@@ -22,6 +22,7 @@
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\FichInter\Classes\Fichinter;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/boxes/box_ficheinter.php

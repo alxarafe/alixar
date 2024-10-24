@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    lib/mrp_mo.lib.php

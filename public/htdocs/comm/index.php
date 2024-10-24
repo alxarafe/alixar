@@ -33,6 +33,7 @@ use Dolibarr\Code\FichInter\Classes\Fichinter;
 use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/comm/index.php
@@ -108,7 +109,7 @@ if (isModEnabled('intervention')) {
     $fichinterstatic = new Fichinter($db);
 }
 
-llxHeader("", $langs->trans("CommercialArea"));
+ViewMain::llxHeader("", $langs->trans("CommercialArea"));
 
 print load_fiche_titre($langs->trans("CommercialArea"), '', 'commercial');
 
@@ -1331,5 +1332,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardCommercials', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

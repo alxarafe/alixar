@@ -27,6 +27,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/user.php
@@ -132,7 +133,7 @@ dol_mkdir(DOL_DATA_ROOT . '/doctemplates/users');
 dol_mkdir(DOL_DATA_ROOT . '/doctemplates/usergroups');
 
 $help_url = 'EN:Module_Users|FR:Module_Utilisateurs|ES:M&oacute;dulo_Usuarios';
-llxHeader('', $langs->trans("UsersSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-user');
+ViewMain::llxHeader('', $langs->trans("UsersSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-user');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("UsersSetup"), $linkback, 'title_setup');
@@ -339,5 +340,5 @@ print '<br>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

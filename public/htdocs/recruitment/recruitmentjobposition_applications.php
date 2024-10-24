@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Recruitement\Classes\RecruitmentJobPosition;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       recruitmentjobposition_applications.php
@@ -155,7 +156,7 @@ $formproject = new FormProjets($db);
 
 $title = $langs->trans("JobPositionApplications");
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // Part to show record
 if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'create'))) {
@@ -281,5 +282,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

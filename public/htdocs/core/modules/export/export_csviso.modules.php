@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/core/modules/export/export_csv.modules.php
  *      \ingroup    export

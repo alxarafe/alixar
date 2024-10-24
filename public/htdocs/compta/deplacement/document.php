@@ -25,6 +25,7 @@
 
 use Dolibarr\Code\Compta\Classes\Deplacement;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/compta/deplacement/document.php
@@ -93,7 +94,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_linkedfiles.inc.php';
 
 $form = new Form($db);
 
-llxHeader("", "", $langs->trans("TripCard"));
+ViewMain::llxHeader("", "", $langs->trans("TripCard"));
 
 
 if ($object->id) {
@@ -139,5 +140,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

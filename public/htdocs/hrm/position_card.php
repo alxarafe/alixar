@@ -29,6 +29,7 @@ use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Hrm\Classes\Job;
 use Dolibarr\Code\Hrm\Classes\Position;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/position_card.php
@@ -215,7 +216,7 @@ function displayPositionCard(&$object)
 
     $title = $langs->trans("Position");
     $help_url = '';
-    llxHeader('', $title, $help_url);
+    ViewMain::llxHeader('', $title, $help_url);
 
 
     // Part to edit record
@@ -403,5 +404,5 @@ if ($action !== 'edit' && $action !== 'create') {
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

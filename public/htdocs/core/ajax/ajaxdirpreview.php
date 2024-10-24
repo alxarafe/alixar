@@ -23,6 +23,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/ajax/ajaxdirpreview.php
@@ -166,7 +167,7 @@ if (!isset($mode) || $mode != 'noajax') {
     header('Cache-Control: Public, must-revalidate');
     header('Pragma: public');
 
-    top_httphead();
+    ViewMain::topHttpHead();
 }
 
 $type = 'directory';

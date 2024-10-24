@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Expedition\Classes\ExpeditionStats;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *     \file       htdocs/expedition/stats/index.php
@@ -64,7 +65,7 @@ restrictedArea($user, 'expedition');
 
 $form = new Form($db);
 
-llxHeader();
+ViewMain::llxHeader();
 
 print load_fiche_titre($langs->trans("StatisticsOfSendings"), '', 'dolly');
 
@@ -357,5 +358,5 @@ print '<br>';
 print '<i class="opacitymedium">' . $langs->trans("StatsOnShipmentsOnlyValidated") . '</i>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

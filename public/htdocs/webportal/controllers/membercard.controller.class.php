@@ -22,6 +22,7 @@
 use Dolibarr\Code\WebPortal\Classes\Context;
 use Dolibarr\Code\WebPortal\Classes\Controller;
 use Dolibarr\Code\WebPortal\Classes\FormCardWebPortal;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/webportal/controllers/membercard.controller.class.php

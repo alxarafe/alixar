@@ -22,6 +22,7 @@
  */
 
 use Dolibarr\Code\SupplierProposal\Classes\ModeleNumRefSupplierProposal;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/modules/propale/mod_propale_marbre.php

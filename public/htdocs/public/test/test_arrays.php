@@ -111,7 +111,7 @@ header("X-Frame-Options: SAMEORIGIN"); // Frames allowed only if on same domain 
     );
     */
 
-    llxHeader('', '', '', '', 0, 0, $arrayjs, $arraycss);
+    ViewMain::llxHeader('', '', '', '', 0, 0, $arrayjs, $arraycss);
 }
 
 
@@ -469,7 +469,7 @@ if (!empty($conf->use_javascript_ajax)) {
 
 <?php
 if (!empty($usedolheader)) {
-    llxFooter();
+    ViewMain::llxFooter();
 } else { ?>
 </body>
 <?php } ?>

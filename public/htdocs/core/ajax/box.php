@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/ajax/box.php
  *       \brief      File to return Ajax response on a Box move or close
@@ -57,7 +59,7 @@ if ($userid != $user->id) {
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 print '<!-- Ajax page called with url ' . dol_escape_htmltag($_SERVER["PHP_SELF"]) . '?' . dol_escape_htmltag($_SERVER["QUERY_STRING"]) . ' -->' . "\n";
 

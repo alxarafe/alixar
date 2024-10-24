@@ -24,6 +24,7 @@
 use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file        htdocs/compta/bank/annuel.php
@@ -88,7 +89,7 @@ $totsorties = array();
 
 $title = $object->ref . ' - ' . $langs->trans("IOMonthlyReporting");
 $helpurl = "";
-llxHeader('', $title, $helpurl);
+ViewMain::llxHeader('', $title, $helpurl);
 
 // Ce rapport de tresorerie est base sur llx_bank (car doit inclure les transactions sans facture)
 // plutot que sur llx_paiement + llx_paiementfourn
@@ -481,5 +482,5 @@ if ($result < 0) {
 print "\n</div><br>\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

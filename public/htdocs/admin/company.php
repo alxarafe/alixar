@@ -27,6 +27,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/company.php
@@ -405,7 +406,7 @@ if ($action == 'removelogo' || $action == 'removelogosquarred') {
  */
 
 $wikihelp = 'EN:First_setup|FR:Premiers_paramétrages|ES:Primeras_configuraciones';
-llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-company');
+ViewMain::llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-company');
 
 $form = new Form($db);
 $formother = new FormOther($db);
@@ -982,5 +983,5 @@ print '</form>';
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

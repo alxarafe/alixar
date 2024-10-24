@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/mrp/lib/mrp.lib.php

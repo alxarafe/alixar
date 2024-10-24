@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Comm\Classes\Mailing;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/lib/emailing.lib.php

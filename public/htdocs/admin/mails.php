@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/admin/mails.php
  *       \brief      Page to setup emails sending
@@ -178,7 +180,7 @@ if (!$server) {
 
 
 $wikihelp = 'EN:Setup_EMails|FR:Paramétrage_EMails|ES:Configuración_EMails';
-llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-mails');
+ViewMain::llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-mails');
 
 print load_fiche_titre($langs->trans("EMailsSetup"), '', 'title_setup');
 
@@ -1159,5 +1161,5 @@ if ($action == 'edit') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

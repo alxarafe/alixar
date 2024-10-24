@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/admin/limits.php
  *       \brief      Page to setup limits
@@ -131,7 +133,7 @@ $form = new Form($db);
 $title = $langs->trans("LimitsSetup");
 $help_url = '';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-admin page-limits');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-admin page-limits');
 
 print load_fiche_titre($title, '', 'title_setup');
 
@@ -339,5 +341,5 @@ if (empty($mysoc->country_code)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

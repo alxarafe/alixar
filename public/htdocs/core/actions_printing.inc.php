@@ -20,6 +20,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/core/actions_printing.inc.php
  *  \brief          Code for actions print_file to print file with calling trigger

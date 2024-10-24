@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/deplacement/stats/index.php
@@ -80,7 +81,7 @@ $mode = GETPOST("mode") ? GETPOST("mode") : 'customer';
 
 $form = new Form($db);
 
-llxHeader();
+ViewMain::llxHeader();
 
 $title = $langs->trans("TripsAndExpensesStatistics");
 $dir = $conf->deplacement->dir_temp;
@@ -329,5 +330,5 @@ print '<div class="clearboth"></div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

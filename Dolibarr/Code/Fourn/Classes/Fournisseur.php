@@ -25,6 +25,7 @@ namespace Dolibarr\Code\Fourn\Classes;
 use Dolibarr\Code\Societe\Classes\Societe;
 use DoliDB;
 
+
 /**
  *  \file       htdocs/fourn/class/fournisseur.class.php
  *  \ingroup    fournisseur,societe

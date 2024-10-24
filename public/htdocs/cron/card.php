@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCron;
 use Dolibarr\Code\Cron\Classes\Cronjob;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/cron/card.php
@@ -258,7 +259,7 @@ if ($action == 'confirm_clone' && $confirm == 'yes' && $permissiontoadd) {
 $form = new Form($db);
 $formCron = new FormCron($db);
 
-llxHeader('', $langs->trans("CronTask"));
+ViewMain::llxHeader('', $langs->trans("CronTask"));
 
 $head = cron_prepare_head($object);
 
@@ -829,6 +830,6 @@ if (($action == "create") || ($action == "edit")) {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

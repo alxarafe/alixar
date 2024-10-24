@@ -33,6 +33,7 @@ use Dolibarr\Code\Mrp\Classes\Mo;
 use Dolibarr\Code\Mrp\Classes\ModelePDFMo;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/mrp/doc/pdf_vinci.modules.php

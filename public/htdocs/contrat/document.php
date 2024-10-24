@@ -26,6 +26,7 @@
 use Dolibarr\Code\Contrat\Classes\Contrat;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/contrat/document.php
@@ -104,7 +105,7 @@ $form = new Form($db);
 $title = $langs->trans("Contract");
 $help_url = 'EN:Module_Contracts|FR:Module_Contrat';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 
 if ($object->id) {
@@ -196,5 +197,5 @@ if ($object->id) {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

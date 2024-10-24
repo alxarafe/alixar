@@ -21,6 +21,7 @@ use Dolibarr\Code\Bom\Classes\BOM;
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/bom/bom_agenda.php
@@ -133,7 +134,7 @@ $form = new Form($db);
 if ($object->id > 0) {
     $title = $langs->trans("Agenda");
     $help_url = 'EN:Module_Agenda_En|FR:Module_Agenda|ES:Módulo_Agenda|DE:Modul_Agenda';
-    llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-bom page-card_agenda');
+    ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-bom page-card_agenda');
 
     if (isModEnabled('notification')) {
         $langs->load("mails");
@@ -256,5 +257,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -38,7 +40,7 @@ if (!$user->admin) {
  * View
  */
 
-llxHeader('', $langs->trans("InfoWebServer"), '', '', 0, 0, '', '', '', 'mod-admin page-system_web');
+ViewMain::llxHeader('', $langs->trans("InfoWebServer"), '', '', 0, 0, '', '', '', 'mod-admin page-system_web');
 
 print load_fiche_titre($langs->trans("InfoWebServer"), '', 'title_setup');
 
@@ -79,6 +81,6 @@ if (function_exists('exec')) {
 print '</table>';
 print '</div>';
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

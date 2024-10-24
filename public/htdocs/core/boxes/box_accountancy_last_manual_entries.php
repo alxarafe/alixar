@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Accountancy\Classes\BookKeeping;
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/boxes/box_accountancy_last_manual_entries.php

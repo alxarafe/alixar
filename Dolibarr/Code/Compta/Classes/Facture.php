@@ -41,9 +41,26 @@
 
 namespace Dolibarr\Code\Compta\Classes;
 
+use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Core\Classes\CommonInvoice;
+use Dolibarr\Code\Core\Classes\CommonInvoiceLine;
+use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Code\Core\Classes\FormMargin;
+use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Core\Classes\WorkboardResponse;
+use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\MouvementStock;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\Productbatch;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
+
 
 /**
  *  \file       htdocs/compta/facture/class/facture.class.php

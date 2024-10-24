@@ -23,6 +23,7 @@
  */
 
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/commande/customer.php
@@ -70,7 +71,7 @@ if (!$sortfield) {
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-commande page-customer');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-commande page-customer');
 
 $thirdpartystatic = new Societe($db);
 
@@ -205,5 +206,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

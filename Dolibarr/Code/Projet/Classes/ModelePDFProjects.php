@@ -24,6 +24,7 @@ namespace Dolibarr\Code\Projet\Classes;
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use DoliDB;
 
+
 /**
  *      \file       htdocs/core/modules/project/modules_project.php
  *      \ingroup    project

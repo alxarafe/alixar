@@ -27,6 +27,7 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/categories/photos.php
@@ -113,7 +114,7 @@ if (empty($reshook)) {
  * View
  */
 
-llxHeader("", "", $langs->trans("Categories"));
+ViewMain::llxHeader("", "", $langs->trans("Categories"));
 
 $form = new Form($db);
 $formother = new FormOther($db);
@@ -279,5 +280,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

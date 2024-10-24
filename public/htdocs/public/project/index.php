@@ -20,6 +20,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Lib\Images;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/public/project/index.php
@@ -112,7 +113,7 @@ function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $
 {
     global $user, $conf, $langs, $mysoc;
 
-    top_htmlhead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss); // Show html headers
+    ViewMain::topHtmlHead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss); // Show html headers
 
     print '<body id="mainbody" class="publicnewmemberform">';
 
@@ -197,7 +198,7 @@ $conf->dol_hide_leftmenu = 1;
 
 $replacemainarea = (empty($conf->dol_hide_leftmenu) ? '<div>' : '') . '<div>';
 
-//llxHeader($head, $langs->trans("SuggestForm"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea);
+//ViewMain::llxHeader($head, $langs->trans("SuggestForm"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea);
 
 llxHeaderVierge($langs->trans("SuggestForm"));
 
@@ -323,6 +324,6 @@ print '<br>';
 
 htmlPrintOnlineFooter($mysoc, $langs, 1, $suffix, $object);
 
-llxFooter('', 'public');
+ViewMain::llxFooter('', 'public');
 
 $db->close();

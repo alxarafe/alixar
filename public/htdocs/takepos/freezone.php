@@ -21,6 +21,7 @@
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/takepos/freezone.php
@@ -91,7 +92,7 @@ $vatRateDefault = get_default_tva($mysoc, $soc);
 $arrayofcss = array('/takepos/css/pos.css.php');
 $arrayofjs = array();
 
-top_htmlhead('', '', 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::topHtmlHead('', '', 0, 0, $arrayofjs, $arrayofcss);
 ?>
 <body>
 

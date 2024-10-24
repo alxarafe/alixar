@@ -22,6 +22,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Entrepot;
 use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stock/massstockmove.php
@@ -548,7 +549,7 @@ $help_url = 'EN:Module_Stocks_En|FR:Module_Stock|ES:Módulo_Stocks|DE:Modul_Best
 
 $title = $langs->trans('MassMovement');
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_massstomove');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_massstomove');
 
 print load_fiche_titre($langs->trans("MassStockTransferShort"), '', 'stock');
 
@@ -800,7 +801,7 @@ if ($action == 'delete') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

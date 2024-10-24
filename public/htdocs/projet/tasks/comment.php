@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/projet/tasks/comment.php
@@ -90,7 +91,7 @@ restrictedArea($user, 'projet', $object->fk_project, 'projet&project');
  * View
  */
 
-llxHeader('', $langs->trans("CommentPage"));
+ViewMain::llxHeader('', $langs->trans("CommentPage"));
 
 $form = new Form($db);
 $formother = new FormOther($db);
@@ -346,5 +347,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

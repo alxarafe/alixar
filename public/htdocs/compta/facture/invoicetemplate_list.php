@@ -27,6 +27,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\FactureRec;
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/compta/facture/invoicetemplate_list.php
  *  \ingroup    invoice
@@ -422,7 +431,7 @@ $num = $db->num_rows($resql);
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'bodyforlist');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'bodyforlist');
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -1102,5 +1111,5 @@ print '</form>' . "\n";
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

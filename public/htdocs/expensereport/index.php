@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/expensereport/index.php
@@ -84,7 +85,7 @@ $childids[] = $user->id;
 
 $help_url = "EN:Module_Expense_Reports|FR:Module_Notes_de_frais";
 
-llxHeader('', $langs->trans("TripsAndExpenses"), $help_url);
+ViewMain::llxHeader('', $langs->trans("TripsAndExpenses"), $help_url);
 
 
 $label = $somme = $nb = array();
@@ -284,5 +285,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardExpenseReport', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

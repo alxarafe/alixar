@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
 use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/eventorganization/conferenceorboothattendee_list.php
@@ -392,7 +393,7 @@ if ($confOrBooth->id > 0) {
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'classforhorizontalscrolloftabs');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'classforhorizontalscrolloftabs');
 
 
 
@@ -1108,5 +1109,5 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

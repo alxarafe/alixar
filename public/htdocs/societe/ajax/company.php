@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/societe/ajax/company.php
@@ -75,7 +76,7 @@ restrictedArea($user, 'societe', $object->id, '&societe');
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 //print '<!-- Ajax page called with url '.dol_escape_htmltag($_SERVER["PHP_SELF"]).'?'.dol_escape_htmltag($_SERVER["QUERY_STRING"]).' -->'."\n";
 

@@ -31,6 +31,7 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Product\Classes\Entrepot;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/reassortlot.php
@@ -534,7 +535,7 @@ if ($search_stock_physique) {
 /*if ($eatby)       $param.="&eatby=".$eatby;
 if ($sellby)    $param.="&sellby=".$sellby;*/
 
-llxHeader("", $title, $helpurl, $texte, 0, 0, '', '', '', 'mod-product page-reassortlot');
+ViewMain::llxHeader("", $title, $helpurl, $texte, 0, 0, '', '', '', 'mod-product page-reassortlot');
 
 print '<form id="searchFormList" action="' . $_SERVER["PHP_SELF"] . '" method="POST" name="formulaire">' . "\n";
 if ($optioncss != '') {
@@ -916,5 +917,5 @@ print '</form>' . "\n";
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

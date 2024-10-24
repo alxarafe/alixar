@@ -21,6 +21,7 @@ use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\FichInter\Classes\Fichinter;
 use Dolibarr\Code\FichInter\Classes\FichinterStats;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/fichinter/stats/index.php
@@ -68,7 +69,7 @@ $objectstatic = new Fichinter($db);
 $title = $langs->trans("InterventionStatistics");
 $dir = $conf->ficheinter->dir_temp;
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 print load_fiche_titre($title, '', 'intervention');
 
@@ -331,6 +332,6 @@ print '<div class="clearboth"></div>';
 print dol_get_fiche_end();
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 if (!defined('CSRFCHECK_WITH_TOKEN')) {
     define('CSRFCHECK_WITH_TOKEN', '1');        // Force use of CSRF protection with tokens even for GET
@@ -91,7 +92,7 @@ if ($action == 'confirm_unlock' && $user->admin) {
 *   View
 */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-tools_listsessions');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-tools_listsessions');
 
 $form = new Form($db);
 
@@ -204,5 +205,5 @@ print '</div>';
 print '<br>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

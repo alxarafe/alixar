@@ -16,6 +16,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       /htdocs/public/bookcal/bookcalAjax.php
  *  \brief      File to make Ajax action on Book cal
@@ -64,7 +66,7 @@ $result = "{}";
  * Actions
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 
 if ($action == 'verifyavailability') {

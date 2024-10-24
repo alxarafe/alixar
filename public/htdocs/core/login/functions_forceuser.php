@@ -18,6 +18,8 @@
  *
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file       htdocs/core/login/functions_forceuser.php
  * \ingroup    core

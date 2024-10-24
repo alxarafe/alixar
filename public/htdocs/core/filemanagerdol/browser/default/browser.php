@@ -27,7 +27,7 @@ require '../../connectors/php/config.inc.php'; // This include the define('NOTOK
 
 global $Config;
 
-top_httphead();
+ViewMain::topHttpHead();
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">

@@ -26,6 +26,7 @@ use Dolibarr\Code\Bom\Classes\BOM;
 use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Mrp\Classes\Mo;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/mrp/index.php
@@ -57,7 +58,7 @@ $max = getDolGlobalInt('MAIN_SIZE_SHORTLIST_LIMIT', 5);
 $staticbom = new BOM($db);
 $staticmo = new Mo($db);
 
-llxHeader('', $langs->trans("MRP"), '');
+ViewMain::llxHeader('', $langs->trans("MRP"), '');
 
 print load_fiche_titre($langs->trans("MRPArea"), '', 'mrp');
 
@@ -284,5 +285,5 @@ $parameters = array(
 $reshook = $hookmanager->executeHooks('dashboardMRP', $parameters, $object);
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

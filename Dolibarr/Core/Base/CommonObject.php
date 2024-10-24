@@ -53,6 +53,7 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Trait\DolDeprecationHandler;
 use DoliDB;
 use stdClass;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/class/commonobject.class.php

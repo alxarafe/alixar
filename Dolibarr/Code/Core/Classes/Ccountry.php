@@ -19,6 +19,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+
 /**
  *      \file       htdocs/core/class/ccountry.class.php
  *      \ingroup    core

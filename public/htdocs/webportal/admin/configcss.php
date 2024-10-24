@@ -20,6 +20,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/webportal/admin/configcss.php
@@ -86,7 +87,7 @@ $title = "WebPortalSetup";
 
 $wikihelp = 'EN:First_setup|FR:Premiers_param&eacute;trages|ES:Primeras_configuraciones';
 
-llxHeader(
+ViewMain::llxHeader(
     '',
     $langs->trans($title),
     $wikihelp,
@@ -149,5 +150,5 @@ print '</form>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

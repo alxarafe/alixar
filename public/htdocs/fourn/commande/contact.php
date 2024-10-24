@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/fourn/commande/contact.php
  *       \ingroup    order
@@ -139,7 +141,7 @@ if ($id > 0 || !empty($ref)) {
 
         $title = $object->ref . " - " . $langs->trans('ContactsAddresses');
         $help_url = 'EN:Module_Suppliers_Orders|FR:CommandeFournisseur|ES:Módulo_Pedidos_a_proveedores';
-        llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-supplier-order page-card_contact');
+        ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-supplier-order page-card_contact');
 
         $head = ordersupplier_prepare_head($object);
         print dol_get_fiche_head($head, 'contact', $langs->trans("SupplierOrder"), -1, 'order');
@@ -190,5 +192,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

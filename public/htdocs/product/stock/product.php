@@ -41,6 +41,7 @@ use Dolibarr\Code\Product\Classes\Productlot;
 use Dolibarr\Code\Product\Classes\ProductStockEntrepot;
 use Dolibarr\Code\Variants\Classes\ProductCombination;
 use Dolibarr\Code\Variants\Classes\ProductCombination2ValuePair;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stock/product.php
@@ -550,7 +551,7 @@ if ($id > 0 || $ref) {
         $helpurl = 'EN:Module_Services_En|FR:Module_Services|ES:M&oacute;dulo_Servicios';
     }
 
-    llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-card_stock_product');
+    ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-card_stock_product');
 
     if (!empty($conf->use_javascript_ajax)) {
         ?>
@@ -1315,8 +1316,8 @@ if (!$variants || getDolGlobalString('VARIANT_ALLOW_STOCK_MOVEMENT_ON_VARIANT_PA
     include_once DOL_DOCUMENT_ROOT . '/variants/class/ProductCombination.class.php';
     include_once DOL_DOCUMENT_ROOT . '/variants/class/ProductCombination2ValuePair.class.php';
     $prodstatic = new Product($db);
-    $prodcomb = new ProductCombination($db);
-    $comb2val = new ProductCombination2ValuePair($db);
+    $prodcomb = new ProductAttributeCombination();
+    $comb2val = new ProductAttributeCombination2val();
     $productCombinations = $prodcomb->fetchAllByFkProductParent($object->id);
 
     print '<form method="POST" action="' . $_SERVER["PHP_SELF"] . '">';
@@ -1394,5 +1395,5 @@ if (!$variants || getDolGlobalString('VARIANT_ALLOW_STOCK_MOVEMENT_ON_VARIANT_PA
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

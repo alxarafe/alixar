@@ -24,6 +24,7 @@
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/projet/activity/index.php
@@ -78,7 +79,7 @@ $tasktmp = new Task($db);
 $title = $langs->trans("Activities");
 //if ($mine) $title=$langs->trans("MyActivities");
 
-llxHeader("", $title);
+ViewMain::llxHeader("", $title);
 
 
 // Title for combo list see all projects
@@ -574,5 +575,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardActivities', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

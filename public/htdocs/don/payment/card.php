@@ -22,6 +22,7 @@ use Dolibarr\Code\Compta\Classes\AccountLine;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Don\Classes\Don;
 use Dolibarr\Code\Don\Classes\PaymentDonation;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/don/payment/card.php
@@ -78,7 +79,7 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('don', '
  * View
  */
 $title = $langs->trans("Payment");
-llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-donation page-payment_card');
+ViewMain::llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-donation page-payment_card');
 
 $don = new Don($db);
 $form = new Form($db);
@@ -222,6 +223,6 @@ if (empty($action)) {
 print '</div>';
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

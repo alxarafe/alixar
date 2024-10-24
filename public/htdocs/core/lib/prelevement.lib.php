@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/lib/prelevement.lib.php

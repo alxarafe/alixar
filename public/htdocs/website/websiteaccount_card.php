@@ -22,6 +22,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Societe\Classes\SocieteAccount;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/website/websiteaccount_card.php
@@ -175,7 +176,7 @@ $formfile = new FormFile($db);
 $title = $langs->trans("WebsiteAccount");
 $help_url = '';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // prepare output js
 $out_js = '';
@@ -453,5 +454,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

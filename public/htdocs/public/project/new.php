@@ -32,6 +32,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Lib\Images;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/public/project/new.php
@@ -111,7 +112,7 @@ function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $
 {
     global $user, $conf, $langs, $mysoc;
 
-    top_htmlhead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss); // Show html headers
+    ViewMain::topHtmlHead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss); // Show html headers
 
     print '<body id="mainbody" class="publicnewmemberform">';
 

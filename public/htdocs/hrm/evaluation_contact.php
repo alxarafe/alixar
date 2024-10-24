@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Hrm\Classes\Evaluation;
 use Dolibarr\Code\Hrm\Classes\Job;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/evaluation_contact.php
@@ -118,7 +119,7 @@ if ($action == 'addcontact' && $permission) {
 $title = $langs->trans('Evaluation') . " - " . $langs->trans('ContactsAddresses');
 $help_url = '';
 //$help_url='EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $form = new Form($db);
 $formcompany = new FormCompany($db);
@@ -169,5 +170,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

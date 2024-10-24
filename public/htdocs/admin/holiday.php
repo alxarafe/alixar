@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/admin/contract.php
  *  \ingroup    contract
@@ -167,7 +169,7 @@ if ($action == 'updateMask') {
 
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-holiday');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-holiday');
 
 $form = new Form($db);
 
@@ -576,5 +578,5 @@ print '</form>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

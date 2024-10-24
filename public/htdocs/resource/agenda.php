@@ -28,6 +28,7 @@ use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Resource\Classes\Dolresource;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/resource/agenda.php
@@ -138,7 +139,7 @@ if ($object->id > 0) {
         $title = $object->ref . " - " . $title;
     }
     $help_url = '';
-    llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-resource page-card_agenda');
+    ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-resource page-card_agenda');
 
     if (isModEnabled('notification')) {
         $langs->load("mails");
@@ -191,5 +192,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

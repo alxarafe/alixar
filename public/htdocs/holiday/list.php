@@ -29,6 +29,7 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Holiday\Classes\Holiday;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\User\Classes\UserGroup;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/holiday/list.php
@@ -243,7 +244,7 @@ $result = $object->updateBalance();
 $title = $langs->trans('CPTitreMenu');
 $help_url = '';
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 $max_year = 5;
 $min_year = 10;
@@ -1099,7 +1100,7 @@ print '</div>' . "\n";
 print '</form>' . "\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

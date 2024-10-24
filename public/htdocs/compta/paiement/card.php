@@ -32,6 +32,7 @@ use Dolibarr\Code\Core\Classes\FormMargin;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Stripe\Classes\Stripe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/paiement/card.php
@@ -271,7 +272,7 @@ if (empty($reshook)) {
  * View
  */
 
-llxHeader('', $langs->trans("Payment"));
+ViewMain::llxHeader('', $langs->trans("Payment"));
 
 $thirdpartystatic = new Societe($db);
 
@@ -620,5 +621,5 @@ if ($user->socid == 0 && $action == '') {
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

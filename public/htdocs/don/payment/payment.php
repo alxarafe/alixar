@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Don\Classes\Don;
 use Dolibarr\Code\Don\Classes\PaymentDonation;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/don/payment/payment.php
@@ -143,7 +144,7 @@ if ($action == 'add_payment') {
 
 $form = new Form($db);
 $title = $langs->trans("Payment");
-llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-donation page-payment');
+ViewMain::llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-donation page-payment');
 
 
 $sql = "SELECT sum(p.amount) as total";
@@ -289,5 +290,5 @@ if ($action == 'create') {
     print "</form>\n";
 }
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

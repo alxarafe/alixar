@@ -21,6 +21,7 @@
 use Dolibarr\Code\Asset\Classes\Asset;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/asset/disposal.php
@@ -93,7 +94,7 @@ if (empty($reshook)) {
 $form = new Form($db);
 
 $help_url = '';
-llxHeader('', $langs->trans('Asset'), $help_url, '', 0, 0, '', '', '', 'mod-asset page-card_disposal');
+ViewMain::llxHeader('', $langs->trans('Asset'), $help_url, '', 0, 0, '', '', '', 'mod-asset page-card_disposal');
 
 if ($id > 0 || !empty($ref)) {
     $object->fetch_thirdparty();
@@ -129,5 +130,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

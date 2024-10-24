@@ -38,6 +38,7 @@ use Dolibarr\Code\Product\Classes\Entrepot;
 use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stock/card.php
@@ -295,7 +296,7 @@ if ($action == 'create') {
 }
 
 $help_url = 'EN:Module_Stocks_En|FR:Module_Stock|ES:M&oacute;dulo_Stocks';
-llxHeader("", $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_card');
+ViewMain::llxHeader("", $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_card');
 
 
 if ($action == 'create') {
@@ -1037,5 +1038,5 @@ if ($action != 'create' && $action != 'edit' && $action != 'delete') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

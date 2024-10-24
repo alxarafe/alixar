@@ -23,6 +23,7 @@
 use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/bank/graph.php
@@ -87,7 +88,7 @@ if (GETPOST("ref")) {
 
 $title = $object->ref . ' - ' . $langs->trans("Graph");
 $helpurl = "";
-llxHeader('', $title, $helpurl);
+ViewMain::llxHeader('', $title, $helpurl);
 
 $result = dol_mkdir($conf->bank->dir_temp);
 if ($result < 0) {
@@ -870,5 +871,5 @@ if ($mode == 'showalltime') {
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

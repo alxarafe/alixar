@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Printing\Classes\PrintingDriver;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/modules/printing/printipp.modules.php

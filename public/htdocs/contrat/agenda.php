@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/contrat/agenda.php
@@ -151,7 +152,7 @@ if ($object->id > 0) {
     }
     $help_url = 'EN:Module_Contracts|FR:Module_Contrat';
 
-    llxHeader('', $title, $help_url);
+    ViewMain::llxHeader('', $title, $help_url);
 
     if (isModEnabled('notification')) {
         $langs->load("mails");
@@ -285,5 +286,5 @@ if ($object->id > 0) {
     }
 }
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

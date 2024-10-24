@@ -24,6 +24,7 @@ use Dolibarr\Code\Contrat\Classes\Contrat;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/contrat/ticket.php
@@ -60,7 +61,7 @@ $result = restrictedArea($user, 'contrat', $id);
  *	View
  */
 
-llxHeader("", $langs->trans("Tickets"), "Contrat");
+ViewMain::llxHeader("", $langs->trans("Tickets"), "Contrat");
 
 $form = new Form($db);
 $userstatic = new User($db);
@@ -212,5 +213,5 @@ if (is_array($allticketarray) && count($allticketarray) > 0) {
 print "</table>";
 
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

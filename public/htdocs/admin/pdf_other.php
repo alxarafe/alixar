@@ -27,6 +27,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/admin/pdf.php
@@ -130,7 +131,7 @@ if ($action == 'update') {
  */
 
 $wikihelp = 'EN:First_setup|FR:Premiers_param&eacute;trages|ES:Primeras_configuraciones';
-llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-pdf_other');
+ViewMain::llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-pdf_other');
 
 $form = new Form($db);
 $formother = new FormOther($db);
@@ -421,5 +422,5 @@ print '</form>';
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

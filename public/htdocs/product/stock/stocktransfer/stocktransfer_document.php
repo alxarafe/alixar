@@ -21,6 +21,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\StockTransfer;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       stocktransfer_document.php
@@ -103,7 +104,7 @@ $form = new Form($db);
 $title = $langs->trans("ModuleStockTransferName") . ' - ' . $langs->trans("Files");
 $help_url = '';
 //$help_url='EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock-stocktransfer_stocktransfer_document');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock-stocktransfer_stocktransfer_document');
 
 if ($object->id) {
     /*
@@ -196,5 +197,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

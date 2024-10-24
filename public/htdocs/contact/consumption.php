@@ -36,6 +36,7 @@ use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/contact/consumption.php
@@ -126,7 +127,7 @@ $objsoc = new Societe($db);
 
 $title = $langs->trans("ContactRelatedItems");
 $help_url = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if (empty($id)) {
     dol_print_error($db);
@@ -685,5 +686,5 @@ if ($sql_select) {
 print "</form>";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

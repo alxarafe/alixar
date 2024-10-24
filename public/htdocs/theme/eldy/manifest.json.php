@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/theme/eldy/manifest.json.php
  *      \brief      File for The Web App (PWA)
@@ -57,7 +59,7 @@ if (!defined('NOSESSION')) {
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-top_httphead('text/json');
+ViewMain::topHttpHead('text/json');
 // Important: Following code is to avoid page request by browser and PHP CPU at each Dolibarr page access.
 if (empty($dolibarr_nocache)) {
     header('Cache-Control: max-age=10800, public, must-revalidate');

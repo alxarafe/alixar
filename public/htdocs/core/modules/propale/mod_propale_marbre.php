@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Propale\Classes\ModeleNumRefPropales;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/modules/propale/mod_propale_marbre.php

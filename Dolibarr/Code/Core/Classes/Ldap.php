@@ -26,6 +26,7 @@ namespace Dolibarr\Code\Core\Classes;
 
 use Dolibarr\Code\User\Classes\User;
 
+
 /**
  *  \file       htdocs/core/class/ldap.class.php
  *  \brief      File of class to manage LDAP features

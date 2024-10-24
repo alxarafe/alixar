@@ -19,6 +19,8 @@
  * or see https://www.gnu.org/
  */
 
+namespace Dolibarr\Code\Security\Classes;
+
 /**
  *      \file       htdocs/core/modules/security/generate/modules_genpassword.php
  *      \ingroup    core

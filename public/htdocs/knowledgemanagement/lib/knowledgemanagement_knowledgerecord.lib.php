@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\KnowledgeManagement\Classes\KnowledgeRecord;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/knowledgemanagement/lib/knowledgemanagement_knowledgerecord.lib.php

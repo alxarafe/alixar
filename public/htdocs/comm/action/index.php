@@ -33,6 +33,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Holiday\Classes\Holiday;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/comm/action/index.php
@@ -246,7 +247,7 @@ if ($reshook < 0) {
 }
 
 $help_url = 'EN:Module_Agenda_En|FR:Module_Agenda|ES:M&oacute;dulo_Agenda|DE:Modul_Terminplanung';
-llxHeader('', $langs->trans("Agenda"), $help_url);
+ViewMain::llxHeader('', $langs->trans("Agenda"), $help_url);
 
 $form = new Form($db);
 $companystatic = new Societe($db);
@@ -1782,7 +1783,7 @@ if (empty($mode) || $mode == 'show_month') {      // View by month
 print "\n" . '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

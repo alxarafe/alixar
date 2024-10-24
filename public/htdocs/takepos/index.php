@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/takepos/index.php
@@ -129,7 +130,7 @@ $head = '<meta name="apple-mobile-web-app-title" content="TakePOS"/>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>';
-top_htmlhead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss);
+ViewMain::topHtmlHead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss);
 
 $categories = $categorie->get_full_arbo('product', ((getDolGlobalInt('TAKEPOS_ROOT_CATEGORY_ID') > 0) ? getDolGlobalInt('TAKEPOS_ROOT_CATEGORY_ID') : 0), 1);
 
@@ -1285,7 +1286,7 @@ $subcategories = dol_sort_array($subcategories, 'label');
                         ?>
                         <div class="login_block_user">
                             <?php
-                            print top_menu_user(1, constant('BASE_URL') . '/user/logout.php?token=' . newToken() . '&urlfrom=' . urlencode('/takepos/?setterminal=' . ((int)$term)));
+                            print ViewMain::topMenuUser(1, constant('BASE_URL') . '/user/logout.php?token=' . newToken() . '&urlfrom=' . urlencode('/takepos/?setterminal=' . ((int)$term)));
                             ?>
                         </div>
                     </div>
@@ -1711,6 +1712,6 @@ $subcategories = dol_sort_array($subcategories, 'label');
     </body>
 <?php
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

@@ -28,6 +28,7 @@ namespace Dolibarr\Code\Societe\Classes;
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use DoliDB;
 
+
 /**
  *      \file       htdocs/core/modules/societe/modules_societe.class.php
  *      \ingroup    societe

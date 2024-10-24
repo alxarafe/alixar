@@ -23,6 +23,7 @@ use Dolibarr\Code\Product\Classes\PriceExpression;
 use Dolibarr\Code\Product\Classes\PriceGlobalVariable;
 use Dolibarr\Code\Product\Classes\PriceParser;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/dynamic_price/editor.php
@@ -142,7 +143,7 @@ if ($action == 'delete') {
 
 $form = new Form($db);
 
-llxHeader("", "", $langs->trans("CardProduct" . $product->type), '', 0, 0, '', '', '', 'mod-product page-dynamic_price_editor');
+ViewMain::llxHeader("", "", $langs->trans("CardProduct" . $product->type), '', 0, 0, '', '', '', 'mod-product page-dynamic_price_editor');
 
 print load_fiche_titre($langs->trans("PriceExpressionEditor"));
 
@@ -217,5 +218,5 @@ print '<script type="text/javascript">
 </script>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

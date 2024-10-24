@@ -28,6 +28,7 @@ namespace Dolibarr\Code\Mrp\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 
+
 /**
  *  \file           htdocs/core/modules/mrp/modules_mo.php
  *  \ingroup        mrp

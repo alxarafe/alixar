@@ -37,6 +37,7 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Fourn\Classes\PaiementFourn;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/fourn/facture/paiement.php
@@ -389,7 +390,7 @@ $formother = new FormOther($db);
 $supplierstatic = new Societe($db);
 $invoicesupplierstatic = new FactureFournisseur($db);
 
-llxHeader('', $langs->trans('ListPayment'));
+ViewMain::llxHeader('', $langs->trans('ListPayment'));
 
 if ($action == 'create' || $action == 'confirm_paiement' || $action == 'add_paiement') {
     $object = new FactureFournisseur($db);
@@ -855,5 +856,5 @@ if ($action == 'create' || $action == 'confirm_paiement' || $action == 'add_paie
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

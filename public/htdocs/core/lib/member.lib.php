@@ -22,6 +22,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file       htdocs/core/lib/member.lib.php
  * \brief      Functions for module members

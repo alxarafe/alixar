@@ -31,6 +31,7 @@ use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/projet/tasks/task.php
@@ -265,7 +266,7 @@ if (!empty($withproject)) {
 }
 $help_url = '';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($id > 0 || !empty($ref)) {
     $res = $object->fetch_optionals();
@@ -758,5 +759,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

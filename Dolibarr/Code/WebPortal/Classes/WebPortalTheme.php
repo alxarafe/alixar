@@ -41,7 +41,7 @@ class WebPortalTheme
         'h' => 216, // Hue
         'l' => 42,  // lightness
         's' => 25,  // Saturation
-        'a' =>  1   // Alfa
+        'a' => 1   // Alfa
     );
 
     public $loginLogoUrl;
@@ -68,7 +68,12 @@ class WebPortalTheme
         $this->loadPrimaryColor();
 
         $width = 0;
-        $urllogo = Images::getLogo($conf->theme, $width, $mysoc->logo_small, $mysoc->logo);
+        $urllogo = Images::getLogo(
+            $conf->theme,
+            $width,
+            $mysoc->logo_small ?? getDolGlobalString('MAIN_INFO_SOCIETE_LOGO_SMALL'),
+            $mysoc->logo ?? getDolGlobalString('MAIN_INFO_SOCIETE_LOGO')
+        );
 
         $this->loginLogoUrl = getDolGlobalString('WEBPORTAL_LOGIN_LOGO_URL', $urllogo);
         $this->menuLogoUrl = getDolGlobalString('WEBPORTAL_MENU_LOGO_URL', $this->loginLogoUrl);

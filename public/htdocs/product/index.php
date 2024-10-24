@@ -31,6 +31,7 @@ use Dolibarr\Code\Product\Classes\Entrepot;
 use Dolibarr\Code\Product\Classes\PriceParser;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/index.php
@@ -109,7 +110,7 @@ if ((GETPOSTISSET("type") && GETPOST("type") == '1') || !isModEnabled("product")
     $helpurl = 'EN:Module_Services_En|FR:Module_Services|ES:M&oacute;dulo_Servicios';
 }
 
-llxHeader("", $langs->trans("ProductsAndServices"), $helpurl, '', 0, 0, '', '', '', 'mod-product page-index');
+ViewMain::llxHeader("", $langs->trans("ProductsAndServices"), $helpurl, '', 0, 0, '', '', '', 'mod-product page-index');
 
 print load_fiche_titre($transAreaType, $resultboxes['selectboxlist'], 'product');
 
@@ -687,7 +688,7 @@ $parameters = array('type' => $type, 'user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardProductsServices', $parameters, $product_static); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

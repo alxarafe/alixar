@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormSetup;
 use Dolibarr\Code\WebPortal\Classes\WebPortalTheme;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/webportal/admin/setup.php
@@ -107,7 +108,7 @@ $form = new Form($db);
 $help_url = '';
 $title = "WebPortalSetup";
 
-llxHeader('', $langs->trans($title), $help_url);
+ViewMain::llxHeader('', $langs->trans($title), $help_url);
 
 // Subheader
 $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1') . '">' . $langs->trans("BackToModuleList") . '</a>';
@@ -137,5 +138,5 @@ if ($action == 'edit') {
 // Page end
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

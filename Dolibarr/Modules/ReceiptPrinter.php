@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2014-2015 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2015      Frederic France      <frederic.france@free.fr>
+/* Copyright (C) 2014-2015  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2015       Frederic France             <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +18,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Modules;
+
+use Dolibarr\Core\Base\DolibarrModules;
+use DoliDB;
+
 /** \defgroup   printing     Module Receipt Printer
  *  \brief      Module for activation of printing icon to make receipt ticket
  */
@@ -27,12 +32,6 @@
  *  \ingroup    printing
  *  \brief      Description and activation file for the module Receipt Printer
  */
-
-namespace Dolibarr\Modules;
-
-use Dolibarr\Core\Base\DolibarrModules;
-use DoliDB;
-
 
 /**
  *  Class to describe and activate module Receipt Printer

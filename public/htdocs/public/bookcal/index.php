@@ -29,6 +29,7 @@ use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Lib\Images;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/public/bookcal/index.php
@@ -138,7 +139,7 @@ function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $
 {
     global $user, $conf, $langs, $mysoc;
 
-    top_htmlhead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss); // Show html headers
+    ViewMain::topHtmlHead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss); // Show html headers
 
     print '<body id="mainbody" class="publicnewmemberform">';
 
@@ -608,7 +609,7 @@ if ($action == 'afteradd') {
     print '</script>';
 }
 
-llxFooter('', 'public');
+ViewMain::llxFooter('', 'public');
 
 
 /**

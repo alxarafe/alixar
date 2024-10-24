@@ -22,6 +22,7 @@ namespace Dolibarr\Tools\DebugBarCollector;
 use DebugBar\DataCollector\MessagesCollector;
 use Psr\Log\LogLevel;
 
+
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolLogsCollector.php
  *  \brief      Class for debugbar collection

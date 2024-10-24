@@ -29,6 +29,7 @@ use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Societe\Classes\Societe;
 
+
 /**
  *  \file       htdocs/core/modules/member/modules_member.class.php
  *  \ingroup    members

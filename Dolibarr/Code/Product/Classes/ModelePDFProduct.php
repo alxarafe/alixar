@@ -28,6 +28,7 @@ namespace Dolibarr\Code\Product\Classes;
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use DoliDB;
 
+
 /**
  *  \file       htdocs/core/modules/product/modules_product.class.php
  *  \ingroup    contract

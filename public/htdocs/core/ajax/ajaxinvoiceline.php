@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/ajax/ajaxinvoiceline.php
  *       \brief      File to load contacts combobox
@@ -48,7 +50,7 @@ restrictedArea($user, 'facture', $invoice_id, '', '', 'fk_soc', 'rowid');
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 //print '<!-- Ajax page called with url '.dol_escape_htmltag($_SERVER["PHP_SELF"]).'?'.dol_escape_htmltag($_SERVER["QUERY_STRING"]).' -->'."\n";
 

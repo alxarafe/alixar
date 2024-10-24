@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Recruitement\Classes\RecruitmentCandidature;
 use Dolibarr\Code\Recruitement\Classes\RecruitmentJobPosition;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       recruitment/index.php
@@ -74,7 +75,7 @@ $formfile = new FormFile($db);
 $staticrecruitmentjobposition = new RecruitmentJobPosition($db);
 $staticrecruitmentcandidature = new RecruitmentCandidature($db);
 
-llxHeader("", $langs->trans("RecruitmentArea"));
+ViewMain::llxHeader("", $langs->trans("RecruitmentArea"));
 
 print load_fiche_titre($langs->trans("RecruitmentArea"), '', 'object_recruitmentjobposition');
 
@@ -472,5 +473,5 @@ if (isModEnabled('recruitment') && $user->hasRight('recruitment', 'recruitmentjo
 print '</div></div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

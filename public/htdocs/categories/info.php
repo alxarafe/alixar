@@ -20,6 +20,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/categories/info.php
@@ -70,7 +71,7 @@ if (is_numeric($type)) {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans('Categories'), '');
+ViewMain::llxHeader('', $langs->trans('Categories'), '');
 
 //$object->info($object->id);
 
@@ -112,5 +113,5 @@ print '</div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

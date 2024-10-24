@@ -21,6 +21,7 @@
 
 namespace Dolibarr\Code\Compta\Classes;
 
+
 /**
  *      \file       htdocs/compta/localtax/class/localtax.class.php
  *      \ingroup    tax

@@ -22,6 +22,7 @@
 use Dolibarr\Code\Compta\Classes\AccountLine;
 use Dolibarr\Code\Compta\Classes\Localtax;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/localtax/card.php
@@ -148,7 +149,7 @@ $form = new Form($db);
 
 $title = $langs->trans("LT" . $object->ltt) . " - " . $langs->trans("Card");
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($action == 'create') {
     $datev = dol_mktime(12, 0, 0, GETPOST("datevmonth"), GETPOST("datevday"), GETPOST("datevyear"));
@@ -291,5 +292,5 @@ if ($id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

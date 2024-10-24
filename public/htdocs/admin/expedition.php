@@ -26,6 +26,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/admin/expedition.php
  *  \ingroup    expedition
@@ -170,7 +172,7 @@ $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $form = new Form($db);
 
-llxHeader("", $langs->trans("SendingsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-expedition');
+ViewMain::llxHeader("", $langs->trans("SendingsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-expedition');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("SendingsSetup"), $linkback, 'title_setup');
@@ -497,5 +499,5 @@ print $form->buttonsSaveCancel("Modify", '');
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

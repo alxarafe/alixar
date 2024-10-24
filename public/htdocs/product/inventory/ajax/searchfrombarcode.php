@@ -18,6 +18,7 @@
 
 use Dolibarr\Code\Product\Classes\Entrepot;
 use Dolibarr\Code\Product\Classes\InventoryLine;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       /htdocs/product/inventory/ajax/searchfrombarcode.php
@@ -64,7 +65,7 @@ $objectreturn = array();
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 if ($action == "existbarcode" && !empty($barcode)) {
     if (!empty($mode) && $mode == "lotserial") {

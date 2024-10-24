@@ -23,6 +23,7 @@
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/paiement/rapport.php
@@ -91,7 +92,7 @@ if ($action == 'builddoc') {
 $formother = new FormOther($db);
 $formfile = new FormFile($db);
 
-llxHeader();
+ViewMain::llxHeader();
 
 $titre = ($year ? $langs->trans("PaymentsReportsForYear", $year) : $langs->trans("PaymentsReports"));
 print load_fiche_titre($titre, '', 'bill');
@@ -146,5 +147,5 @@ if ($year) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

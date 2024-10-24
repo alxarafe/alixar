@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Recruitement\Classes\RecruitmentCandidature;
 use Dolibarr\Code\Recruitement\Classes\RecruitmentJobPosition;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       recruitmentcandidature_card.php
@@ -275,7 +276,7 @@ if ($action == 'create') {
     $help_url = '';
 }
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // Part to create
 if ($action == 'create') {
@@ -679,5 +680,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -24,6 +24,7 @@
 use Dolibarr\Code\Core\Classes\Events;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -198,7 +199,7 @@ if ($action == 'confirm_purge' && $confirm == 'yes' && $user->admin) {
  */
 
 $title = $langs->trans("Audit");
-llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-admin page-tools_listevents');
+ViewMain::llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-admin page-tools_listevents');
 
 $form = new Form($db);
 
@@ -540,5 +541,5 @@ if ($result) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

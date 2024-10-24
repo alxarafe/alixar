@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/projet/note.php
@@ -82,7 +83,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/projectnameonly/', get
     $title = $object->ref . ' ' . $object->name . ' - ' . $langs->trans("Note");
 }
 $help_url = "EN:Module_Projects|FR:Module_Projets|ES:M&oacute;dulo_Proyectos";
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 $form = new Form($db);
 $userstatic = new User($db);
@@ -142,5 +143,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

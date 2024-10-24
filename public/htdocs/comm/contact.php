@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/comm/contact.php
  *      \ingroup    commercial
@@ -67,7 +69,7 @@ $result = restrictedArea($user, 'societe', $socid, '');
  * View
  */
 
-llxHeader('', $langs->trans("Contacts"));
+ViewMain::llxHeader('', $langs->trans("Contacts"));
 
 if ($type == "c" || $type == "p") {
     $label = $langs->trans("Customers");
@@ -190,5 +192,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

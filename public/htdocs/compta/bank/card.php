@@ -30,11 +30,13 @@ use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAccounting;
 use Dolibarr\Code\Core\Classes\FormBank;
 use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/bank/card.php
@@ -370,7 +372,7 @@ if ($action == 'create') {
 } elseif (!empty($object->ref)) {
     $title = $object->ref . " - " . $langs->trans("Card");
 }
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 // Creation
 if ($action == 'create') {
@@ -1223,5 +1225,5 @@ if ($action == 'create') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

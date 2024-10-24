@@ -24,6 +24,7 @@
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Product\Classes\ModeleProductCode;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/core/modules/product/mod_codeproduct_leopard.php

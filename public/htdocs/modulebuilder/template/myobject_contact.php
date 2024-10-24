@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/modulebuilder/template/myobject_contact.php
  *  \ingroup    mymodule
@@ -149,7 +151,7 @@ $title = $langs->trans("MyObject") . " - " . $langs->trans('ContactsAddresses');
 //$title = $object->ref." - ".$langs->trans('ContactsAddresses');
 $help_url = '';
 //$help_url='EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-card_contact');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-card_contact');
 
 $form = new Form($db);
 $formcompany = new FormCompany($db);
@@ -229,5 +231,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

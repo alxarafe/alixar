@@ -30,6 +30,7 @@ use Dolibarr\Code\Core\Classes\CMailFile;
 use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/holiday/card.php
@@ -375,7 +376,7 @@ $listhalfday = array('morning' => $langs->trans("Morning"), "afternoon" => $lang
 $title = $langs->trans('Leave');
 $help_url = 'EN:Module_Holiday';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
     // If user has no permission to create a leave
@@ -656,7 +657,7 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 
 if (is_object($db)) {
     $db->close();

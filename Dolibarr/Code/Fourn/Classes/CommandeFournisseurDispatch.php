@@ -25,6 +25,7 @@ namespace Dolibarr\Code\Fourn\Classes;
 
 use Dolibarr\Code\Reception\Classes\ReceptionLineBatch;
 
+
 /**
  *  \file       htdocs/fourn/class/fournisseur.commande.dispatch.class.php
  *  \ingroup    fournisseur stock

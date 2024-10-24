@@ -24,6 +24,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Resource\Classes\Dolresource;
 use Dolibarr\Code\Resource\Classes\FormResource;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       resource/card.php
@@ -221,7 +222,7 @@ if (empty($reshook)) {
 
 $title = $langs->trans($action == 'create' ? 'AddResource' : 'ResourceSingular');
 $help_url = '';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-resource page-card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-resource page-card');
 
 $form = new Form($db);
 $formresource = new FormResource($db);
@@ -452,5 +453,5 @@ if ($action == 'create' || $object->fetch($id, $ref) > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

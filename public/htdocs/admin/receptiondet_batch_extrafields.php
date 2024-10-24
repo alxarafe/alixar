@@ -27,6 +27,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/receptiondet_batch.php
@@ -75,7 +76,7 @@ require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
 
 $textobject = $langs->transnoentitiesnoconv("Receptions");
 
-llxHeader('', $langs->trans("ReceptionsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-receptiondet_batch_extrafields');
+ViewMain::llxHeader('', $langs->trans("ReceptionsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-receptiondet_batch_extrafields');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("ReceptionsSetup"), $linkback, 'title_setup');
@@ -106,6 +107,6 @@ if ($action == 'edit' && !empty($attrname)) {
     require DOL_DOCUMENT_ROOT . '/core/tpl/admin_extrafields_edit.tpl.php';
 }
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

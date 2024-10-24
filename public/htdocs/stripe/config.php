@@ -21,6 +21,8 @@
  * Set Stripe environment: set the ApiKey and AppInfo
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/stripe/config.php
  *  \ingroup    Stripe

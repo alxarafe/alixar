@@ -25,6 +25,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/asset/admin/asset_extrafields.php
@@ -69,7 +70,7 @@ $help_url = '';
 $page_name = "AssetSetup";
 $textobject = $langs->transnoentitiesnoconv("Assets");
 
-llxHeader('', $langs->trans("AssetSetup"), $help_url);
+ViewMain::llxHeader('', $langs->trans("AssetSetup"), $help_url);
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -106,5 +107,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

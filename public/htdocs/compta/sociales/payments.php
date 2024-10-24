@@ -32,6 +32,7 @@ use Dolibarr\Code\Compta\Classes\PaymentSocialContribution;
 use Dolibarr\Code\Compta\Classes\Tva;
 use Dolibarr\Code\Core\Classes\FormSocialContrib;
 use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/charges/index.php
@@ -114,7 +115,7 @@ $formsocialcontrib = new FormSocialContrib($db);
 $title = $langs->trans("SocialContributionsPayments");
 $help_url = '';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 
 $param = '';
@@ -407,5 +408,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardSpecialBills', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/const.php
@@ -162,7 +163,7 @@ if ($action == 'delete') {
 $form = new Form($db);
 
 $wikihelp = 'EN:Setup_Other|FR:Paramétrage_Divers|ES:Configuración_Varios';
-llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-const');
+ViewMain::llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-const');
 
 // Add logic to show/hide buttons
 if ($conf->use_javascript_ajax) {
@@ -338,5 +339,5 @@ if ($conf->use_javascript_ajax) {
 print "</form>\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

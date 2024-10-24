@@ -38,6 +38,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file htdocs/product/price.php
@@ -893,7 +894,7 @@ if (GETPOST("type") == '1' || ($object->type == Product::TYPE_SERVICE)) {
     $helpurl = 'EN:Module_Services_En|FR:Module_Services|ES:M&oacute;dulo_Servicios';
 }
 
-llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'classforhorizontalscrolloftabs mod-product page-price');
+ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'classforhorizontalscrolloftabs mod-product page-price');
 
 $head = product_prepare_head($object);
 $titre = $langs->trans("CardProduct" . $object->type);
@@ -2538,5 +2539,5 @@ if (getDolGlobalString('PRODUIT_CUSTOMER_PRICES')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

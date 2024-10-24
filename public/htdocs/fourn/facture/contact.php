@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/fourn/facture/contact.php
@@ -136,7 +137,7 @@ if ($id > 0 || !empty($ref)) {
 
         $title = $object->ref . " - " . $langs->trans('ContactsAddresses');
         $helpurl = "EN:Module_Suppliers_Invoices|FR:Module_Fournisseurs_Factures|ES:Módulo_Facturas_de_proveedores";
-        llxHeader('', $title, $helpurl);
+        ViewMain::llxHeader('', $title, $helpurl);
 
         $head = facturefourn_prepare_head($object);
 
@@ -269,5 +270,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -20,6 +20,7 @@
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/margin/tabs/productMargins.php
@@ -141,7 +142,7 @@ if ($id > 0 || !empty($ref)) {
         $help_url = 'EN:Module_Services_En|FR:Module_Services|ES:M&oacute;dulo_Servicios';
     }
 
-    llxHeader('', $title, $help_url);
+    ViewMain::llxHeader('', $title, $help_url);
 
     $param = "&id=" . $object->id;
     if ($limit > 0 && $limit != $conf->liste_limit) {
@@ -499,5 +500,5 @@ print '
 ';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

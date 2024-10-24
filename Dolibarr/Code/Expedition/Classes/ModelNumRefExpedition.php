@@ -29,6 +29,7 @@ namespace Dolibarr\Code\Expedition\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 
+
 /**
  *  \file       htdocs/core/modules/expedition/modules_expedition.php
  *  \ingroup    expedition

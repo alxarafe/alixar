@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Compta\Classes\Tva;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/tva/info.php
@@ -65,7 +66,7 @@ if ($action == 'setlib' && $user->hasRight('tax', 'charges', 'creer')) {
 
 $title = $langs->trans("VAT") . " - " . $langs->trans("Info");
 $help_url = '';
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 $object = new Tva($db);
 $object->fetch($id);
@@ -98,6 +99,6 @@ print '</div>';
 
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

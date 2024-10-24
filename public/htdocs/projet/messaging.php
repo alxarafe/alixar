@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/projet/messaging.php
@@ -120,7 +121,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/projectnameonly/', get
     $title = $object->ref . ' ' . $object->name . ' - ' . $langs->trans("Info");
 }
 $help_url = "EN:Module_Projects|FR:Module_Projets|ES:M&oacute;dulo_Proyectos";
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 $head = project_prepare_head($object);
 
@@ -234,5 +235,5 @@ if (!empty($object->id)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

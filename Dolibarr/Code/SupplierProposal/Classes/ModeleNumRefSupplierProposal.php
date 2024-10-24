@@ -26,6 +26,7 @@ namespace Dolibarr\Code\SupplierProposal\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 
+
 /**
  *  \file       htdocs/core/modules/propale/modules_propale.php
  *  \ingroup    propale

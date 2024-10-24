@@ -29,6 +29,7 @@ use Dolibarr\Code\Societe\Classes\Societe;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/modules/import/import_xlsx.modules.php

@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       /htdocs/core/ajax/extraparams.php
  *  \brief      File to make Ajax action on setting extra parameters of elements.
@@ -69,7 +71,7 @@ if (!$result) {
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 print '<!-- Ajax page called with url ' . dol_escape_htmltag($_SERVER["PHP_SELF"]) . '?' . dol_escape_htmltag($_SERVER["QUERY_STRING"]) . ' -->' . "\n";
 

@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/recruitment/admin/public_interface.php
@@ -82,7 +83,7 @@ $form = new Form($db);
 
 //$help_url = 'EN:Module_Foundations|FR:Module_Adh&eacute;rents|ES:M&oacute;dulo_Miembros';
 $help_url = '';
-llxHeader('', $langs->trans("RecruitmentSetup"), $help_url);
+ViewMain::llxHeader('', $langs->trans("RecruitmentSetup"), $help_url);
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -168,5 +169,5 @@ if (getDolGlobalString('RECRUITMENT_ENABLE_PUBLIC_INTERFACE')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

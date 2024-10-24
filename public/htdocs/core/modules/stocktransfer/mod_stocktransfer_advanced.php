@@ -23,6 +23,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file       htdocs/core/modules/stocktransfer/mod_stocktransfer_advanced.php
  * \ingroup    stocktransfer

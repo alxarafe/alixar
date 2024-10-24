@@ -20,6 +20,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Recruitement\Classes\RecruitmentCandidature;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       recruitmentcandidature_document.php
@@ -100,7 +101,7 @@ $form = new Form($db);
 
 $title = $object->ref . " - " . $langs->trans('Files');
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($object->id) {
     /*
@@ -196,5 +197,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

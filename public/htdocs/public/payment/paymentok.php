@@ -39,6 +39,7 @@ use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Stripe\Classes\Stripe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/public/payment/paymentok.php
@@ -227,7 +228,7 @@ $conf->dol_hide_leftmenu = 1;
 // Show header
 if (empty($doactionsthenredirect)) {
     $replacemainarea = (empty($conf->dol_hide_leftmenu) ? '<div>' : '') . '<div>';
-    llxHeader($head, $langs->trans("PaymentForm"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea);
+    ViewMain::llxHeader($head, $langs->trans("PaymentForm"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea);
 
 
     // Show page content id="dolpaymentdiv"
@@ -2063,7 +2064,7 @@ if (empty($doactionsthenredirect)) {
 if (empty($doactionsthenredirect)) {
     htmlPrintOnlineFooter($mysoc, $langs, 0, $suffix);
 
-    llxFooter('', 'public');
+    ViewMain::llxFooter('', 'public');
 }
 
 

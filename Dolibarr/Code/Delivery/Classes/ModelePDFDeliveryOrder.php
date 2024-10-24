@@ -28,6 +28,7 @@ namespace Dolibarr\Code\Delivery\Classes;
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use DoliDB;
 
+
 /**
  *  \file       htdocs/core/modules/delivery/modules_delivery.php
  *  \ingroup    expedition

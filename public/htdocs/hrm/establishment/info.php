@@ -20,6 +20,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Hrm\Classes\Establishment;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file           htdocs/hrm/establishment/info.php
@@ -133,7 +134,7 @@ $form = new Form($db);
 if ($object->id > 0) {
     $title = $langs->trans("Agenda");
     $help_url = '';
-    llxHeader('', $title, $help_url);
+    ViewMain::llxHeader('', $title, $help_url);
 
     if (isModEnabled('notification')) {
         $langs->load("mails");
@@ -203,5 +204,5 @@ if ($object->id > 0) {
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

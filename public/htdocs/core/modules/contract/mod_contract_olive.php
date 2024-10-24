@@ -27,6 +27,7 @@ use Dolibarr\Code\Contrat\Classes\ModelNumRefContracts;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/contract/mod_contract_olive.php

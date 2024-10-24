@@ -27,6 +27,7 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Expedition\Classes\Expedition;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/product/stats/expedition.php
@@ -105,7 +106,7 @@ if ($id > 0 || !empty($ref)) {
         setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
     }
 
-    llxHeader("", "", $langs->trans("CardProduct" . $product->type), '', '', 0, 0, '', '', 'mod-product page-stats_expedition');
+    ViewMain::llxHeader("", "", $langs->trans("CardProduct" . $product->type), '', '', 0, 0, '', '', 'mod-product page-stats_expedition');
 
     if ($result > 0) {
         $head = product_prepare_head($product);
@@ -298,5 +299,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

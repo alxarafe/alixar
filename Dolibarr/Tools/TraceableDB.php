@@ -23,6 +23,7 @@ namespace Dolibarr\Tools;
 
 use DoliDB;
 
+
 /**
  *  \file       htdocs/debugbar/class/DataCollector/TraceableDB.php
  *  \brief      Class for debugbar DB

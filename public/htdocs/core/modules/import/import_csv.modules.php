@@ -25,6 +25,7 @@
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Imports\Classes\ModeleImports;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/modules/import/import_csv.modules.php

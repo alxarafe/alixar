@@ -25,6 +25,7 @@
 
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/categories/index.php
@@ -81,7 +82,7 @@ if ($type == Categorie::TYPE_ACCOUNT) {
 $arrayofjs = array('/includes/jquery/plugins/jquerytreeview/jquery.treeview.js', '/includes/jquery/plugins/jquerytreeview/lib/jquery.cookie.js');
 $arrayofcss = array('/includes/jquery/plugins/jquerytreeview/jquery.treeview.css');
 
-llxHeader('', $title, '', '', 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::llxHeader('', $title, '', '', 0, 0, $arrayofjs, $arrayofcss);
 
 $newcardbutton = '';
 if ($user->hasRight('categorie', 'creer')) {
@@ -254,5 +255,5 @@ print "</table>";
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

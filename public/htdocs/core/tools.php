@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/tools.php
  *       \brief      Home page for top menu tools
@@ -44,7 +46,7 @@ if ($user->socid > 0) {
 
 $socstatic = new Societe($db);
 
-llxHeader("", $langs->trans("Tools"), "");
+ViewMain::llxHeader("", $langs->trans("Tools"), "");
 
 $text = $langs->trans("Tools");
 
@@ -56,6 +58,6 @@ print '<div class="justify opacitymedium">' . $langs->trans("ToolsDesc") . '</di
 // Show logo
 print '<div class="center"><div class="logo_setup"></div></div>';
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

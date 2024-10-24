@@ -25,6 +25,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/admin/import.php
  *  \ingroup    import
@@ -63,7 +65,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_setmoduleoptions.inc.php';
 $form = new Form($db);
 
 $page_name = "ImportSetup";
-llxHeader('', $langs->trans($page_name), '', '', 0, 0, '', '', '', 'mod-admin page-import');
+ViewMain::llxHeader('', $langs->trans($page_name), '', '', 0, 0, '', '', '', 'mod-admin page-import');
 
 // Subheader
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php">' . $langs->trans("BackToModuleList") . '</a>';
@@ -105,5 +107,5 @@ print '</form>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

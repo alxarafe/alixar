@@ -22,6 +22,7 @@
  */
 
 use Dolibarr\Core\Base\DolibarrModules;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/public/demo/index.php
@@ -466,9 +467,9 @@ $db->close();
  */
 function llxHeaderVierge($title, $head = "")
 {
-    top_httphead();
+    ViewMain::topHttpHead();
 
-    top_htmlhead($head, $title, 0, 0, array(), array('public/demo/demo.css'), 0, 1);
+    ViewMain::topHtmlHead($head, $title, 0, 0, array(), array('public/demo/demo.css'), 0, 1);
 
     print '<body class="demobody"><div class="demobackgrounddiv">' . "\n";
 }

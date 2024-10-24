@@ -34,6 +34,7 @@ use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseurRec;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/fourn/facture/list-rec.php
@@ -428,7 +429,7 @@ $num = $db->num_rows($resql);
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'bodyforlist');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'bodyforlist');
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -1111,5 +1112,5 @@ print '</form>' . "\n";
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

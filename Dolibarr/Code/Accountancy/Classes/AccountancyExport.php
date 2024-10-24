@@ -396,7 +396,7 @@ class AccountancyExport
         $mimetype = $this->getMimeType($formatexportset);
         if ($downloadMode == 0) {
             // begin to print header for direct download
-            top_httphead($mimetype, 1);
+            ViewMain::topHttpHead($mimetype, 1);
         }
 
         include DOL_DOCUMENT_ROOT . '/accountancy/tpl/export_journal.tpl.php';

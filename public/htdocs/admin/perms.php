@@ -23,6 +23,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Core\Base\DolibarrModules;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/perms.php
@@ -74,7 +75,7 @@ $form = new Form($db);
 
 $wikihelp = 'EN:Setup_Security|FR:Paramétrage_Sécurité|ES:Configuración_Seguridad';
 
-llxHeader('', $langs->trans("DefaultRights"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-perms');
+ViewMain::llxHeader('', $langs->trans("DefaultRights"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-perms');
 
 print load_fiche_titre($langs->trans("SecuritySetup"), '', 'title_setup');
 
@@ -269,5 +270,5 @@ if ($reshook < 0) {
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

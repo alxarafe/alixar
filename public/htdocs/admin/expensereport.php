@@ -26,6 +26,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/admin/expensereport.php
  *  \ingroup    expensereport
@@ -190,7 +192,7 @@ if ($action == 'updateMask') {
 
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
-llxHeader('', $langs->trans("ExpenseReportsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-expensereport');
+ViewMain::llxHeader('', $langs->trans("ExpenseReportsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-expensereport');
 
 $form = new Form($db);
 
@@ -519,5 +521,5 @@ print '</form>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

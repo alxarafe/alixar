@@ -21,6 +21,12 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Adherents\Classes\AdherentType;
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/adherents/type_translation.php
  *  \ingroup    product
@@ -28,11 +34,6 @@
  */
 
 // Load Dolibarr environment
-use Dolibarr\Code\Adherents\Classes\AdherentType;
-use Dolibarr\Code\Core\Classes\DolEditor;
-use Dolibarr\Code\Core\Classes\Form;
-use Dolibarr\Code\Core\Classes\FormAdmin;
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
@@ -162,7 +163,7 @@ $title = $langs->trans('MemberType') . " " . $shortlabel . " - " . $langs->trans
 
 $help_url = 'EN:Module_Services_En|FR:Module_Services|ES:M&oacute;dulo_Servicios|DE:Modul_Mitglieder';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $form = new Form($db);
 $formadmin = new FormAdmin($db);
@@ -308,5 +309,5 @@ if ($action == 'create' && $user->hasRight('adherent', 'configurer')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

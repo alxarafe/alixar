@@ -23,6 +23,7 @@
 
 namespace Dolibarr\Code\Compta\Classes;
 
+
 /**
  *  \file       htdocs/compta/prelevement/class/rejetprelevement.class.php
  *  \ingroup    prelevement

@@ -31,6 +31,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/tva/card.php
@@ -390,7 +391,7 @@ $formproject = new FormProjets($db);
 
 $title = $langs->trans("VAT") . " - " . $langs->trans("Card");
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // Form to create a VAT
 if ($action == 'create') {
@@ -889,5 +890,5 @@ if ($id > 0) {
     include DOL_DOCUMENT_ROOT . '/core/tpl/card_presend.tpl.php';
 }
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -30,6 +30,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/comm/action/pertype.php
@@ -238,7 +239,7 @@ $form = new Form($db);
 $companystatic = new Societe($db);
 
 $help_url = 'EN:Module_Agenda_En|FR:Module_Agenda|ES:M&oacute;dulo_Agenda|DE:Modul_Terminplanung';
-llxHeader('', $langs->trans("Agenda"), $help_url);
+ViewMain::llxHeader('', $langs->trans("Agenda"), $help_url);
 
 $now = dol_now();
 $nowarray = dol_getdate($now);
@@ -948,7 +949,7 @@ jQuery(document).ready(function() {
 </script>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

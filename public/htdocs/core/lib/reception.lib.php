@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Link;
 use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\Reception\Classes\Reception;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/lib/reception.lib.php

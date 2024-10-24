@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/boxes/box_graph_invoices_peryear.php

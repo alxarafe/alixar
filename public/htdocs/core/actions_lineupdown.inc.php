@@ -18,6 +18,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/core/actions_lineupdown.inc.php
  *  \brief          Code for actions on moving lines up or down onto object page

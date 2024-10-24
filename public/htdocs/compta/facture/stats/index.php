@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/facture/stats/index.php
@@ -90,7 +91,7 @@ $form = new Form($db);
 $formcompany = new FormCompany($db);
 $formother = new FormOther($db);
 
-llxHeader();
+ViewMain::llxHeader();
 
 $picto = 'bill';
 $title = $langs->trans("BillsStatistics");
@@ -435,5 +436,5 @@ print '<div class="clearboth"></div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

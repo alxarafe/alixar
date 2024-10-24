@@ -23,6 +23,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/modules/asset/doc/doc_generic_asset_odt.modules.php
  *  \ingroup    asset

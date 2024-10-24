@@ -3116,7 +3116,7 @@ class Product extends CommonObject
 
             if (!$error) {
                 //If it is a parent product, then we remove the association with child products
-                $prodcomb = new ProductAttributeCombination($this->db);
+                $prodcomb = new ProductAttributeCombination();
 
                 if ($prodcomb->deleteByFkProductParent($user, $this->id) < 0) {
                     $error++;

@@ -33,6 +33,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormActions;
 use Dolibarr\Code\Holiday\Classes\Holiday;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/holiday/card.php
@@ -966,7 +967,7 @@ $listhalfday = array('morning' => $langs->trans("Morning"), "afternoon" => $lang
 $title = $langs->trans('Leave');
 $help_url = 'EN:Module_Holiday';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $edit = false;
 
@@ -1667,7 +1668,7 @@ if ((empty($id) && empty($ref)) || $action == 'create' || $action == 'add') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 
 if (is_object($db)) {
     $db->close();

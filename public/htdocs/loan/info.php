@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Loan\Classes\Loan;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/loan/info.php
@@ -55,7 +56,7 @@ $form = new Form($db);
 
 $title = $langs->trans("Loan") . ' - ' . $langs->trans("Info");
 $help_url = 'EN:Module_Loan|FR:Module_Emprunt';
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 $object = new Loan($db);
 $object->fetch($id);
@@ -119,5 +120,5 @@ print '</td></tr></table>';
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

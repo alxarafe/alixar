@@ -22,6 +22,7 @@
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Adherents\Classes\AdherentType;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/adherents/note.php
@@ -104,7 +105,7 @@ $title = $langs->trans("Member") . " - " . $langs->trans("Note");
 
 $help_url = "EN:Module_Foundations|FR:Module_Adh&eacute;rents|ES:M&oacute;dulo_Miembros|DE:Modul_Mitglieder";
 
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 $form = new Form($db);
 
@@ -164,5 +165,5 @@ if ($id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -23,6 +23,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Lib\Misc;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    stocktransfer/admin/setup.php
@@ -166,7 +167,7 @@ $form = new Form($db);
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $page_name = "StockTransferSetup";
-llxHeader('', $langs->trans($page_name), '', '', 0, 0, '', '', '', 'mod-admin page-stocktransfer');
+ViewMain::llxHeader('', $langs->trans($page_name), '', '', 0, 0, '', '', '', 'mod-admin page-stocktransfer');
 
 // Subheader
 $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1') . '">' . $langs->trans("BackToModuleList") . '</a>';
@@ -505,5 +506,5 @@ if (empty($setupnotempty)) {
 // Page end
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

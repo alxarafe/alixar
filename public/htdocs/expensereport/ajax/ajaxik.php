@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/expensereport/ajax/ajaxik.php
@@ -62,7 +63,7 @@ $result = restrictedArea($user, 'expensereport', $fk_expense, 'expensereport');
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 $rep = new stdClass();
 $rep->response_status = 0;

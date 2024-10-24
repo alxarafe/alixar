@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/ajax/objectonoff.php
  *       \brief      File to set status for an object. Called when ajax_object_onoff() is used.
@@ -91,7 +93,7 @@ if (preg_match('/statu[st]$/', $field) || ($field == 'evenunsubscribe' && $objec
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 print '<!-- Ajax page called with url ' . dol_escape_htmltag($_SERVER["PHP_SELF"]) . '?' . dol_escape_htmltag($_SERVER["QUERY_STRING"]) . ' -->' . "\n";
 

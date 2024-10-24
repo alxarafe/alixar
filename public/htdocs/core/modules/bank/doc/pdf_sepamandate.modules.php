@@ -20,6 +20,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/modules/bank/doc/pdf_sepamandate.modules.php
  *  \ingroup    project

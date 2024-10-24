@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file    htdocs/modulebuilder/template/admin/about.php
  * \ingroup mymodule
@@ -86,7 +88,7 @@ $form = new Form($db);
 $help_url = '';
 $title = "MyModuleSetup";
 
-llxHeader('', $langs->trans($title), $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-admin_about');
+ViewMain::llxHeader('', $langs->trans($title), $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-admin_about');
 
 // Subheader
 $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1') . '">' . $langs->trans("BackToModuleList") . '</a>';
@@ -103,5 +105,5 @@ print $tmpmodule->getDescLong();
 
 // Page end
 print dol_get_fiche_end();
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

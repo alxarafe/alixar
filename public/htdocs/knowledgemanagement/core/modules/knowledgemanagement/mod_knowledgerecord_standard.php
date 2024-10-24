@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\KnowledgeManagement\Classes\ModeleNumRefKnowledgeRecord;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/knowledgemanagement/core/modules/knowledgemanagement/mod_knowledgerecord_standard.php

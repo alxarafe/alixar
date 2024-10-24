@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/ajax/product_lot.php
@@ -56,7 +57,7 @@ restrictedArea($user, 'produit|service', $productId, 'product&product');
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 $rows = array();
 

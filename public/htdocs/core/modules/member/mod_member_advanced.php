@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Members\Classes\ModeleNumRefMembers;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/member/mod_member_advanced.php

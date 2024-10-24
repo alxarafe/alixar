@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Lib\Misc;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/recruitment/admin/setup_candidatures.php
@@ -175,7 +176,7 @@ $form = new Form($db);
 $dirmodels = array_merge(array('/'), (array) $conf->modules_parts['models']);
 
 $page_name = "RecruitmentSetup";
-llxHeader('', $langs->trans($page_name));
+ViewMain::llxHeader('', $langs->trans($page_name));
 
 // Subheader
 $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1') . '">' . $langs->trans("BackToModuleList") . '</a>';
@@ -501,5 +502,5 @@ if (empty($setupnotempty)) {
 // Page end
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

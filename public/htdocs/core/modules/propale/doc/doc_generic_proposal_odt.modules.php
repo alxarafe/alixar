@@ -27,6 +27,7 @@ use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Propale\Classes\ModelePDFPropales;
 use Dolibarr\Code\Societe\Classes\CompanyBankAccount;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/propale/doc/doc_generic_proposal_odt.modules.php

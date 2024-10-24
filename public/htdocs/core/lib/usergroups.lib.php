@@ -24,6 +24,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/core/lib/usergroups.lib.php
  *      \brief      Set of function to manage users, groups and permissions

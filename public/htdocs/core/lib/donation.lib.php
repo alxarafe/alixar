@@ -20,6 +20,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Link;
 use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file           htdocs/core/lib/donation.lib.php

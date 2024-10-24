@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\WebHook\Classes\Target;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    core/triggers/interface_99_modWebhook_WebhookTriggers.class.php

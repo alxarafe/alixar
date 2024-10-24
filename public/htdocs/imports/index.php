@@ -20,6 +20,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Imports\Classes\Import;
 use Dolibarr\Code\Imports\Classes\ModeleImports;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/imports/index.php
@@ -45,7 +46,7 @@ $import->load_arrays($user);
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("ImportArea"), 'EN:Module_Imports_En|FR:Module_Imports|ES:M&oacute;dulo_Importaciones');
+ViewMain::llxHeader('', $langs->trans("ImportArea"), 'EN:Module_Imports_En|FR:Module_Imports|ES:M&oacute;dulo_Importaciones');
 
 print load_fiche_titre($langs->trans("ImportArea"));
 
@@ -87,5 +88,5 @@ print '</table>';
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

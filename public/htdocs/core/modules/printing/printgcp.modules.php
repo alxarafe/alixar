@@ -22,6 +22,7 @@
 use Dolibarr\Code\Printing\Classes\PrintingDriver;
 use OAuth\Common\Storage\DoliStorage;
 use OAuth\Common\Consumer\Credentials;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/modules/printing/printgcp.modules.php

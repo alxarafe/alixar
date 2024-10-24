@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\Canvas;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/contact/document.php
@@ -120,7 +121,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/contactnameonly/', get
     $title = $object->lastname;
 }
 $help_url = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($object->id) {
     $head = contact_prepare_head($object);
@@ -205,6 +206,6 @@ if ($object->id) {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

@@ -28,6 +28,7 @@ use Dolibarr\Code\Compta\Classes\AccountLine;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Don\Classes\Don;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/don/list.php
@@ -261,7 +262,7 @@ $num = $db->num_rows($resql);
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'bodyforlist');   // Can use also classforhorizontalscrolloftabs instead of bodyforlist for no horizontal scroll
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'bodyforlist');   // Can use also classforhorizontalscrolloftabs instead of bodyforlist for no horizontal scroll
 
 $param = '';
 if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
@@ -658,5 +659,5 @@ print '</div>' . "\n";
 
 print '</form>' . "\n";
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

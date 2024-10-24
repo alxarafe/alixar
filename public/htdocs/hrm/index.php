@@ -27,6 +27,7 @@ use Dolibarr\Code\Holiday\Classes\Holiday;
 use Dolibarr\Code\Recruitement\Classes\RecruitmentCandidature;
 use Dolibarr\Code\Recruitement\Classes\RecruitmentJobPosition;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/index.php
@@ -83,7 +84,7 @@ $childids[] = $user->id;
 
 $title = $langs->trans('HRMArea');
 
-llxHeader('', $title, '');
+ViewMain::llxHeader('', $title, '');
 
 print load_fiche_titre($langs->trans("HRMArea"), '', 'hrm');
 
@@ -93,7 +94,7 @@ if (!empty($setupcompanynotcomplete)) {
     $warnpicto = img_warning($langs->trans("WarningMandatorySetupNotComplete"));
     print '<br><div class="warning"><a href="' . constant('BASE_URL') . '/admin/company.php?mainmenu=home' . (empty($setupcompanynotcomplete) ? '' : '&action=edit&token=' . newToken()) . '">' . $warnpicto . ' ' . $langs->trans("WarningMandatorySetupNotComplete") . '</a></div>';
 
-    llxFooter();
+    ViewMain::llxFooter();
     exit;
 }
 
@@ -435,5 +436,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardHRM', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

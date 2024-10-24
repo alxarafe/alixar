@@ -19,6 +19,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Hrm\Classes\Establishment;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/admin/admin_establishment.php
@@ -84,7 +85,7 @@ $establishmenttmp = new Establishment($db);
 
 $title = $langs->trans('Establishments');
 
-llxHeader('', $title, '');
+ViewMain::llxHeader('', $title, '');
 
 
 // Subheader
@@ -177,5 +178,5 @@ if ($result) {
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

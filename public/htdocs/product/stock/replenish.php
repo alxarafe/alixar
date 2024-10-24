@@ -29,6 +29,7 @@ use Dolibarr\Code\Fourn\Classes\CommandeFournisseurLigne;
 use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
 use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stock/replenish.php
@@ -575,7 +576,7 @@ $i = 0;
 $helpurl = 'EN:Module_Stocks_En|FR:Module_Stock|';
 $helpurl .= 'ES:M&oacute;dulo_Stocks';
 
-llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stock_replenish');
+ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stock_replenish');
 
 $head = array();
 
@@ -1036,6 +1037,6 @@ function toggle(source)
 </script>';
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

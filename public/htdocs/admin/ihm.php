@@ -24,6 +24,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/admin/ihm.php
  *       \brief      Page to setup GUI display options
@@ -34,6 +36,7 @@ use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\ViewMain;
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
@@ -334,7 +337,7 @@ if ($action == 'update') {
 
 $wikihelp = 'EN:First_setup|FR:Premiers_param&eacute;trages|ES:Primeras_configuraciones';
 
-llxHeader(
+ViewMain::llxHeader(
     '',
     $langs->trans("Setup"),
     $wikihelp,
@@ -750,5 +753,5 @@ print '</form>';
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

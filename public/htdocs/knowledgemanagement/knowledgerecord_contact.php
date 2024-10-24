@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\KnowledgeManagement\Classes\KnowledgeRecord;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       knowledgerecord_contact.php
@@ -106,7 +107,7 @@ if ($action == 'addcontact' && $permission) {
 $title = $langs->trans('KnowledgeRecord') . " - " . $langs->trans('ContactsAddresses');
 $help_url = '';
 //$help_url='EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-knowledgemanagement page-contact');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-knowledgemanagement page-contact');
 
 $form = new Form($db);
 $formcompany = new FormCompany($db);
@@ -181,5 +182,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -27,6 +27,7 @@ use Dolibarr\Code\Core\Classes\Conf;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/triggers/interface_20_modWorkflow_WorkflowManager.class.php

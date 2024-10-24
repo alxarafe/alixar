@@ -23,6 +23,7 @@
 
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/boxes/box_birthdays_members.php

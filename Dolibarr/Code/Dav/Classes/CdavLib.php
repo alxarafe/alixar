@@ -22,6 +22,7 @@ namespace Dolibarr\Code\Dav\Classes;
 
 use DoliDB;
 
+
 /**
  *      \file       htdocs/dav/dav.class.php
  *      \ingroup    dav

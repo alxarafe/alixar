@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Mailing\Classes\MailingTargets;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/modules/mailings/fraise.modules.php

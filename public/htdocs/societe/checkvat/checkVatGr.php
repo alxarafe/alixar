@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/societe/checkvat/checkVatGr.php
  *  \ingroup    societe
@@ -35,7 +37,7 @@ $afm = GETPOST('afm'); // Get client Vat from request
 // Make call to check VAT for Greek client
 $result = checkVATGR($username, $password, $myafm, $afm);
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 echo json_encode($result); // Encode the result as JSON and output
 
 /**

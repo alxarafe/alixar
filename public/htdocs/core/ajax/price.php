@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/ajax/price.php
  *       \brief      File to get ht and ttc
@@ -50,7 +52,7 @@ $tva_tx = str_replace('*', '', GETPOST('tva_tx', 'alpha'));
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 //print '<!-- Ajax page called with url '.dol_escape_htmltag($_SERVER["PHP_SELF"]).'?'.dol_escape_htmltag($_SERVER["QUERY_STRING"]).' -->'."\n";
 

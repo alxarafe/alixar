@@ -20,6 +20,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+
 /**
  *  \file       htdocs/core/class/html.formcategory.class.php
  *  \ingroup    core

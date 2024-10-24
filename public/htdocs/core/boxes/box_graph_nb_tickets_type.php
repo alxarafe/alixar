@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *     \file        htdocs/core/boxes/box_graph_nb_tickets_type.php

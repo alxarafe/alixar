@@ -28,9 +28,11 @@ use Dolibarr\Code\Core\Classes\FormAccounting;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Loan\Classes\Loan;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file       htdocs/loan/card.php
+ *   \file
+ * htdocs/loan/card.php
  *   \ingroup    loan
  *   \brief      Loan card
  */
@@ -263,7 +265,7 @@ if (isModEnabled('accounting')) {
 
 $title = $langs->trans("Loan") . ' - ' . $langs->trans("Card");
 $help_url = 'EN:Module_Loan|FR:Module_Emprunt';
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 // Create mode
 if ($action == 'create') {
@@ -774,5 +776,5 @@ if ($id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

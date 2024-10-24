@@ -25,6 +25,7 @@ use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/contact/perso.php
@@ -130,7 +131,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/contactnameonly/', get
     $title = $object->lastname;
 }
 $help_url = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $form = new Form($db);
 $formcompany = new FormCompany($db);
@@ -347,6 +348,6 @@ if ($action != 'edit') {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

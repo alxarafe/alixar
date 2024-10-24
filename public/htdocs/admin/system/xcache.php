@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
@@ -32,7 +34,7 @@ $action = GETPOST('action', 'aZ09');
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_xcache');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_xcache');
 
 print load_fiche_titre("XCache", '', 'title_setup');
 
@@ -40,7 +42,7 @@ print "<br>\n";
 
 if (!function_exists('xcache_info')) {
     print 'XCache seems to be not installed. Function xcache_info not found.';
-    llxFooter();
+    ViewMain::llxFooter();
     exit;
 }
 
@@ -55,5 +57,5 @@ print $langs->trans("xcache.stat") . ': ' . yn(ini_get('xcache.stat')) . '<br>' 
 print $langs->trans("xcache.coverager") . ': ' . yn(ini_get('xcache.coverager')) . '<br>' . "\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -26,6 +26,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/expensereport/document.php
@@ -117,7 +118,7 @@ $form = new Form($db);
 $title = $langs->trans("ExpenseReport") . " - " . $langs->trans("Documents");
 $help_url = "EN:Module_Expense_Reports|FR:Module_Notes_de_frais";
 
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 if ($object->id) {
     $object->fetch_thirdparty();
@@ -168,5 +169,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

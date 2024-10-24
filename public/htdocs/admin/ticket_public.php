@@ -18,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *     \file        admin/ticket_public.php
  *     \ingroup     ticket
@@ -227,7 +229,7 @@ $form = new Form($db);
 
 $help_url = "FR:Module_Ticket";
 $page_name = "TicketSetup";
-llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-ticket_public');
+ViewMain::llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-ticket_public');
 
 // Subheader
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -550,5 +552,5 @@ if (getDolGlobalInt('TICKET_ENABLE_PUBLIC_INTERFACE')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

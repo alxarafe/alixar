@@ -34,6 +34,7 @@ use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/master.inc.php

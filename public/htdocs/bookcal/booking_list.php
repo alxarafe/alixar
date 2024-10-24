@@ -27,6 +27,7 @@ use Dolibarr\Code\BookCal\Classes\Calendar;
 use Dolibarr\Code\Comm\Classes\ActionComm;
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/bookcal/booking_list.php
@@ -110,7 +111,7 @@ $form = new Form($db);
 $now = dol_now();
 $title = $langs->trans('Calendar') . " - " . $langs->trans('Bookings');
 
-llxHeader('', $title, $helpurl);
+ViewMain::llxHeader('', $title, $helpurl);
 
 if ($object->id > 0) {
     $head = calendarPrepareHead($object);
@@ -242,5 +243,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

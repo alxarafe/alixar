@@ -27,6 +27,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/projet/admin/project.php
@@ -244,7 +245,7 @@ if ($action == 'updateMaskTask') {
 
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
-llxHeader("", $langs->trans("ProjectsSetup"));
+ViewMain::llxHeader("", $langs->trans("ProjectsSetup"));
 
 $form = new Form($db);
 
@@ -859,5 +860,5 @@ print '</div>';
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

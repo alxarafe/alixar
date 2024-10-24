@@ -29,6 +29,7 @@
 use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/fichinter.php
@@ -256,7 +257,7 @@ if ($action == 'updateMask') {
 
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-fichinter');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-fichinter');
 
 $form = new Form($db);
 
@@ -669,5 +670,5 @@ print '</div>';
 print '<br>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

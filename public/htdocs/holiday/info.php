@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Holiday\Classes\Holiday;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/holiday/info.php
@@ -85,7 +86,7 @@ $form = new Form($db);
 
 $title = $langs->trans("Leave") . " - " . $langs->trans("Info");
 $helpurl = "";
-llxHeader("", $title, $helpurl);
+ViewMain::llxHeader("", $title, $helpurl);
 
 if ($id > 0 || !empty($ref)) {
     $object = new Holiday($db);
@@ -119,5 +120,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

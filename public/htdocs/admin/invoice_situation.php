@@ -23,6 +23,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/admin/invoice_situation.php
  *      \ingroup    invoice
@@ -136,7 +138,7 @@ $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $help_yrl = 'EN:Invoice_Configuration|FR:Configuration_module_facture|ES:ConfiguracionFactura';
 
-llxHeader("", $langs->trans("BillsSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-invoice_situation');
+ViewMain::llxHeader("", $langs->trans("BillsSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-invoice_situation');
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -173,5 +175,5 @@ if (count($formSetup->items) > 0) {
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

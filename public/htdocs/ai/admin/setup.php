@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormSetup;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/ai/admin/setup.php
@@ -115,7 +116,7 @@ $form = new Form($db);
 $help_url = '';
 $title = "AiSetup";
 
-llxHeader('', $langs->trans($title), $help_url);
+ViewMain::llxHeader('', $langs->trans($title), $help_url);
 
 // Subheader
 $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1') . '">' . $langs->trans("BackToModuleList") . '</a>';
@@ -147,5 +148,5 @@ if (empty($setupnotempty)) {
 // Page end
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

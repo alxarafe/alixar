@@ -23,6 +23,7 @@
 
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/boxes/box_members_by_tags.php

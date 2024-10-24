@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use OAuth\Common\Storage\DoliStorage;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/admin/oauthlogintokens.php
@@ -131,7 +132,7 @@ $form = new Form($db);
 $title = $langs->trans("TokenManager");
 $help_url = 'EN:Module_OAuth|FR:Module_OAuth_FR|ES:Módulo_OAuth_ES';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-admin page-oauthlogintokens');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-admin page-oauthlogintokens');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans('ConfigOAuth'), $linkback, 'title_setup');
@@ -487,5 +488,5 @@ if ($mode == 'userconf' && $user->admin) {
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAccounting;
 use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/accountancy/admin/categories_list.php
@@ -411,7 +412,7 @@ $formadmin = new FormAdmin($db);
 
 $help_url = 'EN:Module_Double_Entry_Accounting#Setup|FR:Module_Comptabilit&eacute;_en_Partie_Double#Configuration';
 
-llxHeader('', $langs->trans('DictionaryAccountancyCategory'), $help_url);
+ViewMain::llxHeader('', $langs->trans('DictionaryAccountancyCategory'), $help_url);
 
 $titre = $langs->trans($tablib[$id]);
 $linkback = '';
@@ -942,7 +943,7 @@ print '</form>';
 print '<br>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

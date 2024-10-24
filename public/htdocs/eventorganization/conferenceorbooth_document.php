@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       conferenceorbooth_document.php
@@ -136,7 +137,7 @@ $form = new Form($db);
 
 $title = $langs->trans("ConferenceOrBooth") . ' - ' . $langs->trans("Files");
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $result = $projectstatic->fetch($object->fk_project);
 if (getDolGlobalString('PROJECT_ALLOW_COMMENT_ON_PROJECT') && method_exists($projectstatic, 'fetchComments') && empty($projectstatic->comments)) {
@@ -414,5 +415,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

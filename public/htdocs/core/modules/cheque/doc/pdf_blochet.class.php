@@ -21,6 +21,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/modules/cheque/doc/pdf_blochet.class.php
  *  \ingroup    banque

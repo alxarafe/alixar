@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/compta/facture/index.php
  *   \ingroup    facture
@@ -49,7 +51,7 @@ $maxOpenCount = !getDolGlobalString('MAIN_MAXLIST_OVERLOAD') ? $max : $conf->glo
  * View
  */
 
-llxHeader("", $langs->trans("CustomersInvoicesArea"), "EN:Customers_Invoices|FR:Factures_Clients|ES:Facturas_a_clientes");
+ViewMain::llxHeader("", $langs->trans("CustomersInvoicesArea"), "EN:Customers_Invoices|FR:Factures_Clients|ES:Facturas_a_clientes");
 
 print load_fiche_titre($langs->trans("CustomersInvoicesArea"), '', 'bill');
 
@@ -88,5 +90,5 @@ print '</div>';
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

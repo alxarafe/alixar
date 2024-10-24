@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       eventorganization/eventorganizationindex.php
@@ -66,7 +67,7 @@ $formfile = new FormFile($db);
 
 $title = $langs->trans('EventOrganizationArea');
 
-llxHeader('', $title, '');
+ViewMain::llxHeader('', $title, '');
 
 print load_fiche_titre($langs->trans("EventOrganizationArea"), '', 'eventorganization.png@eventorganization');
 
@@ -209,5 +210,5 @@ if (isModEnabled('eventorganization') && $user->rights->eventorganization->read)
 print '</div></div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

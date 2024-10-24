@@ -24,6 +24,7 @@ use Dolibarr\Code\Resource\Classes\Dolresource;
 use Dolibarr\Code\Resource\Classes\FormResource;
 use Dolibarr\Code\User\Classes\UserGroup;
 use Dolibarr\Code\Workstation\Classes\Workstation;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/workstation/workstation_card.php
@@ -170,7 +171,7 @@ if ($action == 'create') {
 }
 $help_url = 'EN:Module_Workstation';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-workstation page-workstation_card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-workstation page-workstation_card');
 
 // jquery code
 ?>
@@ -493,5 +494,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

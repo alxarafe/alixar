@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Ecm\Classes\EcmDirectory;
 use Dolibarr\Code\Ecm\Classes\EcmFiles;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/ecm/file_note.php
@@ -130,7 +131,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_setnotes.inc.php'; // Must be include
  * View
  */
 
-llxHeader('', $langs->trans('EcmFiles'));
+ViewMain::llxHeader('', $langs->trans('EcmFiles'));
 
 $form = new Form($db);
 
@@ -189,5 +190,5 @@ print dol_get_fiche_end();
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

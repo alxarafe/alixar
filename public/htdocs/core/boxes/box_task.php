@@ -22,6 +22,7 @@ use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/boxes/box_task.php

@@ -26,7 +26,9 @@
 
 namespace Dolibarr\Code\ExpenseReport\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObjectLine;
+use DoliDB;
 
 /**
  *       \file       htdocs/expensereport/class/expensereport.class.php

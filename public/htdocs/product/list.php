@@ -43,6 +43,7 @@ use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
 use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Workstation\Classes\Workstation;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/list.php
@@ -734,8 +735,8 @@ foreach ($searchCategoryProductList as $searchCategoryProduct) {
     $paramsCat .= "&search_category_product_list[]=" . urlencode($searchCategoryProduct);
 }
 
-//llxHeader('', $title, $helpurl, '', 0, 0, array(), array(), $paramsCat, 'classforhorizontalscrolloftabs');
-llxHeader('', $title, $helpurl, '', 0, 0, array(), array(), $paramsCat, 'mod-product page-list');
+//ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, array(), array(), $paramsCat, 'classforhorizontalscrolloftabs');
+ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, array(), array(), $paramsCat, 'mod-product page-list');
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -2301,5 +2302,5 @@ print '</div>' . "\n";
 print '</form>' . "\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -22,6 +22,7 @@
  */
 
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/bank/budget.php
@@ -51,7 +52,7 @@ $companystatic = new Societe($db);
 $title = $langs->trans('ListTransactionsByCategory');
 $help_url = 'EN:Module_Banks_and_Cash|FR:Module_Banques_et_Caisses|ES:M&oacute;dulo_Bancos_y_Cajas';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // List movements bu category for bank transactions
 print load_fiche_titre($langs->trans("BankTransactionByCategories"), '', 'bank_account');
@@ -105,5 +106,5 @@ if ($result) {
 print "</table>";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

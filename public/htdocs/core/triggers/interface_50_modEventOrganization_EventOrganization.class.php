@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\Conf;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Projet\Classes\Task;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/triggers/interface_50_modEventOrganization_EventOrganization.class.php

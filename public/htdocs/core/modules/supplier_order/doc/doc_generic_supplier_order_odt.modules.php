@@ -30,6 +30,7 @@ use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\SupplierOrder\Classes\ModelePDFSuppliersOrders;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/supplier_order/doc/doc_generic_supplier_order_odt.modules.php

@@ -24,6 +24,7 @@
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/rapport/pdf_paiement.class.php

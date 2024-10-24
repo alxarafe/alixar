@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Lib\Misc;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/admin/workstation.php
@@ -168,7 +169,7 @@ $form = new Form($db);
 $help_url = '';
 $page_name = "WorkstationSetup";
 
-llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-workstation');
+ViewMain::llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-workstation');
 
 // Subheader
 $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1') . '">' . $langs->trans("BackToModuleList") . '</a>';
@@ -498,5 +499,5 @@ foreach ($myTmpObjects as $myTmpObjectKey => $myTmpObjectArray) {
 // Page end
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

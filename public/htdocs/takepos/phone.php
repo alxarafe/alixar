@@ -20,6 +20,7 @@
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/takepos/phone.php
@@ -91,11 +92,11 @@ if (empty($mobilepage) && (empty($action) || ((getDolGlobalString('TAKEPOS_PHONE
     $arrayofjs = array('/takepos/js/jquery.colorbox-min.js');
     $disablejs = 0;
     $disablehead = 0;
-    top_htmlhead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss);
+    ViewMain::topHtmlHead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss);
 
     print '<body style="background-color:#D1D1D1;">' . "\n";
 } else {
-    top_htmlhead('', $title);
+    ViewMain::topHtmlHead('', $title);
 
     print '<body>' . "\n";
 }

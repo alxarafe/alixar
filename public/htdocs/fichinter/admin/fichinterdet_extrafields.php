@@ -23,6 +23,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/fichinter/admin/fichinter_extrafields.php
@@ -66,7 +67,7 @@ require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
 
 $textobject = $langs->transnoentitiesnoconv("Interventions");
 
-llxHeader();
+ViewMain::llxHeader();
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("InterventionsSetup"), $linkback, 'title_setup');
@@ -97,6 +98,6 @@ if ($action == 'edit' && !empty($attrname)) {
     require DOL_DOCUMENT_ROOT . '/core/tpl/admin_extrafields_edit.tpl.php';
 }
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

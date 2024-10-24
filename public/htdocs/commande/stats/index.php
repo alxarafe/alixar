@@ -30,6 +30,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Core\Classes\FormOrder;
 use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/commande/stats/index.php
@@ -112,7 +113,7 @@ if ($mode == 'supplier') {
     $dir = $conf->fournisseur->commande->dir_temp;
 }
 
-llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-order page-stats');
+ViewMain::llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-order page-stats');
 
 print load_fiche_titre($title, '', $picto);
 
@@ -453,5 +454,5 @@ print '<div class="clearboth"></div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

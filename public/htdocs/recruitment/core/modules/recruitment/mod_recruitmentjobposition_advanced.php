@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Recruitement\Classes\ModeleNumRefRecruitmentJobPosition;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/modules/recruitment/mod_recruitmentjobposition_advanced.php

@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Link;
 use Dolibarr\Code\Hrm\Classes\Skilldet;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    lib/hrm_skilldet.lib.php

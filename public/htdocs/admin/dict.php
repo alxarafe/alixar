@@ -32,6 +32,12 @@
  */
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/dict.php
@@ -1259,7 +1265,7 @@ $form = new Form($db);
 
 $title = $langs->trans("DictionarySetup");
 
-llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-admin page-dict');
+ViewMain::llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-admin page-dict');
 
 $linkback = '';
 if ($id && empty($from)) {
@@ -2607,7 +2613,7 @@ if ($id > 0) {
 print '<br>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

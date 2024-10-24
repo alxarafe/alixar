@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file       htdocs/core/customreports.php
  * \ingroup    core
@@ -335,7 +337,7 @@ $form = new Form($db);
 $formother = new FormOther($db);
 
 if (!defined('USE_CUSTOM_REPORT_AS_INCLUDE')) {
-    llxHeader('', $langs->transnoentitiesnoconv('CustomReports'), '');
+    ViewMain::llxHeader('', $langs->transnoentitiesnoconv('CustomReports'), '');
 
     if (empty($head)) {
         print dol_get_fiche_head($head, 'customreports', $title, -2, $picto);
@@ -1155,7 +1157,7 @@ print '<div>';
 if (!defined('USE_CUSTOM_REPORT_AS_INCLUDE')) {
     print dol_get_fiche_end();
 
-    llxFooter();
+    ViewMain::llxFooter();
     // End of page
 
     $db->close();

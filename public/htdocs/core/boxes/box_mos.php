@@ -24,6 +24,7 @@ use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Mrp\Classes\Mo;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/boxes/box_mos.php

@@ -23,6 +23,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/printsheet/doc/pdf_standardlabel.class.php

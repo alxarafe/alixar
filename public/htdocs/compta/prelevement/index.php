@@ -22,6 +22,7 @@
  */
 
 use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/prelevement/index.php
@@ -61,7 +62,7 @@ $usercancreate = $user->hasRight('prelevement', 'bons', 'creer');
  * View
  */
 
-llxHeader('', $langs->trans("CustomersStandingOrdersArea"));
+ViewMain::llxHeader('', $langs->trans("CustomersStandingOrdersArea"));
 
 if (prelevement_check_config() < 0) {
     $langs->load("errors");
@@ -258,5 +259,5 @@ if ($result) {
 print '</div></div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -19,6 +19,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file       htdocs/core/lib/ldap.lib.php
  * \brief      Ensemble de functions de base pour le module LDAP

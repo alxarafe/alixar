@@ -23,6 +23,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormBarCode;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/barcode.php
@@ -141,7 +142,7 @@ $form = new Form($db);
 $formbarcode = new FormBarCode($db);
 
 $help_url = 'EN:Module_Barcode|FR:Module_Codes_Barre|ES:Módulo Código de barra|DE:Modul_Barcode';
-llxHeader('', $langs->trans("BarcodeSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-barcode');
+ViewMain::llxHeader('', $langs->trans("BarcodeSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-barcode');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("BarcodeSetup"), $linkback, 'title_setup');
@@ -492,5 +493,5 @@ print '<br>';
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

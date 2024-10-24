@@ -23,6 +23,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Loan\Classes\Loan;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/loan/list.php
@@ -225,7 +226,7 @@ if ($num == 1 && getDolGlobalInt('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $sear
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -499,5 +500,5 @@ print '</div>' . "\n";
 print '</form>' . "\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

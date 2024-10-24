@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/comm/action/rapport/index.php
@@ -84,7 +85,7 @@ if ($action == 'builddoc') {
 
 $formfile = new FormFile($db);
 
-llxHeader();
+ViewMain::llxHeader();
 
 $sql = "SELECT count(*) as cc,";
 $sql .= " date_format(a.datep, '%m/%Y') as df,";
@@ -215,5 +216,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Adherents\Classes\Subscription;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/adherents/subscription/info.php
@@ -49,7 +50,7 @@ $rowid = GETPOSTINT("rowid");
 
 $form = new Form($db);
 
-llxHeader();
+ViewMain::llxHeader();
 
 $object = new Subscription($db);
 $result = $object->fetch($rowid);
@@ -80,5 +81,5 @@ print '</div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

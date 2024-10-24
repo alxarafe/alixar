@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Resource\Classes\Dolresource;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/resource/contact.php
@@ -110,7 +111,7 @@ $contactstatic = new Contact($db);
 $userstatic = new User($db);
 
 $help_url = '';
-llxHeader('', $langs->trans("Resource"), $help_url, '', 0, 0, '', '', '', 'mod-resource page-card_contact');
+ViewMain::llxHeader('', $langs->trans("Resource"), $help_url, '', 0, 0, '', '', '', 'mod-resource page-card_contact');
 
 // View and edit mode
 
@@ -163,5 +164,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

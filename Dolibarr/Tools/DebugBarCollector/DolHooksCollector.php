@@ -23,6 +23,7 @@ namespace Dolibarr\Tools\DebugBarCollector;
 use DebugBar\DataCollector\RequestDataCollector;
 use Dolibarr\Code\Core\Classes\HookManager;
 
+
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolHooksCollector.php
  *  \brief      Class for debugbar collection

@@ -47,6 +47,7 @@ use Dolibarr\Code\Fourn\Classes\Fournisseur;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/fourn/facture/list.php
@@ -822,7 +823,7 @@ if ($num == 1 && getDolGlobalInt('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $sear
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($socid) {
     $soc = new Societe($db);
@@ -2107,5 +2108,5 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

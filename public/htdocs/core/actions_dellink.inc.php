@@ -18,6 +18,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/core/actions_dellink.inc.php
  *  \brief          Code for actions on linking and deleting link between elements

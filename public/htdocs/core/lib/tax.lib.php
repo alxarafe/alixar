@@ -26,6 +26,7 @@
 
 use Dolibarr\Code\Compta\Classes\ChargeSociales;
 use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/lib/tax.lib.php

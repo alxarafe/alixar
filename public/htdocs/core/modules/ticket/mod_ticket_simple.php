@@ -22,6 +22,7 @@
  */
 
 use Dolibarr\Code\Ticket\Classes\ModeleNumRefTicket;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/core/modules/ticket/mod_ticket_simple.php

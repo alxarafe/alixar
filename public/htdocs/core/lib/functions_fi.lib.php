@@ -18,6 +18,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/core/lib/functions_fi.lib.php
  *  \brief          A set of finish functions for Dolibarr

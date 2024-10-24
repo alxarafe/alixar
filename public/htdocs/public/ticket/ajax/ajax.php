@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/public/ticket/ajax/ajax.php
  *  \brief      Ajax component for Ticket.
@@ -72,7 +74,7 @@ if (!getDolGlobalString('TICKET_CREATE_THIRD_PARTY_WITH_CONTACT_IF_NOT_EXIST')) 
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 if ($action == 'getContacts') {
     $return = array(

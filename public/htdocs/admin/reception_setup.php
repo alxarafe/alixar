@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Reception\Classes\Reception;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/reception_setup.php
@@ -172,7 +173,7 @@ $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("ReceptionsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-reception_setup');
+ViewMain::llxHeader('', $langs->trans("ReceptionsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-reception_setup');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("ReceptionsSetup"), $linkback, 'title_setup');
@@ -484,5 +485,5 @@ print '</table>';
 
 print '</form>';
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

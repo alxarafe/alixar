@@ -32,6 +32,7 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Core\Classes\FormSocialContrib;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/sociales/list.php
@@ -200,7 +201,7 @@ $formsocialcontrib = new FormSocialContrib($db);
 $chargesociale_static = new ChargeSociales($db);
 $projectstatic = new Project($db);
 
-llxHeader('', $langs->trans("SocialContributions"));
+ViewMain::llxHeader('', $langs->trans("SocialContributions"));
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -304,7 +305,7 @@ if ($limit) {
 $resql = $db->query($sql);
 if (!$resql) {
     dol_print_error($db);
-    llxFooter();
+    ViewMain::llxFooter();
     $db->close();
     exit;
 }
@@ -429,7 +430,7 @@ if (empty($mysoc->country_id) && empty($mysoc->country_code)) {
     print '</div>';
 
     print '</form>';
-    llxFooter();
+    ViewMain::llxFooter();
     $db->close();
 }
 
@@ -883,5 +884,5 @@ print '</div>' . "\n";
 print '</form>' . "\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

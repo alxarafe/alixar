@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormActions;
 use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/asset/card.php
@@ -176,7 +177,7 @@ $formfile = new FormFile($db);
 
 $title = $langs->trans("Asset") . ' - ' . $langs->trans("Card");
 $help_url = '';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-asset page-card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-asset page-card');
 
 // Part to create
 if ($action == 'create') {
@@ -444,5 +445,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

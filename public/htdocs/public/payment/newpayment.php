@@ -46,6 +46,7 @@ use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Stripe\Classes\Stripe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/public/payment/newpayment.php
@@ -861,7 +862,7 @@ $conf->dol_hide_topmenu = 1;
 $conf->dol_hide_leftmenu = 1;
 
 $replacemainarea = (empty($conf->dol_hide_leftmenu) ? '<div>' : '') . '<div>';
-llxHeader($head, $langs->trans("PaymentForm"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea);
+ViewMain::llxHeader($head, $langs->trans("PaymentForm"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea);
 
 dol_syslog("--- newpayment.php action = " . $action, LOG_DEBUG, 0, '_payment');
 dol_syslog("newpayment.php show page source=" . $source . " paymentmethod=" . $paymentmethod . ' amount=' . $amount . ' newamount=' . GETPOST("newamount", 'alpha') . " ref=" . $ref, LOG_DEBUG, 0, '_payment');
@@ -873,7 +874,7 @@ if ($source && in_array($ref, array('member_ref', 'contractline_ref', 'invoice_r
     $langs->load("errors");
     dol_print_error_email('BADREFINPAYMENTFORM', $langs->trans("ErrorBadLinkSourceSetButBadValueForRef", $source, $ref));
     // End of page
-    llxFooter();
+    ViewMain::llxFooter();
     $db->close();
     exit;
 }
@@ -2749,6 +2750,6 @@ if (!$ws) {
     htmlPrintOnlineFooter($mysoc, $langs, 1, $suffix, $object);
 }
 
-llxFooter('', 'public');
+ViewMain::llxFooter('', 'public');
 
 $db->close();

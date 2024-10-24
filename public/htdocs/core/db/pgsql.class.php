@@ -26,6 +26,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/db/pgsql.class.php
  *  \brief      Fichier de la class permettant de gerer une base pgsql

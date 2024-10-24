@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReportRule;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/expensereport_rules.php
@@ -183,7 +184,7 @@ if (empty($reshook)) {
  * View
  */
 
-llxHeader('', $langs->trans("ExpenseReportsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-expensereport_rules');
+ViewMain::llxHeader('', $langs->trans("ExpenseReportsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-expensereport_rules');
 
 $form = new Form($db);
 
@@ -385,5 +386,5 @@ echo '<script type="text/javascript"> $(function() {
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

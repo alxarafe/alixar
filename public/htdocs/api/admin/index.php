@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/api/admin/index.php
  *      \ingroup    api
@@ -96,7 +98,7 @@ dol_mkdir(DOL_DATA_ROOT . '/api/temp'); // May have been deleted by a purge
  *	View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("ApiSetup"), $linkback, 'title_setup');
@@ -192,5 +194,5 @@ if (dol_is_dir(DOL_DOCUMENT_ROOT . '/includes/restler/framework/Luracast/Restler
     print info_admin($langs->trans("ErrorNotAvailableWithThisDistribution"), 0, 0, 'error');
 }
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

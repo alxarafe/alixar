@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/comm/propal/index.php
@@ -67,7 +68,7 @@ $form = new Form($db);
 $formfile = new FormFile($db);
 $help_url = "EN:Module_Commercial_Proposals|FR:Module_Propositions_commerciales|ES:Módulo_Presupuestos";
 
-llxHeader("", $langs->trans("ProspectionArea"), $help_url);
+ViewMain::llxHeader("", $langs->trans("ProspectionArea"), $help_url);
 
 print load_fiche_titre($langs->trans("ProspectionArea"), '', 'propal');
 
@@ -350,5 +351,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardPropals', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

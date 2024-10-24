@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       public/emailing/mailing-unsubscribe.php
  *      \ingroup    mailing
@@ -93,7 +95,7 @@ if (empty($tag) || ($unsuscrib != '1')) {
 $head = '';
 $replacemainarea = (empty($conf->dol_hide_leftmenu) ? '<div>' : '') . '<div>';
 
-llxHeader($head, $langs->trans("MailUnsubcribe"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea);
+ViewMain::llxHeader($head, $langs->trans("MailUnsubcribe"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea);
 
 dol_syslog("public/emailing/mailing-unsubscribe.php : Launch unsubscribe requests", LOG_DEBUG);
 
@@ -110,18 +112,18 @@ $obj = $db->fetch_object($resql);
 
 if (empty($obj)) {
     print 'Emailing tag ' . $tag . ' not found in database. Operation canceled.';
-    llxFooter('', 'private');
+    ViewMain::llxFooter('', 'private');
     exit;
 }
 if (empty($obj->email)) {
     print 'Email for this tag is not valid. Operation canceled.';
-    llxFooter('', 'private');
+    ViewMain::llxFooter('', 'private');
     exit;
 }
 
 if ($obj->statut == 3) {
     print 'Email tag already set to unsubscribe. Operation canceled.';
-    llxFooter('', 'private');
+    ViewMain::llxFooter('', 'private');
     exit;
 }
 // TODO Test that mtid and email match also with the one found from $tag
@@ -168,6 +170,6 @@ print $langs->trans("YourMailUnsubcribeOK", $obj->email) . "<br>\n";
 print '</td></tr></table>';
 
 
-llxFooter('', 'public');
+ViewMain::llxFooter('', 'public');
 
 $db->close();

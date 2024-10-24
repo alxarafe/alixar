@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Mrp\Classes\Mo;
 use Dolibarr\Code\Mrp\Classes\ModeleNumRefMos;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/modules/mrp/mod_mo_advanced.php

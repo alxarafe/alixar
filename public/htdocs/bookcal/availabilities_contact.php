@@ -24,9 +24,11 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file       htdocs/bookcal/availabilities_contact.php
+ *   \file
+ * htdocs/bookcal/availabilities_contact.php
  *   \ingroup    bookcal
  *   \brief      Tab for contacts linked to Availabilities
  */
@@ -122,7 +124,7 @@ if ($action == 'addcontact' && $permission) {
 $title = $langs->trans('Availabilities') . " - " . $langs->trans('ContactsAddresses');
 $help_url = '';
 //$help_url='EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $form = new Form($db);
 $formcompany = new FormCompany($db);
@@ -203,5 +205,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

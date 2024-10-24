@@ -23,6 +23,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
 use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/expensereport/payment/payment.php
@@ -166,7 +167,7 @@ if ($action == 'add_payment') {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $form = new Form($db);
 
@@ -342,5 +343,5 @@ if ($action == 'create' || empty($action)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

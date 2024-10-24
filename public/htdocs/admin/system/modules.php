@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Core\Base\DolibarrModules;
+use Dolibarr\Lib\ViewMain;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -182,7 +183,7 @@ foreach ($modules as $key => $module) {
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_modules');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_modules');
 print $info_admin;
 print '<form action="' . $_SERVER["PHP_SELF"] . '" method="post" name="formulaire">';
 if ($optioncss != '') {
@@ -402,7 +403,7 @@ foreach ($rights_ids as $right_id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

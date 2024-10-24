@@ -28,6 +28,7 @@ use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
 use Dolibarr\Code\Product\Classes\Entrepot;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Stock\Classes\ModelePDFStock;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/stock/doc/pdf_standard.modules.php

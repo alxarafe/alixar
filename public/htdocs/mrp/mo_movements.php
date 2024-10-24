@@ -30,6 +30,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productlot;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       mo_movements.php
@@ -268,7 +269,7 @@ $userstatic = new User($db);
 
 $help_url = 'EN:Module_Manufacturing_Orders|FR:Module_Ordres_de_Fabrication|DE:Modul_Fertigungsauftrag';
 
-llxHeader('', $langs->trans('Mo'), $help_url);
+ViewMain::llxHeader('', $langs->trans('Mo'), $help_url);
 
 // Part to show record
 if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'create'))) {
@@ -1060,5 +1061,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

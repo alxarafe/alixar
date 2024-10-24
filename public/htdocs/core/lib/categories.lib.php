@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/lib/categories.lib.php

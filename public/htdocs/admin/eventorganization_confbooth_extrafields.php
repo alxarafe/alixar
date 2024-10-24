@@ -19,6 +19,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/eventorganization_confbooth_extrafields.php
@@ -63,7 +64,7 @@ $textobject = $langs->transnoentitiesnoconv("ConferenceOrBooth");
 $help_url = '';
 $page_name = "EventOrganizationSetup";
 
-llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-eventorganization_confbooth_extrafields');
+ViewMain::llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-eventorganization_confbooth_extrafields');
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -100,5 +101,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

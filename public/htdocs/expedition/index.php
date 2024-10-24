@@ -25,6 +25,7 @@ use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Expedition\Classes\Expedition;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/expedition/index.php
@@ -54,7 +55,7 @@ $companystatic = new Societe($db);
 $shipment = new Expedition($db);
 
 $helpurl = 'EN:Module_Shipments|FR:Module_Exp&eacute;ditions|ES:M&oacute;dulo_Expediciones';
-llxHeader('', $langs->trans("Shipment"), $helpurl);
+ViewMain::llxHeader('', $langs->trans("Shipment"), $helpurl);
 
 print load_fiche_titre($langs->trans("SendingsArea"), '', 'dolly');
 
@@ -296,5 +297,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardWarehouseSendings', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

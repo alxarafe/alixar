@@ -31,6 +31,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Salaries\Classes\Salary;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/prelevement/create.php
@@ -241,7 +242,7 @@ if ($type == 'bank-transfer') {
     $title = $langs->trans("NewPaymentByBankTransfer");
 }
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 
 // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
@@ -749,5 +750,5 @@ else
 */
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -25,6 +25,7 @@ use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/lib/order.lib.php

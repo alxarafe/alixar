@@ -25,6 +25,7 @@
 
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Expedition\Classes\ModelePdfExpedition;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/expedition/doc/pdf_merou.modules.php

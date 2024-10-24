@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/user/hierarchy.php
@@ -106,7 +107,7 @@ $arrayofjs = array(
 );
 $arrayofcss = array('/includes/jquery/plugins/jquerytreeview/jquery.treeview.css');
 
-llxHeader('', $title, $help_url, '', 0, 0, $arrayofjs, $arrayofcss, '', 'bodyforlist mod-user page-hierarchy');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $arrayofjs, $arrayofcss, '', 'bodyforlist mod-user page-hierarchy');
 
 $filters = [];
 if (($search_status != '' && $search_status >= 0)) {
@@ -390,5 +391,5 @@ jQuery(document).ready(function() {
 */
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

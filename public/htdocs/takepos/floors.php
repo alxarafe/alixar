@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/takepos/floors.php
@@ -79,7 +80,7 @@ if ($action == "getTables") {
         $rows[] = $row;
     }
 
-    top_httphead('application/json');
+    ViewMain::topHttpHead('application/json');
     echo json_encode($rows);
     exit;
 }
@@ -125,7 +126,7 @@ if (getDolGlobalString('MAIN_APPLICATION_TITLE')) {
 }
 $arrayofcss = array('/takepos/css/pos.css.php?a=xxx');
 
-top_htmlhead($head, $title, 0, 0, '', $arrayofcss);
+ViewMain::topHtmlHead($head, $title, 0, 0, '', $arrayofcss);
 
 ?>
 <body style="overflow: hidden">

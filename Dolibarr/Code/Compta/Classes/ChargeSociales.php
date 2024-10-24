@@ -24,6 +24,7 @@
 
 namespace Dolibarr\Code\Compta\Classes;
 
+
 /**
  *      \file       htdocs/compta/sociales/class/chargesociales.class.php
  *      \ingroup    invoice

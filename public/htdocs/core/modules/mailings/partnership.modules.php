@@ -14,6 +14,7 @@
 
 use Dolibarr\Code\Mailing\Classes\MailingTargets;
 use Dolibarr\Code\Partnerships\Classes\Partnership;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/mailings/partnership.modules.php

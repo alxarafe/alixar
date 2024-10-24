@@ -29,6 +29,7 @@ use Dolibarr\Code\Core\Classes\FormAccounting;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/accountancy/expensereport/list.php
@@ -229,12 +230,12 @@ $formother = new FormOther($db);
 
 $help_url = 'EN:Module_Double_Entry_Accounting|FR:Module_Comptabilit&eacute;_en_Partie_Double#Liaisons_comptables';
 
-llxHeader('', $langs->trans("ExpenseReportsVentilation"), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-expensereport page-list');
+ViewMain::llxHeader('', $langs->trans("ExpenseReportsVentilation"), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-expensereport page-list');
 
 if (empty($chartaccountcode)) {
     print $langs->trans("ErrorChartOfAccountSystemNotSelected");
     // End of page
-    llxFooter();
+    ViewMain::llxFooter();
     $db->close();
     exit;
 }
@@ -564,5 +565,5 @@ jQuery(document).ready(function() {
 </script>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

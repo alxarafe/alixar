@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Loan\Classes\Loan;
 use Dolibarr\Code\Loan\Classes\LoanSchedule;
 use Dolibarr\Code\Loan\Classes\PaymentLoan;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/loan/payment/payment.php
@@ -230,7 +231,7 @@ if ($action == 'add_payment') {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $form = new Form($db);
 
@@ -383,5 +384,5 @@ if ($action == 'create') {
     print "</form>\n";
 }
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

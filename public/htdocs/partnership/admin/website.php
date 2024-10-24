@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/partnership/admin/website.php
@@ -84,7 +85,7 @@ $form = new Form($db);
 $title = $langs->trans('PartnershipSetup');
 $help_url = '';
 //$help_url = 'EN:Module_Partnership|FR:Module_Adh&eacute;rents|ES:M&oacute;dulo_Miembros';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-partnership page-admin-website');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-partnership page-admin-website');
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -235,5 +236,5 @@ if (getDolGlobalString('PARTNERSHIP_ENABLE_PUBLIC')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

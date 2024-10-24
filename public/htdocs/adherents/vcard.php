@@ -25,6 +25,7 @@
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Core\Classes\vCard;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/adherents/vcard.php

@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Mailing\Classes\MailingTargets;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/mailings/contacts1.modules.php

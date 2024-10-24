@@ -30,6 +30,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAccounting;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/bank/various_payment/list.php
@@ -376,7 +377,7 @@ if ($num == 1 && getDolGlobalInt('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $sear
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -927,5 +928,5 @@ print '</form>' . "\n";
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

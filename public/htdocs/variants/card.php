@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Variants\Classes\ProductAttribute;
 use Dolibarr\Code\Variants\Classes\ProductAttributeValue;
+use Dolibarr\Lib\ViewMain;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -153,7 +154,7 @@ if (empty($reshook)) {
 
 $title = $langs->trans('ProductAttributeName', dol_htmlentities($object->label));
 $help_url = 'EN:Module_Products#Variants';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // Part to create
 if ($action == 'create') {
@@ -341,5 +342,5 @@ if ($action == 'create') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

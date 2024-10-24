@@ -25,6 +25,7 @@ use Dolibarr\Code\Exports\Classes\ModeleExports;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/export/export_excel2007.modules.php

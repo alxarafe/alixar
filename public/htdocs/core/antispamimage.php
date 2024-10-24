@@ -18,6 +18,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/core/antispamimage.php
  *      \brief      Return antispam image
@@ -71,7 +73,7 @@ if (empty($img)) {
 }
 
 // Define mime type
-top_httphead('image/png', 1);
+ViewMain::topHttpHead('image/png', 1);
 
 $background_color = imagecolorallocate($img, 250, 250, 250);
 $ecriture_color = imagecolorallocate($img, 0, 0, 0);

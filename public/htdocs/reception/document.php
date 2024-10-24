@@ -27,6 +27,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Reception\Classes\Reception;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/reception/document.php
@@ -124,7 +125,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_linkedfiles.inc.php';
  * View
  */
 
-llxHeader('', $langs->trans('Reception'), '', '', 0, 0, '', '', '', 'mod-reception page-card_documents');
+ViewMain::llxHeader('', $langs->trans('Reception'), '', '', 0, 0, '', '', '', 'mod-reception page-card_documents');
 
 $form = new Form($db);
 
@@ -213,5 +214,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

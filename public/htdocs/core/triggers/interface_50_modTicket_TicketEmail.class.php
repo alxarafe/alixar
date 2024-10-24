@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/triggers/interface_50_modTicket_TicketEmail.class.php

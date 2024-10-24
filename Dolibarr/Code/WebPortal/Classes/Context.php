@@ -30,7 +30,6 @@ use DoliDB;
 */
 
 require_once __DIR__ . '/controller.class.php';
-require_once __DIR__ . '/webPortalTheme.class.php';
 
 /**
  * Class Context
@@ -507,7 +506,7 @@ class Context
 
     /**
      * Set event messages in dol_events session object. Will be output by calling dol_htmloutput_events.
-     * Note: Calling dol_htmloutput_events is done into pages by standard llxFooter() function.
+     * Note: Calling dol_htmloutput_events is done into pages by standard ViewMain::llxFooter() function.
      *
      * @param   string|string[] $mesgs  Message string or array
      * @param   string          $style  Which style to use ('mesgs' by default, 'warnings', 'errors')
@@ -539,7 +538,7 @@ class Context
 
     /**
      * Set event messages in dol_events session object. Will be output by calling dol_htmloutput_events.
-     * Note: Calling dol_htmloutput_events is done into pages by standard llxFooter() function.
+     * Note: Calling dol_htmloutput_events is done into pages by standard ViewMain::llxFooter() function.
      *
      * @param   string      $mesg   Message string
      * @param   array|null  $mesgs  Message array

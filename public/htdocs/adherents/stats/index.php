@@ -24,6 +24,7 @@ use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Adherents\Classes\AdherentStats;
 use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/adherents/stats/index.php
@@ -73,7 +74,7 @@ $memberstatic = new Adherent($db);
 $form = new Form($db);
 
 $title = $langs->trans("SubscriptionsStatistics");
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 print load_fiche_titre($title, '', $memberstatic->picto);
 
@@ -242,5 +243,5 @@ print '<div class="clearboth"></div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

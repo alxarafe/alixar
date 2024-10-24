@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\FormTicket;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/ticket/agenda.php
@@ -156,7 +157,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/ticketnameonly/', getD
 }
 $help_url = 'EN:Module_Agenda_En|FR:Module_Agenda|DE:Modul_Terminplanung';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-ticket page-card_agenda');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-ticket page-card_agenda');
 
 if ($socid > 0) {
     $object->fetch_thirdparty();
@@ -289,5 +290,5 @@ if (!empty($object->id)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

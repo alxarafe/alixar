@@ -29,6 +29,7 @@ namespace Dolibarr\Code\Commande\Classes;
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use DoliDB;
 
+
 /**
  *  \file           htdocs/core/modules/commande/modules_commande.php
  *  \ingroup        commande

@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       /htdocs/fourn/ajax/getSupplierPrices.php
@@ -55,7 +56,7 @@ $langs->loadLangs(array("stocks", "margins", "products"));
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 //print '<!-- Ajax page called with url '.dol_escape_htmltag($_SERVER["PHP_SELF"]).'?'.dol_escape_htmltag($_SERVER["QUERY_STRING"]).' -->'."\n";
 

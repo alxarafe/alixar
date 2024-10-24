@@ -33,6 +33,7 @@ use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\SupplierOrder\Classes\ModelePDFSuppliersOrders;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/supplier_order/doc/pdf_cornas.modules.php

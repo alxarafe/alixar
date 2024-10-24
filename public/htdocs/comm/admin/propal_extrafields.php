@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/comm/admin/propal_extrafields.php
@@ -62,7 +63,7 @@ require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
 
 $textobject = $langs->transnoentitiesnoconv("Proposals");
 
-llxHeader('', $langs->trans("PropalSetup"));
+ViewMain::llxHeader('', $langs->trans("PropalSetup"));
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("PropalSetup"), $linkback, 'title_setup');
@@ -94,5 +95,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

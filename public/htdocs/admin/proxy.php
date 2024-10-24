@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/proxy.php
@@ -80,7 +81,7 @@ if (GETPOST('action', 'aZ09') == 'set_proxy') {
 $form = new Form($db);
 
 $wikihelp = 'EN:Setup_Security|FR:Paramétrage_Sécurité|ES:Configuración_Seguridad';
-llxHeader('', $langs->trans("Proxy"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-proxy');
+ViewMain::llxHeader('', $langs->trans("Proxy"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-proxy');
 
 print load_fiche_titre($langs->trans("SecuritySetup"), '', 'title_setup');
 
@@ -205,5 +206,5 @@ print dol_get_fiche_end();
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

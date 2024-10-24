@@ -29,6 +29,7 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\FormAccounting;
 use Dolibarr\Code\Core\Classes\FormCategory;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/accountancy/admin/productaccount.php
@@ -318,7 +319,7 @@ foreach ($searchCategoryProductList as $searchCategoryProduct) {
     $paramsCat .= "&search_category_product_list[]=" . urlencode($searchCategoryProduct);
 }
 
-llxHeader('', $title, $help_url, '', 0, 0, array(), array(), $paramsCat, '');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, array(), array(), $paramsCat, '');
 
 $pcgverid = getDolGlobalString('CHARTOFACCOUNTS');
 $pcgvercode = dol_getIdFromCode($db, $pcgverid, 'accounting_system', 'rowid', 'pcg_version');
@@ -955,5 +956,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -24,6 +24,7 @@ use Dolibarr\Code\Compta\Classes\BonPrelevement;
 use Dolibarr\Code\Compta\Classes\LignePrelevement;
 use Dolibarr\Code\Compta\Classes\RejetPrelevement;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/prelevement/rejets.php
@@ -78,7 +79,7 @@ if ($type == 'bank-transfer') {
     $title = $langs->trans("CreditTransfersRefused");
 }
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 if ($sortorder == "") {
     $sortorder = "DESC";
@@ -194,5 +195,5 @@ if ($result) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

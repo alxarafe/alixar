@@ -1861,7 +1861,7 @@ function dol_print_error($db = null, $error = '', $errors = null)
     // Return a http header with error code if possible
     if (!headers_sent()) {
         if (function_exists('top_httphead')) {  // In CLI context, the method does not exists
-            top_httphead();
+            ViewMain::topHttpHead();
         }
         //http_response_code(500);      // If we use 500, message is not output with some command line tools
         http_response_code(202);        // If we use 202, this is not really an error message, but this allow to output message on command line tools
@@ -2458,7 +2458,7 @@ function recordNotFound($message = '', $printheader = 1, $printfooter = 1, $show
 
     if ($printheader) {
         if (function_exists("llxHeader")) {
-            llxHeader('');
+            ViewMain::llxHeader('');
         } elseif (function_exists("llxHeaderVierge")) {
             llxHeaderVierge('');
         }
@@ -2486,7 +2486,7 @@ function recordNotFound($message = '', $printheader = 1, $printfooter = 1, $show
     }
 
     if ($printfooter && function_exists("llxFooter")) {
-        llxFooter();
+        ViewMain::llxFooter();
     }
     exit(0);
 }
@@ -4782,7 +4782,7 @@ function printCommonFooter($zone = 'private')
 
 /**
  *  Print formatted messages to output (Used to show messages on html output).
- *  Note: Calling dol_htmloutput_events is done into pages by standard llxFooter() function, so there is
+ *  Note: Calling dol_htmloutput_events is done into pages by standard ViewMain::llxFooter() function, so there is
  *  no need to call it explicitly.
  *
  * @param int $disabledoutputofmessages Clear all messages stored into session without displaying them

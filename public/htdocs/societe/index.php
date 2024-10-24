@@ -30,6 +30,7 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\InfoBox;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/societe/index.php
@@ -86,7 +87,7 @@ $max = getDolGlobalInt('MAIN_SIZE_SHORTLIST_LIMIT', 5);
 $transAreaType = $langs->trans("ThirdPartiesArea");
 $helpurl = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:M&oacute;dulo_Terceros';
 
-llxHeader("", $langs->trans("ThirdParties"), $helpurl);
+ViewMain::llxHeader("", $langs->trans("ThirdParties"), $helpurl);
 
 print load_fiche_titre($transAreaType, $resultboxes['selectboxlist'], 'companies');
 
@@ -557,5 +558,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardThirdparties', $parameters, $thirdparty_static); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

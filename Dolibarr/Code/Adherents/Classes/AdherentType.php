@@ -25,6 +25,7 @@
 
 namespace Dolibarr\Code\Adherents\Classes;
 
+
 /**
  *  \file       htdocs/adherents/class/adherent_type.class.php
  *  \ingroup    member

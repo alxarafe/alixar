@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
@@ -32,7 +34,7 @@ if (!$user->admin) {
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_os');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_os');
 
 print load_fiche_titre($langs->trans("InfoOS"), '', 'title_setup');
 
@@ -49,5 +51,5 @@ print '<tr class="oddeven"><td>' . $langs->trans("Version") . "</td><td>" . $osv
 print '</table>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

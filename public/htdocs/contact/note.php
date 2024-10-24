@@ -24,9 +24,11 @@
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file       htdocs/contact/note.php
+ *   \file
+ * htdocs/contact/note.php
  *   \brief      Tab for notes on contact
  *   \ingroup    societe
  */
@@ -88,7 +90,7 @@ $title = $langs->trans("ContactNotes");
 $form = new Form($db);
 
 $help_url = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($id > 0) {
     /*
@@ -148,5 +150,5 @@ if ($id > 0) {
     print dol_get_fiche_end();
 }
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

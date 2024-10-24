@@ -32,6 +32,7 @@ use Dolibarr\Tools\DebugBarCollector\DolQueryCollector;
 use Dolibarr\Tools\DebugBarCollector\DolRequestDataCollector;
 use Dolibarr\Tools\DebugBarCollector\DolTimeDataCollector;
 
+
 /**
  *  \file       htdocs/debugbar/class/DebugBar.php
  *  \brief      Class for debugbar

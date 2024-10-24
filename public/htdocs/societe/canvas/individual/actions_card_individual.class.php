@@ -19,6 +19,7 @@
 
 use Dolibarr\Code\Societe\Classes\ActionsCardCommon;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/societe/canvas/individual/actions_card_individual.class.php

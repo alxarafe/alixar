@@ -26,6 +26,7 @@
 
 use Dolibarr\Code\Core\Classes\Conf;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/install/inc.php

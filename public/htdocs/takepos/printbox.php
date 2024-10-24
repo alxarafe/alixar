@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/takepos/printbox.php
  *  \ingroup    takepos
@@ -66,7 +68,7 @@ $arrayofcss = array('/takepos/css/pos.css.php');
 $arrayofjs = array('/takepos/js/jquery.colorbox-min.js');
 
 $head = '';
-top_htmlhead($head, '', 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::topHtmlHead($head, '', 0, 0, $arrayofjs, $arrayofcss);
 
 ?>
 <body>

@@ -19,6 +19,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/lib/ws.lib.php
  *  \ingroup    webservices

@@ -37,6 +37,7 @@ namespace Dolibarr\Code\Fourn\Classes;
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 
+
 /**
  *  \file       htdocs/fourn/class/fournisseur.facture.class.php
  *  \ingroup    fournisseur,facture

@@ -26,6 +26,7 @@
 
 namespace Dolibarr\Code\KnowledgeManagement\Classes;
 
+
 /**
  *  \file           htdocs/knowledgemanagement/core/modules/knowledgemanagement/modules_knowledgerecord.php
  *  \ingroup        knowledgemanagement

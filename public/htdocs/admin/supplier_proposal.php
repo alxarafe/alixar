@@ -227,7 +227,7 @@ if ($action == 'set') {
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 
-llxHeader('', $langs->trans("SupplierProposalSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-supplier_proposal');
+ViewMain::llxHeader('', $langs->trans("SupplierProposalSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-supplier_proposal');
 
 $form = new Form($db);
 
@@ -577,5 +577,5 @@ print "<tr class=\"oddeven\">\n  <td width=\"140\">" . $langs->trans("PathDirect
 print "</table>\n<br>";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

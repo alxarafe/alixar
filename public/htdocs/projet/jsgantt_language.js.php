@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/projet/jsgantt_language.js.php
@@ -47,7 +48,7 @@ if (!defined('NOREQUIREAJAX')) {
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Define mime type
-top_httphead('text/javascript');
+ViewMain::topHttpHead('text/javascript');
 
 global $langs;
 $langs->load("projects");

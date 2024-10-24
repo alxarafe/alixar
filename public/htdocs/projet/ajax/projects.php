@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/projet/ajax/projects.php
@@ -66,7 +67,7 @@ dol_syslog("Call ajax projet/ajax/projects.php");
 
 // Mode to get list of projects
 if (empty($mode) || $mode != 'gettasks') {
-    top_httphead('application/json');
+    ViewMain::topHttpHead('application/json');
 
     // When used from jQuery, the search term is added as GET param "term".
     $searchkey = (GETPOSTISSET($htmlname) ? GETPOST($htmlname, 'aZ09') : '');
@@ -84,7 +85,7 @@ if (empty($mode) || $mode != 'gettasks') {
 // Mode to get list of tasks
 // THIS MODE RETURNS HTML NOT JSON - THE CALL SHOULD BE UPDATE IN THE FUTURE
 if ($mode == 'gettasks') {
-    top_httphead();
+    ViewMain::topHttpHead();
 
     $formproject = new FormProjets($db);
     $formproject->selectTasks((!empty($socid) ? $socid : -1), 0, 'taskid', 24, 1, '1', 1, 0, 0, 'maxwidth500', GETPOSTINT('projectid'), '');

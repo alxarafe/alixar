@@ -30,6 +30,7 @@ use Dolibarr\Code\Projet\Classes\ModelePDFProjects;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Projet\Classes\Task;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/project/doc/pdf_beluga.modules.php

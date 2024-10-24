@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Holiday\Classes\Holiday;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/holiday/document.php
@@ -128,7 +129,7 @@ $form = new Form($db);
 $listhalfday = array('morning' => $langs->trans("Morning"), "afternoon" => $langs->trans("Afternoon"));
 $title = $langs->trans("Leave") . ' - ' . $langs->trans("Files");
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 if ($object->id) {
     $valideur = new User($db);
@@ -307,5 +308,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

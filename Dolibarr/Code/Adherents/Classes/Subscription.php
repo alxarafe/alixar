@@ -22,6 +22,7 @@
 
 namespace Dolibarr\Code\Adherents\Classes;
 
+
 /**
  *      \file       htdocs/adherents/class/subscription.class.php
  *      \ingroup    member

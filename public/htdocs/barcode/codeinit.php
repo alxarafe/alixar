@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/barcode/codeinit.php
@@ -291,7 +292,7 @@ if ($action == 'initbarcodeproducts') {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("MassBarcodeInit"), '', '', 0, 0, '', '', '', 'mod-barcode page-codeinit');
+ViewMain::llxHeader('', $langs->trans("MassBarcodeInit"), '', '', 0, 0, '', '', '', 'mod-barcode page-codeinit');
 
 print load_fiche_titre($langs->trans("MassBarcodeInit"), '', 'title_setup.png');
 print '<br>';
@@ -457,5 +458,5 @@ print $langs->trans("ClickHereToGoTo") . ' : <a href="' . constant('BASE_URL') .
 print '<br>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

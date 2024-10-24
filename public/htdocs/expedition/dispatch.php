@@ -31,6 +31,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Expedition\Classes\Expedition;
 use Dolibarr\Code\Product\Classes\Entrepot;
 use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/expedition/dispatch.php
@@ -376,7 +377,7 @@ $title = $object->ref . " - " . $langs->trans('ShipmentDistribution');
 $help_url = 'EN:Module_Shipments|FR:Module_Expéditions|ES:M&oacute;dulo_Expediciones|DE:Modul_Lieferungen';
 $morejs = array('/expedition/js/lib_dispatch.js.php');
 
-llxHeader('', $title, $help_url, '', 0, 0, $morejs);
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs);
 
 if ($object->id > 0 || !empty($object->ref)) {
     $lines = $object->lines;    // This is an array of detail of line, on line per source order line found intolines[]->fk_elementdet, then each line may have sub data
@@ -1434,5 +1435,5 @@ if ($object->id > 0 || !empty($object->ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

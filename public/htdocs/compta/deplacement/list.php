@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/compta/deplacement/list.php
  *  \brief      Page to list trips and expenses
@@ -92,7 +94,7 @@ $userstatic = new User($db);
 $childids = $user->getAllChildIds();
 $childids[] = $user->id;
 
-llxHeader();
+ViewMain::llxHeader();
 
 $sql = "SELECT s.nom, d.fk_user, s.rowid as socid,"; // Ou
 $sql .= " d.rowid, d.type, d.dated as dd, d.km,"; // Comment
@@ -234,5 +236,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

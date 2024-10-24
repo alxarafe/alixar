@@ -24,6 +24,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Hrm\Classes\Skill;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/skill_agenda.php
@@ -141,7 +142,7 @@ $form = new Form($db);
 if ($object->id > 0) {
     $title = $langs->trans("Agenda");
     $help_url = 'EN:Module_Agenda_En|DE:Modul_Terminplanung';
-    llxHeader('', $title, $help_url);
+    ViewMain::llxHeader('', $title, $help_url);
 
     if (isModEnabled('notification')) {
         $langs->load("mails");
@@ -229,5 +230,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

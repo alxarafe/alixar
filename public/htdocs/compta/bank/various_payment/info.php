@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Compta\Classes\PaymentVarious;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/bank/various_payment/info.php
@@ -49,7 +50,7 @@ $result = restrictedArea($user, 'banque', '', '', '');
  * View
  */
 
-llxHeader("", $langs->trans("VariousPayment"));
+ViewMain::llxHeader("", $langs->trans("VariousPayment"));
 
 $object = new PaymentVarious($db);
 $result = $object->fetch($id);
@@ -107,5 +108,5 @@ print '</td></tr></table>';
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

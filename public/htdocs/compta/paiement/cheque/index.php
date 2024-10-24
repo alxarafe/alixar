@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\Compta\Classes\RemiseCheque;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/paiement/cheque/index.php
@@ -68,7 +69,7 @@ if (getDolGlobalString('BANK_PAYMENT_MODES_FOR_DEPOSIT_MANAGEMENT', 'CHQ') == 'C
     $title = $langs->trans("DocumentsDepositArea");
 }
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 $newcardbutton = '';
 if ($usercancreate) {
@@ -202,5 +203,5 @@ foreach ($arrayofpaymentmodetomanage as $val) {
 print '</div></div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

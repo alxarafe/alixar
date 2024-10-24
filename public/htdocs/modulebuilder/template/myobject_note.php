@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/modulebuilder/template/myobject_note.php
  *  \ingroup    mymodule
@@ -156,7 +158,7 @@ $title = $langs->trans('MyObject') . ' - ' . $langs->trans("Notes");
 $help_url = '';
 //$help_url='EN:Customers_Orders|FR:Commandes_Clients|ES:Pedidos de clientes';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-card_notes');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-card_notes');
 
 if ($id > 0 || !empty($ref)) {
     $object->fetch_thirdparty();
@@ -225,5 +227,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

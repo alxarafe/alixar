@@ -31,6 +31,7 @@ use Dolibarr\Code\Hrm\Classes\Job;
 use Dolibarr\Code\Hrm\Classes\Skill;
 use Dolibarr\Code\Hrm\Classes\SkillRank;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/skill_tab.php
@@ -194,7 +195,7 @@ $formproject = new FormProjets($db);
 
 $title = $langs->trans("RequiredSkills");
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // Part to show record
 if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'create'))) {
@@ -552,5 +553,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
     print dol_get_fiche_end();
 }
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

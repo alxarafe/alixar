@@ -29,6 +29,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Core\Classes\FormPropal;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/comm/propal/stats/index.php
@@ -105,7 +106,7 @@ if ($mode == 'supplier') {
     $cat_label = $langs->trans("Category") . ' ' . lcfirst($langs->trans("Supplier"));
 }
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 print load_fiche_titre($title, '', $picto);
 
@@ -383,5 +384,5 @@ print '<div class="clearboth"></div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

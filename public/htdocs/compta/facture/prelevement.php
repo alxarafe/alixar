@@ -32,6 +32,7 @@ use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\CompanyBankAccount;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/facture/prelevement.php
@@ -267,7 +268,7 @@ if ($type == 'bank-transfer') {
     $helpurl = "EN:Customers_Invoices|FR:Factures_Clients|ES:Facturas_a_clientes";
 }
 
-llxHeader('', $title, $helpurl);
+ViewMain::llxHeader('', $title, $helpurl);
 
 
 if ($object->id > 0) {
@@ -1094,5 +1095,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

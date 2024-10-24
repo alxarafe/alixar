@@ -26,6 +26,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/admin/invoice.php
  *      \ingroup    invoice
@@ -282,7 +284,7 @@ if ($action == 'updateMask') {
 
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
-llxHeader("", $langs->trans("BillsSetup"), 'EN:Invoice_Configuration|FR:Configuration_module_facture|ES:ConfiguracionFactura', '', 0, 0, '', '', '', 'mod-admin page-invoice');
+ViewMain::llxHeader("", $langs->trans("BillsSetup"), 'EN:Invoice_Configuration|FR:Configuration_module_facture|ES:ConfiguracionFactura', '', 0, 0, '', '', '', 'mod-admin page-invoice');
 
 $form = new Form($db);
 
@@ -888,5 +890,5 @@ print "</div>\n";
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

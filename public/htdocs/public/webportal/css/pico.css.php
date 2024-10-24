@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2024   Laurent Destailleur     <eldy@users.sourceforge.net>
+/* Copyright (C) 2024       Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -16,6 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\WebPortal\Classes\WebPortalTheme;
+use Dolibarr\Lib\ViewCss;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/public/webportal/css/global.css.php
@@ -48,12 +52,11 @@ if (!defined('NOREQUIREAJAX')) {
 session_cache_limiter('public');
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // __DIR__ allow this script to be included in custom themes
-require_once __DIR__ . '/../../../webportal/class/webPortalTheme.class.php';
 
 $webPortalTheme = new WebPortalTheme();
 
 // Define css type
-top_httphead('text/css');
+ViewCss::topHttpHead();
 // Important: Following code is to avoid page request by browser and PHP CPU at each Dolibarr page access.
 if (empty($dolibarr_nocache)) {
     header('Cache-Control: max-age=10800, public, must-revalidate');

@@ -36,6 +36,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productlot;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Workstation\Classes\Workstation;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       mo_production.php
@@ -518,7 +519,7 @@ $tmpstockmovement = new MouvementStock($db);
 
 $help_url = 'EN:Module_Manufacturing_Orders|FR:Module_Ordres_de_Fabrication|DE:Modul_Fertigungsauftrag';
 $morejs = array('/mrp/js/lib_dispatch.js.php');
-llxHeader('', $langs->trans('Mo'), $help_url, '', 0, 0, $morejs);
+ViewMain::llxHeader('', $langs->trans('Mo'), $help_url, '', 0, 0, $morejs);
 
 $newToken = newToken();
 
@@ -1957,5 +1958,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

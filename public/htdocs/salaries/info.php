@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Salaries\Classes\Salary;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/salaries/info.php
@@ -119,7 +120,7 @@ if (isModEnabled('project')) {
 
 $title = $langs->trans('Salary') . " - " . $langs->trans('Info');
 $help_url = "";
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 $object->fetch($id);
 $object->info($id);
@@ -194,5 +195,5 @@ print '</div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

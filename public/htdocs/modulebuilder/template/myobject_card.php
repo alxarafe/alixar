@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *    \file       htdocs/modulebuilder/template/myobject_card.php
  *    \ingroup    mymodule
@@ -236,7 +238,7 @@ if ($action == 'create') {
 }
 $help_url = '';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-card');
 
 // Example : Adding jquery code
 // print '<script type="text/javascript">
@@ -641,5 +643,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

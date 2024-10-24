@@ -23,6 +23,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/admin/translation.php
@@ -204,7 +205,7 @@ $form = new Form($db);
 $formadmin = new FormAdmin($db);
 
 $wikihelp = 'EN:Setup_Translation|FR:Paramétrage_Traduction|ES:Configuración_Traducción';
-llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-translation');
+ViewMain::llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-translation');
 
 $param = '&mode=' . urlencode($mode);
 
@@ -651,5 +652,5 @@ if (!empty($langcode)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

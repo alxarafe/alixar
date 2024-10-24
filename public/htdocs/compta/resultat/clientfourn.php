@@ -29,6 +29,7 @@
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Accountancy\Classes\AccountancyCategory;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/resultat/clientfourn.php
@@ -167,7 +168,7 @@ $hookmanager->initHooks(['customersupplierreportlist']);
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $form = new Form($db);
 
@@ -1567,5 +1568,5 @@ print "</table>";
 print '<br>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

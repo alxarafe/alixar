@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Hrm\Classes\Job;
 use Dolibarr\Code\Hrm\Classes\SkillRank;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/job_card.php
@@ -222,7 +223,7 @@ $formproject = new FormProjets($db);
 
 $title = $langs->trans("Job");
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // Example : Adding jquery code
 // print '<script type="text/javascript" language="javascript">
@@ -540,5 +541,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

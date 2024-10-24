@@ -25,6 +25,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/modules/delivery/doc/pdf_storm.modules.php
  *  \ingroup    livraison

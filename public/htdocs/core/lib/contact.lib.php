@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Conf;
 use Dolibarr\Code\Core\Classes\Link;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/lib/contact.lib.php

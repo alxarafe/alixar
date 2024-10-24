@@ -25,6 +25,8 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/modulebuilder/index.php
@@ -3050,7 +3052,7 @@ $morejs = array(
 );
 $morecss = array();
 
-llxHeader('', $langs->trans("ModuleBuilder"), $help_url, '', 0, 0, $morejs, $morecss, '', 'classforhorizontalscrolloftabs');
+ViewMain::llxHeader('', $langs->trans("ModuleBuilder"), $help_url, '', 0, 0, $morejs, $morecss, '', 'classforhorizontalscrolloftabs');
 
 
 $text = $langs->trans("ModuleBuilder");
@@ -3106,7 +3108,7 @@ if (empty($allowonlineinstall)) {
 
     print $message;
 
-    llxFooter();
+    ViewMain::llxFooter();
     exit(0);
 }
 
@@ -6628,5 +6630,5 @@ print dol_get_fiche_end(); // End modules
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

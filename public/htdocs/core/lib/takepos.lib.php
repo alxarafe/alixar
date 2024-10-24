@@ -19,6 +19,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/core/lib/takepos.lib.php
  *      \brief      Library file with function for TakePOS module

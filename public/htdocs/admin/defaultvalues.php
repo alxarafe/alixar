@@ -21,6 +21,7 @@
 use Dolibarr\Code\Core\Classes\DefaultValues;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file      htdocs/admin/defaultvalues.php
@@ -204,7 +205,7 @@ $form = new Form($db);
 $formadmin = new FormAdmin($db);
 
 $wikihelp = 'EN:First_setup|FR:Premiers_paramétrages|ES:Primeras_configuraciones';
-llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-defaultvalues');
+ViewMain::llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-defaultvalues');
 
 $param = '&mode=' . $mode;
 
@@ -429,5 +430,5 @@ print dol_get_fiche_end();
 print "</form>\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Product\Classes\StockTransfer;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       stocktransfer_list.php
@@ -347,7 +348,7 @@ if ($num == 1 && getDolGlobalInt('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $sear
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'bodyforlist mod-product page-stock-stocktransfer_stocktransfer_list');   // Can use also classforhorizontalscrolloftabs instead of bodyforlist for no horizontal scroll
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'bodyforlist mod-product page-stock-stocktransfer_stocktransfer_list');   // Can use also classforhorizontalscrolloftabs instead of bodyforlist for no horizontal scroll
 
 // Example : Adding jquery code
 // print '<script type="text/javascript">
@@ -775,5 +776,5 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

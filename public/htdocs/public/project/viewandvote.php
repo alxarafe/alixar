@@ -21,6 +21,7 @@ use Dolibarr\Code\Comm\Classes\ActionComm;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/public/payment/newpayment.php
@@ -217,7 +218,7 @@ $conf->dol_hide_topmenu = 1;
 $conf->dol_hide_leftmenu = 1;
 
 $replacemainarea = (empty($conf->dol_hide_leftmenu) ? '<div>' : '') . '<div>';
-llxHeader($head, $langs->trans("SuggestForm"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea);
+ViewMain::llxHeader($head, $langs->trans("SuggestForm"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea);
 
 print '<span id="dolpaymentspan"></span>' . "\n";
 print '<div class="center">' . "\n";
@@ -304,6 +305,6 @@ $object = null;
 
 htmlPrintOnlineFooter($mysoc, $langs, 1, $suffix, $object);
 
-llxFooter('', 'public');
+ViewMain::llxFooter('', 'public');
 
 $db->close();

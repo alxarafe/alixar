@@ -35,6 +35,7 @@ use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Projet\Classes\Task;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/projet/card.php
@@ -581,7 +582,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/projectnameonly/', get
 
 $help_url = "EN:Module_Projects|FR:Module_Projets|ES:M&oacute;dulo_Proyectos|DE:Modul_Projekte";
 
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 $titleboth = $langs->trans("LeadsOrProjects");
 $titlenew = $langs->trans("NewLeadOrProject"); // Leads and opportunities by default
@@ -1779,5 +1780,5 @@ if ($action == 'create' && $user->hasRight('projet', 'creer')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

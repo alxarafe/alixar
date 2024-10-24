@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\CMailFile;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/public/payment/paymentko.php
@@ -224,7 +225,7 @@ if (empty($doactionsthenredirect)) {
     $conf->dol_hide_leftmenu = 1;
 
     $replacemainarea = (empty($conf->dol_hide_leftmenu) ? '<div>' : '') . '<div>';
-    llxHeader($head, $langs->trans("PaymentForm"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea);
+    ViewMain::llxHeader($head, $langs->trans("PaymentForm"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea);
 
 
     // Show ko message
@@ -301,7 +302,7 @@ if (empty($doactionsthenredirect)) {
 
     htmlPrintOnlineFooter($mysoc, $langs, 0, $suffix);
 
-    llxFooter('', 'public');
+    ViewMain::llxFooter('', 'public');
 }
 
 

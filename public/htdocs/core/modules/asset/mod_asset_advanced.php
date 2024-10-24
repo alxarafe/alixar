@@ -26,6 +26,7 @@ use Dolibarr\Code\Asset\Classes\Asset;
 use Dolibarr\Code\Asset\Classes\ModeleNumRefAsset;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/modules/asset/mod_asset_advanced.php

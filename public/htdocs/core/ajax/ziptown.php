@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file      htdocs/core/ajax/ziptown.php
  *       \ingroup   core
@@ -61,7 +63,7 @@ dol_syslog('ziptown call with MAIN_USE_ZIPTOWN_DICTIONNARY=' . getDolGlobalStrin
 
 // Generation of list of zip-town
 if (GETPOST('zipcode') || GETPOST('town')) {
-    top_httphead('application/json');
+    ViewMain::topHttpHead('application/json');
 
     $return_arr = array();
     $formcompany = new FormCompany($db);
@@ -141,7 +143,7 @@ if (GETPOST('zipcode') || GETPOST('town')) {
 
     echo json_encode($return_arr);
 } elseif (GETPOSTISSET('country_codeid')) {
-    top_httphead('text/html');
+    ViewMain::topHttpHead('text/html');
 
     $formcompany = new FormCompany($db);
     print $formcompany->select_state(GETPOSTINT('selected', 1), GETPOSTINT('country_codeid', 1), GETPOSTINT('htmlname', 1), GETPOSTINT('morecss', 1));

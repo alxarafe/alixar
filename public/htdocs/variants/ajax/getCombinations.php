@@ -54,7 +54,7 @@ $result = restrictedArea($user, 'variants');
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 $id = GETPOSTINT('id');
 
@@ -73,6 +73,6 @@ if ($product->fetch($id) < 0) {
     ));
 }
 
-$prodcomb = new ProductCombination($db);
+$prodcomb = new ProductAttributeCombination();
 
 echo json_encode($prodcomb->getUniqueAttributesAndValuesByFkProductParent($product->id));

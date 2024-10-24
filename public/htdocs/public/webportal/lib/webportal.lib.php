@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\WebPortal\Classes\Context;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/public/webportal/lib/webportal.lib.php

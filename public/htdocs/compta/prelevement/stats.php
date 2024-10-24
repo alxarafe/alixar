@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Compta\Classes\LignePrelevement;
 use Dolibarr\Code\Compta\Classes\RejetPrelevement;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/prelevement/stats.php
@@ -58,7 +59,7 @@ if ($type == 'bank-transfer') {
     $title = $langs->trans("CreditTransferStatistics");
 }
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 print load_fiche_titre($title);
 
@@ -261,5 +262,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

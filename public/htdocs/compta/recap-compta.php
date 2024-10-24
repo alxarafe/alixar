@@ -24,6 +24,7 @@ use Dolibarr\Code\Compta\Classes\Paiement;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/recap-compta.php
@@ -108,7 +109,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/thirdpartynameonly/', 
 }
 $help_url = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($id > 0) {
     $param = '';
@@ -320,6 +321,6 @@ if ($id > 0) {
     dol_print_error($db);
 }
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

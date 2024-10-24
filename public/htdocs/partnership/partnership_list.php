@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Partnerships\Classes\Partnership;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       partnership_list.php
@@ -481,7 +482,7 @@ if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $s
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'mod-partnership page-list');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'mod-partnership page-list');
 
 if ($managedfor == "member") {
     if ($memberid > 0 && $user->hasRight('adherent', 'lire')) {
@@ -1080,5 +1081,5 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

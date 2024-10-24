@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/eventorganization/conferenceorbooth_list.php
@@ -311,7 +312,7 @@ if ($projectid > 0 || $projectref) {
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 
 if ($projectid > 0) {
@@ -1133,5 +1134,5 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

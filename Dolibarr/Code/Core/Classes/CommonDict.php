@@ -19,6 +19,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+
 /**
  *  \file       htdocs/core/class/commondict.class.php
  *  \ingroup    core

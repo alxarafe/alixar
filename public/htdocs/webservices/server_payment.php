@@ -25,6 +25,8 @@ use Dolibarr\Code\Societe\Classes\Societe;
  * The payment webservice was initially created by Nicolas Nunge <me@nikkow.eu>
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/webservices/server_payment.php
  *       \brief      File that is entry point to call Dolibarr WebServices

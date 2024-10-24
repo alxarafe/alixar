@@ -28,6 +28,7 @@ use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Fourn\Classes\PaiementFourn;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/stats/byratecountry.php
@@ -158,7 +159,7 @@ foreach ($listofparams as $param) {
     }
 }
 
-llxHeader('', $langs->trans("TurnoverReport"), '', '', 0, 0, '', '', $morequerystring);
+ViewMain::llxHeader('', $langs->trans("TurnoverReport"), '', '', 0, 0, '', '', $morequerystring);
 
 $exportlink = "";
 $namelink = "";
@@ -479,5 +480,5 @@ if ($modecompta == 'CREANCES-DETTES') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

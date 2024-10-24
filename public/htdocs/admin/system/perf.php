@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -45,7 +46,7 @@ if (GETPOST('action', 'aZ09') == 'donothing') {
 $form = new Form($db);
 $nowstring = dol_print_date(dol_now(), 'dayhourlog');
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_perf');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_perf');
 
 print load_fiche_titre($langs->trans("PerfDolibarr"), '', 'title_setup');
 
@@ -686,5 +687,5 @@ print '<br>';
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

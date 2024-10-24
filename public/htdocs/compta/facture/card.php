@@ -44,6 +44,7 @@ use Dolibarr\Code\Compta\Classes\FactureLigne;
 use Dolibarr\Code\Compta\Classes\FactureRec;
 use Dolibarr\Code\Compta\Classes\Paiement;
 use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
@@ -52,9 +53,11 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Code\Facture\Classes\ModelePDFFactures;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Code\Variants\Classes\ProductCombination;
+use Dolibarr\Code\Variants\Model\ProductAttributeCombination;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/compta/facture/card.php
@@ -2221,7 +2224,7 @@ if (empty($reshook)) {
         if (!$error && isModEnabled('variants') && $prod_entry_mode != 'free') {
             if ($combinations = GETPOST('combinations', 'array')) {
                 //Check if there is a product with the given combination
-                $prodcomb = new ProductCombination($db);
+                $prodcomb = new ProductAttributeCombination();
 
                 if ($res = $prodcomb->fetchByProductCombination2ValuePairs($idprod, $combinations)) {
                     $idprod = $res->fk_product_child;
@@ -3164,7 +3167,7 @@ if ($action == 'create') {
 }
 $help_url = "EN:Customers_Invoices|FR:Factures_Clients|ES:Facturas_a_clientes";
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // Mode creation
 
@@ -4198,7 +4201,7 @@ if ($action == 'create') {
     if (empty($object->id)) {
         $langs->load('errors');
         echo '<div class="error">' . $langs->trans("ErrorRecordNotFound") . '</div>';
-        llxFooter();
+        ViewMain::llxFooter();
         exit;
     }
 
@@ -6141,5 +6144,5 @@ if ($action == 'create') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

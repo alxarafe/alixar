@@ -38,6 +38,7 @@ use Dolibarr\Code\FichInter\Classes\FichinterRec;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file        htdocs/fichinter/card-rec.php
@@ -265,7 +266,7 @@ if ($action == 'add') {
 
 $help_url = '';
 
-llxHeader('', $langs->trans("RepeatableIntervention"), $help_url);
+ViewMain::llxHeader('', $langs->trans("RepeatableIntervention"), $help_url);
 
 $form = new Form($db);
 $companystatic = new Societe($db);
@@ -938,5 +939,5 @@ if ($action == 'create') {
         }
     }
 }
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

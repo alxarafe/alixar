@@ -17,6 +17,7 @@
  */
 
 use Dolibarr\Code\Product\Classes\Inventory;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       lib/inventory.lib.php

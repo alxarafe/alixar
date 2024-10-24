@@ -35,6 +35,7 @@ use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
 use Dolibarr\Code\Holiday\Classes\Holiday;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file           htdocs/core/actions_massactions.inc.php

@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormMail;
 use Dolibarr\Core\Base\DolibarrModules;
 use Dolibarr\Lib\AveryLabels;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file           htdocs/core/lib/admin.lib.php

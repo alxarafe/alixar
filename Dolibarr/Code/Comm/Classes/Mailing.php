@@ -22,6 +22,7 @@
 
 namespace Dolibarr\Code\Comm\Classes;
 
+
 /**
  *  \file       htdocs/comm/mailing/class/mailing.class.php
  *  \ingroup    mailing

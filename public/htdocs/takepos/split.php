@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/takepos/split.php
@@ -157,7 +158,7 @@ $title = '';
 $disablejs = 0;
 $disablehead = 0;
 
-top_htmlhead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss);
+ViewMain::topHtmlHead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss);
 
 // Define list of possible payments
 $arrayOfValidPaymentModes = array();

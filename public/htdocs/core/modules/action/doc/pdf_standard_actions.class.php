@@ -24,6 +24,7 @@
 use Dolibarr\Code\Comm\Classes\ActionComm;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/action/doc/pdf_standard_actions.class.php

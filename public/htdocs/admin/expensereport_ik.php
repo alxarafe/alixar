@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReportIk;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/expensereport_ik.php
@@ -104,7 +105,7 @@ $rangesbycateg = $expIk->getAllRanges();
  * View
  */
 
-llxHeader('', $langs->trans("ExpenseReportsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-expensereport_ik');
+ViewMain::llxHeader('', $langs->trans("ExpenseReportsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-expensereport_ik');
 
 $form = new Form($db);
 
@@ -208,5 +209,5 @@ echo '</form>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/order_extrafields.php
@@ -69,7 +70,7 @@ require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
 
 $textobject = $langs->transnoentitiesnoconv("Orders");
 
-llxHeader('', $langs->trans("OrdersSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-order_extrafields');
+ViewMain::llxHeader('', $langs->trans("OrdersSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-order_extrafields');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("OrdersSetup"), $linkback, 'title_setup');
@@ -100,5 +101,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

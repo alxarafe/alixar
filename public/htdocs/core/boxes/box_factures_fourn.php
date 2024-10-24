@@ -24,6 +24,7 @@
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Fourn\Classes\Fournisseur;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/boxes/box_factures_fourn.php

@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\BookCal\Classes\Calendar;
 use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/bookcal/lib/bookcal_calendar.lib.php

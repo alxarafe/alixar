@@ -15,6 +15,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       /htdocs/core/ajax/fetchKnowledgeRecord.php
  *  \brief      File to make Ajax action on Knowledge Management
@@ -72,7 +74,7 @@ if (!defined("NOLOGIN")) {  // No need of restrictedArea if not logged: Later th
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 if ($action == "getKnowledgeRecord") {
     $response = '';

@@ -20,6 +20,7 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/webservices/server_category.php

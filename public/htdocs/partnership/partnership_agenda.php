@@ -21,6 +21,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Partnerships\Classes\Partnership;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       partnership_agenda.php
@@ -145,7 +146,7 @@ $form = new Form($db);
 if ($object->id > 0) {
     $title = $langs->trans("Agenda");
     $help_url = '';
-    llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-partnership page-card_agenda');
+    ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-partnership page-card_agenda');
 
     if (isModEnabled('notification')) {
         $langs->load("mails");
@@ -268,5 +269,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

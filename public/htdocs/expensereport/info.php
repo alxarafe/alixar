@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/expensereport/info.php
@@ -75,7 +76,7 @@ $form = new Form($db);
 
 $title = $langs->trans("ExpenseReport") . " - " . $langs->trans("Info");
 $helpurl = "EN:Module_Expense_Reports";
-llxHeader("", $title, $helpurl);
+ViewMain::llxHeader("", $title, $helpurl);
 
 if ($id > 0 || !empty($ref)) {
     $object = new ExpenseReport($db);
@@ -109,5 +110,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

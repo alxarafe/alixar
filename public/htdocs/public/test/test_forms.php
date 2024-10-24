@@ -38,7 +38,7 @@ if ($dolibarr_main_prod) {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 ?>
 
@@ -200,5 +200,5 @@ if (is_file(DOL_DOCUMENT_ROOT . '/includes/flowjs/flow.js')) {
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -18,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file    htdocs/datapolicy/admin/setup.php
  * \ingroup datapolicy
@@ -114,7 +116,7 @@ foreach ($arrayofparameters as $title => $tab) {
  */
 
 $page_name = "datapolicySetup";
-llxHeader('', $langs->trans($page_name));
+ViewMain::llxHeader('', $langs->trans($page_name));
 
 // Subheader
 $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1') . '">' . $langs->trans("BackToModuleList") . '</a>';
@@ -188,5 +190,5 @@ if ($action == 'edit') {
 // Page end
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

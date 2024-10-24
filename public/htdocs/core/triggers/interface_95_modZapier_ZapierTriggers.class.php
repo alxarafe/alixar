@@ -22,6 +22,7 @@ use Dolibarr\Code\Core\Classes\Conf;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    core/triggers/interface_99_modZapier_ZapierTriggers.class.php

@@ -20,6 +20,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/menus/standard/auguria.lib.php
  *  \brief      Library for file auguria menus

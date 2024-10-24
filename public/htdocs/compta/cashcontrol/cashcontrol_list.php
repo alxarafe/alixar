@@ -20,6 +20,7 @@
 use Dolibarr\Code\Compta\Classes\CashControl;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/cashcontrol/cashcontrol_list.php
@@ -339,7 +340,7 @@ if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $s
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'classforhorizontalscrolloftabs');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'classforhorizontalscrolloftabs');
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -746,5 +747,5 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
 */
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

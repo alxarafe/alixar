@@ -20,6 +20,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/modules/expensereport/mod_expensereport_jade.php
  *  \ingroup    expensereport

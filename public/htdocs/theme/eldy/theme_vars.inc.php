@@ -23,6 +23,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/theme/eldy/theme_vars.inc.php
  *  \brief      File to declare variables of CSS style sheet

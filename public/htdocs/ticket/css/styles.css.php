@@ -17,6 +17,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewCss;
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/ticket/css/styles.css.php
  *      \brief      File for CSS style sheet for ticket module
@@ -51,7 +54,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
 // Define css type
-top_httphead('text/css');
+ViewCss::topHttpHead();
 // Important: Following code is to avoid page request by browser and PHP CPU at each Dolibarr page access.
 if (empty($dolibarr_nocache)) {
     header('Cache-Control: max-age=3600, public, must-revalidate');

@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/eventorganization/conferenceorbooth_contact.php
@@ -157,7 +158,7 @@ $userstatic = new User($db);
 $title = $langs->trans('ConferenceOrBooth') . " - " . $langs->trans('ContactsAddresses');
 $help_url = '';
 //$help_url='EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 
 /* *************************************************************************** */
@@ -453,5 +454,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

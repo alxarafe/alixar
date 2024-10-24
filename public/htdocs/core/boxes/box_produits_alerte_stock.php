@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/boxes/box_produits_alerte_stock.php

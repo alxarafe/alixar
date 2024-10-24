@@ -29,6 +29,7 @@ use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Compta\Classes\FactureLigne;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Client;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/journal/sellsjournal.php
@@ -79,7 +80,7 @@ $form = new Form($db);
 
 $morequery = '&date_startyear=' . $date_startyear . '&date_startmonth=' . $date_startmonth . '&date_startday=' . $date_startday . '&date_endyear=' . $date_endyear . '&date_endmonth=' . $date_endmonth . '&date_endday=' . $date_endday;
 
-llxHeader('', $langs->trans("SellsJournal"), '', '', 0, 0, '', '', $morequery);
+ViewMain::llxHeader('', $langs->trans("SellsJournal"), '', '', 0, 0, '', '', $morequery);
 
 
 $year_current = dol_print_date(dol_now('gmt'), "%Y", 'gmt');
@@ -316,5 +317,5 @@ foreach ($tabfac as $key => $val) {
 print "</table>";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

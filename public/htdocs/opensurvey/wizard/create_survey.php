@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/opensurvey/wizard/create_survey.php
@@ -128,7 +129,7 @@ $form = new Form($db);
 
 $arrayofjs = array();
 $arrayofcss = array('/opensurvey/css/style.css');
-llxHeader('', $langs->trans("OpenSurvey"), '', "", 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::llxHeader('', $langs->trans("OpenSurvey"), '', "", 0, 0, $arrayofjs, $arrayofcss);
 
 print load_fiche_titre($langs->trans("CreatePoll") . ' (1 / 2)');
 
@@ -214,5 +215,5 @@ print '<br><br><br>' . "\n";
 print '</form>' . "\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\BloquedLog\Classes\BlockedLogAuthority;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/blockedlog/admin/blockedlog_list.php
@@ -310,7 +311,7 @@ if (GETPOST('withtab', 'alpha')) {
 }
 $help_url = "EN:Module_Unalterable_Archives_-_Logs|FR:Module_Archives_-_Logs_Inaltérable";
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-blockedlog page-admin_blockedlog_list');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-blockedlog page-admin_blockedlog_list');
 
 $MAXLINES = 10000;
 
@@ -711,5 +712,5 @@ if (GETPOST('withtab', 'alpha')) {
 print '<br><br>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

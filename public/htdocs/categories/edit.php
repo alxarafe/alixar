@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/categories/edit.php
@@ -152,7 +153,7 @@ if (empty($reshook)) {
 $form = new Form($db);
 $formother = new FormOther($db);
 
-llxHeader("", "", $langs->trans("Categories"));
+ViewMain::llxHeader("", "", $langs->trans("Categories"));
 
 print load_fiche_titre($langs->trans("ModifCat"));
 
@@ -224,5 +225,5 @@ print '<div class="center"><input type="submit" class="button" name"submit" valu
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

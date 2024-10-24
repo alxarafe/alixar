@@ -30,6 +30,7 @@ use Dolibarr\Code\Compta\Classes\RemiseCheque;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/paiement/cheque/card.php
@@ -316,7 +317,7 @@ if ($action == 'new') {
 }
 
 $helpurl = "";
-llxHeader("", $title, $helpurl);
+ViewMain::llxHeader("", $title, $helpurl);
 
 $form = new Form($db);
 $formfile = new FormFile($db);
@@ -824,5 +825,5 @@ if ($action != 'new') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

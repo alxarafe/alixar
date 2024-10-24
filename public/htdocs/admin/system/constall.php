@@ -19,9 +19,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Load Dolibarr environment
 use Dolibarr\Core\Model\Constant;
+use Dolibarr\Lib\ViewMain;
 
+// Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Load translation files required by the page
@@ -36,7 +37,7 @@ if (!$user->admin) {
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_constall');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_constall');
 
 print load_fiche_titre($langs->trans("SummaryConst"), '', 'title_setup');
 
@@ -219,5 +220,5 @@ foreach (Constant::getConstants() as $obj) {
 print '</table>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

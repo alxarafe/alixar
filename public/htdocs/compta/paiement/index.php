@@ -31,10 +31,10 @@ if (!$user->admin && $user->socid > 0) {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 print load_fiche_titre("Payments");
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

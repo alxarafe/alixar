@@ -24,6 +24,13 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Code\Core\Classes\DefaultValues;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/admin/agenda_other.php
  *      \ingroup    agenda
@@ -31,12 +38,6 @@
  */
 
 // Load Dolibarr environment
-use Dolibarr\Code\Comm\Classes\ActionComm;
-use Dolibarr\Code\Core\Classes\DefaultValues;
-use Dolibarr\Code\Core\Classes\Form;
-use Dolibarr\Code\Core\Classes\FormActions;
-use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/agenda.lib.php';
@@ -194,7 +195,7 @@ $formactions = new FormActions($db);
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
 $wikihelp = 'EN:Module_Agenda_En|FR:Module_Agenda|ES:Módulo_Agenda|DE:Modul_Terminplanung';
-llxHeader('', $langs->trans("AgendaSetup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-agenda_other');
+ViewMain::llxHeader('', $langs->trans("AgendaSetup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-agenda_other');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("AgendaSetup"), $linkback, 'title_setup');
@@ -420,5 +421,5 @@ print '</form>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

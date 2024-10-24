@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/webservices/server_supplier_invoice.php

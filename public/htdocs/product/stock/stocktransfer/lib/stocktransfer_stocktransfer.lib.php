@@ -19,6 +19,7 @@
 
 use Dolibarr\Code\Core\Classes\Link;
 use Dolibarr\Code\Product\Classes\StockTransfer;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    lib/stocktransfer_stocktransfer.lib.php

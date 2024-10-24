@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/admin/skill_extrafields.php
@@ -68,7 +69,7 @@ $textobject = $langs->transnoentitiesnoconv("Skills");
 $help_url = '';
 $page_name = "HrmSetup";
 
-llxHeader('', $langs->trans("HrmSetup"), $help_url);
+ViewMain::llxHeader('', $langs->trans("HrmSetup"), $help_url);
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans($page_name), $linkback, 'title_setup');
@@ -102,5 +103,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

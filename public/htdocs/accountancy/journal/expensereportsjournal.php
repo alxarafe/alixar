@@ -32,6 +32,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReportLine;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/accountancy/journal/expensereportsjournal.php
@@ -570,7 +571,7 @@ if ($action == 'exportcsv' && !$error) {        // ISO and not UTF8 !
 if (empty($action) || $action == 'view') {
     $title = $langs->trans("GenerationOfAccountingEntries") . ' - ' . $accountingjournalstatic->getNomUrl(0, 2, 1, '', 1);
     $help_url = 'EN:Module_Double_Entry_Accounting|FR:Module_Comptabilit&eacute;_en_Partie_Double#G&eacute;n&eacute;ration_des_&eacute;critures_en_comptabilit&eacute;';
-    llxHeader('', dol_string_nohtmltag($title), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-generation page-expensereportsjournal');
+    ViewMain::llxHeader('', dol_string_nohtmltag($title), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-generation page-expensereportsjournal');
 
     $nom = $title;
     $nomlink = '';
@@ -822,6 +823,6 @@ if (empty($action) || $action == 'view') {
     print '</div>';
 
     // End of page
-    llxFooter();
+    ViewMain::llxFooter();
 }
 $db->close();

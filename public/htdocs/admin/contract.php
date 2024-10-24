@@ -23,6 +23,7 @@
 use Dolibarr\Code\Contrat\Classes\Contrat;
 use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/contract.php
@@ -208,7 +209,7 @@ if ($action == 'updateMask') {
 
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-contract');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-contract');
 
 $form = new Form($db);
 
@@ -557,5 +558,5 @@ print '</form>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

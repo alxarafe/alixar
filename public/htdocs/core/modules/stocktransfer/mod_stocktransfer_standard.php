@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Product\Classes\StockTransfer;
 use Dolibarr\Code\StockTransfer\Classes\ModeleNumRefStockTransfer;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/stocktransfer/mod_stocktransfer_standard.php

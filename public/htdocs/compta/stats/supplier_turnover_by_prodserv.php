@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *     \file        htdocs/compta/stats/supplier_turnover_by_prodserv.php
@@ -218,7 +219,7 @@ if (isModEnabled('accounting')) {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $form = new Form($db);
 $formother = new FormOther($db);
@@ -542,5 +543,5 @@ if ($modecompta == 'CREANCES-DETTES') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

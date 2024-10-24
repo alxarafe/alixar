@@ -24,6 +24,7 @@
  */
 
 use Dolibarr\Code\Hrm\Classes\Job;
+use Dolibarr\Lib\ViewMain;
 
 /*
  * \file        htdocs/hrm/compare.php
@@ -67,7 +68,7 @@ if (!$permissiontoread || ($action === 'create' && !$permissiontoadd)) {
 
 $css = array('/hrm/css/style.css');
 
-llxHeader('', $langs->trans('SkillComparison'), '', '', 0, 0, '', $css);
+ViewMain::llxHeader('', $langs->trans('SkillComparison'), '', '', 0, 0, '', $css);
 
 $head = array();
 
@@ -282,7 +283,7 @@ $fk_usergroup1 = GETPOST('fk_usergroup1');
 
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

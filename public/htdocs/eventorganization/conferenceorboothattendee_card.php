@@ -24,6 +24,7 @@ use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
 use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/eventorganization/conferenceorboothattendee_card.php
@@ -205,7 +206,7 @@ $formproject = new FormProjets($db);
 
 $title = $langs->trans("ConferenceOrBoothAttendee");
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $result = $projectstatic->fetch(empty($confOrBooth->fk_project) ? $fk_project : $confOrBooth->fk_project);
 if (getDolGlobalString('PROJECT_ALLOW_COMMENT_ON_PROJECT') && method_exists($projectstatic, 'fetchComments') && empty($projectstatic->comments)) {
@@ -667,5 +668,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

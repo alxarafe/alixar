@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       public/emailing/mailing-read.php
  *      \ingroup    mailing
@@ -51,26 +53,6 @@ if (!defined('NOSESSION')) {
     define('NOSESSION', '1');
 }
 
-/**
- * Header empty
- *
- * @return  void
- */
-function llxHeader()
-{
-}
-
-
-/**
- * Footer empty
- *
- * @return  void
- */
-function llxFooter()
-{
-}
-
-
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
@@ -78,7 +60,6 @@ $mtid = GETPOST('mtid');
 $email = GETPOST('email');
 $tag = GETPOST('tag');
 $securitykey = GETPOST('securitykey');
-
 
 /*
  * Actions

@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Core\Model\Constant;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/ftp/admin/ftpclient.php
@@ -151,7 +152,7 @@ $form = new Form($db);
 
 $help_url = 'EN:Module_FTP_En|FR:Module_FTP|ES:Módulo_FTP';
 
-llxHeader('', 'FTP', $help_url);
+ViewMain::llxHeader('', 'FTP', $help_url);
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("FTPClientSetup"), $linkback, 'title_setup');
@@ -316,5 +317,5 @@ if (!function_exists('ftp_connect')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

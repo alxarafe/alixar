@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Compta\Classes\Paiement;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/paiement/info.php
@@ -72,7 +73,7 @@ if ($socid && $socid != $object->thirdparty->id) {
 
 $form = new Form($db);  // Used in dol_banner_tab
 
-llxHeader('', $langs->trans("Payment"));
+ViewMain::llxHeader('', $langs->trans("Payment"));
 
 $object->info($object->id);
 
@@ -100,5 +101,5 @@ print '</div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

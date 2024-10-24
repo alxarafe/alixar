@@ -21,6 +21,7 @@ use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\Ticket\Classes\TicketStats;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/ticket/stats/index.php
@@ -66,7 +67,7 @@ $object = new Ticket($db);
 $title = $langs->trans("Statistics");
 $dir = $conf->ticket->dir_temp;
 $help_url = '';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-ticket page-stats');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-ticket page-stats');
 
 print load_fiche_titre($title, '', 'ticket');
 
@@ -257,5 +258,5 @@ print '<div class="clearboth"></div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Lib\Images;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/user/passwordforgotten.php

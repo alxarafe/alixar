@@ -25,6 +25,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/agenda_extsites.php
@@ -193,7 +194,7 @@ $arrayofjs = array();
 $arrayofcss = array();
 
 $wikihelp = 'EN:Module_Agenda_En|FR:Module_Agenda|ES:Módulo_Agenda|DE:Modul_Terminplanung';
-llxHeader('', $langs->trans("AgendaSetup"), $wikihelp, '', 0, 0, $arrayofjs, $arrayofcss, '', 'mod-admin page-agenda-extsites');
+ViewMain::llxHeader('', $langs->trans("AgendaSetup"), $wikihelp, '', 0, 0, $arrayofjs, $arrayofcss, '', 'mod-admin page-agenda-extsites');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("AgendaSetup"), $linkback, 'title_setup');
@@ -317,5 +318,5 @@ print '</div>';
 print "</form>\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

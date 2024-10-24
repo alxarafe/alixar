@@ -1,12 +1,12 @@
 <?php
 
-/* Copyright (C) 2004-2017  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2006		Rodolphe Quiedeville	<rodolphe@quiedeville.org>
- * Copyright (C) 2007-2017	Regis Houssin			<regis.houssin@inodbox.com>
- * Copyright (C) 2011		Philippe Grand			<philippe.grand@atoo-net.com>
- * Copyright (C) 2012		Juanjo Menent			<jmenent@2byte.es>
- * Copyright (C) 2018       Ferran Marcet           <fmarcet@2byte.es>
- * Copyright (C) 2021-2023  Anthony Berton          <anthony.berton@bb2a.fr>
+/* Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2006		Rodolphe Quiedeville	    <rodolphe@quiedeville.org>
+ * Copyright (C) 2007-2017	Regis Houssin			    <regis.houssin@inodbox.com>
+ * Copyright (C) 2011		Philippe Grand			    <philippe.grand@atoo-net.com>
+ * Copyright (C) 2012		Juanjo Menent			    <jmenent@2byte.es>
+ * Copyright (C) 2018       Ferran Marcet               <fmarcet@2byte.es>
+ * Copyright (C) 2021-2023  Anthony Berton              <anthony.berton@bb2a.fr>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -23,6 +23,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Lib\ViewCss;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/theme/eldy/style.css.php
@@ -80,7 +83,7 @@ if (empty($user->id) && !empty($_SESSION['dol_login'])) {
 
 
 // Define css type
-top_httphead('text/css');
+ViewCss::topHttpHead();
 // Important: Following code is to avoid page request by browser and PHP CPU at each Dolibarr page access.
 if (empty($dolibarr_nocache)) {
     header('Cache-Control: max-age=10800, public, must-revalidate');

@@ -34,6 +34,7 @@ namespace Dolibarr\Code\Core\Classes;
 use Dolibarr\Code\Categories\Classes\Categorie;
 use DoliDB;
 
+
 /**
  *  \file       htdocs/core/class/extrafields.class.php
  *  \ingroup    core

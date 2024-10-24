@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Salaries\Classes\PaymentSalary;
 use Dolibarr\Code\Salaries\Classes\Salary;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/salaries/paiement_salary.php
@@ -158,7 +159,7 @@ $form = new Form($db);
 
 $help_url = '';
 
-llxHeader('', '', $help_url);
+ViewMain::llxHeader('', '', $help_url);
 
 $salary = $object;
 
@@ -335,5 +336,5 @@ if ($action == 'create') {
     print "</form>\n";
 }
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

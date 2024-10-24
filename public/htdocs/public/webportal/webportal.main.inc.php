@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Societe\Classes\SocieteAccount;
 use Dolibarr\Code\WebPortal\Classes\Context;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/public/webportal/webportal.main.inc.php

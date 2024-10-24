@@ -18,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file    zapier/admin/setup.php
  * \ingroup zapier
@@ -67,7 +69,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_setmoduleoptions.inc.php';
 
 $page_name = 'ZapierForDolibarrSetup';
 $help_url = 'EN:Module_Zapier';
-llxHeader('', $langs->trans($page_name), $help_url);
+ViewMain::llxHeader('', $langs->trans($page_name), $help_url);
 
 // Subheader
 $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1') . '">' . $langs->trans("BackToModuleList") . '</a>';
@@ -125,5 +127,5 @@ if (!empty($arrayofparameters)) {
 // Page end
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

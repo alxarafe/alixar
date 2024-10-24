@@ -23,6 +23,7 @@ use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Compta\Classes\FactureLigne;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/webservices/server_invoice.php

@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/admin/geoipmaxmind.php
  *  \ingroup    geoipmaxmind
@@ -85,7 +87,7 @@ if (!isset($conf->global->GEOIP_VERSION)) {
 
 $form = new Form($db);
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-geoipmaxmind');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-geoipmaxmind');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("GeoIPMaxmindSetup"), $linkback, 'title_setup');
@@ -239,5 +241,5 @@ if ($geoip) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

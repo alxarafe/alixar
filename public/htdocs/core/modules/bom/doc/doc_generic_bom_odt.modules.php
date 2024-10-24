@@ -28,6 +28,7 @@ use Dolibarr\Code\Bom\Classes\ModelePDFBom;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/bom/doc/doc_generic_bom_odt.modules.php

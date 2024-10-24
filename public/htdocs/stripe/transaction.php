@@ -67,7 +67,7 @@ $memberstatic = new Adherent($db);
 $acc = new Account($db);
 $stripe = new Stripe($db);
 
-llxHeader('', $langs->trans("StripeTransactionList"));
+ViewMain::llxHeader('', $langs->trans("StripeTransactionList"));
 
 if (isModEnabled('stripe') && (!getDolGlobalString('STRIPE_LIVE') || GETPOST('forcesandbox', 'alpha'))) {
     $service = 'StripeTest';
@@ -233,5 +233,5 @@ if (!$rowid) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

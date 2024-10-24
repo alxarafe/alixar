@@ -46,6 +46,7 @@ use Dolibarr\Code\FichInter\Classes\Fichinter;
 use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Societe\Classes\Client;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/comm/card.php
@@ -311,7 +312,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/thirdpartynameonly/', 
 
 $help_url = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas|DE:Modul_Geschäftspartner';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($object->id > 0) {
     $head = societe_prepare_head($object);
@@ -1652,5 +1653,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

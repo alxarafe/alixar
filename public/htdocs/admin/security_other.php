@@ -20,6 +20,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/security_other.php
@@ -97,7 +98,7 @@ if (preg_match('/set_([a-z0-9_\-]+)/i', $action, $reg)) {
 $form = new Form($db);
 
 $wikihelp = 'EN:Setup_Security|FR:Paramétrage_Sécurité|ES:Configuración_Seguridad';
-llxHeader('', $langs->trans("Miscellaneous"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-security_other');
+ViewMain::llxHeader('', $langs->trans("Miscellaneous"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-security_other');
 
 print load_fiche_titre($langs->trans("SecuritySetup"), '', 'title_setup');
 
@@ -242,5 +243,5 @@ print dol_get_fiche_end();
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

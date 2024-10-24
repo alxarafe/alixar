@@ -79,7 +79,7 @@ if (getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER')) {
     $disablenofollow = 0;
 }
 
-top_htmlhead('', $titleofpage, 0, 0, $arrayofjs, array(), 1, $disablenofollow);
+ViewMain::topHtmlHead('', $titleofpage, 0, 0, $arrayofjs, array(), 1, $disablenofollow);
 
 
 $colorbackhmenu1 = '60,70,100'; // topmenu

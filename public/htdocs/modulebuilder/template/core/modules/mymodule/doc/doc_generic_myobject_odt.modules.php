@@ -24,6 +24,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/modules/mymodule/doc/doc_generic_myobject_odt.modules.php
  *  \ingroup    mymodule

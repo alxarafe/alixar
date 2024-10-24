@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/search_page.php
  *       \brief      File to return a page with the complete search form (all search input fields)
@@ -107,7 +109,7 @@ $title = $langs->trans("Search");
 $head = '<!-- Quick access -->' . "\n";   // This is used by DoliDroid to know page is a search page
 $arrayofjs = array();
 $arrayofcss = array();
-top_htmlhead($head, $title, 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::topHtmlHead($head, $title, 0, 0, $arrayofjs, $arrayofcss);
 
 
 print '<body>' . "\n";
@@ -148,7 +150,7 @@ if ($conf->use_javascript_ajax && 1 == 2) {   // select2 is not best with smartp
         }
 
         // @phan-suppress-next-line PhanPluginSuspiciousParamPosition
-        $searchform .= printSearchForm($urlaction, $urlaction, $val['label'], 'minwidth200', $keysearch, $accesskey, $key, $val['img'], $showtitlebefore, ($i > 0 ? 0 : 1));
+        $searchform .= ViewMain::printSearchForm($urlaction, $urlaction, $val['label'], 'minwidth200', $keysearch, $accesskey, $key, $val['img'], $showtitlebefore, ($i > 0 ? 0 : 1));
 
         $i++;
     }

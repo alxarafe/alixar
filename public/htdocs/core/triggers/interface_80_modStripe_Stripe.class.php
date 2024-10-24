@@ -26,6 +26,7 @@ use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Stripe\Classes\Stripe;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/triggers/interface_80_modStripe_Stripe.class.php

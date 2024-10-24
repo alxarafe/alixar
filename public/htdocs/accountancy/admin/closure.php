@@ -19,14 +19,15 @@
  *
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file        htdocs/accountancy/admin/closure.php
  * \ingroup     Accountancy (Double entries)
  * \brief       Setup page to configure accounting expert module
  */
-
-use Dolibarr\Code\Core\Classes\Form;
-use Dolibarr\Code\Core\Classes\FormAccounting;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -110,7 +111,7 @@ $title = $langs->trans('Closure');
 
 $help_url = 'EN:Module_Double_Entry_Accounting#Setup|FR:Module_Comptabilit&eacute;_en_Partie_Double#Configuration';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $linkback = '';
 print load_fiche_titre($langs->trans('MenuClosureAccounts'), $linkback, 'title_accountancy');
@@ -171,5 +172,5 @@ print '<div class="center"><input type="submit" class="button button-edit" name=
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

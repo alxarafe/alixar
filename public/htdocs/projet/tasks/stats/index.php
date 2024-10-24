@@ -21,6 +21,7 @@
 use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\TaskStats;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/projet/tasks/stats/index.php
@@ -66,7 +67,7 @@ $form = new Form($db);
 $includeuserlist = array();
 
 
-llxHeader('', $langs->trans('Tasks'));
+ViewMain::llxHeader('', $langs->trans('Tasks'));
 
 $title = $langs->trans("TasksStatistics");
 $dir = $conf->project->dir_output . '/temp';
@@ -233,5 +234,5 @@ print '<div class="clearboth"></div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

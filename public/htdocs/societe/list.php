@@ -42,6 +42,7 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Societe\Classes\Client;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/societe/list.php
@@ -883,7 +884,7 @@ foreach ($searchCategorySupplierList as $searchCategorySupplier) {
     $paramsCat .= "&search_category_supplier_list[]=" . urlencode($searchCategorySupplier);
 }
 
-llxHeader('', $title, $help_url, '', 0, 0, array(), array(), $paramsCat);
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, array(), array(), $paramsCat);
 
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
@@ -2217,5 +2218,5 @@ $formcompany->selectProspectStatus('status_prospect', $prospectstatic, null, nul
 print '</form>' . "\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

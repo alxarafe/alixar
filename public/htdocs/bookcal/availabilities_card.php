@@ -24,9 +24,11 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormActions;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file       htdocs/bookcal/availabilities_card.php
+ *   \file
+ * htdocs/bookcal/availabilities_card.php
  *   \ingroup    bookcal
  *   \brief      Page to create/edit/view availabilities
  */
@@ -222,7 +224,7 @@ $formproject = new FormProjets($db);
 
 $title = $langs->trans("Availabilities");
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // Example : Adding jquery code
 // print '<script type="text/javascript">
@@ -617,5 +619,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Facture\Classes\ModelePDFFactures;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/facture/doc/doc_generic_invoice_odt.modules.php

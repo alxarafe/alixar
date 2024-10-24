@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/takepos/ajax/ajax.php
@@ -78,7 +79,7 @@ if ($action == 'getProducts') {
     $limit = GETPOSTISSET('limit') ? GETPOSTINT('limit') : 0;
     $offset = GETPOSTISSET('offset') ? GETPOSTINT('offset') : 0;
 
-    top_httphead('application/json');
+    ViewMain::topHttpHead('application/json');
 
     // Search
     if (GETPOSTINT('thirdpartyid') > 0) {
@@ -129,7 +130,7 @@ if ($action == 'getProducts') {
         echo 'Failed to load category with id=' . dol_escape_htmltag($category);
     }
 } elseif ($action == 'search' && $term != '') {
-    top_httphead('application/json');
+    ViewMain::topHttpHead('application/json');
 
     // Search barcode into thirdparties. If found, it means we want to change thirdparties.
     $result = $thirdparty->fetch('', '', '', $term);
@@ -402,7 +403,7 @@ if ($action == 'getProducts') {
         echo 'Failed to search product : ' . $db->lasterror();
     }
 } elseif ($action == "opendrawer" && $term != '') {
-    top_httphead('application/html');
+    ViewMain::topHttpHead('application/html');
     $printer = new dolReceiptPrinter($db);
     // check printer for terminal
     if (getDolGlobalInt('TAKEPOS_PRINTER_TO_USE' . $term) > 0) {
@@ -416,7 +417,7 @@ if ($action == 'getProducts') {
         }
     }
 } elseif ($action == "printinvoiceticket" && $term != '' && $id > 0 && $user->hasRight('facture', 'lire')) {
-    top_httphead('application/html');
+    ViewMain::topHttpHead('application/html');
 
     $printer = new dolReceiptPrinter($db);
     // check printer for terminal
@@ -426,7 +427,7 @@ if ($action == 'getProducts') {
         $ret = $printer->sendToPrinter($object, getDolGlobalString('TAKEPOS_TEMPLATE_TO_USE_FOR_INVOICES' . $term), getDolGlobalString('TAKEPOS_PRINTER_TO_USE' . $term));
     }
 } elseif ($action == 'getInvoice') {
-    top_httphead('application/json');
+    ViewMain::topHttpHead('application/json');
 
 
     $object = new Facture($db);
@@ -436,7 +437,7 @@ if ($action == 'getProducts') {
 
     echo json_encode($object);
 } elseif ($action == 'thecheck') {
-    top_httphead('application/html');
+    ViewMain::topHttpHead('application/html');
 
     $place = GETPOST('place', 'alpha');
 

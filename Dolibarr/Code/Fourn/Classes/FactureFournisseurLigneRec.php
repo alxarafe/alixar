@@ -30,6 +30,7 @@ namespace Dolibarr\Code\Fourn\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonInvoiceLine;
 
+
 /**
  *  \file       htdocs/fourn/facture/class/fournisseur.facture-rec.class.php
  *  \ingroup    invoice

@@ -36,6 +36,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\PaiementFourn;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/bank/line.php
@@ -316,7 +317,7 @@ if ($user->hasRight('banque', 'consolidate') && ($action == 'num_releve' || $act
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("BankTransaction"));
+ViewMain::llxHeader('', $langs->trans("BankTransaction"));
 
 $arrayselected = array();
 
@@ -775,5 +776,5 @@ if ($result) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

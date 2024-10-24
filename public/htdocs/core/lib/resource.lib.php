@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Resource\Classes\Dolresource;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/lib/resource.lib.php

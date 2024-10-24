@@ -23,12 +23,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
-
-/**
- *  \file       htdocs/index.php
- *  \brief      Dolibarr home page
- */
-
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Comm\Classes\ActionComm;
 use Dolibarr\Code\Comm\Classes\Propal;
@@ -50,6 +44,12 @@ use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Projet\Classes\Task;
 use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
 use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Lib\ViewMain;
+
+/**
+ *  \file       htdocs/index.php
+ *  \brief      Dolibarr home page
+ */
 
 define('CSRFCHECK_WITH_TOKEN', 1); // We force need to use a token to login when making a POST
 
@@ -110,11 +110,9 @@ if (getDolGlobalString('MAIN_APPLICATION_TITLE')) {
     $title = $langs->trans("HomeArea") . ' - ' . getDolGlobalString('MAIN_APPLICATION_TITLE');
 }
 
-llxHeader('', $title);
-
+ViewMain::llxHeader('', $title);
 
 $resultboxes = FormOther::getBoxesArea($user, "0"); // Load $resultboxes (selectboxlist + boxactivated + boxlista + boxlistb)
-
 
 print load_fiche_titre('&nbsp;', $resultboxes['selectboxlist'], '', 0, '', 'titleforhome');
 
@@ -804,7 +802,7 @@ print '</div>';
 //print 'mem='.memory_get_usage().' - '.memory_get_peak_usage();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

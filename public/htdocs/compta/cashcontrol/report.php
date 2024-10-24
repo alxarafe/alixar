@@ -30,6 +30,7 @@ use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\Compta\Classes\CashControl;
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/cashcontrol/report.php
@@ -100,7 +101,7 @@ $param = '';
 $conf->dol_hide_topmenu = 1;
 $conf->dol_hide_leftmenu = 1;
 
-llxHeader('', $title, '', '', 0, 0, array(), array(), $param);
+ViewMain::llxHeader('', $title, '', '', 0, 0, array(), array(), $param);
 
 print '<!-- Begin div id-container --><div id="id-container" class="id-container center">';
 
@@ -459,6 +460,6 @@ if ($resql) {
 
 print '</div>';
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

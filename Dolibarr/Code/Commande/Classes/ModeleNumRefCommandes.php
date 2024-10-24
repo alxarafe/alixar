@@ -28,6 +28,7 @@ namespace Dolibarr\Code\Commande\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 
+
 /**
  *  \file           htdocs/core/modules/commande/modules_commande.php
  *  \ingroup        commande

@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file htdocs/compta/facture/admin/invoice_cust_extrafields.php
@@ -66,7 +67,7 @@ require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
 
 $textobject = strtolower($langs->transnoentitiesnoconv("BillsCustomers"));
 
-llxHeader('', $langs->trans("BillsSetup"));
+ViewMain::llxHeader('', $langs->trans("BillsSetup"));
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 
@@ -103,5 +104,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

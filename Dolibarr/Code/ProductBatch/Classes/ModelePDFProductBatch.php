@@ -31,6 +31,7 @@ use DoliDB;
  *      \brief      Parent class for product code generators
  */
 
+
 /**
  *  \file       htdocs/core/modules/contract/modules_contract.php
  *  \ingroup    contract

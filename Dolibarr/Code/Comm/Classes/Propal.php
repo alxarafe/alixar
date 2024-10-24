@@ -39,15 +39,21 @@
 
 namespace Dolibarr\Code\Comm\Classes;
 
+
 /**
  *  \file       htdocs/comm/propal/class/propal.class.php
  *  \brief      File of class to manage proposals
  */
 
+use Dolibarr\Code\Core\Classes\DiscountAbsolute;
 use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Code\Core\Traits\CommonIncoterm;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 

@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       admin/ticket_extrafields.php
  *      \ingroup    ticket
@@ -62,7 +64,7 @@ $textobject = $langs->transnoentitiesnoconv("Ticket");
 
 $help_url = "FR:Module_Ticket";
 $page_name = "TicketSetup";
-llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-ticket_extrafields');
+ViewMain::llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-ticket_extrafields');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("TicketSetup"), $linkback, 'title_setup');
@@ -93,5 +95,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

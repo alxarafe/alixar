@@ -34,6 +34,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Don\Classes\Don;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/don/card.php
@@ -419,7 +420,7 @@ $title = $langs->trans("Donation");
 
 $help_url = 'EN:Module_Donations|FR:Module_Dons|ES:M&oacute;dulo_Donaciones|DE:Modul_Spenden';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-donation page-card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-donation page-card');
 
 $form = new Form($db);
 $formfile = new FormFile($db);
@@ -1023,5 +1024,5 @@ if (!empty($id) && $action != 'edit') {
     print '</div></div>';
 }
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

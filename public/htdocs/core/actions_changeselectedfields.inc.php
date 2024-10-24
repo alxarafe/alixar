@@ -18,6 +18,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/core/actions_changeselectedfields.inc.php
  *  \brief          Code for actions when we change list of fields on a list page

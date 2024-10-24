@@ -22,8 +22,11 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
- *   \file       htdocs/core/modules/delivery/mod_delivery_jade.php
+ *   \file
+ * htdocs/core/modules/delivery/mod_delivery_jade.php
  *   \ingroup    delivery
  *   \brief      Fichier contenant la class du modele de numerotation de reference de bon de livraison Jade
  */

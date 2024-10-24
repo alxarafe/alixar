@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/fourn/recap-fourn.php
@@ -55,7 +56,7 @@ $hookmanager->initHooks(array('supplierbalencelist', 'globalcard'));
 $form = new Form($db);
 $userstatic = new User($db);
 
-llxHeader();
+ViewMain::llxHeader();
 
 if ($socid > 0) {
     $societe = new Societe($db);
@@ -186,5 +187,5 @@ if ($socid > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -20,6 +20,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/lib/security2.lib.php
  *  \ingroup    core
@@ -128,7 +130,7 @@ function checkLoginPassEntity($usertotest, $passwordtotest, $entitytotest, $auth
 if (!function_exists('dol_loginfunction')) {
     /**
      * Show Dolibarr default login page.
-     * Part of this code is also duplicated into main.inc.php::top_htmlhead
+     * Part of this code is also duplicated into main.inc.php::ViewMain::topHtmlHead(
      *
      * @param Translate $langs Lang object (must be initialized by a new).
      * @param Conf $conf Conf object

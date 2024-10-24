@@ -34,6 +34,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/accountancy/bookkeeping/listbyaccount.php
@@ -608,7 +609,7 @@ if ($type == 'sub') {
 }
 $title_page .= ')';
 $help_url = 'EN:Module_Double_Entry_Accounting|FR:Module_Comptabilit&eacute;_en_Partie_Double';
-llxHeader('', $title_page, $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-consultation page-' . (($type == 'sub') ? 'sub' : '') . 'ledger');
+ViewMain::llxHeader('', $title_page, $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-consultation page-' . (($type == 'sub') ? 'sub' : '') . 'ledger');
 
 // List
 $nbtotalofrecords = '';
@@ -1476,5 +1477,5 @@ print '</div>';
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

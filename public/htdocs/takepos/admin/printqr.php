@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/takepos/admin/printqr.php
  *  \ingroup    takepos
@@ -51,6 +53,6 @@ print '<h1><b>' . $mysoc->name . '</b></h1>';
 
 print '</center>';
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

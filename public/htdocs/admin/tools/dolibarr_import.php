@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 if (!defined('CSRFCHECK_WITH_TOKEN')) {
     define('CSRFCHECK_WITH_TOKEN', '1');        // Force use of CSRF protection with tokens even for GET
 }
@@ -43,7 +45,7 @@ $label = $db::LABEL;
 $type = $db->type;
 
 $help_url = 'EN:Restores|FR:Restaurations|ES:Restauraciones';
-llxHeader('', '', $help_url, '', 0, 0, '', '', '', 'mod-admin page-tools_dolibarr_import');
+ViewMain::llxHeader('', '', $help_url, '', 0, 0, '', '', '', 'mod-admin page-tools_dolibarr_import');
 
 ?>
     <script type="text/javascript">
@@ -219,5 +221,5 @@ print '</td></tr></table>';
 print '</fieldset>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

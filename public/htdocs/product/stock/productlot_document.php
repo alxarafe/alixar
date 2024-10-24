@@ -28,6 +28,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/product/stock/productlot_document.php
@@ -152,7 +153,7 @@ if (empty($reshook)) {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans('ProductLot'), '', '', 0, 0, '', '', '', 'mod-product page-stock_productlot_document');
+ViewMain::llxHeader('', $langs->trans('ProductLot'), '', '', 0, 0, '', '', '', 'mod-product page-stock_productlot_document');
 
 
 if ($object->id) {
@@ -211,5 +212,5 @@ if ($object->id) {
     print $langs->trans("ErrorUnknown");
 }
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

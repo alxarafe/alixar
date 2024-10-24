@@ -19,6 +19,7 @@
 
 use Dolibarr\Code\Bom\Classes\BOM;
 use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/bom/lib/bom.lib.php

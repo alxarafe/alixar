@@ -24,6 +24,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/user/group/card.php
@@ -264,7 +265,7 @@ if ($action == 'create') {
     $title = $langs->trans("NewGroup");
 }
 $help_url = "";
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-group_card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-group_card');
 
 
 $form = new Form($db);
@@ -563,5 +564,5 @@ if ($action == 'create') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

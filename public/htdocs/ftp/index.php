@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Ecm\Classes\EcmDirectory;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/ftp/index.php
@@ -337,7 +338,7 @@ if ($action == 'download') {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 // Add logic to shoow/hide buttons
 if ($conf->use_javascript_ajax) {
@@ -679,5 +680,5 @@ if (!empty($conn_id)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

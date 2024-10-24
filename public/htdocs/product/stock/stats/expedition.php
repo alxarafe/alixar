@@ -28,6 +28,7 @@ use Dolibarr\Code\Expedition\Classes\Expedition;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productlot;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stock/stats/expedition.php
@@ -120,7 +121,7 @@ if ($id > 0 || !empty($ref)) {
     $title = $langs->trans('Batch') . " " . $shortlabel . " - " . $langs->trans('Referers');
     $helpurl = 'EN:Module_Products|FR:Module_Produits|ES:M&oacute;dulo_Productos';
 
-    llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stock-stats_expedition');
+    ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stock-stats_expedition');
 
     if ($result > 0) {
         $head = productlot_prepare_head($object);
@@ -369,5 +370,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

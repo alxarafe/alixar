@@ -23,7 +23,12 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+
 
 /**
  *      \file       htdocs/core/class/discount.class.php
@@ -132,7 +137,6 @@ class DiscountAbsolute extends CommonObject
         $this->db = $db;
     }
 
-
     /**
      *  Load object from database into memory
      *
@@ -226,7 +230,6 @@ class DiscountAbsolute extends CommonObject
             return -1;
         }
     }
-
 
     /**
      *      Create a discount into database
@@ -507,7 +510,6 @@ class DiscountAbsolute extends CommonObject
             return -3;
         }
     }
-
 
     /**
      *  Return amount (with tax) of discounts currently available for a company, user or other criteria

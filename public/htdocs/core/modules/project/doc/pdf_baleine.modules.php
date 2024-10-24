@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Projet\Classes\ModelePDFProjects;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Projet\Classes\Task;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/project/doc/pdf_baleine.modules.php

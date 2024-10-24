@@ -45,6 +45,7 @@ use Dolibarr\Code\FichInter\Classes\ModelePDFFicheinter;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/fichinter/card.php
@@ -830,7 +831,7 @@ if (isModEnabled('project')) {
 
 $help_url = 'EN:Module_Interventions';
 
-llxHeader('', $langs->trans("Intervention"), $help_url);
+ViewMain::llxHeader('', $langs->trans("Intervention"), $help_url);
 
 if ($action == 'create') {
     // Create new intervention
@@ -1801,6 +1802,6 @@ if ($action == 'create') {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

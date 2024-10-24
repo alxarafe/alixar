@@ -19,6 +19,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+
 /**
  *      \file       htdocs/core/class/ctypent.class.php
  *      \ingroup    core

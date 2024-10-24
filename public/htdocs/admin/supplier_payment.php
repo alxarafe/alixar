@@ -24,6 +24,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\PaiementFourn;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/supplier_payment.php
@@ -156,7 +157,7 @@ if ($action == 'updateMask') {
 
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
-llxHeader('', $langs->trans("SupplierPaymentSetup"), 'EN:Supplier_Payment_Configuration|FR:Configuration_module_paiement_fournisseur', '', 0, 0, '', '', '', 'mod-admin page-supplier_payment');
+ViewMain::llxHeader('', $langs->trans("SupplierPaymentSetup"), 'EN:Supplier_Payment_Configuration|FR:Configuration_module_paiement_fournisseur', '', 0, 0, '', '', '', 'mod-admin page-supplier_payment');
 
 $form = new Form($db);
 
@@ -469,5 +470,5 @@ print '<br>';
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

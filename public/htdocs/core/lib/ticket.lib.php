@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file       core/lib/ticket.lib.php
  * \ingroup    ticket
@@ -235,7 +237,7 @@ function llxHeaderTicket($title, $head = "", $disablejs = 0, $disablehead = 0, $
     global $user, $conf, $langs, $mysoc;
 
     $urllogo = "";
-    top_htmlhead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss, 0, 1); // Show html headers
+    ViewMain::topHtmlHead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss, 0, 1); // Show html headers
 
     print '<body id="mainbody" class="publicnewticketform">';
     print '<div class="publicnewticketform2 flexcontainer centpercent" style="min-height: 100%;">';

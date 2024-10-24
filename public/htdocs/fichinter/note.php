@@ -23,6 +23,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\FichInter\Classes\Fichinter;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/fichinter/note.php
@@ -71,7 +72,7 @@ if (empty($reshook)) {
  * View
  */
 
-llxHeader('', $langs->trans("Intervention"));
+ViewMain::llxHeader('', $langs->trans("Intervention"));
 
 $form = new Form($db);
 
@@ -127,5 +128,5 @@ if ($id > 0 || !empty($ref)) {
     print dol_get_fiche_end();
 }
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

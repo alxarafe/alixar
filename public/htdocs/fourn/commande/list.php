@@ -42,6 +42,7 @@ use Dolibarr\Code\Fourn\Classes\Fournisseur;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/fourn/commande/list.php
@@ -1030,7 +1031,7 @@ if ($resql) {
         exit;
     }
 
-    llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-supplier-order page-list');
+    ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-supplier-order page-list');
 
     $param = '';
     if (!empty($mode)) {
@@ -2141,5 +2142,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

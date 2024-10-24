@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file        htdocs/compta/stats/supplier_turnover_by_thirdparty.php
@@ -194,7 +195,7 @@ if (isModEnabled('accounting')) {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $form = new Form($db);
 $thirdparty_static = new Societe($db);
@@ -682,5 +683,5 @@ print "</div>";
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

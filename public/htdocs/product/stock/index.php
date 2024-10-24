@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Product\Classes\Entrepot;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stock/index.php
@@ -54,7 +55,7 @@ $producttmp = new Product($db);
 $warehouse = new Entrepot($db);
 
 $help_url = 'EN:Module_Stocks_En|FR:Module_Stock|ES:M&oacute;dulo_Stocks';
-llxHeader("", $langs->trans("Stocks"), $help_url, '', 0, 0, '', '', '', 'mod-product page-stock');
+ViewMain::llxHeader("", $langs->trans("Stocks"), $help_url, '', 0, 0, '', '', '', 'mod-product page-stock');
 
 print load_fiche_titre($langs->trans("StocksArea"), '', 'stock');
 
@@ -243,5 +244,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardWarehouse', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

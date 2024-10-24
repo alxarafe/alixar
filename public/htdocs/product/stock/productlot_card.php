@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\FormActions;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       product/stock/productlot_card.php
@@ -396,7 +397,7 @@ $formfile = new FormFile($db);
 $title = $langs->trans("ProductLot");
 $help_url = '';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_productlot_card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_productlot_card');
 
 $res = $object->fetch_product();
 if ($res > 0 && $object->product) {
@@ -615,5 +616,5 @@ if ($action != 'presend') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

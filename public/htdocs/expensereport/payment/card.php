@@ -22,6 +22,7 @@ use Dolibarr\Code\Compta\Classes\AccountLine;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
 use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/expensereport/payment/card.php
@@ -82,7 +83,7 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('expense
  * View
  */
 
-llxHeader('', $langs->trans("ExpenseReportPayment"));
+ViewMain::llxHeader('', $langs->trans("ExpenseReportPayment"));
 
 $form = new Form($db);
 
@@ -255,5 +256,5 @@ if ($action == '') {
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/blockedlog/ajax/block-info.php
@@ -57,7 +58,7 @@ $langs->loadLangs(array("admin"));
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 print '<div id="pop-info"><table height="80%" class="border centpercent"><thead><th width="50%" class="left">' . $langs->trans('Field') . '</th><th class="left">' . $langs->trans('Value') . '</th></thead>';
 print '<tbody>';

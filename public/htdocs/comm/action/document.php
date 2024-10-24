@@ -25,6 +25,7 @@
 use Dolibarr\Code\Comm\Classes\ActionComm;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/comm/action/document.php
@@ -108,7 +109,7 @@ $form = new Form($db);
 
 $help_url = 'EN:Module_Agenda_En|FR:Module_Agenda|ES:M&omodulodulo_Agenda|DE:Modul_Terminplanung';
 
-llxHeader('', $langs->trans("Agenda"), $help_url);
+ViewMain::llxHeader('', $langs->trans("Agenda"), $help_url);
 
 $now = dol_now();
 $delay_warning = getDolGlobalInt('MAIN_DELAY_ACTIONS_TODO') * 24 * 60 * 60;
@@ -328,5 +329,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

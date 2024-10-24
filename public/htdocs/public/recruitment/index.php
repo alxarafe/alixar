@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Recruitement\Classes\RecruitmentJobPosition;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/public/recruitment/index.php
@@ -119,7 +120,7 @@ $arrayofjs = array();
 $arrayofcss = array();
 
 $replacemainarea = (empty($conf->dol_hide_leftmenu) ? '<div>' : '') . '<div>';
-llxHeader($head, $langs->trans("PositionToBeFilled"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea, 1, 1);
+ViewMain::llxHeader($head, $langs->trans("PositionToBeFilled"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea, 1, 1);
 
 
 print '<span id="dolpaymentspan"></span>' . "\n";
@@ -312,6 +313,6 @@ print '<br>';
 
 htmlPrintOnlineFooter($mysoc, $langs);
 
-llxFooter('', 'public');
+ViewMain::llxFooter('', 'public');
 
 $db->close();

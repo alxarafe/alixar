@@ -22,6 +22,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Payment\Classes\ModeleNumRefPayments;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/modules/payment/mod_payment_ant.php

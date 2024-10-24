@@ -27,6 +27,7 @@
  */
 
 use Dolibarr\Code\FichInter\Classes\ModelePDFFicheinter;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/fichinter/doc/pdf_soleil.modules.php

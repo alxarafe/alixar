@@ -26,6 +26,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Fourn\Classes\Fournisseur;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/journal/purchasesjournal.php
@@ -75,7 +76,7 @@ $hookmanager->initHooks(['purchasejournallist']);
 
 $morequery = '&date_startyear=' . $date_startyear . '&date_startmonth=' . $date_startmonth . '&date_startday=' . $date_startday . '&date_endyear=' . $date_endyear . '&date_endmonth=' . $date_endmonth . '&date_endday=' . $date_endday;
 
-llxHeader('', $langs->trans("PurchasesJournal"), '', '', 0, 0, '', '', $morequery);
+ViewMain::llxHeader('', $langs->trans("PurchasesJournal"), '', '', 0, 0, '', '', $morequery);
 
 $form = new Form($db);
 
@@ -271,5 +272,5 @@ foreach ($tabfac as $key => $val) {
 print "</table>";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

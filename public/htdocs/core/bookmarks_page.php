@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/bookmarks_page.php
  *       \brief      File to return a page with the complete list of bookmarks
@@ -75,7 +77,7 @@ $title = $langs->trans("Bookmarks");
 $head = '<!-- Bookmarks -->' . "\n";  // This is used by DoliDroid to know page is a bookmark selection page
 $arrayofjs = array();
 $arrayofcss = array();
-top_htmlhead($head, $title, 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::topHtmlHead($head, $title, 0, 0, $arrayofjs, $arrayofcss);
 
 
 print '<body>' . "\n";

@@ -27,6 +27,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\FichInter\Classes\Fichinter;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/fichinter/document.php
@@ -95,7 +96,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_linkedfiles.inc.php';
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("Intervention"));
+ViewMain::llxHeader('', $langs->trans("Intervention"));
 
 if ($object->id) {
     $object->fetch_thirdparty();
@@ -172,6 +173,6 @@ if ($object->id) {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

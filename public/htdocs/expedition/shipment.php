@@ -35,6 +35,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/expedition/shipment.php
@@ -233,7 +234,7 @@ if (isModEnabled('project')) {
 
 $title = $object->ref . " - " . $langs->trans('Shipments');
 $help_url = 'EN:Customers_Orders|FR:Commandes_Clients|ES:Pedidos de clientes|DE:Modul_Kundenaufträge';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($id > 0 || !empty($ref)) {
     $object = new Commande($db);
@@ -926,5 +927,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

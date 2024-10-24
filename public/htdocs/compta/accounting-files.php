@@ -36,6 +36,7 @@ use Dolibarr\Code\Loan\Classes\PaymentLoan;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Salaries\Classes\PaymentSalary;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/accounting-files.php
@@ -605,7 +606,7 @@ $payment_loan = new PaymentLoan($db);
 $title = $langs->trans("ComptaFiles") . ' - ' . $langs->trans("List");
 $help_url = '';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $h = 0;
 $head = array();
@@ -953,5 +954,5 @@ if (!empty($date_start) && !empty($date_stop)) {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

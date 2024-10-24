@@ -24,6 +24,7 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/spip.php
@@ -104,7 +105,7 @@ if ($action == 'unset') {
 
 $help_url = '';
 
-llxHeader('', $langs->trans("MailmanSpipSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-spip');
+ViewMain::llxHeader('', $langs->trans("MailmanSpipSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-spip');
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -160,5 +161,5 @@ if (getDolGlobalString('ADHERENT_USE_SPIP')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

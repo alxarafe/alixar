@@ -22,6 +22,7 @@ use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Adherents\Classes\AdherentType;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Partnerships\Classes\Partnership;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       partnership_card.php
@@ -145,7 +146,7 @@ $form = new Form($db);
 $formfile = new FormFile($db);
 
 $title = $langs->trans("Partnership");
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 $form = new Form($db);
 
@@ -280,5 +281,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

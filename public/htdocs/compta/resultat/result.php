@@ -23,6 +23,7 @@
 
 use Dolibarr\Code\Accountancy\Classes\AccountancyCategory;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/compta/resultat/result.php
@@ -189,7 +190,7 @@ $months = array(
     $langs->trans("MonthShort12"),
 );
 
-llxHeader('', $langs->trans('ReportInOut'));
+ViewMain::llxHeader('', $langs->trans('ReportInOut'));
 
 $form = new Form($db);
 
@@ -706,5 +707,5 @@ print "</table>";
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

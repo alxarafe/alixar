@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/opensurvey/wizard/choix_date.php
  *  \ingroup    opensurvey
@@ -212,7 +214,7 @@ if (!isset($_SESSION['description']) && !isset($_SESSION['mail'])) {
 
 $arrayofjs = array();
 $arrayofcss = array('/opensurvey/css/style.css');
-llxHeader('', $langs->trans("OpenSurvey"), "", '', 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::llxHeader('', $langs->trans("OpenSurvey"), "", '', 0, 0, $arrayofjs, $arrayofcss);
 
 //nombre de cases par défaut
 if (!isset($_SESSION["nbrecaseshoraires"])) {
@@ -609,5 +611,5 @@ print '<br><br><br><br>' . "\n";
 print '</div></div>' . "\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

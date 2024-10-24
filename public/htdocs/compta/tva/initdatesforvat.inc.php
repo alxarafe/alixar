@@ -18,6 +18,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/compta/tva/initdatesforvat.inc.php
  *  \brief          Set value for date_start and date_end

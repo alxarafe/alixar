@@ -28,7 +28,7 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 $langs->load("ecm");
 
-top_httphead();
+ViewMain::topHttpHead();
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">

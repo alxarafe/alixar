@@ -43,6 +43,7 @@ use Dolibarr\Core\Base\CommonObjectLine;
 use DoliDB;
 use stdClass;
 
+
 /**
  *      \file       htdocs/core/class/commondocgenerator.class.php
  *      \ingroup    core

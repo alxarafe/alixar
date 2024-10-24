@@ -24,6 +24,7 @@ use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReportStats;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/expensereport/stats/index.php
@@ -74,7 +75,7 @@ $tmpexpensereport = new ExpenseReport($db);
 $title = $langs->trans("TripsAndExpensesStatistics");
 $dir = $conf->expensereport->dir_temp;
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 print load_fiche_titre($title, '', 'trip');
 
@@ -323,5 +324,5 @@ print '<div class="clearboth"></div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -28,6 +28,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/modulebuilder/template/core/modules/mymodule/doc/pdf_standard.modules.php
  *  \ingroup    mymodule

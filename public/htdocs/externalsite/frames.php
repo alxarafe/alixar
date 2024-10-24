@@ -18,6 +18,8 @@
  *
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *     \file        htdocs/externalsite/frames.php
  *     \ingroup     externalsite
@@ -52,14 +54,14 @@ if (!isModEnabled("externalsite")) {
  */
 
 if (empty($keyforcontent) && !getDolGlobalString('EXTERNALSITE_URL')) {
-    llxHeader();
+    ViewMain::llxHeader();
     print '<div class="error">' . $langs->trans('ExternalSiteModuleNotComplete') . '</div>';
-    llxFooter();
+    ViewMain::llxFooter();
     exit;
 }
 
 if (!empty($keyforcontent)) {
-    llxHeader();
+    ViewMain::llxHeader();
 
     print '<div class="framecontent" style="height: ' . ($_SESSION['dol_screenheight'] - 90) . 'px">';
 
@@ -112,7 +114,7 @@ if (!empty($keyforcontent)) {
     }
 
     print '<div>';
-    llxFooter();
+    ViewMain::llxFooter();
 } else {
     if (preg_match('/^\//', $conf->global->EXTERNALSITE_URL) || preg_match('/^http/i', $conf->global->EXTERNALSITE_URL)) {
         print "
@@ -147,10 +149,10 @@ if (!empty($keyforcontent)) {
 	</html>
 	";
     } else {
-        llxHeader();
+        ViewMain::llxHeader();
         print '<div class="framecontent" style="height: ' . ($_SESSION['dol_screenheight'] - 90) . 'px">';
         print $conf->global->EXTERNALSITE_URL;
         print '<div>';
-        llxFooter();
+        ViewMain::llxFooter();
     }
 }

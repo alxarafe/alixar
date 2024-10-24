@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/knowledgemanagement/knowledgemanagementindex.php
@@ -63,7 +64,7 @@ $now = dol_now();
 $form = new Form($db);
 $formfile = new FormFile($db);
 
-llxHeader("", $langs->trans("KnowledgeManagementArea"), '', '', 0, 0, '', '', '', 'mod-knowledgemanagement page-card_dashboard');
+ViewMain::llxHeader("", $langs->trans("KnowledgeManagementArea"), '', '', 0, 0, '', '', '', 'mod-knowledgemanagement page-card_dashboard');
 
 print load_fiche_titre($langs->trans("KnowledgeManagementArea"), '', 'knowledgemanagement.png@knowledgemanagement');
 
@@ -205,5 +206,5 @@ if (!empty($conf->knowledgemanagement->enabled) && $user->rights->knowledgemanag
 print '</div></div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

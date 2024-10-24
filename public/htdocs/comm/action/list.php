@@ -32,6 +32,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormActions;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/comm/action/list.php
@@ -301,7 +302,7 @@ $now = dol_now();
 
 $help_url = 'EN:Module_Agenda_En|FR:Module_Agenda|ES:M&omodulodulo_Agenda|DE:Modul_Terminplanung';
 $title = $langs->trans("Agenda");
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // Define list of all external calendars
 $listofextcals = array();
@@ -1255,5 +1256,5 @@ print '</form>' . "\n";
 $db->free($resql);
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

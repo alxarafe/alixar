@@ -25,6 +25,7 @@ use Dolibarr\Code\Compta\Classes\AccountLine;
 use Dolibarr\Code\Compta\Classes\ChargeSociales;
 use Dolibarr\Code\Compta\Classes\PaymentSocialContribution;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/payment_sc/card.php
@@ -94,7 +95,7 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('tax', '
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $socialcontrib = new ChargeSociales($db);
 
@@ -268,5 +269,5 @@ if ($action == '') {
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

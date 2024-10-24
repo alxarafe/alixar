@@ -25,6 +25,7 @@
 
 use Dolibarr\Code\Accountancy\Classes\AccountancyExport;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/accountancy/admin/export.php
@@ -141,7 +142,7 @@ $form = new Form($db);
 
 $help_url = 'EN:Module_Double_Entry_Accounting#Setup|FR:Module_Comptabilit&eacute;_en_Partie_Double#Configuration';
 $title = $langs->trans('ExportOptions');
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $linkback = '';
 // $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -264,5 +265,5 @@ print '<div class="center"><input type="submit" class="button" value="' . dol_es
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

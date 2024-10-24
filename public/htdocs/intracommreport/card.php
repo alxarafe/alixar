@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\IntracommReport\Classes\IntracommReport;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/intracommreport/card.php
@@ -172,7 +173,7 @@ if ($action == 'add' && $permissiontoadd) {
  */
 
 $title = $langs->trans("IntracommReportTitle");
-llxHeader("", $title);
+ViewMain::llxHeader("", $title);
 
 // Creation mode
 if ($action == 'create') {
@@ -289,5 +290,5 @@ if ($id > 0 && $action != 'edit') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

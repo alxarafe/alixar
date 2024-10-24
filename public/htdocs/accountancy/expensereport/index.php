@@ -20,6 +20,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file        htdocs/accountancy/expensereport/index.php
  * \ingroup     Accountancy (Double entries)
@@ -27,8 +30,6 @@
  */
 
 // Load Dolibarr environment
-use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
@@ -182,7 +183,7 @@ if ($action == 'validatehistory') {
  */
 $help_url = 'EN:Module_Double_Entry_Accounting|FR:Module_Comptabilit&eacute;_en_Partie_Double#Liaisons_comptables';
 
-llxHeader('', $langs->trans("ExpenseReportsVentilation"), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-expensereport page-list');
+ViewMain::llxHeader('', $langs->trans("ExpenseReportsVentilation"), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-expensereport page-list');
 
 $textprevyear = '<a href="' . $_SERVER["PHP_SELF"] . '?year=' . ($year_current - 1) . '">' . img_previous() . '</a>';
 $textnextyear = '&nbsp;<a href="' . $_SERVER["PHP_SELF"] . '?year=' . ($year_current + 1) . '">' . img_next() . '</a>';
@@ -473,5 +474,5 @@ if (getDolGlobalString('SHOW_TOTAL_OF_PREVIOUS_LISTS_IN_LIN_PAGE')) { // This pa
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

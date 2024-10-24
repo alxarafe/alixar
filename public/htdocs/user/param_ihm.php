@@ -24,6 +24,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/user/param_ihm.php
@@ -204,7 +205,7 @@ $person_name = !empty($object->firstname) ? $object->lastname . ", " . $object->
 $title = $person_name . " - " . $langs->trans('Card');
 $help_url = '';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-card_param_ihm');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-card_param_ihm');
 
 // List of possible landing pages
 $tmparray = array();
@@ -574,5 +575,5 @@ if ($action == 'edit') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

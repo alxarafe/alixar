@@ -23,6 +23,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\Utils;
+use Dolibarr\Lib\ViewMain;
 
 if (!defined('CSRFCHECK_WITH_TOKEN')) {
     define('CSRFCHECK_WITH_TOKEN', '1');        // Force use of CSRF protection with tokens even for GET
@@ -109,7 +110,7 @@ $form = new Form($db);
 $formfile = new FormFile($db);
 
 //$help_url='EN:Backups|FR:Sauvegardes|ES:Copias_de_seguridad';
-//llxHeader('','',$help_url);
+//ViewMain::llxHeader('','',$help_url);
 
 //print load_fiche_titre($langs->trans("Backup"),'','title_setup');
 
@@ -209,7 +210,7 @@ if ($compression == 'zip') {
 // Output export
 
 if ($export_type != 'externalmodule' || empty($what)) {
-    top_httphead();
+    ViewMain::topHttpHead();
 
     if ($errormsg) {
         setEventMessages($langs->trans("Error") . " : " . $errormsg, null, 'errors');
@@ -226,7 +227,7 @@ if ($export_type != 'externalmodule' || empty($what)) {
 
     exit();
 } else {
-    top_httphead('application/zip');
+    ViewMain::topHttpHead('application/zip');
 
     $zipname = $outputdir . "/" . $file;
 

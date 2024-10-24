@@ -24,6 +24,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Variants\Classes\ProductAttribute;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/variants/list.php
@@ -397,7 +398,7 @@ if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $s
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', '');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', '');
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -906,5 +907,5 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

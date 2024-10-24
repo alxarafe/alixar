@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 if (!defined('CSRFCHECK_WITH_TOKEN')) {
     define('CSRFCHECK_WITH_TOKEN', '1');        // Force use of CSRF protection with tokens even for GET
 }
@@ -66,7 +68,7 @@ if ($action == 'convertdynamic') {
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-database_tables');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-database_tables');
 
 print load_fiche_titre($langs->trans("Tables") . " " . ucfirst($conf->db->type), '', 'title_setup');
 
@@ -266,5 +268,5 @@ if (!$base) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -20,6 +20,8 @@
  * $elementype must be defined.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/core/actions_extrafields.inc.php
  *  \brief          Code for actions on extrafields admin pages

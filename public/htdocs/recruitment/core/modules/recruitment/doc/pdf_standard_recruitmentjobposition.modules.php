@@ -30,6 +30,7 @@
 
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Recruitement\Classes\ModelePDFRecruitmentJobPosition;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/modulebuilder/template/core/modules/recruitment/doc/pdf_standard.modules.php

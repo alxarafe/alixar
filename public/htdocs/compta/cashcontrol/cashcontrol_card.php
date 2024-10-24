@@ -27,6 +27,7 @@
 use Dolibarr\Code\Compta\Classes\CashControl;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/cashcontrol/cashcontrol_card.php
@@ -271,7 +272,7 @@ $theoricalamountforterminal = array();
 $theoricalnbofinvoiceforterminal = array();
 
 
-llxHeader('', $langs->trans("CashControl"));
+ViewMain::llxHeader('', $langs->trans("CashControl"));
 
 
 if ($action == "create" || $action == "start" || $action == 'close') {
@@ -894,5 +895,5 @@ if (empty($action) || $action == "view" || $action == "close") {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

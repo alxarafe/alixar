@@ -26,6 +26,7 @@
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/facture/document.php
@@ -105,13 +106,13 @@ if (empty($object->id)) {
 }
 $help_url = "EN:Customers_Invoices|FR:Factures_Clients|ES:Facturas_a_clientes";
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if (empty($object->id)) {
     $langs->load('errors');
     echo '<div class="error">' . $langs->trans("ErrorRecordNotFound") . '</div>';
 
-    llxFooter();
+    ViewMain::llxFooter();
     exit;
 }
 
@@ -197,5 +198,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

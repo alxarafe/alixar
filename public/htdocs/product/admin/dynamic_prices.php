@@ -22,6 +22,7 @@ use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\PriceGlobalVariable;
 use Dolibarr\Code\Product\Classes\PriceGlobalVariableUpdater;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/admin/dynamic_prices.php
@@ -155,7 +156,7 @@ if (!empty($action) && empty($cancel)) {
 
 $form = new Form($db);
 
-llxHeader("", "", $langs->trans("DynamicPrice"), '', 0, 0, '', '', '', 'mod-product page-admin_dynamic_prices');
+ViewMain::llxHeader("", "", $langs->trans("DynamicPrice"), '', 0, 0, '', '', '', 'mod-product page-admin_dynamic_prices');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("DynamicPriceConfiguration"), $linkback, 'title_setup');
@@ -357,5 +358,5 @@ if ($action == 'create_updater' || $action == 'edit_updater') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

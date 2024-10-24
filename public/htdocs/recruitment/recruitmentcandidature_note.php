@@ -20,6 +20,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Recruitement\Classes\RecruitmentCandidature;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       recruitmentcandidature_note.php
@@ -85,7 +86,7 @@ $form = new Form($db);
 
 $title = $object->ref . " - " . $langs->trans('Notes');
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($id > 0 || !empty($ref)) {
     $object->fetch_thirdparty();
@@ -156,5 +157,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

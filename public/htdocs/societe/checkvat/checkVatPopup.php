@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/societe/checkvat/checkVatPopup.php
  *      \ingroup    societe
@@ -43,7 +45,7 @@ $WS_METHOD = 'checkVat';
 $conf->dol_hide_topmenu = 1;
 $conf->dol_hide_leftmenu = 1;
 
-llxHeader('', $langs->trans("VATIntraCheckableOnEUSite"));
+ViewMain::llxHeader('', $langs->trans("VATIntraCheckableOnEUSite"));
 
 print '<div class="vatcheckarea margintoponly marginbottomonly">';
 
@@ -161,5 +163,5 @@ if ($messagetoshow) {
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

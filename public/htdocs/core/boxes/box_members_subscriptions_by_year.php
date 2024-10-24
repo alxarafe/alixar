@@ -22,6 +22,7 @@
  */
 
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/boxes/box_members_subscriptions_by_year.php

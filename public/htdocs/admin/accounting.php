@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/admin/accounting.php
  *  \ingroup    accounting
@@ -56,7 +58,7 @@ $error = 0;
 $title = $langs->trans("ConfigAccountingExpert");
 $help_url = '';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-admin page-accounting');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-admin page-accounting');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 
@@ -69,6 +71,6 @@ $texttoshow = str_replace('{s2}', '</a>' . img_picto("", "url", 'class="paddingl
 print '<span class="opacitymedium">' . $texttoshow . "</span><br>\n";
 print "<br>\n";
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

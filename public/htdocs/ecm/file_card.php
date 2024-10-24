@@ -21,6 +21,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Ecm\Classes\EcmDirectory;
 use Dolibarr\Code\Ecm\Classes\EcmFiles;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/ecm/file_card.php
@@ -240,7 +241,7 @@ if ($action == 'update' && $permissiontoadd) {
 
 $form = new Form($db);
 
-llxHeader();
+ViewMain::llxHeader();
 
 $object->section_id = $ecmdir->id;
 $object->label = $urlfile;
@@ -432,5 +433,5 @@ if ($action != 'edit') {
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

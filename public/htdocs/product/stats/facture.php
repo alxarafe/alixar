@@ -27,6 +27,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stats/facture.php
@@ -157,7 +158,7 @@ if ($id > 0 || !empty($ref)) {
         $helpurl = 'EN:Module_Services_En|FR:Module_Services|ES:M&oacute;dulo_Servicios';
     }
 
-    llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stats_facture');
+    ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stats_facture');
 
     if ($result > 0) {
         $head = product_prepare_head($product);
@@ -398,5 +399,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

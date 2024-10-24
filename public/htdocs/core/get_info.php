@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/get_info.php
  *       \brief      File to return a single page with just logged user info, to be used by other frontend
@@ -62,7 +64,7 @@ $title = $langs->trans("Info");
 $head = '<!-- Info user page -->' . "\n";
 $arrayofjs = array();
 $arrayofcss = array();
-top_htmlhead($head, $title, 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::topHtmlHead($head, $title, 0, 0, $arrayofjs, $arrayofcss);
 
 
 print '<body>' . "\n";

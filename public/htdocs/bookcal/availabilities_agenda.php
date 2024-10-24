@@ -21,6 +21,7 @@
 use Dolibarr\Code\BookCal\Classes\Availabilities;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/bookcal/availabilities_agenda.php
@@ -145,7 +146,7 @@ $form = new Form($db);
 if ($object->id > 0) {
     $title = $langs->trans("Agenda");
     $help_url = 'EN:Module_Agenda_En|DE:Modul_Terminplanung';
-    llxHeader('', $title, $help_url);
+    ViewMain::llxHeader('', $title, $help_url);
 
     if (!empty($conf->notification->enabled)) {
         $langs->load("mails");
@@ -276,5 +277,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

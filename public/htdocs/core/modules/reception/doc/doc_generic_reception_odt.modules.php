@@ -24,6 +24,7 @@ use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Reception\Classes\ModelePdfReception;
 use Dolibarr\Code\Reception\Classes\Reception;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/reception/doc/doc_generic_reception_odt.modules.php

@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/collab/index.php
@@ -164,7 +165,7 @@ $form = new Form($db);
 
 $help_url = '';
 
-llxHeader('', $langs->trans("WebsiteSetup"), $help_url, '', 0, '', '', '', '', '', '<!-- Begin div class="fiche" -->' . "\n" . '<div class="fichebutwithotherclass">');
+ViewMain::llxHeader('', $langs->trans("WebsiteSetup"), $help_url, '', 0, '', '', '', '', '', '<!-- Begin div class="fiche" -->' . "\n" . '<div class="fichebutwithotherclass">');
 
 print "\n" . '<form action="' . $_SERVER["PHP_SELF"] . '" method="POST"><div>';
 print '<input type="hidden" name="token" value="' . newToken() . '">';
@@ -186,5 +187,5 @@ print '<div class="centpercent websitebar">';
 print "</div>\n</form>\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

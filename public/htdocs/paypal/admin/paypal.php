@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/paypal/admin/paypal.php
@@ -142,7 +143,7 @@ if ($action == "setlive") {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("PaypalSetup"));
+ViewMain::llxHeader('', $langs->trans("PaypalSetup"));
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -387,5 +388,5 @@ $token = '';
 include DOL_DOCUMENT_ROOT . '/core/tpl/onlinepaymentlinks.tpl.php';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

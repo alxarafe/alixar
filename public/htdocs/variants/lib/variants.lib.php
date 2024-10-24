@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    /variants/lib/variants.lib.php

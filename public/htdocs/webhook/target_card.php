@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\WebHook\Classes\Target;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/webhook/target_card.php
@@ -211,7 +212,7 @@ $arrayofcss = array();
 $title = $langs->trans("Target");
 $help_url = '';
 
-llxHeader('', $title, $help_url, '', 0, 0, $arrayofjs, $arrayofcss, '', 'mod-webhook page-target_card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $arrayofjs, $arrayofcss, '', 'mod-webhook page-target_card');
 
 // Part to create
 if ($action == 'create') {
@@ -623,5 +624,5 @@ if ($action == "test") {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

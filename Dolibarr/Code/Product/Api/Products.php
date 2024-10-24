@@ -159,7 +159,7 @@ class Products extends DolibarrApi
         }
 
         if ($includeparentid) {
-            $prodcomb = new ProductAttributeCombination($this->db);
+            $prodcomb = new ProductAttributeCombination();
             $this->product->fk_product_parent = null;
             if (($fk_product_parent = $prodcomb->fetchByFkProductChild($this->product->id)) > 0) {
                 $this->product->fk_product_parent = $fk_product_parent;
@@ -1892,7 +1892,7 @@ class Products extends DolibarrApi
             throw new RestException(403);
         }
 
-        $prodcomb = new ProductAttributeCombination($this->db);
+        $prodcomb = new ProductAttributeCombination();
         $combinations = $prodcomb->fetchAllByFkProductParent((int)$id);
 
         foreach ($combinations as $key => $combination) {
@@ -1933,7 +1933,7 @@ class Products extends DolibarrApi
             throw new RestException(404, 'Product not found');
         }
 
-        $prodcomb = new ProductAttributeCombination($this->db);
+        $prodcomb = new ProductAttributeCombination();
         $combinations = $prodcomb->fetchAllByFkProductParent((int)$this->product->id);
 
         foreach ($combinations as $key => $combination) {
@@ -1998,7 +1998,7 @@ class Products extends DolibarrApi
             throw new RestException(404, 'Product not found');
         }
 
-        $prodcomb = new ProductAttributeCombination($this->db);
+        $prodcomb = new ProductAttributeCombination();
 
         $result = $prodcomb->createProductCombination(DolibarrApiAccess::$user, $this->product, $features, array(), $price_impact_is_percent, $price_impact, $weight_impact, $reference, $ref_ext);
         if ($result > 0) {
@@ -2055,7 +2055,7 @@ class Products extends DolibarrApi
             throw new RestException(404, 'Product not found');
         }
 
-        $prodcomb = new ProductAttributeCombination($this->db);
+        $prodcomb = new ProductAttributeCombination();
         if (!$prodcomb->fetchByProductCombination2ValuePairs($this->product->id, $features)) {
             $result = $prodcomb->createProductCombination(DolibarrApiAccess::$user, $this->product, $features, array(), $price_impact_is_percent, $price_impact, $weight_impact);
             if ($result > 0) {
@@ -2088,7 +2088,7 @@ class Products extends DolibarrApi
             throw new RestException(403);
         }
 
-        $prodcomb = new ProductAttributeCombination($this->db);
+        $prodcomb = new ProductAttributeCombination();
         $prodcomb->fetch((int)$id);
 
         foreach ($request_data as $field => $value) {
@@ -2128,7 +2128,7 @@ class Products extends DolibarrApi
             throw new RestException(403);
         }
 
-        $prodcomb = new ProductAttributeCombination($this->db);
+        $prodcomb = new ProductAttributeCombination();
         $prodcomb->id = (int)$id;
         $result = $prodcomb->delete(DolibarrApiAccess::$user);
         if ($result <= 0) {

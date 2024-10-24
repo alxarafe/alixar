@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Product\Classes\StockTransfer;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/product/stock/stocktransfer/stocktransfer_contact.php
@@ -115,7 +116,7 @@ if ($action == 'addcontact' && $user->hasRight('stocktransfer', 'stocktransfer',
  * View
  */
 
-llxHeader('', $langs->trans('ModuleStockTransferName'), 'EN:Commercial_Proposals|FR:Proposition_commerciale|ES:Presupuestos');
+ViewMain::llxHeader('', $langs->trans('ModuleStockTransferName'), 'EN:Commercial_Proposals|FR:Proposition_commerciale|ES:Presupuestos');
 
 $form = new Form($db);
 $formcompany = new FormCompany($db);
@@ -168,5 +169,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

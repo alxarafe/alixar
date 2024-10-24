@@ -34,6 +34,7 @@ namespace Dolibarr\Code\Core\Classes;
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Projet\Classes\Task;
 use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 

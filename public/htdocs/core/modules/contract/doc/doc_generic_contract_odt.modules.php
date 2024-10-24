@@ -26,6 +26,7 @@ use Dolibarr\Code\Contrat\Classes\ModelePDFContract;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/contract/doc/doc_generic_contract_odt.modules.php

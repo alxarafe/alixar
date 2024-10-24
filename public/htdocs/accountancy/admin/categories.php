@@ -20,15 +20,16 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Accountancy\Classes\AccountancyCategory;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file    htdocs/accountancy/admin/categories.php
  * \ingroup Accountancy (Double entries)
  * \brief   Page to assign mass categories to accounts
  */
-
-use Dolibarr\Code\Accountancy\Classes\AccountancyCategory;
-use Dolibarr\Code\Core\Classes\Form;
-use Dolibarr\Code\Core\Classes\FormAccounting;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -120,7 +121,7 @@ $formaccounting = new FormAccounting($db);
 $title = $langs->trans('AccountingCategory');
 $help_url = 'EN:Module_Double_Entry_Accounting#Setup|FR:Module_Comptabilit&eacute;_en_Partie_Double#Configuration';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $linkback = '<a href="' . constant('BASE_URL') . '/accountancy/admin/categories_list.php?restore_lastsearch_values=1">' . $langs->trans("BackToList") . '</a>';
 $titlepicto = 'setup';
@@ -217,5 +218,5 @@ if ((empty($action) || $action == 'display' || $action == 'delete') && $cat_id >
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

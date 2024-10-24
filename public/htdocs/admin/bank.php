@@ -22,17 +22,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Societe\Classes\CompanyBankAccount;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/bank.php
  *      \ingroup    bank
  *      \brief      Page to setup the bank module
  */
-
-use Dolibarr\Code\Compta\Classes\Account;
-use Dolibarr\Code\Core\Classes\Form;
-use Dolibarr\Code\Core\Classes\FormOther;
-use Dolibarr\Code\Societe\Classes\CompanyBankAccount;
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
@@ -216,7 +216,7 @@ $formother = new FormOther($db);
 
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
-llxHeader("", $langs->trans("BankSetupModule"), '', '', 0, 0, '', '', '', 'mod-admin page-bank');
+ViewMain::llxHeader("", $langs->trans("BankSetupModule"), '', '', 0, 0, '', '', '', 'mod-admin page-bank');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("BankSetupModule"), $linkback, 'title_setup');
@@ -548,5 +548,5 @@ print $form->buttonsSaveCancel("Save", '');
 print "</form>\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

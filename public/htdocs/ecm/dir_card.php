@@ -22,6 +22,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Ecm\Classes\EcmDirectory;
 use Dolibarr\Code\Ecm\Classes\FormEcm;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/ecm/dir_card.php
@@ -291,7 +292,7 @@ if ($module == 'ecm' && $ecmdir->id > 0) {
     $object->fetch($ecmdir->id);
 }
 
-llxHeader();
+ViewMain::llxHeader();
 
 // Built the file List
 $filearrayall = dol_dir_list($upload_dir, "all", 0, '', '', $sortfield, (strtolower($sortorder) == 'desc' ? SORT_DESC : SORT_ASC), 1);
@@ -508,5 +509,5 @@ if ($user->rights->ecm->read)
 */
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

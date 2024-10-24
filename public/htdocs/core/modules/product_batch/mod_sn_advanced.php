@@ -29,6 +29,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Product\Classes\Productlot;
 use Dolibarr\Code\ProductBatch\Classes\ModeleNumRefBatch;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/modules/product_batch/mod_sn_advanced.php

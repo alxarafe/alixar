@@ -24,6 +24,7 @@ use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Expedition\Classes\Expedition;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/boxes/box_shipments.php

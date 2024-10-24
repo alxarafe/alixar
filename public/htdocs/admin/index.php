@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/admin/index.php
  *      \brief      Home page of setup area
@@ -49,7 +51,7 @@ $hookmanager->initHooks(array('homesetup'));
 $form = new Form($db);
 
 $wikihelp = 'EN:First_setup|FR:Premiers_paramétrages|ES:Primeras_configuraciones';
-llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-index');
+ViewMain::llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-index');
 
 print load_fiche_titre($langs->trans("SetupArea"), '', 'tools');
 
@@ -146,5 +148,5 @@ if (empty($reshook)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

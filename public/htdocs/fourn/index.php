@@ -23,6 +23,7 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/fourn/index.php
@@ -50,7 +51,7 @@ $commandestatic = new CommandeFournisseur($db);
 $facturestatic = new FactureFournisseur($db);
 $companystatic = new Societe($db);
 
-llxHeader("", $langs->trans("SuppliersArea"));
+ViewMain::llxHeader("", $langs->trans("SuppliersArea"));
 
 print load_fiche_titre($langs->trans("SuppliersArea"));
 
@@ -322,5 +323,5 @@ if (count($companystatic->SupplierCategories)) {
 print '</div></div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

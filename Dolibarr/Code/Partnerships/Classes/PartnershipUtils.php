@@ -22,6 +22,7 @@ namespace Dolibarr\Code\Partnerships\Classes;
 
 use DoliDB;
 
+
 /**
  *  \file       partnership/class/partnershiputils.class.php
  *  \ingroup    partnership

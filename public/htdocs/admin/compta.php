@@ -24,6 +24,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/compta.php
@@ -128,7 +129,7 @@ if ($action == 'update') {
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-compta');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-compta');
 
 $form = new Form($db);
 
@@ -197,5 +198,5 @@ print '<br><br><div style="text-align:center"><input type="submit" class="button
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/ticket/contact.php
@@ -189,7 +190,7 @@ if ($action == 'set_thirdparty' && $user->hasRight('ticket', 'write')) {
  */
 
 $help_url = 'FR:DocumentationModuleTicket';
-llxHeader('', $langs->trans("TicketContacts"), $help_url, '', 0, 0, '', '', '', 'mod-ticket page-card_contacts');
+ViewMain::llxHeader('', $langs->trans("TicketContacts"), $help_url, '', 0, 0, '', '', '', 'mod-ticket page-card_contacts');
 
 $form = new Form($db);
 $formcompany = new FormCompany($db);
@@ -294,5 +295,5 @@ if ($id > 0 || !empty($track_id) || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

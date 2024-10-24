@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/compta/bank/treso.php
  *  \ingroup    banque
@@ -95,7 +97,7 @@ if (GETPOST("account") || GETPOST("ref")) {
 
     $title = $object->ref . ' - ' . $langs->trans("PlannedTransactions");
     $helpurl = "";
-    llxHeader('', $title, $helpurl);
+    ViewMain::llxHeader('', $title, $helpurl);
 
     // Onglets
     $head = bank_prepare_head($object);
@@ -393,5 +395,5 @@ if (GETPOST("account") || GETPOST("ref")) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

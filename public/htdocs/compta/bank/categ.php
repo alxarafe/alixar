@@ -23,6 +23,7 @@
  */
 
 use Dolibarr\Code\Compta\Classes\BankCateg;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/compta/bank/categ.php
@@ -86,7 +87,7 @@ if ($categid) {
 $title = $langs->trans('RubriquesTransactions');
 $help_url = 'EN:Module_Banks_and_Cash|FR:Module_Banques_et_Caisses|ES:M&oacute;dulo_Bancos_y_Cajas';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 
 print load_fiche_titre($langs->trans("RubriquesTransactions"), '', 'object_category');
@@ -166,5 +167,5 @@ print '</div>';
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

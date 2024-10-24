@@ -27,6 +27,7 @@ use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Compta\Classes\FactureLigne;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/accountancy/customer/index.php
@@ -307,7 +308,7 @@ if ($action == 'validatehistory') {
  */
 $help_url = 'EN:Module_Double_Entry_Accounting|FR:Module_Comptabilit&eacute;_en_Partie_Double#Liaisons_comptables';
 
-llxHeader('', $langs->trans("CustomersVentilation"), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-customer page-index');
+ViewMain::llxHeader('', $langs->trans("CustomersVentilation"), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-customer page-index');
 
 $textprevyear = '<a href="' . $_SERVER["PHP_SELF"] . '?year=' . ($year_current - 1) . '">' . img_previous() . '</a>';
 $textnextyear = '&nbsp;<a href="' . $_SERVER["PHP_SELF"] . '?year=' . ($year_current + 1) . '">' . img_next() . '</a>';
@@ -745,5 +746,5 @@ if (getDolGlobalString('SHOW_TOTAL_OF_PREVIOUS_LISTS_IN_LIN_PAGE')) { // This pa
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

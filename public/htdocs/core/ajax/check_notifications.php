@@ -88,7 +88,7 @@ if ($action == 'stopreminder') {
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 global $user, $db, $langs, $conf;
 

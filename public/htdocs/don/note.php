@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Don\Classes\Don;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/don/note.php
@@ -90,7 +91,7 @@ $title = $langs->trans('Donation') . " - " . $langs->trans('Notes');
 
 $help_url = 'EN:Module_Donations|FR:Module_Dons|ES:M&oacute;dulo_Donaciones|DE:Modul_Spenden';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-donation page-card_notes');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-donation page-card_notes');
 
 $form = new Form($db);
 if (isModEnabled('project')) {
@@ -153,6 +154,6 @@ if ($id > 0 || !empty($ref)) {
     print dol_get_fiche_end();
 }
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

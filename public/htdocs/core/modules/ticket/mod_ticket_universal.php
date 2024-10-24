@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Ticket\Classes\ModeleNumRefTicket;
 use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/core/modules/ticket/mod_ticket_universal.php

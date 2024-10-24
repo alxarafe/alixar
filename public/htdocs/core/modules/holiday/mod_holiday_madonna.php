@@ -26,6 +26,7 @@ use Dolibarr\Code\Holiday\Classes\Holiday;
 use Dolibarr\Code\Holiday\Classes\ModelNumRefHolidays;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/holiday/mod_holiday_madonna.php

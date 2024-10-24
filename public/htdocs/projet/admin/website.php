@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/projet/admin/website.php
@@ -91,7 +92,7 @@ $formproject = new FormProjets($db);
 
 $title = $langs->trans("ProjectsSetup");
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($title, $linkback, 'title_setup');
@@ -190,5 +191,5 @@ if (getDolGlobalString('PROJECT_ENABLE_PUBLIC')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

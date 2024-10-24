@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/lib/doleditor.lib.php

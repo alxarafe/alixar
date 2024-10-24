@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Utils;
+use Dolibarr\Lib\ViewMain;
 
 if (!defined('CSRFCHECK_WITH_TOKEN')) {
     define('CSRFCHECK_WITH_TOKEN', '1');        // Force use of CSRF protection with tokens even for GET
@@ -76,7 +77,7 @@ if ($action == 'purge' && !preg_match('/^confirm/i', $choice) && ($choice != 'al
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-tools_purge');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-tools_purge');
 
 $form = new Form($db);
 
@@ -139,5 +140,5 @@ if (preg_match('/^confirm/i', $choice)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

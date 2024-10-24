@@ -24,6 +24,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/admin/export.php
  *  \ingroup    export
@@ -62,7 +64,7 @@ if ($action == 'save') {
 $form = new Form($db);
 
 $page_name = "ExportSetup";
-llxHeader('', $langs->trans($page_name), '', '', 0, 0, '', '', '', 'mod-admin page-export');
+ViewMain::llxHeader('', $langs->trans($page_name), '', '', 0, 0, '', '', '', 'mod-admin page-export');
 
 // Subheader
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php">' . $langs->trans("BackToModuleList") . '</a>';
@@ -113,5 +115,5 @@ print '</form>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

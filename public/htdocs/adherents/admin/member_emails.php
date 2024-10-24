@@ -25,6 +25,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/adherents/admin/member_emails.php
  *      \ingroup    member
@@ -32,8 +35,6 @@
  */
 
 // Load Dolibarr environment
-use Dolibarr\Code\Core\Classes\Form;
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/member.lib.php';
@@ -140,7 +141,7 @@ $form = new Form($db);
 
 $help_url = 'EN:Module_Foundations|FR:Module_Adh&eacute;rents|ES:M&oacute;dulo_Miembros|DE:Modul_Mitglieder';
 
-llxHeader('', $langs->trans("MembersSetup"), $help_url);
+ViewMain::llxHeader('', $langs->trans("MembersSetup"), $help_url);
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -166,5 +167,5 @@ print '</form>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

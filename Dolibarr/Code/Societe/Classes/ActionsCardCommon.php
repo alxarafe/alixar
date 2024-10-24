@@ -22,6 +22,7 @@ namespace Dolibarr\Code\Societe\Classes;
 
 use DoliDB;
 
+
 /**
  *  \file       htdocs/societe/canvas/actions_card_common.class.php
  *  \ingroup    thirdparty

@@ -22,6 +22,8 @@
  * cadaver http://myurl/dav/fileserver.php
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/dav/fileserver.php
  *      \ingroup    dav

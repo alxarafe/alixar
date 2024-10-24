@@ -25,6 +25,7 @@ use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/commande/index.php
@@ -78,7 +79,7 @@ $form = new Form($db);
 $formfile = new FormFile($db);
 $help_url = "EN:Module_Customers_Orders|FR:Module_Commandes_Clients|ES:Módulo_Pedidos_de_clientes";
 
-llxHeader('', $langs->trans("Orders"), $help_url, '', 0, 0, '', '', '', 'mod-commande page-index');
+ViewMain::llxHeader('', $langs->trans("Orders"), $help_url, '', 0, 0, '', '', '', 'mod-commande page-index');
 
 
 print load_fiche_titre($langs->trans("OrdersArea"), '', 'order');
@@ -426,5 +427,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardOrders', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -22,6 +22,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/ai/lib/generate_content.lib.php
  *  \brief          Library of ai script
@@ -54,7 +56,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/ai/class/ai.class.php';
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 //get data from AJAX
 $rawData = file_get_contents('php://input');

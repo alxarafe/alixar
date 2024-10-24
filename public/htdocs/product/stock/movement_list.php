@@ -37,6 +37,7 @@ use Dolibarr\Code\Product\Classes\Productbatch;
 use Dolibarr\Code\Product\Classes\Productlot;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stock/movement_list.php
@@ -826,7 +827,7 @@ if ($msid) {
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_movement_list');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_movement_list');
 
 /*
  * Show tab only if we ask a particular warehouse
@@ -1707,5 +1708,5 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

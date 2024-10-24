@@ -24,6 +24,7 @@
 use Dolibarr\Code\Compta\Classes\RemiseCheque;
 use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/bank.php
@@ -100,7 +101,7 @@ if ($action == 'set_BANK_CHEQUERECEIPT_FREE_TEXT') {
  */
 
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
-llxHeader("", $langs->trans("BankSetupModule"), '', '', 0, 0, '', '', '', 'mod-admin page-chequereceipts');
+ViewMain::llxHeader("", $langs->trans("BankSetupModule"), '', '', 0, 0, '', '', '', 'mod-admin page-chequereceipts');
 
 $form = new Form($db);
 
@@ -287,5 +288,5 @@ print dol_get_fiche_end();
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

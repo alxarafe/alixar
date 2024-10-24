@@ -26,6 +26,7 @@ use Dolibarr\Code\Projet\Classes\ModeleNumRefProjects;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/project/mod_project_simple.php

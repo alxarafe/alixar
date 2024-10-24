@@ -19,6 +19,7 @@
 
 use Dolibarr\Code\Core\Classes\Events;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -49,7 +50,7 @@ $execmethod = getDolGlobalInt('MAIN_EXEC_USE_POPEN', 1);
 
 $form = new Form($db);
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_security');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_security');
 
 print load_fiche_titre($langs->trans("Security"), '', 'title_setup');
 
@@ -815,5 +816,5 @@ print '<span class="fas fa-shield-alt"></span> You can also protect the applicat
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

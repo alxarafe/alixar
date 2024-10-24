@@ -20,6 +20,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/paybox/admin/paybox.php
@@ -136,7 +137,7 @@ if (!getDolGlobalString('PAYBOX_IBS_DEVISE')) {
     $conf->global->PAYBOX_IBS_DEVISE = $IBS_DEVISE;
 }
 
-llxHeader();
+ViewMain::llxHeader();
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("PayBoxSetup"), $linkback, 'title_setup');
@@ -298,5 +299,5 @@ print '<br><br>';
 include DOL_DOCUMENT_ROOT . '/core/tpl/onlinepaymentlinks.tpl.php';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

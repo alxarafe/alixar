@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
 use Dolibarr\Code\Product\Classes\Entrepot;
 use Dolibarr\Code\Stock\Classes\ModelePDFStock;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/stock/doc/doc_generic_stock_odt.modules.php

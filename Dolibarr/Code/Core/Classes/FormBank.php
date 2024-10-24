@@ -24,6 +24,7 @@ namespace Dolibarr\Code\Core\Classes;
 use Dolibarr\Code\Compta\Classes\Account;
 use DoliDB;
 
+
 /**
  *  \file       htdocs/core/class/html.formbank.class.php
  *  \ingroup    core

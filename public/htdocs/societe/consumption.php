@@ -40,6 +40,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Reception\Classes\Reception;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/societe/consumption.php
@@ -134,7 +135,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/thirdpartynameonly/', 
     $title = $object->name . " - " . $title;
 }
 $help_url = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if (empty($socid)) {
     dol_print_error($db);
@@ -778,5 +779,5 @@ if ($sql_select) {
 print "</form>";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

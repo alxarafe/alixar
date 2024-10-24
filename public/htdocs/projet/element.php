@@ -43,6 +43,7 @@ use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Projet\Classes\Task;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Lib\Misc;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/projet/element.php
@@ -149,7 +150,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/projectnameonly/', get
 
 $help_url = 'EN:Module_Projects|FR:Module_Projets|ES:M&oacute;dulo_Proyectos|DE:Modul_Projekte';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $form = new Form($db);
 $formproject = new FormProjets($db);
@@ -1618,7 +1619,7 @@ if ($conf->use_javascript_ajax) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

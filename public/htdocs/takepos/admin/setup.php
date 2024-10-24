@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormMail;
 use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/takepos/admin/setup.php
@@ -136,7 +137,7 @@ $formproduct = new FormProduct($db);
 
 $help_url = 'EN:Module_Point_of_sale_(TakePOS)';
 
-llxHeader('', $langs->trans("CashDeskSetup"), $help_url, '', 0, 0, '', '', '', 'mod-takepos page-admin_setup');
+ViewMain::llxHeader('', $langs->trans("CashDeskSetup"), $help_url, '', 0, 0, '', '', '', 'mod-takepos page-admin_setup');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("CashDeskSetup") . ' (TakePOS)', $linkback, 'title_setup');
@@ -505,5 +506,5 @@ print $form->buttonsSaveCancel("Save", '');
 
 print "</form>\n";
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

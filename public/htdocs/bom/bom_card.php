@@ -27,6 +27,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormActions;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/bom/bom_card.php
@@ -318,7 +319,7 @@ $formfile = new FormFile($db);
 
 $title = $langs->trans('BOM');
 $help_url = 'EN:Module_BOM';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-bom page-card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-bom page-card');
 
 // Part to create
 if ($action == 'create') {
@@ -836,5 +837,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -41,6 +41,7 @@ use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\BloquedLog\Classes\BlockedLog;
 use Dolibarr\Code\Comm\Classes\Propal;
 use Dolibarr\Core\Model\Constant;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/install/upgrade2.php

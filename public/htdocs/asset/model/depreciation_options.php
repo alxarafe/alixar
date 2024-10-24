@@ -22,6 +22,7 @@ use Dolibarr\Code\Asset\Classes\AssetDepreciationOptions;
 use Dolibarr\Code\Asset\Classes\AssetModel;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/asset/model/depreciation_options.php
@@ -138,7 +139,7 @@ if (empty($reshook)) {
 $form = new Form($db);
 
 $help_url = '';
-llxHeader('', $langs->trans('AssetModel'), $help_url, '', 0, 0, '', '', '', 'mod-asset page-model-card_depreciation_options');
+ViewMain::llxHeader('', $langs->trans('AssetModel'), $help_url, '', 0, 0, '', '', '', 'mod-asset page-model-card_depreciation_options');
 
 if ($id > 0 || !empty($ref)) {
     $head = assetModelPrepareHead($object);
@@ -201,5 +202,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

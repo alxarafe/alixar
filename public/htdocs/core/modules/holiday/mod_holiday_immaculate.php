@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Holiday\Classes\Holiday;
 use Dolibarr\Code\Holiday\Classes\ModelNumRefHolidays;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/holiday/mod_holiday_immaculate.php

@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/societe/document.php
@@ -118,7 +119,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/thirdpartynameonly/', 
     $title = $object->name . ' - ' . $langs->trans("Files");
 }
 $help_url = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // Show tabs
 $head = societe_prepare_head($object);
@@ -193,5 +194,5 @@ $param = '&id=' . $object->id;
 include DOL_DOCUMENT_ROOT . '/core/tpl/document_actions_post_headers.tpl.php';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

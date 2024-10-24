@@ -44,6 +44,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/commande/list.php
@@ -375,7 +376,7 @@ $projectstatic = new Project($db);
 
 $title = $langs->trans("Orders");
 $help_url = "EN:Module_Customers_Orders|FR:Module_Commandes_Clients|ES:Módulo_Pedidos_de_clientes";
-// llxHeader('',$title,$help_url);
+// ViewMain::llxHeader('',$title,$help_url);
 
 $sql = 'SELECT';
 if ($search_all || $search_product_category_array > 0 || $search_user > 0) {
@@ -709,7 +710,7 @@ if ($resql) {
         exit;
     }
 
-    llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-commande page-list_det');
+    ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-commande page-list_det');
 
     $param = '';
 
@@ -2281,5 +2282,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -24,6 +24,7 @@ namespace Dolibarr\Code\Core\Classes;
 
 use DoliDB;
 
+
 /**
  *  \file       htdocs/core/class/hookmanager.class.php
  *  \ingroup    core

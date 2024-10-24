@@ -30,6 +30,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Fourn\Classes\Fournisseur;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/supplier_invoice.php
@@ -199,7 +200,7 @@ $form = new Form($db);
 
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-supplier_invoice');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-supplier_invoice');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("SuppliersSetup"), $linkback, 'title_setup');
@@ -513,5 +514,5 @@ print '</table>';
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/recruitment/lib/recruitment.lib.php

@@ -1,7 +1,7 @@
 <?php
 
-/* Copyright (C) 2006-2011 Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2006-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,14 +19,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Security\Classes\ModeleGenPassword;
+
 /**
  *      \file       htdocs/core/modules/security/generate/modGeneratePassStandard.class.php
  *      \ingroup    core
  *      \brief      File to manage password generation according to standard rule
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/security/generate/modules_genpassword.php';
-
 
 /**
  *  Class to generate a password according to a dolibarr standard rule (12 random chars)

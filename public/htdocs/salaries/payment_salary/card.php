@@ -25,6 +25,7 @@ use Dolibarr\Code\Compta\Classes\AccountLine;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Salaries\Classes\PaymentSalary;
 use Dolibarr\Code\Salaries\Classes\Salary;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/salaries/payment_salary/card.php
@@ -95,7 +96,7 @@ if ($action == 'setdatep' && GETPOST('datepday') && $user->hasRight('salaries', 
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("SalaryPayment"));
+ViewMain::llxHeader('', $langs->trans("SalaryPayment"));
 
 $h = 0;
 
@@ -282,5 +283,5 @@ if ($action == '') {
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

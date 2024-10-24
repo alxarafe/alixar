@@ -46,6 +46,7 @@ use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/societe/card.php
@@ -575,7 +576,7 @@ if (empty($reshook)) {
                     $db->commit();
 
                     if ($backtopagejsfields) {
-                        llxHeader('', '', '');
+                        ViewMain::llxHeader('', '', '');
 
                         $retstring = '<script>';
                         $retstring .= 'jQuery(document).ready(function() {
@@ -588,7 +589,7 @@ if (empty($reshook)) {
                         $retstring .= '</script>';
                         print $retstring;
 
-                        llxFooter();
+                        ViewMain::llxFooter();
                         exit;
                     }
 
@@ -872,7 +873,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/thirdpartynameonly/', 
 }
 $help_url = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas|DE:Modul_Geschäftspartner';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $countrynotdefined = $langs->trans("ErrorSetACountryFirst") . ' (' . $langs->trans("SeeAbove") . ')';
 
@@ -3237,7 +3238,7 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($canvasdisplayactio
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 ?>

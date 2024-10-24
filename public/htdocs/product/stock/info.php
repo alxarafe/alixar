@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/product/stock/info.php
  *  \ingroup    stock
@@ -47,7 +49,7 @@ $usercancreate = $user->hasRight('stock', 'creer');
  */
 
 $help_url = 'EN:Module_Stocks_En|FR:Module_Stock|ES:M&oacute;dulo_Stocks';
-llxHeader("", $langs->trans("Stocks"), $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_info');
+ViewMain::llxHeader("", $langs->trans("Stocks"), $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_info');
 
 $object = new Entrepot($db);
 $object->fetch($id, $ref);
@@ -115,5 +117,5 @@ dol_print_object_info($object);
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

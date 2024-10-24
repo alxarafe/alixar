@@ -19,6 +19,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/core/lib/geturl.lib.php
  *  \brief          This file contains functions dedicated to get URLs.

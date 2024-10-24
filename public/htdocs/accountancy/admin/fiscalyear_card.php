@@ -18,19 +18,19 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Fiscalyear;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file        htdocs/accountancy/admin/fiscalyear_card.php
  * \ingroup     Accountancy (Double entries)
  * \brief       Page to show a fiscal year
  */
 
-use Dolibarr\Code\Core\Classes\ExtraFields;
-use Dolibarr\Code\Core\Classes\Fiscalyear;
-use Dolibarr\Code\Core\Classes\Form;
-
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/fiscalyear.lib.php';
 
 // Load translation files required by the page
@@ -186,7 +186,7 @@ if ($action == 'create') {
 
 $help_url = 'EN:Module_Double_Entry_Accounting#Setup|FR:Module_Comptabilit&eacute;_en_Partie_Double#Configuration';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-accountancy page-fiscalyear');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-accountancy page-fiscalyear');
 
 if ($action == 'create') {
     print load_fiche_titre($title, '', 'object_' . $object->picto);
@@ -376,5 +376,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -21,6 +21,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/modules/delivery/mod_delivery_saphir.php
  *  \ingroup    expedition

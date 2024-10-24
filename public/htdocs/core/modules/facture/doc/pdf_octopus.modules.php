@@ -42,6 +42,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\CompanyBankAccount;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/facture/doc/pdf_octopus.modules.php

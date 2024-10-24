@@ -21,6 +21,7 @@
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Comm\Classes\PropaleStats;
 use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/boxes/box_graph_propales_permonth.php

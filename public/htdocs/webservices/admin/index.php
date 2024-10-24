@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/webservices/admin/index.php
  *      \ingroup    webservices
@@ -60,7 +62,7 @@ if ($actionsave) {
  *	View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-webservices page-admin_index');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-webservices page-admin_index');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 
@@ -149,5 +151,5 @@ print dolJSToSetRandomPassword($constname);
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

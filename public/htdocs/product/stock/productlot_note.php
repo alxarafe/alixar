@@ -20,6 +20,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       productlot_note.php
@@ -84,7 +85,7 @@ if (empty($reshook)) {
 $form = new Form($db);
 
 $help_url = '';
-llxHeader('', $langs->trans('productlot'), $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_productlot_note');
+ViewMain::llxHeader('', $langs->trans('productlot'), $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_productlot_note');
 
 if ($id > 0 || !empty($ref)) {
     $object->fetch_thirdparty();
@@ -112,5 +113,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -36,6 +36,7 @@ use Dolibarr\Code\Don\Classes\PaymentDonation;
 use Dolibarr\Code\Fourn\Classes\PaiementFourn;
 use Dolibarr\Code\Loan\Classes\PaymentLoan;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/bank/releve.php
@@ -263,7 +264,7 @@ if (empty($numref)) {
 }
 
 
-llxHeader('', $title, $helpurl);
+ViewMain::llxHeader('', $title, $helpurl);
 
 
 if (empty($numref)) {
@@ -755,5 +756,5 @@ if (empty($numref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

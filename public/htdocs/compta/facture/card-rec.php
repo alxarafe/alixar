@@ -44,6 +44,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/facture/card-rec.php
@@ -984,7 +985,7 @@ if (empty($reshook)) {
 $title = $object->ref . " - " . $langs->trans('Card');
 $help_url = '';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $form = new Form($db);
 $formother = new FormOther($db);
@@ -1820,5 +1821,5 @@ if ($action == 'create') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

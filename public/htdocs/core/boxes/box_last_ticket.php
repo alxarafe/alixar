@@ -23,6 +23,7 @@
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Ticket\Classes\Ticket;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *     \file        htdocs/core/boxes/box_last_ticket.php

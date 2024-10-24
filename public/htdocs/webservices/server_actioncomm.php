@@ -25,6 +25,7 @@
 use Dolibarr\Code\Comm\Classes\ActionComm;
 use Dolibarr\Code\Comm\Classes\CActionComm;
 use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/webservices/server_actioncomm.php

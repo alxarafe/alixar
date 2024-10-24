@@ -59,7 +59,7 @@ if ($action == 'setvalue') {
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-bookmarks page-admin_bookmark');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-bookmarks page-admin_bookmark');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("BookmarkSetup"), $linkback, 'title_setup');
@@ -84,5 +84,5 @@ print '</td></tr>';
 print '</table><br><div class="center"><input type="submit" class="button button-edit" value="' . $langs->trans("Modify") . '"></div></form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

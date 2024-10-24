@@ -22,6 +22,7 @@
  */
 
 use Dolibarr\Code\Recruitement\Classes\ModeleNumRefRecruitmentCandidature;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/recruitment/mod_recruitmentcandidature_standard.php

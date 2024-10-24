@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/admin/mails_ingoing.php
  *       \brief      Page to setup emails entry
@@ -64,7 +66,7 @@ if (preg_match('/^mac/i', PHP_OS)) {
 
 //$wikihelp = 'EN:Setup_EMails|FR:Paramétrage_EMails|ES:Configuración_EMails';
 $wikihelp = '';
-llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-mails_ingoing');
+ViewMain::llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-mails_ingoing');
 
 print load_fiche_titre($langs->trans("EMailsSetup"), '', 'title_setup');
 
@@ -130,5 +132,5 @@ print dol_get_fiche_end();
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

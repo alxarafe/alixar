@@ -30,6 +30,7 @@ namespace Dolibarr\Code\Workstation\Classes;
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use DoliDB;
 
+
 /**
  *  \file           htdocs/core/modules/workstation/modules_workstation.php
  *  \ingroup        workstation

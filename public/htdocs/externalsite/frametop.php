@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/externalsite/frametop.php
  *      \ingroup    externalsite
@@ -29,10 +31,10 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 // Load translation files required by the page
 $langs->load("other");
 
-top_htmlhead("", "");
+ViewMain::topHtmlHead("", "");
 
 print '<body id="mainbody">' . "\n";
 
-top_menu("", "", "_top");
+ViewMain::topMenu("", "", "_top");
 
 print '</body>';

@@ -22,6 +22,7 @@
 use Dolibarr\Code\BookMarks\Classes\Bookmark;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/bookmarks/card.php
@@ -138,7 +139,7 @@ if ($action == 'add' || $action == 'addproduct' || $action == 'update') {
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-bookmarks page-card');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-bookmarks page-card');
 
 $form = new Form($db);
 
@@ -340,5 +341,5 @@ if ($id > 0 && !preg_match('/^add/i', $action)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

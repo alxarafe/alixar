@@ -25,6 +25,7 @@ use Dolibarr\Code\Compta\Classes\AccountLine;
 use Dolibarr\Code\Compta\Classes\PaymentVAT;
 use Dolibarr\Code\Compta\Classes\Tva;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/payment_vat/card.php
@@ -121,7 +122,7 @@ if ($action == 'confirm_valide' && $confirm == 'yes' && $user->rights->tax->char
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $tva = new Tva($db);
 $form = new Form($db);
@@ -280,5 +281,5 @@ if ($action == '') {
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

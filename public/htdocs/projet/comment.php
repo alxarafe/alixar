@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/projet/comment.php
@@ -85,7 +86,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_comments.inc.php';
 
 $title = $langs->trans('CommentPage');
 
-llxHeader('', $title, '');
+ViewMain::llxHeader('', $title, '');
 
 $form = new Form($db);
 $formother = new FormOther($db);
@@ -202,5 +203,5 @@ print '<br>';
 include DOL_DOCUMENT_ROOT . '/core/tpl/bloc_comment.tpl.php';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

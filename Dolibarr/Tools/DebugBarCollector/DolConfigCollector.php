@@ -21,6 +21,7 @@ namespace Dolibarr\Tools\DebugBarCollector;
 
 use DebugBar\DataCollector\ConfigCollector;
 
+
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolConfigCollector.php
  *  \brief      Class for debugbar collection

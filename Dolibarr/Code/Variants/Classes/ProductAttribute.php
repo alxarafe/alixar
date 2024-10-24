@@ -26,6 +26,7 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
+
 /**
  *  \file       htdocs/variants/class/ProductAttribute.class.php
  *  \ingroup    variants

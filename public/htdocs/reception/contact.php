@@ -29,6 +29,7 @@ use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Reception\Classes\Reception;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *     \file       htdocs/reception/contact.php
@@ -140,7 +141,7 @@ if ($action == 'addcontact' && $user->hasRight('reception', 'creer')) {
  */
 
 $help_url = 'EN:Customers_Orders|FR:receptions_Clients|ES:Pedidos de clientes';
-llxHeader('', $langs->trans('Reception'), $help_url, '', 0, 0, '', '', '', 'mod-reception page-card_contact');
+ViewMain::llxHeader('', $langs->trans('Reception'), $help_url, '', 0, 0, '', '', '', 'mod-reception page-card_contact');
 
 $form = new Form($db);
 $formcompany = new FormCompany($db);
@@ -248,6 +249,6 @@ if ($id > 0 || !empty($ref)) {
     }
 }
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

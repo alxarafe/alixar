@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/product/stats/card.php
@@ -103,7 +104,7 @@ $htmlother = new FormOther($db);
 if (!($id > 0) && empty($ref) || $notab) {
     $notab = 1;
 
-    llxHeader("", $langs->trans("ProductStatistics"), '', '', 0, 0, '', '', '', 'mod-product page-stats_card_general');
+    ViewMain::llxHeader("", $langs->trans("ProductStatistics"), '', '', 0, 0, '', '', '', 'mod-product page-stats_card_general');
 
     $type = GETPOSTINT('type');
 
@@ -140,7 +141,7 @@ if (!($id > 0) && empty($ref) || $notab) {
     }
 
     //HERE
-    llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stats_card_by_product');
+    ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stats_card_by_product');
 }
 
 
@@ -563,5 +564,5 @@ if (!($id > 0)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

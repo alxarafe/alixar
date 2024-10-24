@@ -28,6 +28,7 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
+
 /**
  *  \file       comm/mailing/class/advtargetemailing.class.php
  *  \ingroup    mailing

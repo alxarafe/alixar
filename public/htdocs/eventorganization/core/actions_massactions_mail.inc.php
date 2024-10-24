@@ -26,6 +26,7 @@
 use Dolibarr\Code\Core\Classes\CMailFile;
 use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
 use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file            htdocs/core/actions_massactions.inc.php

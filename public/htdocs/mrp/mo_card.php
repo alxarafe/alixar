@@ -30,6 +30,7 @@ use Dolibarr\Code\Mrp\Classes\MoLine;
 use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/mrp/mo_card.php
@@ -332,7 +333,7 @@ $formproject = new FormProjets($db);
 
 $title = $langs->trans('ManufacturingOrder') . " - " . $langs->trans("Card");
 
-llxHeader('', $title, '');
+ViewMain::llxHeader('', $title, '');
 
 
 // Part to create
@@ -888,5 +889,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

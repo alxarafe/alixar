@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Core\Classes\FormMail;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/admin/eventorganization.php
@@ -164,7 +165,7 @@ $form = new Form($db);
 
 $page_name = "EventOrganizationSetup";
 
-llxHeader('', $langs->trans($page_name), '', '', 0, 0, '', '', '', 'mod-admin page-eventorganization');
+ViewMain::llxHeader('', $langs->trans($page_name), '', '', 0, 0, '', '', '', 'mod-admin page-eventorganization');
 
 // Subheader
 $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1') . '">' . $langs->trans("BackToModuleList") . '</a>';
@@ -356,5 +357,5 @@ if ($action == 'edit') {
 // Page end
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

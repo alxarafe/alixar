@@ -29,6 +29,7 @@
 use Dolibarr\Code\Comm\Classes\Propal;
 use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/propal.php
@@ -238,7 +239,7 @@ $form = new Form($db);
 
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
-llxHeader('', $langs->trans("PropalSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-propal');
+ViewMain::llxHeader('', $langs->trans("PropalSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-propal');
 
 //if ($mesg) print $mesg;
 
@@ -738,5 +739,5 @@ print "</td></tr>\n";
 print '</table>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

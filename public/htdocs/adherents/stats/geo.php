@@ -21,6 +21,7 @@
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/adherents/stats/geo.php
@@ -80,7 +81,7 @@ if ($mode == 'memberbyregion') {
     $title = $langs->trans("MembersStatisticsByRegion");
 }
 
-llxHeader('', $title, '', '', 0, 0, $arrayjs);
+ViewMain::llxHeader('', $title, '', '', 0, 0, $arrayjs);
 
 print load_fiche_titre($title, '', $memberstatic->picto);
 
@@ -334,5 +335,5 @@ if ($mode) {
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

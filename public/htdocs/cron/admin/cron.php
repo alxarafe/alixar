@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       cron/admin/cron.php
  *      \ingroup    cron
@@ -63,7 +65,7 @@ if (!empty($actionsave)) {
  */
 
 $help_url = '';
-llxHeader('', '', $help_url);
+ViewMain::llxHeader('', '', $help_url);
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("CronSetup"), $linkback, 'title_setup');
@@ -145,5 +147,5 @@ $constname = 'CRON_KEY';
 include_once DOL_DOCUMENT_ROOT . '/core/lib/security2.lib.php';
 print dolJSToSetRandomPassword($constname);
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -19,6 +19,7 @@
 
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/accountancy/journal/variousjournal.php
@@ -201,7 +202,7 @@ if ($object->nature == 2) {
 
 $title = $langs->trans("GenerationOfAccountingEntries") . ' - ' . $object->getNomUrl(0, 2, 1, '', 1);
 $help_url = 'EN:Module_Double_Entry_Accounting|FR:Module_Comptabilit&eacute;_en_Partie_Double#G&eacute;n&eacute;ration_des_&eacute;critures_en_comptabilit&eacute;';
-llxHeader('', dol_string_nohtmltag($title), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-generation page-variousjournal');
+ViewMain::llxHeader('', dol_string_nohtmltag($title), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-generation page-variousjournal');
 
 $nom = $title;
 $nomlink = '';
@@ -366,6 +367,6 @@ if (!$i) {
 print '</table>';
 print '</div>';
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

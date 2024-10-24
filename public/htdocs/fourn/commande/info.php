@@ -23,6 +23,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/fourn/commande/info.php
@@ -126,7 +127,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/projectnameonly/', get
     $title = $object->ref . ' ' . $object->name . ' - ' . $langs->trans("Info");
 }
 $help_url = 'EN:Module_Suppliers_Orders|FR:CommandeFournisseur|ES:Módulo_Pedidos_a_proveedores';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-supplier-order page-info');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-supplier-order page-info');
 
 $now = dol_now();
 
@@ -235,5 +236,5 @@ if (!empty($object->id)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

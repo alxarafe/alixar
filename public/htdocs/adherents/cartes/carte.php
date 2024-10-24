@@ -23,6 +23,7 @@ use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Lib\AveryLabels;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/adherents/cartes/carte.php
@@ -268,7 +269,7 @@ if ((!empty($foruserid) || !empty($foruserlogin) || !empty($mode)) && !$mesg) {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("MembersCards"));
+ViewMain::llxHeader('', $langs->trans("MembersCards"));
 
 print load_fiche_titre($langs->trans("LinkToGeneratedPages"), '', $adherentstatic->picto);
 
@@ -336,5 +337,5 @@ print '<br><input type="submit" class="button small" value="' . $langs->trans("B
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

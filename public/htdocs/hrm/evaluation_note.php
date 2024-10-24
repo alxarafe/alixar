@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Hrm\Classes\Evaluation;
 use Dolibarr\Code\Hrm\Classes\Job;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/evaluation_note.php
@@ -99,7 +100,7 @@ $form = new Form($db);
 
 //$help_url='EN:Customers_Orders|FR:Commandes_Clients|ES:Pedidos de clientes';
 $help_url = '';
-llxHeader('', $langs->trans('Evaluation'), $help_url);
+ViewMain::llxHeader('', $langs->trans('Evaluation'), $help_url);
 
 if ($id > 0 || !empty($ref)) {
     $object->fetch_thirdparty();
@@ -139,5 +140,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -23,6 +23,7 @@
 use Dolibarr\Code\Core\Classes\CSMSFile;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormSms;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/admin/sms.php
@@ -152,7 +153,7 @@ if (preg_match('/^mac/i', PHP_OS)) {
 }
 
 $wikihelp = 'EN:Setup Sms|FR:Paramétrage Sms|ES:Configuración Sms';
-llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-sms');
+ViewMain::llxHeader('', $langs->trans("Setup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-sms');
 
 print load_fiche_titre($langs->trans("SmsSetup"), '', 'title_setup');
 
@@ -288,5 +289,5 @@ if ($action == 'edit') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

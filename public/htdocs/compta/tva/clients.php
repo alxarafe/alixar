@@ -33,6 +33,7 @@ use Dolibarr\Code\Fourn\Classes\PaiementFourn;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/tva/clients.php
@@ -102,7 +103,7 @@ if (isset($_REQUEST['extra_report']) && $_REQUEST['extra_report'] == 1) {
     $special_report = true;
 }
 
-llxHeader('', $langs->trans("VATReport"), '', '', 0, 0, '', '', $morequerystring);
+ViewMain::llxHeader('', $langs->trans("VATReport"), '', '', 0, 0, '', '', $morequerystring);
 
 $fsearch = '<!-- hidden fields for form -->';
 $fsearch .= '<input type="hidden" name="token" value="' . newToken() . '">';
@@ -799,6 +800,6 @@ if (!is_array($x_coll) || !is_array($x_paye)) {
 print '</table>';
 print '</div>';
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

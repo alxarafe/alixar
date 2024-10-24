@@ -22,6 +22,7 @@
 use Dolibarr\Code\WebPortal\Classes\Context;
 use Dolibarr\Code\WebPortal\Classes\Controller;
 use Dolibarr\Code\WebPortal\Classes\FormListWebPortal;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/webportal/controllers/orderlist.controller.class.php

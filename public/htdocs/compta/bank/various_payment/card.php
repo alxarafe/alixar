@@ -29,6 +29,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAccounting;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/bank/various_payment/card.php
@@ -348,7 +349,7 @@ if ($action == 'create') {
     $title = $langs->trans("NewVariousPayment");
 }
 $help_url = 'EN:Module_Suppliers_Invoices|FR:Module_Fournisseurs_Factures|ES:Módulo_Facturas_de_proveedores|DE:Modul_Lieferantenrechnungen';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $options = array();
 
@@ -755,5 +756,5 @@ if ($id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

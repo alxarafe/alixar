@@ -22,6 +22,7 @@
  */
 
 use Dolibarr\Lib\Images;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/public/eventorganization/subscriptionok.php
@@ -100,7 +101,7 @@ function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $
 {
     global $user, $conf, $langs, $mysoc;
 
-    top_htmlhead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss); // Show html headers
+    ViewMain::topHtmlHead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss); // Show html headers
 
     print '<body id="mainbody" class="publicnewmemberform">';
 
@@ -229,6 +230,6 @@ unset($_SESSION["FinalPaymentAmt"]);
 unset($_SESSION["TRANSACTIONID"]);
 
 
-llxFooter('', 'public');
+ViewMain::llxFooter('', 'public');
 
 $db->close();

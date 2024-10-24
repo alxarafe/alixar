@@ -26,6 +26,7 @@ use Dolibarr\Code\Accountancy\Classes\BookKeeping;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAccounting;
 use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/accountancy/bookkeeping/balance.php
@@ -254,8 +255,7 @@ if ($type == 'sub') {
 
 $help_url = 'EN:Module_Double_Entry_Accounting|FR:Module_Comptabilit&eacute;_en_Partie_Double';
 
-llxHeader('', $title_page, $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-consultation page-' . (($type == 'sub') ? 'sub' : '') . 'balance');
-
+ViewMain::llxHeader('', $title_page, $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-consultation page-' . (($type == 'sub') ? 'sub' : '') . 'balance');
 
 if ($action != 'export_csv') {
     // List
@@ -728,5 +728,5 @@ if ($action != 'export_csv') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -30,6 +30,7 @@ use Dolibarr\Code\Product\Classes\MouvementStock;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productlot;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/movement/doc/pdf_standard.modules.php

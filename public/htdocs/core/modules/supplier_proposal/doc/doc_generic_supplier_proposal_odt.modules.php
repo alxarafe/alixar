@@ -25,6 +25,7 @@ use Dolibarr\Code\Comm\Classes\Propal;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\SupplierProposal\Classes\ModelePDFSupplierProposal;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/propale/doc/doc_generic_proposal_odt.modules.php

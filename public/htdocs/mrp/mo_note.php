@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Mrp\Classes\Mo;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       mo_note.php
@@ -92,7 +93,7 @@ $formproject = new FormProjets($db);
 
 //$help_url='EN:Customers_Orders|FR:Commandes_Clients|ES:Pedidos de clientes';
 $help_url = '';
-llxHeader('', $langs->trans('Mo'), $help_url);
+ViewMain::llxHeader('', $langs->trans('Mo'), $help_url);
 
 if ($id > 0 || !empty($ref)) {
     $object->fetch_thirdparty();
@@ -157,5 +158,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

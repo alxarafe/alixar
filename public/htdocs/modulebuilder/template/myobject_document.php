@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/modulebuilder/template/myobject_document.php
  *  \ingroup    mymodule
@@ -174,7 +176,7 @@ $title = $langs->trans("MyObject") . " - " . $langs->trans("Files");
 //$title = $object->ref." - ".$langs->trans("Files");
 $help_url = '';
 //Example $help_url='EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-card_document');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-card_document');
 
 // Show tabs
 $head = myobjectPrepareHead($object);
@@ -259,5 +261,5 @@ $relativepathwithnofile = 'myobject/' . dol_sanitizeFileName($object->ref) . '/'
 include DOL_DOCUMENT_ROOT . '/core/tpl/document_actions_post_headers.tpl.php';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

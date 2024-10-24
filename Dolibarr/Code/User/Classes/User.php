@@ -46,6 +46,7 @@ use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 use stdClass;
 
+
 /**
  *  \file       htdocs/user/class/user.class.php
  *  \brief      File of class to manage users

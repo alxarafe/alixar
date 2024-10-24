@@ -51,6 +51,7 @@ use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\Variants\Classes\ProductCombination;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/fourn/commande/card.php
@@ -504,7 +505,7 @@ if (empty($reshook)) {
         if (!$error && isModEnabled('variants') && $prod_entry_mode != 'free') {
             if ($combinations = GETPOST('combinations', 'array')) {
                 //Check if there is a product with the given combination
-                $prodcomb = new ProductCombination($db);
+                $prodcomb = new ProductAttributeCombination();
 
                 if ($res = $prodcomb->fetchByProductCombination2ValuePairs($idprod, $combinations)) {
                     $idprod = $res->fk_product_child;
@@ -1609,7 +1610,7 @@ if ($action == 'create') {
     $title = $langs->trans("NewOrderSupplier");
 }
 $help_url = 'EN:Module_Suppliers_Orders|FR:CommandeFournisseur|ES:Módulo_Pedidos_a_proveedores';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-supplier-order page-card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-supplier-order page-card');
 
 $now = dol_now();
 
@@ -3045,5 +3046,5 @@ if ($action == 'create') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

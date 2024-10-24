@@ -132,7 +132,7 @@ if (!isModEnabled("product")) {
     $tab = $langs->trans('Products');
 }
 
-llxHeader('', $langs->trans('MultipriceRules'), '', '', 0, 0, '', '', '', 'mod-product page-admin_price_rules');
+ViewMain::llxHeader('', $langs->trans('MultipriceRules'), '', '', 0, 0, '', '', '', 'mod-product page-admin_price_rules');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($title, $linkback, 'title_setup');
@@ -214,5 +214,5 @@ print '<div style="text-align: center">
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -29,6 +29,7 @@
 
 use Dolibarr\Code\Website\Classes\Website;
 use Dolibarr\Code\Website\Classes\WebsitePage;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/public/website/index.php
@@ -61,27 +62,8 @@ if (!defined('NOBROWSERNOTIF')) {
     define('NOBROWSERNOTIF', '1');
 }
 
-/**
- * Header empty
- *
- * @return  void
- */
-function llxHeader()
-{
-}
-
-/**
- * Footer empty
- *
- * @return  void
- */
-function llxFooter()
-{
-}
-
 require '../../master.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-
 
 $error = 0;
 $websitekey = GETPOST('website', 'alpha');
@@ -95,7 +77,6 @@ if (preg_match('/^(\w\w)\/(.*)$/', $pageref, $reg)) {
 
 $accessallowed = 1;
 $type = '';
-
 
 if (empty($pageid)) {
 
@@ -173,13 +154,11 @@ if (getDolGlobalString('MAIN_APPLICATION_TITLE')) {
     $appli = getDolGlobalString('MAIN_APPLICATION_TITLE');
 }
 
-
 /*
  * View
  */
 
 //print 'Directory with '.$appli.' websites.<br>';
-
 
 // Security: Delete string ../ into $original_file
 global $dolibarr_main_data_root;
@@ -233,7 +212,6 @@ if (!file_exists($original_file_osencoded)) {
     include DOL_DOCUMENT_ROOT . '/public/error-404.php';
     exit;
 }
-
 
 // Output page content
 define('USEDOLIBARRSERVER', 1);

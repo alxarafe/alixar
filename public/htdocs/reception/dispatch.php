@@ -36,6 +36,7 @@ use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Reception\Classes\Reception;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/reception/dispatch.php
@@ -311,7 +312,7 @@ $help_url = 'EN:Module_Suppliers_Orders|FR:CommandeFournisseur|ES:Módulo_Pedido
 $morejs = array('/fourn/js/lib_dispatch.js.php');
 $numline = 0;
 
-llxHeader('', $title, $help_url, '', 0, 0, $morejs, '', '', 'mod-reception page-card_dispatch');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs, '', '', 'mod-reception page-card_dispatch');
 
 if ($id > 0 || !empty($ref)) {
     if (!empty($object->origin) && $object->origin_id > 0) {
@@ -1163,5 +1164,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
