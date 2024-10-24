@@ -24,6 +24,7 @@ namespace Dolibarr\Code\Ticket\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 
+
 /**
  *      \file       htdocs/core/modules/ticket/modules_ticket.php
  *      \ingroup    ticket

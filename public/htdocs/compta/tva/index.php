@@ -28,6 +28,7 @@
 use Dolibarr\Code\Compta\Classes\Tva;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/tva/index.php
@@ -230,7 +231,7 @@ $period = $form->selectDate($date_start, 'date_start', 0, 0, 0, '', 1, 0) . ' - 
 $builddate = dol_now();
 
 
-llxHeader('', $name);
+ViewMain::llxHeader('', $name);
 
 //$textprevyear="<a href=\"index.php?year=" . ($year_current-1) . "\">".img_previous($langs->trans("Previous"), 'class="valignbottom"')."</a>";
 //$textnextyear=" <a href=\"index.php?year=" . ($year_current+1) . "\">".img_next($langs->trans("Next"), 'class="valignbottom"')."</a>";
@@ -554,5 +555,5 @@ if ($refresh === true) {
     print '</div>';
 }
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

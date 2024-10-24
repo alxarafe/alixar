@@ -24,6 +24,7 @@
  */
 
 use Dolibarr\Code\FactureFournisseur\Classes\ModeleNumRefSuppliersInvoices;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/modules/supplier_invoice/mod_facture_fournisseur_cactus.php

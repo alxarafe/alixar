@@ -24,6 +24,7 @@ namespace Dolibarr\Code\Product\Classes;
 
 use DoliDB;
 
+
 /**
  *  \file       htdocs/product/dynamic_price/class/price_expression.class.php
  *  \ingroup    product

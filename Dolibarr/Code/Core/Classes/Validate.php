@@ -21,6 +21,7 @@ namespace Dolibarr\Code\Core\Classes;
 
 use DoliDB;
 
+
 /**
  *      \file       htdocs/core/class/validate.class.php
  *      \ingroup    core

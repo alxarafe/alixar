@@ -26,6 +26,7 @@
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\TakePos\Classes\ModeleNumRefTakepos;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/takepos/mod_takepos_ref_simple.php

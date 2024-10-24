@@ -28,6 +28,7 @@ namespace Dolibarr\Code\KnowledgeManagement\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 
+
 /**
  *  \file           htdocs/knowledgemanagement/core/modules/knowledgemanagement/modules_knowledgerecord.php
  *  \ingroup        knowledgemanagement

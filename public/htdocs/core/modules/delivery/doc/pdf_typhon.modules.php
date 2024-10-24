@@ -23,6 +23,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/modules/delivery/doc/pdf_typhon.modules.php
  *  \ingroup    livraison

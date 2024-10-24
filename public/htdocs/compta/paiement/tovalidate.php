@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/compta/paiement/tovalidate.php
  *  \ingroup    compta
@@ -69,7 +71,7 @@ if (!$user->hasRight('facture', 'lire')) {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $sql = "SELECT p.rowid, p.datep as dp, p.amount, p.statut";
 $sql .= ", c.libelle as paiement_type, p.num_paiement as num_payment";
@@ -139,5 +141,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

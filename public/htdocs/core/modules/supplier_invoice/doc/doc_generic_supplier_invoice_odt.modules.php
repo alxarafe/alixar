@@ -29,6 +29,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\FactureFournisseur\Classes\ModelePDFSuppliersInvoices;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/supplier_invoce/doc/doc_generic_supplier_invoice_odt.modules.php

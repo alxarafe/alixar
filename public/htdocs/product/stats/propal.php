@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file htdocs/product/stats/propal.php
@@ -104,7 +105,7 @@ if ($id > 0 || !empty($ref)) {
         setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
     }
 
-    llxHeader("", "", $langs->trans("CardProduct" . $product->type), '', '', 0, 0, '', '', '', 'mod-product page-stats_propal');
+    ViewMain::llxHeader("", "", $langs->trans("CardProduct" . $product->type), '', '', 0, 0, '', '', '', 'mod-product page-stats_propal');
 
     if ($result > 0) {
         $head = product_prepare_head($product);
@@ -293,5 +294,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

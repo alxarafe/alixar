@@ -21,9 +21,11 @@
 use Dolibarr\Code\BookCal\Classes\Availabilities;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file       htdocs/bookcal/availabilities_document.php
+ *   \file
+ * htdocs/bookcal/availabilities_document.php
  *   \ingroup    bookcal
  *   \brief      Tab for documents linked to Availabilities
  */
@@ -117,7 +119,7 @@ $form = new Form($db);
 $title = $langs->trans("Availabilities") . ' - ' . $langs->trans("Files");
 $help_url = '';
 //$help_url='EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($object->id) {
     /*
@@ -210,5 +212,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

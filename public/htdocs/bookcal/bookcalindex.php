@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/bookcal/bookcalindex.php
@@ -67,7 +68,7 @@ $max = getDolGlobalInt('MAIN_SIZE_SHORTLIST_LIMIT', 5);
 $form = new Form($db);
 $formfile = new FormFile($db);
 
-llxHeader("", $langs->trans("BookCalArea"));
+ViewMain::llxHeader("", $langs->trans("BookCalArea"));
 
 print load_fiche_titre($langs->trans("BookCalArea"), '', 'fa-calendar-check');
 
@@ -193,5 +194,5 @@ if (isModEnabled('bookcal')) {
 print '</div></div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

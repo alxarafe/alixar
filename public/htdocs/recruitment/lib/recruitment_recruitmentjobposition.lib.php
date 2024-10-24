@@ -19,6 +19,7 @@
 
 use Dolibarr\Code\Core\Classes\Link;
 use Dolibarr\Code\Recruitement\Classes\RecruitmentJobPosition;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    lib/recruitment_recruitmentjobposition.lib.php

@@ -26,7 +26,10 @@
 
 namespace Dolibarr\Code\Partnerships\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+
 
 /**
  *  \file       htdocs/partnership/class/partnership_type.class.php

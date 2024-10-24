@@ -29,6 +29,7 @@ namespace Dolibarr\Code\StockTransfer\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 
+
 /**
  *  \file           htdocs/core/modules/stocktransfer/modules_stocktransfer.php
  *  \ingroup        stocktransfer

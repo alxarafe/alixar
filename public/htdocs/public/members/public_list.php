@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/public/members/public_list.php
@@ -68,7 +69,7 @@ $langs->loadLangs(array("main", "members", "companies", "other"));
  */
 function llxHeaderVierge($title, $head = "")
 {
-    top_htmlhead($head, $title);
+    ViewMain::topHtmlHead($head, $title);
 
     print '<body class="public_body">' . "\n";
 }

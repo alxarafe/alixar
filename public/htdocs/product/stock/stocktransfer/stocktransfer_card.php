@@ -32,6 +32,7 @@ use Dolibarr\Code\Product\Classes\StockTransferLine;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\StockTransfer\Classes\ModelePDFStockTransfer;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       stocktransfer_card.php
@@ -414,7 +415,7 @@ $formproject = new FormProjets($db);
 $title = $langs->trans("StockTransfer");
 $help_url = '';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock-stocktransfer_stocktransfer_card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock-stocktransfer_stocktransfer_card');
 
 
 // Example : Adding jquery code
@@ -1138,5 +1139,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

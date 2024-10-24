@@ -22,9 +22,11 @@
 
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Societe\Classes\Client;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file       htdocs/core/boxes/box_prospect.php
+ *   \file
+ * htdocs/core/boxes/box_prospect.php
  *   \ingroup    societe
  *   \brief      Module to generate the last prospects box.
  */

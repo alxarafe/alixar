@@ -28,6 +28,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       core/modules/asset/doc/pdf_standard.modules.php
  *  \ingroup    asset

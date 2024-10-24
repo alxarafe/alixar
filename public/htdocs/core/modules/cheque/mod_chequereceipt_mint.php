@@ -25,6 +25,7 @@ use Dolibarr\Code\Compta\Classes\RemiseCheque;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/modules/cheque/mod_chequereceipt_mint.php

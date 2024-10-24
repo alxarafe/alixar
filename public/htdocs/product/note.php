@@ -24,9 +24,11 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file       htdocs/product/note.php
+ *   \file
+ * htdocs/product/note.php
  *   \brief      Tab for notes on products
  *   \ingroup    societe
  */
@@ -110,7 +112,7 @@ if (GETPOST("type") == '1' || ($object->type == Product::TYPE_SERVICE)) {
     $help_url = 'EN:Module_Services_En|FR:Module_Services|ES:M&oacute;dulo_Servicios|DE:Modul_Leistungen';
 }
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-card_note');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-card_note');
 
 if ($id > 0 || !empty($ref)) {
     /*
@@ -150,5 +152,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

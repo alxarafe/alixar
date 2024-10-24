@@ -25,6 +25,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+
 /**
  *  \file       htdocs/core/class/smtps.class.php
  *  \brief      Class to construct and send SMTP compliant email, even to a secure

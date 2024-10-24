@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\KnowledgeManagement\Classes\KnowledgeRecord;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       knowledgerecord_card.php
@@ -171,7 +172,7 @@ $formadmin = new FormAdmin($db);
 
 $title = $langs->trans("KnowledgeRecord");
 $help_url = '';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-knowledgemanagement page-card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-knowledgemanagement page-card');
 
 // Part to create
 if ($action == 'create') {
@@ -576,5 +577,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

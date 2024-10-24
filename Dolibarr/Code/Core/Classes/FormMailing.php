@@ -22,6 +22,7 @@ namespace Dolibarr\Code\Core\Classes;
 
 use Dolibarr\Code\Comm\Classes\Mailing;
 
+
 /**
  *  \file       htdocs/core/class/html.formmailing.class.php
  *  \ingroup    core

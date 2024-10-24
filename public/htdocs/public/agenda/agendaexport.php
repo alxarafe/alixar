@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Comm\Classes\ActionComm;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/public/agenda/agendaexport.php
@@ -168,7 +169,7 @@ if (!isModEnabled('agenda')) {
 if (!getDolGlobalString('MAIN_AGENDA_XCAL_EXPORTKEY')) {
     $user->getrights();
 
-    top_httphead();
+    ViewMain::topHttpHead();
 
     llxHeaderVierge();
     print '<div class="error">Module Agenda was not configured properly.</div>';
@@ -181,7 +182,7 @@ $hookmanager->initHooks(array('agendaexport'));
 
 $reshook = $hookmanager->executeHooks('doActions', $filters); // Note that $action and $object may have been modified by some
 if ($reshook < 0) {
-    top_httphead();
+    ViewMain::topHttpHead();
 
     llxHeaderVierge();
     if (!empty($hookmanager->errors) && is_array($hookmanager->errors)) {
@@ -195,7 +196,7 @@ if ($reshook < 0) {
     if (!GETPOST("exportkey") || getDolGlobalString('MAIN_AGENDA_XCAL_EXPORTKEY') != GETPOST("exportkey")) {
         $user->getrights();
 
-        top_httphead();
+        ViewMain::topHttpHead();
 
         llxHeaderVierge();
         print '<div class="error">Bad value for key.</div>';
@@ -270,7 +271,7 @@ if ($format == 'rss') {
 if ($shortfilename == 'dolibarrcalendar') {
     $langs->load("errors");
 
-    top_httphead();
+    ViewMain::topHttpHead();
 
     llxHeaderVierge();
     print '<div class="error">' . $langs->trans("ErrorWrongValueForParameterX", 'format') . '</div>';
@@ -333,7 +334,7 @@ if ($format == 'ical' || $format == 'vcal') {
         //header("Location: ".DOL_URL_ROOT.'/document.php?modulepart=agenda&file='.urlencode($filename));
         exit;
     } else {
-        top_httphead();
+        ViewMain::topHttpHead();
 
         print 'Error ' . $agenda->error;
 
@@ -386,7 +387,7 @@ if ($format == 'rss') {
         // header("Location: ".DOL_URL_ROOT.'/document.php?modulepart=agenda&file='.urlencode($filename));
         exit;
     } else {
-        top_httphead();
+        ViewMain::topHttpHead();
 
         print 'Error ' . $agenda->error;
 
@@ -395,7 +396,7 @@ if ($format == 'rss') {
 }
 
 
-top_httphead();
+ViewMain::topHttpHead();
 
 llxHeaderVierge();
 print '<div class="error">' . $agenda->error . '</div>';

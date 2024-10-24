@@ -23,6 +23,7 @@
 use Dolibarr\Code\Contrat\Classes\Contrat;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/lib/contract.lib.php

@@ -27,6 +27,7 @@ use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Projet\Classes\Task;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/projet/tasks/contact.php
@@ -160,7 +161,7 @@ if (!empty($withproject)) {
 }
 $help_url = '';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 /* *************************************************************************** */
 /*                                                                             */
@@ -571,5 +572,5 @@ if (is_object($hookmanager)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

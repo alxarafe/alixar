@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/asterisk/wrapper.php
  *  \brief      File that is entry point to call an Asterisk server
@@ -48,42 +50,15 @@ if (!defined('NOREQUIREAJAX')) {
     define('NOREQUIREAJAX', '1');
 }
 
-/**
- * Empty header
- *
- * @return  void
- * @ignore
- */
-function llxHeader()
-{
-    print '<html>' . "\n";
-    print '<head>' . "\n";
-    print '<title>Asterisk redirection from Dolibarr...</title>' . "\n";
-    print '</head>' . "\n";
-}
-
-/**
- * Empty footer
- *
- * @return  void
- * @ignore
- */
-function llxFooter()
-{
-    print "\n" . '</html>' . "\n";
-}
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-
 
 // Security check
 if (!isModEnabled('clicktodial')) {
     accessforbidden();
     exit;
 }
-
 
 // Define Asterisk setup
 if (!getDolGlobalString('ASTERISK_HOST')) {
@@ -156,7 +131,11 @@ $strMaxRetry = getDolGlobalString('ASTERISK_MAX_RETRY');
  * View
  */
 
-llxHeader();
+// Possible ViewMain::llxHeader();
+print '<html>' . "\n";
+print '<head>' . "\n";
+print '<title>Asterisk redirection from Dolibarr...</title>' . "\n";
+print '</head>' . "\n";
 
 $sql = "SELECT s.nom as name FROM " . MAIN_DB_PREFIX . "societe as s";
 $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "socpeople as sp ON sp.fk_soc = s.rowid";
@@ -226,5 +205,7 @@ if (!empty($number)) {
 }
 
 // End of page
-llxFooter();
+// Possible ViewMain::llxFooter();
+print "\n" . '</html>' . "\n";
+
 $db->close();

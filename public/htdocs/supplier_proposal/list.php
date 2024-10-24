@@ -41,6 +41,7 @@ use Dolibarr\Code\Core\Classes\FormPropal;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file           htdocs/supplier_proposal/list.php
@@ -521,7 +522,7 @@ if ($resql) {
     // Output page
     // --------------------------------------------------------------------
 
-    llxHeader('', $title, $help_url);
+    ViewMain::llxHeader('', $title, $help_url);
 
     $param = '';
     if (!empty($mode)) {
@@ -1368,5 +1369,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -18,6 +18,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/core/lib/parsemd.lib.php
  *  \brief          This file contains functions dedicated to MD parsing.

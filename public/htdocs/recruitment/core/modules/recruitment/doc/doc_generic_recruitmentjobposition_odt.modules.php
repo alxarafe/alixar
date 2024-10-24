@@ -26,6 +26,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Recruitement\Classes\ModelePDFRecruitmentJobPosition;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/recruitment/core/modules/recruitment/doc/doc_generic_recruitmentjobposition_odt.modules.php

@@ -18,6 +18,8 @@
  *
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file        htdocs/admin/loan.php
  * \ingroup     loan
@@ -78,7 +80,7 @@ if ($action == 'update') {
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-loan');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-loan');
 
 $form = new Form($db);
 if (isModEnabled('accounting')) {
@@ -125,5 +127,5 @@ print "</table>\n";
 print '<br><div style="text-align:center"><input type="submit" class="button button-edit" name="button" value="' . $langs->trans('Modify') . '"></div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

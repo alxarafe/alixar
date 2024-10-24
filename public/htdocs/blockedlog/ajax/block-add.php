@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/blockedlog/ajax/block-add.php
@@ -55,7 +56,7 @@ if ($element === 'facture') {
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 if (empty($action)) {
     print 'No action logged. Empty action code.';

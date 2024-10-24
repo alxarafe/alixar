@@ -23,6 +23,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/lib/fichinter.lib.php
  *  \brief      Ensemble de functions de base pour le module fichinter

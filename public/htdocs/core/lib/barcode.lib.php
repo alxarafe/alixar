@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/lib/barcode.lib.php
  *  \brief      Set of functions used for barcode generation (internal lib, also code 'phpbarcode')
@@ -510,13 +512,13 @@ function barcode_outimage($text, $bars, $scale = 1, $mode = "png", $total_y = 0,
         // To write into a file onto disk
         imagepng($im, $filebarcode);
     } elseif ($mode == 'jpg' || $mode == 'jpeg') {
-        top_httphead('image/jpeg; name="barcode.jpg"');
+        ViewMain::topHttpHead('image/jpeg; name="barcode.jpg"');
         imagejpeg($im);
     } elseif ($mode == 'gif') {
-        top_httphead('image/gif; name="barcode.gif"');
+        ViewMain::topHttpHead('image/gif; name="barcode.gif"');
         imagegif($im);
     } elseif ($mode == 'png') {
-        top_httphead('image/png; name="barcode.png"');
+        ViewMain::topHttpHead('image/png; name="barcode.png"');
         imagepng($im);
     }
 

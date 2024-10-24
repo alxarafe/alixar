@@ -27,6 +27,7 @@ use Dolibarr\Code\Product\Classes\InventoryLine;
 use Dolibarr\Code\Product\Classes\MouvementStock;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productlot;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/product/inventory/inventory.php
@@ -440,7 +441,7 @@ $formproduct = new FormProduct($db);
 
 $help_url = '';
 
-llxHeader('', $langs->trans('Inventory'), $help_url, '', 0, 0, '', '', '', 'mod-product page-inventory_inventory');
+ViewMain::llxHeader('', $langs->trans('Inventory'), $help_url, '', 0, 0, '', '', '', 'mod-product page-inventory_inventory');
 
 // Part to show record
 if ($object->id <= 0) {
@@ -1360,5 +1361,5 @@ if (getDolGlobalString('INVENTORY_MANAGE_REAL_PMP')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

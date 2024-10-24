@@ -17,6 +17,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 // or see https://www.gnu.org/
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/expedition/js/lib_dispatch.js.php
@@ -50,7 +51,7 @@ session_cache_limiter('public');
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Define javascript type
-top_httphead('text/javascript; charset=UTF-8');
+ViewMain::topHttpHead('text/javascript; charset=UTF-8');
 // Important: Following code is to avoid page request by browser and PHP CPU at each Dolibarr page access.
 if (empty($dolibarr_nocache)) {
     header('Cache-Control: max-age=10800, public, must-revalidate');

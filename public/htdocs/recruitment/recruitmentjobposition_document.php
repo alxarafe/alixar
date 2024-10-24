@@ -21,6 +21,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Recruitement\Classes\RecruitmentJobPosition;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       recruitmentjobposition_document.php
@@ -101,7 +102,7 @@ $form = new Form($db);
 $title = $object->ref . " - " . $langs->trans('Files');
 $help_url = '';
 //$help_url='EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($object->id) {
     /*
@@ -196,5 +197,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

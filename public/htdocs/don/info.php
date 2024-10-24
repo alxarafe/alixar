@@ -21,6 +21,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Don\Classes\Don;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/don/info.php
@@ -72,7 +73,7 @@ $title = $langs->trans('Donation') . " - " . $langs->trans('Info');
 
 $help_url = 'EN:Module_Donations|FR:Module_Dons|ES:M&oacute;dulo_Donaciones|DE:Modul_Spenden';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-donation page-card_info');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-donation page-card_info');
 
 $form = new Form($db);
 if (isModEnabled('project')) {
@@ -137,5 +138,5 @@ print '</div>';
 
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

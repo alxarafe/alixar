@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Ecm\Classes\EcmDirectory;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/ajax/ajaxdirtree.php
@@ -132,7 +133,7 @@ if ($modulepart == 'ecm') {
  */
 
 if (!isset($mode) || $mode != 'noajax') {   // if ajax mode
-    top_httphead();
+    ViewMain::topHttpHead();
 }
 
 //print '<!-- selecteddir (relative dir we click on) = '.$selecteddir.', openeddir = '.$openeddir.', modulepart='.$modulepart.', preopened='.$preopened.' -->'."\n";

@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\CUnits;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/bom/ajax/ajax.php
@@ -56,7 +57,7 @@ $idproduct = GETPOSTINT('idproduct');
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 if ($action == 'getDurationUnitByProduct' && $user->hasRight('product', 'lire')) {
     $product = new Product($db);

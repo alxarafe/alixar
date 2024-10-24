@@ -26,6 +26,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/societe/project.php
@@ -120,7 +121,7 @@ if ($socid) {
     if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/thirdpartynameonly/', getDolGlobalString('MAIN_HTML_TITLE')) && $object->name) {
         $title = $object->name . " - " . $title;
     }
-    llxHeader('', $title);
+    ViewMain::llxHeader('', $title);
 
     $head = societe_prepare_head($object);
 
@@ -195,5 +196,5 @@ if ($socid) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

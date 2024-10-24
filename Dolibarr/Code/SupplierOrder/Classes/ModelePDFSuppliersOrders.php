@@ -29,6 +29,7 @@ namespace Dolibarr\Code\SupplierOrder\Classes;
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use DoliDB;
 
+
 /**
  *      \file       htdocs/core/modules/supplier_order/modules_commandefournisseur.php
  *      \ingroup    order fournisseur

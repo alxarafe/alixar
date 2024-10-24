@@ -23,6 +23,7 @@
 
 use Dolibarr\Code\Comm\Classes\Mailing;
 use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/comm/mailing/index.php
@@ -54,7 +55,7 @@ $result = restrictedArea($user, 'mailing');
 $help_url = 'EN:Module_EMailing|FR:Module_Mailing|ES:M&oacute;dulo_Mailing';
 $title = $langs->trans('MailingArea');
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 print load_fiche_titre($title);
 
@@ -224,5 +225,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardEmailings', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

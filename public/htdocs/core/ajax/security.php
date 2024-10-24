@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/ajax/security.php
  *       \brief      This ajax component is used to generated hash keys for security purposes,
@@ -56,8 +58,8 @@ $action = GETPOST('action');
  * View
  */
 
-//top_htmlhead("", "", 1);  // Replaced with top_httphead. An ajax page does not need html header.
-top_httphead();
+//ViewMain::topHtmlHead("", "", 1);  // Replaced with top_httphead. An ajax page does not need html header.
+ViewMain::topHttpHead();
 
 //print '<!-- Ajax page called with url '.dol_escape_htmltag($_SERVER["PHP_SELF"]).'?'.dol_escape_htmltag($_SERVER["QUERY_STRING"]).' -->'."\n";
 

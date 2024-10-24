@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Core\Model\Constant;
+use Dolibarr\Lib\ViewMain;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -72,7 +73,7 @@ $form = new Form($db);
 $help_url = '';
 $title = $langs->trans("InfoDolibarr");
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-admin page-system_dolibarr');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-admin page-system_dolibarr');
 
 print load_fiche_titre($title, '', 'title_setup');
 
@@ -518,5 +519,5 @@ print '</table>';
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

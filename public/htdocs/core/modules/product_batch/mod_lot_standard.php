@@ -27,6 +27,7 @@ use Dolibarr\Code\Product\Classes\Productlot;
 use Dolibarr\Code\ProductBatch\Classes\ModeleNumRefBatch;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/product_batch/mod_lot_standard.php

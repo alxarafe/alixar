@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/product/stock/stats/commande_fournisseur.php
  *  \ingroup    product service facture
@@ -121,7 +123,7 @@ if ($id > 0 || !empty($ref)) {
     $title = $langs->trans('Batch') . " " . $shortlabel . " - " . $langs->trans('Referers');
     $helpurl = 'EN:Module_Products|FR:Module_Produits|ES:M&oacute;dulo_Productos';
 
-    llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stock-stats_commande_fournisseur');
+    ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stock-stats_commande_fournisseur');
 
     if ($result > 0) {
         $head = productlot_prepare_head($object);
@@ -380,5 +382,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

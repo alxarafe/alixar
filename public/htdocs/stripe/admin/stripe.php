@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Stripe\Classes\Stripe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/stripe/admin/stripe.php
@@ -180,7 +181,7 @@ if ($action == "setlive") {
 $form = new Form($db);
 $formproduct = new FormProduct($db);
 
-llxHeader('', $langs->trans("StripeSetup"));
+ViewMain::llxHeader('', $langs->trans("StripeSetup"));
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("ModuleSetup") . ' Stripe', $linkback);
@@ -641,5 +642,5 @@ if (!empty($conf->use_javascript_ajax)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

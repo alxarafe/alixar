@@ -61,6 +61,7 @@ use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Variants\Model\ProductAttributeCombination;
 use Dolibarr\Code\Workstation\Classes\Workstation;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/card.php
@@ -1270,7 +1271,7 @@ if (GETPOST("type") == '1' || ($object->type == Product::TYPE_SERVICE)) {
     }
 }
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-card');
 
 // Load object modBarCodeProduct
 $res = 0;
@@ -3090,5 +3091,5 @@ if ($action != 'create' && $action != 'edit' && $action != 'delete') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

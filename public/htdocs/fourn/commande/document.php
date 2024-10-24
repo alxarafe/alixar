@@ -27,6 +27,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/fourn/commande/document.php
@@ -105,7 +106,7 @@ $form = new Form($db);
 
 $title = $object->ref . " - " . $langs->trans('Documents');
 $help_url = 'EN:Module_Suppliers_Orders|FR:CommandeFournisseur|ES:Módulo_Pedidos_a_proveedores';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-supplier-order page-card_documents');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-supplier-order page-card_documents');
 
 if ($object->id > 0) {
     $object->fetch_thirdparty();
@@ -185,5 +186,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

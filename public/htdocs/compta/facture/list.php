@@ -51,6 +51,7 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/facture/list.php
@@ -1009,7 +1010,7 @@ if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $s
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $param = '&socid=' . urlencode((string)($socid));
 if (!empty($mode)) {
@@ -2791,5 +2792,5 @@ if ($contextpage != 'poslist') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

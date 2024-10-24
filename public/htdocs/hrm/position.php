@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Hrm\Classes\Job;
 use Dolibarr\Code\Hrm\Classes\Position;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/position.php
@@ -241,7 +242,7 @@ $title = $langs->trans("Position");
 //$help_url="EN:Module_Position|FR:Module_Position_FR|ES:Módulo_Position";
 $help_url = '';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $now = dol_now();
 
@@ -767,5 +768,5 @@ if ($job->id > 0 && (empty($action) || ($action != 'edit' && $action != 'create'
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

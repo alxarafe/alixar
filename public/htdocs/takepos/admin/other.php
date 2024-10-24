@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/takepos/admin/other.php
  *  \ingroup    takepos
@@ -70,7 +72,7 @@ if ($resql) {
  * View
  */
 
-llxHeader('', $langs->trans("CashDeskSetup"), '', '', 0, 0, '', '', '', 'mod-takepos page-admin_other');
+ViewMain::llxHeader('', $langs->trans("CashDeskSetup"), '', '', 0, 0, '', '', '', 'mod-takepos page-admin_other');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("CashDeskSetup") . ' (TakePOS)', $linkback, 'title_setup');
@@ -130,5 +132,5 @@ print "</table>\n";
 print '</div>';
 print '<br>';
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

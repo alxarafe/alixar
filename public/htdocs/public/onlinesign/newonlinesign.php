@@ -28,6 +28,7 @@ use Dolibarr\Code\Expedition\Classes\Expedition;
 use Dolibarr\Code\FichInter\Classes\Fichinter;
 use Dolibarr\Code\Societe\Classes\CompanyBankAccount;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/public/onlinesign/newonlinesign.php
@@ -233,7 +234,7 @@ $conf->dol_hide_topmenu = 1;
 $conf->dol_hide_leftmenu = 1;
 
 $replacemainarea = (empty($conf->dol_hide_leftmenu) ? '<div>' : '') . '<div>';
-llxHeader($head, $langs->trans("OnlineSignature"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea, 1);
+ViewMain::llxHeader($head, $langs->trans("OnlineSignature"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea, 1);
 
 if ($action == 'refusepropal') {
     print $form->formconfirm($_SERVER["PHP_SELF"] . '?ref=' . urlencode($ref) . '&securekey=' . urlencode($SECUREKEY) . (isModEnabled('multicompany') ? '&entity=' . $entity : ''), $langs->trans('RefusePropal'), $langs->trans('ConfirmRefusePropal', $object->ref), 'confirm_refusepropal', '', '', 1);
@@ -244,7 +245,7 @@ if (!empty($source) && in_array($ref, array('member_ref', 'contractline_ref', 'i
     $langs->load("errors");
     dol_print_error_email('BADREFINONLINESIGNFORM', $langs->trans("ErrorBadLinkSourceSetButBadValueForRef", $source, $ref));
     // End of page
-    llxFooter();
+    ViewMain::llxFooter();
     $db->close();
     exit;
 }
@@ -865,6 +866,6 @@ print '<br>';
 
 htmlPrintOnlineFooter($mysoc, $langs);
 
-llxFooter('', 'public');
+ViewMain::llxFooter('', 'public');
 
 $db->close();

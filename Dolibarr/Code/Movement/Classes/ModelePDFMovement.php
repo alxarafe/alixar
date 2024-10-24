@@ -22,6 +22,7 @@ namespace Dolibarr\Code\Movement\Classes;
 
 use DoliDB;
 
+
 /**
  *  \file       htdocs/core/modules/movement/modules_movement.php
  *  \ingroup    stock

@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/ticket/document.php
@@ -128,7 +129,7 @@ if ($action == 'set_thirdparty' && $user->hasRight('ticket', 'write')) {
 $form = new Form($db);
 
 $help_url = '';
-llxHeader('', $langs->trans("TicketDocumentsLinked") . ' - ' . $langs->trans("Files"), $help_url, '', 0, 0, '', '', '', 'mod-ticket page-card_documents');
+ViewMain::llxHeader('', $langs->trans("TicketDocumentsLinked") . ' - ' . $langs->trans("Files"), $help_url, '', 0, 0, '', '', '', 'mod-ticket page-card_documents');
 
 if ($object->id) {
     /*
@@ -250,5 +251,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -36,6 +36,7 @@ use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file      htdocs/core/photos_resize.php
@@ -482,7 +483,7 @@ $title = $langs->trans("ImageEditor");
 $morejs = array('/includes/jquery/plugins/jcrop/js/jquery.Jcrop.min.js', '/core/js/lib_photosresize.js');
 $morecss = array('/includes/jquery/plugins/jcrop/css/jquery.Jcrop.css');
 
-llxHeader($head, $title, '', '', 0, 0, $morejs, $morecss);
+ViewMain::llxHeader($head, $title, '', '', 0, 0, $morejs, $morecss);
 
 
 print load_fiche_titre($title);
@@ -615,5 +616,5 @@ jQuery(document).ready(function() {
 });
 </script>';
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

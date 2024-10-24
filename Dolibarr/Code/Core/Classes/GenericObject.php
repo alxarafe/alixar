@@ -19,6 +19,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+
 /**
  *  \file       htdocs/core/class/genericobject.class.php
  *  \ingroup    core

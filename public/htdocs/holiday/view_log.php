@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Holiday\Classes\Holiday;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\User\Classes\UserGroup;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  Displays the log of actions performed in the module.
@@ -188,7 +189,7 @@ $holidaylogstatic = new stdClass();
 $alltypeleaves = $object->getTypes(1, -1); // To have labels
 
 $title = $langs->trans('CPTitreMenu');
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 $sqlwhere = '';
 
@@ -578,5 +579,5 @@ print '</div>';
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

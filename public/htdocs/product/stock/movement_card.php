@@ -36,6 +36,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productbatch;
 use Dolibarr\Code\Product\Classes\Productlot;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stock/movement_card.php
@@ -558,7 +559,7 @@ if ($resql) {
             $texte .= ' (' . $langs->trans("ForThisWarehouse") . ')';
         }
     }
-    llxHeader("", $texte, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_movement_card');
+    ViewMain::llxHeader("", $texte, $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_movement_card');
 
     /*
      * Show tab only if we ask a particular warehouse
@@ -1227,5 +1228,5 @@ if ($action != 'create' && $action != 'edit' && $action != 'delete' && $id > 0) 
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

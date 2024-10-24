@@ -17,14 +17,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Fiscalyear;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/accountancy/admin/fiscalyear.php
  *  \ingroup    Accountancy (Double entries)
  *  \brief      Setup page to configure fiscal year
  */
-
-use Dolibarr\Code\Core\Classes\Fiscalyear;
-use Dolibarr\Code\Core\Classes\Form;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -93,7 +94,7 @@ $title = $langs->trans('AccountingPeriods');
 
 $help_url = 'EN:Module_Double_Entry_Accounting#Setup|FR:Module_Comptabilit&eacute;_en_Partie_Double#Configuration';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $sql = "SELECT f.rowid, f.label, f.date_start, f.date_end, f.statut as status, f.entity";
 $sql .= " FROM " . MAIN_DB_PREFIX . "accounting_fiscalyear as f";
@@ -182,5 +183,5 @@ if ($result) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

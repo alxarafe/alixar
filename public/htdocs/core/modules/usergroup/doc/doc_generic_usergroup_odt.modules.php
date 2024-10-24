@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\User\Classes\UserGroup;
 use Dolibarr\Code\UserGroup\Classes\ModelePDFUserGroup;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/user/doc/doc_generic_user_odt.modules.php

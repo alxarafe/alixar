@@ -21,6 +21,7 @@
 use Dolibarr\Code\Comm\Classes\ActionComm;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/comm/action/info.php
@@ -62,7 +63,7 @@ $usercancreate = $user->hasRight('agenda', 'allactions', 'create') || (($object-
 $form = new Form($db);
 
 $help_url = 'EN:Module_Agenda_En|FR:Module_Agenda|ES:M&omodulodulo_Agenda|DE:Modul_Terminplanung';
-llxHeader('', $langs->trans("Agenda"), $help_url);
+ViewMain::llxHeader('', $langs->trans("Agenda"), $help_url);
 
 $object = new ActionComm($db);
 $object->fetch($id);
@@ -147,5 +148,5 @@ print '</td></tr></table>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

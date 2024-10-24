@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/loan/payment/card.php
  *  \ingroup    loan
@@ -79,7 +81,7 @@ if ($action == 'confirm_delete' && $confirm == 'yes' && $user->hasRight('loan', 
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $loan = new Loan($db);
 $form = new Form($db);
@@ -231,5 +233,5 @@ if (empty($action) && $user->hasRight('loan', 'delete')) {
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

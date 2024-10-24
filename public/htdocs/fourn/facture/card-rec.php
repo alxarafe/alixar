@@ -43,6 +43,7 @@ use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/fourn/facture/card-rec.php
@@ -883,7 +884,7 @@ if (empty($reshook)) {
  */
 
 $help_url = '';
-llxHeader('', $langs->trans("RepeatableSupplierInvoice"), $help_url);
+ViewMain::llxHeader('', $langs->trans("RepeatableSupplierInvoice"), $help_url);
 
 $form = new Form($db);
 $formother = new FormOther($db);
@@ -1694,5 +1695,5 @@ if ($action == 'create') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

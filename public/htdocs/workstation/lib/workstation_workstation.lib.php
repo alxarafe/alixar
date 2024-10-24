@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\Link;
 use Dolibarr\Code\Workstation\Classes\Workstation;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/workstation/lib/workstation_workstation.lib.php

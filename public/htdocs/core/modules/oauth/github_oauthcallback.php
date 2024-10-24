@@ -19,6 +19,7 @@
  */
 
 use OAuth\Common\Http\Uri\UriFactory;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/modules/oauth/github_oauthcallback.php

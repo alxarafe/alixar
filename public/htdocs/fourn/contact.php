@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/fourn/contact.php
  *      \ingroup    fournisseur
@@ -35,7 +37,7 @@ $langs->load("companies");
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 // Security check
 if ($user->socid > 0) {
@@ -141,5 +143,5 @@ if ($result) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -29,6 +29,7 @@ use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/categories/card.php
@@ -225,7 +226,7 @@ $formother = new FormOther($db);
 
 $help_url = 'EN:Module_Categories|FR:Module_Catégories|DE:Modul_Kategorien';
 
-llxHeader("", $langs->trans("Categories"), $help_url);
+ViewMain::llxHeader("", $langs->trans("Categories"), $help_url);
 
 if ($user->hasRight('categorie', 'creer')) {
     // Create or add
@@ -302,5 +303,5 @@ if ($user->hasRight('categorie', 'creer')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

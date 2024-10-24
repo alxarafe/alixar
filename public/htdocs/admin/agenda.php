@@ -22,6 +22,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/agenda.php
@@ -121,7 +122,7 @@ $form = new Form($db);
 $title = $langs->trans("AgendaSetup");
 $help_url = 'EN:Module_Agenda_En|FR:Module_Agenda|ES:Módulo_Agenda|DE:Modul_Terminplanung';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-admin page-agenda');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-admin page-agenda');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("AgendaSetup"), $linkback, 'title_setup');
@@ -230,5 +231,5 @@ print "</form>\n";
 print "<br>";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

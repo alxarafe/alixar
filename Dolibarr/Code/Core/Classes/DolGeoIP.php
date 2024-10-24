@@ -21,6 +21,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+
 /**
  *  \file       htdocs/core/class/dolgeoip.class.php
  *  \ingroup    geoip

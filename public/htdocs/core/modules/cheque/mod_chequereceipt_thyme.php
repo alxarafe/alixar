@@ -22,6 +22,7 @@
 use Dolibarr\Code\Cheque\Classes\ModeleNumRefChequeReceipts;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/modules/cheque/mod_chequereceipt_thyme.php

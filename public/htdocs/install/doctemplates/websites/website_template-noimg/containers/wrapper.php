@@ -257,7 +257,7 @@ if ($rss) {
     }
 
     // Permissions are ok and file found, so we return it
-    //top_httphead($type);
+    //ViewMain::topHttpHead($type);
     header('Content-Type: ' . $type);
     header('Content-Description: File Transfer');
     if ($encoding) {

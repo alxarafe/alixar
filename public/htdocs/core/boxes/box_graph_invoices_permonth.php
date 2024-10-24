@@ -21,6 +21,7 @@
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Compta\Classes\FactureStats;
 use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/boxes/box_graph_invoices_permonth.php

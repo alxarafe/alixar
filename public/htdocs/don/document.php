@@ -29,6 +29,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Don\Classes\Don;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/don/document.php
@@ -112,7 +113,7 @@ $title = $langs->trans('Donation') . " - " . $langs->trans('Documents');
 
 $help_url = 'EN:Module_Donations|FR:Module_Dons|ES:M&oacute;dulo_Donaciones|DE:Modul_Spenden';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-donation page-card_documents');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-donation page-card_documents');
 
 
 if ($object->id) {
@@ -204,6 +205,6 @@ if ($object->id) {
     print $langs->trans("ErrorUnknown");
 }
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

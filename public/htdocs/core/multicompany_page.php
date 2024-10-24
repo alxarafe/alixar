@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/multicompany_page.php
  *       \brief      File to return a page with the list of all entities user can switch to
@@ -85,7 +87,7 @@ $title = $langs->trans("Multicompanies");
 $head = '<!-- Multicompany selection -->' . "\n"; // This is used by DoliDroid to know page is a multicompany selection page
 $arrayofjs = array();
 $arrayofcss = array();
-top_htmlhead($head, $title, 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::topHtmlHead($head, $title, 0, 0, $arrayofjs, $arrayofcss);
 
 
 print '<body>' . "\n";

@@ -21,6 +21,7 @@ use Dolibarr\Code\BookMarks\Classes\Bookmark;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/bookmarks/list.php
@@ -220,7 +221,7 @@ $num = $db->num_rows($resql);
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-bookmarks page-list');
+ViewMain::llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-bookmarks page-list');
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -513,5 +514,5 @@ print '</form>' . "\n";
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

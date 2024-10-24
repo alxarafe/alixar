@@ -41,9 +41,11 @@ use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Ticket\Classes\ActionsTicket;
 use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file       htdocs/ticket/card.php
+ *   \file
+ * htdocs/ticket/card.php
  *   \ingroup    ticket
  *   \brief      Page to create/edit/view Tickets
  */
@@ -699,7 +701,7 @@ $help_url = 'EN:Module_Ticket|FR:DocumentationModuleTicket';
 
 $title = $actionobject->getTitle($action);
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-ticket page-card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-ticket page-card');
 
 if ($action == 'create' || $action == 'presend') {
     if (empty($permissiontoadd)) {
@@ -1625,5 +1627,5 @@ if ($action == 'create' || $action == 'presend') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

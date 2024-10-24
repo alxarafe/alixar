@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\FichInter\Classes\Fichinter;
 use Dolibarr\Code\FichInter\Classes\ModeleNumRefFicheinter;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/fichinter/mod_arctic.php

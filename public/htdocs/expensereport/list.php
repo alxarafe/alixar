@@ -25,6 +25,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/expensereport/list.php
  *      \ingroup    expensereport
@@ -399,7 +401,7 @@ $num = $db->num_rows($resql);
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '');
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -1067,5 +1069,5 @@ if (empty($id)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

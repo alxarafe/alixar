@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/security_file.php
@@ -123,7 +124,7 @@ if ($action == 'updateform') {
 $form = new Form($db);
 
 $wikihelp = 'EN:Setup_Security|FR:Paramétrage_Sécurité|ES:Configuración_Seguridad';
-llxHeader('', $langs->trans("Files"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-security_file');
+ViewMain::llxHeader('', $langs->trans("Files"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-security_file');
 
 print load_fiche_titre($langs->trans("SecuritySetup"), '', 'title_setup');
 
@@ -234,5 +235,5 @@ if (count($filearray) > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

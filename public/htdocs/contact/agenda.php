@@ -26,6 +26,7 @@
  */
 
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/contact/card.php
@@ -150,7 +151,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/contactnameonly/', get
     $title = $object->lastname;
 }
 $help_url = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas|DE:Modul_Partner';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 
 if ($socid > 0) {
@@ -299,6 +300,6 @@ if (is_object($objcanvas) && $objcanvas->displayCanvasExists($action)) {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

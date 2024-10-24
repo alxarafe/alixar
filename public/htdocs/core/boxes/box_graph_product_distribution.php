@@ -23,6 +23,7 @@ use Dolibarr\Code\Comm\Classes\PropaleStats;
 use Dolibarr\Code\Commande\Classes\CommandeStats;
 use Dolibarr\Code\Compta\Classes\FactureStats;
 use Dolibarr\Code\Core\Classes\DolGraph;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/boxes/box_graph_product_distribution.php

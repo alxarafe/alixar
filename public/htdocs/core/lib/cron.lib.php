@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Cron\Classes\Cronjob;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       core/lib/cron.lib.php

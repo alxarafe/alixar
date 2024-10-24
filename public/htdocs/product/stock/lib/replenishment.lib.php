@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stock/lib/replenishment.lib.php

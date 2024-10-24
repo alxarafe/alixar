@@ -23,6 +23,7 @@ namespace Dolibarr\Code\Reception\Classes;
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use DoliDB;
 
+
 /**
  *  \file       htdocs/core/modules/reception/modules_reception.php
  *  \ingroup    reception

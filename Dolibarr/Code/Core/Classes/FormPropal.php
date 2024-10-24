@@ -22,6 +22,7 @@ namespace Dolibarr\Code\Core\Classes;
 
 use DoliDB;
 
+
 /**
  *  \file       htdocs/core/class/html.formpropal.class.php
  *  \ingroup    core

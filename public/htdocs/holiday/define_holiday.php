@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Holiday\Classes\Holiday;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      File that defines the balance of paid holiday of users.
@@ -221,7 +222,7 @@ $userstatic = new User($db);
 
 $title = $langs->trans('CPTitreMenu');
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 $typeleaves = $holiday->getTypes(1, 1);
 $result = $holiday->updateBalance(); // Create users into table holiday if they don't exists. TODO Remove this whif we use field into table user.
@@ -553,5 +554,5 @@ if (count($typeleaves) == 0) {
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

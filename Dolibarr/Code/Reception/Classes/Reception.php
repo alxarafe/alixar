@@ -47,6 +47,7 @@ use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 use stdClass;
 
+
 /**
  *  \file       htdocs/reception/class/reception.class.php
  *  \ingroup    reception

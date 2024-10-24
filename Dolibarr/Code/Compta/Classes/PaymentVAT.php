@@ -25,6 +25,7 @@ namespace Dolibarr\Code\Compta\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
 
+
 /**
  *      \file       htdocs/compta/sociales/class/paymentsocialcontribution.class.php
  *      \ingroup    invoice

@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/user/note.php
@@ -85,7 +86,7 @@ if (empty($reshook)) {
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-user page-card_note');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-user page-card_note');
 
 $form = new Form($db);
 
@@ -156,5 +157,5 @@ if ($id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

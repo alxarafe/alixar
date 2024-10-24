@@ -24,6 +24,7 @@
 use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/commande/note.php
@@ -83,7 +84,7 @@ if (empty($reshook)) {
  */
 $title = $object->ref . " - " . $langs->trans('Notes');
 $help_url = 'EN:Customers_Orders|FR:Commandes_Clients|ES:Pedidos de clientes|DE:Modul_Kundenaufträge';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-order page-card_notes');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-order page-card_notes');
 
 $form = new Form($db);
 
@@ -146,5 +147,5 @@ if ($id > 0 || !empty($ref)) {
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

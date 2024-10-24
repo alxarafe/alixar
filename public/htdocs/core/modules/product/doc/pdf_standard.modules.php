@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
 use Dolibarr\Code\Product\Classes\ModelePDFProduct;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/product/doc/pdf_standard.modules.php

@@ -25,6 +25,7 @@ namespace Dolibarr\Code\Stripe\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonHookActions;
 
+
 /**
  *  \file       htdocs/stripe/class/actions_stripe.class.php
  *  \ingroup    stripe

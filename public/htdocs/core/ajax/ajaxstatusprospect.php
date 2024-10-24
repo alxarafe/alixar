@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/ajax/ajaxstatusprospect.php
  *       \brief      File to return Ajax response on third parties request
@@ -68,7 +70,7 @@ $permisstiontoupdate = $user->hasRight('societe', 'creer');
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 
 if ($action === "updatestatusprospect" && $permisstiontoupdate) {

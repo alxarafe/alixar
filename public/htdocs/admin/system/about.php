@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
@@ -48,7 +50,7 @@ $version = '0.0';
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_about');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_about');
 
 print load_fiche_titre($langs->trans("ExternalResources"), '', 'title_setup');
 
@@ -206,5 +208,5 @@ if (is_numeric($tmp[2])) {    // Not alpha, beta or rc
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -14,6 +14,7 @@
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Mailing\Classes\MailingTargets;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/mailings/advthirdparties.modules.php

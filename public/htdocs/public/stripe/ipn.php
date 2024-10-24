@@ -172,7 +172,7 @@ if (getDolGlobalString('MAIN_APPLICATION_TITLE')) {
     $societeName = getDolGlobalString('MAIN_APPLICATION_TITLE');
 }
 
-top_httphead();
+ViewMain::topHttpHead();
 
 dol_syslog("***** Stripe IPN was called with event->type=" . $event->type . " service=" . $service);
 

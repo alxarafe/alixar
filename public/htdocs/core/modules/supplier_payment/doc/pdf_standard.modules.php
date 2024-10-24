@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Fourn\Classes\PaiementFourn;
 use Dolibarr\Code\SupplierPayment\Classes\ModelePDFSuppliersPayments;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/supplier_payment/doc/pdf_standard.modules.php

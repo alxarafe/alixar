@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Boxes\Classes\ModeleBoxes;
 use Dolibarr\Code\Cron\Classes\Cronjob;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/boxes/box_scheduled_jobs.php

@@ -25,9 +25,11 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file       htdocs/bookcal/admin/calendar_extrafields.php
+ *   \file
+ * htdocs/bookcal/admin/calendar_extrafields.php
  *   \ingroup    bookcal
  *   \brief      Page to setup extra fields of calendar
  */
@@ -70,7 +72,7 @@ $textobject = $langs->transnoentitiesnoconv("Calendar");
 $help_url = '';
 $page_name = "BookCalSetup";
 
-llxHeader('', $langs->trans("BookCalSetup"), $help_url);
+ViewMain::llxHeader('', $langs->trans("BookCalSetup"), $help_url);
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -117,5 +119,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

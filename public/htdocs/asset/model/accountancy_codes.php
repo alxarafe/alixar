@@ -22,6 +22,7 @@ use Dolibarr\Code\Asset\Classes\AssetAccountancyCodes;
 use Dolibarr\Code\Asset\Classes\AssetModel;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/asset/model/accountancy_code.php
@@ -136,7 +137,7 @@ if (empty($reshook)) {
 $form = new Form($db);
 
 $help_url = '';
-llxHeader('', $langs->trans('AssetModel'), $help_url, '', 0, 0, '', '', '', 'mod-asset page-model-card_accountancy');
+ViewMain::llxHeader('', $langs->trans('AssetModel'), $help_url, '', 0, 0, '', '', '', 'mod-asset page-model-card_accountancy');
 
 if ($id > 0 || !empty($ref)) {
     $head = assetModelPrepareHead($object);
@@ -199,5 +200,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -20,6 +20,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Hrm\Classes\Establishment;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file           htdocs/hrm/establishment/card.php
@@ -161,7 +162,7 @@ if ($action == 'confirm_delete' && $confirm == "yes") {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $form = new Form($db);
 $formcompany = new FormCompany($db);
@@ -440,5 +441,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

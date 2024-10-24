@@ -29,6 +29,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Core\Base\DolibarrModules;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/modules.php
@@ -376,7 +377,7 @@ if (!dol_is_dir($dirins)) {
 $dirins_ok = (dol_is_dir($dirins));
 
 $help_url = 'EN:First_setup|FR:Premiers_paramétrages|ES:Primeras_configuraciones';
-llxHeader('', $langs->trans("Setup"), $help_url, '', '', '', $morejs, $morecss, 0, 'mod-admin page-modules');
+ViewMain::llxHeader('', $langs->trans("Setup"), $help_url, '', '', '', $morejs, $morecss, 0, 'mod-admin page-modules');
 
 
 // Search modules dirs
@@ -1426,5 +1427,5 @@ if ($mode == 'develop') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

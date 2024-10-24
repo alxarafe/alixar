@@ -28,6 +28,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/compta/index.php
  *  \ingroup    compta
@@ -99,7 +101,7 @@ $form = new Form($db);
 $formfile = new FormFile($db);
 $thirdpartystatic = new Societe($db);
 
-llxHeader("", $langs->trans("InvoicesArea"));
+ViewMain::llxHeader("", $langs->trans("InvoicesArea"));
 
 print load_fiche_titre($langs->trans("InvoicesArea"), '', 'bill');
 
@@ -778,5 +780,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardAccountancy', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -27,6 +27,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/fourn/facture/document.php
@@ -97,7 +98,7 @@ $form = new Form($db);
 
 $title = $object->ref . " - " . $langs->trans('Documents');
 $helpurl = "EN:Module_Suppliers_Invoices|FR:Module_Fournisseurs_Factures|ES:Módulo_Facturas_de_proveedores";
-llxHeader('', $title, $helpurl);
+ViewMain::llxHeader('', $title, $helpurl);
 
 if ($object->id > 0) {
     $head = facturefourn_prepare_head($object);
@@ -267,5 +268,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

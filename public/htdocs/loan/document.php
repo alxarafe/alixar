@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Loan\Classes\Loan;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/loan/document.php
@@ -90,7 +91,7 @@ $form = new Form($db);
 
 $title = $langs->trans("Loan") . ' - ' . $langs->trans("Documents");
 $help_url = 'EN:Module_Loan|FR:Module_Emprunt';
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 if ($object->id) {
     $totalpaid = $object->getSumPayment();
@@ -174,5 +175,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -21,6 +21,7 @@
 
 namespace Dolibarr\Code\Compta\Classes;
 
+
 /**
  *  \file       htdocs/compta/bank/class/paymentvarious.class.php
  *  \ingroup    bank

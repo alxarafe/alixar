@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/takepos/admin/orderprinters.php
@@ -132,7 +133,7 @@ $arrayofjs = array(
 );
 $arrayofcss = array('/includes/jquery/plugins/jquerytreeview/jquery.treeview.css');
 
-llxHeader('', $title, '', '', 0, 0, $arrayofjs, $arrayofcss, '', 'mod-takepos page-admin_orderprinters');
+ViewMain::llxHeader('', $title, '', '', 0, 0, $arrayofjs, $arrayofcss, '', 'mod-takepos page-admin_orderprinters');
 
 
 print load_fiche_titre($langs->trans("OrderPrinters"));
@@ -281,6 +282,6 @@ print '<input type="submit" class="button button-save" value="' . $langs->trans(
 
 print '</div>';
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

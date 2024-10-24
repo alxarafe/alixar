@@ -22,6 +22,7 @@ use Dolibarr\Code\Asset\Classes\Asset;
 use Dolibarr\Code\Asset\Classes\AssetModel;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/core/lib/asset.lib.php

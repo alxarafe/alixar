@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/comm/recap-client.php
@@ -49,7 +50,7 @@ $result = restrictedArea($user, 'societe', $id, '&societe', '', 'fk_soc', 'rowid
  *	View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 if ($socid > 0) {
     $societe = new Societe($db);
@@ -91,5 +92,5 @@ if ($socid > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -22,6 +22,7 @@
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/margin/productMargins.php
@@ -99,7 +100,7 @@ $invoicestatic = new Facture($db);
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("Margins") . ' - ' . $langs->trans("Products"));
+ViewMain::llxHeader('', $langs->trans("Margins") . ' - ' . $langs->trans("Products"));
 
 $text = $langs->trans("Margins");
 //print load_fiche_titre($text);
@@ -401,5 +402,5 @@ $(document).ready(function() {
 ';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

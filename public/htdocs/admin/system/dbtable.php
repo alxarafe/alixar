@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
@@ -86,7 +88,7 @@ if ($action == 'convertutf8mb4') {
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_dbtable');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_dbtable');
 
 
 print load_fiche_titre($langs->trans("Table") . " " . $table, '', 'title_setup');
@@ -220,5 +222,5 @@ if (!$base) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

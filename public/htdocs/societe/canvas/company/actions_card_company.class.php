@@ -21,6 +21,7 @@
 use Dolibarr\Code\Societe\Classes\ActionsCardCommon;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/societe/canvas/company/actions_card_company.class.php

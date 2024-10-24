@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/comm/prospect/index.php
@@ -54,7 +55,7 @@ $result = restrictedArea($user, 'propal', $socid, '');
 
 $companystatic = new Societe($db);
 
-llxHeader();
+ViewMain::llxHeader();
 
 print load_fiche_titre($langs->trans("ProspectionArea"));
 
@@ -325,5 +326,5 @@ if ($resql) {
 print '</div></div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

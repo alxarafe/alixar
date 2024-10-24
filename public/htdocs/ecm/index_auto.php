@@ -23,6 +23,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Ecm\Classes\EcmDirectory;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/ecm/index_auto.php
@@ -305,7 +306,7 @@ $moreheadjs .= '<script type="text/javascript">' . "\n";
 $moreheadjs .= 'var indicatorBlockUI = \'' . constant('DOL_URL_ROOT') . "/theme/" . $conf->theme . "/img/working.gif" . '\';' . "\n";
 $moreheadjs .= '</script>' . "\n";
 
-llxHeader($moreheadcss . $moreheadjs, $langs->trans("ECMArea"), '', '', '', '', $morejs, '', 0, 0);
+ViewMain::llxHeader($moreheadcss . $moreheadjs, $langs->trans("ECMArea"), '', '', '', '', $morejs, '', 0, 0);
 
 
 // Add sections to manage
@@ -538,6 +539,6 @@ if (!empty($conf->use_javascript_ajax) && !getDolGlobalString('MAIN_ECM_DISABLE_
 
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

@@ -32,6 +32,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productlot;
 use Dolibarr\Code\Variants\Model\ProductAttributeCombination;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/lib/product.lib.php

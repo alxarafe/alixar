@@ -26,6 +26,7 @@ use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\SupplierOrder\Classes\ModeleNumRefSuppliersOrders;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/modules/supplier_order/mod_commande_fournisseur_muguet.php

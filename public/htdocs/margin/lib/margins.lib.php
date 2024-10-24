@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file           /htdocs/margin/lib/margins.lib.php

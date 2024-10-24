@@ -37,6 +37,7 @@ use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 use Dolibarr\Code\Product\Classes\PriceExpression;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/price_suppliers.php
@@ -379,7 +380,7 @@ if (GETPOST("type") == '1' || ($object->type == Product::TYPE_SERVICE)) {
     $helpurl = 'EN:Module_Services_En|FR:Module_Services|ES:M&oacute;dulo_Servicios|DE:Modul_Lesitungen';
 }
 
-llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'classforhorizontalscrolloftabs mod-product page-price_suppliers');
+ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'classforhorizontalscrolloftabs mod-product page-price_suppliers');
 
 if ($id > 0 || $ref) {
     if ($result) {
@@ -1331,5 +1332,5 @@ if ($id > 0 || $ref) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

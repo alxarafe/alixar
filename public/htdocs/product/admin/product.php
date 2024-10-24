@@ -30,6 +30,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormBarCode;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/admin/product.php
@@ -284,7 +285,7 @@ if (!isModEnabled("product")) {
     $tab = $langs->trans('Products');
 }
 
-llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-product page-admin_product');
+ViewMain::llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-product page-admin_product');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($title, $linkback, 'title_setup');
@@ -800,5 +801,5 @@ print '</div>';
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

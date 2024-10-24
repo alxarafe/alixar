@@ -32,6 +32,7 @@ use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Core\Classes\FormSocialContrib;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/sociales/card.php
@@ -347,7 +348,7 @@ $now = dol_now();
 
 $title = $langs->trans("SocialContribution") . ' - ' . $langs->trans("Card");
 $help_url = 'EN:Module_Taxes_and_social_contributions|FR:Module_Taxes_et_charges_spéciales|ES:M&oacute;dulo Impuestos y cargas sociales (IVA, impuestos)';
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 
 // Form to create a social contribution
@@ -894,5 +895,5 @@ if ($id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

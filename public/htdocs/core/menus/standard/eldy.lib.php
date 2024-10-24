@@ -26,6 +26,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/menus/standard/eldy.lib.php
  *  \brief      Library for file eldy menus

@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Reception\Classes\Reception;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/reception/note.php
@@ -116,7 +117,7 @@ if (empty($reshook)) {
  * View
  */
 
-llxHeader('', $langs->trans('Reception'), '', '', 0, 0, $morejs, '', '', 'mod-reception page-card_notes');
+ViewMain::llxHeader('', $langs->trans('Reception'), '', '', 0, 0, $morejs, '', '', 'mod-reception page-card_notes');
 
 $form = new Form($db);
 
@@ -169,6 +170,6 @@ if ($id > 0 || !empty($ref)) {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

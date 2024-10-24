@@ -23,6 +23,7 @@
  */
 
 use Dolibarr\Code\FichInter\Classes\ModeleNumRefFicheinter;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/fichinter/mod_pacific.php

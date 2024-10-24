@@ -21,6 +21,7 @@
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       /htdocs/margin/admin/margin.php
@@ -96,7 +97,7 @@ if ($action == 'contact') {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("margesSetup"));
+ViewMain::llxHeader('', $langs->trans("margesSetup"));
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -249,5 +250,5 @@ print dol_get_fiche_end();
 print '<br>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

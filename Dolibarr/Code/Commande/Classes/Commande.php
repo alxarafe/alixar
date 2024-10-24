@@ -44,6 +44,7 @@ use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 
+
 /**
  *  \file       htdocs/commande/class/commande.class.php
  *  \ingroup    order

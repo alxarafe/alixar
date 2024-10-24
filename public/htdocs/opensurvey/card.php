@@ -20,6 +20,7 @@
  */
 
 use Dolibarr\Code\OpenSurvey\Classes\Opensurveysondage;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/opensurvey/card.php
@@ -202,7 +203,7 @@ $title = $object->title . " - " . $langs->trans('Card');
 $helpurl = '';
 $arrayofjs = array();
 $arrayofcss = array('/opensurvey/css/style.css');
-llxHeader('', $title, $helpurl, 0, 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::llxHeader('', $title, $helpurl, 0, 0, 0, $arrayofjs, $arrayofcss);
 
 
 // Define format of choices
@@ -435,5 +436,5 @@ if ($object->allow_comments) {
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -27,6 +27,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\DolibarrModules;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/user/perms.php
@@ -154,7 +155,7 @@ $form = new Form($db);
 $person_name = !empty($object->firstname) ? $object->lastname . ", " . $object->firstname : $object->lastname;
 $title = $person_name . " - " . $langs->trans('Permissions');
 $help_url = '';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-card_perms');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-card_perms');
 
 $head = user_prepare_head($object);
 
@@ -795,5 +796,5 @@ if ($reshook < 0) {
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

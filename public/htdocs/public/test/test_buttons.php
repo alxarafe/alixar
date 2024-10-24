@@ -55,7 +55,7 @@ if ($dolibarr_main_prod) {
  * View
  */
 
-llxHeader('', 'Documentation and examples for theme');
+ViewMain::llxHeader('', 'Documentation and examples for theme');
 ?>
     <main role="main">
         <h1 class="bd-title" id="content">Button for action</h1>
@@ -215,4 +215,4 @@ llxHeader('', 'Documentation and examples for theme');
 
     </main>
 
-<?php llxFooter();
+<?php ViewMain::llxFooter();

@@ -24,6 +24,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\IntracommReport\Classes\IntracommReport;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/intracommreport/list.php
@@ -321,7 +322,7 @@ $num = $db->num_rows($resql);
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $helpurl, '');
+ViewMain::llxHeader('', $title, $helpurl, '');
 
 // Displays product removal confirmation
 if (GETPOST('delreport')) {
@@ -681,5 +682,5 @@ print "</div>";
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

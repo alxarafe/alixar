@@ -29,6 +29,7 @@ namespace Dolibarr\Code\Partnerships\Classes;
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use DoliDB;
 
+
 /**
  *  \file           htdocs/core/modules/partnership/modules_partnership.php
  *  \ingroup        partnership

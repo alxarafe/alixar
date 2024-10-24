@@ -24,6 +24,7 @@ namespace Dolibarr\Code\Loan\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
 
+
 /**
  *  \file       htdocs/loan/class/paymentloan.class.php
  *  \ingroup    loan

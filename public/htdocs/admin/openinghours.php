@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/openinghours.php
@@ -79,7 +80,7 @@ if (
 $form = new Form($db);
 
 $help_url = '';
-llxHeader('', $langs->trans("CompanyFoundation"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-openinghours');
+ViewMain::llxHeader('', $langs->trans("CompanyFoundation"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-openinghours');
 
 print load_fiche_titre($langs->trans("CompanyFoundation"), '', 'title_setup');
 
@@ -143,6 +144,6 @@ if (empty($action) || $action == 'edit' || $action == 'updateedit') {
     print '</form>';
 }
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

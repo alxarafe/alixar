@@ -27,6 +27,7 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Core\Classes\FormWebsite;
 use Dolibarr\Code\Website\Classes\Website;
 use Dolibarr\Code\Website\Classes\WebsitePage;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/website/index.php
@@ -2872,7 +2873,7 @@ $moreheadjs .= '<script type="text/javascript">' . "\n";
 $moreheadjs .= 'var indicatorBlockUI = \'' . constant('DOL_URL_ROOT') . "/theme/" . $conf->theme . "/img/working.gif" . '\';' . "\n";
 $moreheadjs .= '</script>' . "\n";
 
-llxHeader($moreheadcss . $moreheadjs, $langs->trans("Website") . (empty($website->ref) ? '' : ' - ' . $website->ref), $helpurl, '', 0, 0, $arrayofjs, $arrayofcss, '', '', '<!-- Begin div class="fiche" -->' . "\n" . '<div class="fichebutwithotherclass">');
+ViewMain::llxHeader($moreheadcss . $moreheadjs, $langs->trans("Website") . (empty($website->ref) ? '' : ' - ' . $website->ref), $helpurl, '', 0, 0, $arrayofjs, $arrayofcss, '', '', '<!-- Begin div class="fiche" -->' . "\n" . '<div class="fichebutwithotherclass">');
 
 print "\n";
 print '<!-- Open form for all page -->' . "\n";
@@ -5560,5 +5561,5 @@ if ((empty($action) || $action == 'preview' || $action == 'createfromclone' || $
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

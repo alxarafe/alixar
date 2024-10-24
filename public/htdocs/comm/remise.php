@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/comm/remise.php
@@ -106,7 +107,7 @@ $object = new Societe($db);
 $object->fetch($socid);
 
 $title = $object->name;
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 $head = societe_prepare_head($object);
 
@@ -134,7 +135,7 @@ if (!$isCustomer && !$isSupplier) {
     print '</form>';
 
     // End of page
-    llxFooter();
+    ViewMain::llxFooter();
     $db->close();
     exit;
 }
@@ -316,5 +317,5 @@ if ($isSupplier) {
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

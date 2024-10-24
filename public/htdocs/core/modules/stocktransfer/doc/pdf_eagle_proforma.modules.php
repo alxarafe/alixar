@@ -29,6 +29,7 @@
  */
 
 use Dolibarr\Code\StockTransfer\Classes\ModelePDFStockTransfer;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/stocktransfer/doc/pdf_eagle_proforma.modules.php

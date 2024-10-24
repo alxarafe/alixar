@@ -29,6 +29,7 @@ use OAuth\Common\Storage\DoliStorage;
 use OAuth\Common\Consumer\Credentials;
 use Webklex\PHPIMAP\ClientManager;
 use Webklex\PHPIMAP\Exceptions\ConnectionFailedException;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/emailcollector_card.php
@@ -281,7 +282,7 @@ $formfile = new FormFile($db);
 
 $help_url = "EN:Module_EMail_Collector|FR:Module_Collecteur_de_courrier_électronique|ES:Module_EMail_Collector";
 
-llxHeader('', 'EmailCollector', $help_url, '', 0, 0, '', '', '', 'mod-admin page-emailcollector_card');
+ViewMain::llxHeader('', 'EmailCollector', $help_url, '', 0, 0, '', '', '', 'mod-admin page-emailcollector_card');
 
 // Part to create
 if ($action == 'create') {
@@ -895,5 +896,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

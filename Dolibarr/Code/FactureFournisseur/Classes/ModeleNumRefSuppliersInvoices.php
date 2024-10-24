@@ -25,6 +25,7 @@ namespace Dolibarr\Code\FactureFournisseur\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 
+
 /**
  *      \file       htdocs/core/modules/supplier_invoice/modules_facturefournisseur.php
  *      \ingroup    invoice fournisseur

@@ -24,6 +24,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/bookcal/calendar_card.php
@@ -184,7 +185,7 @@ $formproject = new FormProjets($db);
 
 $title = $langs->trans("Calendar");
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // Example : Adding jquery code
 // print '<script type="text/javascript">
@@ -564,5 +565,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

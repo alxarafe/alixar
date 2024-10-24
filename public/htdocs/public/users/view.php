@@ -20,6 +20,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\vCard;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/public/users/view.php
@@ -185,7 +186,7 @@ if ($mode == 'vcard') {
     $filenameurlencoded = dol_sanitizeFileName(urlencode($filename));
     //$filename = dol_sanitizeFileName($filename);
 
-    top_httphead('text/vcard; name="' . $filename . '"');
+    ViewMain::topHttpHead('text/vcard; name="' . $filename . '"');
 
     header("Content-Disposition: attachment; filename=\"" . $filename . "\"");
     header("Content-Length: " . dol_strlen($output));
@@ -217,7 +218,7 @@ $arrayofjs = array();
 $arrayofcss = array();
 
 $replacemainarea = (empty($conf->dol_hide_leftmenu) ? '<div>' : '') . '<div>';
-llxHeader($head, $object->getFullName($langs) . ' - ' . $langs->trans("PublicVirtualCard"), '', '', 0, 0, '', '', '', 'onlinepaymentbody' . (GETPOST('mode') == 'preview' ? ' scalepreview cursorpointer virtualcardpreview' : ''), $replacemainarea, 1, 1);
+ViewMain::llxHeader($head, $object->getFullName($langs) . ' - ' . $langs->trans("PublicVirtualCard"), '', '', 0, 0, '', '', '', 'onlinepaymentbody' . (GETPOST('mode') == 'preview' ? ' scalepreview cursorpointer virtualcardpreview' : ''), $replacemainarea, 1, 1);
 
 print '
 <style>
@@ -517,6 +518,6 @@ print 'jQuery(document).ready(function() {
 });';
 print '</script>';
 
-llxFooter('', 'public');
+ViewMain::llxFooter('', 'public');
 
 $db->close();

@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/ajax/fileupload.php
  *       \brief      File to return Ajax response on common file upload. For large files, see flowjs-server.php
@@ -76,7 +78,7 @@ if (!$result) {
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 header('Pragma: no-cache');
 header('Cache-Control: no-store, no-cache, must-revalidate');

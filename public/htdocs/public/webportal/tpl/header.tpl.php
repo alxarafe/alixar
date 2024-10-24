@@ -47,7 +47,7 @@ if (getDolGlobalString('WEBPORTAL_CUSTOM_CSS')) {
 //$jNotifyJSUrl = dol_buildpath('/includes/jquery/plugins/jnotify/jquery.jnotify.js', 2);
 //$head .= '<script src="'.$jNotifyJSUrl.'"></script>'."\n";
 
-top_htmlhead($head, $title);
+ViewMain::topHtmlHead($head, $title);
 ?>
 <body
         data-theme="custom"

@@ -21,6 +21,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file        htdocs/core/lib/agenda.lib.php
  * \brief       Set of function for the agenda module

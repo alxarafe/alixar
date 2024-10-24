@@ -35,6 +35,7 @@ use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Fourn\Classes\Fournisseur;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/fourn/card.php
@@ -206,7 +207,7 @@ if ($object->id > 0) {
         $title = $object->name . " - " . $langs->trans('Supplier');
     }
     $help_url = '';
-    llxHeader('', $title, $help_url);
+    ViewMain::llxHeader('', $title, $help_url);
 
     /*
      * Show tabs
@@ -974,5 +975,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

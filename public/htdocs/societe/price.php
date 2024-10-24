@@ -28,6 +28,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/societe/price.php
@@ -205,7 +206,7 @@ $form = new Form($db);
 $object = new Societe($db);
 
 $result = $object->fetch($socid);
-llxHeader("", $langs->trans("ThirdParty") . '-' . $langs->trans('PriceByCustomer'));
+ViewMain::llxHeader("", $langs->trans("ThirdParty") . '-' . $langs->trans('PriceByCustomer'));
 
 $head = societe_prepare_head($object);
 
@@ -693,5 +694,5 @@ if (getDolGlobalString('PRODUIT_CUSTOMER_PRICES')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

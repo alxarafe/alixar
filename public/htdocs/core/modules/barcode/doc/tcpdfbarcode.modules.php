@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\BarCode\Classes\ModeleBarCode;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/modules/barcode/doc/tcpdfbarcode.modules.php

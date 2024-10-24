@@ -21,6 +21,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/core/lib/json.lib.php
  *      \brief      Functions to emulate json function when there were not activated

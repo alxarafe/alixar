@@ -26,6 +26,7 @@ use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Salaries\Classes\Salary;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/prelevement/demandes.php
@@ -122,7 +123,7 @@ if ($type != 'bank-transfer') {
     }
 }
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 $thirdpartystatic = new Societe($db);
 if ($type == 'bank-transfer') {
@@ -371,5 +372,5 @@ print '</form>';
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

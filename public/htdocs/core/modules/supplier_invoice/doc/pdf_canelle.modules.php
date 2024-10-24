@@ -22,6 +22,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/modules/supplier_invoice/doc/pdf_canelle.modules.php
  *  \ingroup    fournisseur

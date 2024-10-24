@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/salaries/ajax/ajaxsalaries.php
  *       \brief      File to return Ajax response on salary request
@@ -51,7 +53,7 @@ restrictedArea($user, 'salaries');
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 $fk_user = GETPOSTINT('fk_user');
 $return_arr = array();

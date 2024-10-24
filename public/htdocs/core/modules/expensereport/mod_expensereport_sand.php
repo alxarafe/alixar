@@ -24,6 +24,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
 use Dolibarr\Code\ExpenseReport\Classes\ModeleNumRefExpenseReport;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/modules/expensereport/mod_expensereport_sand.php

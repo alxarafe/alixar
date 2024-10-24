@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Exports\Classes\Export;
 use Dolibarr\Code\Exports\Classes\ModeleExports;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/exports/export.php
@@ -446,7 +447,7 @@ if ($step == 4 && $action == 'submitFormField') {
  */
 
 if ($step == 1 || !$datatoexport) {
-    llxHeader('', $langs->trans("NewExport"), 'EN:Module_Exports_En|FR:Module_Exports|ES:M&oacute;dulo_Exportaciones', '', 0, 0, '', '', '', 'mod-exports page-export action-step1');
+    ViewMain::llxHeader('', $langs->trans("NewExport"), 'EN:Module_Exports_En|FR:Module_Exports|ES:M&oacute;dulo_Exportaciones', '', 0, 0, '', '', '', 'mod-exports page-export action-step1');
 
     $h = 0;
 
@@ -506,7 +507,7 @@ if ($step == 2 && $datatoexport) {
         accessforbidden();
     }
 
-    llxHeader('', $langs->trans("NewExport"), 'EN:Module_Exports_En|FR:Module_Exports|ES:M&oacute;dulo_Exportaciones', '', 0, 0, '', '', '', 'mod-exports page-export action-step2');
+    ViewMain::llxHeader('', $langs->trans("NewExport"), 'EN:Module_Exports_En|FR:Module_Exports|ES:M&oacute;dulo_Exportaciones', '', 0, 0, '', '', '', 'mod-exports page-export action-step2');
 
     $h = 0;
 
@@ -688,7 +689,7 @@ if ($step == 3 && $datatoexport) {
         accessforbidden();
     }
 
-    llxHeader('', $langs->trans("NewExport"), 'EN:Module_Exports_En|FR:Module_Exports|ES:M&oacute;dulo_Exportaciones', '', 0, 0, '', '', '', 'mod-exports page-export action-step3');
+    ViewMain::llxHeader('', $langs->trans("NewExport"), 'EN:Module_Exports_En|FR:Module_Exports|ES:M&oacute;dulo_Exportaciones', '', 0, 0, '', '', '', 'mod-exports page-export action-step3');
 
     $h = 0;
 
@@ -859,7 +860,7 @@ if ($step == 4 && $datatoexport) {
 
     asort($array_selected);
 
-    llxHeader('', $langs->trans("NewExport"), 'EN:Module_Exports_En|FR:Module_Exports|ES:M&oacute;dulo_Exportaciones', '', 0, 0, '', '', '', 'mod-exports page-export action-step4');
+    ViewMain::llxHeader('', $langs->trans("NewExport"), 'EN:Module_Exports_En|FR:Module_Exports|ES:M&oacute;dulo_Exportaciones', '', 0, 0, '', '', '', 'mod-exports page-export action-step4');
 
     $stepoffset = 0;
     $h = 0;
@@ -1133,7 +1134,7 @@ if ($step == 5 && $datatoexport) {
 
     asort($array_selected);
 
-    llxHeader('', $langs->trans("NewExport"), 'EN:Module_Exports_En|FR:Module_Exports|ES:M&oacute;dulo_Exportaciones', '', 0, 0, '', '', '', 'mod-exports page-export action-step5');
+    ViewMain::llxHeader('', $langs->trans("NewExport"), 'EN:Module_Exports_En|FR:Module_Exports|ES:M&oacute;dulo_Exportaciones', '', 0, 0, '', '', '', 'mod-exports page-export action-step5');
 
     $h = 0;
     $stepoffset = 0;
@@ -1283,7 +1284,7 @@ if ($step == 5 && $datatoexport) {
     print $formfile->showdocuments('export', '', $upload_dir, $_SERVER["PHP_SELF"] . '?step=5&datatoexport=' . $datatoexport, $liste, 1, (GETPOST('model') ? GETPOST('model') : 'csv'), 1, 1, 0, 0, 0, '', 'none', '', '', '');
 }
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();
 

@@ -23,6 +23,7 @@
 use Dolibarr\Code\Contrat\Classes\Contrat;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/contrat/note.php
@@ -80,7 +81,7 @@ if (empty($reshook)) {
 $title = $langs->trans("Contract");
 $help_url = 'EN:Module_Contracts|FR:Module_Contrat';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $form = new Form($db);
 
@@ -188,5 +189,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

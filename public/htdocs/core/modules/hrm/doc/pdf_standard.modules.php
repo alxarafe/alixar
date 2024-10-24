@@ -27,6 +27,7 @@
  */
 
 use Dolibarr\Code\Hrm\Classes\ModelePDFEvaluation;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/hrm/doc/pdf_standard.modules.php

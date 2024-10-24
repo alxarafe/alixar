@@ -30,6 +30,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\SupplierProposal\Classes\ModelePDFSupplierProposal;
 use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/supplir_proposal/doc/pdf_zenith.modules.php

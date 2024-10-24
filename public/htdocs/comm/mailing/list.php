@@ -22,6 +22,7 @@
 use Dolibarr\Code\Comm\Classes\Mailing;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/comm/mailing/list.php
@@ -273,7 +274,7 @@ if ($filteremail) {
     $title .= ' (' . $langs->trans("SentTo", $filteremail) . ')';
 }
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -619,5 +620,5 @@ print '</div>' . "\n";
 print '</form>' . "\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

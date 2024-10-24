@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Hrm\Classes\Job;
 use Dolibarr\Code\Hrm\Classes\Position;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/position_list.php
@@ -354,7 +355,7 @@ if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $s
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', '');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', '');
 
 // Example : Adding jquery code
 // print '<script type="text/javascript" language="javascript">
@@ -794,5 +795,5 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

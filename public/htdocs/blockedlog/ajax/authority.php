@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\BloquedLog\Classes\BlockedLogAuthority;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/blockedlog/ajax/authority.php
@@ -50,7 +51,7 @@ $user->fetch(1); //TODO conf user authority
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 $auth = new BlockedLogAuthority($db);
 

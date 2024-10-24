@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\CMailFile;
 use Dolibarr\Code\Core\Classes\FormMail;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/takepos/send.php
@@ -101,7 +102,7 @@ if ($action == "send") {
 
 $arrayofcss = array('/takepos/css/pos.css.php');
 $arrayofjs = array();
-top_htmlhead($head, '', 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::topHtmlHead($head, '', 0, 0, $arrayofjs, $arrayofcss);
 
 ?>
 <body class="center">

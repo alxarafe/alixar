@@ -28,6 +28,7 @@ namespace Dolibarr\Code\SupplierOrder\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 
+
 /**
  *      \file       htdocs/core/modules/supplier_order/modules_commandefournisseur.php
  *      \ingroup    order fournisseur

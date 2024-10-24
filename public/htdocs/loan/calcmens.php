@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file htdocs/loan/calcmens.php
  *  \ingroup    loan
@@ -45,7 +47,7 @@ $rate = price2num(GETPOST('rate'));
 $echance = GETPOSTINT('echeance');
 $nbterm = GETPOSTINT('nbterm');
 
-top_httphead();
+ViewMain::topHttpHead();
 
 $output = array();
 

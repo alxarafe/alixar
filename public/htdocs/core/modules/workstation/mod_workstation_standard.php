@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Workstation\Classes\ModeleNumRefWorkstation;
 use Dolibarr\Code\Workstation\Classes\Workstation;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/workstation/mod_workstation_standard.php

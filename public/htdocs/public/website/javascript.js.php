@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Website\Classes\Website;
 use Dolibarr\Code\Website\Classes\WebsitePage;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/public/website/javascript.js.php
@@ -52,24 +53,6 @@ if (!defined('NOBROWSERNOTIF')) {
     define('NOBROWSERNOTIF', '1');
 }
 
-/**
- * Header empty
- *
- * @return  void
- */
-function llxHeader()
-{
-}
-
-/**
- * Footer empty
- *
- * @return  void
- */
-function llxFooter()
-{
-}
-
 require '../../master.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
@@ -81,7 +64,6 @@ $pageid = GETPOST('page', 'alpha') ? GETPOST('page', 'alpha') : GETPOST('pageid'
 
 $accessallowed = 1;
 $type = '';
-
 
 /*
  * View
@@ -95,7 +77,6 @@ if (getDolGlobalString('MAIN_APPLICATION_TITLE')) {
 //print 'Directory with '.$appli.' websites.<br>';
 
 if (empty($pageid)) {
-
     $object = new Website($db);
     if ($websiteid) {
         $object->fetch($websiteid);
@@ -164,12 +145,10 @@ if (!file_exists($original_file_osencoded)) {
     exit;
 }
 
-
 // Output page content
 define('USEDOLIBARRSERVER', 1);
 print '/* Page content ' . $original_file . ' : JS content that was saved into tpl dir */' . "\n";
 require_once $original_file_osencoded;
-
 
 if (is_object($db)) {
     $db->close();

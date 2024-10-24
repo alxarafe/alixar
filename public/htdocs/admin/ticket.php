@@ -22,6 +22,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *     \file        htdocs/admin/ticket.php
  *     \ingroup     ticket
@@ -246,7 +248,7 @@ $formcategory = new FormCategory($db);
 // Page Header
 $help_url = 'EN:Module_Ticket|FR:Module_Ticket_FR';
 $page_name = 'TicketSetup';
-llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-ticket');
+ViewMain::llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-ticket');
 
 // Subheader
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -714,5 +716,5 @@ print $formcategory->buttonsSaveCancel("Save", '', array(), 0, 'reposition');
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

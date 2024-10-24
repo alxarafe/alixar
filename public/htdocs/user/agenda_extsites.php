@@ -22,6 +22,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/user/agenda_extsites.php
@@ -161,7 +162,7 @@ $person_name = !empty($object->firstname) ? $object->lastname . ", " . $object->
 $title = $person_name . " - " . $langs->trans('ExtSites');
 $help_url = '';
 
-llxHeader('', $title, $help_url, '', 0, 0, $arrayofjs, $arrayofcss, '', 'mod-user page-agenda_extsites');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $arrayofjs, $arrayofcss, '', 'mod-user page-agenda_extsites');
 
 
 print '<form name="extsitesconfig" action="' . $_SERVER["PHP_SELF"] . '" method="post">';
@@ -287,5 +288,5 @@ print dol_get_fiche_end();
 print "</form>\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

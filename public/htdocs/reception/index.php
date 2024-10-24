@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\Reception\Classes\Reception;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/reception/index.php
@@ -59,7 +60,7 @@ $orderstatic = new CommandeFournisseur($db);
 $companystatic = new Societe($db);
 
 $helpurl = 'EN:Module_Receptions|FR:Module_Receptions|ES:M&oacute;dulo_Receptiones';
-llxHeader('', $langs->trans("Reception"), $helpurl, '', 0, 0, '', '', '', 'mod-reception page-dashboard');
+ViewMain::llxHeader('', $langs->trans("Reception"), $helpurl, '', 0, 0, '', '', '', 'mod-reception page-dashboard');
 
 print load_fiche_titre($langs->trans("ReceptionsArea"), '', 'dollyrevert');
 
@@ -269,5 +270,5 @@ print '</div></div>';
 $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardWarehouseReceptions', $parameters, $object); // Note that $action and $object may have been modified by hook
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

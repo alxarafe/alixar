@@ -23,6 +23,7 @@
 
 use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/categories/traduction.php
@@ -183,7 +184,7 @@ $form      = new Form($db);
 $formadmin = new FormAdmin($db);
 $formother = new FormOther($db);
 
-llxHeader("", "", $langs->trans("Translation"));
+ViewMain::llxHeader("", "", $langs->trans("Translation"));
 
 $title = Categorie::$MAP_TYPE_TITLE_AREA[$type];
 
@@ -352,5 +353,5 @@ if ($action == 'add' && ($user->hasRight('produit', 'creer') || $user->hasRight(
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

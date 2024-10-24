@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/categories/admin/categorie_extrafields.php
@@ -65,7 +66,7 @@ require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
 $textobject = $langs->transnoentitiesnoconv("Categories");
 
 $help_url = 'EN:Module Categories|FR:Module Catégories|ES:Módulo Categorías|DE:Modul_Kategorien';
-llxHeader('', $langs->trans("Categories"), $help_url);
+ViewMain::llxHeader('', $langs->trans("Categories"), $help_url);
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -97,5 +98,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

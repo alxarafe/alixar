@@ -31,6 +31,7 @@ use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Salaries\Classes\Salary;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/salaries/info.php
@@ -188,7 +189,7 @@ if (isModEnabled('project')) {
 
 $title = $langs->trans('Salary') . " - " . $langs->trans('Info');
 $help_url = "";
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 $object->fetch($id);
 $object->info($id);
@@ -758,5 +759,5 @@ print "</table>";
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

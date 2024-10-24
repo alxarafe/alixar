@@ -24,6 +24,7 @@ namespace Dolibarr\Code\Core\Classes;
 
 use DoliDB;
 
+
 /**
  *      \file       htdocs/core/class/html.formadmin.class.php
  *      \ingroup    core

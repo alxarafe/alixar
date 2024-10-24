@@ -28,6 +28,7 @@ use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Salaries\Classes\Salary;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *     \file       htdocs/compta/prelevement/factures.php
@@ -96,7 +97,7 @@ $form = new Form($db);
 $invoicetmp = new Facture($db);
 $thirdpartytmp = new Societe($db);
 
-llxHeader('', $langs->trans("WithdrawalsReceipts"));
+ViewMain::llxHeader('', $langs->trans("WithdrawalsReceipts"));
 
 if ($id > 0 || $ref) {
     if ($object->fetch($id, $ref) >= 0) {
@@ -424,5 +425,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

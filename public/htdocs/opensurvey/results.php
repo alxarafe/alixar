@@ -24,6 +24,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\OpenSurvey\Classes\Opensurveysondage;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/opensurvey/results.php
@@ -440,7 +441,7 @@ $helpurl = '';
 $arrayofjs = array();
 $arrayofcss = array('/opensurvey/css/style.css');
 
-llxHeader('', $title, $helpurl, 0, 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::llxHeader('', $title, $helpurl, 0, 0, 0, $arrayofjs, $arrayofcss);
 
 
 // Define format of choices
@@ -1178,6 +1179,6 @@ print '</form>' . "\n";
 
 print '<a name="bas"></a>' . "\n";
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

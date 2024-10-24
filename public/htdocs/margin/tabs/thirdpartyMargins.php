@@ -20,6 +20,7 @@
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/margin/tabs/thirdpartyMargins.php
@@ -136,7 +137,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/thirdpartynameonly/', 
     $title = $object->name . ' - ' . $langs->trans("Files");
 }
 $help_url = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $param = "&socid=" . $socid;
 if ($limit > 0 && $limit != $conf->liste_limit) {
@@ -497,5 +498,5 @@ print '
 ';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

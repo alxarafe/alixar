@@ -19,14 +19,15 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/admin/tools/index.php
  *      \brief      Page d'accueil de l'espace outils admin
  */
 
 // Load Dolibarr environment
-use Dolibarr\Code\Core\Classes\Form;
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 // Load translation files required by the page
@@ -45,7 +46,7 @@ $form = new Form($db);
 $title = $langs->trans("AdminTools");
 //if (GETPOST('leftmenu',"aZ09") == 'admintools') $title=$langs->trans("ModulesSystemTools");
 
-llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-admin page-tools_index');
+ViewMain::llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-admin page-tools_index');
 
 print load_fiche_titre($title, '', 'title_setup');
 
@@ -61,5 +62,5 @@ print '<br><br>';
 print '<center><div class="logo_setup"></div></center>'; // For a reason I don't know, the div class="center does not works, we must keep the <center>
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

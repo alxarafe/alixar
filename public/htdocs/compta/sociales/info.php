@@ -21,6 +21,7 @@ use Dolibarr\Code\Compta\Classes\ChargeSociales;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/sociales/info.php
@@ -79,7 +80,7 @@ if (isModEnabled('project')) {
 
 $title = $langs->trans("SocialContribution") . ' - ' . $langs->trans("Info");
 $help_url = 'EN:Module_Taxes_and_social_contributions|FR:Module Taxes et dividendes|ES:M&oacute;dulo Impuestos y cargas sociales (IVA, impuestos)';
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 $object->fetch($id);
 $object->info($id);
@@ -130,5 +131,5 @@ print '</td></tr></table>';
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

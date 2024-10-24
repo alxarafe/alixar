@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/modulebuilder/template/mymoduleindex.php
  *  \ingroup    mymodule
@@ -103,7 +105,7 @@ if (isset($user->socid) && $user->socid > 0) {
 $form = new Form($db);
 $formfile = new FormFile($db);
 
-llxHeader("", $langs->trans("MyModuleArea"), '', '', 0, 0, '', '', '', 'mod-mymodule page-index');
+ViewMain::llxHeader("", $langs->trans("MyModuleArea"), '', '', 0, 0, '', '', '', 'mod-mymodule page-index');
 
 print load_fiche_titre($langs->trans("MyModuleArea"), '', 'mymodule.png@mymodule');
 
@@ -240,5 +242,5 @@ if (isModEnabled('mymodule') && $user->hasRight('mymodule', 'read')) {
 print '</div></div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

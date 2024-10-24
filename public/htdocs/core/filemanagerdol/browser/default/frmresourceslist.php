@@ -26,7 +26,7 @@ define('NOTOKENRENEWAL', 1); // Disables token renewal
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
-top_httphead();
+ViewMain::topHttpHead();
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">

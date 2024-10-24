@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Partnerships\Classes\Partnership;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       partnership_card.php
@@ -277,7 +278,7 @@ $formproject = new FormProjets($db);
 
 $title = $langs->trans("Partnership");
 $help_url = '';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-partnership page-card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-partnership page-card');
 
 // Part to create
 if ($action == 'create') {
@@ -690,5 +691,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

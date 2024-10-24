@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *    \file       htdocs/compta/bank/bilan.php
  *    \ingroup    compta/bank
@@ -62,7 +64,7 @@ function valeur($sql)
  *	View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 print load_fiche_titre("Bilan");
 print '<br>';
@@ -96,5 +98,5 @@ print "<tr class=\"oddeven\"><td>" . $langs->trans("BankBalance") . "</td><td al
 print "</table>";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

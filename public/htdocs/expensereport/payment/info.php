@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/expensereport/payment/info.php
@@ -52,7 +53,7 @@ $confirm = GETPOST('confirm', 'alpha');
  * View
  */
 
-llxHeader('', $langs->trans("Payment"));
+ViewMain::llxHeader('', $langs->trans("Payment"));
 
 $object = new PaymentExpenseReport($db);
 $object->fetch($id);
@@ -82,5 +83,5 @@ print '</div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

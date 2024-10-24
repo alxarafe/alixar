@@ -23,6 +23,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\DolibarrModules;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/modulehelp.php
@@ -71,7 +72,7 @@ if (empty($user->admin)) {
 $form = new Form($db);
 
 $help_url = 'EN:First_setup|FR:Premiers_paramétrages|ES:Primeras_configuraciones';
-llxHeader('', $langs->trans("Setup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-modulehelp');
+ViewMain::llxHeader('', $langs->trans("Setup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-modulehelp');
 
 print '<!-- Force style container -->' . "\n" . '<style>
 .id-container {
@@ -635,5 +636,5 @@ print dol_get_fiche_end();
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

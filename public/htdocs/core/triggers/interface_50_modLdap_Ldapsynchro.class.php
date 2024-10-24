@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Ldap;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\User\Classes\UserGroup;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/triggers/interface_50_modLdap_Ldapsynchro.class.php

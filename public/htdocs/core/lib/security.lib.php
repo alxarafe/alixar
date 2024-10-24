@@ -1,8 +1,8 @@
 <?php
 
-/* Copyright (C) 2008-2021 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2008-2021 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2020	   Ferran Marcet        <fmarcet@2byte.es>
+/* Copyright (C) 2008-2021  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2008-2021  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2020	    Ferran Marcet               <fmarcet@2byte.es>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
@@ -21,6 +21,9 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/lib/security.lib.php
  *  \ingroup    core
@@ -28,9 +31,6 @@
  *              Warning, this file must not depends on other library files, except function.lib.php
  *              because it is used at low code level.
  */
-
-use Dolibarr\Code\User\Classes\User;
-
 
 /**
  *  Encode a string with base 64 algorithm + specific delta change.
@@ -1185,7 +1185,7 @@ function checkUserAccessToObject($user, array $featuresarray, $object = 0, $tabl
  */
 function httponly_accessforbidden($message = '1', $http_response_code = 403, $stringalreadysanitized = 0)
 {
-    top_httphead();
+    ViewMain::topHttpHead();
     http_response_code($http_response_code);
 
     if ($stringalreadysanitized) {
@@ -1224,7 +1224,7 @@ function accessforbidden($message = '', $printheader = 1, $printfooter = 1, $sho
 
     if ($printheader && !defined('NOHEADERNOFOOTER')) {
         if (function_exists("llxHeader")) {
-            llxHeader('');
+            ViewMain::llxHeader('');
         } elseif (function_exists("llxHeaderVierge")) {
             llxHeaderVierge('');
         }
@@ -1261,7 +1261,7 @@ function accessforbidden($message = '', $printheader = 1, $printfooter = 1, $sho
     }
     if ($printfooter && !defined('NOHEADERNOFOOTER') && function_exists("llxFooter")) {
         print '</div>';
-        llxFooter();
+        ViewMain::llxFooter();
     }
 
     exit(0);

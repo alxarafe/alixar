@@ -26,6 +26,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAccounting;
 use Dolibarr\Code\Don\Classes\Don;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/don/admin/donation.php
@@ -179,7 +180,7 @@ if (isModEnabled('accounting')) {
 }
 
 $help_url = '';
-llxHeader('', $langs->trans("DonationsSetup"), $help_url, '', 0, 0, '', '', '', 'mod-donation page-admin');
+ViewMain::llxHeader('', $langs->trans("DonationsSetup"), $help_url, '', 0, 0, '', '', '', 'mod-donation page-admin');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("DonationsSetup"), $linkback, 'title_setup');
@@ -416,6 +417,6 @@ if (preg_match('/fr/i', $conf->global->MAIN_INFO_SOCIETE_COUNTRY)) {
     print "</table>\n";
 }
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

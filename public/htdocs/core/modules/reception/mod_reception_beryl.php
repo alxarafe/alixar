@@ -25,6 +25,7 @@ use Dolibarr\Code\Reception\Classes\ModelNumRefReception;
 use Dolibarr\Code\Reception\Classes\Reception;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/reception/mod_reception_beryl.php

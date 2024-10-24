@@ -20,6 +20,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/viewimage.php
  *      \brief      Wrapper to show images into Dolibarr screens.
@@ -27,6 +29,9 @@
  *                  DOL_URL_ROOT.'/viewimage.php?modulepart=diroffile&file=relativepathofofile&cache=0
  *                  DOL_URL_ROOT.'/viewimage.php?hashp=sharekey
  */
+
+use Dolibarr\Code\Ecm\Classes\EcmFiles;
+use Dolibarr\Lib\ViewMain;
 
 define('MAIN_SECURITY_FORCECSP', "default-src: 'none'");
 
@@ -111,25 +116,6 @@ if (is_numeric($entity)) {
     define("DOLENTITY", $entity);
 }
 
-/**
- * Header empty
- *
- * @ignore
- * @return  void
- */
-function llxHeader()
-{
-}
-/**
- * Footer empty
- *
- * @ignore
- * @return  void
- */
-function llxFooter()
-{
-}
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 
@@ -151,14 +137,11 @@ if ($modulepart == 'fckeditor') {
     $modulepart = 'medias'; // For backward compatibility
 }
 
-
 /*
  * Actions
  */
 
 // None
-
-
 
 /*
  * View
@@ -364,10 +347,10 @@ if ($modulepart == 'barcode') {
 
     // Permissions are ok and file found, so we return it
     if ($type) {
-        top_httphead($type);
+        ViewMain::topHttpHead($type);
         header('Content-Disposition: inline; filename="' . basename($fullpath_original_file) . '"');
     } else {
-        top_httphead('image/png');
+        ViewMain::topHttpHead('image/png');
         header('Content-Disposition: inline; filename="' . basename($fullpath_original_file) . '"');
     }
 

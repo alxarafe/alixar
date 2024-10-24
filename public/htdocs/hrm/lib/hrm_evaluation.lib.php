@@ -23,6 +23,7 @@
 
 use Dolibarr\Code\Core\Classes\Link;
 use Dolibarr\Code\Hrm\Classes\Evaluation;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    lib/hrm_evaluation.lib.php

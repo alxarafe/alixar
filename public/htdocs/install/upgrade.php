@@ -34,6 +34,8 @@
  * Return code is 0 if OK, >0 if error
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/install/upgrade.php
  *      \brief      Run migration script

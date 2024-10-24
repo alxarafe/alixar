@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/accountancy/admin/journals_list.php
@@ -352,7 +353,7 @@ $formadmin = new FormAdmin($db);
 
 $title = $langs->trans('AccountingJournals');
 $help_url = 'EN:Module_Double_Entry_Accounting#Setup|FR:Module_Comptabilit&eacute;_en_Partie_Double#Configuration';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $titre = $langs->trans("DictionarySetup");
 $linkback = '';
@@ -680,7 +681,7 @@ if ($id) {
 print '<br>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

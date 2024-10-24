@@ -28,6 +28,7 @@ use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Projet\Classes\Task;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/projet/ganttview.php
@@ -95,7 +96,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/projectnameonly/', get
 }
 $help_url = "EN:Module_Projects|FR:Module_Projets|ES:M&oacute;dulo_Proyectos";
 
-llxHeader("", $title, $help_url, '', 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::llxHeader("", $title, $help_url, '', 0, 0, $arrayofjs, $arrayofcss);
 
 if (($id > 0 && is_numeric($id)) || !empty($ref)) {
     // To verify role of users
@@ -419,5 +420,5 @@ if (count($tasksarray) > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

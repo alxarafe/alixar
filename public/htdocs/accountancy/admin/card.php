@@ -24,6 +24,7 @@ use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Accountancy\Classes\AccountancySystem;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/accountancy/admin/card.php
@@ -210,8 +211,7 @@ $title = $langs->trans('AccountAccounting') . " - " . $langs->trans('Card');
 
 $help_url = 'EN:Module_Double_Entry_Accounting#Setup|FR:Module_Comptabilit&eacute;_en_Partie_Double#Configuration';
 
-llxHeader('', $title, $help_url);
-
+ViewMain::llxHeader('', $title, $help_url);
 
 // Create mode
 if ($action == 'create') {
@@ -432,5 +432,5 @@ if ($action == 'create') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

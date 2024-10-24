@@ -17,13 +17,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Fiscalyear;
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file        htdocs/accountancy/admin/fiscalyear_info.php
  * \ingroup     Accountancy (Double entries)
  * \brief       Page to show info of a fiscal year
  */
-
-use Dolibarr\Code\Core\Classes\Fiscalyear;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -50,7 +51,7 @@ $title = $langs->trans("Fiscalyear") . " - " . $langs->trans("Info");
 
 $help_url = 'EN:Module_Double_Entry_Accounting#Setup|FR:Module_Comptabilit&eacute;_en_Partie_Double#Configuration';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($id) {
     $object = new Fiscalyear($db);
@@ -79,5 +80,5 @@ if ($id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

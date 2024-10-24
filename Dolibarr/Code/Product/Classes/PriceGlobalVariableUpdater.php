@@ -25,6 +25,7 @@ namespace Dolibarr\Code\Product\Classes;
 
 use DoliDB;
 
+
 /**
  *  \file       htdocs/product/dynamic_price/class/price_global_variable_updater.class.php
  *  \ingroup    product

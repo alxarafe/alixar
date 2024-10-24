@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *    \file       htdocs/eventorganization/conferenceorbooth_card.php
  *    \ingroup    eventorganization
@@ -174,7 +176,7 @@ $formproject = new FormProjets($db);
 
 $title = $langs->trans("ConferenceOrBooth");
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($action == 'create') {
     $result = $projectstatic->fetch(GETPOST('fk_project'));
@@ -683,5 +685,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

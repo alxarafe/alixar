@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\BloquedLog\Classes\BlockedLogAuthority;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/blockedlog/ajax/check_signature.php
@@ -56,7 +57,7 @@ if (!getDolGlobalString('BLOCKEDLOG_AUTHORITY_URL')) {
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 $auth = new BlockedLogAuthority($db);
 $auth->syncSignatureWithAuthority();

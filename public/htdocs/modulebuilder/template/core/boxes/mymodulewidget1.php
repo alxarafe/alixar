@@ -18,6 +18,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file    htdocs/modulebuilder/template/core/boxes/mymodulewidget1.php
  * \ingroup mymodule

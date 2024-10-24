@@ -29,7 +29,9 @@ namespace Dolibarr\Code\Core\Classes;
  */
 
 // Put here all includes required by your class file
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 //use Dolibarr\Code\Societe\Classes\Societe;
 //

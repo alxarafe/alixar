@@ -25,6 +25,7 @@
 use Dolibarr\Code\Adherents\Classes\AdherentType;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Ldap;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/ldap_members_types.php
@@ -96,7 +97,7 @@ if ($action == 'setvalue' && $user->admin) {
  * View
  */
 
-llxHeader('', $langs->trans("LDAPSetup"), 'EN:Module_LDAP_En|FR:Module_LDAP|ES:M&oacute;dulo_LDAP', '', 0, 0, '', '', '', 'mod-admin page-ldap_members_types');
+ViewMain::llxHeader('', $langs->trans("LDAPSetup"), 'EN:Module_LDAP_En|FR:Module_LDAP|ES:M&oacute;dulo_LDAP', '', 0, 0, '', '', '', 'mod-admin page-ldap_members_types');
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 
 print load_fiche_titre($langs->trans("LDAPSetup"), $linkback, 'title_setup');
@@ -250,5 +251,5 @@ if (function_exists("ldap_connect")) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -22,6 +22,7 @@ use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Adherents\Classes\AdherentType;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Ldap;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/adherents/ldap.php
@@ -108,7 +109,7 @@ if ($action == 'dolibarr2ldap') {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("Member"), 'EN:Module_Foundations|FR:Module_Adh&eacute;rents|ES:M&oacute;dulo_Miembros|DE:Modul_Mitglieder');
+ViewMain::llxHeader('', $langs->trans("Member"), 'EN:Module_Foundations|FR:Module_Adh&eacute;rents|ES:M&oacute;dulo_Miembros|DE:Modul_Mitglieder');
 
 $head = member_prepare_head($object);
 
@@ -223,5 +224,5 @@ if ($result > 0) {
 print '</table>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

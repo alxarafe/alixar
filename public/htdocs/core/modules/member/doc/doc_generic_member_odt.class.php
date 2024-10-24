@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Members\Classes\ModelePDFMember;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/member/doc/doc_generic_member_odt.class.php

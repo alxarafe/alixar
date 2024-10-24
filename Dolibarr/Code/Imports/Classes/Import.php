@@ -22,6 +22,7 @@
 
 namespace Dolibarr\Code\Imports\Classes;
 
+
 /**
  *  \file       htdocs/imports/class/import.class.php
  *  \ingroup    import

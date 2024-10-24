@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\WebHook\Classes\Target;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/webhook/lib/webhook_target.lib.php

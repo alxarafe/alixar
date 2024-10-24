@@ -37,6 +37,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Expedition\Classes\Expedition;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/expedition/list.php
@@ -902,7 +903,7 @@ if ($num == 1 && !empty($conf->global->MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE) && $
     exit;
 }
 
-llxHeader('', $langs->trans('ListOfSendings'), $helpurl);
+ViewMain::llxHeader('', $langs->trans('ListOfSendings'), $helpurl);
 
 $expedition = new Expedition($db);
 
@@ -1730,5 +1731,5 @@ $title      = '';
 print $formfile->showdocuments('massfilesarea_sendings', '', $filedir, $urlsource, 0, $delallowed, '', 1, 1, 0, 48, 1, $param, $title, '', '', '', null, $hidegeneratedfilelistifempty);
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

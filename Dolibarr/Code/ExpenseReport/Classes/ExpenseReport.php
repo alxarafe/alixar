@@ -26,8 +26,12 @@
 
 namespace Dolibarr\Code\ExpenseReport\Classes;
 
+use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Core\Classes\WorkboardResponse;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  *       \file       htdocs/expensereport/class/expensereport.class.php

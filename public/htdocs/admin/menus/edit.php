@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2007      Patrick Raguin       <patrick.raguin@gmail.com>
- * Copyright (C) 2007-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2011 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2016      Meziane Sof          <virtualsof@yahoo.fr>
+/* Copyright (C) 2007       Patrick Raguin              <patrick.raguin@gmail.com>
+ * Copyright (C) 2007-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2011  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2016       Meziane Sof                 <virtualsof@yahoo.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/menus/edit.php
@@ -242,7 +244,7 @@ if ($action == 'update') {
 $form = new Form($db);
 $formadmin = new FormAdmin($db);
 
-llxHeader('', $langs->trans('Menu'), '', '', 0, 0, '', '', '', 'mod-admin page-menus_edit');
+ViewMain::llxHeader('', $langs->trans('Menu'), '', '', 0, 0, '', '', '', 'mod-admin page-menus_edit');
 
 
 if ($action == 'create') {
@@ -538,5 +540,5 @@ if ($action == 'create') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

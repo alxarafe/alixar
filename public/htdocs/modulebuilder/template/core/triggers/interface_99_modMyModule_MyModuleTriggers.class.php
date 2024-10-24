@@ -17,6 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file    core/triggers/interface_99_modMyModule_MyModuleTriggers.class.php
  * \ingroup mymodule

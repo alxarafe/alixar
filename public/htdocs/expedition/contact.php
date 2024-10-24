@@ -23,6 +23,7 @@
 use Dolibarr\Code\Comm\Classes\Propal;
 use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *     \file       htdocs/expedition/contact.php
@@ -134,7 +135,7 @@ if (empty($reshook)) {
 
 $help_url = 'EN:Module_Shipments|FR:Module_Expéditions|ES:M&oacute;dulo_Expediciones|DE:Modul_Lieferungen';
 
-llxHeader('', $langs->trans('Order'), $help_url);
+ViewMain::llxHeader('', $langs->trans('Order'), $help_url);
 
 $form = new Form($db);
 $formcompany = new FormCompany($db);
@@ -251,5 +252,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

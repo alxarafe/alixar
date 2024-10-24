@@ -20,17 +20,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *  \file       htdocs/core/modules/modIntracommreport.class.php
- *  \ingroup    Intracomm report
- *  \brief      Description and activation file for the module intracomm report
- */
-
 namespace Dolibarr\Modules;
 
 use Dolibarr\Core\Base\DolibarrModules;
 use DoliDB;
 use stdClass;
+
+/**
+ *  \file       htdocs/core/modules/modIntracommreport.class.php
+ *  \ingroup    Intracomm report
+ *  \brief      Description and activation file for the module intracomm report
+ */
 
 /**
  *  Description and activation class for module intracommreport

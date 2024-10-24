@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/compta/localtax/clients.php
  *      \ingroup    tax
@@ -131,7 +133,7 @@ foreach ($listofparams as $param) {
     }
 }
 
-llxHeader('', '', '', '', 0, 0, '', '', $morequerystring);
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', $morequerystring);
 
 
 $name = $langs->transcountry($local == 1 ? "LT1ReportByCustomers" : "LT2ReportByCustomers", $mysoc->country_code);
@@ -347,5 +349,5 @@ print '</div>';
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

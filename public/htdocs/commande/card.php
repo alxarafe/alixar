@@ -54,9 +54,11 @@ use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\Variants\Classes\ProductCombination;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file      htdocs/commande/card.php
+ *   \file
+ * htdocs/commande/card.php
  *   \ingroup   commande
  *   \brief     Page to show sales order
  */
@@ -790,7 +792,7 @@ if (empty($reshook)) {
         if (!$error && isModEnabled('variants') && $prod_entry_mode != 'free') {
             if ($combinations = GETPOST('combinations', 'array')) {
                 //Check if there is a product with the given combination
-                $prodcomb = new ProductCombination($db);
+                $prodcomb = new ProductAttributeCombination();
 
                 if ($res = $prodcomb->fetchByProductCombination2ValuePairs($idprod, $combinations)) {
                     $idprod = $res->fk_product_child;
@@ -1689,7 +1691,7 @@ if ($action == 'create') {
 }
 $help_url = 'EN:Customers_Orders|FR:Commandes_Clients|ES:Pedidos de clientes|DE:Modul_Kundenaufträge';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-order page-card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-order page-card');
 
 $form = new Form($db);
 $formfile = new FormFile($db);
@@ -3182,5 +3184,5 @@ if ($action == 'create' && $usercancreate) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -19,6 +19,8 @@
 * or see https://www.gnu.org/
 */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/core/actions_sendmails.inc.php
  *  \brief          Code for actions on sending mails from object page

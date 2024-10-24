@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Expedition\Classes\ExpeditionStats;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/expedition/stats/month.php
@@ -42,7 +43,7 @@ restrictedArea($user, 'expedition');
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width');
 $HEIGHT = DolGraph::getDefaultGraphSizeForStats('height');
@@ -81,5 +82,5 @@ print '</td></tr>';
 print '</table>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

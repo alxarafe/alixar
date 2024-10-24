@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Cron\Classes\Cronjob;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/public/cron/cron_run_jobs_by_url.php

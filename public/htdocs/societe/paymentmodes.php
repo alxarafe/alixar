@@ -39,6 +39,7 @@ use Dolibarr\Code\Societe\Classes\CompanyPaymentMode;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Societe\Classes\SocieteAccount;
 use Dolibarr\Code\Stripe\Classes\Stripe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/societe/paymentmodes.php
@@ -883,7 +884,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/thirdpartynameonly/', 
 }
 $help_url = '';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $head = societe_prepare_head($object);
 
@@ -2310,5 +2311,5 @@ if ($socid && ($action == 'create' || $action == 'createcard') && $permissiontoa
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

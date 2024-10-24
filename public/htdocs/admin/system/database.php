@@ -22,6 +22,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -38,7 +39,7 @@ if (!$user->admin) {
 
 $form = new Form($db);
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_database');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_database');
 
 print load_fiche_titre($langs->trans("InfoDatabase"), '', 'title_setup');
 
@@ -138,5 +139,5 @@ if (!count($listofvars) && !count($listofstatus)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

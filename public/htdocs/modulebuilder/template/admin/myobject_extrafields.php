@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/modulebuilder/template/admin/myobject_extrafields.php
  *      \ingroup    mymodule
@@ -94,7 +96,7 @@ $textobject = $langs->transnoentitiesnoconv("MyObject");
 $help_url = '';
 $page_name = "MyModuleSetup";
 
-llxHeader('', $langs->trans("MyModuleSetup"), $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-admin_extrafields');
+ViewMain::llxHeader('', $langs->trans("MyModuleSetup"), $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-admin_extrafields');
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -141,5 +143,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

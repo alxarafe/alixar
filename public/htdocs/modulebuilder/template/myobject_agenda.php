@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/modulebuilder/template/myobject_agenda.php
  *  \ingroup    mymodule
@@ -196,7 +198,7 @@ if ($object->id > 0) {
     //$title = $object->ref." - ".$langs->trans("Agenda");
     $help_url = 'EN:Module_Agenda_En|DE:Modul_Terminplanung';
 
-    llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-card_agenda');
+	ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-card_agenda');
 
     if (isModEnabled('notification')) {
         $langs->load("mails");
@@ -331,5 +333,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

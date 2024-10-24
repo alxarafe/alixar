@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\Ticket\Classes\TicketStats;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/ticket/index.php
@@ -88,7 +89,7 @@ $max = getDolGlobalInt('MAIN_SIZE_SHORTLIST_LIMIT', 5);
 $resultboxes = FormOther::getBoxesArea($user, "11"); // Load $resultboxes (selectboxlist + boxactivated + boxlista + boxlistb)
 
 $help_url = '';
-llxHeader('', $langs->trans('TicketsIndex'), $help_url, '', 0, 0, '', '', '', 'mod-ticket page-dashboard');
+ViewMain::llxHeader('', $langs->trans('TicketsIndex'), $help_url, '', 0, 0, '', '', '', 'mod-ticket page-dashboard');
 
 $linkback = '';
 print load_fiche_titre($langs->trans('TicketsIndex'), $resultboxes['selectboxlist'], 'ticket');
@@ -464,5 +465,5 @@ $reshook = $hookmanager->executeHooks('dashboardTickets', $parameters, $object);
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

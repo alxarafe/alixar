@@ -51,6 +51,7 @@ use Dolibarr\Code\Loan\Classes\Loan;
 use Dolibarr\Code\Salaries\Classes\PaymentSalary;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/bank/bankentries_list.php
@@ -538,7 +539,7 @@ if ($id > 0 || !empty($ref)) {
 }
 $help_url = '';
 
-llxHeader('', $title, $help_url, '', 0, 0, array(), array(), $param);
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, array(), array(), $param);
 
 
 if ($id > 0 || !empty($ref)) {
@@ -1965,5 +1966,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

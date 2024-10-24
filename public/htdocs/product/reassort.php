@@ -29,6 +29,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/reassort.php
@@ -393,7 +394,7 @@ if ($resql) {
         $param .= '&search_stock_physique=' . urlencode($search_stock_physique);
     }
 
-    llxHeader("", $texte, $helpurl, '', 0, 0, '', '', '', 'mod-product page-reassort');
+    ViewMain::llxHeader("", $texte, $helpurl, '', 0, 0, '', '', '', 'mod-product page-reassort');
 
     print '<form action="' . $_SERVER["PHP_SELF"] . '" method="post" name="formulaire">';
     print '<input type="hidden" name="token" value="' . newToken() . '">';
@@ -646,5 +647,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

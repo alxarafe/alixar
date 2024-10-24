@@ -34,6 +34,7 @@ use Dolibarr\Code\Compta\Classes\Paiement;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/paiement/list.php
@@ -186,7 +187,7 @@ $accountstatic = new Account($db);
 $companystatic = new Societe($db);
 $bankline = new AccountLine($db);
 
-llxHeader('', $langs->trans('ListPayment'));
+ViewMain::llxHeader('', $langs->trans('ListPayment'));
 
 if (GETPOST("orphelins", "alpha")) {
     // Payments not linked to an invoice. Should not happen. For debug only.
@@ -332,7 +333,7 @@ if ($limit) {
 $resql = $db->query($sql);
 if (!$resql) {
     dol_print_error($db);
-    llxFooter();
+    ViewMain::llxFooter();
     $db->close();
     exit;
 }
@@ -856,5 +857,5 @@ print '</div>' . "\n";
 print '</form>' . "\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

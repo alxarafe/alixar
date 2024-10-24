@@ -26,9 +26,14 @@
 
 namespace Dolibarr\Code\Projet\Classes;
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\TimeSpent;
+use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObjectLine;
+use DoliDB;
+use stdClass;
 
 /**
  *      \file       htdocs/projet/class/task.class.php
@@ -213,7 +218,6 @@ class Task extends CommonObjectLine
      */
     const STATUS_CANCELED = 9;
 
-
     /**
      *  Constructor
      *
@@ -223,7 +227,6 @@ class Task extends CommonObjectLine
     {
         $this->db = $db;
     }
-
 
     /**
      *  Create into database

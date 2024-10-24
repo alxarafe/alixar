@@ -26,6 +26,7 @@ namespace Dolibarr\Code\Cheque\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 
+
 /**
  *  \file       htdocs/core/modules/cheque/modules_chequereceipts.php
  *  \ingroup    invoice

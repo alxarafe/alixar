@@ -24,9 +24,11 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file       htdocs/societe/note.php
+ *   \file
+ * htdocs/societe/note.php
  *   \brief      Tab for notes on third party
  *   \ingroup    societe
  */
@@ -90,7 +92,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/thirdpartynameonly/', 
     $title = $object->name . ' - ' . $langs->trans("Notes");
 }
 $help_url = 'EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($object->id > 0) {
     /*
@@ -161,5 +163,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

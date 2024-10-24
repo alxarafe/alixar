@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Imports\Classes\Import;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/imports/emptyexample.php
@@ -27,28 +28,6 @@ use Dolibarr\Code\Imports\Classes\Import;
 
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', '1'); // Do not roll the Anti CSRF token (used if MAIN_SECURITY_CSRF_WITH_TOKEN is on)
-}
-
-/**
- * This file is a wrapper, so empty header
- *
- * @return  void
- * @ignore
- */
-function llxHeader()
-{
-    print '<html><title>Build an import example file</title><body>';
-}
-
-/**
- * This file is a wrapper, so empty footer
- *
- * @return  void
- * @ignore
- */
-function llxFooter()
-{
-    print '</body></html>';
 }
 
 // Load Dolibarr environment
@@ -65,9 +44,11 @@ $langs->load("exports");
 if (empty($datatoimport)) {
     $user->getrights();
 
-    llxHeader();
+    // Possible ViewMain::llxHeader();
+    print '<html><title>Build an import example file</title><body>';
     print '<div class="error">Bad value for datatoimport.</div>';
-    llxFooter();
+    // Possible ViewMain::llxFooter();
+    print '</body></html>';
     exit;
 }
 

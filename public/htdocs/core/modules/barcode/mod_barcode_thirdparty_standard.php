@@ -25,6 +25,7 @@
  */
 
 use Dolibarr\Code\BarCode\Classes\ModeleNumRefBarCode;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/core/modules/barcode/mod_barcode_thirdparty_standard.php

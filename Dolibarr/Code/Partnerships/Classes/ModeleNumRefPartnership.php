@@ -28,6 +28,7 @@ namespace Dolibarr\Code\Partnerships\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 
+
 /**
  *  \file           htdocs/core/modules/partnership/modules_partnership.php
  *  \ingroup        partnership

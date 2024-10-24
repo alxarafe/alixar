@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/admin/mails_senderprofile_list.php
  *      \ingroup    core
@@ -234,7 +236,7 @@ $now = dol_now();
 $help_url = '';
 $title = $langs->trans("EMailsSetup");
 
-llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-admin page-mails_senderprofile_list');
+ViewMain::llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-admin page-mails_senderprofile_list');
 
 $linkback = '';
 $titlepicto = 'title_setup';
@@ -881,5 +883,5 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

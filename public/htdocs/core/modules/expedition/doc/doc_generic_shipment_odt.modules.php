@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Expedition\Classes\Expedition;
 use Dolibarr\Code\Expedition\Classes\ModelePdfExpedition;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/expedition/doc/doc_generic_shipment_odt.modules.php

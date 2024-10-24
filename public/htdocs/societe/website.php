@@ -31,6 +31,7 @@ use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Societe\Classes\SocieteAccount;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/societe/website.php
@@ -329,7 +330,7 @@ $num = $db->num_rows($resql);
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -780,5 +781,5 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

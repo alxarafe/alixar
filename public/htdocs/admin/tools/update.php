@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 if (!defined('CSRFCHECK_WITH_TOKEN')) {
     define('CSRFCHECK_WITH_TOKEN', '1');        // Force use of CSRF protection with tokens even for GET
 }
@@ -78,7 +80,7 @@ if ($action == 'getlastversion') {
  */
 
 $wikihelp = 'EN:Installation_-_Upgrade|FR:Installation_-_Mise_à_jour|ES:Instalación_-_Actualización';
-llxHeader('', $langs->trans("Upgrade"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-tools_update');
+ViewMain::llxHeader('', $langs->trans("Upgrade"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-tools_update');
 
 print load_fiche_titre($langs->trans("Upgrade"), '', 'title_setup');
 
@@ -150,5 +152,5 @@ $texttoshow = str_replace('{s2}', img_picto('', 'tools', 'class="pictofixedwidth
 print $texttoshow;
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

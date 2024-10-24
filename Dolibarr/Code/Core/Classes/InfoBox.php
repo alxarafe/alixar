@@ -24,6 +24,7 @@ namespace Dolibarr\Code\Core\Classes;
 
 use DoliDB;
 
+
 /**
  *  \file       htdocs/core/class/infobox.class.php
  *  \brief      File of class to manage widget boxes

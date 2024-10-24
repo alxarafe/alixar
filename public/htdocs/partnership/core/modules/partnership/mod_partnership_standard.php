@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Partnerships\Classes\ModeleNumRefPartnership;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/partnership/mod_partnership_standard.php

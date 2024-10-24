@@ -22,8 +22,14 @@
  */
 
 use Dolibarr\Code\Comm\Classes\Mailing;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormMail;
+use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/comm/mailing/card.php
@@ -754,7 +760,7 @@ $form = new Form($db);
 $htmlother = new FormOther($db);
 
 $help_url = 'EN:Module_EMailing|FR:Module_Mailing|ES:M&oacute;dulo_Mailing';
-llxHeader(
+ViewMain::llxHeader(
     '',
     $langs->trans("Mailing"),
     $help_url,
@@ -1566,5 +1572,5 @@ if ($action == 'create') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

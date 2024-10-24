@@ -24,6 +24,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/core/lib/invoice.lib.php
  *      \brief      Functions used by invoice module

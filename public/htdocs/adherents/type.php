@@ -33,6 +33,7 @@ use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/adherents/type.php
@@ -255,7 +256,7 @@ $formproduct = new FormProduct($db);
 
 $help_url = 'EN:Module_Foundations|FR:Module_Adh&eacute;rents|ES:M&oacute;dulo_Miembros|DE:Modul_Mitglieder';
 
-llxHeader('', $langs->trans("MembersTypeSetup"), $help_url);
+ViewMain::llxHeader('', $langs->trans("MembersTypeSetup"), $help_url);
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -1023,5 +1024,5 @@ if ($rowid > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

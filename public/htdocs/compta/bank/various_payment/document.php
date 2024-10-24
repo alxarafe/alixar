@@ -19,6 +19,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/compta/bank/various_payment/document.php
  *  \ingroup    bank
@@ -89,7 +91,7 @@ $form = new Form($db);
 
 $title = $langs->trans("VariousPayment") . ' - ' . $langs->trans("Documents");
 $help_url = '';
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 if ($object->id) {
     $head = various_payment_prepare_head($object);
@@ -162,5 +164,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -21,6 +21,7 @@
 use Dolibarr\Code\Adherents\Classes\AdherentType;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Ldap;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/adherents/type_ldap.php
@@ -86,7 +87,7 @@ if (empty($reshook)) {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $form = new Form($db);
 
@@ -181,5 +182,5 @@ if ($result > 0) {
 print '</table>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

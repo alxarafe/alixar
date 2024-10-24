@@ -29,6 +29,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/admin/mails_templates.php
  *      \ingroup    core
@@ -620,7 +622,7 @@ $sql .= $db->plimit($listlimit + 1, $offset);
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'mod-admin page-mails_templates');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'mod-admin page-mails_templates');
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -1354,7 +1356,7 @@ if (!empty($user->admin) && (empty($_SESSION['leftmenu']) || $_SESSION['leftmenu
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

@@ -22,6 +22,7 @@ use Dolibarr\Code\Core\Classes\Link;
 use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBooth;
 use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/eventorganization/lib/eventorganization_conferenceorbooth.lib.php

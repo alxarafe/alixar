@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/supplier_proposal/note.php
@@ -92,7 +93,7 @@ if ($id > 0 || !empty($ref)) {
 
         $title = $object->ref . " - " . $langs->trans('Notes');
         $help_url = 'EN:Ask_Price_Supplier|FR:Demande_de_prix_fournisseur';
-        llxHeader('', $title, $help_url);
+        ViewMain::llxHeader('', $title, $help_url);
 
         $societe = new Societe($db);
         if ($societe->fetch($object->socid)) {
@@ -151,5 +152,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

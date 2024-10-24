@@ -19,6 +19,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file    htdocs/ai/admin/custom_prompt.php
  * \ingroup ai
@@ -183,7 +185,7 @@ $form = new Form($db);
 $help_url = '';
 $title = "AiSetup";
 
-llxHeader('', $langs->trans($title), $help_url);
+ViewMain::llxHeader('', $langs->trans($title), $help_url);
 
 // Subheader
 $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1') . '">' . $langs->trans("BackToModuleList") . '</a>';
@@ -389,5 +391,5 @@ if (empty($setupnotempty)) {
 // Page end
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

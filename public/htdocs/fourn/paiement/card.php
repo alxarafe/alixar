@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Fourn\Classes\PaiementFourn;
 use Dolibarr\Code\SupplierPayment\Classes\ModelePDFSuppliersPayments;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/fourn/paiement/card.php
@@ -166,7 +167,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_sendmails.inc.php';
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $result = $object->fetch($id);
 
@@ -442,5 +443,5 @@ if ($result > 0) {
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

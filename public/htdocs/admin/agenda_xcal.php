@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/admin/agenda_xcal.php
  *      \ingroup    agenda
@@ -89,7 +91,7 @@ if (!isset($conf->global->MAIN_AGENDA_EXPORT_PAST_DELAY)) {
 }
 
 $wikihelp = 'EN:Module_Agenda_En|FR:Module_Agenda|ES:Módulo_Agenda|DE:Modul_Terminplanung';
-llxHeader('', $langs->trans("AgendaSetup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-agenda_xcal');
+ViewMain::llxHeader('', $langs->trans("AgendaSetup"), $wikihelp, '', 0, 0, '', '', '', 'mod-admin page-agenda_xcal');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("AgendaSetup"), $linkback, 'title_setup');
@@ -240,5 +242,5 @@ include_once DOL_DOCUMENT_ROOT . '/core/lib/security2.lib.php';
 print dolJSToSetRandomPassword($constname);
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -34,6 +34,7 @@
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\Core\Classes\DiscountAbsolute;
+use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormActions;
@@ -51,6 +52,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Variants\Classes\ProductCombination;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/fourn/facture/card.php
@@ -1632,7 +1634,7 @@ if (empty($reshook)) {
         if (!$error && isModEnabled('variants') && $prod_entry_mode != 'free') {
             if ($combinations = GETPOST('combinations', 'array')) {
                 //Check if there is a product with the given combination
-                $prodcomb = new ProductCombination($db);
+                $prodcomb = new ProductAttributeCombination();
 
                 if ($res = $prodcomb->fetchByProductCombination2ValuePairs($idprod, $combinations)) {
                     $idprod = $res->fk_product_child;
@@ -2077,7 +2079,7 @@ if ($action == 'create') {
     $title = $langs->trans("NewSupplierInvoice");
 }
 $help_url = 'EN:Module_Suppliers_Invoices|FR:Module_Fournisseurs_Factures|ES:Módulo_Facturas_de_proveedores|DE:Modul_Lieferantenrechnungen';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // Mode creation
 if ($action == 'create') {
@@ -2905,7 +2907,7 @@ if ($action == 'create') {
         if ($result <= 0) {
             $langs->load("errors");
             print $langs->trans("ErrorRecordNotFound");
-            llxFooter();
+            ViewMain::llxFooter();
             $db->close();
             exit;
         }
@@ -4252,5 +4254,5 @@ if ($action == 'create') {
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

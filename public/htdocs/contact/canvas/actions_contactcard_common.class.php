@@ -21,6 +21,7 @@
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/contact/canvas/actions_contactcard_common.class.php

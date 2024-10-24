@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/user/document.php
  *  \brief      Tab for documents linked to user
@@ -139,7 +141,7 @@ $form = new Form($db);
 $person_name = !empty($object->firstname) ? $object->lastname . ", " . $object->firstname : $object->lastname;
 $title = $person_name . " - " . $langs->trans('Documents');
 $help_url = '';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-card_document');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-card_document');
 
 if ($object->id) {
     /*
@@ -219,5 +221,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

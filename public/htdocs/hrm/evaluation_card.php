@@ -32,6 +32,7 @@ use Dolibarr\Code\Hrm\Classes\Job;
 use Dolibarr\Code\Hrm\Classes\Skill;
 use Dolibarr\Code\Hrm\Classes\SkillRank;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/evaluation_card.php
@@ -256,7 +257,7 @@ $title = $langs->trans("Evaluation");
 $help_url = '';
 $css = array();
 $css[] = '/hrm/css/style.css';
-llxHeader('', $title, $help_url, '', 0, 0, '', $css);
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', $css);
 
 print '<script type="text/javascript" language="javascript">
 	$(document).ready(function() {
@@ -730,5 +731,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

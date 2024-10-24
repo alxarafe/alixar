@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       /htdocs/expedition/ajax/searchfrombarcode.php
@@ -73,7 +74,7 @@ if (!$result) {
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 if ($action == "existbarcode" && !empty($barcode)) {
     if (!empty($mode) && $mode == "lotserial") {

@@ -22,6 +22,7 @@
  */
 
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/societe/ajax/ajaxcompanies.php
@@ -71,8 +72,8 @@ restrictedArea($user, 'societe', $object, '&societe');
  * View
  */
 
-//top_htmlhead("", "", 1);  // Replaced with top_httphead. An ajax page does not need html header.
-top_httphead('application/json');
+//ViewMain::topHtmlHead("", "", 1);  // Replaced with top_httphead. An ajax page does not need html header.
+ViewMain::topHttpHead('application/json');
 
 //print '<!-- Ajax page called with url '.dol_escape_htmltag($_SERVER["PHP_SELF"]).'?'.dol_escape_htmltag($_SERVER["QUERY_STRING"]).' -->'."\n";
 

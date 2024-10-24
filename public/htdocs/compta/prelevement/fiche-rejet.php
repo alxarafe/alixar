@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/prelevement/fiche-rejet.php
@@ -95,7 +96,7 @@ $invoicesupplierstatic = new FactureFournisseur($db);
 $rej = new RejetPrelevement($db, $user, $type);
 
 
-llxHeader('', $langs->trans("WithdrawalsReceipts"));
+ViewMain::llxHeader('', $langs->trans("WithdrawalsReceipts"));
 
 if ($id > 0 || $ref) {
     if ($object->fetch($id, $ref) >= 0) {
@@ -323,5 +324,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

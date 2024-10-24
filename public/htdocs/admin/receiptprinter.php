@@ -25,6 +25,7 @@
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Core\Classes\dolReceiptPrinter;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/receiptprinter.php
@@ -303,7 +304,7 @@ if ($action == 'deletetemplate' && $user->admin) {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("ReceiptPrinterSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-receiptprinter');
+ViewMain::llxHeader('', $langs->trans("ReceiptPrinterSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-receiptprinter');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("ReceiptPrinterSetup"), $linkback, 'title_setup');
@@ -542,5 +543,5 @@ if ($mode == 'template' && $user->admin) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

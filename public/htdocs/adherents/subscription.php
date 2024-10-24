@@ -36,7 +36,9 @@ use Dolibarr\Code\Core\Classes\FormMail;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 use Dolibarr\Modules\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/adherents/subscription.php
@@ -452,8 +454,7 @@ $title = $langs->trans("Member") . " - " . $langs->trans("Subscriptions");
 
 $help_url = "EN:Module_Foundations|FR:Module_Adh&eacute;rents|ES:M&oacute;dulo_Miembros|DE:Modul_Mitglieder";
 
-llxHeader("", $title, $help_url);
-
+ViewMain::llxHeader("", $title, $help_url);
 
 $param = '';
 if (!empty($contextpage) && $contextpage != $_SERVER["PHP_SELF"]) {
@@ -1230,5 +1231,5 @@ if (($action == 'addsubscription' || $action == 'create_thirdparty') && $user->h
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

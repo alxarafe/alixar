@@ -25,6 +25,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Recruitement\Classes\ModeleNumRefRecruitmentCandidature;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/modules/recruitment/mod_recruitmentcandidaturen_advanced.php

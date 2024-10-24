@@ -3,7 +3,8 @@
 /**
  * custom.css.php
  *
- * Copyright (c) 2023 Eric Seigne <eric.seigne@cap-rel.fr>
+ * Copyright (c) 2023       Eric Seigne                 <eric.seigne@cap-rel.fr>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -18,6 +19,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Lib\ViewCss;
 
 if (!defined('NOREQUIRESOC')) {
     define('NOREQUIRESOC', '1');
@@ -45,7 +48,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // __DIR__ allow t
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
 
 // Define css type
-top_httphead('text/css');
+ViewCss::topHttpHead();
 // Important: Following code is to avoid page request by browser and PHP CPU at each Dolibarr page access.
 if (empty($dolibarr_nocache)) {
     header('Cache-Control: max-age=10800, public, must-revalidate');

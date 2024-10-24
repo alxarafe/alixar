@@ -30,6 +30,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *    \file       htdocs/multicurrency/multicurrency_rate.php
  *    \ingroup    multicurrency
@@ -275,7 +277,7 @@ $title = $langs->trans("CurrencyRate");
 $page_name = "MultiCurrencySetup";
 $help_url = '';
 
-llxHeader('', $title, $help_url, '');
+ViewMain::llxHeader('', $title, $help_url, '');
 // Subheader
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans($page_name), $linkback);
@@ -677,5 +679,5 @@ if ($resql) {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

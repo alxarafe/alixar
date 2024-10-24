@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       month_report.php
@@ -155,7 +156,7 @@ $listhalfday = array('morning' => $langs->trans("Morning"), "afternoon" => $lang
 
 $title = $langs->trans('CPTitreMenu');
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 $search_month = GETPOSTINT("remonth") ? GETPOSTINT("remonth") : date("m", time());
 $search_year = GETPOSTINT("reyear") ? GETPOSTINT("reyear") : date("Y", time());
@@ -486,5 +487,5 @@ print '</div>';
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

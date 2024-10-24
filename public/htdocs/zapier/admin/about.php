@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Modules\Zapier;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/zapier/admin/about.php
@@ -75,7 +76,7 @@ $form = new Form($db);
 
 $page_name = "ZapierForDolibarrSetup";
 $help_url = 'EN:Module_Zapier';
-llxHeader('', $langs->trans($page_name), $help_url);
+ViewMain::llxHeader('', $langs->trans($page_name), $help_url);
 
 // Subheader
 $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1') . '">' . $langs->trans("BackToModuleList") . '</a>';
@@ -91,5 +92,5 @@ print $tmpmodule->getDescLong();
 
 // Page end
 print dol_get_fiche_end();
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\Fournisseur;
 use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/admin/product_tools.php
@@ -304,7 +305,7 @@ $form = new Form($db);
 
 $title = $langs->trans('ProductVatMassChange');
 
-llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-product page-admin_product_tools');
+ViewMain::llxHeader('', $title, '', '', 0, 0, '', '', '', 'mod-product page-admin_product_tools');
 
 print load_fiche_titre($title, '', 'title_setup');
 
@@ -365,5 +366,5 @@ if (empty($mysoc->country_code)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

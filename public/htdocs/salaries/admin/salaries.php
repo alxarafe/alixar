@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/salaries/admin/salaries.php
@@ -83,7 +84,7 @@ if (preg_match('/^(set|del)_?([A-Z_]+)$/', $action, $reg)) {
  * View
  */
 
-llxHeader('', $langs->trans('SalariesSetup'));
+ViewMain::llxHeader('', $langs->trans('SalariesSetup'));
 
 $form = new Form($db);
 if (isModEnabled('accounting')) {
@@ -155,5 +156,5 @@ echo '</table>';
 echo '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

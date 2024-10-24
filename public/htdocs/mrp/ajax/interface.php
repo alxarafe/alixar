@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/mrp/ajax/interface.php
  *  \brief      Ajax search component for Mrp.
@@ -58,7 +60,7 @@ $permissiontoproduce = $user->hasRight('mrp', 'write');
  * View
  */
 
-top_httphead("application/json");
+ViewMain::topHttpHead("application/json");
 
 if ($action == 'updateselectbatchbywarehouse' && $permissiontoproduce) {
     $TRes = array();

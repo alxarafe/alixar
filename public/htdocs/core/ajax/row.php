@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/ajax/row.php
  *       \brief      File to return Ajax response on Row move.
@@ -68,7 +70,7 @@ $element_id = GETPOSTINT('element_id', 3);
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 dol_syslog("AjaxRow roworder=" . $roworder . " table_element_line=" . $table_element_line . " fk_element=" . $fk_element . " element_id=" . $element_id, LOG_DEBUG);
 

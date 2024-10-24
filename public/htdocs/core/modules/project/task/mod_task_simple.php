@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Projet\Classes\ModeleNumRefTask;
 use Dolibarr\Code\Projet\Classes\Task;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/project/mod_project_simple.php

@@ -42,6 +42,7 @@ use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 use Exception;
 
+
 /**
  *  \file       htdocs/contact/class/contact.class.php
  *  \ingroup    societe

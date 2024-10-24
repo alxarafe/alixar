@@ -37,6 +37,7 @@ use Dolibarr\Code\Product\Classes\Entrepot;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/delivery/card.php
@@ -259,7 +260,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_printing.inc.php';
 
 $title = $langs->trans('Delivery');
 
-llxHeader('', $title, 'Livraison', '', 0, 0, '', '', '', 'mod-delivery page-card');
+ViewMain::llxHeader('', $title, 'Livraison', '', 0, 0, '', '', '', 'mod-delivery page-card');
 
 $form = new Form($db);
 $formfile = new FormFile($db);
@@ -710,5 +711,5 @@ if ($action == 'create') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -39,6 +39,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/contrat/list.php
@@ -589,7 +590,7 @@ if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $s
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $langs->trans("Contracts"));
+ViewMain::llxHeader('', $langs->trans("Contracts"));
 
 $i = 0;
 
@@ -1393,5 +1394,5 @@ $delallowed = $permissiontoadd;
 print $formfile->showdocuments('massfilesarea_contract', '', $filedir, $urlsource, 0, $delallowed, '', 1, 1, 0, 48, 1, $param, $title, '', '', '', null, $hidegeneratedfilelistifempty);
 
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

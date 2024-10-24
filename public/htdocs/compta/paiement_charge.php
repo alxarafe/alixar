@@ -22,6 +22,7 @@
 use Dolibarr\Code\Compta\Classes\ChargeSociales;
 use Dolibarr\Code\Compta\Classes\PaymentSocialContribution;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/paiement_charge.php
@@ -145,7 +146,7 @@ if ($action == 'add_payment' || ($action == 'confirm_paiement' && $confirm == 'y
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $form = new Form($db);
 
@@ -323,5 +324,5 @@ if ($action == 'create') {
     print "</form>\n";
 }
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

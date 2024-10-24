@@ -27,6 +27,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Ticket\Classes\ModelePDFTicket;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/ticket/doc/doc_generic_ticket_odt.modules.php

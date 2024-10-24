@@ -23,6 +23,7 @@ use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/margin/agentMargins.php
@@ -106,7 +107,7 @@ $invoicestatic = new Facture($db);
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("Margins") . ' - ' . $langs->trans("Agents"));
+ViewMain::llxHeader('', $langs->trans("Margins") . ' - ' . $langs->trans("Agents"));
 
 $text = $langs->trans("Margins");
 //print load_fiche_titre($text);
@@ -395,5 +396,5 @@ $(document).ready(function() {
 </script>' . "\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

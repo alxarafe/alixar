@@ -23,6 +23,7 @@ namespace Dolibarr\Code\BookMarks\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
 
+
 /**
  *      \file       htdocs/bookmarks/class/bookmark.class.php
  *      \ingroup    bookmark

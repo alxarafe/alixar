@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2006-2011  Laurent Destailleur <eldy@users.sourceforge.net>
- * Copyright (C) 2014		Teddy Andreotti		<125155@supinfo.com>
- * Copyright (C) 2017		Regis Houssin		<regis.houssin@inodbox.com>
- * Copyright (C) 2024		Frédéric France			<frederic.france@free.fr>
+/* Copyright (C) 2006-2011  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2014		Teddy Andreotti		        <125155@supinfo.com>
+ * Copyright (C) 2017		Regis Houssin		        <regis.houssin@inodbox.com>
+ * Copyright (C) 2024		Frédéric France			    <frederic.france@free.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -21,14 +21,13 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Security\Classes\ModeleGenPassword;
+
 /**
  *      \file       htdocs/core/modules/security/generate/modGeneratePassPerso.class.php
  *      \ingroup    core
  *      \brief      File to manage no password generation.
  */
-
-require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/security/generate/modules_genpassword.php';
-
 
 /**
  *  Class to generate a password according to personal rules

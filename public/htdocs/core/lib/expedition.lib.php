@@ -25,6 +25,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Expedition\Classes\Expedition;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/lib/expedition.lib.php

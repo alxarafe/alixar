@@ -27,6 +27,7 @@ use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Expedition\Classes\Expedition;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/expedition/document.php
@@ -114,7 +115,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_linkedfiles.inc.php';
  * View
  */
 
-llxHeader('', $langs->trans('Order'), 'EN:Customers_Orders|FR:expeditions_Clients|ES:Pedidos de clientes');
+ViewMain::llxHeader('', $langs->trans('Order'), 'EN:Customers_Orders|FR:expeditions_Clients|ES:Pedidos de clientes');
 
 $form = new Form($db);
 
@@ -203,5 +204,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

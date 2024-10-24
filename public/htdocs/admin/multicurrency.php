@@ -19,6 +19,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       admin/multicurrency.php
@@ -174,7 +175,7 @@ $form = new Form($db);
 $page_name = "MultiCurrencySetup";
 $help_url = '';
 
-llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-multicurrency');
+ViewMain::llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-multicurrency');
 
 // Subheader
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -381,5 +382,5 @@ if (!getDolGlobalString('MULTICURRENCY_DISABLE_SYNC_CURRENCYLAYER')) {
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Core\Classes\InfoBox;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/accountancy/index.php
@@ -77,7 +78,7 @@ if (GETPOST('addbox')) {
 
 $help_url = 'EN:Module_Double_Entry_Accounting#Setup|FR:Module_Comptabilit&eacute;_en_Partie_Double#Configuration';
 
-llxHeader('', $langs->trans("AccountancyArea"), $help_url, '', 0, 0, '', '', '', 'mod-accountancy page-index');
+ViewMain::llxHeader('', $langs->trans("AccountancyArea"), $help_url, '', 0, 0, '', '', '', 'mod-accountancy page-index');
 
 $resultboxes = FormOther::getBoxesArea($user, "27"); // Load $resultboxes (selectboxlist + boxactivated + boxlista + boxlistb)
 
@@ -307,5 +308,5 @@ if (isModEnabled('accounting')) {
 print $boxlist;
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

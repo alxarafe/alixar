@@ -23,6 +23,7 @@ namespace Dolibarr\Code\Payment\Classes;
 
 use Dolibarr\Code\Compta\Classes\Paiement;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/payment.php
@@ -106,7 +107,7 @@ if ($action == 'setparams') {
 
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
-llxHeader('', $langs->trans("BillsSetup"), 'EN:Invoice_Configuration|FR:Configuration_module_facture|ES:ConfiguracionFactura', '', 0, 0, '', '', '', 'mod-admin page-payment');
+ViewMain::llxHeader('', $langs->trans("BillsSetup"), 'EN:Invoice_Configuration|FR:Configuration_module_facture|ES:ConfiguracionFactura', '', 0, 0, '', '', '', 'mod-admin page-payment');
 
 $form = new Form($db);
 
@@ -287,5 +288,5 @@ print $form->buttonsSaveCancel("Modify", '');
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

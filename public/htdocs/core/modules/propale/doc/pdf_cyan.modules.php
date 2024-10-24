@@ -35,6 +35,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Propalmergepdfproduct;
 use Dolibarr\Code\Propale\Classes\ModelePDFPropales;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/propale/doc/pdf_cyan.modules.php

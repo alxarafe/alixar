@@ -23,6 +23,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/lib/doc.lib.php
  *  \brief      Set of functions used for ODT generation

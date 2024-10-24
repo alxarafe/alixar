@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Don\Classes\Don;
 use Dolibarr\Code\Don\Classes\ModeleDon;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/dons/html_generic.modules.php

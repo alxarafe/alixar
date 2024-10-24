@@ -18,6 +18,8 @@
 * or see https://www.gnu.org/
 */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/core/website.inc.php
  *  \brief          Common file loaded by all website pages (after master.inc.php). It sets the new object $weblangs.

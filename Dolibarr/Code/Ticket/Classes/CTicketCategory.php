@@ -21,7 +21,9 @@
 
 namespace Dolibarr\Code\Ticket\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  * \file        htdocs/modulebuilder/template/class/myobject.class.php

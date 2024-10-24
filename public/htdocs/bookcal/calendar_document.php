@@ -22,6 +22,7 @@
 use Dolibarr\Code\BookCal\Classes\Calendar;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/bookcal/calendar_document.php
@@ -121,7 +122,7 @@ $form = new Form($db);
 $title = $langs->trans("Calendar") . ' - ' . $langs->trans("Files");
 $help_url = '';
 //$help_url='EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 // Show tabs
 $head = calendarPrepareHead($object);
@@ -207,5 +208,5 @@ $relativepathwithnofile = 'calendar/' . dol_sanitizeFileName($object->ref) . '/'
 include DOL_DOCUMENT_ROOT . '/core/tpl/document_actions_post_headers.tpl.php';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

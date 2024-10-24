@@ -23,6 +23,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/syslog.php
@@ -175,7 +176,7 @@ if ($action == 'setlevel') {
  * View
  */
 
-llxHeader('', $langs->trans("SyslogSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-syslog');
+ViewMain::llxHeader('', $langs->trans("SyslogSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-syslog');
 
 $form = new Form($db);
 
@@ -335,5 +336,5 @@ print "</div>\n";
 print "</form>\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

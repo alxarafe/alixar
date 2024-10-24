@@ -29,6 +29,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\TakePos\Classes\ModeleNumRefTakepos;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/takepos/mod_takepos_ref_universal.php

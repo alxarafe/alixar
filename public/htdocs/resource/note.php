@@ -23,6 +23,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Resource\Classes\Dolresource;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/resource/note.php
@@ -78,7 +79,7 @@ if (empty($reshook)) {
 
 $title = '';
 $help_url = '';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-resource page-card_notes');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-resource page-card_notes');
 
 $form = new Form($db);
 
@@ -121,5 +122,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

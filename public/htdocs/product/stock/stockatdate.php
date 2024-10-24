@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Entrepot;
 use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stock/stockatdate.php
@@ -367,7 +368,7 @@ if ($mode == 'future') {
 
 // TODO Move this action into a separated files: We should not mix output with MIME type HTML and MIME type CSV in the same file.
 if ($ext == 'csv') {
-    top_httphead("text/csv");
+    ViewMain::topHttpHead("text/csv");
     //header("Content-Type: text/csv");
     header("Content-Disposition: attachment; filename=stock" . ($date ? '-' . date("Y-m-d", $date) : '') . ".csv");
 
@@ -376,7 +377,7 @@ if ($ext == 'csv') {
             array('"Product Reference"', '"Label"', '"Current Stock"', '"' . $stocklabel . '"', '"Virtual Stock"') :
             array('"Product Reference"', '"Label"', '"' . $stocklabel . '"', '"Estimated Stock Value"', '"Estimate Sell Value"', '"Movements"', '"Current Stock"')) . "\r\n";
 } else {
-    llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stock_stockatdate');
+    ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stock_stockatdate');
 
     $head = array();
 
@@ -810,7 +811,7 @@ if ($ext == 'csv') {
 
     print '</form>';
 
-    llxFooter();
+    ViewMain::llxFooter();
 }
 
 if (!empty($resql)) {

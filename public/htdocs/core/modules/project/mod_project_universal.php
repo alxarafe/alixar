@@ -24,9 +24,11 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Projet\Classes\ModeleNumRefProjects;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file       htdocs/core/modules/project/mod_project_universal.php
+ *   \file
+ * htdocs/core/modules/project/mod_project_universal.php
  *   \ingroup    project
  *   \brief      File containing the Universal project reference numbering model class
  */

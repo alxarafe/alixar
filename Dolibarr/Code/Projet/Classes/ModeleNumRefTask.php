@@ -24,6 +24,7 @@ namespace Dolibarr\Code\Projet\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 
+
 /**
  *      \file       htdocs/core/modules/project/task/modules_task.php
  *      \ingroup    project

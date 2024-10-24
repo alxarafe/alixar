@@ -22,6 +22,7 @@ use Dolibarr\Code\Core\Classes\CMailFile;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\OpenSurvey\Classes\Opensurveysondage;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/public/opensurvey/studs.php

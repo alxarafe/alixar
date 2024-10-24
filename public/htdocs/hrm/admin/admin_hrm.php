@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/admin/admin_hrm.php
@@ -86,7 +87,7 @@ if ($action == 'update') {
 
 $title = $langs->trans('Parameters');
 
-llxHeader('', $title, '');
+ViewMain::llxHeader('', $title, '');
 
 $form = new Form($db);
 
@@ -132,5 +133,5 @@ print '<div class="center"><input type="submit" class="button button-edit" name=
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

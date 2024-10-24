@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/mrp_extrafields.php
@@ -64,7 +65,7 @@ require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
 
 $textobject = $langs->transnoentitiesnoconv('ManufacturingOrder');
 
-llxHeader('', $langs->trans("MrpSetupPage"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-mrp_extrafields');
+ViewMain::llxHeader('', $langs->trans("MrpSetupPage"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-mrp_extrafields');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("MrpSetupPage"), $linkback, 'title_setup');
@@ -98,5 +99,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

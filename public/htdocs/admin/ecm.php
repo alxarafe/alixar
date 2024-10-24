@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/ecm.php
@@ -76,7 +77,7 @@ if (preg_match('/del_([a-z0-9_\-]+)/i', $action, $reg)) {
 $form = new Form($db);
 
 $help_url = '';
-llxHeader('', $langs->trans("ECMSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-ecm');
+ViewMain::llxHeader('', $langs->trans("ECMSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-ecm');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("ECMSetup"), $linkback, 'title_setup');
@@ -111,5 +112,5 @@ print '</td></tr>';
 print '</table>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/modulebuilder/admin/setup.php
@@ -93,7 +94,7 @@ if (preg_match('/del_(.*)/', $action, $reg)) {
 $form = new Form($db);
 
 $help_url = '';
-llxHeader('', $langs->trans("ModulebuilderSetup"), $help_url);
+ViewMain::llxHeader('', $langs->trans("ModulebuilderSetup"), $help_url);
 
 $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php') . '">' . $langs->trans("BackToModuleList") . '</a>';
 
@@ -210,5 +211,5 @@ print '<br>';
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

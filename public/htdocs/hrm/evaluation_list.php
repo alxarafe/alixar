@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Hrm\Classes\Evaluation;
 use Dolibarr\Code\Hrm\Classes\Job;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/evaluation_list.php
@@ -37,7 +38,6 @@ use Dolibarr\Code\User\Classes\User;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 
@@ -367,7 +367,7 @@ if ($num == 1 && getDolGlobalString('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $s
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', '');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', '');
 
 // Example : Adding jquery code
 // print '<script type="text/javascript" language="javascript">
@@ -804,5 +804,5 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

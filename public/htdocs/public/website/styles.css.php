@@ -18,9 +18,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
- use Dolibarr\Code\Website\Classes\Website;use Dolibarr\Code\Website\Classes\WebsitePage;
+ use Dolibarr\Code\Website\Classes\Website;
+ use Dolibarr\Code\Website\Classes\WebsitePage;
 
-/**
+ /**
  *      \file       htdocs/public/website/styles.css.php
  *      \ingroup    website
  *      \brief      Page to output style page. Called with <link rel="stylesheet" href="styles.css.php?websiteid=123" type="text/css" />
@@ -51,26 +52,8 @@ if (!defined('NOBROWSERNOTIF')) {
     define('NOBROWSERNOTIF', '1');
 }
 
-/**
- * Header empty
- *
- * @return  void
- */
-function llxHeader()
-{
-}
-/**
- * Footer empty
- *
- * @return  void
- */
-function llxFooter()
-{
-}
-
 require '../../master.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
-
 
 $error = 0;
 $website = GETPOST('website', 'alpha');
@@ -79,7 +62,6 @@ $pageid = GETPOST('page', 'alpha') ? GETPOST('page', 'alpha') : GETPOST('pageid'
 
 $accessallowed = 1;
 $type = '';
-
 
 /*
  * View
@@ -162,12 +144,10 @@ if (!file_exists($original_file_osencoded)) {
     exit;
 }
 
-
 // Output page content
 define('USEDOLIBARRSERVER', 1);
 print '/* Page content ' . $original_file . ' : CSS content that was saved into tpl dir */' . "\n";
 require_once $original_file_osencoded;
-
 
 if (is_object($db)) {
     $db->close();

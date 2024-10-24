@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/contrat/index.php
@@ -83,7 +84,7 @@ $now = dol_now();
 $title = $langs->trans("ContractsArea");
 $help_url = '';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 print load_fiche_titre($langs->trans("ContractsArea"), '', 'contract');
 
@@ -699,6 +700,6 @@ print '</div></div>';
 $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardContracts', $parameters, $object); // Note that $action and $object may have been modified by hook
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

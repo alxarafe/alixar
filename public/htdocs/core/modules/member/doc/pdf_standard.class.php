@@ -23,6 +23,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/modules/member/doc/pdf_standard.class.php
  *  \ingroup    member

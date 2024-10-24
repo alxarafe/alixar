@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/compta/prelevement/line.php
  *  \ingroup    prelevement
@@ -146,7 +148,7 @@ if ($type == 'bank-transfer') {
     $title = $langs->trans("CreditTransferLine");
 }
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 $head = array();
 
@@ -406,5 +408,5 @@ if ($id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

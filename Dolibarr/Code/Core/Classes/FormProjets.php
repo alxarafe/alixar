@@ -28,6 +28,7 @@ use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 
+
 /**
  *      \file       htdocs/core/class/html.formprojet.class.php
  *      \ingroup    core

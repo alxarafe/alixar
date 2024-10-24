@@ -24,6 +24,7 @@ namespace Dolibarr\Code\Reception\Classes;
 
 use Dolibarr\Code\Core\Classes\Stats;
 
+
 /**
  *  \file       htdocs/reception/class/receptionstats.class.php
  *  \ingroup    reception

@@ -25,6 +25,7 @@ use Dolibarr\Code\Fourn\Classes\PaiementFourn;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\SupplierPayment\Classes\ModeleNumRefSupplierPayments;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/modules/supplier_payment/mod_supplier_payment_bronan.php

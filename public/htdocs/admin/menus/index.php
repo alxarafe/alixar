@@ -1,9 +1,9 @@
 <?php
 
-/* Copyright (C) 2007      Patrick Raguin       <patrick.raguin@gmail.com>
- * Copyright (C) 2007-2012 Laurent Destailleur  <eldy@users.sourceforge.net>
- * Copyright (C) 2009-2012 Regis Houssin        <regis.houssin@inodbox.com>
- * Copyright (C) 2019      Frédéric France      <frederic.france@netlogic.fr>
+/* Copyright (C) 2007       Patrick Raguin              <patrick.raguin@gmail.com>
+ * Copyright (C) 2007-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2009-2012  Regis Houssin               <regis.houssin@inodbox.com>
+ * Copyright (C) 2019       Frédéric France             <frederic.france@netlogic.fr>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -19,6 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
+
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/menus/index.php
@@ -192,7 +196,6 @@ if ($action == 'up') {
     }
 }
 
-
 /*
  * View
  */
@@ -203,11 +206,9 @@ $formadmin = new FormAdmin($db);
 $arrayofjs = array('/includes/jquery/plugins/jquerytreeview/jquery.treeview.js', '/includes/jquery/plugins/jquerytreeview/lib/jquery.cookie.js');
 $arrayofcss = array('/includes/jquery/plugins/jquerytreeview/jquery.treeview.css');
 
-llxHeader('', $langs->trans("Menus"), '', '', 0, 0, $arrayofjs, $arrayofcss, '', 'mod-admin page-menus_index');
-
+ViewMain::llxHeader('', $langs->trans("Menus"), '', '', 0, 0, $arrayofjs, $arrayofcss, '', 'mod-admin page-menus_index');
 
 print load_fiche_titre($langs->trans("Menus"), '', 'title_setup');
-
 
 $h = 0;
 $head = array();
@@ -396,5 +397,5 @@ if (count($remainingdata)) {
 print '<br>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

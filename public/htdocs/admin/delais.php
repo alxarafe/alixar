@@ -23,6 +23,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/delais.php
@@ -207,7 +208,7 @@ if ($action == 'update') {
 
 $form = new Form($db);
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-delais');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-delais');
 
 print load_fiche_titre($langs->trans("DelaysOfToleranceBeforeWarning"), '', 'title_setup');
 
@@ -461,5 +462,5 @@ if ($action == 'edit') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

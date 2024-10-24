@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\FormMail;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Core\Classes\FormSetup;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    webhook/admin/webhook.php
@@ -156,7 +157,7 @@ $form = new Form($db);
 $help_url = '';
 $page_name = "WebhookSetup";
 
-llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-webhook');
+ViewMain::llxHeader('', $langs->trans($page_name), $help_url, '', 0, 0, '', '', '', 'mod-admin page-webhook');
 
 // Subheader
 $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1') . '">' . $langs->trans("BackToModuleList") . '</a>';
@@ -353,5 +354,5 @@ if (empty($setupnotempty)) {
 // Page end
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

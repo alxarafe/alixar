@@ -26,6 +26,7 @@ use Dolibarr\Code\Contrat\Classes\ContratLigne;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/boxes/box_services_contracts.php

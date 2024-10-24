@@ -32,6 +32,7 @@ use Dolibarr\Code\Core\Classes\CommonInvoice;
 use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 
+
 /**
  *  \file       htdocs/compta/facture/class/facture-rec.class.php
  *  \ingroup    invoice

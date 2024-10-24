@@ -20,6 +20,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  * or see https://www.gnu.org/
  */
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/core/js/lib_head.js.php
@@ -59,7 +60,7 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
  */
 
 // Define javascript type
-top_httphead('text/javascript; charset=UTF-8');
+ViewMain::topHttpHead('text/javascript; charset=UTF-8');
 // Important: Following code is to avoid page request by browser and PHP CPU at each Dolibarr page access.
 if (empty($dolibarr_nocache)) {
     header('Cache-Control: max-age=10800, public, must-revalidate');

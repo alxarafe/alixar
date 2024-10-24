@@ -20,6 +20,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\KnowledgeManagement\Classes\KnowledgeRecord;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/knowledgemanagement/knowledgerecord_note.php
@@ -87,7 +88,7 @@ $form = new Form($db);
 
 //$help_url='EN:Customers_Orders|FR:Commandes_Clients|ES:Pedidos de clientes';
 $help_url = '';
-llxHeader('', $langs->trans('KnowledgeRecord'), $help_url, '', 0, 0, '', '', '', 'mod-knowledgemanagement page-card_notes');
+ViewMain::llxHeader('', $langs->trans('KnowledgeRecord'), $help_url, '', 0, 0, '', '', '', 'mod-knowledgemanagement page-card_notes');
 
 if ($id > 0 || !empty($ref)) {
     $object->fetch_thirdparty();
@@ -157,5 +158,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

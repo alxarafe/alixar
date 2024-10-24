@@ -23,6 +23,7 @@
 use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Reception\Classes\ReceptionStats;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *     \file       htdocs/reception/stats/index.php
@@ -59,7 +60,7 @@ $result = restrictedArea($user, 'reception', 0, '');
 
 $form = new Form($db);
 
-llxHeader();
+ViewMain::llxHeader();
 
 print load_fiche_titre($langs->trans("StatisticsOfReceptions"), '', 'dollyrevert');
 
@@ -347,6 +348,6 @@ print '</table>';
 print '<br>';
 print '<i class="opacitymedium">' . $langs->trans("StatsOnReceptionsOnlyValidated") . '</i>';
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

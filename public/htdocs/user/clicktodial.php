@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/user/clicktodial.php
@@ -91,7 +92,7 @@ if ($id > 0) {
     $person_name = !empty($object->firstname) ? $object->lastname . ", " . $object->firstname : $object->lastname;
     $title = $person_name . " - " . $langs->trans('ClickToDial');
     $help_url = '';
-    llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-clicktodial');
+    ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-clicktodial');
 
     $head = user_prepare_head($object);
 
@@ -219,5 +220,5 @@ if ($id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

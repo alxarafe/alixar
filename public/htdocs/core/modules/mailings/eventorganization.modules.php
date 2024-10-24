@@ -14,6 +14,7 @@
 
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Mailing\Classes\MailingTargets;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/mailings/eventorganization.modules.php

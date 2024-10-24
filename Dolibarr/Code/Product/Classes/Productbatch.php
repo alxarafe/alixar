@@ -23,7 +23,10 @@
 
 namespace Dolibarr\Code\Product\Classes;
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
+
 
 /**
  *  \file       product/class/productbatch.class.php

@@ -26,6 +26,7 @@ use Dolibarr\Code\FichInter\Classes\Fichinter;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Resource\Classes\Dolresource;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       resource/element_resource.php
@@ -300,7 +301,7 @@ $form = new Form($db);
 
 $pagetitle = $langs->trans('ResourceElementPage');
 $help_url = '';
-llxHeader('', $pagetitle, $help_url, '', 0, 0, '', '', '', 'mod-resource page-element_resource');
+ViewMain::llxHeader('', $pagetitle, $help_url, '', 0, 0, '', '', '', 'mod-resource page-element_resource');
 
 $now = dol_now();
 $delay_warning = $conf->global->MAIN_DELAY_ACTIONS_TODO * 24 * 60 * 60;
@@ -679,5 +680,5 @@ if (!$ret) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

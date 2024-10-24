@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/takepos/pay.php
  *  \ingroup    takepos
@@ -78,7 +80,7 @@ if (getDolGlobalInt('TAKEPOS_COLOR_THEME') == 1) {
     $head .= '<link rel="stylesheet" href="css/colorful.css">';
 }
 
-top_htmlhead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss);
+ViewMain::topHtmlHead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss);
 
 ?>
 <body>

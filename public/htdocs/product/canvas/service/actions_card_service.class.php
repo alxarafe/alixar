@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/canvas/service/actions_card_service.class.php

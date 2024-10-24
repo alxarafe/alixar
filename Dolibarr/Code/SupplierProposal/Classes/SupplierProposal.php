@@ -41,6 +41,7 @@ use Dolibarr\Code\Core\Traits\CommonIncoterm;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
+
 /**
  *  \file       htdocs/supplier_proposal/class/supplier_proposal.class.php
  *  \brief      File of class to manage supplier proposals

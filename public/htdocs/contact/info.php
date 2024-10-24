@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/contact/info.php
@@ -54,7 +55,7 @@ $form = new Form($db);
 
 $title = (getDolGlobalString('SOCIETE_ADDRESSES_MANAGEMENT') ? $langs->trans("Contacts") : $langs->trans("ContactsAddresses"));
 
-llxHeader('', $title, 'EN:Module_Third_Parties|FR:Module_Tiers|ES:M&oacute;dulo_Empresas');
+ViewMain::llxHeader('', $title, 'EN:Module_Third_Parties|FR:Module_Tiers|ES:M&oacute;dulo_Empresas');
 
 if ($id > 0) {
     $result = $object->fetch($id, $user);
@@ -84,6 +85,6 @@ if ($id > 0) {
     print dol_get_fiche_end();
 }
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

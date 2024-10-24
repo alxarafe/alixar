@@ -32,6 +32,7 @@ use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Fourn\Classes\PaiementFourn;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/tva/quadri_detail.php
@@ -150,7 +151,7 @@ foreach ($listofparams as $param) {
     }
 }
 
-llxHeader('', $langs->trans("LocalTaxReport"), '', '', 0, 0, '', '', $morequerystring);
+ViewMain::llxHeader('', $langs->trans("LocalTaxReport"), '', '', 0, 0, '', '', $morequerystring);
 
 $fsearch = '<!-- hidden fields for form -->';
 $fsearch .= '<input type="hidden" name="token" value="' . newToken() . '">';
@@ -685,5 +686,5 @@ print '</table>';
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

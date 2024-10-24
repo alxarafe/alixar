@@ -27,6 +27,7 @@ namespace Dolibarr\Code\Propale\Classes;
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use DoliDB;
 
+
 /**
  *  \file       htdocs/core/modules/propale/modules_propale.php
  *  \ingroup    propale

@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Comm\Classes\Propal;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       /htdocs/core/ajax/onlineSign.php
@@ -103,7 +104,7 @@ $hookmanager->initHooks(array('ajaxonlinesign'));
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 if ($action == "importSignature") {
     $issignatureok = (!empty($signature) && $signature[0] == "image/png;base64");

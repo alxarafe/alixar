@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Mrp\Classes\Mo;
 use Dolibarr\Code\Mrp\Classes\MoLine;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/product/stats/mo.php
@@ -104,7 +105,7 @@ if ($id > 0 || !empty($ref)) {
         setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
     }
 
-    llxHeader("", "", $langs->trans("CardProduct" . $product->type), '', '', 0, 0, '', '', 'mod-product page-stats_mo');
+    ViewMain::llxHeader("", "", $langs->trans("CardProduct" . $product->type), '', '', 0, 0, '', '', 'mod-product page-stats_mo');
 
     if ($result > 0) {
         $head = product_prepare_head($product);
@@ -284,5 +285,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

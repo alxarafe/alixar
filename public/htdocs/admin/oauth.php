@@ -20,6 +20,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/admin/oauth.php
@@ -215,7 +216,7 @@ $form = new Form($db);
 $title = $langs->trans('ConfigOAuth');
 $help_url = 'EN:Module_OAuth|FR:Module_OAuth_FR|ES:Módulo_OAuth_ES';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-admin page-oauth');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-admin page-oauth');
 
 // Confirmation of action process
 if ($action == 'delete') {
@@ -468,5 +469,5 @@ if (count($listinsetup) > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

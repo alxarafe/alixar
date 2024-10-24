@@ -26,6 +26,7 @@ use Dolibarr\Code\Compta\Classes\LignePrelevement;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/prelevement/card.php
@@ -198,7 +199,7 @@ if (empty($reshook)) {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("WithdrawalsReceipts"));
+ViewMain::llxHeader('', $langs->trans("WithdrawalsReceipts"));
 
 if ($id > 0 || $ref) {
     $head = prelevement_prepare_head($object);
@@ -624,5 +625,5 @@ if ($id > 0 || $ref) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

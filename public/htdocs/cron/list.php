@@ -24,6 +24,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Cron\Classes\Cronjob;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/cron/list.php
@@ -245,7 +246,7 @@ $cronjob = new Cronjob($db);
 
 $pagetitle = $langs->trans("CronList");
 
-llxHeader('', $pagetitle);
+ViewMain::llxHeader('', $pagetitle);
 
 $TTestNotAllowed = array();
 $sqlTest = 'SELECT rowid, test FROM ' . MAIN_DB_PREFIX . 'cronjob';
@@ -781,6 +782,6 @@ if ($mode == 'modulesetup') {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

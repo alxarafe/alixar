@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\Link;
 use Dolibarr\Code\Loan\Classes\LoanSchedule;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/lib/loan.lib.php

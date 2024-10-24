@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Hrm\Classes\Evaluation;
 use Dolibarr\Code\Hrm\Classes\ModeleNumRefEvaluation;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/hrm/mod_evaluation_standard.php

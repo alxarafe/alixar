@@ -20,6 +20,7 @@
  */
 
 use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stock/valo.php
@@ -91,7 +92,7 @@ if ($result) {
     $i = 0;
 
     $help_url = 'EN:Module_Stocks_En|FR:Module_Stock|ES:M&oacute;dulo_Stocks';
-    llxHeader("", $langs->trans("EnhancedValueOfWarehouses"), $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_valo');
+    ViewMain::llxHeader("", $langs->trans("EnhancedValueOfWarehouses"), $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_valo');
 
     print_barre_liste($langs->trans("EnhancedValueOfWarehouses"), $page, $_SERVER["PHP_SELF"], "", $sortfield, $sortorder, '', $num);
 
@@ -168,5 +169,5 @@ if ($result) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

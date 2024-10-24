@@ -40,6 +40,7 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
+
 /**
  *  \file       htdocs/expedition/class/expedition.class.php
  *  \ingroup    expedition

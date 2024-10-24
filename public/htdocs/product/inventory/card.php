@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\FormActions;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Product\Classes\Inventory;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/product/inventory/card.php
@@ -180,7 +181,7 @@ $title = $langs->trans("Inventory");
 
 $help_url = 'EN:Module_Stocks_En|FR:Module_Stock|ES:Módulo_Stocks|DE:Modul_Bestände';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-inventory_card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-inventory_card');
 
 
 // Part to create
@@ -506,5 +507,5 @@ if ($object->id > 0 && (empty($action) || ($action != 'edit' && $action != 'crea
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

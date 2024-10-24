@@ -27,6 +27,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/fourn/commande/index.php
@@ -58,7 +59,7 @@ $result = restrictedArea($user, 'fournisseur', $orderid, '', 'commande');
  * 	View
  */
 
-llxHeader('', $langs->trans("SuppliersOrdersArea"), '', '', 0, 0, '', '', '', 'mod-supplier-order page-stats');
+ViewMain::llxHeader('', $langs->trans("SuppliersOrdersArea"), '', '', 0, 0, '', '', '', 'mod-supplier-order page-stats');
 
 $commandestatic = new CommandeFournisseur($db);
 $userstatic = new User($db);
@@ -434,5 +435,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardOrdersSuppliers', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

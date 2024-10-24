@@ -24,6 +24,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Loan\Classes\Loan;
 use Dolibarr\Code\Loan\Classes\LoanSchedule;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/loan/schedule.php
@@ -145,7 +146,7 @@ if ($action == 'updateecheancier' && empty($pay_without_schedule)) {
 
 $title = $langs->trans("Loan") . ' - ' . $langs->trans("Card");
 $help_url = 'EN:Module_Loan|FR:Module_Emprunt';
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 $head = loan_prepare_head($object);
 print dol_get_fiche_head($head, 'FinancialCommitment', $langs->trans("Loan"), -1, 'money-bill-alt');
@@ -354,5 +355,5 @@ print '<div class="center"><input type="submit" class="button button-add" value=
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

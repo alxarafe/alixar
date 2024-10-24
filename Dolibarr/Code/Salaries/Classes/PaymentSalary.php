@@ -25,6 +25,7 @@ namespace Dolibarr\Code\Salaries\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
 
+
 /**
  *  \file       htdocs/salaries/class/paymentsalary.class.php
  *  \ingroup    salaries

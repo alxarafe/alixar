@@ -27,6 +27,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Don\Classes\Don;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/don/list.php
@@ -258,7 +259,7 @@ if ($num == 1 && getDolGlobalInt('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $sear
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'mod-donation page-list bodyforlist');    // Can use also classforhorizontalscrolloftabs instead of bodyforlist for no horizontal scroll
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'mod-donation page-list bodyforlist');    // Can use also classforhorizontalscrolloftabs instead of bodyforlist for no horizontal scroll
 
 // Example : Adding jquery code
 // print '<script type="text/javascript">
@@ -554,5 +555,5 @@ print "</form>\n";
 $db->free($resql);
 
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

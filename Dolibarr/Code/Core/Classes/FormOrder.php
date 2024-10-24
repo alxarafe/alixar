@@ -23,6 +23,7 @@ namespace Dolibarr\Code\Core\Classes;
 use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 
+
 /**
  *  \file       htdocs/core/class/html.formorder.class.php
  *  \ingroup    core

@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/get_menudiv.php
  *       \brief      File to return menu into a div tree, to be used by other frontend
@@ -101,7 +103,7 @@ $title = $langs->trans("Menu");
 $head = '<!-- Menu -->' . "\n";   // This is used by DoliDroid to know page is a menu page
 $arrayofjs = array();
 $arrayofcss = array();
-top_htmlhead($head, $title, 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::topHtmlHead($head, $title, 0, 0, $arrayofjs, $arrayofcss);
 
 print '<body class="getmenudiv">' . "\n";
 

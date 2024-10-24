@@ -36,6 +36,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/expensereport/payment/list.php
@@ -298,7 +299,7 @@ $i = 0;
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $langs->trans('ListPayment'));
+ViewMain::llxHeader('', $langs->trans('ListPayment'));
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -782,5 +783,5 @@ print '</div>' . "\n";
 print '</form>' . "\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

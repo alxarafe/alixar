@@ -23,9 +23,11 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\InfoBox;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file       htdocs/admin/boxes.php
+ *   \file
+ * htdocs/admin/boxes.php
  *   \brief      Page to setup boxes
  */
 
@@ -213,7 +215,7 @@ if ($action == 'switch') {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("Boxes"), '', '', 0, 0, '', '', '', 'mod-admin page-boxes');
+ViewMain::llxHeader('', $langs->trans("Boxes"), '', '', 0, 0, '', '', '', 'mod-admin page-boxes');
 
 print load_fiche_titre($langs->trans("Boxes"), '', 'title_setup');
 
@@ -467,5 +469,5 @@ print '</form>';
 print "\n" . '<!-- End Other Const -->' . "\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

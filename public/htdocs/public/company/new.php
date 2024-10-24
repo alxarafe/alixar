@@ -33,6 +33,7 @@ use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Lib\Images;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/public/company/new.php
@@ -116,7 +117,7 @@ function llxHeaderVierge($title, $head = "", $disablejs = 0, $disablehead = 0, $
 {
     global $conf, $langs, $mysoc;
 
-    top_htmlhead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss); // Show html headers
+    ViewMain::topHtmlHead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss); // Show html headers
 
     print '<body id="mainbody" class="publicnewmemberform">';
 

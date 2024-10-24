@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Compta\Classes\BonPrelevement;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/prelevement/orders_list.php
@@ -233,7 +234,7 @@ $num = $db->num_rows($resql);
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 $param = '';
@@ -481,5 +482,5 @@ print '</form>' . "\n";
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -20,6 +20,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Website\Classes\Website;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/website.php
@@ -386,7 +387,7 @@ if ($action == $acts[1]) {
 $form = new Form($db);
 $formadmin = new FormAdmin($db);
 
-llxHeader('', $langs->trans("WebsiteSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-website');
+ViewMain::llxHeader('', $langs->trans("WebsiteSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-website');
 
 $titre = $langs->trans("WebsiteSetup");
 $linkback = '<a href="' . ($backtopage ? $backtopage : constant('BASE_URL') . '/admin/modules.php') . '">' . $langs->trans("BackToModuleList") . '</a>';
@@ -664,7 +665,7 @@ if ($id) {
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

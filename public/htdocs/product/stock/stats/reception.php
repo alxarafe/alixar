@@ -28,6 +28,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productlot;
 use Dolibarr\Code\Reception\Classes\Reception;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stock/stats/reception.php
@@ -120,7 +121,7 @@ if ($id > 0 || !empty($ref)) {
     $shortlabel = dol_trunc($object->batch, 16);
     $title = $langs->trans('Batch') . " " . $shortlabel . " - " . $langs->trans('Referers');
 
-    llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stock-stats_reception');
+    ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stock-stats_reception');
 
     if ($result > 0) {
         $head = productlot_prepare_head($object);
@@ -368,5 +369,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

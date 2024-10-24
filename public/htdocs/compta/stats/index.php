@@ -23,6 +23,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file        htdocs/compta/stats/index.php
@@ -144,7 +145,7 @@ if ($date_endday && $date_endmonth && $date_endyear) {
     $param .= '&date_endday=' . $date_endday . '&date_endmonth=' . $date_endmonth . '&date_endyear=' . $date_endyear;
 }
 
-llxHeader();
+ViewMain::llxHeader();
 
 $form = new Form($db);
 
@@ -772,5 +773,5 @@ print '</div>';
  */
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\InfoBox;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\User\Classes\UserGroup;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/user/home.php
@@ -88,7 +89,7 @@ $max = getDolGlobalInt('MAIN_SIZE_SHORTLIST_LIMIT', 5);
 
 $title = $langs->trans("MenuUsersAndGroups");
 $help_url = '';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-home');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-home');
 
 
 print load_fiche_titre($langs->trans("MenuUsersAndGroups"), $resultboxes['selectboxlist'], 'user');
@@ -334,5 +335,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardUsersGroups', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

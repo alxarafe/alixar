@@ -17,6 +17,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/lib/customreports.lib.php
  *  \brief      Set of function to manipulate custom reports

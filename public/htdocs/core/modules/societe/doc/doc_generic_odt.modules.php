@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Contact\Classes\Contact;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/societe/doc/doc_generic_odt.modules.php

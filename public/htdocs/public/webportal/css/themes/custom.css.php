@@ -17,6 +17,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/public/webportal/css/themes/custom.css.php
@@ -47,10 +48,9 @@ if (!defined('NOREQUIREAJAX')) {
 session_cache_limiter('public');
 
 require_once __DIR__ . '/../../webportal.main.inc.php';
-dol_include_once('/webportal/class/webPortalTheme.class.php');
 
 // Define css type
-// top_httphead('text/css');
+// ViewCss::topHttpHead();
 header("Content-Type: text/css");
 header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: SAMEORIGIN");

@@ -27,6 +27,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Propalmergepdfproduct;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/product/document.php
@@ -211,7 +212,7 @@ if (GETPOST("type") == '1' || ($object->type == Product::TYPE_SERVICE)) {
     $helpurl = 'EN:Module_Services_En|FR:Module_Services|ES:M&oacute;dulo_Servicios';
 }
 
-llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-card_document');
+ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-card_document');
 
 
 if ($object->id) {
@@ -362,5 +363,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

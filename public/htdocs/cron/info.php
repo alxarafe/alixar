@@ -19,6 +19,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Cron\Classes\Cronjob;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file           htdocs/cron/info.php
@@ -49,7 +50,7 @@ $object = new Cronjob($db);
 
 $form = new Form($db);  // $form is required as global value into dol_banner_tab
 
-llxHeader('', $langs->trans("CronInfo"));
+ViewMain::llxHeader('', $langs->trans("CronInfo"));
 
 $object->fetch($id);
 $object->info($id);
@@ -75,5 +76,5 @@ dol_print_object_info($object);
 print '</td></tr></table>';
 print '</div>';
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

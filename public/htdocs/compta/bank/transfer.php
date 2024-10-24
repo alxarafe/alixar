@@ -28,6 +28,7 @@
 
 use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/compta/bank/transfer.php
@@ -226,7 +227,7 @@ $form = new Form($db);
 $help_url = 'EN:Module_Banks_and_Cash|FR:Module_Banques_et_Caisses|ES:M&oacute;dulo_Bancos_y_Cajas';
 $title = $langs->trans('MenuBankInternalTransfer');
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 
 print '<script type="text/javascript">
@@ -376,6 +377,6 @@ print '<script type="text/javascript">
 	 ';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

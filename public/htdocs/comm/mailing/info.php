@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Comm\Classes\Mailing;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/comm/mailing/info.php
@@ -48,7 +49,7 @@ if (!$user->hasRight('mailing', 'lire') || (!getDolGlobalString('EXTERNAL_USERS_
  * View
  */
 
-llxHeader('', $langs->trans("Mailing"), 'EN:Module_EMailing|FR:Module_Mailing|ES:M&oacute;dulo_Mailing');
+ViewMain::llxHeader('', $langs->trans("Mailing"), 'EN:Module_EMailing|FR:Module_Mailing|ES:M&oacute;dulo_Mailing');
 
 $form = new Form($db);
 
@@ -92,5 +93,5 @@ if ($object->fetch($id) >= 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

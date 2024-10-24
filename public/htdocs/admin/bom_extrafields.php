@@ -22,6 +22,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/admin/bom_extrafields.php
  *      \ingroup    bom
@@ -29,9 +33,6 @@
  */
 
 // Load Dolibarr environment
-use Dolibarr\Code\Core\Classes\ExtraFields;
-use Dolibarr\Code\Core\Classes\Form;
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/bom/lib/bom.lib.php';
 
@@ -67,7 +68,7 @@ require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
 $textobject = $langs->transnoentitiesnoconv("BOM");
 
 $help_url = '';
-llxHeader('', $langs->trans("BOMsSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-bom_extrafiels');
+ViewMain::llxHeader('', $langs->trans("BOMsSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-bom_extrafiels');
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -104,5 +105,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

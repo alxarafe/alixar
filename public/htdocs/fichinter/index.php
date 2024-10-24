@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\FichInter\Classes\Fichinter;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/fichinter/index.php
@@ -67,7 +68,7 @@ $formfile = new FormFile($db);
 
 $help_url = "EN:ModuleFichinters|FR:Module_Fiche_Interventions|ES:Módulo_FichaInterventiones";
 
-llxHeader("", $langs->trans("Interventions"), $help_url);
+ViewMain::llxHeader("", $langs->trans("Interventions"), $help_url);
 
 print load_fiche_titre($langs->trans("InterventionsArea"), '', 'intervention');
 
@@ -371,6 +372,6 @@ print '</div></div>';
 $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardInterventions', $parameters, $object); // Note that $action and $object may have been modified by hook
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

@@ -62,7 +62,7 @@ if ($action) {
 }
 
 $title = $langs->trans('ModuleSetup') . ' ' . $langs->trans('Module610Name');
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($title, $linkback, 'title_setup');
@@ -99,5 +99,5 @@ print '<br><div class="center"><input type="submit" value="' . $langs->trans("Sa
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

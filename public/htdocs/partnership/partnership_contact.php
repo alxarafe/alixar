@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       partnership_contact.php
@@ -124,7 +125,7 @@ if ($action == 'addcontact' && $permission) {
 $title = $langs->trans('Partnership') . " - " . $langs->trans('ContactsAddresses');
 $help_url = '';
 //$help_url='EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-partnership page-contact');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-partnership page-contact');
 
 $form = new Form($db);
 $formcompany = new FormCompany($db);
@@ -204,5 +205,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

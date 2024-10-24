@@ -22,6 +22,7 @@ use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Projet\Classes\ProjectStats;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/projet/stats/index.php
@@ -68,7 +69,7 @@ $formproject = new FormProjets($db);
 $includeuserlist = array();
 
 
-llxHeader('', $langs->trans('Projects'));
+ViewMain::llxHeader('', $langs->trans('Projects'));
 
 $title = $langs->trans("ProjectsStatistics");
 $dir = $conf->project->dir_output . '/temp';
@@ -338,5 +339,5 @@ print '<div class="clearboth"></div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

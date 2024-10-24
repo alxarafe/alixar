@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/takepos/public/menu.php

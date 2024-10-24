@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/debugbar.php
@@ -73,7 +74,7 @@ if ($action == 'set') {
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-debugbar');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-debugbar');
 
 $form = new Form($db);
 
@@ -115,5 +116,5 @@ print '</table>';
 print "</form>\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

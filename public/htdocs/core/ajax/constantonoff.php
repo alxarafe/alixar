@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/ajax/constantonoff.php
  *       \brief      File to set or del an on/off constant
@@ -64,7 +66,7 @@ if (empty($user->admin)) {
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 //print '<!-- Ajax page called with url '.dol_escape_htmltag($_SERVER["PHP_SELF"]).'?'.dol_escape_htmltag($_SERVER["QUERY_STRING"]).' -->'."\n";
 

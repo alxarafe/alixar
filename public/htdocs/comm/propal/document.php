@@ -25,6 +25,7 @@
 use Dolibarr\Code\Comm\Classes\Propal;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/comm/propal/document.php
@@ -103,7 +104,7 @@ if ($object->id > 0) {
  */
 $title = $object->ref . " - " . $langs->trans('Documents');
 $help_url = 'EN:Commercial_Proposals|FR:Proposition_commerciale|ES:Presupuestos';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $form = new Form($db);
 
@@ -184,5 +185,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

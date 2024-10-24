@@ -24,6 +24,7 @@ namespace Dolibarr\Core\Base;
 
 use Dolibarr\Code\Product\Classes\Product;
 use DoliDB;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/class/commonobjectline.class.php

@@ -21,6 +21,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/core/lib/ajax.lib.php
  *  \brief      Page called to enhance interface with Javascript and Ajax features.

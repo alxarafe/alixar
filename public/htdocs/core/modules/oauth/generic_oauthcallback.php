@@ -19,6 +19,7 @@
  */
 
 use OAuth\Common\Http\Uri\UriFactory;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/modules/oauth/generic_oauthcallback.php

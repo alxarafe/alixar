@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Printing\Classes\PrintingDriver;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/printing/index.php
@@ -48,7 +49,7 @@ if (!$user->admin) {
  * View
  */
 
-llxHeader("", $langs->trans("Printing"));
+ViewMain::llxHeader("", $langs->trans("Printing"));
 
 print_barre_liste($langs->trans("Printing"), 0, $_SERVER["PHP_SELF"], '', '', '', '<a class="button" href="' . $_SERVER["PHP_SELF"] . '">' . $langs->trans("Refresh") . '</a>', 0, 0, 'title_setup.png');
 
@@ -75,5 +76,5 @@ foreach ($result as $driver) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

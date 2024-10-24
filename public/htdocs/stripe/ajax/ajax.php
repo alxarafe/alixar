@@ -19,6 +19,7 @@
 
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Stripe\Classes\Stripe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/stripe/ajax/ajax.php
@@ -69,7 +70,7 @@ if (!$usestripeterminals) {
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 if ($action == 'getConnexionToken') {
     try {

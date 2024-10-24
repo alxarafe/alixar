@@ -18,6 +18,8 @@
 * along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/opensurvey/lib/opensurvey.lib.php
  *  \ingroup    opensurvey
@@ -85,7 +87,7 @@ function llxHeaderSurvey($title, $head = "", $disablejs = 0, $disablehead = 0, $
 
     // $replacemainarea = (empty($conf->dol_hide_leftmenu) ? '<div>' : '').'<div>';
 
-    top_htmlhead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss, 0, 1); // Show html headers
+    ViewMain::topHtmlHead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss, 0, 1); // Show html headers
 
     print '<body id="mainbody" class="publicnewmemberform">';
 

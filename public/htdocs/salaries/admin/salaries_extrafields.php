@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/salaries/admin/salaries_extrafields.php
@@ -62,7 +63,7 @@ require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
 $textobject = $langs->transnoentitiesnoconv("Salaries");
 
 $help_url = '';
-llxHeader('', $langs->trans("SalariesSetup"), $help_url);
+ViewMain::llxHeader('', $langs->trans("SalariesSetup"), $help_url);
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -95,5 +96,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

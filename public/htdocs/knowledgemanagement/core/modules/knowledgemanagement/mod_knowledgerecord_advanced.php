@@ -25,6 +25,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\KnowledgeManagement\Classes\KnowledgeRecord;
 use Dolibarr\Code\KnowledgeManagement\Classes\ModeleNumRefKnowledgeRecord;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/knowledgemanagement/core/modules/knowledgemanagement/mod_knowledgerecord_advanced.php

@@ -26,6 +26,7 @@ namespace Dolibarr\Code\Core\Classes;
 
 use DoliDB;
 
+
 /**
  *      \file       htdocs/core/class/utils.class.php
  *      \ingroup    core

@@ -23,6 +23,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Ecm\Classes\EcmDirectory;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/ecm/index_medias.php
@@ -299,7 +300,7 @@ $moreheadjs .= '<script type="text/javascript">' . "\n";
 $moreheadjs .= 'var indicatorBlockUI = \'' . constant('DOL_URL_ROOT') . "/theme/" . $conf->theme . "/img/working.gif" . '\';' . "\n";
 $moreheadjs .= '</script>' . "\n";
 
-llxHeader($moreheadcss . $moreheadjs, $langs->trans("ECMArea"), '', '', '', '', $morejs, '', 0, 0);
+ViewMain::llxHeader($moreheadcss . $moreheadjs, $langs->trans("ECMArea"), '', '', '', '', $morejs, '', 0, 0);
 
 $head = ecm_prepare_dasboard_head(null);
 print dol_get_fiche_head($head, 'index_medias', '', -1, '');
@@ -315,6 +316,6 @@ include DOL_DOCUMENT_ROOT . '/core/tpl/filemanager.tpl.php';
 // End of page
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

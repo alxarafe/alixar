@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/ecm/ajax/ecmdatabase.php
  *       \brief      File to build/refresh the ecm database for directories
@@ -49,7 +51,7 @@ $element = GETPOST('element', 'alpha');
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 //print '<!-- Ajax page called with url '.dol_escape_htmltag($_SERVER["PHP_SELF"]).'?'.dol_escape_htmltag($_SERVER["QUERY_STRING"]).' -->'."\n";
 

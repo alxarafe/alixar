@@ -25,6 +25,7 @@
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/fourn/product/list.php
@@ -249,7 +250,7 @@ if (!empty($supplier->id)) {
 // Output page
 // --------------------------------------------------------------------
 
-llxHeader("", "", $texte);
+ViewMain::llxHeader("", "", $texte);
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
 
@@ -507,5 +508,5 @@ print '</form>' . "\n";
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -27,6 +27,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/accountancy/admin/defaultaccounts.php
@@ -209,7 +210,7 @@ $formaccounting = new FormAccounting($db);
 
 $help_url = 'EN:Module_Double_Entry_Accounting#Setup|FR:Module_Comptabilit&eacute;_en_Partie_Double#Configuration';
 
-llxHeader('', $langs->trans('MenuDefaultAccounts'), $help_url);
+ViewMain::llxHeader('', $langs->trans('MenuDefaultAccounts'), $help_url);
 
 $linkback = '';
 print load_fiche_titre($langs->trans('MenuDefaultAccounts'), $linkback, 'title_accountancy');
@@ -361,5 +362,5 @@ print '<div class="center"><input type="submit" class="button button-edit" name=
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

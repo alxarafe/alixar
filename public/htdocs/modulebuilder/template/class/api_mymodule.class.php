@@ -23,6 +23,7 @@ use Luracast\Restler\RestException;
 dol_include_once('/mymodule/class/myobject.class.php');
 
 
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/modulebuilder/template/class/api_mymodule.class.php

@@ -28,6 +28,7 @@ use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\Compta\Classes\AccountLine;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/fourn/paiement/document.php
@@ -98,7 +99,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_linkedfiles.inc.php';
 $form = new Form($db);
 
 $title = $langs->trans('Payment') . " - " . $langs->trans('Documents');
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 if ($object->id > 0) {
     $head = payment_supplier_prepare_head($object);
@@ -178,5 +179,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

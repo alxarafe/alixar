@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Bom\Classes\BOM;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/mrp/ajax/ajax_bom.php
@@ -61,7 +62,7 @@ $result = restrictedArea($user, 'bom', $object, $object->table_element, '', '', 
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 if ($result > 0) {
     // We remove properties we don't need in answer

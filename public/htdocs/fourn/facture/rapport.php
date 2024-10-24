@@ -21,6 +21,7 @@
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/fourn/facture/rapport.php
@@ -95,7 +96,7 @@ $formfile = new FormFile($db);
 
 $titre = ($year ? $langs->trans("PaymentsReportsForYear", $year) : $langs->trans("PaymentsReports"));
 
-llxHeader('', $titre);
+ViewMain::llxHeader('', $titre);
 
 print load_fiche_titre($titre, '', 'supplier_invoice');
 
@@ -168,5 +169,5 @@ if ($year) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

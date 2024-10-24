@@ -32,6 +32,7 @@ use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
 use Dolibarr\Code\ExpenseReport\Classes\ModeleExpenseReport;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\User\Classes\UserBankAccount;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/expensereport/doc/pdf_standard.modules.php

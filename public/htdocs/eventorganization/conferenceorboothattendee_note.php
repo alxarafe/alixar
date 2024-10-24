@@ -21,6 +21,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/eventorganization/conferenceorboothattendee_note.php
@@ -86,7 +87,7 @@ $form = new Form($db);
 
 //$help_url='EN:Customers_Orders|FR:Commandes_Clients|ES:Pedidos de clientes';
 $help_url = '';
-llxHeader('', $langs->trans('ConferenceOrBoothAttendee'), $help_url);
+ViewMain::llxHeader('', $langs->trans('ConferenceOrBoothAttendee'), $help_url);
 
 if ($id > 0 || !empty($ref)) {
     $object->fetch_thirdparty();
@@ -156,5 +157,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

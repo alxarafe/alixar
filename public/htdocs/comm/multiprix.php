@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/comm/multiprix.php
@@ -71,7 +72,7 @@ if ($action == 'setpricelevel' && $user->hasRight('societe', 'creer')) {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $userstatic = new User($db);
 
@@ -169,5 +170,5 @@ if ($_socid > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

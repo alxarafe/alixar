@@ -2,20 +2,23 @@
 
 /* Copyright (C) 2009-2014  Laurent Destailleur         <eldy@users.sourceforge.net>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 3 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <https://www.gnu.org/licenses/>.
-*/
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+use Dolibarr\Lib\ViewMain;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -30,14 +33,14 @@ if (!$user->admin) {
  * View
 */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_xdebug');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_xdebug');
 
 print load_fiche_titre("XDebug", '', 'title_setup');
 
 if (!function_exists('xdebug_is_enabled')) {
     print "<br>\n";
     print 'XDebug seems to be not installed. Function xdebug_is_enabled not found.';
-    llxFooter();
+    ViewMain::llxFooter();
     exit;
 }
 
@@ -126,6 +129,6 @@ xdebug.auto_trace=0
     print "Can't test if PHPDebug is OK as PHP socket functions are not enabled.";
 }
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Notify;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/notification.php
@@ -173,7 +174,7 @@ if ($action == 'setfixednotif' && $user->admin) {
 $form = new Form($db);
 $notify = new Notify($db);
 
-llxHeader('', $langs->trans("NotificationSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-notification');
+ViewMain::llxHeader('', $langs->trans("NotificationSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-notification');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("NotificationSetup"), $linkback, 'title_setup');
@@ -523,5 +524,5 @@ print $form->buttonsSaveCancel("Save", '');
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

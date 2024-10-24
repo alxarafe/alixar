@@ -25,6 +25,7 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
+
 /**
  *      \file       htdocs/loan/class/loanschedule.class.php
  *      \ingroup    loan

@@ -26,6 +26,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/accountancy/admin/index.php
@@ -262,8 +263,7 @@ $form = new Form($db);
 
 $title = $langs->trans('ConfigAccountingExpert');
 $help_url = 'EN:Module_Double_Entry_Accounting#Setup|FR:Module_Comptabilit&eacute;_en_Partie_Double#Configuration';
-llxHeader('', $title, $help_url);
-
+ViewMain::llxHeader('', $title, $help_url);
 
 $linkback = '';
 //$linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -567,5 +567,5 @@ print '<div class="center"><input type="submit" class="button button-edit" name=
 print '</form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Ldap;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/user/ldap.php
@@ -99,7 +100,7 @@ $form = new Form($db);
 $person_name = !empty($object->firstname) ? $object->lastname . ", " . $object->firstname : $object->lastname;
 $title = $person_name . " - " . $langs->trans('LDAP');
 $help_url = '';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-ldap');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-ldap');
 
 $head = user_prepare_head($object);
 
@@ -217,5 +218,5 @@ if ($result > 0) {
 print '</table>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

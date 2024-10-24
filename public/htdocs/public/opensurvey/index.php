@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\OpenSurvey\Classes\Opensurveysondage;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/public/opensurvey/index.php
@@ -118,7 +119,7 @@ $arrayofjs = array();
 $arrayofcss = array();
 
 $replacemainarea = (empty($conf->dol_hide_leftmenu) ? '<div>' : '') . '<div>';
-llxHeader($head, $langs->trans("Surveys"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea, 1, 1);
+ViewMain::llxHeader($head, $langs->trans("Surveys"), '', '', 0, 0, '', '', '', 'onlinepaymentbody', $replacemainarea, 1, 1);
 
 
 print '<span id="dolpaymentspan"></span>' . "\n";
@@ -258,6 +259,6 @@ print '<br>';
 
 htmlPrintOnlineFooter($mysoc, $langs);
 
-llxFooter('', 'public');
+ViewMain::llxFooter('', 'public');
 
 $db->close();

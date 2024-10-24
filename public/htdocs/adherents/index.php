@@ -33,6 +33,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\InfoBox;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/adherents/index.php
@@ -81,7 +82,7 @@ $form = new Form($db);
 // Load $resultboxes (selectboxlist + boxactivated + boxlista + boxlistb)
 $resultboxes = FormOther::getBoxesArea($user, "2");
 
-llxHeader('', $langs->trans("Members"), 'EN:Module_Foundations|FR:Module_Adh&eacute;rents|ES:M&oacute;dulo_Miembros|DE:Modul_Mitglieder');
+ViewMain::llxHeader('', $langs->trans("Members"), 'EN:Module_Foundations|FR:Module_Adh&eacute;rents|ES:M&oacute;dulo_Miembros|DE:Modul_Mitglieder');
 
 $staticmember = new Adherent($db);
 $statictype = new AdherentType($db);
@@ -174,5 +175,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardMembers', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

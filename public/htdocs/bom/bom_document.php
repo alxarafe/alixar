@@ -21,6 +21,7 @@
 use Dolibarr\Code\Bom\Classes\BOM;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/bom/bom_document.php
@@ -109,7 +110,7 @@ $title = $langs->trans("BillOfMaterials") . ' - ' . $langs->trans("Files");
 $help_url = 'EN:Module_BOM';
 $morehtmlref = "";
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-bom page-card_documents');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-bom page-card_documents');
 
 if ($object->id) {
     /*
@@ -164,5 +165,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

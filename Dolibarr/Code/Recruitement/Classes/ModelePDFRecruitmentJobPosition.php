@@ -29,6 +29,7 @@ namespace Dolibarr\Code\Recruitement\Classes;
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use DoliDB;
 
+
 /**
  *  \file           htdocs/core/modules/recruitment/modules_recruitmentjobposition.php
  *  \ingroup        recruitment

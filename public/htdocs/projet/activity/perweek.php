@@ -32,6 +32,7 @@ use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Projet\Classes\Task;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/projet/activity/perweek.php
@@ -430,7 +431,7 @@ $tasksrole = $taskstatic->getUserRolesForProjectsOrTasks(null, $usertoprocess, (
 //var_dump($taskrole);
 
 
-llxHeader("", $title, "", '', '', '', array('/core/js/timesheet.js'));
+ViewMain::llxHeader("", $title, "", '', '', '', array('/core/js/timesheet.js'));
 
 //print_barre_liste($title, $page, $_SERVER["PHP_SELF"], "", $sortfield, $sortorder, "", $num, '', 'project');
 
@@ -905,5 +906,5 @@ if ($conf->use_javascript_ajax) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

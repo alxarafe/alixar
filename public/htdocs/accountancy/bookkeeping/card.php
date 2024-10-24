@@ -28,6 +28,7 @@ use Dolibarr\Code\Accountancy\Classes\BookKeeping;
 use Dolibarr\Code\Accountancy\Classes\BookKeepingLine;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/accountancy/bookkeeping/card.php
@@ -353,7 +354,7 @@ $formaccounting = new FormAccounting($db);
 
 $title = $langs->trans("CreateMvts");
 $help_url = 'EN:Module_Double_Entry_Accounting|FR:Module_Comptabilit&eacute;_en_Partie_Double';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-consultation page-card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-consultation page-card');
 
 // Confirmation to delete the command
 if ($action == 'delete') {
@@ -862,5 +863,5 @@ if ($action == 'create') {
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -23,6 +23,7 @@
  */
 
 use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/takepos/receipt.php
@@ -73,7 +74,7 @@ if (!$user->hasRight('takepos', 'run')) {
  * View
  */
 
-top_httphead('text/html', 1);
+ViewMain::topHttpHead('text/html', 1);
 
 if ($place > 0) {
     $sql = "SELECT rowid FROM " . MAIN_DB_PREFIX . "facture where ref='(PROV-POS" . $db->escape($_SESSION["takeposterminal"] . "-" . $place) . ")'";

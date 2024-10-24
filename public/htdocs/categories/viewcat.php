@@ -35,6 +35,7 @@ use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/categories/viewcat.php
@@ -250,7 +251,7 @@ $arrayofcss = array('/includes/jquery/plugins/jquerytreeview/jquery.treeview.css
 
 $help_url = '';
 
-llxHeader("", $langs->trans("Categories"), $help_url, '', 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::llxHeader("", $langs->trans("Categories"), $help_url, '', 0, 0, $arrayofjs, $arrayofcss);
 
 $title = Categorie::$MAP_TYPE_TITLE_AREA[$type];
 
@@ -1349,5 +1350,5 @@ $parameters = array('type' => $type, 'id' => $id, 'label' => $label);
 $reshook = $hookmanager->executeHooks('addMoreCategoriesList', $parameters, $object, $action);
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

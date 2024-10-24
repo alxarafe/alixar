@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/admin/mrp_production_extrafields.php
  *      \ingroup    mrp
@@ -66,7 +68,7 @@ require DOL_DOCUMENT_ROOT . '/core/actions_extrafields.inc.php';
 $textobject = $langs->transnoentitiesnoconv('ManufacturingOrder');
 
 $help_url = '';
-llxHeader('', $langs->trans("MrpSetupPage"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-mrp_production_extrafields');
+ViewMain::llxHeader('', $langs->trans("MrpSetupPage"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-mrp_production_extrafields');
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -109,5 +111,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

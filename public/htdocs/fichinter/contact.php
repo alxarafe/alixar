@@ -20,6 +20,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/fichinter/contact.php
@@ -109,7 +110,7 @@ $contactstatic = new Contact($db);
 $userstatic = new User($db);
 $formproject = new FormProjets($db);
 
-llxHeader('', $langs->trans("Intervention"));
+ViewMain::llxHeader('', $langs->trans("Intervention"));
 
 // Mode vue et edition
 
@@ -179,5 +180,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

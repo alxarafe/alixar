@@ -31,6 +31,7 @@ use Dolibarr\Code\Compta\Classes\PaymentVAT;
 use Dolibarr\Code\Compta\Classes\Tva;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Salaries\Classes\Salary;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/charges/index.php
@@ -93,7 +94,7 @@ $payment_sc_static = new PaymentSocialContribution($db);
 $sal_static = new Salary($db);
 $accountstatic = new Account($db);
 
-llxHeader('', $langs->trans("SpecialExpensesArea"));
+ViewMain::llxHeader('', $langs->trans("SpecialExpensesArea"));
 
 $title = $langs->trans("SpecialExpensesArea");
 
@@ -508,5 +509,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardSpecialBills', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

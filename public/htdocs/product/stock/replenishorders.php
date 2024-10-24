@@ -24,6 +24,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stock/replenishorders.php
@@ -102,7 +103,7 @@ $form = new Form($db);
 $helpurl = 'EN:Module_Stocks_En|FR:Module_Stock|ES:M&oacute;dulo_Stocks';
 $texte = $langs->trans('ReplenishmentOrders');
 
-llxHeader('', $texte, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stock_replenishorders');
+ViewMain::llxHeader('', $texte, $helpurl, '', 0, 0, '', '', '', 'mod-product page-stock_replenishorders');
 
 print load_fiche_titre($langs->trans('Replenishment'), '', 'stock');
 
@@ -366,5 +367,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

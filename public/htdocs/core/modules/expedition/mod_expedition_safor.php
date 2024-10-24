@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Expedition\Classes\ModelNumRefExpedition;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/expedition/mod_expedition_safor.php

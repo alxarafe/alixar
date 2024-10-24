@@ -24,6 +24,7 @@
 use Dolibarr\Code\Core\Classes\vCard;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/user/vcard.php
@@ -70,7 +71,7 @@ $filename = trim(urldecode($v->getFileName())); // "Nom prenom.vcf"
 $filenameurlencoded = dol_sanitizeFileName(urlencode($filename));
 //$filename = dol_sanitizeFileName($filename);
 
-top_httphead('text/x-vcard; name="' . $filename . '"');
+ViewMain::topHttpHead('text/x-vcard; name="' . $filename . '"');
 
 header("Content-Disposition: attachment; filename=\"" . $filename . "\"");
 header("Content-Length: " . dol_strlen($output));

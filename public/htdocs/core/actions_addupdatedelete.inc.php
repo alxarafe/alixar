@@ -19,6 +19,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/core/actions_addupdatedelete.inc.php
  *  \brief          Code for common actions cancel / add / update / update_extras / delete / deleteline / validate / cancel / reopen / clone

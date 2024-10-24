@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       admin/partnership_extrafields.php
@@ -70,7 +71,7 @@ $textobject = $langs->transnoentitiesnoconv("Partnership");
 $help_url = '';
 $title = $langs->trans("PartnershipSetup");
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-partnership page-admin-extrafields');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-partnership page-admin-extrafields');
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -107,5 +108,5 @@ if ($action == 'edit' && !empty($attrname)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

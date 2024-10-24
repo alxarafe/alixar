@@ -31,6 +31,7 @@ use Dolibarr\Code\Core\Classes\FormAccounting;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/accountancy/customer/list.php
@@ -237,12 +238,12 @@ $formother = new FormOther($db);
 
 $help_url = 'EN:Module_Double_Entry_Accounting|FR:Module_Comptabilit&eacute;_en_Partie_Double#Liaisons_comptables';
 
-llxHeader('', $langs->trans("CustomersVentilation"), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-customer page-list');
+ViewMain::llxHeader('', $langs->trans("CustomersVentilation"), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-customer page-list');
 
 if (empty($chartaccountcode)) {
     print $langs->trans("ErrorChartOfAccountSystemNotSelected");
     // End of page
-    llxFooter();
+    ViewMain::llxFooter();
     $db->close();
     exit;
 }
@@ -826,5 +827,5 @@ jQuery(document).ready(function() {
 </script>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Exports\Classes\ModeleExports;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/modules/export/export_csv.modules.php

@@ -27,6 +27,7 @@ use Dolibarr\Code\Bom\Classes\ModeleNumRefBoms;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/modules/bom/mod_bom_advanced.php

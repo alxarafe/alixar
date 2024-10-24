@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Asset\Classes\AssetModel;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/asset/model/agenda.php
@@ -141,7 +142,7 @@ $form = new Form($db);
 if ($object->id > 0) {
     $title = $langs->trans("Agenda");
     $help_url = 'EN:Module_Agenda_En|DE:Modul_Terminplanung';
-    llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-asset page-model-card_agenda');
+    ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-asset page-model-card_agenda');
 
     if (isModEnabled('notification')) {
         $langs->load("mails");
@@ -228,5 +229,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

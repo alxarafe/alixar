@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *     \file       htdocs/admin/taxes.php
@@ -144,7 +145,7 @@ if ($action == 'update') {
  * View
  */
 
-llxHeader('', $langs->trans("TaxSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-taxes');
+ViewMain::llxHeader('', $langs->trans("TaxSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-taxes');
 
 $form = new Form($db);
 if (isModEnabled('accounting')) {
@@ -299,5 +300,5 @@ if (isModEnabled('accounting')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

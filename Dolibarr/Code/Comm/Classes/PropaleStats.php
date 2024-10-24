@@ -24,6 +24,8 @@
 namespace Dolibarr\Code\Comm\Classes;
 
 use Dolibarr\Code\Core\Classes\Stats;
+use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+use DoliDB;
 
 /**
  *  \file       htdocs/comm/propal/class/propalestats.class.php
@@ -50,7 +52,6 @@ class PropaleStats extends Stats
     public $field;
     public $where;
     public $join;
-
 
     /**
      * Constructor

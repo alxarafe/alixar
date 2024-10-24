@@ -28,6 +28,7 @@ use Dolibarr\Code\Commande\Classes\ModelePDFCommandes;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/commande/doc/doc_generic_order_odt.modules.php

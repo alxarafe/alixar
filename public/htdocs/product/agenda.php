@@ -26,6 +26,7 @@
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/agenda.php
@@ -145,7 +146,7 @@ $help_url = 'EN:Module_Agenda_En|FR:Module_Agenda|DE:Modul_Terminplanung';
 if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/productnameonly/', getDolGlobalString('MAIN_HTML_TITLE')) && $object->name) {
     $title = $object->name . " - " . $title;
 }
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-card_agenda');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-product page-card_agenda');
 
 if (isModEnabled('notification')) {
     $langs->load("mails");
@@ -244,5 +245,5 @@ if (isModEnabled('agenda') && ($user->hasRight('agenda', 'myactions', 'read') ||
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

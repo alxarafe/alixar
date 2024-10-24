@@ -21,6 +21,7 @@
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/contact/project.php
@@ -70,7 +71,7 @@ if ($id) {
     if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/thirdpartynameonly/', getDolGlobalString('MAIN_HTML_TITLE')) && $object->name) {
         $title = $object->name . " - " . $title;
     }
-    llxHeader('', $title);
+    ViewMain::llxHeader('', $title);
 
     if (isModEnabled('notification')) {
         $langs->load("mails");
@@ -122,5 +123,5 @@ if ($id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

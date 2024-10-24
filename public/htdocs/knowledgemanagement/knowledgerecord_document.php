@@ -20,6 +20,7 @@
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\KnowledgeManagement\Classes\KnowledgeRecord;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       knowledgerecord_document.php
@@ -103,7 +104,7 @@ $form = new Form($db);
 $title = $langs->trans("KnowledgeRecord") . ' - ' . $langs->trans("Files");
 $help_url = '';
 //$help_url='EN:Module_Third_Parties|FR:Module_Tiers|ES:Empresas';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-knowledgemanagement page-card_documents');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-knowledgemanagement page-card_documents');
 
 if ($object->id) {
     /*
@@ -196,5 +197,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

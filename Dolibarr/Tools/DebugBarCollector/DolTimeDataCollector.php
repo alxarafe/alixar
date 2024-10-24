@@ -21,6 +21,7 @@ namespace Dolibarr\Tools\DebugBarCollector;
 
 use DebugBar\DataCollector\TimeDataCollector;
 
+
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolTimeDataCollector.php
  *  \brief      Class for debugbar collection

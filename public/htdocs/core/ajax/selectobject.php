@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/ajax/selectobject.php
  *       \brief      File to return Ajax response on a selection list request
@@ -150,7 +152,7 @@ if (!empty($objecttmp->module)) {
 
 $form = new Form($db);
 
-top_httphead($outjson ? 'application/json' : 'text/html');
+ViewMain::topHttpHead($outjson ? 'application/json' : 'text/html');
 
 //print '<!-- Ajax page called with url '.dol_escape_htmltag($_SERVER["PHP_SELF"]).'?'.dol_escape_htmltag($_SERVER["QUERY_STRING"]).' -->'."\n";
 

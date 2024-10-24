@@ -19,6 +19,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Interfaces;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/admin/triggers.php
@@ -48,7 +49,7 @@ $sortorder = 'ASC';
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-triggers');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-triggers');
 
 $form = new Form($db);
 
@@ -91,5 +92,5 @@ print '</table>';
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

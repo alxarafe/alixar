@@ -25,6 +25,8 @@ use Dolibarr\Code\Core\Classes\FormBarCode;
 use Dolibarr\Code\Core\Classes\GenericObject;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\AveryLabels;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/barcode/printsheet.php
@@ -310,7 +312,7 @@ if (empty($reshook)) {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("BarCodePrintsheet"), '', '', 0, 0, '', '', '', 'mod-barcode page-printsheet');
+ViewMain::llxHeader('', $langs->trans("BarCodePrintsheet"), '', '', 0, 0, '', '', '', 'mod-barcode page-printsheet');
 
 print load_fiche_titre($langs->trans("BarCodePrintsheet"), '', 'barcode');
 print '<br>';
@@ -333,7 +335,9 @@ print '	<div class="tagtr">';
 print '	<div class="tagtd">';
 print $langs->trans("DescADHERENT_ETIQUETTE_TYPE") . ' &nbsp; ';
 print '</div><div class="tagtd maxwidthonsmartphone" style="overflow: hidden; white-space: nowrap;">';
+
 // List of possible labels (defined into $_Avery_Labels variable set into core/lib/format_cards.lib.php)
+$_Avery_Labels = AveryLabels::getAveryLabels();
 $arrayoflabels = array();
 foreach (array_keys($_Avery_Labels) as $codecards) {
     $labeltoshow = $_Avery_Labels[$codecards]['name'];
@@ -482,5 +486,5 @@ print '</form>';
 print '<br>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

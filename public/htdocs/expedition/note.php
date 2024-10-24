@@ -25,6 +25,7 @@ use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Expedition\Classes\Expedition;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/expedition/note.php
@@ -95,7 +96,7 @@ if (empty($reshook)) {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $form = new Form($db);
 
@@ -149,5 +150,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

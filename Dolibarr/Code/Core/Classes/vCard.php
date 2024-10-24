@@ -21,6 +21,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+
 /**
  *  \file       htdocs/core/class/vcard.class.php
  *  \brief      Class to manage vCard files

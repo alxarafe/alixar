@@ -24,6 +24,7 @@
 use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Commande\Classes\OrderLine;
 use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/webservices/server_order.php

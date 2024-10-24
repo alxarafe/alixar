@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\SupplierProposal\Classes\ModeleNumRefSupplierProposal;
 use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/core/modules/propale/mod_propale_saphir.php

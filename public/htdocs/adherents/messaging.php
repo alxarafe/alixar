@@ -27,6 +27,7 @@
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Adherents\Classes\AdherentType;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/adherents/messaging.php
@@ -126,7 +127,7 @@ $form = new Form($db);
 $person_name = !empty($object->firstname) ? $object->lastname . ", " . $object->firstname : $object->lastname;
 $title = $person_name . " - " . $langs->trans('Info');
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $head = member_prepare_head($object);
 
@@ -215,5 +216,5 @@ if (isModEnabled('agenda') && ($user->hasRight('agenda', 'myactions', 'read') ||
 }
 
 //End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

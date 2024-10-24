@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/takepos/reduction.php
@@ -80,7 +81,7 @@ $head = '';
 $arrayofcss = array('/takepos/css/pos.css.php');
 $arrayofjs = array();
 
-top_htmlhead($head, '', 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::topHtmlHead($head, '', 0, 0, $arrayofjs, $arrayofcss);
 
 $langs->loadLangs(array('main', 'bills', 'cashdesk'));
 

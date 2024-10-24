@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/admin/resource.php
@@ -63,7 +64,7 @@ if ($action == 'updateoptions') {
  * View
  */
 
-llxHeader('', $langs->trans('ResourceSetup'), '', '', 0, 0, '', '', '', 'mod-admin page-resource');
+ViewMain::llxHeader('', $langs->trans('ResourceSetup'), '', '', 0, 0, '', '', '', 'mod-admin page-resource');
 
 $form = new Form($db);
 
@@ -149,5 +150,5 @@ print '</form>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

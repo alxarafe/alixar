@@ -24,6 +24,7 @@
 
 use Dolibarr\Code\Compta\Classes\BonPrelevement;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/paymentbybanktransfer/index.php
@@ -64,7 +65,7 @@ $usercancreate = $user->hasRight('paymentbybanktransfer', 'create');
  * View
  */
 
-llxHeader('', $langs->trans("SuppliersStandingOrdersArea"));
+ViewMain::llxHeader('', $langs->trans("SuppliersStandingOrdersArea"));
 
 if (prelevement_check_config('bank-transfer') < 0) {
     $langs->load("errors");
@@ -336,5 +337,5 @@ if ($result) {
 print '</div></div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

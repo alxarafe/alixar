@@ -26,6 +26,7 @@
  */
 
 use Dolibarr\Code\SupplierProposal\Classes\ModelePDFSupplierProposal;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/supplier_proposal/doc/pdf_aurore.modules.php

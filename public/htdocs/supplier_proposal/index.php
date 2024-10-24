@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\SupplierProposal\Classes\SupplierProposal;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/supplier_proposal/index.php
@@ -63,7 +64,7 @@ $form = new Form($db);
 $formfile = new FormFile($db);
 $help_url = "EN:Module_Ask_Price_Supplier|FR:Module_Demande_de_prix_fournisseur";
 
-llxHeader("", $langs->trans("SupplierProposalArea"), $help_url);
+ViewMain::llxHeader("", $langs->trans("SupplierProposalArea"), $help_url);
 
 print load_fiche_titre($langs->trans("SupplierProposalArea"), '', 'supplier_proposal');
 
@@ -400,5 +401,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardSupplierProposal', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

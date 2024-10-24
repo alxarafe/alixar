@@ -20,6 +20,7 @@
  */
 
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/clients.php
@@ -69,7 +70,7 @@ if (!$sortfield) {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $thirdpartystatic = new Societe($db);
 
@@ -195,5 +196,5 @@ if ($resql) {
     dol_print_error($db);
 }
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

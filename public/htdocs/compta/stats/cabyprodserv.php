@@ -23,6 +23,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *     \file        htdocs/compta/stats/cabyprodserv.php
@@ -234,7 +235,7 @@ foreach ($allparams as $key => $value) {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $form = new Form($db);
 $formother = new FormOther($db);
@@ -642,5 +643,5 @@ if ($modecompta == 'CREANCES-DETTES') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

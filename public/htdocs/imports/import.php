@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Imports\Classes\Import;
 use Dolibarr\Code\Imports\Classes\ModeleImports;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/imports/import.php
@@ -339,7 +340,7 @@ if ($step == 1 || !$datatoimport) {
         $param .= '&enclosure=' . urlencode($enclosure);
     }
 
-    llxHeader('', $langs->trans("NewImport"), $help_url);
+    ViewMain::llxHeader('', $langs->trans("NewImport"), $help_url);
 
     $head = import_prepare_head($param, 1);
 
@@ -406,7 +407,7 @@ if ($step == 2 && $datatoimport) {
         $param .= '&enclosure=' . urlencode($enclosure);
     }
 
-    llxHeader('', $langs->trans("NewImport"), $help_url);
+    ViewMain::llxHeader('', $langs->trans("NewImport"), $help_url);
 
     $head = import_prepare_head($param, 2);
 
@@ -516,7 +517,7 @@ if ($step == 3 && $datatoimport) {
 
     $list = $objmodelimport->listOfAvailableImportFormat($db);
 
-    llxHeader('', $langs->trans("NewImport"), $help_url);
+    ViewMain::llxHeader('', $langs->trans("NewImport"), $help_url);
 
     $head = import_prepare_head($param, 3);
 
@@ -922,7 +923,7 @@ if ($step == 4 && $datatoimport) {
         $param .= '&enclosure=' . urlencode($enclosure);
     }
 
-    llxHeader('', $langs->trans("NewImport"), $help_url);
+    ViewMain::llxHeader('', $langs->trans("NewImport"), $help_url);
 
     $head = import_prepare_head($param, 4);
 
@@ -1586,7 +1587,7 @@ if ($step == 5 && $datatoimport) {
         $param .= '&updatekeys[]=' . implode('&updatekeys[]=', $updatekeys);
     }
 
-    llxHeader('', $langs->trans("NewImport"), $help_url);
+    ViewMain::llxHeader('', $langs->trans("NewImport"), $help_url);
 
     $head = import_prepare_head($param, 5);
 
@@ -1772,7 +1773,7 @@ if ($step == 5 && $datatoimport) {
             if ($helppagename && empty($conf->global->MAIN_HELP_DISABLELINK))
             {
                 // Get helpbaseurl, helppage and mode from helppagename and langs
-                $arrayres=getHelpParamFor($helppagename,$langs);
+                $arrayres=ViewMain::getHelpParamFor($helppagename,$langs);
                 $helpbaseurl=$arrayres['helpbaseurl'];
                 $helppage=$arrayres['helppage'];
                 $mode=$arrayres['mode'];
@@ -2078,7 +2079,7 @@ if ($step == 6 && $datatoimport) {
         $param .= '&enclosure=' . urlencode($enclosure);
     }
 
-    llxHeader('', $langs->trans("NewImport"), $help_url);
+    ViewMain::llxHeader('', $langs->trans("NewImport"), $help_url);
 
     $head = import_prepare_head($param, 6);
 
@@ -2205,7 +2206,7 @@ if ($step == 6 && $datatoimport) {
             if ($helppagename && empty($conf->global->MAIN_HELP_DISABLELINK))
             {
                 // Get helpbaseurl, helppage and mode from helppagename and langs
-                $arrayres=getHelpParamFor($helppagename,$langs);
+                $arrayres=ViewMain::getHelpParamFor($helppagename,$langs);
                 $helpbaseurl=$arrayres['helpbaseurl'];
                 $helppage=$arrayres['helppage'];
                 $mode=$arrayres['mode'];
@@ -2378,7 +2379,7 @@ if ($step == 6 && $datatoimport) {
 print '<br>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

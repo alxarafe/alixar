@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file htdocs/margin/checkMargins.php
@@ -160,7 +161,7 @@ $form = new Form($db);
 
 $title = $langs->trans("MarginDetails");
 
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 // print load_fiche_titre($text);
 
@@ -367,5 +368,5 @@ print '</form>';
 $db->free($result);
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

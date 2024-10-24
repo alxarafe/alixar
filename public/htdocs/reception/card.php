@@ -51,6 +51,7 @@ use Dolibarr\Code\Reception\Classes\ModelePdfReception;
 use Dolibarr\Code\Reception\Classes\Reception;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/reception/card.php
@@ -757,7 +758,7 @@ if (empty($reshook)) {
 
 $title = $object->ref . ' - ' . $langs->trans('Reception');
 
-llxHeader('', $title, 'Reception', '', 0, 0, '', '', '', 'mod-reception page-card');
+ViewMain::llxHeader('', $title, 'Reception', '', 0, 0, '', '', '', 'mod-reception page-card');
 
 $form = new Form($db);
 $formfile = new FormFile($db);
@@ -1356,7 +1357,7 @@ if ($action == 'create') {
 
     if ($object->id <= 0) {
         print $langs->trans("NoRecordFound");
-        llxFooter();
+        ViewMain::llxFooter();
         exit;
     }
 
@@ -2243,6 +2244,6 @@ if ($action == 'create') {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

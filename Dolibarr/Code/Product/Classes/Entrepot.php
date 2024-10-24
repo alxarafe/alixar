@@ -26,14 +26,17 @@
 namespace Dolibarr\Code\Product\Classes;
 
 use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use DoliDB;
 
 /**
  *  \file       htdocs/product/stock/class/entrepot.class.php
  *  \ingroup    stock
  *  \brief      File for class to manage warehouses
  */
-
 
 /**
  *  Class to manage warehouses
@@ -207,8 +210,6 @@ class Entrepot extends CommonObject
      * Warehouse open and any operations are allowed, but warehouse is not included into calculation of stock.
      */
     const STATUS_OPENEXT_ALL = 3;   // TODO Implement this
-
-
 
     /**
      *  Constructor

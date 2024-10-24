@@ -25,6 +25,7 @@
 use Dolibarr\Code\Comm\Classes\Propal;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/comm/propal/note.php
@@ -88,7 +89,7 @@ $form = new Form($db);
 $title = $object->ref . " - " . $langs->trans('Notes');
 $help_url = 'EN:Commercial_Proposals|FR:Proposition_commerciale|ES:Presupuestos';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($object->id > 0) {
     if ($object->fetch_thirdparty() > 0) {
@@ -149,5 +150,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

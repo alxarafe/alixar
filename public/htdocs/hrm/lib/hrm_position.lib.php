@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Link;
 use Dolibarr\Code\Hrm\Classes\Position;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    lib/hrm_position.lib.php

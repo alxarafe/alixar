@@ -26,15 +26,23 @@
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 use Dolibarr\Code\Accountancy\Classes\AccountingJournal;
 use Dolibarr\Code\Compta\Classes\Account;
+use Dolibarr\Code\Core\Classes\CMailFile;
+use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
 use Dolibarr\Code\Core\Classes\FormExpenseReport;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\Link;
+use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Ecm\Classes\EcmFiles;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReportLine;
 use Dolibarr\Code\ExpenseReport\Classes\PaymentExpenseReport;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file           htdocs/expensereport/card.php
@@ -1412,7 +1420,7 @@ if (empty($reshook)) {
 $title = $langs->trans("ExpenseReport") . " - " . $langs->trans("Card");
 $help_url = "EN:Module_Expense_Reports|FR:Module_Notes_de_frais";
 
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 $form = new Form($db);
 $formfile = new FormFile($db);
@@ -1558,7 +1566,7 @@ if ($action == 'create') {
                 print '</div>';
 
                 // End of page
-                llxFooter();
+                ViewMain::llxFooter();
                 $db->close();
 
                 exit;
@@ -2725,7 +2733,7 @@ if ($action == 'create') {
 } else {
     print 'Record not found';
 
-    llxFooter();
+    ViewMain::llxFooter();
     exit(1);
 }
 
@@ -2931,6 +2939,6 @@ $trackid = 'exp' . $object->id;
 include DOL_DOCUMENT_ROOT . '/core/tpl/card_presend.tpl.php';
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

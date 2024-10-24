@@ -21,6 +21,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\WebHook\Classes\Target;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/webhook/target_list.php
@@ -376,7 +377,7 @@ if ($num == 1 && getDolGlobalInt('MAIN_SEARCH_DIRECT_OPEN_IF_ONLY_ONE') && $sear
 // Output page
 // --------------------------------------------------------------------
 $title = $langs->trans("Targets");
-llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'mod-webhook page-target_list');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, $morejs, $morecss, '', 'mod-webhook page-target_list');
 
 if ($mode == 'modulesetup') {
     require_once 'lib/webhook.lib.php';
@@ -832,5 +833,5 @@ if (in_array('builddoc', array_keys($arrayofmassactions)) && ($nbtotalofrecords 
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

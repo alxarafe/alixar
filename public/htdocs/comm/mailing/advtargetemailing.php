@@ -24,6 +24,7 @@ use Dolibarr\Code\Comm\Classes\Mailing;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/comm/mailing/advtargetemailing.php
@@ -413,7 +414,7 @@ if (GETPOST("button_removefilter")) {
  * View
  */
 
-llxHeader('', $langs->trans("MailAdvTargetRecipients"));
+ViewMain::llxHeader('', $langs->trans("MailAdvTargetRecipients"));
 
 $form = new Form($db);
 $formadvtargetemaling = new FormAdvTargetEmailing($db);
@@ -470,5 +471,5 @@ if ($object->fetch($id) >= 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

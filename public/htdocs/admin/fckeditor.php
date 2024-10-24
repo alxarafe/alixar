@@ -22,6 +22,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/fckeditor.php
@@ -146,7 +147,7 @@ if (GETPOST('save', 'alpha')) {
  * View
  */
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-fckeditor');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-fckeditor');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("AdvancedEditor"), $linkback, 'title_setup');
@@ -256,5 +257,5 @@ if (empty($conf->use_javascript_ajax)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

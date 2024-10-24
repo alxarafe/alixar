@@ -33,6 +33,7 @@
 
 namespace Dolibarr\Code\Compta\Classes;
 
+
 /**
  *  \file       htdocs/compta/paiement/class/paiement.class.php
  *  \ingroup    invoice

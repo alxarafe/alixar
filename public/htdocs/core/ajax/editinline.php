@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/core/ajax/editinline.php
  *      \brief      Save edit inline changes
@@ -58,7 +60,7 @@ if (!$usercanmodify) {
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 if (!empty($action) && $action === 'updatedElementContent' && $usercanmodify && !empty($content) && !empty($element_id) && !empty($website_ref) && !empty($page_id)) {
     // Page object

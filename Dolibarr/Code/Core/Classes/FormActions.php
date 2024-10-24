@@ -26,6 +26,7 @@ use Dolibarr\Code\Comm\Classes\CActionComm;
 use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 
+
 /**
  *      \file       htdocs/core/class/html.formactions.class.php
  *      \ingroup    core

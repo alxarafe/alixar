@@ -21,6 +21,7 @@
 use Dolibarr\Code\Asset\Classes\Asset;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/asset/document.php
@@ -105,7 +106,7 @@ $form = new Form($db);
 
 $title = $langs->trans("Asset") . ' - ' . $langs->trans("Files");
 $help_url = '';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-asset page-card_documents');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-asset page-card_documents');
 
 if ($object->id) {
     /*
@@ -165,5 +166,5 @@ if ($object->id) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

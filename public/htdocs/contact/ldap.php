@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/contact/ldap.php
@@ -88,7 +89,7 @@ $form = new Form($db);
 
 $title = (getDolGlobalString('SOCIETE_ADDRESSES_MANAGEMENT') ? $langs->trans("Contacts") : $langs->trans("ContactsAddresses"));
 
-llxHeader('', $title, 'EN:Module_Third_Parties|FR:Module_Tiers|ES:M&oacute;dulo_Empresas');
+ViewMain::llxHeader('', $title, 'EN:Module_Third_Parties|FR:Module_Tiers|ES:M&oacute;dulo_Empresas');
 
 $head = contact_prepare_head($object);
 
@@ -195,5 +196,5 @@ if ($result > 0) {
 
 print '</table>';
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

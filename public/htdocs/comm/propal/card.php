@@ -35,26 +35,33 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Comm\Classes\Propal;
 use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormActions;
+use Dolibarr\Code\Core\Classes\FormFile;
+use Dolibarr\Code\Core\Classes\FormMargin;
+use Dolibarr\Code\Core\Classes\FormProjets;
+use Dolibarr\Code\Core\Classes\FormPropal;
+use Dolibarr\Code\Core\Classes\Notify;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Product\Classes\FormProduct;
+use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
+use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Code\Propale\Classes\ModelePDFPropales;
+use Dolibarr\Code\Variants\Model\ProductAttributeCombination;
+use Dolibarr\Lib\ViewMain;
+use Dolibarr\Modules\Societe;
 
 /**
  * \file        htdocs/comm/propal/card.php
  * \ingroup     propale
  * \brief       Page of commercial proposals card and list
  */
-
-use Dolibarr\Code\Comm\Classes\Propal;
-use Dolibarr\Code\Core\Classes\FormFile;
-use Dolibarr\Code\Core\Classes\FormMargin;
-use Dolibarr\Code\Core\Classes\FormProjets;
-use Dolibarr\Code\Core\Classes\FormPropal;
-use Dolibarr\Code\Core\Classes\Translate;
-use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
-use Dolibarr\Code\Product\Classes\Product;
-use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
-use Dolibarr\Code\Variants\Classes\ProductCombination;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -1077,7 +1084,7 @@ if (empty($reshook)) {
         if (!$error && isModEnabled('variants') && $prod_entry_mode != 'free') {
             if ($combinations = GETPOST('combinations', 'array')) {
                 //Check if there is a product with the given combination
-                $prodcomb = new ProductCombination($db);
+                $prodcomb = new ProductAttributeCombination();
 
                 if ($res = $prodcomb->fetchByProductCombination2ValuePairs($idprod, $combinations)) {
                     $idprod = $res->fk_product_child;
@@ -1768,7 +1775,7 @@ if ($action == 'create') {
 }
 $help_url = 'EN:Commercial_Proposals|FR:Proposition_commerciale|ES:Presupuestos|DE:Modul_Angebote';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $now = dol_now();
 
@@ -3221,5 +3228,5 @@ if ($action == 'create') {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

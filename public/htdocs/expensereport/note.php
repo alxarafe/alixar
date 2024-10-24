@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/expensereport/note.php
@@ -93,7 +94,7 @@ if (empty($reshook)) {
  */
 $title = $langs->trans("ExpenseReport") . " - " . $langs->trans("Note");
 $helpurl = "EN:Module_Expense_Reports";
-llxHeader("", $title, $helpurl);
+ViewMain::llxHeader("", $title, $helpurl);
 
 $form = new Form($db);
 
@@ -126,5 +127,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

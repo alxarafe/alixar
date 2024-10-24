@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       /htdocs/webhook/ajax/webhook.php
  *  \brief      File to make Ajax action on webhook
@@ -70,7 +72,7 @@ if (empty($user->admin)) {
  * View
  */
 
-top_httphead('application/json');
+ViewMain::topHttpHead('application/json');
 
 if ($action == "getjsonformtrigger") {
     $response = '';

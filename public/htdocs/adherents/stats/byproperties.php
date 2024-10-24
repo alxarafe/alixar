@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Adherents\Classes\Adherent;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/adherents/stats/byproperties.php
@@ -58,7 +59,7 @@ $langs->loadLangs(array("companies", "members"));
 
 $memberstatic = new Adherent($db);
 
-llxHeader('', $langs->trans("MembersStatisticsByProperties"), '', '', 0, 0, array('https://www.google.com/jsapi'));
+ViewMain::llxHeader('', $langs->trans("MembersStatisticsByProperties"), '', '', 0, 0, array('https://www.google.com/jsapi'));
 
 $title = $langs->trans("MembersStatisticsByProperties");
 
@@ -193,5 +194,5 @@ print '</div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

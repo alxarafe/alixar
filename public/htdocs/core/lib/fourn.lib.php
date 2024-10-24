@@ -27,6 +27,7 @@ use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Link;
 use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/lib/fourn.lib.php

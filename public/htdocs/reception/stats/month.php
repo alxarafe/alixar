@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Reception\Classes\ReceptionStats;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/reception/stats/month.php
@@ -45,7 +46,7 @@ $result = restrictedArea($user, 'reception', 0, '');
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $WIDTH = DolGraph::getDefaultGraphSizeForStats('width');
 $HEIGHT = DolGraph::getDefaultGraphSizeForStats('height');
@@ -81,6 +82,6 @@ print $px->show();
 print '</td></tr>';
 print '</table>';
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

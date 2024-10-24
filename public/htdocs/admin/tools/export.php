@@ -21,6 +21,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Utils;
+use Dolibarr\Lib\ViewMain;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -213,7 +214,7 @@ if ($errormsg) {
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 $db->close();
 

@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/projet/index.php
@@ -104,7 +105,7 @@ $title = $langs->trans('ProjectsArea');
 
 $help_url = 'EN:Module_Projects|FR:Module_Projets|ES:M&oacute;dulo_Proyectos|DE:Modul_Projekte';
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 //if ($mine) $title=$langs->trans("MyProjectsArea");
 
@@ -438,5 +439,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardProjects', $parameters, $projectstatic); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -30,16 +30,17 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/accountancy/admin/accountmodel.php
  *      \ingroup    Accountancy (Double entries)
  *      \brief      Page to administer model of chart of accounts
  */
-
-use Dolibarr\Code\Core\Classes\Form;
-use Dolibarr\Code\Core\Classes\FormAccounting;
-use Dolibarr\Code\Core\Classes\FormAdmin;
-use Dolibarr\Code\Core\Classes\FormCompany;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -341,7 +342,7 @@ $formadmin = new FormAdmin($db);
 
 $help_url = 'EN:Module_Double_Entry_Accounting#Setup|FR:Module_Comptabilit&eacute;_en_Partie_Double#Configuration';
 
-llxHeader('', $langs->trans("Pcg_version"), $help_url);
+ViewMain::llxHeader('', $langs->trans("Pcg_version"), $help_url);
 
 $titre = $langs->trans($tablib[$id]);
 $linkback = '';
@@ -650,7 +651,7 @@ print '</form>';
 print '<br>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 

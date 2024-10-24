@@ -26,6 +26,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/core/lib/functions2.lib.php
  *  \brief          A set of functions for Dolibarr

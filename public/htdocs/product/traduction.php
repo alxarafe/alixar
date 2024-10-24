@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAdmin;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/traduction.php
@@ -196,7 +197,7 @@ if (GETPOST("type") == '1' || ($object->type == Product::TYPE_SERVICE)) {
     $helpurl = 'EN:Module_Services_En|FR:Module_Services|ES:M&oacute;dulo_Servicios';
 }
 
-llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-translation');
+ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-translation');
 
 $form = new Form($db);
 $formadmin = new FormAdmin($db);
@@ -364,5 +365,5 @@ if ($action == 'add' && ($user->hasRight('produit', 'creer') || $user->hasRight(
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

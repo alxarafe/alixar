@@ -22,6 +22,7 @@
 
 use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/bank/document.php
@@ -100,7 +101,7 @@ include DOL_DOCUMENT_ROOT . '/core/actions_linkedfiles.inc.php';
 $title = $object->ref . ' - ' . $langs->trans("Documents");
 $help_url = "EN:Module_Banks_and_Cash|FR:Module_Banques_et_Caisses";
 
-llxHeader("", $title, $help_url);
+ViewMain::llxHeader("", $title, $help_url);
 
 $form = new Form($db);
 
@@ -154,5 +155,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\ExtraFields;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       stocktransfer_note.php
@@ -79,7 +80,7 @@ $form = new Form($db);
 
 //$help_url='EN:Customers_Orders|FR:Commandes_Clients|ES:Pedidos de clientes';
 $help_url = '';
-llxHeader('', $langs->trans('ModuleStockTransferName'), $help_url, '', 0, 0, '', '', '', 'mod-product page-stock-stocktransfer_stocktransfer_note');
+ViewMain::llxHeader('', $langs->trans('ModuleStockTransferName'), $help_url, '', 0, 0, '', '', '', 'mod-product page-stock-stocktransfer_stocktransfer_note');
 
 if ($id > 0 || !empty($ref)) {
     $object->fetch_thirdparty();
@@ -149,5 +150,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

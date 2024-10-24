@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Projet\Classes\Project;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/comm/propal/contact.php
@@ -130,7 +131,7 @@ if (empty($reshook)) {
 $title = $object->ref . " - " . $langs->trans('ContactsAddresses');
 $help_url = "EN:Commercial_Proposals|FR:Proposition_commerciale|ES:Presupuestos";
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $form = new Form($db);
 $formcompany = new FormCompany($db);
@@ -188,5 +189,5 @@ if ($object->id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

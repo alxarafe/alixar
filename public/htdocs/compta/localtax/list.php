@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Compta\Classes\Localtax;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/localtax/list.php
@@ -48,7 +49,7 @@ $mode = GETPOST('mode', 'alpha');
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $localtax_static = new Localtax($db);
 
@@ -139,5 +140,5 @@ if ($result) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

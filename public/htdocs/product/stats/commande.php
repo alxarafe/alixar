@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\FormOrder;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/product/stats/commande.php
@@ -110,7 +111,7 @@ if ($id > 0 || !empty($ref)) {
         setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
     }
 
-    llxHeader("", "", $langs->trans("CardProduct" . $product->type), '', '', 0, 0, '', '', 'mod-product page-stats_commande');
+    ViewMain::llxHeader("", "", $langs->trans("CardProduct" . $product->type), '', '', 0, 0, '', '', 'mod-product page-stats_commande');
 
     if ($result > 0) {
         $head = product_prepare_head($product);
@@ -319,5 +320,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

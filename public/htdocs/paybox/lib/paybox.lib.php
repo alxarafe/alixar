@@ -19,6 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/paybox/lib/paybox.lib.php
  *  \ingroup        paybox
@@ -177,7 +179,7 @@ function print_paybox_redirect($PRICE, $CURRENCY, $EMAIL, $urlok, $urlko, $TAG)
     dol_syslog("PBX_HASH: $PBX_HASH", LOG_DEBUG);
     dol_syslog("PBX_TIME: $PBX_TIME", LOG_DEBUG);
 
-    top_httphead();
+    ViewMain::topHttpHead();
 
     print '<html>' . "\n";
     print '<head>' . "\n";

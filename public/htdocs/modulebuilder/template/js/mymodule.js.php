@@ -49,6 +49,7 @@ if (!defined('NOREQUIREAJAX')) {
     define('NOREQUIREAJAX', '1');
 }
 
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/modulebuilder/template/js/mymodule.js.php

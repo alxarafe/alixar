@@ -22,6 +22,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Ecm\Classes\EcmDirectory;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/ecm/search.php
@@ -108,7 +109,7 @@ if (!$permissiontoread) {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $form = new Form($db);
 $ecmdirstatic = new EcmDirectory($db);
@@ -279,5 +280,5 @@ print '</table>';
 print '<br>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

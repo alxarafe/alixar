@@ -29,6 +29,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+
 /**
  *      \file       htdocs/core/class/CMailFile.class.php
  *      \brief      File of class to send emails (with attachments or not)

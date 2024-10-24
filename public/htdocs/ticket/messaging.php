@@ -23,6 +23,7 @@ use Dolibarr\Code\Core\Classes\FormTicket;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Ticket\Classes\Ticket;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/ticket/messaging.php
@@ -153,7 +154,7 @@ if (getDolGlobalString('MAIN_HTML_TITLE') && preg_match('/ticketnameonly/', getD
     $title = $object->ref . ' ' . $object->name . ' - ' . $langs->trans("Info");
 }
 $help_url = 'FR:DocumentationModuleTicket';
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-ticket page-card_messaging');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-ticket page-card_messaging');
 
 if ($socid > 0) {
     $object->fetch_thirdparty();
@@ -287,5 +288,5 @@ if (!empty($object->id)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

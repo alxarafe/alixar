@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/public/clicktodial/cidlookup.php
  *  \brief      Script to search companies names based on incoming calls, from caller phone number

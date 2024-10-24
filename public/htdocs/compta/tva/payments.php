@@ -28,6 +28,7 @@ use Dolibarr\Code\Compta\Classes\AccountLine;
 use Dolibarr\Code\Compta\Classes\PaymentVAT;
 use Dolibarr\Code\Compta\Classes\Tva;
 use Dolibarr\Code\Salaries\Classes\PaymentSalary;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/tva/payments.php
@@ -87,7 +88,7 @@ $accountlinestatic = new AccountLine($db);
 $payment_vat_static = new PaymentVAT($db);
 $sal_static = new PaymentSalary($db);
 
-llxHeader('', $langs->trans("VATExpensesArea"));
+ViewMain::llxHeader('', $langs->trans("VATExpensesArea"));
 
 $title = $langs->trans("VATPayments");
 
@@ -318,5 +319,5 @@ if (isModEnabled('tax') && $user->hasRight('tax', 'charges', 'lire')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

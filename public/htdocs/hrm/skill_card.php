@@ -29,6 +29,7 @@ use Dolibarr\Code\Core\Classes\FormFile;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Hrm\Classes\Skill;
 use Dolibarr\Code\Hrm\Classes\Skilldet;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/hrm/skill_card.php
@@ -201,7 +202,7 @@ $formproject = new FormProjets($db);
 
 $title = $langs->trans("Skill");
 $help_url = '';
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 
 // Part to create
@@ -864,5 +865,5 @@ if ($action != "create" && $action != "edit") {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

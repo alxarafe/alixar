@@ -34,6 +34,7 @@ use Dolibarr\Code\Product\Classes\MouvementStock;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\Productbatch;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/takepos/invoice.php
@@ -1209,11 +1210,11 @@ if ((getDolGlobalString('TAKEPOS_PHONE_BASIC_LAYOUT') == 1 && $conf->browser->la
     $arrayofjs = array('/takepos/js/jquery.colorbox-min.js');
     $disablejs = 0;
     $disablehead = 0;
-    top_htmlhead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss);
+    ViewMain::topHtmlHead($head, $title, $disablejs, $disablehead, $arrayofjs, $arrayofcss);
 
     print '<body>' . "\n";
 } else {
-    top_httphead('text/html', 1);
+    ViewMain::topHttpHead('text/html', 1);
 }
 
 ?>

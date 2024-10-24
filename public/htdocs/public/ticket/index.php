@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormTicket;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/public/ticket/index.php
@@ -109,6 +110,6 @@ if (getDolGlobalInt('TICKET_SHOW_COMPANY_FOOTER')) {
     htmlPrintOnlineFooter($mysoc, $langs, 0, $suffix, $object);
 }
 
-llxFooter('', 'public');
+ViewMain::llxFooter('', 'public');
 
 $db->close();

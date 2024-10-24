@@ -22,6 +22,8 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file       htdocs/core/modules/mymodule/mod_myobject_advanced.php
  * \ingroup    mymodule

@@ -25,6 +25,7 @@
  */
 
 use Dolibarr\Code\Ecm\Classes\EcmFiles;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/document.php
@@ -76,26 +77,6 @@ if ((isset($_GET["modulepart"]) && $_GET["modulepart"] == 'medias')) {
     if (!defined("NOIPCHECK")) {
         define("NOIPCHECK", 1); // Do not check IP defined into conf $dolibarr_main_restrict_ip
     }
-}
-
-/**
- * Header empty
- *
- * @return  void
- * @ignore
- */
-function llxHeader()
-{
-}
-
-/**
- * Footer empty
- *
- * @return  void
- * @ignore
- */
-function llxFooter()
-{
 }
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions
@@ -293,9 +274,8 @@ if ($reshook < 0) {
     exit;
 }
 
-
 // Permissions are ok and file found, so we return it
-top_httphead($type);
+ViewMain::topHttpHead($type);
 
 header('Content-Description: File Transfer');
 if ($encoding) {

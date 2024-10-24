@@ -57,7 +57,7 @@ $result = restrictedArea($user, 'variants');
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 print '<!-- Ajax page called with url ' . dol_escape_htmltag($_SERVER["PHP_SELF"]) . '?' . dol_escape_htmltag($_SERVER["QUERY_STRING"]) . ' -->' . "\n";
 

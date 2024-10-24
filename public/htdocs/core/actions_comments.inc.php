@@ -24,6 +24,8 @@ use Dolibarr\Code\Core\Classes\Comment;
 
 global $db;
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file           htdocs/core/actions_comments.inc.php
  *  \brief          Code for actions on comments pages

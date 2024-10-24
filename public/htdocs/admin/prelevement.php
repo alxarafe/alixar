@@ -24,6 +24,7 @@
 use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\Compta\Classes\BonPrelevement;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/prelf
@@ -145,7 +146,7 @@ $form = new Form($db);
 
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
-llxHeader('', $langs->trans("WithdrawalsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-prelevement');
+ViewMain::llxHeader('', $langs->trans("WithdrawalsSetup"), '', '', 0, 0, '', '', '', 'mod-admin page-prelevement');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 
@@ -506,5 +507,5 @@ if (isModEnabled('notification') )
 */
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

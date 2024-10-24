@@ -11,6 +11,7 @@
  */
 
 use Dolibarr\Code\Mailing\Classes\MailingTargets;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/mailings/thirdparties_services_expired.modules.php

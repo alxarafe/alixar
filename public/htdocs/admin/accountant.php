@@ -20,6 +20,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/admin/accountant.php
@@ -87,7 +88,7 @@ if (
  */
 
 $help_url = '';
-llxHeader('', $langs->trans("CompanyFoundation"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-accountant');
+ViewMain::llxHeader('', $langs->trans("CompanyFoundation"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-accountant');
 
 print load_fiche_titre($langs->trans("CompanyFoundation"), '', 'title_setup');
 
@@ -196,6 +197,6 @@ print $form->buttonsSaveCancel("Save", '');
 print '</form>';
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

@@ -22,6 +22,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
@@ -41,7 +43,7 @@ $error = 0;
 
 @set_time_limit(300);
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_filecheck');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-system_filecheck');
 
 print load_fiche_titre($langs->trans("FileCheckDolibarr"), '', 'title_setup');
 
@@ -465,7 +467,7 @@ if (empty($error) && !empty($xml)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
 
 exit($error);

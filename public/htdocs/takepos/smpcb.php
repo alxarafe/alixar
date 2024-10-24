@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/takepos/smpcb.php
  *  \ingroup    takepos
@@ -52,7 +54,7 @@ if (GETPOSTISSET('status')) {
  * View
  */
 
-top_httphead('text/html', 1);
+ViewMain::topHttpHead('text/html', 1);
 
 if (GETPOST('smp-status')) {
     print '<html lang="en">';

@@ -24,6 +24,7 @@
 use Dolibarr\Code\Compta\Classes\Tva;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/compta/localtax/index.php
@@ -253,7 +254,7 @@ $period = $form->selectDate($date_start, 'date_start', 0, 0, 0, '', 1, 0) . ' - 
 
 $builddate = dol_now();
 
-llxHeader('', $name);
+ViewMain::llxHeader('', $name);
 
 //$textprevyear="<a href=\"index.php?localTaxType=".$localTaxType."&year=" . ($year_current-1) . "\">".img_previous()."</a>";
 //$textnextyear=" <a href=\"index.php?localTaxType=".$localTaxType."&year=" . ($year_current+1) . "\">".img_next()."</a>";
@@ -603,5 +604,5 @@ pt($db, $sql, $langs->trans("Month"));
 print '</div></div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

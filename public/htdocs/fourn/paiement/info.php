@@ -20,6 +20,7 @@
  */
 
 use Dolibarr\Code\Fourn\Classes\PaiementFourn;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/fourn/paiement/info.php
@@ -69,7 +70,7 @@ if ($socid && $socid != $object->thirdparty->id) {
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $object->info($id);
 
@@ -88,5 +89,5 @@ dol_print_object_info($object);
 print '</td></tr></table>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

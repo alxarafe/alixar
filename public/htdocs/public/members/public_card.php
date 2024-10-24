@@ -24,6 +24,7 @@
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/public/members/public_card.php
@@ -149,7 +150,7 @@ $db->close();
  */
 function llxHeaderVierge($title, $head = "")
 {
-    top_htmlhead($head, $title);
+    ViewMain::topHtmlHead($head, $title);
 
     print '<body class="public_body">' . "\n";
 }

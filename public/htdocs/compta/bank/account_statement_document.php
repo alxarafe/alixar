@@ -23,6 +23,7 @@
 
 use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/bankaccount_statement_document.php
@@ -145,7 +146,7 @@ $form = new Form($db);
 
 $title = $langs->trans("FinancialAccount") . ' - ' . $langs->trans("Documents");
 $helpurl = "";
-llxHeader('', $title, $helpurl);
+ViewMain::llxHeader('', $title, $helpurl);
 
 if ($id > 0 || !empty($ref)) {
     if ($object->fetch($id, $ref)) {
@@ -202,5 +203,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

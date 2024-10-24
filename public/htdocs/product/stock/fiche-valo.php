@@ -20,6 +20,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/product/stock/fiche-valo.php
@@ -47,7 +48,7 @@ $result = restrictedArea($user, 'stock');
 $form = new Form($db);
 
 $help_url = 'EN:Module_Stocks_En|FR:Module_Stock|ES:M&oacute;dulo_Stocks';
-llxHeader("", $langs->trans("WarehouseCard"), $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_fiche_valo');
+ViewMain::llxHeader("", $langs->trans("WarehouseCard"), $help_url, '', 0, 0, '', '', '', 'mod-product page-stock_fiche_valo');
 
 if ($id > 0) {
     $entrepot = new Entrepot($db);
@@ -134,5 +135,5 @@ if ($id > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

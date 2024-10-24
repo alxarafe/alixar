@@ -23,6 +23,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/admin/mailman.php
  *      \ingroup    mailmanspip
@@ -136,7 +138,7 @@ if (($action == 'testsubscribe' || $action == 'testunsubscribe') && getDolGlobal
 
 $help_url = '';
 
-llxHeader('', $langs->trans("MailmanSpipSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-mailman');
+ViewMain::llxHeader('', $langs->trans("MailmanSpipSetup"), $help_url, '', 0, 0, '', '', '', 'mod-admin page-mailman');
 
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
@@ -233,5 +235,5 @@ if (getDolGlobalString('ADHERENT_USE_MAILMAN')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

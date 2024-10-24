@@ -21,6 +21,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Printing\Classes\PrintingDriver;
 use OAuth\Common\Storage\DoliStorage;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/printing/admin/printing.php
@@ -113,7 +114,7 @@ if ($action == 'setvalue' && $user->admin) {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("PrintingSetup"));
+ViewMain::llxHeader('', $langs->trans("PrintingSetup"));
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("PrintingSetup"), $linkback, 'title_setup');
@@ -393,5 +394,5 @@ if ($mode == 'userconf' && $user->admin) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

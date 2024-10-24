@@ -21,6 +21,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/admin/workflow.php
  *  \ingroup    company
@@ -240,7 +242,7 @@ $workflowcodes = array_filter(
  * View
  */
 
-llxHeader('', $langs->trans("WorkflowSetup"), "EN:Module_Workflow_En|FR:Module_Workflow|ES:Módulo_Workflow", '', 0, 0, '', '', '', 'mod-admin page-workflow');
+ViewMain::llxHeader('', $langs->trans("WorkflowSetup"), "EN:Module_Workflow_En|FR:Module_Workflow|ES:Módulo_Workflow", '', 0, 0, '', '', '', 'mod-admin page-workflow');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("WorkflowSetup"), $linkback, 'title_setup');
@@ -253,7 +255,7 @@ print '<br>';
 if (count($workflowcodes) < 1) {
     print $langs->trans("ThereIsNoWorkflowToModify");
 
-    llxFooter();
+    ViewMain::llxFooter();
     $db->close();
     return;
 }
@@ -357,5 +359,5 @@ foreach ($workflowcodes as $key => $params) {
 print '</table>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

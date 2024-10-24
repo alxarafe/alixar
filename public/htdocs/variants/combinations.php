@@ -25,8 +25,9 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Variants\Classes\ProductAttribute;
 use Dolibarr\Code\Variants\Classes\ProductAttributeValue;
 use Dolibarr\Code\Variants\Model\ProductAttributeCombination;
-use Dolibarr\Code\Variants\Model\ProductCombination2ValuePair;
-use Dolibarr\Code\Variants\Model\ProductCombinationLevel;
+use Dolibarr\Code\Variants\Model\ProductAttributeCombination2val;
+use Dolibarr\Code\Variants\Model\ProductAttributeCombinationPriceLevel;
+use Dolibarr\Lib\ViewMain;
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -142,7 +143,7 @@ if ($action == 'create' && $subaction == 'delete') {    // We click on select co
 }
 
 $prodcomb = new ProductAttributeCombination();
-$prodcomb2val = new ProductCombination2ValuePair();
+$prodcomb2val = new ProductAttributeCombination2val();
 
 $productCombination2ValuePairs1 = array();
 
@@ -179,7 +180,7 @@ if (($action == 'add' || $action == 'create') && empty($massaction) && !GETPOST(
             // Valuepair
             $sanit_features[(int)$explode[0]] = (int)$explode[1];
 
-            $tmp = new ProductCombination2ValuePair($db);
+            $tmp = new ProductAttributeCombination2val($db);
             $tmp->fk_prod_attr = (int)$explode[0];
             $tmp->fk_prod_attr_val = (int)$explode[1];
 
@@ -298,7 +299,7 @@ if (($action == 'add' || $action == 'create') && empty($massaction) && !GETPOST(
     if (getDolGlobalString('PRODUIT_MULTIPRICES')) {
         $prodcomb->combination_price_levels = array();
         for ($i = 1; $i <= $conf->global->PRODUIT_MULTIPRICES_LIMIT; $i++) {
-            $productCombinationLevel = new ProductCombinationLevel($db);
+            $productCombinationLevel = new ProductAttributeCombinationPriceLevel($db);
             $productCombinationLevel->fk_product_attribute_combination = $prodcomb->id;
             $productCombinationLevel->fk_price_level = $i;
             $productCombinationLevel->variation_price = (float)$level_price_impact[$i];
@@ -402,7 +403,7 @@ $form = new Form($db);
 
 $title = $langs->trans("Variant");
 
-llxHeader("", $title);
+ViewMain::llxHeader("", $title);
 
 
 if (!empty($id) || !empty($ref)) {
@@ -813,7 +814,7 @@ if (!empty($id) || !empty($ref)) {
             print $form->formconfirm('combinations.php?id=' . $id, $langs->trans('ToClone'), $langs->trans('ConfirmCloneProductCombinations'), 'confirm_copycombination', array(array('type' => 'text', 'label' => $langs->trans('CloneDestinationReference'), 'name' => 'dest_product')), 0, 1);
         }
 
-        $comb2val = new ProductCombination2ValuePair();
+        $comb2val = new ProductAttributeCombination2val();
 
         if ($productCombinations) {
             ?>
@@ -980,5 +981,5 @@ if (!empty($id) || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

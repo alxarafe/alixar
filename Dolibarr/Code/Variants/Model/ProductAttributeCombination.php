@@ -18,6 +18,7 @@
 
 namespace Dolibarr\Code\Variants\Model;
 
+use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\Model;
 

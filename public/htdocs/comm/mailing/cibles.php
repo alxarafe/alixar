@@ -28,6 +28,7 @@ use Dolibarr\Code\EventOrganizaction\Classes\ConferenceOrBoothAttendee;
 use Dolibarr\Code\Mailing\Classes\MailingTargets;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/comm/mailing/cibles.php
@@ -273,7 +274,7 @@ if ($action == 'settitle' || $action == 'setemail_from' || $action == 'setreplyt
  * View
  */
 
-llxHeader('', $langs->trans("Mailing"), 'EN:Module_EMailing|FR:Module_Mailing|ES:M&oacute;dulo_Mailing');
+ViewMain::llxHeader('', $langs->trans("Mailing"), 'EN:Module_EMailing|FR:Module_Mailing|ES:M&oacute;dulo_Mailing');
 
 $form = new Form($db);
 $formmailing = new FormMailing($db);
@@ -953,5 +954,5 @@ if ($object->fetch($id) >= 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

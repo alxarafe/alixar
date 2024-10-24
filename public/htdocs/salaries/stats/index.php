@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Salaries\Classes\SalariesStats;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/salaries/stats/index.php
@@ -66,7 +67,7 @@ $endyear = $year;
 
 $form = new Form($db);
 
-llxHeader();
+ViewMain::llxHeader();
 
 $title = $langs->trans("SalariesStatistics");
 $dir = $conf->salaries->dir_temp;
@@ -290,5 +291,5 @@ print '<div class="clearboth"></div>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

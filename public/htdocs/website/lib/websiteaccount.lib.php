@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Societe\Classes\SocieteAccount;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/website/lib/websiteaccount.lib.php

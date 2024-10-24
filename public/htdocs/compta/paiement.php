@@ -31,6 +31,7 @@
  */
 
 use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/paiement.php
@@ -333,7 +334,7 @@ if (empty($reshook)) {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("Payment"));
+ViewMain::llxHeader('', $langs->trans("Payment"));
 
 if ($action == 'create' || $action == 'confirm_paiement' || $action == 'add_paiement') {
     $facture = new Facture($db);
@@ -994,6 +995,6 @@ if (!GETPOST('action', 'aZ09')) {
     }
 }
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();

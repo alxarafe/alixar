@@ -26,6 +26,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormProjets;
 use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Stripe\Classes\Stripe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/takepos/admin/terminal.php
@@ -172,7 +173,7 @@ if (GETPOST('action', 'alpha') == 'set') {
 $form = new Form($db);
 $formproduct = new FormProduct($db);
 
-llxHeader('', $langs->trans("CashDeskSetup"), '', '', 0, 0, '', '', '', 'mod-takepos page-admin_terminal');
+ViewMain::llxHeader('', $langs->trans("CashDeskSetup"), '', '', 0, 0, '', '', '', 'mod-takepos page-admin_terminal');
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("CashDeskSetup") . ' (TakePOS)', $linkback, 'title_setup');
@@ -544,5 +545,5 @@ print "</form>\n";
 
 print '<br>';
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

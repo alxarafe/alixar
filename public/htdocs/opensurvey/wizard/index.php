@@ -20,6 +20,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', '1');
 }
@@ -43,7 +45,7 @@ $langs->load("opensurvey");
 
 $arrayofjs = array();
 $arrayofcss = array('/opensurvey/css/style.css');
-llxHeader('', $langs->trans("Survey"), '', "", 0, 0, $arrayofjs, $arrayofcss);
+ViewMain::llxHeader('', $langs->trans("Survey"), '', "", 0, 0, $arrayofjs, $arrayofcss);
 
 print load_fiche_titre($langs->trans("CreatePoll"), '', 'poll');
 
@@ -71,5 +73,5 @@ print '</div>';
 print '</div></form>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

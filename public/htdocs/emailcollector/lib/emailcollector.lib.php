@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\EmailCollector\Classes\EmailCollector;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        emailcollector/lib/emailcollector.lib.php

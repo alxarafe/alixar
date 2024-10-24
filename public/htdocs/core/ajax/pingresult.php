@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file      htdocs/core/ajax/pingresult.php
  *       \brief     Page called after a ping was done in js to the official dolibarr ping service.
@@ -62,7 +64,7 @@ $hash_algo = GETPOST('hash_algo', 'alpha');
 
 $now = dol_now();
 
-top_httphead();
+ViewMain::topHttpHead();
 
 print '<!-- Ajax page called with url ' . dol_escape_htmltag($_SERVER["PHP_SELF"]) . '?' . dol_escape_htmltag($_SERVER["QUERY_STRING"]) . ' -->' . "\n";
 

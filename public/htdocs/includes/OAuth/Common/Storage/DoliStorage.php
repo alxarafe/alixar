@@ -18,12 +18,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-/**
- *      \file       htdocs/includes/OAuth/Common/Storage/DoliStorage.php
- *      \ingroup    oauth
- *      \brief      Dolibarr token storage class
- */
-
 namespace OAuth\Common\Storage;
 
 use Dolibarr\Code\Core\Classes\Conf;
@@ -31,6 +25,12 @@ use OAuth\Common\Token\TokenInterface;
 use OAuth\Common\Storage\Exception\TokenNotFoundException;
 use OAuth\Common\Storage\Exception\AuthorizationStateNotFoundException;
 use DoliDB;
+
+/**
+ *      \file       htdocs/includes/OAuth/Common/Storage/DoliStorage.php
+ *      \ingroup    oauth
+ *      \brief      Dolibarr token storage class
+ */
 
 /**
  * Class to manage storage of OAUTH2 in Dolibarr

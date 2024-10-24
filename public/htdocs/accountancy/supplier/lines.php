@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Fourn\Classes\ProductFournisseur;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/accountancy/supplier/lines.php
@@ -185,7 +186,7 @@ $formother = new FormOther($db);
 
 $help_url = 'EN:Module_Double_Entry_Accounting|FR:Module_Comptabilit&eacute;_en_Partie_Double#Liaisons_comptables';
 
-llxHeader('', $langs->trans("SuppliersVentilation") . ' - ' . $langs->trans("Dispatched"), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-supplier page-lines');
+ViewMain::llxHeader('', $langs->trans("SuppliersVentilation") . ' - ' . $langs->trans("Dispatched"), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-supplier page-lines');
 
 print '<script type="text/javascript">
 			$(function () {
@@ -592,5 +593,5 @@ if ($result) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -21,9 +21,11 @@
 use Dolibarr\Code\BookCal\Classes\Availabilities;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file       htdocs/bookcal/availabilities_note.php
+ *   \file
+ * htdocs/bookcal/availabilities_note.php
  *   \ingroup    bookcal
  *   \brief      Tab for notes on Availabilities
  */
@@ -105,7 +107,7 @@ $form = new Form($db);
 //$help_url='EN:Customers_Orders|FR:Commandes_Clients|ES:Pedidos de clientes';
 $help_url = '';
 $title = $langs->trans('Availabilities') . ' - ' . $langs->trans("Notes");
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 if ($id > 0 || !empty($ref)) {
     $object->fetch_thirdparty();
@@ -175,5 +177,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

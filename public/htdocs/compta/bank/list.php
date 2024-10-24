@@ -29,6 +29,7 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\FormCategory;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/compta/bank/list.php
@@ -302,7 +303,7 @@ if ($resql) {
 }
 
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 
 $arrayofselected = is_array($toselect) ? $toselect : array();
@@ -893,5 +894,5 @@ print '</div>' . "\n";
 print '</form>' . "\n";
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

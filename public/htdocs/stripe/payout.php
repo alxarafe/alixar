@@ -21,6 +21,7 @@
 use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Stripe\Classes\Stripe;
+use Dolibarr\Lib\ViewMain;
 
 // Put here all includes required by your class file
 
@@ -63,7 +64,7 @@ $form = new Form($db);
 $acc = new Account($db);
 $stripe = new Stripe($db);
 
-llxHeader('', $langs->trans("StripePayoutList"));
+ViewMain::llxHeader('', $langs->trans("StripePayoutList"));
 
 if (isModEnabled('stripe') && (!getDolGlobalString('STRIPE_LIVE') || GETPOST('forcesandbox', 'alpha'))) {
     $service = 'StripeTest';
@@ -171,5 +172,5 @@ if (!$rowid) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

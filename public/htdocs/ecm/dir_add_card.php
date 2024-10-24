@@ -22,6 +22,7 @@
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Ecm\Classes\EcmDirectory;
 use Dolibarr\Code\Ecm\Classes\FormEcm;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/ecm/dir_add_card.php
@@ -205,7 +206,7 @@ if ($action == 'add' && $permissiontoadd) {
  * View
  */
 
-llxHeader('', $langs->trans("ECMNewSection"));
+ViewMain::llxHeader('', $langs->trans("ECMNewSection"));
 
 $form = new Form($db);
 $formecm = new FormEcm($db);
@@ -296,5 +297,5 @@ if (empty($action) || $action == 'delete_section') {
 
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

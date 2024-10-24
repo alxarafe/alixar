@@ -105,7 +105,7 @@ foreach ($listofparams as $param) {
 }
 
 $title = $langs->trans("VATReport") . " " . dol_print_date($date_start, '', 'tzserver') . " -> " . dol_print_date($date_end, '', 'tzserver');
-llxHeader('', $title, '', '', 0, 0, '', '', $morequerystring);
+ViewMain::llxHeader('', $title, '', '', 0, 0, '', '', $morequerystring);
 
 
 //print load_fiche_titre($langs->trans("VAT"),"");
@@ -894,5 +894,5 @@ if (!is_array($x_coll) || !is_array($x_paye)) {
 }
 print '</table>';
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -50,6 +50,7 @@ use Dolibarr\Code\Product\Classes\FormProduct;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\User\Classes\UserGroup;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/user/card.php
@@ -810,7 +811,7 @@ if ($object->id > 0) {
 }
 $help_url = '';
 
-llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-card');
+ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-user page-card');
 
 
 if ($action == 'create' || $action == 'adduserldap') {
@@ -3010,5 +3011,5 @@ if (isModEnabled('api')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

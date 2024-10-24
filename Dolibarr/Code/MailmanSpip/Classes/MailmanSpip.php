@@ -26,7 +26,9 @@
 
 namespace Dolibarr\Code\MailmanSpip\Classes;
 
+use Dolibarr\Code\Adherents\Classes\Adherent;
 use DoliDB;
+
 
 /**
  *  \file       htdocs/mailmanspip/class/mailmanspip.class.php

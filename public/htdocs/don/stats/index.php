@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Don\Classes\DonationStats;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/don/stats/index.php
@@ -67,7 +68,7 @@ $result = restrictedArea($user, 'don');
 $form = new Form($db);
 $formcompany = new FormCompany($db);
 
-llxHeader();
+ViewMain::llxHeader();
 
 $dir = $conf->don->dir_temp;
 
@@ -328,5 +329,5 @@ print '<div class="clearboth"></div>';
 
 print dol_get_fiche_end();
 
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

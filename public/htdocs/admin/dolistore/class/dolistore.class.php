@@ -1,7 +1,8 @@
 <?php
 
 /*
- * Copyright (C) 2017		 Oscss-Shop       <support@oscss-shop.fr>.
+ * Copyright (C) 2017		Oscss-Shop                  <support@oscss-shop.fr>.
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modifyion 2.0 (the "License");
  * it under the terms of the GNU General Public License as published bypliance with the License.

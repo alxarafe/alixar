@@ -24,6 +24,7 @@ use Dolibarr\Code\Compta\Classes\BonPrelevement;
 use Dolibarr\Code\Compta\Classes\LignePrelevement;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/prelevement/fiche-stat.php
@@ -81,7 +82,7 @@ if ($type == 'bank-transfer') {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("WithdrawalsReceipts"));
+ViewMain::llxHeader('', $langs->trans("WithdrawalsReceipts"));
 
 if ($id > 0 || $ref) {
     if ($object->fetch($id, $ref) >= 0) {
@@ -247,5 +248,5 @@ if ($id > 0 || $ref) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

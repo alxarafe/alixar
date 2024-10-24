@@ -23,6 +23,7 @@ use Dolibarr\Code\Contrat\Classes\Contrat;
 use Dolibarr\Code\Contrat\Classes\ContratLigne;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/product/stats/contrat.php
@@ -93,7 +94,7 @@ if ($id > 0 || !empty($ref)) {
         setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
     }
 
-    llxHeader("", "", $langs->trans("CardProduct" . $product->type), '', '', 0, 0, '', '', 'mod-product page-stats_contrat');
+    ViewMain::llxHeader("", "", $langs->trans("CardProduct" . $product->type), '', '', 0, 0, '', '', 'mod-product page-stats_contrat');
 
     if ($result > 0) {
         $head = product_prepare_head($product);
@@ -266,5 +267,5 @@ if ($id > 0 || !empty($ref)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

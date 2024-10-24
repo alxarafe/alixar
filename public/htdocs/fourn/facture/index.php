@@ -17,6 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *  \file       htdocs/fourn/facture/index.php
  *   \ingroup    facture
@@ -58,7 +60,7 @@ restrictedArea($user, 'fournisseur', 0, '', 'facture');
  * View
  */
 
-llxHeader("", $langs->trans("SupplierInvoicesArea"), 'EN:Suppliers_Invoices|FR:FactureFournisseur|ES:Facturas_de_proveedores');
+ViewMain::llxHeader("", $langs->trans("SupplierInvoicesArea"), 'EN:Suppliers_Invoices|FR:FactureFournisseur|ES:Facturas_de_proveedores');
 
 print load_fiche_titre($langs->trans("SupplierInvoicesArea"), '', 'supplier_invoice');
 
@@ -98,5 +100,5 @@ print '</div>';
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

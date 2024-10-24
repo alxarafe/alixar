@@ -49,6 +49,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file           htdocs/core/lib/functions.lib.php
@@ -6588,7 +6589,7 @@ function dolGetFirstLastname($firstname, $lastname, $nameorder = -1)
 
 /**
  *  Set event message in dol_events session object. Will be output by calling dol_htmloutput_events.
- *  Note: Calling dol_htmloutput_events is done into pages by standard llxFooter() function.
+ *  Note: Calling dol_htmloutput_events is done into pages by standard ViewMain::llxFooter() function.
  *  Note: Prefer to use setEventMessages instead.
  *
  * @param string|string[] $mesgs Message string or array
@@ -6625,7 +6626,7 @@ function setEventMessage($mesgs, $style = 'mesgs', $noduplicate = 0)
 
 /**
  *  Set event messages in dol_events session object. Will be output by calling dol_htmloutput_events.
- *  Note: Calling dol_htmloutput_events is done into pages by standard llxFooter() function.
+ *  Note: Calling dol_htmloutput_events is done into pages by standard ViewMain::llxFooter() function.
  *
  * @param string|null $mesg Message string
  * @param string[]|null $mesgs Message array

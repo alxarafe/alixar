@@ -30,6 +30,7 @@
 use Dolibarr\Code\Core\Classes\DolEditor;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Delivery\Classes\Delivery;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/admin/delivery.php
@@ -208,7 +209,7 @@ if ($action == 'setmod') {
 
 $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
 
-llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-delivery');
+ViewMain::llxHeader('', '', '', '', 0, 0, '', '', '', 'mod-admin page-delivery');
 
 $form = new Form($db);
 
@@ -511,5 +512,5 @@ if (getDolGlobalString('MAIN_SUBMODULE_DELIVERY')) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

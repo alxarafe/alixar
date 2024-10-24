@@ -22,6 +22,7 @@
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormAccounting;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/accountancy/customer/card.php
@@ -90,7 +91,7 @@ if ($action == 'ventil' && $user->hasRight('accounting', 'bind', 'write')) {
  */
 $help_url = 'EN:Module_Double_Entry_Accounting|FR:Module_Comptabilit&eacute;_en_Partie_Double#Liaisons_comptables';
 
-llxHeader("", $langs->trans('FicheVentilation'), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-customer page-card');
+ViewMain::llxHeader("", $langs->trans('FicheVentilation'), $help_url, '', 0, 0, '', '', '', 'mod-accountancy accountancy-customer page-card');
 
 if ($cancel == $langs->trans("Cancel")) {
     $action = '';
@@ -177,5 +178,5 @@ if (!empty($id)) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

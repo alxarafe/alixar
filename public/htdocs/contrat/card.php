@@ -45,6 +45,7 @@ use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
 use Dolibarr\Code\Projet\Classes\Project;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/contrat/card.php
@@ -1088,7 +1089,7 @@ if ($action == 'create') {
     $title = $langs->trans("NewContract");
 }
 
-llxHeader('', $title, $help_url);
+ViewMain::llxHeader('', $title, $help_url);
 
 $form = new Form($db);
 $formfile = new FormFile($db);
@@ -2314,7 +2315,7 @@ if ($action == 'create') {
 }
 
 
-llxFooter();
+ViewMain::llxFooter();
 
 $db->close();
 ?>

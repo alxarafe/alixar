@@ -18,6 +18,7 @@
  */
 
 use Dolibarr\Code\Compta\Classes\AccountLine;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *    \file       htdocs/compta/bank/info.php
@@ -58,7 +59,7 @@ if (!$user->hasRight('banque', 'lire') && !$user->hasRight('banque', 'consolidat
  * View
  */
 
-llxHeader();
+ViewMain::llxHeader();
 
 $object = new AccountLine($db);
 $object->fetch($id);
@@ -95,5 +96,5 @@ print '</td></tr></table>';
 print '</div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

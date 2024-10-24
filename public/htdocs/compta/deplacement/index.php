@@ -23,6 +23,7 @@
 use Dolibarr\Code\Compta\Classes\Deplacement;
 use Dolibarr\Code\Core\Classes\DolGraph;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/compta/deplacement/index.php
@@ -72,7 +73,7 @@ $childids[] = $user->id;
 
 //$help_url='EN:Module_Donations|FR:Module_Dons|ES:M&oacute;dulo_Donaciones';
 $help_url = '';
-llxHeader('', $langs->trans("TripsAndExpenses"), $help_url);
+ViewMain::llxHeader('', $langs->trans("TripsAndExpenses"), $help_url);
 
 
 $totalnb = 0;
@@ -228,5 +229,5 @@ if ($result) {
 print '</div></div>';
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

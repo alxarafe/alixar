@@ -20,6 +20,7 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
+use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
 use DoliDB;
 
 /**

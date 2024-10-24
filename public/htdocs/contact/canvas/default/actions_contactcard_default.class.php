@@ -19,6 +19,7 @@
  */
 
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/contact/canvas/default/actions_contactcard_default.class.php

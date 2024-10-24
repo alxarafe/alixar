@@ -27,6 +27,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/comm/remx.php
@@ -228,7 +229,7 @@ $facturestatic = new Facture($db);
 $facturefournstatic = new FactureFournisseur($db);
 $tmpuser = new User($db);
 
-llxHeader('', $langs->trans("GlobalDiscount"));
+ViewMain::llxHeader('', $langs->trans("GlobalDiscount"));
 
 if ($socid > 0) {
     // On recupere les donnees societes par l'objet
@@ -264,7 +265,7 @@ if ($socid > 0) {
 
         print '</form>';
 
-        llxFooter();
+        ViewMain::llxFooter();
         $db->close();
         exit;
     }
@@ -1085,5 +1086,5 @@ if ($socid > 0) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

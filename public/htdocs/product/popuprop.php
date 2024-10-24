@@ -25,6 +25,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Product\Classes\Product;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file       htdocs/product/popuprop.php
@@ -85,7 +86,7 @@ if ($type == '0') {
 $title = $langs->trans("Statistics");
 
 
-llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-popuprop');
+ViewMain::llxHeader('', $title, $helpurl, '', 0, 0, '', '', '', 'mod-product page-popuprop');
 
 print load_fiche_titre($title, '', 'product');
 
@@ -275,5 +276,5 @@ print '</form>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

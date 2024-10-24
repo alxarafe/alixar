@@ -19,6 +19,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Lib\ViewMain;
+
 /**
  * \file        htdocs/accountancy/admin/subaccount.php
  * \ingroup     Accountancy (Double entries)
@@ -26,8 +29,6 @@
  */
 
 // Load Dolibarr environment
-use Dolibarr\Code\Core\Classes\Form;
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/accounting.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
@@ -133,8 +134,7 @@ $form = new Form($db);
 $help_url = 'EN:Module_Double_Entry_Accounting#Setup|FR:Module_Comptabilit&eacute;_en_Partie_Double#Configuration';
 $title = $langs->trans('ChartOfIndividualAccountsOfSubsidiaryLedger');
 
-llxHeader('', $title, $help_url);
-
+ViewMain::llxHeader('', $title, $help_url);
 
 // Customer
 $sql = "SELECT sa.rowid, sa.nom as label, sa.code_compta as subaccount, '1' as type, sa.entity, sa.client as nature";
@@ -551,5 +551,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

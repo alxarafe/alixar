@@ -25,6 +25,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormCompany;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/societe/admin/societe.php
@@ -348,7 +349,7 @@ clearstatcache();
 $form = new Form($db);
 
 $help_url = 'EN:Module Third Parties setup|FR:Paramétrage_du_module_Tiers|ES:Configuración_del_módulo_terceros';
-llxHeader('', $langs->trans("CompanySetup"), $help_url);
+ViewMain::llxHeader('', $langs->trans("CompanySetup"), $help_url);
 
 $linkback = '<a href="' . constant('BASE_URL') . '/admin/modules.php?restore_lastsearch_values=1">' . $langs->trans("BackToModuleList") . '</a>';
 print load_fiche_titre($langs->trans("CompanySetup"), $linkback, 'title_setup');
@@ -935,5 +936,5 @@ print '</form>';
 print dol_get_fiche_end();
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

@@ -25,6 +25,7 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\ViewMain;
 
 /**
  * \file    htdocs/product/ajax/products.php
@@ -80,7 +81,7 @@ restrictedArea($user, 'produit|service|commande|propal|facture', 0, 'product&pro
 if ($action == 'fetch' && !empty($id)) {
     // action='fetch' is used to get product information on a product. So when action='fetch', id must be the product id.
 
-    top_httphead('application/json');
+    ViewMain::topHttpHead('application/json');
 
     $outjson = array();
 
@@ -284,7 +285,7 @@ if ($action == 'fetch' && !empty($id)) {
 
     $langs->loadLangs(array("main", "products"));
 
-    top_httphead();
+    ViewMain::topHttpHead();
 
     if (empty($htmlname)) {
         print json_encode(array());

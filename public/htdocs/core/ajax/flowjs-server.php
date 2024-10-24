@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *       \file       htdocs/core/ajax/flowjs-server.php
  *       \brief      File to upload very large file, higher than PHP limit. Using flowjs library.
@@ -74,7 +76,7 @@ if (!empty($conf->$module->dir_temp)) {
  * Action
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 $result = false;
 

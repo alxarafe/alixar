@@ -28,6 +28,7 @@ use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Mrp\Classes\Mo;
 use Dolibarr\Code\Mrp\Classes\ModelePDFMo;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/core/modules/mrp/doc/doc_generic_mo_odt.modules.php

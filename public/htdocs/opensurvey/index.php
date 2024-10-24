@@ -20,6 +20,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/opensurvey/index.php
@@ -64,7 +65,7 @@ if ($resql) {
 
 
 $title = $langs->trans("OpenSurveyArea");
-llxHeader('', $title);
+ViewMain::llxHeader('', $title);
 
 print load_fiche_titre($title, '', 'poll');
 
@@ -89,5 +90,5 @@ $parameters = array('user' => $user);
 $reshook = $hookmanager->executeHooks('dashboardOpenSurvey', $parameters, $object); // Note that $action and $object may have been modified by hook
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();

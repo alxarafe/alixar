@@ -18,6 +18,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\ViewMain;
+
 /**
  *      \file       htdocs/core/ajax/ajaxtooltip.php
  *      \ingroup    tooltip
@@ -79,7 +81,7 @@ restrictedArea($user, $object->module, $object, $object->table_element, $usesubl
  * View
  */
 
-top_httphead();
+ViewMain::topHttpHead();
 
 $html = '';
 

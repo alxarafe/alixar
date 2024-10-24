@@ -19,6 +19,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+namespace Dolibarr\Modules;
+
+use Dolibarr\Core\Base\DolibarrModules;
+use DoliDB;
+
 /** \defgroup   oauth     Module oauth
  *  \brief      Module for activation of Oauth for several Api Access
  */
@@ -28,12 +33,6 @@
  *  \ingroup    oauth
  *  \brief      Description and activation file for the module Oauth
  */
-
-namespace Dolibarr\Modules;
-
-use Dolibarr\Core\Base\DolibarrModules;
-use DoliDB;
-
 
 /**
  *  Class to describe and activate module OAuth

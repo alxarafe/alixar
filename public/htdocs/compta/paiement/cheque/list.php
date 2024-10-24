@@ -26,9 +26,11 @@ use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\Compta\Classes\RemiseCheque;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormOther;
+use Dolibarr\Lib\ViewMain;
 
 /**
- *   \file       htdocs/compta/paiement/cheque/list.php
+ *   \file
+ * htdocs/compta/paiement/cheque/list.php
  *   \ingroup    compta
  *   \brief      Page list of cheque deposits
  */
@@ -144,7 +146,7 @@ if (empty($reshook)) {
 
 $form = new Form($db);
 
-llxHeader('', $langs->trans("ChequeDeposits"));
+ViewMain::llxHeader('', $langs->trans("ChequeDeposits"));
 
 $sql = "SELECT bc.rowid, bc.ref, bc.date_bordereau,";
 $sql .= " bc.nbcheque, bc.amount, bc.statut, bc.type,";
@@ -570,5 +572,5 @@ if ($resql) {
 }
 
 // End of page
-llxFooter();
+ViewMain::llxFooter();
 $db->close();
