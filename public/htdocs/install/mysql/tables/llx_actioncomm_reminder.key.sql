@@ -24,6 +24,6 @@ ALTER TABLE llx_actioncomm_reminder
 -- END MODULEBUILDER INDEXES
 
 ALTER TABLE llx_actioncomm_reminder
-    ADD UNIQUE INDEX uk_actioncomm_reminder_unique(fk_actioncomm, fk_user, typeremind, offsetvalue, offsetunit);
+    ADD UNIQUE INDEX uk_actioncomm_reminder_unique (fk_actioncomm, fk_user, typeremind, offsetvalue, offsetunit);
 
 

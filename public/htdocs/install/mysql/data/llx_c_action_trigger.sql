@@ -222,7 +222,7 @@ values ('MEMBER_EXCLUDE', 'Member excluded', 'Executed when a member is excluded
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
 values ('FICHINTER_VALIDATE', 'Intervention validated', 'Executed when a intervention is validated', 'ficheinter', 30);
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('FICHINTER_MODIFY', 'Intervention modify', 'Executed when a intervention is modify', 'ficheinter', 30);
+values ('FICHINTER_MODIFY', 'Intervention modified', 'Executed when a intervention is modify', 'ficheinter', 30);
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
 values ('FICHINTER_CLASSIFY_BILLED', 'Intervention set billed',
         'Executed when a intervention is set to billed (when option FICHINTER_CLASSIFY_BILLED is set)', 'ficheinter',
@@ -302,8 +302,6 @@ insert into llx_c_action_trigger (code, label, description, elementtype, rang)
 values ('USER_NEW_PASSWORD', 'User update', 'Executed when a user is change password', 'user', 304);
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
 values ('USER_ENABLEDISABLE', 'User update', 'Executed when a user is enable or disable', 'user', 305);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('FICHINTER_MODIFY', 'Intervention modified', 'Executed when a intervention is modified', 'ficheinter', 19);
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
 values ('BOM_VALIDATE', 'BOM validated', 'Executed when a BOM is validated', 'bom', 650);
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)

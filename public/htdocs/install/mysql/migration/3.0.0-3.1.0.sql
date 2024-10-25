@@ -18,11 +18,13 @@ where dated < '2000-01-01';
 
 ALTER TABLE llx_c_methode_commande_fournisseur RENAME TO llx_c_input_method;
 
-ALTER TABLE llx_adherent MODIFY login varchar (50);
+ALTER TABLE llx_adherent
+    MODIFY login varchar(50);
 
 ALTER TABLE llx_c_ziptown
     ADD COLUMN fk_pays integer NOT NULL DEFAULT 0 after fk_county;
-ALTER TABLE llx_c_ziptown MODIFY fk_county integer NULL;
+ALTER TABLE llx_c_ziptown
+    MODIFY fk_county integer NULL;
 
 ALTER TABLE llx_c_actioncomm
     ADD COLUMN position integer NOT NULL DEFAULT 0;
@@ -37,21 +39,35 @@ ALTER TABLE llx_commande_fournisseur
 
 -- ALTER TABLE llx_c_currencies ADD COLUMN symbole varchar(3) NOT NULL default '';
 
-ALTER TABLE llx_commande_fournisseur MODIFY model_pdf varchar (255);
-ALTER TABLE llx_commande MODIFY model_pdf varchar (255);
-ALTER TABLE llx_don MODIFY model_pdf varchar (255);
-ALTER TABLE llx_expedition MODIFY model_pdf varchar (255);
-ALTER TABLE llx_facture_fourn MODIFY model_pdf varchar (255);
-ALTER TABLE llx_facture MODIFY model_pdf varchar (255);
-ALTER TABLE llx_fichinter MODIFY model_pdf varchar (255);
-ALTER TABLE llx_livraison MODIFY model_pdf varchar (255);
-ALTER TABLE llx_projet MODIFY model_pdf varchar (255);
-ALTER TABLE llx_propal MODIFY model_pdf varchar (255);
+ALTER TABLE llx_commande_fournisseur
+    MODIFY model_pdf varchar(255);
+ALTER TABLE llx_commande
+    MODIFY model_pdf varchar(255);
+ALTER TABLE llx_don
+    MODIFY model_pdf varchar(255);
+ALTER TABLE llx_expedition
+    MODIFY model_pdf varchar(255);
+ALTER TABLE llx_facture_fourn
+    MODIFY model_pdf varchar(255);
+ALTER TABLE llx_facture
+    MODIFY model_pdf varchar(255);
+ALTER TABLE llx_fichinter
+    MODIFY model_pdf varchar(255);
+ALTER TABLE llx_livraison
+    MODIFY model_pdf varchar(255);
+ALTER TABLE llx_projet
+    MODIFY model_pdf varchar(255);
+ALTER TABLE llx_propal
+    MODIFY model_pdf varchar(255);
 
-ALTER TABLE llx_societe MODIFY siren varchar (32);
-ALTER TABLE llx_societe MODIFY siret varchar (32);
-ALTER TABLE llx_societe MODIFY ape varchar (32);
-ALTER TABLE llx_societe MODIFY idprof4 varchar (32);
+ALTER TABLE llx_societe
+    MODIFY siren varchar(32);
+ALTER TABLE llx_societe
+    MODIFY siret varchar(32);
+ALTER TABLE llx_societe
+    MODIFY ape varchar(32);
+ALTER TABLE llx_societe
+    MODIFY idprof4 varchar(32);
 
 -- Delete old constants
 DELETE
@@ -92,13 +108,15 @@ ALTER TABLE llx_societe
 ALTER TABLE llx_societe
     ADD COLUMN logo varchar(255) DEFAULT NULL;
 
-ALTER TABLE llx_societe_remise MODIFY remise_client double (6,3) DEFAULT 0 NOT NULL;
+ALTER TABLE llx_societe_remise
+    MODIFY remise_client double(6, 3) DEFAULT 0 NOT NULL;
 
 ALTER TABLE llx_menu
     ADD COLUMN fk_mainmenu varchar(16) after fk_menu;
 ALTER TABLE llx_menu
     ADD COLUMN fk_leftmenu varchar(16) after fk_menu;
-ALTER TABLE llx_menu MODIFY leftmenu varchar (100) NULL;
+ALTER TABLE llx_menu
+    MODIFY leftmenu varchar(100) NULL;
 
 
 CREATE TABLE llx_c_availability
@@ -110,7 +128,7 @@ CREATE TABLE llx_c_availability
 )ENGINE=innodb;
 
 ALTER TABLE llx_c_availability
-    ADD UNIQUE INDEX uk_c_availability(code);
+    ADD UNIQUE INDEX uk_c_availability (code);
 
 -- Use table name input_reason to match also input_method
 DROP table llx_c_demand_reason;
@@ -123,7 +141,7 @@ CREATE TABLE llx_c_input_reason
 )ENGINE=innodb;
 
 ALTER TABLE llx_c_input_reason
-    ADD UNIQUE INDEX uk_c_input_reason(code);
+    ADD UNIQUE INDEX uk_c_input_reason (code);
 
 INSERT INTO llx_c_input_reason (rowid, code, label, active)
 VALUES (1, 'SRC_INTE', 'Web site', 1);
@@ -175,7 +193,7 @@ ALTER TABLE llx_usergroup_user DROP INDEX uk_user_group_entity;
 ALTER TABLE llx_usergroup_user
     ADD COLUMN entity integer DEFAULT 1 NOT NULL AFTER rowid;
 ALTER TABLE llx_usergroup_user
-    ADD UNIQUE INDEX uk_usergroup_user (entity,fk_user,fk_usergroup);
+    ADD UNIQUE INDEX uk_usergroup_user (entity, fk_user, fk_usergroup);
 -- V4.1 DELETE FROM llx_usergroup_user WHERE fk_user NOT IN (SELECT rowid from llx_user);
 ALTER TABLE llx_usergroup_user
     ADD CONSTRAINT fk_usergroup_user_fk_user FOREIGN KEY (fk_user) REFERENCES llx_user (rowid);
@@ -220,8 +238,10 @@ ALTER TABLE llx_actioncomm
     ADD COLUMN elementtype varchar(16) DEFAULT NULL AFTER fk_element;
 
 
-ALTER TABLE llx_c_regions MODIFY COLUMN cheflieu varchar (50);
-ALTER TABLE llx_c_departements MODIFY COLUMN cheflieu varchar (50);
+ALTER TABLE llx_c_regions
+    MODIFY COLUMN cheflieu varchar(50);
+ALTER TABLE llx_c_departements
+    MODIFY COLUMN cheflieu varchar(50);
 
 
 -- Table c_action_trigger
@@ -234,7 +254,7 @@ create table llx_c_action_trigger
     description varchar(255),
     elementtype varchar(16)  NOT NULL,
     rang        integer DEFAULT 0
-
+  
 )ENGINE=innodb;
 ALTER TABLE llx_c_action_trigger
     ADD UNIQUE INDEX uk_action_trigger_code (code);
@@ -756,14 +776,22 @@ drop table llx_extra_fields_options;
 drop table llx_extra_fields_values;
 drop table llx_extra_fields;
 
-ALTER TABLE llx_commande MODIFY ref_int varchar (50);
-ALTER TABLE llx_commande MODIFY ref_ext varchar (50);
-ALTER TABLE llx_commande MODIFY ref_client varchar (50);
-ALTER TABLE llx_facture MODIFY ref_int varchar (50);
-ALTER TABLE llx_facture MODIFY ref_ext varchar (50);
-ALTER TABLE llx_facture MODIFY ref_client varchar (50);
-ALTER TABLE llx_propal MODIFY ref_ext varchar (50);
-ALTER TABLE llx_propal MODIFY ref_client varchar (50);
+ALTER TABLE llx_commande
+    MODIFY ref_int varchar(50);
+ALTER TABLE llx_commande
+    MODIFY ref_ext varchar(50);
+ALTER TABLE llx_commande
+    MODIFY ref_client varchar(50);
+ALTER TABLE llx_facture
+    MODIFY ref_int varchar(50);
+ALTER TABLE llx_facture
+    MODIFY ref_ext varchar(50);
+ALTER TABLE llx_facture
+    MODIFY ref_client varchar(50);
+ALTER TABLE llx_propal
+    MODIFY ref_ext varchar(50);
+ALTER TABLE llx_propal
+    MODIFY ref_client varchar(50);
 ALTER TABLE llx_propal
     ADD COLUMN ref_int varchar(50) AFTER ref_ext;
 
@@ -809,8 +837,10 @@ ALTER TABLE llx_don
 ALTER TABLE llx_don
     ADD phone varchar(24) after email;
 
-ALTER TABLE llx_element_element MODIFY sourcetype varchar (32) NOT NULL;
-ALTER TABLE llx_element_element MODIFY targettype varchar (32) NOT NULL;
+ALTER TABLE llx_element_element
+    MODIFY sourcetype varchar(32) NOT NULL;
+ALTER TABLE llx_element_element
+    MODIFY targettype varchar(32) NOT NULL;
 
 ALTER TABLE llx_societe_prices MODIFY tms timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
 -- ALTER TABLE llx_societe_prices ALTER COLUMN tms DROP NOT NULL;

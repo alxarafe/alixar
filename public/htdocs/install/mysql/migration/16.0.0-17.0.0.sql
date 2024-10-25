@@ -37,11 +37,13 @@
 -- VMYSQL4.3 ALTER TABLE llx_emailcollector_emailcollector MODIFY COLUMN tms timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
 
 ALTER TABLE llx_accounting_account DROP FOREIGN KEY fk_accounting_account_fk_pcg_version;
-ALTER TABLE llx_accounting_system MODIFY COLUMN pcg_version varchar (32) NOT NULL;
+ALTER TABLE llx_accounting_system
+    MODIFY COLUMN pcg_version varchar(32) NOT NULL;
 ALTER TABLE llx_accounting_account
     ADD CONSTRAINT fk_accounting_account_fk_pcg_version FOREIGN KEY (fk_pcg_version) REFERENCES llx_accounting_system (pcg_version);
 
-ALTER TABLE llx_c_action_trigger MODIFY elementtype VARCHAR (64);
+ALTER TABLE llx_c_action_trigger
+    MODIFY elementtype VARCHAR(64);
 
 ALTER TABLE llx_c_email_templates
     ADD COLUMN joinfiles text;
@@ -69,15 +71,17 @@ UPDATE llx_c_actioncomm
 SET type = 'system'
 WHERE code = 'AC_OTH';
 
-ALTER TABLE llx_opensurvey_user_studs MODIFY reponses VARCHAR (200) NOT NULL;
+ALTER TABLE llx_opensurvey_user_studs
+    MODIFY reponses VARCHAR(200) NOT NULL;
 
 ALTER TABLE llx_overwrite_trans DROP INDEX uk_overwrite_trans;
 ALTER TABLE llx_overwrite_trans
-    ADD UNIQUE INDEX uk_overwrite_trans(lang, transkey, entity);
+    ADD UNIQUE INDEX uk_overwrite_trans (lang, transkey, entity);
 
 -- v17
 
-ALTER TABLE llx_mailing_cibles MODIFY COLUMN source_type varchar (32);
+ALTER TABLE llx_mailing_cibles
+    MODIFY COLUMN source_type varchar(32);
 
 ALTER TABLE llx_actioncomm
     ADD INDEX idx_actioncomm_percent (percent);
@@ -261,7 +265,8 @@ ALTER TABLE llx_rights_def
 UPDATE llx_establishment
 SET name=''
 WHERE name IS NULL;
-ALTER TABLE llx_establishment CHANGE name label varchar (255) NOT NULL;
+ALTER TABLE llx_establishment
+    CHANGE name label varchar(255) NOT NULL;
 
 ALTER TABLE llx_don
     ADD UNIQUE INDEX idx_don_uk_ref (ref, entity);
@@ -276,7 +281,7 @@ ALTER TABLE llx_don
     ADD INDEX idx_don_fk_user_valid (fk_user_valid);
 
 ALTER TABLE llx_commande
-    ADD COLUMN revenuestamp double(24,8) DEFAULT 0 after localtax2;
+    ADD COLUMN revenuestamp double(24, 8) DEFAULT 0 after localtax2;
 
 create table llx_element_categorie
 (
@@ -299,7 +304,7 @@ ALTER TABLE llx_socpeople
     ADD INDEX idx_socpeople_lastname (lastname);
 
 ALTER TABLE llx_societe
-    ADD INDEX idx_societe_nom(nom);
+    ADD INDEX idx_societe_nom (nom);
 
 ALTER TABLE llx_extrafields MODIFY COLUMN fielddefault text;
 
@@ -309,7 +314,7 @@ ALTER TABLE llx_bank_url
 ALTER TABLE llx_societe_remise_except
     ADD COLUMN multicurrency_code varchar(3) NULL;
 ALTER TABLE llx_societe_remise_except
-    ADD COLUMN multicurrency_tx double(24,8) NULL;
+    ADD COLUMN multicurrency_tx double(24, 8) NULL;
 
 -- VMYSQL4.3 ALTER TABLE llx_hrm_evaluationdet CHANGE COLUMN `rank` rankorder integer;
 -- VPGSQL8.2 ALTER TABLE llx_hrm_evaluationdet CHANGE COLUMN rank rankorder integer;
@@ -334,11 +339,12 @@ ALTER TABLE llx_projet
     ADD COLUMN location varchar(255);
 
 
-ALTER TABLE llx_c_action_trigger MODIFY COLUMN code varchar (128);
+ALTER TABLE llx_c_action_trigger
+    MODIFY COLUMN code varchar(128);
 
 ALTER TABLE llx_overwrite_trans DROP INDEX uk_overwrite_trans;
 ALTER TABLE llx_overwrite_trans
-    ADD UNIQUE INDEX uk_overwrite_trans(entity, lang, transkey);
+    ADD UNIQUE INDEX uk_overwrite_trans (entity, lang, transkey);
 
 --
 -- List of all managed triggered events (used for trigger agenda automatic events and for notification)
@@ -714,8 +720,10 @@ ALTER TABLE llx_opensurvey_comments
 ALTER TABLE llx_c_tva
     ADD COLUMN use_default tinyint DEFAULT 0;
 
-ALTER TABLE llx_commande_fournisseurdet MODIFY COLUMN ref varchar (128);
-ALTER TABLE llx_facture_fourn_det MODIFY COLUMN ref varchar (128);
+ALTER TABLE llx_commande_fournisseurdet
+    MODIFY COLUMN ref varchar(128);
+ALTER TABLE llx_facture_fourn_det
+    MODIFY COLUMN ref varchar(128);
 
 ALTER TABLE llx_projet
     ADD COLUMN extraparams varchar(255);

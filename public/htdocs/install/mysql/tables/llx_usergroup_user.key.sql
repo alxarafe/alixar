@@ -17,7 +17,7 @@
 -- ===========================================================================
 
 ALTER TABLE llx_usergroup_user
-    ADD UNIQUE INDEX uk_usergroup_user (entity,fk_user,fk_usergroup);
+    ADD UNIQUE INDEX uk_usergroup_user (entity, fk_user, fk_usergroup);
 
 ALTER TABLE llx_usergroup_user
     ADD CONSTRAINT fk_usergroup_user_fk_user FOREIGN KEY (fk_user) REFERENCES llx_user (rowid);

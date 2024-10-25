@@ -18,7 +18,8 @@
 -- -- VMYSQL4.1 DELETE FROM llx_usergroup_user      WHERE fk_usergroup NOT IN (SELECT rowid from llx_usergroup);
 
 
-ALTER TABLE llx_menu MODIFY COLUMN leftmenu varchar (100);
+ALTER TABLE llx_menu
+    MODIFY COLUMN leftmenu varchar(100);
 
 create table llx_adherent_type_extrafields
 (
@@ -74,7 +75,7 @@ ALTER TABLE llx_user
 alter table llx_contratdet
     add column fk_product_fournisseur_price integer after info_bits;
 alter table llx_contratdet
-    add column buy_price_ht double(24,8) DEFAULT 0 after fk_product_fournisseur_price;
+    add column buy_price_ht double(24, 8) DEFAULT 0 after fk_product_fournisseur_price;
 
 -- serialised array, to store value of select list choices for example
 alter table llx_extrafields
@@ -83,7 +84,8 @@ alter table llx_extrafields
 -- numbering on supplier invoice
 ALTER TABLE llx_facture_fourn
     ADD COLUMN ref varchar(30) after rowid;
-ALTER TABLE llx_facture_fourn MODIFY COLUMN ref varchar (30);
+ALTER TABLE llx_facture_fourn
+    MODIFY COLUMN ref varchar(30);
 ALTER TABLE llx_facture_fourn DROP INDEX uk_facture_fourn;
 ALTER TABLE llx_facture_fourn DROP INDEX uk_facture_fourn_ref;
 UPDATE llx_facture_fourn
@@ -91,43 +93,68 @@ set ref = NULL
 where ref = '';
 ALTER TABLE llx_facture_fourn
     ADD UNIQUE INDEX uk_facture_fourn_ref (ref, entity);
-ALTER TABLE llx_facture_fourn CHANGE COLUMN facnumber ref_supplier varchar (50);
+ALTER TABLE llx_facture_fourn
+    CHANGE COLUMN facnumber ref_supplier varchar(50);
 ALTER TABLE llx_facture_fourn
     ADD UNIQUE INDEX uk_facture_fourn_ref_supplier (ref_supplier, fk_soc, entity);
 
 
-alter table llx_propal CHANGE COLUMN fk_adresse_livraison fk_delivery_address integer;
+alter table llx_propal
+    CHANGE COLUMN fk_adresse_livraison fk_delivery_address integer;
 alter table llx_commande CHANGE COLUMN fk_adresse_livraison fk_delivery_address integer;
-alter table llx_don CHANGE COLUMN adresse address text;
-alter table llx_don CHANGE COLUMN ville town text;
-alter table llx_don CHANGE COLUMN prenom firstname varchar (50);
-alter table llx_don CHANGE COLUMN nom lastname varchar (50);
-alter table llx_don CHANGE COLUMN cp zip varchar (10);
-alter table llx_don CHANGE COLUMN pays country varchar (50);
+alter table llx_don
+    CHANGE COLUMN adresse address text;
+alter table llx_don
+    CHANGE COLUMN ville town text;
+alter table llx_don
+    CHANGE COLUMN prenom firstname varchar(50);
+alter table llx_don
+    CHANGE COLUMN nom lastname varchar(50);
+alter table llx_don
+    CHANGE COLUMN cp zip varchar(10);
+alter table llx_don
+    CHANGE COLUMN pays country varchar(50);
 alter table llx_adherent CHANGE COLUMN adresse address text;
-alter table llx_adherent CHANGE COLUMN nom lastname varchar (50);
-alter table llx_adherent CHANGE COLUMN prenom firstname varchar (50);
+alter table llx_adherent
+    CHANGE COLUMN nom lastname varchar(50);
+alter table llx_adherent
+    CHANGE COLUMN prenom firstname varchar(50);
 alter table llx_adherent CHANGE COLUMN ville town text;
-alter table llx_adherent CHANGE COLUMN cp zip varchar (10);
-alter table llx_adherent CHANGE COLUMN pays country varchar (50);
+alter table llx_adherent
+    CHANGE COLUMN cp zip varchar(10);
+alter table llx_adherent
+    CHANGE COLUMN pays country varchar(50);
 alter table llx_adherent CHANGE COLUMN naiss birth date;
-alter table llx_adherent CHANGE COLUMN fk_departement state_id varchar (50);
+alter table llx_adherent
+    CHANGE COLUMN fk_departement state_id varchar(50);
 alter table llx_bank_account CHANGE COLUMN adresse_proprio owner_address text;
-alter table llx_bank_account CHANGE COLUMN fk_departement state_id varchar (50);
-alter table llx_mailing_cibles CHANGE COLUMN nom lastname varchar (50);
-alter table llx_mailing_cibles CHANGE COLUMN prenom firstname varchar (50);
-alter table llx_user CHANGE COLUMN name lastname varchar (50);
+alter table llx_bank_account
+    CHANGE COLUMN fk_departement state_id varchar(50);
+alter table llx_mailing_cibles
+    CHANGE COLUMN nom lastname varchar(50);
+alter table llx_mailing_cibles
+    CHANGE COLUMN prenom firstname varchar(50);
+alter table llx_user
+    CHANGE COLUMN name lastname varchar(50);
 alter table llx_entrepot CHANGE COLUMN ville town text;
-alter table llx_entrepot CHANGE COLUMN cp zip varchar (10);
-alter table llx_societe CHANGE COLUMN ville town text;
-alter table llx_societe CHANGE COLUMN cp zip varchar (10);
-alter table llx_societe CHANGE COLUMN tel phone varchar (20);
-alter table llx_socpeople CHANGE COLUMN name lastname varchar (50);
-alter table llx_socpeople CHANGE COLUMN ville town text;
-alter table llx_socpeople CHANGE COLUMN cp zip varchar (10);
+alter table llx_entrepot
+    CHANGE COLUMN cp zip varchar(10);
+alter table llx_societe
+    CHANGE COLUMN ville town text;
+alter table llx_societe
+    CHANGE COLUMN cp zip varchar(10);
+alter table llx_societe
+    CHANGE COLUMN tel phone varchar(20);
+alter table llx_socpeople
+    CHANGE COLUMN name lastname varchar(50);
+alter table llx_socpeople
+    CHANGE COLUMN ville town text;
+alter table llx_socpeople
+    CHANGE COLUMN cp zip varchar(10);
 alter table llx_societe_rib CHANGE COLUMN adresse_proprio owner_address text;
 alter table llx_societe_address CHANGE COLUMN ville town text;
-alter table llx_societe_address CHANGE COLUMN cp zip varchar (10);
+alter table llx_societe_address
+    CHANGE COLUMN cp zip varchar(10);
 
 
 -- remove constraint and index before rename field
@@ -190,13 +217,13 @@ create table llx_facture_extrafields
 ALTER TABLE llx_facture_extrafields
     ADD INDEX idx_facture_extrafields (fk_object);
 ALTER TABLE llx_facture
-    ADD COLUMN revenuestamp double(24,8) DEFAULT 0 AFTER localtax2;
+    ADD COLUMN revenuestamp double(24, 8) DEFAULT 0 AFTER localtax2;
 
 CREATE TABLE llx_c_revenuestamp
 (
     rowid                 integer               NOT NULL AUTO_INCREMENT PRIMARY KEY,
     fk_pays               integer               NOT NULL,
-    taux double NOT NULL,
+    taux                  double                NOT NULL,
     note                  varchar(128),
     active                tinyint     DEFAULT 1 NOT NULL,
     accountancy_code_sell varchar(15) DEFAULT NULL,
@@ -206,22 +233,38 @@ CREATE TABLE llx_c_revenuestamp
 insert into llx_c_revenuestamp(rowid, fk_pays, taux, note, active)
 values (101, 10, '0.4', 'Timbre fiscal', 1);
 
-ALTER TABLE llx_c_tva MODIFY COLUMN localtax1_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_c_tva MODIFY COLUMN localtax2_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_commande_fournisseurdet MODIFY COLUMN localtax1_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_commande_fournisseurdet MODIFY COLUMN localtax2_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_commandedet MODIFY COLUMN localtax1_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_commandedet MODIFY COLUMN localtax2_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_contratdet MODIFY COLUMN localtax1_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_contratdet MODIFY COLUMN localtax2_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_facture_fourn_det MODIFY COLUMN localtax1_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_facture_fourn_det MODIFY COLUMN localtax2_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_facturedet_rec MODIFY COLUMN localtax1_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_facturedet_rec MODIFY COLUMN localtax2_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_facturedet MODIFY COLUMN localtax1_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_facturedet MODIFY COLUMN localtax2_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_propaldet MODIFY COLUMN localtax1_type varchar (10) DEFAULT NULL;
-ALTER TABLE llx_propaldet MODIFY COLUMN localtax2_type varchar (10) DEFAULT NULL;
+ALTER TABLE llx_c_tva
+    MODIFY COLUMN localtax1_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_c_tva
+    MODIFY COLUMN localtax2_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_commande_fournisseurdet
+    MODIFY COLUMN localtax1_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_commande_fournisseurdet
+    MODIFY COLUMN localtax2_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_commandedet
+    MODIFY COLUMN localtax1_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_commandedet
+    MODIFY COLUMN localtax2_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_contratdet
+    MODIFY COLUMN localtax1_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_contratdet
+    MODIFY COLUMN localtax2_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_facture_fourn_det
+    MODIFY COLUMN localtax1_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_facture_fourn_det
+    MODIFY COLUMN localtax2_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_facturedet_rec
+    MODIFY COLUMN localtax1_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_facturedet_rec
+    MODIFY COLUMN localtax2_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_facturedet
+    MODIFY COLUMN localtax1_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_facturedet
+    MODIFY COLUMN localtax2_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_propaldet
+    MODIFY COLUMN localtax1_type varchar(10) DEFAULT NULL;
+ALTER TABLE llx_propaldet
+    MODIFY COLUMN localtax2_type varchar(10) DEFAULT NULL;
 -- No more use type 7, use revenuse stamp instead
 UPDATE llx_c_tva
 set localtax1=0,
@@ -258,7 +301,7 @@ ALTER TABLE llx_facture_fourn_det
     ADD COLUMN fk_code_ventilation integer DEFAULT 0 NOT NULL;
 ALTER TABLE llx_facturedet DROP COLUMN fk_export_compta;
 
-CREATE TABLE llx_cronjob
+CREATE TABLE llx_cronjob 
 (
     rowid          integer AUTO_INCREMENT PRIMARY KEY,
     tms            timestamp            DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -290,7 +333,8 @@ CREATE TABLE llx_cronjob
 )ENGINE=innodb;
 
 
-ALTER TABLE llx_societe MODIFY COLUMN zip varchar (25);
+ALTER TABLE llx_societe
+    MODIFY COLUMN zip varchar(25);
 
 ALTER TABLE llx_user
     ADD COLUMN address varchar(255);
@@ -309,7 +353,7 @@ ALTER TABLE llx_product_price
     ADD COLUMN import_key varchar(14) AFTER price_by_qty;
 
 DROP TABLE llx_printer_ipp;
-CREATE TABLE llx_printer_ipp
+CREATE TABLE llx_printer_ipp 
 (
     rowid            integer AUTO_INCREMENT PRIMARY KEY,
     tms              timestamp             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -324,7 +368,8 @@ CREATE TABLE llx_printer_ipp
 
 ALTER TABLE llx_socpeople
     ADD COLUMN ref_ext varchar(128) after entity;
-ALTER TABLE llx_adherent MODIFY COLUMN ref_ext varchar (128);
+ALTER TABLE llx_adherent
+    MODIFY COLUMN ref_ext varchar(128);
 
 create table llx_commande_extrafields
 (
@@ -393,8 +438,8 @@ CREATE TABLE llx_opensurvey_comments
 (
     id_comment INTEGER unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
     id_sondage CHAR(16) NOT NULL,
-    comment    text     NOT NULL,
-    tms        timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    comment text NOT NULL,
+    tms     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     usercomment text
 ) ENGINE=InnoDB;
 
@@ -484,7 +529,8 @@ ALTER TABLE llx_user_clicktodial
 ALTER TABLE llx_fichinterdet
     ADD COLUMN fk_parent_line integer NULL AFTER fk_fichinter;
 
-ALTER TABLE llx_societe_address CHANGE COLUMN tel phone varchar (20);
+ALTER TABLE llx_societe_address
+    CHANGE COLUMN tel phone varchar(20);
 
 insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, localtax1, localtax1_type, note, active)
 values (143, 14, '5', '0', '9.975', '1', 'TPS and TVQ rate', 1);

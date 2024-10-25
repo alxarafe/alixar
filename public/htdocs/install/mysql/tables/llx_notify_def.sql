@@ -28,7 +28,7 @@ create table llx_notify_def
     fk_contact integer,
     fk_user    integer,
     email      varchar(255),               -- for fixed email notif
-    threshold double(24,8),                -- threshold on an amount to qualify the notification
+    threshold  double(24, 8),              -- threshold on an amount to qualify the notification
     context    varchar(128),               -- only for a particular contet
     type       varchar(16) DEFAULT 'email' -- 'browser', 'email', 'sms', 'webservice', ...
 )ENGINE=innodb;

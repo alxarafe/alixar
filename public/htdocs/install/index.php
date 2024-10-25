@@ -19,7 +19,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Lib\ViewMain;
+use Dolibarr\Code\Core\Classes\FormAdmin;
 
 /**
  *       \file       htdocs/install/index.php
@@ -31,8 +31,6 @@ use Dolibarr\Lib\ViewMain;
 define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
 
 include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
-include_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
-include_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
 
 global $langs;
 

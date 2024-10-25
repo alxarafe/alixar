@@ -34,7 +34,7 @@
  * Return code is 0 if OK, >0 if error
  */
 
-use Dolibarr\Lib\ViewMain;
+use Dolibarr\Lib\Version;
 
 /**
  *      \file       htdocs/install/upgrade.php
@@ -203,7 +203,7 @@ if (!GETPOST('action', 'aZ09') || preg_match('/upgrade/i', GETPOST('action', 'aZ
         //print join('.',$versionarray).' - '.join('.',$versionmindb);
         if (
             count($versionmindb) && count($versionarray)
-            && versioncompare($versionarray, $versionmindb) < 0
+            && Version::compare($versionarray, $versionmindb) < 0
         ) {
             // Warning: database version too low.
             print "<tr><td>" . $langs->trans("ErrorDatabaseVersionTooLow", implode('.', $versionarray), implode('.', $versionmindb)) . '</td><td class="right"><span class="error">' . $langs->trans("Error") . "</span></td></tr>\n";
@@ -226,10 +226,10 @@ if (!GETPOST('action', 'aZ09') || preg_match('/upgrade/i', GETPOST('action', 'aZ
                 }
             }
             foreach ($dbversion_disallowed as $dbversion_totest) {
-                //print $db->type.' - '.join('.',$versionarray).' - '.versioncompare($dbversion_totest['version'],$versionarray)."<br>\n";
+                //print $db->type.' - '.join('.',$versionarray).' - '.Version::compare($dbversion_totest['version'],$versionarray)."<br>\n";
                 if (
                     $dbversion_totest['type'] == $db->type
-                    && (versioncompare($dbversion_totest['version'], $versionarray) == 0 || versioncompare($dbversion_totest['version'], $versionarray) <= -4 || versioncompare($dbversion_totest['version'], $versionarray) >= 4)
+                    && (Version::compare($dbversion_totest['version'], $versionarray) == 0 || Version::compare($dbversion_totest['version'], $versionarray) <= -4 || Version::compare($dbversion_totest['version'], $versionarray) >= 4)
                 ) {
                     // Warning: database version too low.
                     print '<tr><td><div class="warning">' . $langs->trans("ErrorDatabaseVersionForbiddenForMigration", implode('.', $versionarray), $listofforbiddenversion) . "</div></td><td class=\"right\">" . $langs->trans("Error") . "</td></tr>\n";
@@ -259,7 +259,7 @@ if (!GETPOST('action', 'aZ09') || preg_match('/upgrade/i', GETPOST('action', 'aZ
         $versioncommande = array(4, 0, 0);
         if (
             count($versioncommande) && count($versionarray)
-            && versioncompare($versioncommande, $versionarray) <= 0
+            && Version::compare($versioncommande, $versionarray) <= 0
         ) {  // Si mysql >= 4.0
             dolibarr_install_syslog("Clean database from bad named constraints");
 

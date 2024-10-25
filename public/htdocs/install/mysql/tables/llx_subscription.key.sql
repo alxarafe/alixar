@@ -17,4 +17,4 @@
 -- ============================================================================
 
 ALTER TABLE llx_subscription
-    ADD UNIQUE INDEX uk_subscription (fk_adherent,dateadh);
+    ADD UNIQUE INDEX uk_subscription (fk_adherent, dateadh);

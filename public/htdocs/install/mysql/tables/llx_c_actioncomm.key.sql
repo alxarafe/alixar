@@ -19,4 +19,4 @@
 -- ========================================================================
 
 ALTER TABLE llx_c_actioncomm
-    ADD UNIQUE INDEX uk_c_actioncomm(code);
+    ADD UNIQUE INDEX uk_c_actioncomm (code);

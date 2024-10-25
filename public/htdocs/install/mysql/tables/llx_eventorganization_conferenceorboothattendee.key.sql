@@ -32,5 +32,5 @@ ALTER TABLE llx_eventorganization_conferenceorboothattendee
 -- END MODULEBUILDER INDEXES
 
 ALTER TABLE llx_eventorganization_conferenceorboothattendee
-    ADD UNIQUE INDEX uk_eventorganization_conferenceorboothattendee(fk_project, email, fk_actioncomm);
+    ADD UNIQUE INDEX uk_eventorganization_conferenceorboothattendee (fk_project, email, fk_actioncomm);
 

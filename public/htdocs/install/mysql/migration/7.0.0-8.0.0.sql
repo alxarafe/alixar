@@ -59,7 +59,8 @@ UPDATE llx_const
 set name = __ENCRYPT('INVOICE_FREE_TEXT') __
 where name = __ENCRYPT('FACTURE_FREE_TEXT') __;
 
-ALTER TABLE llx_chargesociales MODIFY COLUMN amount double (24,8);
+ALTER TABLE llx_chargesociales
+    MODIFY COLUMN amount double(24, 8);
 
 
 -- drop very old table (bad name)
@@ -143,7 +144,8 @@ ALTER TABLE llx_paiementfourn
 -- delete old permission no more used
 DELETE
 FROM llx_rights_def
-WHERE perms = 'main' and module = 'commercial';
+WHERE perms = 'main'
+  and module = 'commercial';
 
 delete
 from llx_rights_def
@@ -166,7 +168,8 @@ ALTER TABLE llx_c_type_fees DROP COLUMN llx_c_type_fees;
 ALTER TABLE llx_c_type_fees
     ADD COLUMN type integer DEFAULT 0;
 
-ALTER TABLE llx_c_ecotaxe CHANGE COLUMN libelle label varchar (255);
+ALTER TABLE llx_c_ecotaxe
+    CHANGE COLUMN libelle label varchar(255);
 
 ALTER TABLE llx_product_fournisseur_price DROP COLUMN unitcharges;
 
@@ -176,9 +179,9 @@ ALTER TABLE llx_projet
     ADD COLUMN bill_time integer DEFAULT 0;
 
 ALTER TABLE llx_societe
-    ADD COLUMN order_min_amount double(24,8) DEFAULT NULL AFTER outstanding_limit;
+    ADD COLUMN order_min_amount double(24, 8) DEFAULT NULL AFTER outstanding_limit;
 ALTER TABLE llx_societe
-    ADD COLUMN supplier_order_min_amount double(24,8) DEFAULT NULL AFTER order_min_amount;
+    ADD COLUMN supplier_order_min_amount double(24, 8) DEFAULT NULL AFTER order_min_amount;
 
 
 create table llx_c_type_container
@@ -187,7 +190,7 @@ create table llx_c_type_container
     code   varchar(32)       NOT NULL,
     entity integer DEFAULT 1 NOT NULL, -- multi company id
     label  varchar(64)       NOT NULL,
-    module varchar(32) NULL,
+    module varchar(32)       NULL,
     active tinyint DEFAULT 1 NOT NULL
 )ENGINE=innodb;
 
@@ -203,14 +206,14 @@ ALTER TABLE llx_societe
     ADD COLUMN remise_supplier real DEFAULT 0 AFTER remise_client;
 CREATE TABLE llx_societe_remise_supplier
 (
-    rowid          integer AUTO_INCREMENT PRIMARY KEY,
-    entity         integer   DEFAULT 1 NOT NULL,     -- multi company id
-    fk_soc         integer             NOT NULL,
-    tms            timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    datec          datetime,                         -- creation date
-    fk_user_author integer,                          -- creation user
-    remise_supplier double(6,3)  DEFAULT 0 NOT NULL, -- discount
-    note           text
+    rowid           integer AUTO_INCREMENT PRIMARY KEY,
+    entity          integer      DEFAULT 1 NOT NULL, -- multi company id
+    fk_soc          integer                NOT NULL,
+    tms             timestamp    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    datec           datetime,                        -- creation date
+    fk_user_author  integer,                         -- creation user
+    remise_supplier double(6, 3) DEFAULT 0 NOT NULL, -- discount
+    note            text
 )ENGINE=innodb;
 insert into llx_c_type_container (code, label, module, active)
 values ('page', 'Page', 'system', 1);
@@ -222,8 +225,10 @@ insert into llx_c_type_container (code, label, module, active)
 values ('other', 'Other', 'system', 1);
 
 -- For supplier product buy price in multicurency
-ALTER TABLE llx_product_fournisseur_price CHANGE COLUMN multicurrency_price_ttc multicurrency_unitprice DOUBLE (24,8) NULL DEFAULT NULL;
-ALTER TABLE llx_product_fournisseur_price_log CHANGE COLUMN multicurrency_price_ttc multicurrency_unitprice DOUBLE (24,8) NULL DEFAULT NULL;
+ALTER TABLE llx_product_fournisseur_price
+    CHANGE COLUMN multicurrency_price_ttc multicurrency_unitprice DOUBLE(24, 8) NULL DEFAULT NULL;
+ALTER TABLE llx_product_fournisseur_price_log
+    CHANGE COLUMN multicurrency_price_ttc multicurrency_unitprice DOUBLE(24, 8) NULL DEFAULT NULL;
 
 ALTER TABLE llx_expensereport_det
     ADD COLUMN docnumber varchar(128) after fk_expensereport;
@@ -250,7 +255,7 @@ WHERE entity > 1
 -- Add missing keys and primary key
 ALTER TABLE llx_c_paiement DROP INDEX uk_c_paiement;
 ALTER TABLE llx_c_paiement
-    ADD UNIQUE INDEX uk_c_paiement_code(entity, code);
+    ADD UNIQUE INDEX uk_c_paiement_code (entity, code);
 
 -- VMYSQL4.3 ALTER TABLE llx_c_paiement CHANGE COLUMN id id INTEGER AUTO_INCREMENT PRIMARY KEY;
 -- VPGSQL8.2 CREATE SEQUENCE __DATABASE__.llx_c_paiement_id_seq OWNED BY llx_c_paiement.id;
@@ -261,7 +266,7 @@ ALTER TABLE llx_c_paiement
 -- Add missing keys and primary key
 ALTER TABLE llx_c_payment_term DROP INDEX uk_c_payment_term;
 ALTER TABLE llx_c_payment_term
-    ADD UNIQUE INDEX uk_c_payment_term_code(entity, code);
+    ADD UNIQUE INDEX uk_c_payment_term_code (entity, code);
 
 -- VMYSQL4.3 ALTER TABLE llx_c_payment_term CHANGE COLUMN rowid rowid INTEGER AUTO_INCREMENT PRIMARY KEY;
 -- VPGSQL8.2 CREATE SEQUENCE __DATABASE__.llx_c_payment_term_rowid_seq OWNED BY llx_c_payment_term.rowid;
@@ -294,13 +299,13 @@ ALTER TABLE llx_societe_rib
 ALTER TABLE llx_societe_rib
     ADD COLUMN ending_date date;
 ALTER TABLE llx_societe_rib
-    ADD COLUMN max_total_amount_of_all_payments double(24,8);
+    ADD COLUMN max_total_amount_of_all_payments double(24, 8);
 ALTER TABLE llx_societe_rib
     ADD COLUMN preapproval_key varchar(255);
 ALTER TABLE llx_societe_rib
     ADD COLUMN starting_date date;
 ALTER TABLE llx_societe_rib
-    ADD COLUMN total_amount_of_all_payments double(24,8);
+    ADD COLUMN total_amount_of_all_payments double(24, 8);
 ALTER TABLE llx_societe_rib
     ADD COLUMN stripe_card_ref varchar(128);
 ALTER TABLE llx_societe_rib
@@ -429,6 +434,7 @@ ALTER TABLE llx_c_ticket_type
     ADD UNIQUE INDEX uk_code (code, entity);
 
 
+
 -- Load data
 INSERT INTO llx_c_ticket_severity (code, pos, label, color, active, use_default, description)
 VALUES ('LOW', '10', 'Low', '', 1, 0, NULL);
@@ -477,7 +483,7 @@ CREATE TABLE llx_societe_account
     rowid           integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
     entity          integer   DEFAULT 1,
     key_account     varchar(128),
-    login           varchar(128) NOT NULL,
+    login           varchar(128)                       NOT NULL,
     pass_encoding   varchar(24),
     pass_crypted    varchar(128),
     pass_temp       varchar(128), -- temporary password when asked for forget password
@@ -487,9 +493,9 @@ CREATE TABLE llx_societe_account
     note_private    text,
     date_last_login datetime,
     date_previous_login datetime,
-    date_creation   datetime     NOT NULL,
+    date_creation   datetime                           NOT NULL,
     tms             timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_creat   integer      NOT NULL,
+    fk_user_creat   integer                            NOT NULL,
     fk_user_modif   integer,
     import_key      varchar(14),
     status          integer
@@ -498,7 +504,8 @@ CREATE TABLE llx_societe_account
 
 -- VMYSQL4.3 ALTER TABLE llx_societe_account MODIFY COLUMN pass_encoding varchar(24) NULL;
 
-ALTER TABLE llx_const MODIFY type varchar (64) DEFAULT 'string';
+ALTER TABLE llx_const
+    MODIFY type varchar(64) DEFAULT 'string';
 
 UPDATE llx_const
 set type = 'text'
@@ -529,9 +536,9 @@ ALTER TABLE llx_societe_account
     ADD INDEX idx_societe_account_fk_soc (fk_soc);
 
 ALTER TABLE llx_societe_account
-    ADD UNIQUE INDEX uk_societe_account_login_website_soc(entity, fk_soc, login, site, fk_website);
+    ADD UNIQUE INDEX uk_societe_account_login_website_soc (entity, fk_soc, login, site, fk_website);
 ALTER TABLE llx_societe_account
-    ADD UNIQUE INDEX uk_societe_account_key_account_soc(entity, fk_soc, key_account, site, fk_website);
+    ADD UNIQUE INDEX uk_societe_account_key_account_soc (entity, fk_soc, key_account, site, fk_website);
 
 ALTER TABLE llx_societe_account
     ADD CONSTRAINT llx_societe_account_fk_website FOREIGN KEY (fk_website) REFERENCES llx_website (rowid);
@@ -539,8 +546,10 @@ ALTER TABLE llx_societe_account
     ADD CONSTRAINT llx_societe_account_fk_societe FOREIGN KEY (fk_soc) REFERENCES llx_societe (rowid);
 
 
-ALTER TABLE llx_societe_rib MODIFY COLUMN max_total_amount_of_all_payments double (24,8);
-ALTER TABLE llx_societe_rib MODIFY COLUMN total_amount_of_all_payments double (24,8);
+ALTER TABLE llx_societe_rib
+    MODIFY COLUMN max_total_amount_of_all_payments double(24, 8);
+ALTER TABLE llx_societe_rib
+    MODIFY COLUMN total_amount_of_all_payments double(24, 8);
 
 
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
@@ -589,21 +598,21 @@ ALTER TABLE llx_product
 CREATE TABLE llx_asset
 (
     rowid         integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    ref           varchar(128)        NOT NULL,
-    entity        integer   DEFAULT 1 NOT NULL,
+    ref           varchar(128)                       NOT NULL,
+    entity        integer       DEFAULT 1            NOT NULL,
     label         varchar(255),
-    amount_ht double(24,8) DEFAULT NULL,
-    amount_vat double(24,8) DEFAULT NULL,
-    fk_asset_type integer             NOT NULL,
+    amount_ht     double(24, 8) DEFAULT NULL,
+    amount_vat    double(24, 8) DEFAULT NULL,
+    fk_asset_type integer                            NOT NULL,
     description   text,
     note_public   text,
     note_private  text,
-    date_creation datetime            NOT NULL,
-    tms           timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_creat integer             NOT NULL,
+    date_creation datetime                           NOT NULL,
+    tms           timestamp     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    fk_user_creat integer                            NOT NULL,
     fk_user_modif integer,
     import_key    varchar(14),
-    status        integer             NOT NULL
+    status        integer                            NOT NULL
 ) ENGINE=innodb;
 
 ALTER TABLE llx_asset
@@ -671,7 +680,8 @@ UPDATE llx_accounting_bookkeeping
 set date_creation = tms
 where date_creation IS NULL;
 
-ALTER TABLE llx_extrafields MODIFY COLUMN list VARCHAR (128);
+ALTER TABLE llx_extrafields
+    MODIFY COLUMN list VARCHAR(128);
 
 UPDATE llx_rights_def
 set module = 'asset'
@@ -682,11 +692,11 @@ ALTER TABLE llx_c_accounting_category
 -- VMYSQL4.1 DROP INDEX uk_c_accounting_category on llx_c_accounting_category;
 -- VPGSQL8.2 DROP INDEX uk_c_accounting_category;
 ALTER TABLE llx_c_accounting_category
-    ADD UNIQUE INDEX uk_c_accounting_category(code,entity);
+    ADD UNIQUE INDEX uk_c_accounting_category (code, entity);
 -- VMYSQL4.1 DROP INDEX uk_accounting_journal_code on llx_accounting_journal;
 -- VPGSQL8.2 DROP INDEX uk_accounting_journal_code;
 ALTER TABLE llx_accounting_journal
-    ADD UNIQUE INDEX uk_accounting_journal_code (code,entity);
+    ADD UNIQUE INDEX uk_accounting_journal_code (code, entity);
 
 UPDATE llx_c_email_templates
 SET lang = ''
@@ -792,4 +802,5 @@ ALTER TABLE llx_advtargetemailing DROP COLUMN fk_mailing;
 
 DROP TABLE llx_ticket_logs;
 
-ALTER TABLE llx_actioncomm MODIFY COLUMN code varchar (50);
+ALTER TABLE llx_actioncomm
+    MODIFY COLUMN code varchar(50);

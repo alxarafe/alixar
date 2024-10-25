@@ -47,8 +47,6 @@ VALUES (1, 'giphy', 'Giphy', '{socialid}', '', 0);
 INSERT INTO llx_c_socialnetworks (entity, code, label, url, icon, active)
 VALUES (1, 'github', 'GitHub', 'https://www.github.com/{socialid}', '', 0);
 INSERT INTO llx_c_socialnetworks (entity, code, label, url, icon, active)
-VALUES (1, 'googleplus', 'GooglePlus', 'https://www.googleplus.com/{socialid}', 'fa-google-plus', 0);
-INSERT INTO llx_c_socialnetworks (entity, code, label, url, icon, active)
 VALUES (1, 'instagram', 'Instagram', 'https://www.instagram.com/{socialid}', 'fa-instagram', 1);
 INSERT INTO llx_c_socialnetworks (entity, code, label, url, icon, active)
 VALUES (1, 'linkedin', 'LinkedIn', 'https://www.linkedin.com/in/{socialid}', 'fa-linkedin', 1);
@@ -77,7 +75,7 @@ VALUES (1, 'tumblr', 'Tumblr', 'https://www.tumblr.com/{socialid}', 'fa-tumblr',
 INSERT INTO llx_c_socialnetworks (entity, code, label, url, icon, active)
 VALUES (1, 'twitch', 'Twitch', '{socialid}', '', 0);
 INSERT INTO llx_c_socialnetworks (entity, code, label, url, icon, active)
-VALUES (1, 'twitter', 'Twitter', 'https://www.twitter.com/{socialid}', 'fa-twitter', 1);
+VALUES (1, 'twitter', 'X-Twitter', 'https://www.x.com/{socialid}', 'fa-twitter', 1);
 INSERT INTO llx_c_socialnetworks (entity, code, label, url, icon, active)
 VALUES (1, 'vero', 'Vero', 'https://vero.co/{socialid}', '', 0);
 INSERT INTO llx_c_socialnetworks (entity, code, label, url, icon, active)

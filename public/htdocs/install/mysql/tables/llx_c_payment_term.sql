@@ -21,16 +21,16 @@
 create table llx_c_payment_term
 (
     rowid           integer AUTO_INCREMENT PRIMARY KEY,
-    entity          integer          DEFAULT 1 NOT NULL, -- multi company id
+    entity          integer              DEFAULT 1 NOT NULL, -- multi company id
     code            varchar(16),
     sortorder       smallint,
-    active          tinyint          DEFAULT 1,
+    active          tinyint              DEFAULT 1,
     libelle         varchar(255),
     libelle_facture text,
-    type_cdr        tinyint,                             -- Type of change date reckoning. 1=Payment at end of current month, 2=the Nth of next month
+    type_cdr        tinyint,                                 -- Type of change date reckoning. 1=Payment at end of current month, 2=the Nth of next month
     nbjour          smallint,
     decalage        smallint,
-    deposit_percent varchar(63)      DEFAULT NULL,
+    deposit_percent varchar(63)          DEFAULT NULL,
     module          varchar(32) NULL,
-    position        integer NOT NULL DEFAULT 0
+    position        integer     NOT NULL DEFAULT 0
 )ENGINE=innodb;

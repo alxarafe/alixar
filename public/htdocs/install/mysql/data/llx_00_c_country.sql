@@ -1273,6 +1273,7 @@ SET numeric_code = '716'
 WHERE code_iso = 'ZWE';
 
 
+
 -- Set field eec
 UPDATE llx_c_country
 SET eec = 1

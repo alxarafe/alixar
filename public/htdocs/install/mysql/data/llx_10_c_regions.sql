@@ -91,6 +91,7 @@
 -- Venezuela
 
 
+
 -- TEMPLATE ------------------------------------------------------------------------------------------
 insert into llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
 values (0, 0, '0', 0, '-');
@@ -594,6 +595,7 @@ INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
 values (12, 1215, '', 0, 'Laâyoune-Boujdour-Sakia el Hamra');
 INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
 values (12, 1216, '', 0, 'Oued Ed-Dahab Lagouira');
+
 
 
 -- Netherlands Regions (id country=17)

@@ -1,3 +1,4 @@
+
 -- Descriptif plan comptable fr_MA PCG
 -- ID 7000 - 7999
 -- ADD 1200000 to rowid # Do no remove this comment --

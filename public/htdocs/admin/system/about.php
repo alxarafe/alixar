@@ -21,6 +21,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\Version;
 use Dolibarr\Lib\ViewMain;
 
 // Load Dolibarr environment
@@ -189,7 +190,7 @@ print '</div>';
 print '</div>';
 print '<div class="clearboth"></div>';
 
-$tmp = versiondolibarrarray();
+$tmp = Version::toArray();
 if (is_numeric($tmp[2])) {    // Not alpha, beta or rc
     print '<br>';
     print '<br>';

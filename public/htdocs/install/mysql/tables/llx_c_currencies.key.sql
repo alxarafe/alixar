@@ -18,4 +18,4 @@
 
 
 ALTER TABLE llx_c_currencies
-    ADD UNIQUE uk_c_currencies_code_iso(code_iso);
+    ADD UNIQUE uk_c_currencies_code_iso (code_iso);

@@ -21,9 +21,9 @@ create table llx_payment_donation
     rowid            integer AUTO_INCREMENT PRIMARY KEY,
     fk_donation      integer,
     datec            datetime,     -- date de creation
-    tms              timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    tms              timestamp     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     datep            datetime,     -- payment date
-    amount double(24,8) DEFAULT 0,
+    amount           double(24, 8) DEFAULT 0,
     fk_typepayment   integer NOT NULL,
     num_payment      varchar(50),
     note             text,

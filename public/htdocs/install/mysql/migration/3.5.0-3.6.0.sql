@@ -46,7 +46,8 @@ create table llx_c_email_templates
 )ENGINE=innodb;
 
 
-ALTER TABLE llx_bank_account MODIFY COLUMN account_number varchar (24);
+ALTER TABLE llx_bank_account
+    MODIFY COLUMN account_number varchar(24);
 
 
 -- delete foreign key that should never exists
@@ -55,14 +56,19 @@ ALTER TABLE llx_commande DROP FOREIGN KEY fk_commande_fk_currency;
 ALTER TABLE llx_facture DROP FOREIGN KEY fk_facture_fk_currency;
 ALTER TABLE llx_facture DROP FOREIGN KEY fk_societe_fk_currency;
 
-ALTER TABLE llx_propal MODIFY COLUMN fk_currency varchar (3) NULL;
-ALTER TABLE llx_commande MODIFY COLUMN fk_currency varchar (3) NULL;
-ALTER TABLE llx_facture MODIFY COLUMN fk_currency varchar (3) NULL;
-ALTER TABLE llx_societe MODIFY COLUMN fk_currency varchar (3) NULL;
+ALTER TABLE llx_propal
+    MODIFY COLUMN fk_currency varchar(3) NULL;
+ALTER TABLE llx_commande
+    MODIFY COLUMN fk_currency varchar(3) NULL;
+ALTER TABLE llx_facture
+    MODIFY COLUMN fk_currency varchar(3) NULL;
+ALTER TABLE llx_societe
+    MODIFY COLUMN fk_currency varchar(3) NULL;
 
 ALTER TABLE llx_bookmark
     ADD COLUMN entity integer DEFAULT 1 NOT NULL;
-ALTER TABLE llx_bookmark MODIFY COLUMN url varchar (255) NOT NULL;
+ALTER TABLE llx_bookmark
+    MODIFY COLUMN url varchar(255) NOT NULL;
 
 
 -- VMYSQL4.1 ALTER TABLE llx_opensurvey_sondage MODIFY COLUMN tms timestamp DEFAULT '2001-01-01 00:00:00';
@@ -95,7 +101,8 @@ ALTER TABLE llx_opensurvey_sondage
 ALTER TABLE llx_opensurvey_sondage CHANGE COLUMN mailsonde mailsonde tinyint NOT NULL DEFAULT 0;
 ALTER TABLE llx_opensurvey_sondage CHANGE COLUMN titre titre TEXT NOT NULL;
 ALTER TABLE llx_opensurvey_sondage CHANGE COLUMN date_fin date_fin DATETIME NOT NULL;
-ALTER TABLE llx_opensurvey_sondage CHANGE COLUMN format format VARCHAR (2) NOT NULL;
+ALTER TABLE llx_opensurvey_sondage
+    CHANGE COLUMN format format VARCHAR(2) NOT NULL;
 ALTER TABLE llx_opensurvey_sondage
     ADD COLUMN sujet TEXT;
 
@@ -108,7 +115,8 @@ ALTER TABLE llx_c_type_contact
 ALTER TABLE llx_c_tva
     ADD UNIQUE INDEX uk_c_tva_id (fk_pays, taux, recuperableonly);
 
-ALTER TABLE llx_accountingaccount MODIFY COLUMN label varchar (255);
+ALTER TABLE llx_accountingaccount
+    MODIFY COLUMN label varchar(255);
 
 ALTER TABLE llx_projet_task
     ADD COLUMN entity integer DEFAULT 1 NOT NULL AFTER ref;
@@ -121,15 +129,15 @@ create table llx_product_customer_price
     tms             timestamp        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     fk_product      integer NOT NULL,
     fk_soc          integer NOT NULL,
-    price double(24,8) DEFAULT 0,
-    price_ttc double(24,8) DEFAULT 0,
-    price_min double(24,8) DEFAULT 0,
-    price_min_ttc double(24,8) DEFAULT 0,
+    price           double(24, 8)    DEFAULT 0,
+    price_ttc       double(24, 8)    DEFAULT 0,
+    price_min       double(24, 8)    DEFAULT 0,
+    price_min_ttc   double(24, 8)    DEFAULT 0,
     price_base_type varchar(3)       DEFAULT 'HT',
-    tva_tx double(6,3),
+    tva_tx          double(6, 3),
     recuperableonly integer NOT NULL DEFAULT '0',        -- Other NPR VAT
-    localtax1_tx double(6,3)  DEFAULT 0,                 -- Other local VAT 1
-    localtax2_tx double(6,3)  DEFAULT 0,                 -- Other local VAT 2
+    localtax1_tx    double(6, 3)     DEFAULT 0,          -- Other local VAT 1
+    localtax2_tx    double(6, 3)     DEFAULT 0,          -- Other local VAT 2
     fk_user         integer,
     import_key      varchar(14)                          -- Import key
 )ENGINE=innodb;
@@ -155,7 +163,7 @@ ALTER TABLE llx_user
 ALTER TABLE llx_user
     ADD COLUMN nb_holiday integer DEFAULT 0;
 ALTER TABLE llx_user
-    ADD COLUMN salary double(24,8) DEFAULT NULL;
+    ADD COLUMN salary double(24, 8) DEFAULT NULL;
 
 ALTER TABLE llx_product
     ADD COLUMN url varchar(255);
@@ -167,15 +175,15 @@ create table llx_product_customer_price_log
     datec           datetime,
     fk_product      integer NOT NULL,
     fk_soc          integer NOT NULL,
-    price double(24,8) DEFAULT 0,
-    price_ttc double(24,8) DEFAULT 0,
-    price_min double(24,8) DEFAULT 0,
-    price_min_ttc double(24,8) DEFAULT 0,
+    price           double(24, 8)    DEFAULT 0,
+    price_ttc       double(24, 8)    DEFAULT 0,
+    price_min       double(24, 8)    DEFAULT 0,
+    price_min_ttc   double(24, 8)    DEFAULT 0,
     price_base_type varchar(3)       DEFAULT 'HT',
-    tva_tx double(6,3),
+    tva_tx          double(6, 3),
     recuperableonly integer NOT NULL DEFAULT 0,          -- Other NPR VAT
-    localtax1_tx double(6,3)  DEFAULT 0,                 -- Other local VAT 1
-    localtax2_tx double(6,3)  DEFAULT 0,                 -- Other local VAT 2
+    localtax1_tx    double(6, 3)     DEFAULT 0,          -- Other local VAT 1
+    localtax2_tx    double(6, 3)     DEFAULT 0,          -- Other local VAT 2
     fk_user         integer,
     import_key      varchar(14)                          -- Import key
 )ENGINE=innodb;
@@ -187,23 +195,23 @@ ALTER TABLE llx_product
 CREATE TABLE llx_product_batch
 (
     rowid            integer AUTO_INCREMENT PRIMARY KEY,
-    tms              timestamp   DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    tms              timestamp        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     fk_product_stock integer NOT NULL,
-    eatby            datetime    DEFAULT NULL,
-    sellby           datetime    DEFAULT NULL,
-    batch            varchar(30) DEFAULT NULL,
-    qty double NOT NULL DEFAULT 0,
-    import_key       varchar(14) DEFAULT NULL
+    eatby            datetime         DEFAULT NULL,
+    sellby           datetime         DEFAULT NULL,
+    batch            varchar(30)      DEFAULT NULL,
+    qty              double  NOT NULL DEFAULT 0,
+    import_key       varchar(14)      DEFAULT NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE llx_expeditiondet_batch
 (
     rowid            integer AUTO_INCREMENT PRIMARY KEY,
     fk_expeditiondet integer NOT NULL,
-    eatby            date        DEFAULT NULL,
-    sellby           date        DEFAULT NULL,
-    batch            varchar(30) DEFAULT NULL,
-    qty double NOT NULL DEFAULT 0,
+    eatby            date             DEFAULT NULL,
+    sellby           date             DEFAULT NULL,
+    batch            varchar(30)      DEFAULT NULL,
+    qty              double  NOT NULL DEFAULT 0,
     fk_origin_stock  integer NOT NULL
 ) ENGINE=InnoDB;
 
@@ -257,9 +265,9 @@ ALTER TABLE llx_stock_mouvement
 
 -- New 1300 : Add THM on user
 ALTER TABLE llx_user
-    ADD thm double(24,8) AFTER fk_user;
+    ADD thm double(24, 8) AFTER fk_user;
 ALTER TABLE llx_projet_task_time
-    ADD thm double(24,8) AFTER fk_user;
+    ADD thm double(24, 8) AFTER fk_user;
 
 
 -- New : extrafield on categories
@@ -377,7 +385,8 @@ create table llx_c_type_resource
 )ENGINE=innodb;
 
 -- Fix llx_c_type_resource when you update from a 3.6-beta
-ALTER TABLE llx_c_type_resource CHANGE libelle label VARCHAR (64) NOT NULL;
+ALTER TABLE llx_c_type_resource
+    CHANGE libelle label VARCHAR(64) NOT NULL;
 
 ALTER TABLE llx_c_type_resource
     ADD UNIQUE INDEX uk_c_type_resource_id (label, code);

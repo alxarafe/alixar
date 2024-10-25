@@ -22,5 +22,5 @@ ALTER TABLE llx_emailcollector_emailcollector
 -- END MODULEBUILDER INDEXES
 
 ALTER TABLE llx_emailcollector_emailcollector
-    ADD UNIQUE INDEX uk_emailcollector_emailcollector_ref(ref, entity);
+    ADD UNIQUE INDEX uk_emailcollector_emailcollector_ref (ref, entity);
 

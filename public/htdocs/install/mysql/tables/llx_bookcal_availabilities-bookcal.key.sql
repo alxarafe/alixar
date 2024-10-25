@@ -18,8 +18,6 @@
 ALTER TABLE llx_bookcal_availabilities
     ADD INDEX idx_bookcal_availabilities_rowid (rowid);
 ALTER TABLE llx_bookcal_availabilities
-    ADD INDEX idx_bookcal_availabilities_ref (ref);
-ALTER TABLE llx_bookcal_availabilities
     ADD CONSTRAINT llx_bookcal_availabilities_fk_user_creat FOREIGN KEY (fk_user_creat) REFERENCES llx_user (rowid);
 ALTER TABLE llx_bookcal_availabilities
     ADD INDEX idx_bookcal_availabilities_status (status);
@@ -33,4 +31,3 @@ ALTER TABLE llx_bookcal_availabilities
 --ALTER TABLE llx_bookcal_availabilities ADD UNIQUE INDEX uk_bookcal_availabilities_fieldxy(fieldx, fieldy);
 
 --ALTER TABLE llx_bookcal_availabilities ADD CONSTRAINT llx_bookcal_availabilities_fk_field FOREIGN KEY (fk_field) REFERENCES llx_bookcal_myotherobject(rowid);
-

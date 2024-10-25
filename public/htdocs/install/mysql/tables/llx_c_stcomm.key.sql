@@ -17,4 +17,4 @@
 -- ========================================================================
 
 ALTER TABLE llx_c_stcomm
-    ADD UNIQUE INDEX uk_c_stcomm(code);
+    ADD UNIQUE INDEX uk_c_stcomm (code);

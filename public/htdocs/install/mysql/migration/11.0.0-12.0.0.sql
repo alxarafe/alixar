@@ -51,7 +51,7 @@ ALTER TABLE llx_commande_fournisseur_dispatch_extrafields
     ADD INDEX idx_commande_fournisseur_dispatch_extrafields (fk_object);
 
 ALTER TABLE llx_product_fournisseur_price
-    ADD COLUMN packaging double(24,8) DEFAULT 1;
+    ADD COLUMN packaging double(24, 8) DEFAULT 1;
 
 UPDATE llx_accounting_system
 SET fk_country = NULL,
@@ -78,7 +78,8 @@ create table llx_facturedet_rec_extrafields
 ALTER TABLE llx_facturedet_rec_extrafields
     ADD INDEX idx_facturedet_rec_extrafields (fk_object);
 
-ALTER TABLE llx_facture_rec MODIFY COLUMN titre varchar (200) NOT NULL;
+ALTER TABLE llx_facture_rec
+    MODIFY COLUMN titre varchar(200) NOT NULL;
 
 create table llx_mrp_mo_extrafields
 (
@@ -91,7 +92,8 @@ create table llx_mrp_mo_extrafields
 ALTER TABLE llx_mrp_mo_extrafields DROP INDEX idx_fk_object;
 
 ALTER TABLE llx_mrp_mo_extrafields
-    ADD INDEX idx_mrp_mo_fk_object(fk_object);
+    ADD INDEX idx_mrp_mo_fk_object (fk_object);
+
 
 
 -- This var is per entity now, so we remove const if global if exists
@@ -102,14 +104,17 @@ where name in ('PROJECT_HIDE_TASKS', 'MAIN_BUGTRACK_ENABLELINK', 'MAIN_HELP_DISA
 
 -- For v12
 
-ALTER TABLE llx_bom_bom MODIFY COLUMN duration double (24,8);
+ALTER TABLE llx_bom_bom
+    MODIFY COLUMN duration double(24, 8);
 
 ALTER TABLE llx_prelevement_bons
     ADD COLUMN type varchar(16) DEFAULT 'debit-order';
 
-ALTER TABLE llx_ecm_files MODIFY COLUMN src_object_type varchar (64);
+ALTER TABLE llx_ecm_files
+    MODIFY COLUMN src_object_type varchar(64);
 
-ALTER TABLE llx_document_model MODIFY COLUMN type varchar (64);
+ALTER TABLE llx_document_model
+    MODIFY COLUMN type varchar(64);
 
 
 -- Delete an old index that is duplicated
@@ -120,7 +125,7 @@ ALTER TABLE llx_actioncomm DROP COLUMN punctual;
 
 DELETE
 FROM llx_menu
-where module ='supplier_proposal';
+where module = 'supplier_proposal';
 
 UPDATE llx_website
 SET lang = 'en'
@@ -170,15 +175,17 @@ ALTER TABLE llx_website_page
 UPDATE llx_rights_def
 SET perms    = 'order_advance',
     subperms = 'close'
-WHERE module = 'commande' AND perms = 'cloturer';
+WHERE module = 'commande'
+  AND perms = 'cloturer';
 UPDATE llx_rights_def
 SET perms    = 'propal_advance',
     subperms = 'close'
-WHERE module = 'propale' AND perms = 'cloturer';
+WHERE module = 'propale'
+  AND perms = 'cloturer';
 
 ALTER TABLE llx_holiday_users DROP INDEX uk_holiday_users;
 ALTER TABLE llx_holiday_users
-    ADD UNIQUE INDEX uk_holiday_users(fk_user, fk_type);
+    ADD UNIQUE INDEX uk_holiday_users (fk_user, fk_type);
 
 ALTER TABLE llx_ticket
     ADD COLUMN import_key varchar(14);
@@ -324,7 +331,8 @@ ALTER TABLE llx_bookmark MODIFY COLUMN url TEXT;
 ALTER TABLE llx_bookmark
     ADD UNIQUE uk_bookmark_title (fk_user, entity, title);
 
-ALTER TABLE llx_societe_rib MODIFY COLUMN owner_address varchar (255);
+ALTER TABLE llx_societe_rib
+    MODIFY COLUMN owner_address varchar(255);
 ALTER TABLE llx_societe_rib MODIFY COLUMN default_rib smallint NOT NULL DEFAULT 0;
 
 ALTER TABLE llx_societe_rib
@@ -458,14 +466,21 @@ ALTER TABLE llx_blockedlog MODIFY COLUMN object_data mediumtext;
 ALTER TABLE llx_blockedlog
     ADD COLUMN object_version varchar(32) DEFAULT '';
 
-ALTER TABLE llx_product_lot MODIFY COLUMN batch varchar (128);
-ALTER TABLE llx_product_batch MODIFY COLUMN batch varchar (128);
-ALTER TABLE llx_expeditiondet_batch MODIFY COLUMN batch varchar (128);
-ALTER TABLE llx_commande_fournisseur_dispatch MODIFY COLUMN batch varchar (128);
-ALTER TABLE llx_stock_mouvement MODIFY COLUMN batch varchar (128);
-ALTER TABLE llx_mrp_production MODIFY COLUMN batch varchar (128);
+ALTER TABLE llx_product_lot
+    MODIFY COLUMN batch varchar(128);
+ALTER TABLE llx_product_batch
+    MODIFY COLUMN batch varchar(128);
+ALTER TABLE llx_expeditiondet_batch
+    MODIFY COLUMN batch varchar(128);
+ALTER TABLE llx_commande_fournisseur_dispatch
+    MODIFY COLUMN batch varchar(128);
+ALTER TABLE llx_stock_mouvement
+    MODIFY COLUMN batch varchar(128);
+ALTER TABLE llx_mrp_production
+    MODIFY COLUMN batch varchar(128);
 ALTER TABLE llx_mrp_production MODIFY qty real NOT NULL DEFAULT 1;
-ALTER TABLE llx_expeditiondet_batch MODIFY COLUMN batch varchar (128);
+ALTER TABLE llx_expeditiondet_batch
+    MODIFY COLUMN batch varchar(128);
 
 create table llx_categorie_website_page
 (
@@ -508,7 +523,8 @@ ALTER TABLE llx_prelevement_facture_demande
 ALTER TABLE llx_prelevement_facture
     ADD COLUMN fk_facture_fourn INTEGER NULL;
 
-ALTER TABLE llx_menu MODIFY COLUMN module varchar (255);
+ALTER TABLE llx_menu
+    MODIFY COLUMN module varchar(255);
 
 UPDATE llx_actioncomm
 SET fk_action = 50
@@ -518,8 +534,10 @@ where fk_action = 40
 ALTER TABLE llx_emailcollector_emailcollector
     ADD COLUMN hostcharset varchar(16) DEFAULT 'UTF-8';
 
-ALTER TABLE llx_adherent_type MODIFY subscription varchar (3) NOT NULL DEFAULT '1';
-ALTER TABLE llx_adherent_type MODIFY vote varchar (3) NOT NULL DEFAULT '1';
+ALTER TABLE llx_adherent_type
+    MODIFY subscription varchar(3) NOT NULL DEFAULT '1';
+ALTER TABLE llx_adherent_type
+    MODIFY vote varchar(3) NOT NULL DEFAULT '1';
 
 UPDATE llx_prelevement_facture_demande
 SET entity = 1

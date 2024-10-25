@@ -23,7 +23,8 @@ DROP TABLE llx_product_fournisseur;
 ALTER TABLE llx_adherent
     ADD COLUMN canvas varchar(32);
 
-ALTER TABLE llx_societe_rib MODIFY COLUMN bic varchar (20);
+ALTER TABLE llx_societe_rib
+    MODIFY COLUMN bic varchar(20);
 
 ALTER TABLE llx_facture_rec
     ADD COLUMN usenewprice integer;
@@ -31,17 +32,21 @@ ALTER TABLE llx_facture_rec
 ALTER TABLE llx_facture_fourn_det
     ADD COLUMN remise_percent real DEFAULT 0 after qty;
 
-ALTER TABLE llx_extrafields MODIFY COLUMN size varchar (8) DEFAULT NULL;
+ALTER TABLE llx_extrafields
+    MODIFY COLUMN size varchar(8) DEFAULT NULL;
 
-ALTER TABLE llx_menu MODIFY COLUMN fk_mainmenu varchar (24);
-ALTER TABLE llx_menu MODIFY COLUMN fk_leftmenu varchar (24);
+ALTER TABLE llx_menu
+    MODIFY COLUMN fk_mainmenu varchar(24);
+ALTER TABLE llx_menu
+    MODIFY COLUMN fk_leftmenu varchar(24);
 
 ALTER TABLE llx_societe
     ADD COLUMN idprof6 varchar(128) after idprof5;
 ALTER TABLE llx_societe DROP COLUMN fk_secteur;
 ALTER TABLE llx_societe DROP COLUMN description;
 ALTER TABLE llx_societe DROP COLUMN services;
-ALTER TABLE llx_societe MODIFY COLUMN ref_ext varchar (128);
+ALTER TABLE llx_societe
+    MODIFY COLUMN ref_ext varchar(128);
 
 ALTER TABLE llx_bank
     ADD COLUMN tms timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP after datec;
@@ -81,31 +86,33 @@ ALTER TABLE llx_mailing
     ADD COLUMN extraparams varchar(255);
 
 
-ALTER TABLE llx_product MODIFY COLUMN ref varchar (128) NOT NULL;
-ALTER TABLE llx_product MODIFY COLUMN ref_ext varchar (128);
+ALTER TABLE llx_product
+    MODIFY COLUMN ref varchar(128) NOT NULL;
+ALTER TABLE llx_product
+    MODIFY COLUMN ref_ext varchar(128);
 
 ALTER TABLE llx_product_fournisseur_price DROP COLUMN fk_product_fournisseur;
 ALTER TABLE llx_product_fournisseur_price
-    ADD charges DOUBLE( 24, 8 ) DEFAULT 0 AFTER unitprice;
+    ADD charges DOUBLE(24, 8) DEFAULT 0 AFTER unitprice;
 ALTER TABLE llx_product_fournisseur_price
-    ADD unitcharges DOUBLE( 24, 8 ) DEFAULT 0 AFTER charges;
+    ADD unitcharges DOUBLE(24, 8) DEFAULT 0 AFTER charges;
 
 alter table llx_commandedet
     add column fk_product_fournisseur_price integer after info_bits;
 alter table llx_commandedet
-    add column buy_price_ht double(24,8) DEFAULT 0 after fk_product_fournisseur_price;
+    add column buy_price_ht double(24, 8) DEFAULT 0 after fk_product_fournisseur_price;
 alter table llx_commandedet drop column marge_tx;
 alter table llx_commandedet drop column marque_tx;
 
 alter table llx_facturedet
     add column fk_product_fournisseur_price integer after info_bits;
 alter table llx_facturedet
-    add column buy_price_ht double(24,8) DEFAULT 0 after fk_product_fournisseur_price;
+    add column buy_price_ht double(24, 8) DEFAULT 0 after fk_product_fournisseur_price;
 
 alter table llx_propaldet
     add column fk_product_fournisseur_price integer after info_bits;
 alter table llx_propaldet
-    add column buy_price_ht double(24,8) DEFAULT 0 after fk_product_fournisseur_price;
+    add column buy_price_ht double(24, 8) DEFAULT 0 after fk_product_fournisseur_price;
 alter table llx_propaldet drop column pa_ht;
 alter table llx_propaldet drop column marge_tx;
 alter table llx_propaldet drop column marque_tx;
@@ -122,7 +129,7 @@ values (__ENCRYPT('PRODUCT_CODEPRODUCT_ADDON') __, __ENCRYPT('mod_codeproduct_le
         'Module to control product codes', 0);
 
 ALTER TABLE llx_c_barcode_type
-    ADD UNIQUE INDEX uk_c_barcode_type(code, entity);
+    ADD UNIQUE INDEX uk_c_barcode_type (code, entity);
 
 ALTER TABLE llx_socpeople
     ADD column no_email SMALLINT NOT NULL DEFAULT 0 AFTER priv;
@@ -139,12 +146,15 @@ ALTER TABLE llx_facturedet
 ALTER TABLE llx_facturedet_rec
     ADD COLUMN label varchar(255) DEFAULT NULL AFTER product_type;
 
-ALTER TABLE llx_actioncomm MODIFY elementtype VARCHAR (32);
+ALTER TABLE llx_actioncomm
+    MODIFY elementtype VARCHAR(32);
 
-ALTER TABLE llx_ecm_directories MODIFY COLUMN label varchar (64) NOT NULL;
+ALTER TABLE llx_ecm_directories
+    MODIFY COLUMN label varchar(64) NOT NULL;
 ALTER TABLE llx_ecm_directories
     ADD COLUMN fullpath varchar(255) AFTER cachenbofdoc;
-ALTER TABLE llx_ecm_directories MODIFY COLUMN fullpath varchar (255);
+ALTER TABLE llx_ecm_directories
+    MODIFY COLUMN fullpath varchar(255);
 ALTER TABLE llx_ecm_directories
     ADD COLUMN extraparams varchar(255) AFTER fullpath;
 ALTER TABLE llx_ecm_directories
@@ -177,8 +187,9 @@ CREATE TABLE llx_holiday_config
 (
     rowid integer      NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name  varchar(255) NOT NULL UNIQUE,
-    value text NULL
-) ENGINE=innodb;
+    value text         NULL
+)
+    ENGINE = innodb;
 
 CREATE TABLE llx_holiday_events
 (
@@ -186,7 +197,8 @@ CREATE TABLE llx_holiday_events
     entity integer DEFAULT 1 NOT NULL,
     name   varchar(255)      NOT NULL,
     value  text              NOT NULL
-) ENGINE=innodb;
+)
+    ENGINE = innodb;
 ALTER TABLE llx_holiday_events
     ADD COLUMN entity integer DEFAULT 1 NOT NULL AFTER rowid;
 ALTER TABLE llx_holiday_events
@@ -201,13 +213,15 @@ CREATE TABLE llx_holiday_logs
     type_action    varchar(255) NOT NULL,
     prev_solde     varchar(255) NOT NULL,
     new_solde      varchar(255) NOT NULL
-) ENGINE=innodb;
+)
+    ENGINE = innodb;
 
 CREATE TABLE llx_holiday_users
 (
     fk_user    integer NOT NULL PRIMARY KEY,
     nb_holiday real    NOT NULL DEFAULT '0'
-) ENGINE=innodb;
+)
+    ENGINE = innodb;
 ALTER TABLE llx_holiday_users MODIFY COLUMN nb_holiday real NOT NULL DEFAULT '0';
 
 CREATE TABLE llx_holiday
@@ -228,7 +242,8 @@ CREATE TABLE llx_holiday
     date_cancel    datetime              DEFAULT NULL,
     fk_user_cancel integer               DEFAULT NULL,
     detail_refuse  varchar(250)          DEFAULT NULL
-) ENGINE=innodb;
+)
+    ENGINE = innodb;
 ALTER TABLE llx_holiday
     ADD COLUMN halfday integer DEFAULT 0 after date_fin;
 
@@ -287,60 +302,77 @@ ALTER TABLE llx_c_tva
     ADD COLUMN localtax1_type varchar(1) default '0' after localtax1;
 ALTER TABLE llx_c_tva
     ADD COLUMN localtax2_type varchar(1) default '0' after localtax2;
-ALTER TABLE llx_c_tva MODIFY COLUMN localtax1_type varchar (1);
-ALTER TABLE llx_c_tva MODIFY COLUMN localtax2_type varchar (1);
+ALTER TABLE llx_c_tva
+    MODIFY COLUMN localtax1_type varchar(1);
+ALTER TABLE llx_c_tva
+    MODIFY COLUMN localtax2_type varchar(1);
 
 alter table llx_commande_fournisseurdet
     add column localtax1_type varchar(1) after localtax1_tx;
 alter table llx_commande_fournisseurdet
     add column localtax2_type varchar(1) after localtax2_tx;
-ALTER TABLE llx_commande_fournisseurdet MODIFY COLUMN localtax1_type varchar (1);
-ALTER TABLE llx_commande_fournisseurdet MODIFY COLUMN localtax2_type varchar (1);
+ALTER TABLE llx_commande_fournisseurdet
+    MODIFY COLUMN localtax1_type varchar(1);
+ALTER TABLE llx_commande_fournisseurdet
+    MODIFY COLUMN localtax2_type varchar(1);
 
 alter table llx_commandedet
     add column localtax1_type varchar(1) after localtax1_tx;
 alter table llx_commandedet
     add column localtax2_type varchar(1) after localtax2_tx;
-ALTER TABLE llx_commandedet MODIFY COLUMN localtax1_type varchar (1);
-ALTER TABLE llx_commandedet MODIFY COLUMN localtax2_type varchar (1);
+ALTER TABLE llx_commandedet
+    MODIFY COLUMN localtax1_type varchar(1);
+ALTER TABLE llx_commandedet
+    MODIFY COLUMN localtax2_type varchar(1);
 
 alter table llx_facture_fourn_det
     add column localtax1_type varchar(1) after localtax1_tx;
 alter table llx_facture_fourn_det
     add column localtax2_type varchar(1) after localtax2_tx;
-ALTER TABLE llx_facture_fourn_det MODIFY COLUMN localtax1_type varchar (1);
-ALTER TABLE llx_facture_fourn_det MODIFY COLUMN localtax2_type varchar (1);
+ALTER TABLE llx_facture_fourn_det
+    MODIFY COLUMN localtax1_type varchar(1);
+ALTER TABLE llx_facture_fourn_det
+    MODIFY COLUMN localtax2_type varchar(1);
 
 alter table llx_facturedet
     add column localtax1_type varchar(1) after localtax1_tx;
 alter table llx_facturedet
     add column localtax2_type varchar(1) after localtax2_tx;
-ALTER TABLE llx_facturedet MODIFY COLUMN localtax1_type varchar (1);
-ALTER TABLE llx_facturedet MODIFY COLUMN localtax2_type varchar (1);
+ALTER TABLE llx_facturedet
+    MODIFY COLUMN localtax1_type varchar(1);
+ALTER TABLE llx_facturedet
+    MODIFY COLUMN localtax2_type varchar(1);
 
 alter table llx_facturedet_rec
     add column localtax1_type varchar(1) after localtax1_tx;
 alter table llx_facturedet_rec
     add column localtax2_type varchar(1) after localtax2_tx;
-ALTER TABLE llx_facturedet_rec MODIFY COLUMN localtax1_type varchar (1);
-ALTER TABLE llx_facturedet_rec MODIFY COLUMN localtax2_type varchar (1);
+ALTER TABLE llx_facturedet_rec
+    MODIFY COLUMN localtax1_type varchar(1);
+ALTER TABLE llx_facturedet_rec
+    MODIFY COLUMN localtax2_type varchar(1);
 
 alter table llx_propaldet
     add column localtax1_type varchar(1) after localtax1_tx;
 alter table llx_propaldet
     add column localtax2_type varchar(1) after localtax2_tx;
-ALTER TABLE llx_propaldet MODIFY COLUMN localtax1_type varchar (1);
-ALTER TABLE llx_propaldet MODIFY COLUMN localtax2_type varchar (1);
+ALTER TABLE llx_propaldet
+    MODIFY COLUMN localtax1_type varchar(1);
+ALTER TABLE llx_propaldet
+    MODIFY COLUMN localtax2_type varchar(1);
 
 alter table llx_contratdet
     add column localtax1_type varchar(1) after localtax1_tx;
 alter table llx_contratdet
     add column localtax2_type varchar(1) after localtax2_tx;
-ALTER TABLE llx_contratdet MODIFY COLUMN localtax1_type varchar (1);
-ALTER TABLE llx_contratdet MODIFY COLUMN localtax2_type varchar (1);
+ALTER TABLE llx_contratdet
+    MODIFY COLUMN localtax1_type varchar(1);
+ALTER TABLE llx_contratdet
+    MODIFY COLUMN localtax2_type varchar(1);
 -- END TASK #204
 
-ALTER TABLE llx_menu MODIFY COLUMN enabled varchar (255) NULL DEFAULT '1';
+ALTER TABLE llx_menu
+    MODIFY COLUMN enabled varchar(255) NULL DEFAULT '1';
 
 ALTER TABLE llx_extrafields
     ADD COLUMN fieldunique INTEGER DEFAULT 0;
@@ -1948,10 +1980,12 @@ ALTER TABLE llx_user
 
 
 -- Use entity 0 for all entities
-INSERT INTO llx_const(name, value, visible, entity)
-SELECT __ENCRYPT('SYSLOG_HANDLERS') __, __ENCRYPT('["mod_syslog_file"]') __, 0, 0
-FROM llx_const
-WHERE __DECRYPT('name')__ = 'SYSLOG_FILE_ON' AND __DECRYPT('value')__ = '1';
+INSERT INTO llx_const(name, value, visible, entity) SELECT __ENCRYPT('SYSLOG_HANDLERS')     __,
+                                                           __ENCRYPT('["mod_syslog_file"]') __,
+                                                           0,
+                                                           0
+                                                    FROM llx_const
+                                                    WHERE __DECRYPT('name') __ = 'SYSLOG_FILE_ON' AND __DECRYPT('value')__ = '1';
 
 
 -- New Imports
@@ -1982,7 +2016,8 @@ ALTER TABLE llx_categorie_association DROP FOREIGN KEY fk_categorie_asso_fk_cate
 ALTER TABLE llx_categorie DROP INDEX uk_categorie_ref;
 ALTER TABLE llx_categorie
     ADD COLUMN fk_parent integer DEFAULT 0 NOT NULL AFTER rowid;
-ALTER TABLE llx_categorie MODIFY COLUMN label varchar (255) NOT NULL;
+ALTER TABLE llx_categorie
+    MODIFY COLUMN label varchar(255) NOT NULL;
 ALTER TABLE llx_categorie
     ADD UNIQUE INDEX uk_categorie_ref (entity, fk_parent, label, type);
 ALTER TABLE llx_categorie
@@ -1995,10 +2030,10 @@ CREATE TABLE llx_product_price_by_qty
 (
     rowid            integer AUTO_INCREMENT PRIMARY KEY,
     fk_product_price integer NOT NULL,
-    date_price       timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    price double (24,8) DEFAULT 0,
-    price_ttc double (24,8) DEFAULT 0,
-    qty_min          real      DEFAULT 0
+    date_price       timestamp     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    price            double(24, 8) DEFAULT 0,
+    price_ttc        double(24, 8) DEFAULT 0,
+    qty_min          real          DEFAULT 0
 )ENGINE=innodb;
 
 ALTER TABLE llx_product_price
@@ -2016,34 +2051,34 @@ ALTER TABLE llx_product_price_by_qty
 ALTER TABLE llx_product_price_by_qty
     ADD remise DOUBLE NOT NULL DEFAULT '0' AFTER remise_percent;
 ALTER TABLE llx_product_price_by_qty
-    ADD unitprice DOUBLE (24,8) NOT NULL DEFAULT '0' AFTER qty_min;
+    ADD unitprice DOUBLE(24, 8) NOT NULL DEFAULT '0' AFTER qty_min;
 ALTER TABLE llx_product_price_by_qty CHANGE qty_min quantity DOUBLE NULL DEFAULT NULL;
 
 -- Change index name to be compliant with SQL standard, index name must be unique in database schema
 ALTER TABLE llx_c_actioncomm DROP INDEX code;
 ALTER TABLE llx_c_actioncomm
-    ADD UNIQUE INDEX uk_c_actioncomm(code);
+    ADD UNIQUE INDEX uk_c_actioncomm (code);
 ALTER TABLE llx_c_civilite DROP INDEX code;
 ALTER TABLE llx_c_civilite
-    ADD UNIQUE INDEX uk_c_civilite(code);
+    ADD UNIQUE INDEX uk_c_civilite (code);
 ALTER TABLE llx_c_propalst DROP INDEX code;
 ALTER TABLE llx_c_propalst
-    ADD UNIQUE INDEX uk_c_propalst(code);
+    ADD UNIQUE INDEX uk_c_propalst (code);
 ALTER TABLE llx_c_stcomm DROP INDEX code;
 ALTER TABLE llx_c_stcomm
-    ADD UNIQUE INDEX uk_c_stcomm(code);
+    ADD UNIQUE INDEX uk_c_stcomm (code);
 ALTER TABLE llx_c_type_fees DROP INDEX code;
 ALTER TABLE llx_c_type_fees
-    ADD UNIQUE INDEX uk_c_type_fees(code);
+    ADD UNIQUE INDEX uk_c_type_fees (code);
 ALTER TABLE llx_c_typent DROP INDEX code;
 ALTER TABLE llx_c_typent
-    ADD UNIQUE INDEX uk_c_typent(code);
+    ADD UNIQUE INDEX uk_c_typent (code);
 ALTER TABLE llx_c_effectif DROP INDEX code;
 ALTER TABLE llx_c_effectif
-    ADD UNIQUE INDEX uk_c_effectif(code);
+    ADD UNIQUE INDEX uk_c_effectif (code);
 ALTER TABLE llx_c_paiement DROP INDEX code;
 ALTER TABLE llx_c_paiement
-    ADD UNIQUE INDEX uk_c_paiement(code);
+    ADD UNIQUE INDEX uk_c_paiement (code);
 
 delete
 from llx_c_actioncomm
@@ -2107,7 +2142,8 @@ VALUES (225, 'CAP6', 'Format Canadian P6', '107', '140', 'mm', 1);
 
 
 -- increase field size
-ALTER TABLE llx_bank_account MODIFY COLUMN code_banque varchar (8);
+ALTER TABLE llx_bank_account
+    MODIFY COLUMN code_banque varchar(8);
 
 create table llx_user_extrafields
 (
@@ -2122,7 +2158,8 @@ ALTER TABLE llx_user_extrafields
 
 ALTER TABLE llx_element_lock
     ADD COLUMN sessionid varchar(255) AFTER datem;
-ALTER TABLE llx_element_lock MODIFY COLUMN elementtype varchar (32) NOT NULL;
+ALTER TABLE llx_element_lock
+    MODIFY COLUMN elementtype varchar(32) NOT NULL;
 ALTER TABLE llx_element_lock DROP COLUMN fk_user_modif;
 ALTER TABLE llx_element_lock DROP COLUMN status;
 

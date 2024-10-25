@@ -26,7 +26,11 @@
  * or see https://www.gnu.org/
  */
 
-use Dolibarr\Lib\ViewMain;
+use Dolibarr\Code\Core\Classes\Translate;
+use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Lib\AveryLabels;
+use Dolibarr\Lib\Version;
 
 /**
  *  \file           htdocs/core/lib/functions2.lib.php
@@ -36,10 +40,6 @@ use Dolibarr\Lib\ViewMain;
 
 // Enable this line to trace path when function is called.
 //print xdebug_print_function_stack('Functions2.lib was called');exit;
-use Dolibarr\Code\Core\Classes\Translate;
-use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Code\User\Classes\User;
-use Dolibarr\Lib\AveryLabels;
 
 /**
  * Same function than javascript unescape() function but in PHP.
@@ -1850,7 +1850,7 @@ function version_os($option = '')
  *  Return PHP version
  *
  * @return     string          PHP version
- * @see        versionphparray(), versioncompare()
+ * @see        Version::arrayPhp(), Version::compare()
  */
 function version_php()
 {
@@ -1875,7 +1875,7 @@ function version_db()
  *  Return Dolibarr version
  *
  * @return     string          Dolibarr version
- * @see        versiondolibarrarray(), versioncompare()
+ * @see        Version::toArray(), Version::compare()
  */
 function version_dolibarr()
 {

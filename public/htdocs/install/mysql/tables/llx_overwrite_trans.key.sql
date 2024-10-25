@@ -18,4 +18,4 @@
 
 
 ALTER TABLE llx_overwrite_trans
-    ADD UNIQUE INDEX uk_overwrite_trans(entity, lang, transkey);
+    ADD UNIQUE INDEX uk_overwrite_trans (entity, lang, transkey);

@@ -83,23 +83,34 @@ ALTER TABLE llx_actioncomm
 ALTER TABLE llx_product_fournisseur_price
     ADD COLUMN fk_availability integer AFTER fk_product_fournisseur;
 
-ALTER TABLE llx_element_element MODIFY COLUMN sourcetype varchar (32) NOT NULL;
-ALTER TABLE llx_element_element MODIFY COLUMN targettype varchar (32) NOT NULL;
+ALTER TABLE llx_element_element
+    MODIFY COLUMN sourcetype varchar(32) NOT NULL;
+ALTER TABLE llx_element_element
+    MODIFY COLUMN targettype varchar(32) NOT NULL;
 
-ALTER TABLE llx_user MODIFY ref_ext varchar (50);
+ALTER TABLE llx_user
+    MODIFY ref_ext varchar(50);
 ALTER TABLE llx_user
     ADD COLUMN ref_int varchar(50) AFTER ref_ext;
 
-ALTER TABLE llx_societe MODIFY code_client varchar (24);
-ALTER TABLE llx_societe MODIFY code_fournisseur varchar (24);
-ALTER TABLE llx_societe MODIFY siren varchar (128);
-ALTER TABLE llx_societe MODIFY siret varchar (128);
-ALTER TABLE llx_societe MODIFY ape varchar (128);
-ALTER TABLE llx_societe MODIFY idprof4 varchar (128);
+ALTER TABLE llx_societe
+    MODIFY code_client varchar(24);
+ALTER TABLE llx_societe
+    MODIFY code_fournisseur varchar(24);
+ALTER TABLE llx_societe
+    MODIFY siren varchar(128);
+ALTER TABLE llx_societe
+    MODIFY siret varchar(128);
+ALTER TABLE llx_societe
+    MODIFY ape varchar(128);
+ALTER TABLE llx_societe
+    MODIFY idprof4 varchar(128);
 ALTER TABLE llx_societe
     ADD COLUMN idprof5 varchar(128);
-ALTER TABLE llx_societe MODIFY code_compta varchar (24);
-ALTER TABLE llx_societe MODIFY code_compta_fournisseur varchar (24);
+ALTER TABLE llx_societe
+    MODIFY code_compta varchar(24);
+ALTER TABLE llx_societe
+    MODIFY code_compta_fournisseur varchar(24);
 
 
 ALTER TABLE llx_chargesociales
@@ -192,26 +203,35 @@ CREATE TABLE llx_localtax
     tms           timestamp        DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     datep         date             DEFAULT NULL,
     datev         date             DEFAULT NULL,
-    amount double NOT NULL DEFAULT '0',
+    amount        double  NOT NULL DEFAULT '0',
     label         varchar(255)     DEFAULT NULL,
     note          text,
     fk_bank       integer          DEFAULT NULL,
     fk_user_creat integer          DEFAULT NULL,
     fk_user_modif integer          DEFAULT NULL
-
+	
 ) ENGINE=InnoDB;
 
-ALTER TABLE llx_propal MODIFY ref_int varchar (255);
-ALTER TABLE llx_propal MODIFY ref_ext varchar (255);
-ALTER TABLE llx_propal MODIFY ref_client varchar (255);
+ALTER TABLE llx_propal
+    MODIFY ref_int varchar(255);
+ALTER TABLE llx_propal
+    MODIFY ref_ext varchar(255);
+ALTER TABLE llx_propal
+    MODIFY ref_client varchar(255);
 
-ALTER TABLE llx_commande MODIFY ref_int varchar (255);
-ALTER TABLE llx_commande MODIFY ref_ext varchar (255);
-ALTER TABLE llx_commande MODIFY ref_client varchar (255);
+ALTER TABLE llx_commande
+    MODIFY ref_int varchar(255);
+ALTER TABLE llx_commande
+    MODIFY ref_ext varchar(255);
+ALTER TABLE llx_commande
+    MODIFY ref_client varchar(255);
 
-ALTER TABLE llx_facture MODIFY ref_int varchar (255);
-ALTER TABLE llx_facture MODIFY ref_ext varchar (255);
-ALTER TABLE llx_facture MODIFY ref_client varchar (255);
+ALTER TABLE llx_facture
+    MODIFY ref_int varchar(255);
+ALTER TABLE llx_facture
+    MODIFY ref_ext varchar(255);
+ALTER TABLE llx_facture
+    MODIFY ref_client varchar(255);
 
 
 UPDATE llx_societe
@@ -219,7 +239,8 @@ SET fk_stcomm = 0
 WHERE fk_stcomm IS NULL;
 ALTER TABLE llx_societe MODIFY COLUMN fk_stcomm integer NOT NULL;
 
-ALTER TABLE llx_societe CHANGE COLUMN gencod barcode varchar (255);
+ALTER TABLE llx_societe
+    CHANGE COLUMN gencod barcode varchar(255);
 ALTER TABLE llx_societe
     ADD COLUMN fk_barcode_type integer DEFAULT 0;
 
@@ -372,9 +393,9 @@ ALTER TABLE llx_propal
 ALTER TABLE llx_propal
     ADD INDEX idx_propal_fk_projet (fk_projet);
 ALTER TABLE llx_propal
-    ADD INDEX idx_propal_fk_account(fk_account);
+    ADD INDEX idx_propal_fk_account (fk_account);
 ALTER TABLE llx_propal
-    ADD INDEX idx_propal_fk_currency(fk_currency);
+    ADD INDEX idx_propal_fk_currency (fk_currency);
 ALTER TABLE llx_propal
     ADD CONSTRAINT fk_propal_fk_user_author FOREIGN KEY (fk_user_author) REFERENCES llx_user (rowid);
 ALTER TABLE llx_propal
@@ -400,9 +421,9 @@ ALTER TABLE llx_commande
 ALTER TABLE llx_commande
     ADD INDEX idx_commande_fk_projet (fk_projet);
 ALTER TABLE llx_commande
-    ADD INDEX idx_commande_fk_account(fk_account);
+    ADD INDEX idx_commande_fk_account (fk_account);
 ALTER TABLE llx_commande
-    ADD INDEX idx_commande_fk_currency(fk_currency);
+    ADD INDEX idx_commande_fk_currency (fk_currency);
 ALTER TABLE llx_commande
     ADD CONSTRAINT fk_commande_fk_user_author FOREIGN KEY (fk_user_author) REFERENCES llx_user (rowid);
 ALTER TABLE llx_commande
@@ -735,7 +756,7 @@ ALTER TABLE llx_product_fournisseur_price DROP INDEX idx_product_fournisseur_pri
 --We keep column for the moment because we must not loose data if migrate process fails (upgrade2) to allow a second chance fix. We will delete it at next version.
 --ALTER TABLE llx_product_fournisseur_price DROP COLUMN fk_product_fournisseur;
 ALTER TABLE llx_product_fournisseur_price
-    ADD COLUMN tva_tx double(6,3) NOT NULL DEFAULT 0 AFTER unitprice;
+    ADD COLUMN tva_tx double(6, 3) NOT NULL DEFAULT 0 AFTER unitprice;
 
 UPDATE llx_c_departements
 SET ncc='JUJUY',
@@ -784,7 +805,7 @@ FROM llx_const
 WHERE __DECRYPT('name')__ = 'SOCIETE_CODECOMPTA_ADDON' AND __DECRYPT('value')__ = 'mod_codecompta_digitaria';
 
 ALTER TABLE llx_c_barcode_type
-    ADD UNIQUE INDEX uk_c_barcode_type(code, entity);
+    ADD UNIQUE INDEX uk_c_barcode_type (code, entity);
 
 -- To make migration script with version >= 3.3 working correctly
 ALTER TABLE llx_c_tva

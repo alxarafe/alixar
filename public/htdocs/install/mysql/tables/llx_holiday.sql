@@ -31,7 +31,7 @@ CREATE TABLE llx_holiday
     date_debut      DATE         NOT NULL,
     date_fin        DATE         NOT NULL,
     halfday         integer               DEFAULT 0,          -- 0=start morning and end afternoon, -1=start afternoon end afternoon, 1=start morning and end morning, 2=start afternoon and end morning
-    nb_open_day double(24,8) DEFAULT NULL,                    -- denormalized number of open days of holiday. Not always set. More reliable when re-calculated with num_open_days(date_debut, date_fin, halfday).
+    nb_open_day     double(24, 8)         DEFAULT NULL,       -- DENORMALIZED FIELD. number of open days of holiday. Not always set. More reliable when re-calculated with num_open_days(date_debut, date_fin, halfday).
     statut          integer      NOT NULL DEFAULT 1,          -- status of leave request
     fk_validator    integer      NOT NULL,                    -- who should approve the leave
     date_valid      DATETIME              DEFAULT NULL,       -- date validation
@@ -48,4 +48,5 @@ CREATE TABLE llx_holiday
     tms             timestamp             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     import_key      varchar(14),
     extraparams     varchar(255)                              -- for other parameters with json format
-) ENGINE=innodb;
+)
+    ENGINE = innodb;

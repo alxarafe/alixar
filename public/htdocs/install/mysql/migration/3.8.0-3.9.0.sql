@@ -64,8 +64,10 @@ ALTER TABLE llx_actioncomm
     ADD COLUMN email_tobcc varchar(255) after email_tocc;
 
 
-ALTER TABLE llx_user MODIFY COLUMN pass varchar (128);
-ALTER TABLE llx_user MODIFY COLUMN pass_temp varchar (128);
+ALTER TABLE llx_user
+    MODIFY COLUMN pass varchar(128);
+ALTER TABLE llx_user
+    MODIFY COLUMN pass_temp varchar(128);
 
 ALTER TABLE llx_askpricesupplier RENAME TO llx_supplier_proposal;
 ALTER TABLE llx_askpricesupplierdet RENAME TO llx_supplier_proposaldet;
@@ -88,8 +90,10 @@ INSERT INTO llx_const (name, value, type, note, visible)
 values (__ENCRYPT('MAIN_SIZE_SHORTLISTE_LIMIT') __, __ENCRYPT('3') __, 'chaine', 'Max length for small lists (tabs)',
         0);
 
-ALTER TABLE llx_accounting_system MODIFY COLUMN pcg_version varchar (32);
-ALTER TABLE llx_accountingaccount MODIFY COLUMN fk_pcg_version varchar (32);
+ALTER TABLE llx_accounting_system
+    MODIFY COLUMN pcg_version varchar(32);
+ALTER TABLE llx_accountingaccount
+    MODIFY COLUMN fk_pcg_version varchar(32);
 ALTER TABLE llx_accountingaccount RENAME TO llx_accounting_account;
 --VPGSQL8.2 ALTER SEQUENCE llx_accountingaccount_rowid_seq RENAME TO llx_accounting_account_rowid_seq;
 ALTER TABLE llx_accounting_account
@@ -153,7 +157,8 @@ ALTER TABLE llx_socpeople
 UPDATE llx_user_param
 SET param='ToDelete'
 WHERE param IS NULL;
-ALTER TABLE llx_user_param MODIFY COLUMN param varchar (255) NOT NULL;
+ALTER TABLE llx_user_param
+    MODIFY COLUMN param varchar(255) NOT NULL;
 ALTER TABLE llx_user_param MODIFY COLUMN value text NOT NULL;
 
 ALTER TABLE llx_expedition
@@ -161,10 +166,14 @@ ALTER TABLE llx_expedition
 ALTER TABLE llx_expedition
     ADD COLUMN extraparams varchar(255);
 
-ALTER TABLE llx_bank_account MODIFY COLUMN code_banque varchar (128);
-ALTER TABLE llx_prelevement_facture_demande MODIFY COLUMN code_banque varchar (128);
-ALTER TABLE llx_prelevement_lignes MODIFY COLUMN code_banque varchar (128);
-ALTER TABLE llx_societe_rib MODIFY COLUMN code_banque varchar (128);
+ALTER TABLE llx_bank_account
+    MODIFY COLUMN code_banque varchar(128);
+ALTER TABLE llx_prelevement_facture_demande
+    MODIFY COLUMN code_banque varchar(128);
+ALTER TABLE llx_prelevement_lignes
+    MODIFY COLUMN code_banque varchar(128);
+ALTER TABLE llx_societe_rib
+    MODIFY COLUMN code_banque varchar(128);
 
 ALTER TABLE llx_contrat
     ADD COLUMN ref_customer varchar(30);
@@ -185,9 +194,10 @@ where statut = 8
   and billed = 1;
 
 ALTER TABLE llx_product
-    ADD COLUMN cost_price double(24,8) DEFAULT NULL;
+    ADD COLUMN cost_price double(24, 8) DEFAULT NULL;
 
-ALTER TABLE llx_ecm_directories MODIFY COLUMN fullpath varchar (750);
+ALTER TABLE llx_ecm_directories
+    MODIFY COLUMN fullpath varchar(750);
 ALTER TABLE llx_ecm_directories DROP INDEX idx_ecm_directories;
 ALTER TABLE llx_ecm_directories
     ADD UNIQUE INDEX uk_ecm_directories (label, fk_parent, entity);
@@ -230,28 +240,13 @@ ALTER TABLE llx_user
 
 CREATE TABLE IF NOT EXISTS llx_c_hrm_function
 (
-    rowid
-    integer
-    PRIMARY
-    KEY,
-    pos
-    smallint
-    DEFAULT
-    0
-    NOT
-    NULL,
-    code
-    varchar
-(
-    16
-) NOT NULL,
-    label varchar
-(
-    50
-),
+    rowid   integer PRIMARY KEY,
+    pos     smallint DEFAULT 0 NOT NULL,
+    code    varchar(16)        NOT NULL,
+    label   varchar(50),
     c_level smallint DEFAULT 0 NOT NULL,
-    active smallint DEFAULT 1 NOT NULL
-    ) ENGINE=innodb;
+    active  smallint DEFAULT 1 NOT NULL
+) ENGINE = innodb;
 
 INSERT INTO llx_c_hrm_function (rowid, pos, code, label, c_level, active)
 VALUES (1, 5, 'EXECBOARD', 'Executive board', 0, 1);
@@ -274,27 +269,12 @@ VALUES (9, 45, 'EMPLOYEE', 'Department employee', 0, 1);
 
 CREATE TABLE IF NOT EXISTS llx_c_hrm_department
 (
-    rowid
-    integer
-    PRIMARY
-    KEY,
-    pos
-    smallint
-    DEFAULT
-    0
-    NOT
-    NULL,
-    code
-    varchar
-(
-    16
-) NOT NULL,
-    label varchar
-(
-    50
-),
+    rowid  integer PRIMARY KEY,
+    pos    smallint DEFAULT 0 NOT NULL,
+    code   varchar(16)        NOT NULL,
+    label  varchar(50),
     active smallint DEFAULT 1 NOT NULL
-    ) ENGINE=innodb;
+) ENGINE = innodb;
 
 INSERT INTO llx_c_hrm_department (rowid, pos, code, label, active)
 VALUES (1, 5, 'MANAGEMENT', 'Management', 1);
@@ -335,133 +315,44 @@ VALUES (18, 85, 'MAINT', 'Plant assurance', 1);
 
 CREATE TABLE IF NOT EXISTS llx_establishment
 (
-    rowid
-    integer
-    NOT
-    NULL
-    auto_increment
-    PRIMARY
-    KEY,
-    entity
-    integer
-    NOT
-    NULL
-    DEFAULT
-    1,
-    name
-    varchar
-(
-    50
-),
-    address varchar
-(
-    255
-),
-    zip varchar
-(
-    25
-),
-    town varchar
-(
-    50
-),
-    fk_state integer DEFAULT 0,
-    fk_country integer DEFAULT 0,
-    profid1 varchar
-(
-    20
-),
-    profid2 varchar
-(
-    20
-),
-    profid3 varchar
-(
-    20
-),
-    phone varchar
-(
-    20
-),
-    fk_user_author integer NOT NULL,
-    fk_user_mod integer NOT NULL,
-    datec datetime NOT NULL,
-    tms timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    status smallint DEFAULT 1
-    ) ENGINE=InnoDB;
+    rowid          integer  NOT NULL auto_increment PRIMARY KEY,
+    entity         integer  NOT NULL DEFAULT 1,
+    name           varchar(50),
+    address        varchar(255),
+    zip            varchar(25),
+    town           varchar(50),
+    fk_state       integer           DEFAULT 0,
+    fk_country     integer           DEFAULT 0,
+    profid1        varchar(20),
+    profid2        varchar(20),
+    profid3        varchar(20),
+    phone          varchar(20),
+    fk_user_author integer  NOT NULL,
+    fk_user_mod    integer  NOT NULL,
+    datec          datetime NOT NULL,
+    tms            timestamp         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    status         smallint          DEFAULT 1
+) ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS llx_user_rib
 (
-    rowid
-    integer
-    AUTO_INCREMENT
-    PRIMARY
-    KEY,
-    fk_user
-    integer
-    NOT
-    NULL,
-    entity
-    integer
-    DEFAULT
-    1
-    NOT
-    NULL, -- multi company id
-    datec
-    datetime,
-    tms
-    timestamp
-    DEFAULT
-    CURRENT_TIMESTAMP
-    ON
-    UPDATE
-    CURRENT_TIMESTAMP,
-    label
-    varchar
-(
-    30
-),
-    bank varchar
-(
-    255
-), -- bank name
-    code_banque varchar
-(
-    128
-), -- bank code
-    code_guichet varchar
-(
-    6
-), -- desk code
-    number varchar
-(
-    255
-), -- account number
-    cle_rib varchar
-(
-    5
-), -- key of bank account
-    bic varchar
-(
-    11
-), -- 11 according to ISO 9362
-    iban_prefix varchar
-(
-    34
-), -- full iban. 34 according to ISO 13616
-    domiciliation varchar
-(
-    255
-),
-    proprio varchar
-(
-    60
-),
-    owner_address varchar
-(
-    255
-)
-    ) ENGINE=innodb;
+    rowid         integer AUTO_INCREMENT PRIMARY KEY,
+    fk_user       integer             NOT NULL,
+    entity        integer   DEFAULT 1 NOT NULL, -- multi company id
+    datec         datetime,
+    tms           timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    label         varchar(30),
+    bank          varchar(255),                 -- bank name
+    code_banque   varchar(128),                 -- bank code
+    code_guichet  varchar(6),                   -- desk code
+    number        varchar(255),                 -- account number
+    cle_rib       varchar(5),                   -- key of bank account
+    bic           varchar(11),                  -- 11 according to ISO 9362
+    iban_prefix   varchar(34),                  -- full iban. 34 according to ISO 13616
+    domiciliation varchar(255),
+    proprio       varchar(60),
+    owner_address varchar(255)
+) ENGINE = innodb;
 
 ALTER TABLE llx_projet_task_time
     ADD COLUMN invoice_id integer DEFAULT NULL;
@@ -507,9 +398,9 @@ create table llx_budget
 create table llx_budget_lines
 (
     rowid          integer AUTO_INCREMENT PRIMARY KEY,
-    fk_budget      integer      NOT NULL,
-    fk_project_ids varchar(255) NOT NULL, -- List of project ids related to this budget. If budget is dedicated to projects not yet started, we recommand to create a project 'Projects to come'.
-    amount double(24,8) NOT NULL,
+    fk_budget      integer       NOT NULL,
+    fk_project_ids varchar(255)  NOT NULL, -- List of project ids related to this budget. If budget is dedicated to projects not yet started, we recommand to create a project 'Projects to come'.
+    amount         double(24, 8) NOT NULL,
     datec          datetime,
     tms            timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     fk_user_creat  integer,
@@ -573,8 +464,9 @@ CREATE TABLE llx_opensurvey_user_formanswers
 (
     fk_user_survey INTEGER NOT NULL,
     fk_question INTEGER NOT NULL,
-    reponses    TEXT
+    reponses TEXT
 ) ENGINE=InnoDB;
+
 
 
 
@@ -608,6 +500,7 @@ create table llx_expeditiondet_extrafields
 
 ALTER TABLE llx_expeditiondet_extrafields
     ADD INDEX idx_expeditiondet_extrafields (fk_object);
+
 
 
 -- Extrafields Expedition (delivery receipts)
@@ -901,6 +794,7 @@ INSERT INTO llx_c_departements (code_departement, fk_region, cheflieu, tncc, ncc
 VALUES ('112', 5209, '', 0, '', 'General Federico Román', 1);
 
 
+
 -- Regions Austria (id country=41)
 INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom, active)
 values (41, 4101, '', 0, 'Österreich', 1);
@@ -978,7 +872,8 @@ values (4108, 'Mitarbeitervorsorgekasse', 1, 1, 'TAXATMVK', '41');
 insert into llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
 values (4109, 'Familienlastenausgleichsfond', 1, 1, 'TAXATFLAF', '41');
 
-ALTER TABLE llx_accounting_bookkeeping MODIFY COLUMN doc_ref varchar (300) NOT NULL;
+ALTER TABLE llx_accounting_bookkeeping
+    MODIFY COLUMN doc_ref varchar(300) NOT NULL;
 
 ALTER TABLE llx_holiday
     ADD COLUMN tms timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
@@ -1007,7 +902,8 @@ VALUES (1484, 148, '0', '0', 'VAT Rate 0', 1);
 
 -- VMYSQL4.1 ALTER TABLE llx_c_type_resource CHANGE COLUMN rowid rowid integer NOT NULL AUTO_INCREMENT;
 
-ALTER TABLE llx_import_model MODIFY COLUMN type varchar (50);
+ALTER TABLE llx_import_model
+    MODIFY COLUMN type varchar(50);
 
 -- Negative buying prices
 

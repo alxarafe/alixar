@@ -26,10 +26,10 @@
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Imports\Classes\ModeleImports;
 use Dolibarr\Code\Societe\Classes\Societe;
+use Dolibarr\Lib\Version;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/core/modules/import/import_xlsx.modules.php
@@ -106,7 +106,7 @@ class ImportXlsx extends ModeleImports
         $this->phpmin = array(7, 1); // Minimum version of PHP required by module
 
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-        if (versioncompare($this->phpmin, versionphparray()) > 0) {
+        if (Version::compare($this->phpmin, Version::arrayPhp()) > 0) {
             dol_syslog("Module need a higher PHP version");
             $this->error = "Module need a higher PHP version";
             return;

@@ -21,7 +21,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Lib\ViewMain;
+use Dolibarr\Lib\Version;
 
 /**
  *      \file       htdocs/install/step2.php
@@ -30,9 +30,6 @@ use Dolibarr\Lib\ViewMain;
  */
 
 include 'inc.php';
-
-use Dolibarr\Code\Core\Classes\Conf;
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security.lib.php';
 
@@ -184,7 +181,7 @@ if ($action == "set") {
         $tabledata = array();
         if (is_resource($handle)) {
             while (($file = readdir($handle)) !== false) {
-                if (preg_match('/\.sql$/i', $file) && preg_match('/^llx_/i', $file) && !preg_match('/\.key\.sql$/i', $file) && !preg_match('/\-/', $file)) {
+                if (preg_match('/\.sql$/i', $file) && preg_match('/^llx_/i', $file) && !preg_match('/\.key\.sql$/i', $file) && !str_contains($file, '-')) {
                     $tablefound++;
                     $tabledata[] = $file;
                 }
@@ -201,7 +198,7 @@ if ($action == "set") {
             if ($fp) {
                 while (!feof($fp)) {
                     $buf = fgets($fp, 4096);
-                    if (substr($buf, 0, 2) != '--') {
+                    if (!str_starts_with($buf, '--')) {
                         $buf = preg_replace('/--(.+)*/', '', $buf);
                         $buffer .= $buf;
                     }
@@ -284,7 +281,7 @@ if ($action == "set") {
         $tabledata = array();
         if (is_resource($handle)) {
             while (($file = readdir($handle)) !== false) {
-                if (preg_match('/\.sql$/i', $file) && preg_match('/^llx_/i', $file) && preg_match('/\.key\.sql$/i', $file) && !preg_match('/\-/', $file)) {
+                if (preg_match('/\.sql$/i', $file) && preg_match('/^llx_/i', $file) && preg_match('/\.key\.sql$/i', $file) && !str_contains($file, '-')) {
                     $tablefound++;
                     $tabledata[] = $file;
                 }
@@ -305,30 +302,30 @@ if ($action == "set") {
 
                     // Special case of lines allowed for some version only
                     // MySQL
-                    if ($choix == 1 && preg_match('/^--\sV([0-9\.]+)/i', $buf, $reg)) {
+                    if ($choix == 1 && preg_match('/^--\sV([0-9.]+)/i', $buf, $reg)) {
                         $versioncommande = explode('.', $reg[1]);
                         //var_dump($versioncommande);
                         //var_dump($versionarray);
                         if (
                             count($versioncommande) && count($versionarray)
-                            && versioncompare($versioncommande, $versionarray) <= 0
+                            && Version::compare($versioncommande, $versionarray) <= 0
                         ) {
                             // Version qualified, delete SQL comments
-                            $buf = preg_replace('/^--\sV([0-9\.]+)/i', '', $buf);
+                            $buf = preg_replace('/^--\sV([0-9.]+)/i', '', $buf);
                             //print "Ligne $i qualifiee par version: ".$buf.'<br>';
                         }
                     }
                     // PGSQL
-                    if ($choix == 2 && preg_match('/^--\sPOSTGRESQL\sV([0-9\.]+)/i', $buf, $reg)) {
+                    if ($choix == 2 && preg_match('/^--\sPOSTGRESQL\sV([0-9.]+)/i', $buf, $reg)) {
                         $versioncommande = explode('.', $reg[1]);
                         //var_dump($versioncommande);
                         //var_dump($versionarray);
                         if (
                             count($versioncommande) && count($versionarray)
-                            && versioncompare($versioncommande, $versionarray) <= 0
+                            && Version::compare($versioncommande, $versionarray) <= 0
                         ) {
                             // Version qualified, delete SQL comments
-                            $buf = preg_replace('/^--\sPOSTGRESQL\sV([0-9\.]+)/i', '', $buf);
+                            $buf = preg_replace('/^--\sPOSTGRESQL\sV([0-9.]+)/i', '', $buf);
                             //print "Ligne $i qualifiee par version: ".$buf.'<br>';
                         }
                     }
@@ -490,8 +487,8 @@ if ($action == "set") {
         $tabledata = array();
         if (is_resource($handle)) {
             while (($file = readdir($handle)) !== false) {
-                if (preg_match('/\.sql$/i', $file) && preg_match('/^llx_/i', $file) && !preg_match('/\-/', $file)) {
-                    if (preg_match('/^llx_accounting_account_/', $file)) {
+                if (preg_match('/\.sql$/i', $file) && preg_match('/^llx_/i', $file) && !str_contains($file, '-')) {
+                    if (str_starts_with($file, 'llx_accounting_account_')) {
                         continue; // We discard data file of chart of account. This will be loaded when a chart is selected.
                     }
 
@@ -522,7 +519,7 @@ if ($action == "set") {
                     $buffer = fgets($fp, 4096);
                     $buffer = trim($buffer);
                     if ($buffer) {
-                        if (substr($buffer, 0, 2) == '--') {
+                        if (str_starts_with($buffer, '--')) {
                             continue;
                         }
 
@@ -552,11 +549,18 @@ if ($action == "set") {
                         $buffer = preg_replace('/llx_/i', $dolibarr_main_db_prefix, $buffer);
                     }
 
+                    $b = $buffer;
+
+                    // Replace __ENTITY__ tag with 1 (master entity), this is only for dictionaries.
+                    $buffer = preg_replace('/__ENTITY__/i', '1', $buffer);
+
                     //dolibarr_install_syslog("step2: request: " . $buffer);
                     $resql = $db->query($buffer, 1);
                     if ($resql) {
                         //$db->free($resql);     // Not required as request we launch here does not return memory needs.
                     } else {
+                        dump([$b, $buffer]);
+
                         if ($db->lasterrno() == 'DB_ERROR_RECORD_ALREADY_EXISTS') {
                             //print "<tr><td>Insertion ligne : $buffer</td><td>";
                         } else {

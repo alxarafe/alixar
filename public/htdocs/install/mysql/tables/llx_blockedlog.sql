@@ -23,7 +23,7 @@ CREATE TABLE llx_blockedlog
     date_creation  datetime,
     tms            timestamp   DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     action         varchar(50),
-    amounts double(24,8) NOT NULL,
+    amounts        double(24, 8)         NOT NULL,
     element        varchar(50),
     fk_user        integer,
     user_fullname  varchar(255),

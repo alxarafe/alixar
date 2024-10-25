@@ -1,3 +1,4 @@
+
 -- Descriptif plan comptable Suisse
 -- ID 13000 - 13299
 -- ADD 600000 to rowid # Do no remove this comment --

@@ -47,7 +47,7 @@ values ('MAILING_LIMIT_SENDBYWEB', '25', 'chaine', 'Number of targets to defined
 insert into llx_const (name, value, type, note, visible, entity)
 values ('SYSLOG_HANDLERS', '["mod_syslog_file"]', 'chaine', 'Which logger to use', 0, 0);
 insert into llx_const (name, value, type, note, visible, entity)
-values ('SYSLOG_FILE', 'DOL_DATA_ROOT/alixar.log', 'chaine', 'Directory where to write log file', 0, 0);
+values ('SYSLOG_FILE', 'DOL_DATA_ROOT/dolibarr.log', 'chaine', 'Directory where to write log file', 0, 0);
 insert into llx_const (name, value, type, note, visible, entity)
 values ('SYSLOG_LEVEL', '7', 'chaine', 'Level of debug info to show', 0, 0);
 insert into llx_const (name, value, type, note, visible, entity)

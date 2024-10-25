@@ -32,12 +32,17 @@
 -- -- VPGSQL8.2 SELECT dol_util_rebuild_sequences();
 
 
--- V18 forgotten
+-- V18 and - forgotten
 
 UPDATE llx_paiement
 SET ref = rowid
 WHERE ref IS NULL
    OR ref = '';
+
+ALTER TABLE llx_c_holiday_types
+    ADD COLUMN block_if_negative integer NOT NULL DEFAULT 0 AFTER fk_country;
+ALTER TABLE llx_c_holiday_types
+    ADD COLUMN sortorder smallint;
 
 
 -- V19 forgotten
@@ -67,6 +72,14 @@ WHERE file = 'box_members.php';
 UPDATE llx_c_units
 SET scale = 1
 WHERE code = 'S';
+
+
+UPDATE llx_menu
+SET url = CONCAT(url, '&mode=init')
+WHERE fk_mainmenu = 'ticket'
+  AND titre = 'NewTicket'
+  AND url LIKE '/ticket/card.php?action=create%'
+  AND url NOT LIKE '%mode=init%';
 
 
 -- Use unique keys for extrafields
@@ -279,22 +292,23 @@ ALTER TABLE llx_product
 
 ALTER TABLE llx_fichinter_rec
     ADD COLUMN status smallint DEFAULT 0;
-ALTER TABLE llx_fichinter_rec CHANGE COLUMN titre title varchar (50) NOT NULL;
+ALTER TABLE llx_fichinter_rec
+    CHANGE COLUMN titre title varchar(50) NOT NULL;
 CREATE TABLE llx_product_thirdparty
 (
     rowid                               integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    fk_product                          integer           NOT NULL,
-    fk_soc                              integer           NOT NULL,
-    fk_product_thirdparty_relation_type integer           NOT NULL,
+    fk_product                          integer  NOT NULL,
+    fk_soc                              integer  NOT NULL,
+    fk_product_thirdparty_relation_type integer  NOT NULL,
     date_start                          datetime,
     date_end                            datetime,
     fk_project                          integer,
     description                         text,
     note_public                         text,
     note_private                        text,
-    date_creation                       datetime          NOT NULL,
+    date_creation                       datetime NOT NULL,
     tms                                 timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_creat                       integer           NOT NULL,
+    fk_user_creat                       integer  NOT NULL,
     fk_user_modif                       integer,
     last_main_doc                       varchar(255),
     import_key                          varchar(14),
@@ -370,21 +384,23 @@ ALTER TABLE llx_ticket
 ALTER TABLE llx_ticket
     ADD COLUMN origin_references text DEFAULT NULL;
 
-ALTER TABLE llx_expensereport MODIFY COLUMN model_pdf varchar (255) DEFAULT NULL;
-ALTER TABLE llx_fichinter_rec MODIFY COLUMN modelpdf varchar (255) DEFAULT NULL;
+ALTER TABLE llx_expensereport
+    MODIFY COLUMN model_pdf varchar(255) DEFAULT NULL;
+ALTER TABLE llx_fichinter_rec
+    MODIFY COLUMN modelpdf varchar(255) DEFAULT NULL;
 ALTER TABLE llx_societe
-    ADD COLUMN geolat double(24,8) DEFAULT NULL;
+    ADD COLUMN geolat double(24, 8) DEFAULT NULL;
 ALTER TABLE llx_societe
-    ADD COLUMN geolong double(24,8) DEFAULT NULL;
+    ADD COLUMN geolong double(24, 8) DEFAULT NULL;
 ALTER TABLE llx_societe
     ADD COLUMN geopoint point DEFAULT NULL;
 ALTER TABLE llx_societe
     ADD COLUMN georesultcode varchar(16) NULL;
 
 ALTER TABLE llx_socpeople
-    ADD COLUMN geolat double(24,8) DEFAULT NULL;
+    ADD COLUMN geolat double(24, 8) DEFAULT NULL;
 ALTER TABLE llx_socpeople
-    ADD COLUMN geolong double(24,8) DEFAULT NULL;
+    ADD COLUMN geolong double(24, 8) DEFAULT NULL;
 ALTER TABLE llx_socpeople
     ADD COLUMN geopoint point DEFAULT NULL;
 ALTER TABLE llx_socpeople
@@ -411,9 +427,12 @@ ALTER TABLE llx_facture
 ALTER TABLE llx_facture_fourn
     ADD INDEX idx_facture_fourn_tms (tms);
 
-ALTER TABLE llx_element_element MODIFY COLUMN sourcetype VARCHAR (64) NOT NULL;
-ALTER TABLE llx_element_element MODIFY COLUMN targettype VARCHAR (64) NOT NULL;
-ALTER TABLE llx_c_type_contact MODIFY COLUMN element VARCHAR (64) NOT NULL;
+ALTER TABLE llx_element_element
+    MODIFY COLUMN sourcetype VARCHAR(64) NOT NULL;
+ALTER TABLE llx_element_element
+    MODIFY COLUMN targettype VARCHAR(64) NOT NULL;
+ALTER TABLE llx_c_type_contact
+    MODIFY COLUMN element VARCHAR(64) NOT NULL;
 
 ALTER TABLE llx_product_association
     ADD COLUMN import_key varchar(14) DEFAULT NULL;
@@ -447,7 +466,8 @@ ALTER TABLE llx_receptiondet_batch CHANGE COLUMN fk_commandefourndet fk_elementd
 ALTER TABLE llx_receptiondet_batch
     ADD INDEX idx_receptiondet_batch_fk_element (fk_element);
 
-ALTER TABLE llx_supplier_proposaldet MODIFY ref_fourn VARCHAR (128) NULL;
+ALTER TABLE llx_supplier_proposaldet
+    MODIFY ref_fourn VARCHAR(128) NULL;
 
 ALTER TABLE llx_projet
     ADD COLUMN ref_ext varchar(50) after ref;
@@ -539,30 +559,30 @@ WHERE disable_stock_change IS NULL;
 ALTER TABLE llx_socpeople
     ADD COLUMN url varchar(255);
 
--- knowledgemanagement module
+-- knowledge management module
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_CREATE', 'Knowledgerecord created', 'Executed when a knowledgerecord is created',
+values ('KNOWLEDGERECORD_CREATE', 'Knowledge article created', 'Executed when a article is created',
         'knowledgemanagement', 57001);
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_MODIFY', 'Knowledgerecord modified', 'Executed when a knowledgerecord is modified',
+values ('KNOWLEDGERECORD_MODIFY', 'Knowledge article modified', 'Executed when a article is modified',
         'knowledgemanagement', 57002);
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_VALIDATE', 'Knowledgerecord Evaluation validated', 'Executed when an evaluation is validated',
+values ('KNOWLEDGERECORD_VALIDATE', 'Knowledge article Evaluation validated',
+        'Executed when an evaluation is validated', 'knowledgemanagement', 57004);
+insert into llx_c_action_trigger (code, label, description, elementtype, rang)
+values ('KNOWLEDGERECORD_REOPEN', 'Knowledge article reopen', 'Executed when an evaluation is back to draft',
         'knowledgemanagement', 57004);
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_REOPEN', 'Knowledgerecord reopen', 'Executed when an evaluation is back to draft',
+values ('KNOWLEDGERECORD_UNVALIDATE', 'Knowledge article invalidated', 'Executed when an evaluation is back to draft',
         'knowledgemanagement', 57004);
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_UNVALIDATE', 'Knowledgerecord unvalidated', 'Executed when an evaluation is back to draft',
+values ('KNOWLEDGERECORD_CANCEL', 'Knowledge article cancel', 'Executed when an evaluation to cancel',
         'knowledgemanagement', 57004);
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_CANCEL', 'Knowledgerecord cancel', 'Executed when an evaluation to cancel',
+values ('KNOWLEDGERECORD_SENTBYMAIL', 'Mails sent from article file', 'article when you send email from article file',
         'knowledgemanagement', 57004);
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_SENTBYMAIL', 'Mails sent from knowledgerecord file',
-        'knowledgerecord when you send email from knowledgerecord file', 'knowledgemanagement', 57004);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_DELETE', 'Knowledgerecord deleted', 'Executed when a knowledgerecord is deleted',
+values ('KNOWLEDGERECORD_DELETE', 'Knowledge article deleted', 'Executed when a article is deleted',
         'knowledgemanagement', 57006);
 
 -- table chargesociales indexes
@@ -605,7 +625,24 @@ values (1024, 102, 1.0, 'fixed', 'Λοιπές περιπτώσεις Χαρτο
 ALTER TABLE llx_hrm_evaluation
     ADD COLUMN entity INTEGER DEFAULT 1 NOT NULL;
 
+-- Error SQL DB_ERROR_1170 BLOB/TEXT column 'url' used in key specification without a key length, so we remove completely the unique key
+ALTER TABLE llx_menu
+    DROP INDEX idx_menu_uk_menu;
+ALTER TABLE llx_menu
+    MODIFY COLUMN url TEXT NOT NULL;
+--
+ALTER TABLE llx_menu
+    ADD UNIQUE INDEX idx_menu_uk_menu (menu_handler, fk_menu, position, entity, url);
+
 UPDATE llx_c_units
 SET short_label = 'mn'
 WHERE short_label = 'i'
   AND code = 'MI';
+
+-- missing entity field
+ALTER TABLE llx_c_holiday_types
+    DROP INDEX uk_c_holiday_types;
+ALTER TABLE llx_c_holiday_types
+    ADD COLUMN entity integer DEFAULT 1 NOT NULL AFTER rowid;
+ALTER TABLE llx_c_holiday_types
+    ADD UNIQUE INDEX uk_c_holiday_types (entity, code);

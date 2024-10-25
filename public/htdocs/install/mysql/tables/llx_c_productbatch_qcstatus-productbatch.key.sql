@@ -17,4 +17,4 @@
 -- ========================================================================
 
 ALTER TABLE llx_c_productbatch_qcstatus
-    ADD UNIQUE INDEX uk_c_productbatch_qcstatus(code, entity);
+    ADD UNIQUE INDEX uk_c_productbatch_qcstatus (code, entity);

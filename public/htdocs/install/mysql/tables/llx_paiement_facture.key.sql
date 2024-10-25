@@ -33,5 +33,5 @@ ALTER TABLE llx_paiement_facture
 
 
 ALTER TABLE llx_paiement_facture
-    ADD UNIQUE INDEX uk_paiement_facture(fk_paiement, fk_facture);
+    ADD UNIQUE INDEX uk_paiement_facture (fk_paiement, fk_facture);
 

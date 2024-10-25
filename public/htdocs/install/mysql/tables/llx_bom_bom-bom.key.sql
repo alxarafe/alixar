@@ -28,6 +28,6 @@ ALTER TABLE llx_bom_bom
 -- END MODULEBUILDER INDEXES
 
 ALTER TABLE llx_bom_bom
-    ADD UNIQUE INDEX uk_bom_bom_ref(ref, entity);
+    ADD UNIQUE INDEX uk_bom_bom_ref (ref, entity);
 
 --ALTER TABLE llx_bom_bom ADD CONSTRAINT llx_bom_bom_fk_field FOREIGN KEY (fk_field) REFERENCES llx_bom_myotherobject(rowid);

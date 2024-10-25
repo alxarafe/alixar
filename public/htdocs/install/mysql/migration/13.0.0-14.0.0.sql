@@ -64,11 +64,13 @@ ALTER TABLE llx_accounting_bookkeeping
 ALTER TABLE llx_accounting_bookkeeping
     ADD INDEX idx_accounting_bookkeeping_piece_num (piece_num, entity);
 
-ALTER TABLE llx_recruitment_recruitmentcandidature MODIFY COLUMN email_msgid VARCHAR (175);
+ALTER TABLE llx_recruitment_recruitmentcandidature
+    MODIFY COLUMN email_msgid VARCHAR(175);
 
-ALTER TABLE llx_asset CHANGE COLUMN amount amount_ht double (24,8) DEFAULT NULL;
 ALTER TABLE llx_asset
-    ADD COLUMN amount_vat double(24,8) DEFAULT NULL;
+    CHANGE COLUMN amount amount_ht double(24, 8) DEFAULT NULL;
+ALTER TABLE llx_asset
+    ADD COLUMN amount_vat double(24, 8) DEFAULT NULL;
 
 ALTER TABLE llx_supplier_proposal_extrafields
     ADD INDEX idx_supplier_proposal_extrafields (fk_object);
@@ -181,8 +183,10 @@ WHERE code = 'ISSUE';
 INSERT INTO llx_c_ticket_type (code, pos, label, active, use_default, description)
 VALUES ('PROBLEM', '22', 'Problem', 0, 0, NULL);
 
-ALTER TABLE llx_import_model MODIFY COLUMN type varchar (64);
-ALTER TABLE llx_export_model MODIFY COLUMN type varchar (64);
+ALTER TABLE llx_import_model
+    MODIFY COLUMN type varchar(64);
+ALTER TABLE llx_export_model
+    MODIFY COLUMN type varchar(64);
 
 ALTER TABLE llx_import_model
     ADD COLUMN entity integer DEFAULT 0 NOT NULL;
@@ -216,7 +220,8 @@ ALTER TABLE llx_events
 ALTER TABLE llx_events
     ADD COLUMN fk_oauth_token integer NULL;
 
-ALTER TABLE llx_mailing_cibles MODIFY COLUMN tag varchar (64) NULL;
+ALTER TABLE llx_mailing_cibles
+    MODIFY COLUMN tag varchar(64) NULL;
 ALTER TABLE llx_mailing_cibles
     ADD INDEX idx_mailing_cibles_tag (tag);
 
@@ -230,7 +235,8 @@ UPDATE llx_adherent
 SET ref = rowid
 WHERE ref = ''
    or ref IS NULL;
-ALTER TABLE llx_adherent MODIFY COLUMN ref varchar (30) NOT NULL;
+ALTER TABLE llx_adherent
+    MODIFY COLUMN ref varchar(30) NOT NULL;
 ALTER TABLE llx_adherent
     ADD UNIQUE INDEX uk_adherent_ref (ref, entity);
 
@@ -271,22 +277,22 @@ ALTER TABLE llx_propal DROP FOREIGN KEY llx_propal_fk_warehouse;
 CREATE TABLE llx_workstation_workstation
 (
     -- BEGIN MODULEBUILDER FIELDS
-    rowid                 integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    ref                   varchar(128) DEFAULT '(PROV)' NOT NULL,
-    label                 varchar(255),
-    type                  varchar(7),
-    note_public           text,
-    entity                int          DEFAULT 1,
-    note_private          text,
-    date_creation         datetime                      NOT NULL,
-    tms                   timestamp    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_creat         integer                       NOT NULL,
-    fk_user_modif         integer,
-    import_key            varchar(14),
-    status                smallint                      NOT NULL,
-    nb_operators_required integer,
+    rowid                  integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    ref                    varchar(128) DEFAULT '(PROV)'      NOT NULL,
+    label                  varchar(255),
+    type                   varchar(7),
+    note_public            text,
+    entity                 int          DEFAULT 1,
+    note_private           text,
+    date_creation          datetime                           NOT NULL,
+    tms                    timestamp    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    fk_user_creat          integer                            NOT NULL,
+    fk_user_modif          integer,
+    import_key             varchar(14),
+    status                 smallint                           NOT NULL,
+    nb_operators_required  integer,
     thm_operator_estimated double,
-    thm_machine_estimated double
+    thm_machine_estimated  double
     -- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;
 
@@ -320,14 +326,14 @@ DROP TABLE llx_c_producbatch_qcstatus; -- delete table with bad name
 CREATE TABLE llx_c_productbatch_qcstatus
 (
     rowid  integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    entity integer     NOT NULL DEFAULT 1,
-    code   varchar(16) NOT NULL,
-    label  varchar(50) NOT NULL,
-    active integer              DEFAULT 1 NOT NULL
+    entity integer                            NOT NULL DEFAULT 1,
+    code   varchar(16)                        NOT NULL,
+    label  varchar(50)                        NOT NULL,
+    active integer                                     DEFAULT 1 NOT NULL
 ) ENGINE=innodb;
 
 ALTER TABLE llx_c_productbatch_qcstatus
-    ADD UNIQUE INDEX uk_c_productbatch_qcstatus(code, entity);
+    ADD UNIQUE INDEX uk_c_productbatch_qcstatus (code, entity);
 
 INSERT INTO llx_c_productbatch_qcstatus (code, label, active)
 VALUES ('OK', 'InWorkingOrder', 1);
@@ -343,13 +349,13 @@ ALTER TABLE llx_propal
     ADD COLUMN fk_warehouse integer DEFAULT NULL AFTER fk_shipping_method;
 --ALTER TABLE llx_propal ADD CONSTRAINT fk_propal_fk_warehouse FOREIGN KEY (fk_warehouse) REFERENCES llx_entrepot(rowid);
 ALTER TABLE llx_propal
-    ADD INDEX idx_propal_fk_warehouse(fk_warehouse);
+    ADD INDEX idx_propal_fk_warehouse (fk_warehouse);
 
 ALTER TABLE llx_societe DROP INDEX idx_societe_entrepot;
 ALTER TABLE llx_societe CHANGE fk_entrepot fk_warehouse INTEGER DEFAULT NULL;
 --ALTER TABLE llx_societe ADD CONSTRAINT fk_propal_fk_warehouse FOREIGN KEY (fk_warehouse) REFERENCES llx_entrepot(rowid);
 ALTER TABLE llx_societe
-    ADD INDEX idx_societe_warehouse(fk_warehouse);
+    ADD INDEX idx_societe_warehouse (fk_warehouse);
 
 -- VMYSQL4.3 ALTER TABLE llx_societe MODIFY COLUMN fk_typent integer NULL;
 -- VPGSQL8.2 ALTER TABLE llx_societe ALTER COLUMN fk_typent DROP NOT NULL;
@@ -362,7 +368,8 @@ DELETE
 FROM llx_c_typent
 WHERE code = 'TE_UNKNOWN';
 
-ALTER TABLE llx_socpeople MODIFY poste varchar (255);
+ALTER TABLE llx_socpeople
+    MODIFY poste varchar(255);
 
 ALTER TABLE llx_menu
     ADD COLUMN prefix varchar(255) NULL AFTER titre;
@@ -387,9 +394,9 @@ create table llx_payment_vat
     rowid           integer AUTO_INCREMENT PRIMARY KEY,
     fk_tva          integer,
     datec           datetime, -- date de creation
-    tms             timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    tms             timestamp     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     datep           datetime, -- payment date
-    amount double(24,8) DEFAULT 0,
+    amount          double(24, 8) DEFAULT 0,
     fk_typepaiement integer NOT NULL,
     num_paiement    varchar(50),
     note            text,
@@ -472,9 +479,9 @@ ALTER TABLE llx_projet
 ALTER TABLE llx_projet
     ADD COLUMN accept_booth_suggestions integer DEFAULT 0;
 ALTER TABLE llx_projet
-    ADD COLUMN price_registration double(24,8);
+    ADD COLUMN price_registration double(24, 8);
 ALTER TABLE llx_projet
-    ADD COLUMN price_booth double(24,8);
+    ADD COLUMN price_booth double(24, 8);
 
 ALTER TABLE llx_actioncomm
     ADD COLUMN num_vote integer DEFAULT NULL AFTER reply_to;
@@ -488,12 +495,15 @@ UPDATE llx_actioncomm
 SET ref = id
 WHERE ref = ''
    OR ref IS NULL;
-ALTER TABLE llx_actioncomm MODIFY COLUMN ref varchar (30) NOT NULL;
+ALTER TABLE llx_actioncomm
+    MODIFY COLUMN ref varchar(30) NOT NULL;
 ALTER TABLE llx_actioncomm
     ADD UNIQUE INDEX uk_actioncomm_ref (ref, entity);
 
-ALTER TABLE llx_c_actioncomm MODIFY code varchar (50) NOT NULL;
-ALTER TABLE llx_c_actioncomm MODIFY module varchar (50) DEFAULT NULL;
+ALTER TABLE llx_c_actioncomm
+    MODIFY code varchar(50) NOT NULL;
+ALTER TABLE llx_c_actioncomm
+    MODIFY module varchar(50) DEFAULT NULL;
 
 INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, active, position)
 VALUES (60, 'AC_EO_ONLINECONF', 'module', 'Online/Virtual conference', 'conference@eventorganization', 1, 60);
@@ -504,16 +514,26 @@ VALUES (62, 'AC_EO_ONLINEBOOTH', 'module', 'Online/Virtual booth', 'booth@evento
 INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, active, position)
 VALUES (63, 'AC_EO_INDOORBOOTH', 'module', 'Indoor booth', 'booth@eventorganization', 1, 63);
 -- Code enhanced - Standardize field name
-ALTER TABLE llx_commande CHANGE COLUMN tva total_tva double (24,8) default 0;
-ALTER TABLE llx_supplier_proposal CHANGE COLUMN tva total_tva double (24,8) default 0;
-ALTER TABLE llx_supplier_proposal CHANGE COLUMN total total_ttc double (24,8) default 0;
-ALTER TABLE llx_propal CHANGE COLUMN tva total_tva double (24,8) default 0;
-ALTER TABLE llx_propal CHANGE COLUMN total total_ttc double (24,8) default 0;
-ALTER TABLE llx_facture CHANGE COLUMN tva total_tva double (24,8) default 0;
-ALTER TABLE llx_facture CHANGE COLUMN total total_ht double (24,8) default 0;
-ALTER TABLE llx_facture_rec CHANGE COLUMN tva total_tva double (24,8) default 0;
-ALTER TABLE llx_facture_rec CHANGE COLUMN total total_ht double (24,8) default 0;
-ALTER TABLE llx_commande_fournisseur CHANGE COLUMN tva total_tva double (24,8) default 0;
+ALTER TABLE llx_commande
+    CHANGE COLUMN tva total_tva double(24, 8) default 0;
+ALTER TABLE llx_supplier_proposal
+    CHANGE COLUMN tva total_tva double(24, 8) default 0;
+ALTER TABLE llx_supplier_proposal
+    CHANGE COLUMN total total_ttc double(24, 8) default 0;
+ALTER TABLE llx_propal
+    CHANGE COLUMN tva total_tva double(24, 8) default 0;
+ALTER TABLE llx_propal
+    CHANGE COLUMN total total_ttc double(24, 8) default 0;
+ALTER TABLE llx_facture
+    CHANGE COLUMN tva total_tva double(24, 8) default 0;
+ALTER TABLE llx_facture
+    CHANGE COLUMN total total_ht double(24, 8) default 0;
+ALTER TABLE llx_facture_rec
+    CHANGE COLUMN tva total_tva double(24, 8) default 0;
+ALTER TABLE llx_facture_rec
+    CHANGE COLUMN total total_ht double(24, 8) default 0;
+ALTER TABLE llx_commande_fournisseur
+    CHANGE COLUMN tva total_tva double(24, 8) default 0;
 
 
 --VMYSQL4.3 ALTER TABLE llx_c_civility CHANGE COLUMN rowid rowid INTEGER NOT NULL AUTO_INCREMENT;
@@ -526,15 +546,15 @@ ALTER TABLE llx_commande_fournisseur CHANGE COLUMN tva total_tva double (24,8) d
 create table llx_salary
 (
     rowid          integer AUTO_INCREMENT PRIMARY KEY,
-    ref            varchar(30) NULL,             -- payment reference number (currently NULL because there is no numbering manager yet)
+    ref            varchar(30)         NULL,     -- payment reference number (currently NULL because there is no numbering manager yet)
     label          varchar(255),
     tms            timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     datec          datetime,                     -- Create date
     fk_user        integer             NOT NULL,
     datep          date,                         -- payment date
     datev          date,                         -- value date (this field should not be here, only into bank tables)
-    salary double(24,8),                         -- salary of user when payment was done
-    amount double(24,8) NOT NULL DEFAULT 0,
+    salary         double(24, 8),                -- salary of user when payment was done
+    amount         double(24, 8)       NOT NULL DEFAULT 0,
     fk_projet      integer   DEFAULT NULL,
     datesp         date,                         -- date start period
     dateep         date,                         -- date end period
@@ -645,24 +665,24 @@ ALTER TABLE llx_societe_perentity
 CREATE TABLE llx_eventorganization_conferenceorboothattendee
 (
     rowid         integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    ref           varchar(128) NOT NULL,
+    ref           varchar(128)                       NOT NULL,
     fk_soc        integer,
     fk_actioncomm integer,
-    fk_project    integer      NOT NULL,
-    fk_invoice    integer NULL,
+    fk_project    integer                            NOT NULL,
+    fk_invoice    integer                            NULL,
     email         varchar(100),
     date_subscription datetime,
     amount double DEFAULT NULL,
     note_public   text,
     note_private  text,
-    date_creation datetime     NOT NULL,
+    date_creation datetime                           NOT NULL,
     tms           timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     fk_user_creat integer,
     fk_user_modif integer,
     last_main_doc varchar(255),
     import_key    varchar(14),
     model_pdf     varchar(255),
-    status        smallint     NOT NULL
+    status        smallint                           NOT NULL
 ) ENGINE=innodb;
 
 -- VMYSQL4.3 ALTER TABLE llx_eventorganization_conferenceorboothattendee MODIFY COLUMN fk_actioncomm integer NULL;
@@ -694,7 +714,7 @@ ALTER TABLE llx_eventorganization_conferenceorboothattendee
 -- VPGSQL8.2 DROP INDEX uk_eventorganization_conferenceorboothattendee;
 
 ALTER TABLE llx_eventorganization_conferenceorboothattendee
-    ADD UNIQUE INDEX uk_eventorganization_conferenceorboothattendee(fk_project, email, fk_actioncomm);
+    ADD UNIQUE INDEX uk_eventorganization_conferenceorboothattendee (fk_project, email, fk_actioncomm);
 
 
 create table llx_eventorganization_conferenceorboothattendee_extrafields
@@ -706,7 +726,7 @@ create table llx_eventorganization_conferenceorboothattendee_extrafields
 ) ENGINE=innodb;
 
 ALTER TABLE llx_eventorganization_conferenceorboothattendee_extrafields
-    ADD INDEX idx_conferenceorboothattendee_fk_object(fk_object);
+    ADD INDEX idx_conferenceorboothattendee_fk_object (fk_object);
 
 ALTER TABLE llx_c_ticket_category
     ADD COLUMN public integer DEFAULT 0;
@@ -714,7 +734,8 @@ ALTER TABLE llx_c_ticket_category
 -- VPGSQL8.2 ALTER TABLE llx_c_ticket_category ALTER COLUMN pos TYPE INTEGER USING pos::INTEGER;
 -- VPGSQL8.2 ALTER TABLE llx_c_ticket_category ALTER COLUMN pos SET NOT NULL;
 -- VPGSQL8.2 ALTER TABLE llx_c_ticket_category ALTER COLUMN pos SET DEFAULT 0;
-ALTER TABLE llx_c_ticket_category MODIFY COLUMN pos integer DEFAULT 0 NOT NULL;
+ALTER TABLE llx_c_ticket_category
+    MODIFY COLUMN pos integer DEFAULT 0 NOT NULL;
 
 
 ALTER TABLE llx_propal
@@ -752,23 +773,23 @@ values (212, 'conferenceorbooth', 'external', 'RESPONSIBLE', 'Booth responsible'
 CREATE TABLE llx_partnership
 (
     rowid                      integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    ref                        varchar(128) DEFAULT '(PROV)' NOT NULL,
-    status                     smallint                      NOT NULL DEFAULT '0',
+    ref                        varchar(128) DEFAULT '(PROV)'      NOT NULL,
+    status                     smallint                           NOT NULL DEFAULT '0',
     fk_soc                     integer,
     fk_member                  integer,
-    date_partnership_start     date                          NOT NULL,
-    date_partnership_end       date NULL,
-    entity                     integer      DEFAULT 1        NOT NULL, -- multi company id, 0 = all
-    reason_decline_or_cancel   text NULL,
-    date_creation              datetime                      NOT NULL,
-    fk_user_creat              integer                       NOT NULL,
+    date_partnership_start     date                               NOT NULL,
+    date_partnership_end       date                               NULL,
+    entity                     integer      DEFAULT 1             NOT NULL, -- multi company id, 0 = all
+    reason_decline_or_cancel   text                               NULL,
+    date_creation              datetime                           NOT NULL,
+    fk_user_creat              integer                            NOT NULL,
     tms                        timestamp    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     fk_user_modif              integer,
     note_private               text,
     note_public                text,
     last_main_doc              varchar(255),
     count_last_url_check_error integer      DEFAULT '0',
-    last_check_backlink        datetime NULL,
+    last_check_backlink        datetime                           NULL,
     import_key                 varchar(14),
     model_pdf                  varchar(255)
 ) ENGINE=innodb;
@@ -798,7 +819,7 @@ create table llx_partnership_extrafields
 ) ENGINE=innodb;
 
 ALTER TABLE llx_partnership_extrafields
-    ADD INDEX idx_partnership_fk_object(fk_object);
+    ADD INDEX idx_partnership_fk_object (fk_object);
 
 INSERT INTO llx_c_email_templates (entity, module, type_template, label, lang, position, topic, joinfiles, content)
 VALUES (0, 'partnership', 'partnership_send', '(SendingEmailOnPartnershipWillSoonBeCanceled)', '', 100,
@@ -851,21 +872,21 @@ CREATE TABLE llx_knowledgemanagement_knowledgerecord
 (
     -- BEGIN MODULEBUILDER FIELDS
     rowid                integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    ref                  varchar(128) NOT NULL,
-    date_creation        datetime     NOT NULL,
+    ref                  varchar(128)                       NOT NULL,
+    date_creation        datetime                           NOT NULL,
     tms                  timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     last_main_doc        varchar(255),
-    fk_user_creat        integer      NOT NULL,
+    fk_user_creat        integer                            NOT NULL,
     fk_user_modif        integer,
     fk_user_valid        integer,
     import_key           varchar(14),
     model_pdf            varchar(255),
-    question             text         NOT NULL,
+    question             text                               NOT NULL,
     answer               text,
     url                  varchar(255),
     fk_ticket            integer,
     fk_c_ticket_category integer,
-    status               integer      NOT NULL
+    status               integer                            NOT NULL
     -- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;
 
@@ -887,7 +908,7 @@ create table llx_knowledgemanagement_knowledgerecord_extrafields
 
 -- add default amount by member type
 ALTER TABLE llx_adherent_type
-    ADD COLUMN amount DOUBLE(24,8) NULL DEFAULT NULL AFTER subscription;
+    ADD COLUMN amount DOUBLE(24, 8) NULL DEFAULT NULL AFTER subscription;
 
 -- add action trigger
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
@@ -907,7 +928,8 @@ create table llx_c_partnership_type
 
 DELETE
 FROM llx_rights_def
-WHERE module = 'hrm' AND perms = 'employee';
+WHERE module = 'hrm'
+  AND perms = 'employee';
 
 
 CREATE TABLE llx_ecm_directories_extrafields

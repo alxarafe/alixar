@@ -1574,6 +1574,7 @@ abstract class DolibarrModules
                     $ignoreerror = $val['ignoreerror'];
                 }
                 // Add current entity id
+                $ssql = $sql;
                 $sql = str_replace('__ENTITY__', (string)$conf->entity, $sql);
 
                 dol_syslog(get_only_class($this) . "::_init ignoreerror=" . $ignoreerror, LOG_DEBUG);

@@ -17,4 +17,4 @@
 -- ========================================================================
 
 ALTER TABLE llx_c_type_fees
-    ADD UNIQUE INDEX uk_c_type_fees(code);
+    ADD UNIQUE INDEX uk_c_type_fees (code);

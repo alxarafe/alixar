@@ -25,7 +25,7 @@ create table llx_localtax
     tms           timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     datep         date, -- date of payment
     datev         date, -- date of value
-    amount double,
+    amount        double,
     label         varchar(255),
     note          text,
     fk_bank       integer,

@@ -4435,7 +4435,6 @@ class Societe extends CommonObject
 
         if ($resql) {
             // Call triggers
-            include_once DOL_DOCUMENT_ROOT . '/core/class/interfaces.class.php';
             $interface = new Interfaces($this->db);
             $result = $interface->run_triggers('COMPANY_MODIFY', $this, $user, $langs, $conf);
             if ($result < 0) {

@@ -18,5 +18,5 @@
 
 
 ALTER TABLE llx_default_values
-    ADD UNIQUE INDEX uk_default_values(type, entity, user_id, page, param);
+    ADD UNIQUE INDEX uk_default_values (type, entity, user_id, page, param);
 

@@ -18,4 +18,4 @@
 
 
 ALTER TABLE llx_mailing_unsubscribe
-    ADD UNIQUE uk_mailing_unsubscribe(email, entity, unsubscribegroup);
+    ADD UNIQUE uk_mailing_unsubscribe (email, entity, unsubscribegroup);

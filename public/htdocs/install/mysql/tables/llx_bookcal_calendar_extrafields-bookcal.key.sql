@@ -16,5 +16,5 @@
 
 -- BEGIN MODULEBUILDER INDEXES
 ALTER TABLE llx_bookcal_calendar_extrafields
-    ADD INDEX idx_calendar_fk_object(fk_object);
+    ADD INDEX idx_calendar_fk_object (fk_object);
 -- END MODULEBUILDER INDEXES

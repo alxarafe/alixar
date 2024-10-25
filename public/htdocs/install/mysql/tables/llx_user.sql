@@ -63,15 +63,24 @@ create table llx_user
 
     socialnetworks               text         DEFAULT NULL,       -- json with socialnetworks
 
-    --module_comm       smallint DEFAULT 1,
-    --module_compta     smallint DEFAULT 1,
+    -
+    -
+    module_comm
+    smallint
+    DEFAULT
+    1, -
+    -
+    module_compta
+    smallint
+    DEFAULT
+    1,
 
-    fk_soc                       integer NULL,                    -- id thirdparty if user linked to a company (external user)
-    fk_socpeople                 integer NULL,                    -- id contact origin if user linked to a contact
-    fk_member                    integer NULL,                    -- if member if user linked to a member
-    fk_user                      integer NULL,                    -- Supervisor, hierarchic parent
-    fk_user_expense_validator    integer NULL,
-    fk_user_holiday_validator    integer NULL,
+    fk_soc                       integer                NULL,     -- id thirdparty if user linked to a company (external user)
+    fk_socpeople                 integer                NULL,     -- id contact origin if user linked to a contact
+    fk_member                    integer                NULL,     -- if member if user linked to a member
+    fk_user                      integer                NULL,     -- Supervisor, hierarchic parent
+    fk_user_expense_validator    integer                NULL,
+    fk_user_holiday_validator    integer                NULL,
 
     idpers1                      varchar(128),
     idpers2                      varchar(128),
@@ -88,8 +97,10 @@ create table llx_user
     dateendvalidity              datetime,
     flagdelsessionsbefore        datetime     DEFAULT NULL,       -- set this to a date if we need to launch an external process to invalidate all sessions for the same login created before this date
     iplastlogin                  varchar(250),
-    ippreviouslogin              varchar(250),
-    --egroupware_id           integer,
+    ippreviouslogin              varchar(250), -
+    -
+    egroupware_id
+    integer,
     ldap_sid                     varchar(255) DEFAULT NULL,
     openid                       varchar(255),
     statut                       tinyint      DEFAULT 1,
@@ -98,16 +109,16 @@ create table llx_user
     color                        varchar(6),
     barcode                      varchar(255) DEFAULT NULL,
     fk_barcode_type              integer      DEFAULT 0,
-    accountancy_code             varchar(32) NULL,
+    accountancy_code             varchar(32)            NULL,
     nb_holiday                   integer      DEFAULT 0,
-    thm double(24,8),
-    tjm double(24,8),
+    thm                          double(24, 8),
+    tjm                          double(24, 8),
 
-    salary double(24,8),                                          -- denormalized value coming from llx_user_employment
-    salaryextra double(24,8),                                     -- denormalized value coming from llx_user_employment
-    dateemployment               date,                            -- denormalized value coming from llx_user_employment
-    dateemploymentend            date,                            -- denormalized value coming from llx_user_employment
-    weeklyhours double(16,8),                                     -- denormalized value coming from llx_user_employment
+    salary                       double(24, 8),                   -- DENORMALIZED FIELD. Value coming from llx_user_employment
+    salaryextra                  double(24, 8),                   -- DENORMALIZED FIELD. Value coming from llx_user_employment
+    dateemployment               date,                            -- DENORMALIZED FIELD. Value coming from llx_user_employment
+    dateemploymentend            date,                            -- DENORMALIZED FIELD. Value coming from llx_user_employment
+    weeklyhours                  double(16, 8),                   -- DENORMALIZED FIELD. Value coming from llx_user_employment
 
     import_key                   varchar(14),                     -- import key
     default_range                integer,

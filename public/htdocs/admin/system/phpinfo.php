@@ -22,6 +22,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Lib\Version;
 use Dolibarr\Lib\ViewMain;
 
 // Load Dolibarr environment
@@ -101,12 +102,12 @@ print '<tr><td>' . $langs->trans("Version") . '</td><td>';
 $arrayphpminversionerror = array(5, 5, 0);
 $arrayphpminversionwarning = array(5, 6, 0);
 
-if (versioncompare(versionphparray(), $arrayphpminversionerror) < 0) {
-    print '<img src="' . $ErrorPicturePath . '" alt="Error"> ' . $langs->trans("ErrorPHPVersionTooLow", versiontostring($arrayphpminversionerror));
-} elseif (versioncompare(versionphparray(), $arrayphpminversionwarning) < 0) {
-    print '<img src="' . $WarningPicturePath . '" alt="Warning"> ' . $langs->trans("ErrorPHPVersionTooLow", versiontostring($arrayphpminversionwarning));
+if (Version::compare(Version::arrayPhp(), $arrayphpminversionerror) < 0) {
+    print '<img src="' . $ErrorPicturePath . '" alt="Error"> ' . $langs->trans("ErrorPHPVersionTooLow", Version::toString($arrayphpminversionerror));
+} elseif (Version::compare(Version::arrayPhp(), $arrayphpminversionwarning) < 0) {
+    print '<img src="' . $WarningPicturePath . '" alt="Warning"> ' . $langs->trans("ErrorPHPVersionTooLow", Version::toString($arrayphpminversionwarning));
 } else {
-    print '<img src="' . $OkayPicturePath . '" alt="Ok"> ' . versiontostring(versionphparray());
+    print '<img src="' . $OkayPicturePath . '" alt="Ok"> ' . Version::toString(Version::arrayPhp());
 }
 
 print '</td></tr>';

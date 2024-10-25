@@ -19,7 +19,7 @@
 
 
 ALTER TABLE llx_bank_account
-    ADD UNIQUE uk_bank_account_label (label,entity);
+    ADD UNIQUE uk_bank_account_label (label, entity);
 ALTER TABLE llx_bank_account
     ADD INDEX idx_fk_accountancy_journal (fk_accountancy_journal);
 

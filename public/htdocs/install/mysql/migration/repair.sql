@@ -26,6 +26,7 @@
 -- You can check with 'show full columns from mytablename';
 
 
+
 -- VMYSQLUTF8UNICODECI ALTER TABLE llx_accounting_account MODIFY account_number VARCHAR(20) CHARACTER SET utf8;
 -- VMYSQLUTF8UNICODECI ALTER TABLE llx_accounting_account MODIFY account_number VARCHAR(20) COLLATE utf8_unicode_ci;
 -- VMYSQLUTF8UNICODECI ALTER TABLE llx_accounting_bookkeeping MODIFY numero_compte VARCHAR(20) CHARACTER SET utf8;
@@ -250,6 +251,7 @@ DELETE
 FROM llx_product_stock
 WHERE reel = 0
   AND rowid NOT IN (SELECT fk_product_stock FROM llx_product_batch as pb);
+
 
 
 -- Merge splitted lines into one in table llx_product_batch
@@ -530,7 +532,8 @@ create table tmp_links_double as (select objectid, label, max(rowid) as max_rowi
 --select * from tmp_links_double;
 delete
 from llx_links
-where (rowid, label) in (select max_rowid, label from tmp_links_double); --update to avoid duplicate, delete to delete
+where (rowid, label) in (select max_rowid, label from tmp_links_double);
+--update to avoid duplicate, delete to delete
 drop table tmp_links_double;
 
 
@@ -545,7 +548,8 @@ create table tmp_product_double as (select barcode, max(rowid) as max_rowid, cou
 --select * from tmp_product_double;
 update llx_product
 set barcode = null
-where (rowid, barcode) in (select max_rowid, barcode from tmp_product_double); --update to avoid duplicate, delete to delete
+where (rowid, barcode) in (select max_rowid, barcode from tmp_product_double);
+--update to avoid duplicate, delete to delete
 drop table tmp_product_double;
 
 
@@ -578,7 +582,8 @@ create table tmp_accounting_account_double as (select account_number,
 --select * from tmp_accounting_account_double;
 delete
 from llx_accounting_account
-where (rowid) in (select max_rowid from tmp_accounting_account_double); --update to avoid duplicate, delete to delete
+where (rowid) in (select max_rowid from tmp_accounting_account_double);
+--update to avoid duplicate, delete to delete
 drop table tmp_accounting_account_double;
 
 
@@ -592,7 +597,8 @@ create table tmp_commande_extrafields_double as (select fk_object, max(rowid) as
 --select * from tmp_links_double;
 delete
 from llx_commande_extrafields
-where (rowid) in (select max_rowid from tmp_commande_extrafields_double); --update to avoid duplicate, delete to delete
+where (rowid) in (select max_rowid from tmp_commande_extrafields_double);
+--update to avoid duplicate, delete to delete
 drop table tmp_commande_extrafields_double;
 
 
@@ -734,23 +740,17 @@ DELETE
 FROM llx_c_shipment_mode
 where code IN (select code from tmp_c_shipment_mode WHERE tracking is NULL OR tracking = '')
   AND code IN (select code from tmp_c_shipment_mode WHERE tracking is NOT NULL AND tracking != '')
-  AND (tracking IS NULL
-   OR tracking = '');
+  AND (tracking IS NULL OR tracking = '');
 drop table tmp_c_shipment_mode;
 
 
 -- Restore id of user on link for payment of expense report
 drop table tmp_bank_url_expense_user;
-create table tmp_bank_url_expense_user
-(
-    select e.fk_user_author, bu2
-    .
-    fk_bank
-    from
-    llx_expensereport as
-    e,
-    llx_bank_url as bu2 where bu2.url_id = e.rowid and bu2.type = 'payment_expensereport'
-);
+create table tmp_bank_url_expense_user (select e.fk_user_author, bu2.fk_bank
+                                        from llx_expensereport as e,
+                                             llx_bank_url as bu2
+                                        where bu2.url_id = e.rowid
+                                          and bu2.type = 'payment_expensereport');
 update llx_bank_url as bu
 set url_id = (select e.fk_user_author from tmp_bank_url_expense_user as e where e.fk_bank = bu.fk_bank)
 where (bu.url_id = 0 OR bu.url_id IS NULL)
@@ -759,18 +759,20 @@ drop table tmp_bank_url_expense_user;
 
 
 -- Delete duplicate accounting account, but only if not used
-DROP TABLE tmp_llx_accouting_account;
-CREATE TABLE tmp_llx_accouting_account AS
+DROP TABLE tmp_llx_accounting_account;
+CREATE TABLE tmp_llx_accounting_account AS
 SELECT MIN(rowid) as MINID, account_number, entity, fk_pcg_version, count(*) AS NB
 FROM llx_accounting_account
 group BY account_number, entity, fk_pcg_version
 HAVING count(*) >= 2
 order by account_number, entity, fk_pcg_version;
---SELECT * from tmp_llx_accouting_account;
+--
+SELECT *
+from tmp_llx_accounting_account;
 DELETE
 from llx_accounting_account
 where rowid in (select minid
-                from tmp_llx_accouting_account
+                from tmp_llx_accounting_account
                 where minid NOT IN (SELECT fk_code_ventilation from llx_facturedet)
                   AND minid NOT IN (SELECT fk_code_ventilation from llx_facture_fourn_det)
                   AND minid NOT IN (SELECT fk_code_ventilation from llx_expensereport_det));
@@ -808,9 +810,8 @@ WHERE fk_code_ventilation > 0
 -- p.tva_tx = 0
 -- where price = 17.5
 
-UPDATE llx_chargesociales
-SET date_creation = tms
-WHERE date_creation IS NULL;
+UPDATE llx_chargesociales SET date_creation = tms
+  WHERE date_creation IS NULL;
 
 -- VMYSQL4.1 SET sql_mode = 'ALLOW_INVALID_DATES';
 -- VMYSQL4.1 update llx_accounting_account set tms = datec where DATE(STR_TO_DATE(tms, '%Y-%m-%d')) IS NULL;
@@ -989,7 +990,8 @@ WHERE situation_percent IS NULL
 
 DELETE
 FROM llx_rights_def
-WHERE module = 'hrm' AND perms = 'employee';
+WHERE module = 'hrm'
+  AND perms = 'employee';
 
 
 
@@ -1007,6 +1009,7 @@ WHERE module = 'hrm' AND perms = 'employee';
 
 -- Sequence to fix the content of llx_bank.amount_main_currency (sign was wrong with some version)
 -- UPDATE llx_bank as b SET b.amount_main_currency = -b.amount_main_currency WHERE b.amount IS NOT NULL AND b.amount_main_currency IS NOT NULL AND SIGN(b.amount_main_currency) <> SIGN(b.amount);
+
 
 
 -- Delete duplicate entries into llx_c_transport_mode
@@ -1093,4 +1096,4 @@ alter table llx_product_attribute_combination_price_level drop index fk_product_
 alter table llx_product_attribute_combination_price_level drop index fk_product_attribute_combinati_62;
 alter table llx_product_attribute_combination_price_level drop index fk_product_attribute_combinati_63;
 ALTER TABLE llx_product_attribute_combination_price_level
-    ADD UNIQUE INDEX uk_prod_att_comb_price_level(fk_product_attribute_combination, fk_price_level);
+    ADD UNIQUE INDEX uk_prod_att_comb_price_level (fk_product_attribute_combination, fk_price_level);

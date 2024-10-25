@@ -28,7 +28,7 @@ create table llx_c_ticket_category
     public         integer DEFAULT 0,
     use_default    integer DEFAULT 1,
     fk_parent      integer DEFAULT 0 NOT NULL, -- Parent group
-    force_severity varchar(32) NULL,           -- To force the severity if we choosed this category
+    force_severity varchar(32)       NULL,     -- To force the severity if we choosed this category
     description    varchar(255),               -- A long description of ticket
     pos            integer DEFAULT 0 NOT NULL,
     active         integer DEFAULT 1

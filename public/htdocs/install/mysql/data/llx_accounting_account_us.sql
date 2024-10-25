@@ -47,6 +47,7 @@
 -- US-GAAP-BASIC
 
 
+
 -- US-BASE
 ----------
 INSERT INTO llx_accounting_account (entity, rowid, fk_pcg_version, pcg_type, account_number, account_parent, label,

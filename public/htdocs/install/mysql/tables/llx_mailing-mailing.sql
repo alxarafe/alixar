@@ -35,7 +35,7 @@ create table llx_mailing
     name_from       varchar(128),                   -- Name to show of sender
     email_replyto   varchar(160),                   -- Email address for reply
     email_errorsto  varchar(160),                   -- Email addresse for errors
-    tag             varchar(128) NULL,
+    tag             varchar(128)          NULL,
     date_creat      datetime,                       -- creation date
     date_valid      datetime,                       --
     date_appro      datetime,                       --

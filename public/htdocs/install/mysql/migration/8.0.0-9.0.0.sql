@@ -35,8 +35,10 @@ ALTER TABLE llx_facture_rec_extrafields
     ADD INDEX idx_facture_rec_extrafields (fk_object);
 
 ALTER TABLE llx_accounting_account DROP FOREIGN KEY fk_accounting_account_fk_pcg_version;
-ALTER TABLE llx_accounting_account MODIFY COLUMN fk_pcg_version varchar (32) NOT NULL;
-ALTER TABLE llx_accounting_system MODIFY COLUMN pcg_version varchar (32) NOT NULL;
+ALTER TABLE llx_accounting_account
+    MODIFY COLUMN fk_pcg_version varchar(32) NOT NULL;
+ALTER TABLE llx_accounting_system
+    MODIFY COLUMN pcg_version varchar(32) NOT NULL;
 ALTER TABLE llx_accounting_account
     ADD CONSTRAINT fk_accounting_account_fk_pcg_version FOREIGN KEY (fk_pcg_version) REFERENCES llx_accounting_system (pcg_version);
 
@@ -60,7 +62,8 @@ ALTER TABLE llx_actioncomm
 ALTER TABLE llx_actioncomm
     ADD COLUMN email_tobcc varchar(255) after email_tocc;
 
-ALTER TABLE llx_actioncomm MODIFY COLUMN code varchar (50);
+ALTER TABLE llx_actioncomm
+    MODIFY COLUMN code varchar(50);
 
 
 -- For 9.0
@@ -77,7 +80,8 @@ ALTER TABLE llx_user
 
 ALTER TABLE llx_stock_mouvement
     ADD COLUMN fk_project integer;
-ALTER TABLE llx_c_action_trigger MODIFY COLUMN elementtype varchar (32);
+ALTER TABLE llx_c_action_trigger
+    MODIFY COLUMN elementtype varchar(32);
 ALTER TABLE llx_c_field_list
     ADD COLUMN visible tinyint DEFAULT 1 NOT NULL AFTER search;
 
@@ -225,12 +229,12 @@ ALTER TABLE llx_website_page
 
 CREATE TABLE llx_takepos_floor_tables
 (
-    rowid  integer AUTO_INCREMENT PRIMARY KEY,
+    rowid integer AUTO_INCREMENT PRIMARY KEY,
     entity integer DEFAULT 1 NOT NULL,
-    label  varchar(255),
+    label varchar(255),
     leftpos float,
     toppos float,
-    floor  smallint
+    floor smallint
 ) ENGINE=innodb;
 
 
@@ -254,26 +258,26 @@ CREATE TABLE llx_emailcollector_emailcollector
 (
     -- BEGIN MODULEBUILDER FIELDS
     rowid            integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    entity           integer   DEFAULT 1 NOT NULL,
-    ref              varchar(128)        NOT NULL,
+    entity           integer   DEFAULT 1                NOT NULL,
+    ref              varchar(128)                       NOT NULL,
     label            varchar(255),
     description      text,
     host             varchar(255),
     login            varchar(128),
     password         varchar(128),
-    source_directory varchar(255)        NOT NULL,
+    source_directory varchar(255)                       NOT NULL,
     target_directory varchar(255),
     datelastresult   datetime,
     codelastresult   varchar(16),
     lastresult       varchar(255),
     note_public      text,
     note_private     text,
-    date_creation    datetime            NOT NULL,
+    date_creation    datetime                           NOT NULL,
     tms              timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_creat    integer             NOT NULL,
+    fk_user_creat    integer                            NOT NULL,
     fk_user_modif    integer,
     import_key       varchar(14),
-    status           integer             NOT NULL
+    status           integer                            NOT NULL
     -- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;
 
@@ -289,15 +293,15 @@ CREATE TABLE llx_emailcollector_emailcollectorfilter
 (
     -- BEGIN MODULEBUILDER FIELDS
     rowid             integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    fk_emailcollector INTEGER      NOT NULL,
-    type              varchar(128) NOT NULL,
-    rulevalue         varchar(128) NULL,
-    date_creation     datetime     NOT NULL,
+    fk_emailcollector INTEGER                            NOT NULL,
+    type              varchar(128)                       NOT NULL,
+    rulevalue         varchar(128)                       NULL,
+    date_creation     datetime                           NOT NULL,
     tms               timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_creat     integer      NOT NULL,
+    fk_user_creat     integer                            NOT NULL,
     fk_user_modif     integer,
     import_key        varchar(14),
-    status            integer      NOT NULL
+    status            integer                            NOT NULL
     -- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;
 
@@ -305,16 +309,16 @@ CREATE TABLE llx_emailcollector_emailcollectoraction
 (
     -- BEGIN MODULEBUILDER FIELDS
     rowid             integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    fk_emailcollector INTEGER      NOT NULL,
-    type              varchar(128) NOT NULL,
-    actionparam       varchar(255) NULL,
-    date_creation     datetime     NOT NULL,
+    fk_emailcollector INTEGER                            NOT NULL,
+    type              varchar(128)                       NOT NULL,
+    actionparam       varchar(255)                       NULL,
+    date_creation     datetime                           NOT NULL,
     tms               timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_creat     integer      NOT NULL,
+    fk_user_creat     integer                            NOT NULL,
     fk_user_modif     integer,
     position          integer   DEFAULT 0,
     import_key        varchar(14),
-    status            integer      NOT NULL
+    status            integer                            NOT NULL
     -- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;
 
@@ -345,15 +349,15 @@ DROP TABLE llx_ticket_logs;
 CREATE TABLE llx_pos_cash_fence
 (
     rowid         INTEGER AUTO_INCREMENT PRIMARY KEY,
-    entity        INTEGER DEFAULT 1 NOT NULL,
+    entity        INTEGER       DEFAULT 1 NOT NULL,
     ref           VARCHAR(64),
     label         VARCHAR(255),
-    opening double(24,8) default 0,
-    cash double(24,8) default 0,
-    card double(24,8) default 0,
-    cheque double(24,8) default 0,
+    opening       double(24, 8) default 0,
+    cash          double(24, 8) default 0,
+    card          double(24, 8) default 0,
+    cheque        double(24, 8) default 0,
     status        INTEGER,
-    date_creation DATETIME          NOT NULL,
+    date_creation DATETIME                NOT NULL,
     date_valid    DATETIME,
     day_close     INTEGER,
     month_close   INTEGER,
@@ -362,7 +366,7 @@ CREATE TABLE llx_pos_cash_fence
     posnumber     VARCHAR(30),
     fk_user_creat integer,
     fk_user_valid integer,
-    tms           TIMESTAMP         NOT NULL,
+    tms           TIMESTAMP               NOT NULL,
     import_key    VARCHAR(14)
 ) ENGINE=innodb;
 
@@ -380,23 +384,25 @@ where name = __ENCRYPT('USTRD') __;
 
 
 -- Delete duplicate accounting account, but only if not used
-DROP TABLE tmp_llx_accouting_account;
-CREATE TABLE tmp_llx_accouting_account AS
+DROP TABLE tmp_llx_accounting_account;
+CREATE TABLE tmp_llx_accounting_account AS
 SELECT MIN(rowid) as MINID, MAX(rowid) as MAXID, account_number, entity, fk_pcg_version, count(*) AS NB
 FROM llx_accounting_account
 group BY account_number, entity, fk_pcg_version
 HAVING count(*) >= 2
 order by account_number, entity, fk_pcg_version;
---SELECT * from tmp_llx_accouting_account;
+--
+SELECT *
+from tmp_llx_accounting_account;
 DELETE
 from llx_accounting_account
 where rowid in (select minid
-                from tmp_llx_accouting_account
+                from tmp_llx_accounting_account
                 where minid NOT IN (SELECT fk_code_ventilation from llx_facturedet)
                   AND minid NOT IN (SELECT fk_code_ventilation from llx_facture_fourn_det)
                   AND minid NOT IN (SELECT fk_code_ventilation from llx_expensereport_det));
 
--- If there is record in tmp_llx_accouting_account, make a look on each line to do
+-- If there is record in tmp_llx_accounting_account, make a look on each line to do
 --update llx_facturedet        set fk_code_ventilation = maxid WHERE fk_code_ventilation = minid;
 --update llx_facture_fourn_det set fk_code_ventilation = maxid WHERE fk_code_ventilation = minid;
 --update llx_expensereport_det set fk_code_ventilation = maxid WHERE fk_code_ventilation = minid;
@@ -408,4 +414,3 @@ ALTER TABLE llx_accounting_account
 UPDATE llx_projet
 SET fk_opp_status = NULL
 WHERE fk_opp_status = -1;
-

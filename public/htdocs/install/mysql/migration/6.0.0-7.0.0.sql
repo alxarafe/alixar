@@ -78,8 +78,10 @@ ALTER TABLE llx_accounting_account DROP FOREIGN KEY fk_accountingaccount_fk_pcg_
 -- VMYSQLUTF8UNICODECI ALTER TABLE llx_accounting_account ADD CONSTRAINT fk_accounting_account_fk_pcg_version FOREIGN KEY (fk_pcg_version) REFERENCES llx_accounting_system (pcg_version);
 
 
+
 -- Missing in 5.0
-ALTER TABLE llx_user MODIFY login varchar (50) NOT NULL;
+ALTER TABLE llx_user
+    MODIFY login varchar(50) NOT NULL;
 
 -- Missing in 6.0 ?
 ALTER TABLE llx_product_price
@@ -87,11 +89,11 @@ ALTER TABLE llx_product_price
 ALTER TABLE llx_product_price
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_product_price
-    ADD COLUMN multicurrency_tx double(24,8) DEFAULT 1;
+    ADD COLUMN multicurrency_tx double(24, 8) DEFAULT 1;
 ALTER TABLE llx_product_price
-    ADD COLUMN multicurrency_price double(24,8) DEFAULT NULL;
+    ADD COLUMN multicurrency_price double(24, 8) DEFAULT NULL;
 ALTER TABLE llx_product_price
-    ADD COLUMN multicurrency_price_ttc double(24,8) DEFAULT NULL;
+    ADD COLUMN multicurrency_price_ttc double(24, 8) DEFAULT NULL;
 
 ALTER TABLE llx_product_customer_price_log
     ADD COLUMN default_vat_code varchar(10);
@@ -135,7 +137,7 @@ ALTER TABLE llx_product_attribute_value
 ALTER TABLE llx_product_price_by_qty
     ADD COLUMN quantity double DEFAULT NULL;
 ALTER TABLE llx_product_price_by_qty
-    ADD COLUMN unitprice double(24,8) DEFAULT 0;
+    ADD COLUMN unitprice double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_product_price_by_qty
     ADD COLUMN price_base_type varchar(3) DEFAULT 'HT';
@@ -144,11 +146,11 @@ ALTER TABLE llx_product_price_by_qty
 ALTER TABLE llx_product_price_by_qty
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_product_price_by_qty
-    ADD COLUMN multicurrency_tx double(24,8) DEFAULT 1;
+    ADD COLUMN multicurrency_tx double(24, 8) DEFAULT 1;
 ALTER TABLE llx_product_price_by_qty
-    ADD COLUMN multicurrency_price double(24,8) DEFAULT NULL;
+    ADD COLUMN multicurrency_price double(24, 8) DEFAULT NULL;
 ALTER TABLE llx_product_price_by_qty
-    ADD COLUMN multicurrency_price_ttc double(24,8) DEFAULT NULL;
+    ADD COLUMN multicurrency_price_ttc double(24, 8) DEFAULT NULL;
 
 -- VMYSQL4.0 DROP INDEX uk_product_price_by_qty_level on llx_product_price_by_qty;
 -- VPGSQL8.0 DROP INDEX uk_product_price_by_qty_level;
@@ -180,7 +182,8 @@ ALTER TABLE llx_inventory CHANGE COLUMN fk_user_author fk_user_creat integer;
 ALTER TABLE llx_inventory
     ADD UNIQUE INDEX uk_inventory_ref (ref, entity);
 
-ALTER table llx_entrepot CHANGE COLUMN label ref varchar (255);
+ALTER table llx_entrepot
+    CHANGE COLUMN label ref varchar(255);
 
 UPDATE llx_paiementfourn
 SET ref = rowid
@@ -201,14 +204,14 @@ ALTER TABLE llx_user
 -- VMYSQL4.1 ALTER TABLE llx_holiday_users DROP PRIMARY KEY;
 
 ALTER TABLE llx_holiday_users
-    ADD UNIQUE INDEX uk_holiday_users(fk_user, fk_type, nb_holiday);
+    ADD UNIQUE INDEX uk_holiday_users (fk_user, fk_type, nb_holiday);
 
 ALTER TABLE llx_product_fournisseur_price
-    ADD COLUMN localtax1_tx double(6,3) DEFAULT 0;
+    ADD COLUMN localtax1_tx double(6, 3) DEFAULT 0;
 ALTER TABLE llx_product_fournisseur_price
     ADD COLUMN localtax1_type varchar(10) NOT NULL DEFAULT '0';
 ALTER TABLE llx_product_fournisseur_price
-    ADD COLUMN localtax2_tx double(6,3) DEFAULT 0;
+    ADD COLUMN localtax2_tx double(6, 3) DEFAULT 0;
 ALTER TABLE llx_product_fournisseur_price
     ADD COLUMN localtax2_type varchar(10) NOT NULL DEFAULT '0';
 
@@ -217,7 +220,8 @@ insert into llx_c_action_trigger (code, label, description, elementtype, rang)
 values ('MEMBER_SENTBYMAIL', 'Mails sent from member card', 'Executed when you send email from member card', 'member',
         23);
 
-ALTER TABLE llx_ecm_files MODIFY label varchar (128) NOT NULL;
+ALTER TABLE llx_ecm_files
+    MODIFY label varchar(128) NOT NULL;
 ALTER TABLE llx_ecm_files
     ADD COLUMN share varchar(128) NULL after label;
 ALTER TABLE llx_ecm_files
@@ -259,12 +263,17 @@ ALTER TABLE llx_product MODIFY COLUMN seuil_stock_alerte integer DEFAULT NULL;
 ALTER TABLE llx_facture_rec
     ADD COLUMN suspended integer DEFAULT 0;
 
-ALTER TABLE llx_facture_rec MODIFY COLUMN titre VARCHAR (100);
+ALTER TABLE llx_facture_rec
+    MODIFY COLUMN titre VARCHAR(100);
 
-ALTER TABLE llx_contrat MODIFY COLUMN ref varchar (50);
-ALTER TABLE llx_contrat MODIFY COLUMN ref_customer varchar (50);
-ALTER TABLE llx_contrat MODIFY COLUMN ref_supplier varchar (50);
-ALTER TABLE llx_contrat MODIFY COLUMN ref_ext varchar (50);
+ALTER TABLE llx_contrat
+    MODIFY COLUMN ref varchar(50);
+ALTER TABLE llx_contrat
+    MODIFY COLUMN ref_customer varchar(50);
+ALTER TABLE llx_contrat
+    MODIFY COLUMN ref_supplier varchar(50);
+ALTER TABLE llx_contrat
+    MODIFY COLUMN ref_ext varchar(50);
 
 
 UPDATE llx_c_email_templates
@@ -317,10 +326,13 @@ where code = 'MARGE';
 
 ALTER TABLE llx_menu MODIFY COLUMN perms text;
 
-ALTER TABLE llx_mailing MODIFY COLUMN titre varchar (128);
-ALTER TABLE llx_mailing MODIFY COLUMN sujet varchar (128);
+ALTER TABLE llx_mailing
+    MODIFY COLUMN titre varchar(128);
+ALTER TABLE llx_mailing
+    MODIFY COLUMN sujet varchar(128);
 
-ALTER TABLE llx_mailing MODIFY COLUMN langs varchar (64);
+ALTER TABLE llx_mailing
+    MODIFY COLUMN langs varchar(64);
 
 ALTER TABLE llx_facture_fourn
     ADD COLUMN date_pointoftax date DEFAULT NULL;
@@ -329,9 +341,11 @@ ALTER TABLE llx_facture_fourn
 
 ALTER TABLE llx_bookmark DROP COLUMN fk_soc;
 
-ALTER TABLE llx_website MODIFY COLUMN ref varchar (128);
+ALTER TABLE llx_website
+    MODIFY COLUMN ref varchar(128);
 
-ALTER TABLE llx_website_page MODIFY COLUMN pageurl varchar (255);
+ALTER TABLE llx_website_page
+    MODIFY COLUMN pageurl varchar(255);
 ALTER TABLE llx_website_page
     ADD COLUMN lang varchar(6);
 ALTER TABLE llx_website_page
@@ -381,8 +395,10 @@ ALTER TABLE llx_accounting_bookkeeping_tmp
     ADD COLUMN fk_user integer NULL;
 
 
-ALTER TABLE llx_menu MODIFY fk_mainmenu varchar (100);
-ALTER TABLE llx_menu MODIFY fk_leftmenu varchar (100);
+ALTER TABLE llx_menu
+    MODIFY fk_mainmenu varchar(100);
+ALTER TABLE llx_menu
+    MODIFY fk_leftmenu varchar(100);
 
 
 CREATE TABLE llx_website_extrafields
@@ -400,18 +416,18 @@ ALTER TABLE llx_website_extrafields
 CREATE TABLE llx_website_account
 (
     rowid         integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    login         varchar(64) NOT NULL,
-    pass_encoding varchar(24) NOT NULL,
+    login         varchar(64)                        NOT NULL,
+    pass_encoding varchar(24)                        NOT NULL,
     pass_crypted  varchar(128),
     pass_temp     varchar(128), -- temporary password when asked for forget password
     fk_soc        integer,
-    fk_website    integer     NOT NULL,
+    fk_website    integer                            NOT NULL,
     note_private  text,
     date_last_login     datetime,
     date_previous_login datetime,
-    date_creation datetime    NOT NULL,
+    date_creation datetime                           NOT NULL,
     tms           timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_creat integer     NOT NULL,
+    fk_user_creat integer                            NOT NULL,
     fk_user_modif integer,
     import_key    varchar(14),
     status        integer
@@ -432,7 +448,7 @@ ALTER TABLE llx_website_account
     ADD INDEX idx_website_account_fk_website (fk_website);
 
 ALTER TABLE llx_website_account
-    ADD UNIQUE INDEX uk_website_account_login_website_soc(login, fk_website, fk_soc);
+    ADD UNIQUE INDEX uk_website_account_login_website_soc (login, fk_website, fk_soc);
 
 ALTER TABLE llx_website_account
     ADD CONSTRAINT llx_website_account_fk_website FOREIGN KEY (fk_website) REFERENCES llx_website (rowid);
@@ -457,103 +473,35 @@ alter table llx_user
 
 CREATE TABLE IF NOT EXISTS llx_expensereport_ik
 (
-    rowid
-    integer
-    AUTO_INCREMENT
-    PRIMARY
-    KEY,
-    datec
-    datetime
-    DEFAULT
-    NULL,
-    tms
-    timestamp
-    DEFAULT
-    CURRENT_TIMESTAMP
-    ON
-    UPDATE
-    CURRENT_TIMESTAMP,
-    fk_c_exp_tax_cat
-    integer
-    DEFAULT
-    0
-    NOT
-    NULL,
-    fk_range
-    integer
-    DEFAULT
-    0
-    NOT
-    NULL,
-    coef
-    double
-    DEFAULT
-    0
-    NOT
-    NULL,
-    ikoffset
-    double
-    DEFAULT
-    0
-    NOT
-    NULL,
-    active
-    integer
-    DEFAULT
-    1
-) ENGINE=innodb;
+    rowid            integer AUTO_INCREMENT PRIMARY KEY,
+    datec            datetime  DEFAULT NULL,
+    tms              timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    fk_c_exp_tax_cat integer   DEFAULT 0 NOT NULL,
+    fk_range         integer   DEFAULT 0 NOT NULL,
+    coef             double    DEFAULT 0 NOT NULL,
+    ikoffset         double    DEFAULT 0 NOT NULL,
+    active           integer   DEFAULT 1
+) ENGINE = innodb;
 
 ALTER TABLE llx_expensereport_ik
     ADD COLUMN ikoffset double DEFAULT 0 NOT NULL;
 
 CREATE TABLE IF NOT EXISTS llx_c_exp_tax_cat
 (
-    rowid
-    integer
-    AUTO_INCREMENT
-    PRIMARY
-    KEY,
-    label
-    varchar
-(
-    48
-) NOT NULL,
+    rowid  integer AUTO_INCREMENT PRIMARY KEY,
+    label  varchar(48)       NOT NULL,
     entity integer DEFAULT 1 NOT NULL,
     active integer DEFAULT 1 NOT NULL
-    ) ENGINE=innodb;
+) ENGINE = innodb;
 
 CREATE TABLE IF NOT EXISTS llx_c_exp_tax_range
 (
-    rowid
-    integer
-    AUTO_INCREMENT
-    PRIMARY
-    KEY,
-    fk_c_exp_tax_cat
-    integer
-    DEFAULT
-    1
-    NOT
-    NULL,
-    range_ik
-    double
-    DEFAULT
-    0
-    NOT
-    NULL,
-    entity
-    integer
-    DEFAULT
-    1
-    NOT
-    NULL,
-    active
-    integer
-    DEFAULT
-    1
-    NOT
-    NULL
-) ENGINE=innodb;
+    rowid            integer AUTO_INCREMENT PRIMARY KEY,
+    fk_c_exp_tax_cat integer DEFAULT 1 NOT NULL,
+    range_ik         double  DEFAULT 0 NOT NULL,
+    entity           integer DEFAULT 1 NOT NULL,
+    active           integer DEFAULT 1 NOT NULL
+) ENGINE = innodb;
 
 INSERT INTO llx_c_type_fees (code, label, active, accountancy_code)
 VALUES ('EX_KME', 'ExpLabelKm', 1, '625100'),
@@ -748,20 +696,29 @@ ALTER TABLE llx_extrafields
 --VPGSQL8.2 ALTER TABLE llx_extrafields MODIFY COLUMN list integer DEFAULT 1 USING list::integer;
 --VPGSQL8.2 ALTER TABLE llx_extrafields ALTER COLUMN list SET DEFAULT 1;
 
-ALTER TABLE llx_extrafields MODIFY COLUMN langs varchar (64);
+ALTER TABLE llx_extrafields
+    MODIFY COLUMN langs varchar(64);
 
-ALTER TABLE llx_holiday_config MODIFY COLUMN name varchar (128) NOT NULL;
+ALTER TABLE llx_holiday_config
+    MODIFY COLUMN name varchar(128) NOT NULL;
 ALTER TABLE llx_holiday_config
     ADD UNIQUE INDEX idx_holiday_config (name);
 
-ALTER TABLE llx_societe MODIFY COLUMN ref_ext varchar (255);
-ALTER TABLE llx_socpeople MODIFY COLUMN ref_ext varchar (255);
-ALTER TABLE llx_actioncomm MODIFY COLUMN ref_ext varchar (255);
-ALTER TABLE llx_expedition MODIFY COLUMN ref_ext varchar (255);
-ALTER TABLE llx_livraison MODIFY COLUMN ref_ext varchar (255);
-ALTER TABLE llx_contrat MODIFY COLUMN ref_ext varchar (255);
+ALTER TABLE llx_societe
+    MODIFY COLUMN ref_ext varchar(255);
+ALTER TABLE llx_socpeople
+    MODIFY COLUMN ref_ext varchar(255);
+ALTER TABLE llx_actioncomm
+    MODIFY COLUMN ref_ext varchar(255);
+ALTER TABLE llx_expedition
+    MODIFY COLUMN ref_ext varchar(255);
+ALTER TABLE llx_livraison
+    MODIFY COLUMN ref_ext varchar(255);
+ALTER TABLE llx_contrat
+    MODIFY COLUMN ref_ext varchar(255);
 
-ALTER TABLE llx_actioncomm MODIFY COLUMN label varchar (255) NOT NULL;
+ALTER TABLE llx_actioncomm
+    MODIFY COLUMN label varchar(255) NOT NULL;
 
 ALTER TABLE llx_actioncomm
     ADD INDEX idx_actioncomm_fk_user_action (fk_user_action);
@@ -815,7 +772,8 @@ UPDATE llx_accounting_account
 SET pcg_type = 'EXPENSE'
 where pcg_type = 'COMPRAS_GASTOS';
 
-ALTER TABLE llx_c_action_trigger MODIFY COLUMN elementtype varchar (24) NOT NULL;
+ALTER TABLE llx_c_action_trigger
+    MODIFY COLUMN elementtype varchar(24) NOT NULL;
 
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
 values ('CONTRACT_SENTBYMAIL', 'Contract sent by mail', 'Executed when a contract is sent by mail', 'contrat', 18);
@@ -897,13 +855,13 @@ ALTER TABLE llx_c_paiement
     ADD COLUMN entity integer DEFAULT 1 NOT NULL AFTER id;
 ALTER TABLE llx_c_paiement DROP INDEX uk_c_paiement;
 ALTER TABLE llx_c_paiement
-    ADD UNIQUE INDEX uk_c_paiement(id, entity, code);
+    ADD UNIQUE INDEX uk_c_paiement (id, entity, code);
 
 -- VMYSQL4.1 ALTER TABLE llx_c_payment_term DROP PRIMARY KEY;
 ALTER TABLE llx_c_payment_term
     ADD COLUMN entity integer DEFAULT 1 NOT NULL AFTER rowid;
 ALTER TABLE llx_c_payment_term
-    ADD UNIQUE INDEX uk_c_payment_term(rowid, entity, code);
+    ADD UNIQUE INDEX uk_c_payment_term (rowid, entity, code);
 
 ALTER TABLE llx_projet CHANGE datec datec datetime;
 
@@ -922,7 +880,7 @@ create table llx_c_email_senderprofile
 )ENGINE=innodb;
 
 ALTER TABLE llx_c_email_senderprofile
-    ADD UNIQUE INDEX uk_c_email_senderprofile(entity, label, email);
+    ADD UNIQUE INDEX uk_c_email_senderprofile (entity, label, email);
 
 
 -- Add new chart of account entries
@@ -1002,12 +960,12 @@ CREATE TABLE llx_actioncomm_reminder
 (
     -- BEGIN MODULEBUILDER FIELDS
     rowid       integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    dateremind  datetime    NOT NULL,
-    typeremind  varchar(32) NOT NULL,
-    fk_user     integer     NOT NULL,
-    offsetvalue integer     NOT NULL,
-    offsetunit  varchar(1)  NOT NULL,
-    status      integer     NOT NULL DEFAULT 0
+    dateremind  datetime                           NOT NULL,
+    typeremind  varchar(32)                        NOT NULL,
+    fk_user     integer                            NOT NULL,
+    offsetvalue integer                            NOT NULL,
+    offsetunit  varchar(1)                         NOT NULL,
+    status      integer                            NOT NULL DEFAULT 0
     -- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;
 
@@ -1019,7 +977,7 @@ ALTER TABLE llx_actioncomm_reminder
     ADD INDEX idx_actioncomm_reminder_fk_user (fk_user);
 
 ALTER TABLE llx_actioncomm_reminder
-    ADD UNIQUE INDEX uk_actioncomm_reminder_unique(fk_user, typeremind, offsetvalue, offsetunit);
+    ADD UNIQUE INDEX uk_actioncomm_reminder_unique (fk_user, typeremind, offsetvalue, offsetunit);
 
 UPDATE llx_tva
 SET datec = tms
@@ -1050,6 +1008,7 @@ create table llx_onlinesignature
 )ENGINE=innodb;
 
 
+
 -- May have error due to duplicate keys
 ALTER TABLE llx_resource
     ADD UNIQUE INDEX uk_resource_ref (ref, entity);
@@ -1063,35 +1022,62 @@ ALTER TABLE llx_blockedlog
     ADD COLUMN date_creation datetime;
 ALTER TABLE llx_blockedlog
     ADD COLUMN user_fullname varchar(255);
-ALTER TABLE llx_blockedlog MODIFY COLUMN ref_object varchar (255);
+ALTER TABLE llx_blockedlog
+    MODIFY COLUMN ref_object varchar(255);
 
 -- SPEC : use database type 'double' to store monetary values
-ALTER TABLE llx_blockedlog MODIFY COLUMN amounts double (24,8) NOT NULL;
-ALTER TABLE llx_chargesociales MODIFY COLUMN amount double (24,8);
-ALTER TABLE llx_commande MODIFY COLUMN amount_ht double (24,8) default 0;
-ALTER TABLE llx_commande_fournisseur MODIFY COLUMN amount_ht double (24,8);
-ALTER TABLE llx_don MODIFY COLUMN amount double (24,8);
-ALTER TABLE llx_expensereport_rules MODIFY COLUMN amount double (24,8);
-ALTER TABLE llx_loan MODIFY COLUMN capital double (24,8);
-ALTER TABLE llx_loan MODIFY COLUMN capital_position double (24,8);
-ALTER TABLE llx_loan_schedule MODIFY COLUMN amount_capital double (24,8);
-ALTER TABLE llx_loan_schedule MODIFY COLUMN amount_insurance double (24,8);
-ALTER TABLE llx_loan_schedule MODIFY COLUMN amount_interest double (24,8);
-ALTER TABLE llx_paiementcharge MODIFY COLUMN amount double (24,8);
-ALTER TABLE llx_paiementfourn MODIFY COLUMN amount double (24,8);
-ALTER TABLE llx_payment_donation MODIFY COLUMN amount double (24,8);
-ALTER TABLE llx_payment_expensereport MODIFY COLUMN amount double (24,8);
-ALTER TABLE llx_payment_loan MODIFY COLUMN amount_capital double (24,8);
-ALTER TABLE llx_payment_loan MODIFY COLUMN amount_insurance double (24,8);
-ALTER TABLE llx_payment_loan MODIFY COLUMN amount_interest double (24,8);
-ALTER TABLE llx_payment_salary MODIFY COLUMN salary double (24,8);
-ALTER TABLE llx_payment_salary MODIFY COLUMN amount double (24,8);
-ALTER TABLE llx_prelevement_bons MODIFY COLUMN amount double (24,8);
-ALTER TABLE llx_prelevement_facture_demande MODIFY COLUMN amount double (24,8);
-ALTER TABLE llx_prelevement_lignes MODIFY COLUMN amount double (24,8);
-ALTER TABLE llx_societe MODIFY COLUMN capital double (24,8);
-ALTER TABLE llx_tva MODIFY COLUMN amount double (24,8);
-ALTER TABLE llx_subscription MODIFY COLUMN subscription double (24,8);
+ALTER TABLE llx_blockedlog
+    MODIFY COLUMN amounts double(24, 8) NOT NULL;
+ALTER TABLE llx_chargesociales
+    MODIFY COLUMN amount double(24, 8);
+ALTER TABLE llx_commande
+    MODIFY COLUMN amount_ht double(24, 8) default 0;
+ALTER TABLE llx_commande_fournisseur
+    MODIFY COLUMN amount_ht double(24, 8);
+ALTER TABLE llx_don
+    MODIFY COLUMN amount double(24, 8);
+ALTER TABLE llx_expensereport_rules
+    MODIFY COLUMN amount double(24, 8);
+ALTER TABLE llx_loan
+    MODIFY COLUMN capital double(24, 8);
+ALTER TABLE llx_loan
+    MODIFY COLUMN capital_position double(24, 8);
+ALTER TABLE llx_loan_schedule
+    MODIFY COLUMN amount_capital double(24, 8);
+ALTER TABLE llx_loan_schedule
+    MODIFY COLUMN amount_insurance double(24, 8);
+ALTER TABLE llx_loan_schedule
+    MODIFY COLUMN amount_interest double(24, 8);
+ALTER TABLE llx_paiementcharge
+    MODIFY COLUMN amount double(24, 8);
+ALTER TABLE llx_paiementfourn
+    MODIFY COLUMN amount double(24, 8);
+ALTER TABLE llx_payment_donation
+    MODIFY COLUMN amount double(24, 8);
+ALTER TABLE llx_payment_expensereport
+    MODIFY COLUMN amount double(24, 8);
+ALTER TABLE llx_payment_loan
+    MODIFY COLUMN amount_capital double(24, 8);
+ALTER TABLE llx_payment_loan
+    MODIFY COLUMN amount_insurance double(24, 8);
+ALTER TABLE llx_payment_loan
+    MODIFY COLUMN amount_interest double(24, 8);
+ALTER TABLE llx_payment_salary
+    MODIFY COLUMN salary double(24, 8);
+ALTER TABLE llx_payment_salary
+    MODIFY COLUMN amount double(24, 8);
+ALTER TABLE llx_prelevement_bons
+    MODIFY COLUMN amount double(24, 8);
+ALTER TABLE llx_prelevement_facture_demande
+    MODIFY COLUMN amount double(24, 8);
+ALTER TABLE llx_prelevement_lignes
+    MODIFY COLUMN amount double(24, 8);
+ALTER TABLE llx_societe
+    MODIFY COLUMN capital double(24, 8);
+ALTER TABLE llx_tva
+    MODIFY COLUMN amount double(24, 8);
+ALTER TABLE llx_subscription
+    MODIFY COLUMN subscription double(24, 8);
 
 ALTER TABLE llx_resource
     ADD fk_country integer DEFAULT NULL;

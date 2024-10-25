@@ -29,7 +29,7 @@ ALTER TABLE llx_facture_rec
 ALTER TABLE llx_facture_rec
     ADD INDEX idx_facture_rec_fk_projet (fk_projet);
 ALTER TABLE llx_facture_rec
-    ADD INDEX idx_facture_rec_datec(datec);
+    ADD INDEX idx_facture_rec_datec (datec);
 
 ALTER TABLE llx_facture_rec
     ADD CONSTRAINT fk_facture_rec_fk_soc FOREIGN KEY (fk_soc) REFERENCES llx_societe (rowid);

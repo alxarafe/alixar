@@ -99,7 +99,8 @@ ALTER TABLE llx_user
     ADD COLUMN fk_user_modif integer AFTER fk_user_creat;
 
 -- Add module accounting Expert
---ALTER TABLE llx_bookkeeping RENAME TO llx_accounting_bookkeeping; -- To update old user of module Accounting Expert -> Line should be added into file sql/x.y.z-a.b.c.sql of module.
+--
+ALTER TABLE llx_bookkeeping RENAME TO llx_accounting_bookkeeping; -- To update old user of module Accounting Expert -> Line should be added into file sql/x.y.z-a.b.c.sql of module.
 
 
 CREATE TABLE llx_accounting_bookkeeping
@@ -113,9 +114,9 @@ CREATE TABLE llx_accounting_bookkeeping
     code_tiers     varchar(24),           -- code tiers
     numero_compte  varchar(32) DEFAULT NULL,
     label_compte   varchar(128) NOT NULL,
-    debit double NOT NULL,
-    credit double NOT NULL,
-    montant double NOT NULL,
+    debit          double       NOT NULL,
+    credit         double       NOT NULL,
+    montant        double       NOT NULL,
     sens           varchar(1)  DEFAULT NULL,
     fk_user_author integer      NOT NULL,
     import_key     varchar(14),
@@ -231,32 +232,44 @@ DROP TABLE llx_compta_account;
 DROP TABLE llx_compta_compte_generaux;
 
 -- Align size for accounting account
-ALTER TABLE llx_accountingaccount MODIFY COLUMN account_number varchar (32);
-ALTER TABLE llx_accountingaccount MODIFY COLUMN account_parent varchar (32);
+ALTER TABLE llx_accountingaccount
+    MODIFY COLUMN account_number varchar(32);
+ALTER TABLE llx_accountingaccount
+    MODIFY COLUMN account_parent varchar(32);
 ALTER TABLE llx_accountingaccount
     add column tms timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP AFTER datec;
-ALTER TABLE llx_accountingdebcred MODIFY COLUMN account_number varchar (32);
-ALTER TABLE llx_bank_account MODIFY COLUMN account_number varchar (32);
-ALTER TABLE llx_c_chargesociales MODIFY COLUMN accountancy_code varchar (32);
-ALTER TABLE llx_c_revenuestamp MODIFY COLUMN accountancy_code_sell varchar (32);
-ALTER TABLE llx_c_revenuestamp MODIFY COLUMN accountancy_code_buy varchar (32);
-ALTER TABLE llx_c_tva MODIFY COLUMN accountancy_code_sell varchar (32);
-ALTER TABLE llx_c_tva MODIFY COLUMN accountancy_code_buy varchar (32);
-ALTER TABLE llx_product MODIFY COLUMN accountancy_code_sell varchar (32);
-ALTER TABLE llx_product MODIFY COLUMN accountancy_code_buy varchar (32);
-ALTER TABLE llx_user MODIFY COLUMN accountancy_code varchar (32);
+ALTER TABLE llx_accountingdebcred
+    MODIFY COLUMN account_number varchar(32);
+ALTER TABLE llx_bank_account
+    MODIFY COLUMN account_number varchar(32);
+ALTER TABLE llx_c_chargesociales
+    MODIFY COLUMN accountancy_code varchar(32);
+ALTER TABLE llx_c_revenuestamp
+    MODIFY COLUMN accountancy_code_sell varchar(32);
+ALTER TABLE llx_c_revenuestamp
+    MODIFY COLUMN accountancy_code_buy varchar(32);
+ALTER TABLE llx_c_tva
+    MODIFY COLUMN accountancy_code_sell varchar(32);
+ALTER TABLE llx_c_tva
+    MODIFY COLUMN accountancy_code_buy varchar(32);
+ALTER TABLE llx_product
+    MODIFY COLUMN accountancy_code_sell varchar(32);
+ALTER TABLE llx_product
+    MODIFY COLUMN accountancy_code_buy varchar(32);
+ALTER TABLE llx_user
+    MODIFY COLUMN accountancy_code varchar(32);
 
 
 ALTER TABLE llx_user
-    ADD COLUMN thm double(24,8);
+    ADD COLUMN thm double(24, 8);
 ALTER TABLE llx_user
-    ADD COLUMN tjm double(24,8);
+    ADD COLUMN tjm double(24, 8);
 ALTER TABLE llx_user
-    ADD COLUMN salary double(24,8);
+    ADD COLUMN salary double(24, 8);
 ALTER TABLE llx_user
-    ADD COLUMN salaryextra double(24,8);
+    ADD COLUMN salaryextra double(24, 8);
 ALTER TABLE llx_user
-    ADD COLUMN weeklyhours double(16,8);
+    ADD COLUMN weeklyhours double(16, 8);
 
 
 ALTER TABLE llx_projet_task_time
@@ -266,23 +279,26 @@ ALTER TABLE llx_actioncomm_resources CHANGE COLUMN transparent transparency smal
 
 ALTER TABLE llx_actioncomm_resources DROP INDEX idx_actioncomm_resources_idx1;
 ALTER TABLE llx_actioncomm_resources
-    ADD UNIQUE INDEX uk_actioncomm_resources(fk_actioncomm, element_type, fk_element);
+    ADD UNIQUE INDEX uk_actioncomm_resources (fk_actioncomm, element_type, fk_element);
 
 
 -- Localtaxes by thirds
-ALTER TABLE llx_c_tva MODIFY COLUMN localtax1 varchar (20);
-ALTER TABLE llx_c_tva MODIFY COLUMN localtax2 varchar (20);
+ALTER TABLE llx_c_tva
+    MODIFY COLUMN localtax1 varchar(20);
+ALTER TABLE llx_c_tva
+    MODIFY COLUMN localtax2 varchar(20);
 ALTER TABLE llx_localtax
     ADD COLUMN localtaxtype tinyint after entity;
 ALTER TABLE llx_societe
-    ADD COLUMN localtax1_value double(6,3) after localtax1_assuj;
+    ADD COLUMN localtax1_value double(6, 3) after localtax1_assuj;
 ALTER TABLE llx_societe
-    ADD COLUMN localtax2_value double(6,3) after localtax2_assuj;
+    ADD COLUMN localtax2_value double(6, 3) after localtax2_assuj;
 
 -- Change on table c_pays
 ALTER TABLE llx_c_pays RENAME TO llx_c_country;
 
-ALTER TABLE llx_c_country CHANGE COLUMN libelle label VARCHAR (50);
+ALTER TABLE llx_c_country
+    CHANGE COLUMN libelle label VARCHAR(50);
 
 ALTER TABLE llx_c_ziptown
     ADD CONSTRAINT fk_c_ziptown_fk_pays FOREIGN KEY (fk_pays) REFERENCES llx_c_country (rowid);
@@ -333,7 +349,8 @@ UPDATE llx_product_price
 set fk_user_author = null
 where fk_user_author not in (select rowid from llx_user);
 -- drop foreign key for avoid a mysql crash
-ALTER TABLE llx_product_price DROP FOREIGN KEY fk_product_price_user_author;
+ALTER TABLE llx_product_price
+    DROP FOREIGN KEY fk_product_price_user_author;
 ALTER TABLE llx_product_price
     ADD CONSTRAINT fk_product_price_user_author FOREIGN KEY (fk_user_author) REFERENCES llx_user (rowid);
 -- fk_product
@@ -343,11 +360,13 @@ DELETE
 from llx_product_price
 where fk_product NOT IN (SELECT rowid from llx_product);
 -- drop foreign key for avoid a mysql crash
-ALTER TABLE llx_product_price DROP FOREIGN KEY fk_product_price_product;
+ALTER TABLE llx_product_price
+    DROP FOREIGN KEY fk_product_price_product;
 ALTER TABLE llx_product_price
     ADD CONSTRAINT fk_product_price_product FOREIGN KEY (fk_product) REFERENCES llx_product (rowid);
 
-ALTER TABLE llx_commande_fournisseur MODIFY COLUMN date_livraison datetime;
+ALTER TABLE llx_commande_fournisseur
+    MODIFY COLUMN date_livraison datetime;
 
 ALTER TABLE llx_commande_fournisseur
     ADD COLUMN fk_account integer AFTER date_livraison;
@@ -365,8 +384,8 @@ create table llx_accounting_fiscalyear
     entity         integer   DEFAULT 1 NOT NULL, -- multi company id
     datec          datetime            NOT NULL,
     tms            timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_author integer NULL,
-    fk_user_modif  integer NULL
+    fk_user_author integer             NULL,
+    fk_user_modif  integer             NULL
 )ENGINE=innodb;
 
 ALTER TABLE llx_contrat
@@ -379,7 +398,8 @@ ALTER TABLE llx_propal
 ALTER TABLE llx_commande
     ADD COLUMN fk_shipping_method integer AFTER date_livraison;
 
-ALTER TABLE llx_adherents MODIFY COLUMN societe VARCHAR (60);
+ALTER TABLE llx_adherents
+    MODIFY COLUMN societe VARCHAR(60);
 
 --
 -- Descriptif des plans comptables ES PCG08-PYME
@@ -3297,17 +3317,24 @@ CREATE TABLE llx_holiday_types
 -- Change on table c_civilite
 ALTER TABLE llx_c_civilite DROP INDEX uk_c_civilite;
 ALTER TABLE llx_c_civilite RENAME TO llx_c_civility;
-ALTER TABLE llx_c_civility CHANGE COLUMN civilite label VARCHAR (50);
 ALTER TABLE llx_c_civility
-    ADD UNIQUE INDEX uk_c_civility(code);
-ALTER TABLE llx_adherent CHANGE COLUMN civilite civility VARCHAR (6);
-ALTER TABLE llx_socpeople CHANGE COLUMN civilite civility VARCHAR (6);
-ALTER TABLE llx_user CHANGE COLUMN civilite civility VARCHAR (6);
+    CHANGE COLUMN civilite label VARCHAR(50);
+ALTER TABLE llx_c_civility
+    ADD UNIQUE INDEX uk_c_civility (code);
+ALTER TABLE llx_adherent
+    CHANGE COLUMN civilite civility VARCHAR(6);
+ALTER TABLE llx_socpeople
+    CHANGE COLUMN civilite civility VARCHAR(6);
+ALTER TABLE llx_user
+    CHANGE COLUMN civilite civility VARCHAR(6);
 
-ALTER TABLE llx_societe MODIFY COLUMN nom varchar (128);
-ALTER TABLE llx_adherent MODIFY COLUMN societe varchar (128);
+ALTER TABLE llx_societe
+    MODIFY COLUMN nom varchar(128);
+ALTER TABLE llx_adherent
+    MODIFY COLUMN societe varchar(128);
 
-ALTER TABLE llx_c_type_fees CHANGE COLUMN libelle label VARCHAR (30);
+ALTER TABLE llx_c_type_fees
+    CHANGE COLUMN libelle label VARCHAR(30);
 ALTER TABLE llx_c_type_fees
     ADD COLUMN accountancy_code varchar(32) DEFAULT NULL AFTER label;
 
@@ -3360,9 +3387,9 @@ WHERE rowid = '0';
 
 ALTER TABLE llx_c_email_templates DROP INDEX uk_c_email_templates;
 ALTER TABLE llx_c_email_templates
-    ADD UNIQUE INDEX uk_c_email_templates(entity, label, lang);
+    ADD UNIQUE INDEX uk_c_email_templates (entity, label, lang);
 ALTER TABLE llx_c_email_templates
-    ADD INDEX idx_type(type_template);
+    ADD INDEX idx_type (type_template);
 
 -- Remove OSC module
 DELETE
@@ -3386,13 +3413,19 @@ ALTER TABLE llx_societe
     ADD webservices_key varchar(128) DEFAULT NULL;
 
 -- changes size of ref in commande_fourn and facture_fourn
-ALTER TABLE llx_commande_fournisseur MODIFY COLUMN ref VARCHAR (255);
-ALTER TABLE llx_commande_fournisseur MODIFY COLUMN ref_ext VARCHAR (255);
-ALTER TABLE llx_commande_fournisseur MODIFY COLUMN ref_supplier VARCHAR (255);
+ALTER TABLE llx_commande_fournisseur
+    MODIFY COLUMN ref VARCHAR(255);
+ALTER TABLE llx_commande_fournisseur
+    MODIFY COLUMN ref_ext VARCHAR(255);
+ALTER TABLE llx_commande_fournisseur
+    MODIFY COLUMN ref_supplier VARCHAR(255);
 
-ALTER TABLE llx_facture_fourn MODIFY COLUMN ref VARCHAR (255);
-ALTER TABLE llx_facture_fourn MODIFY COLUMN ref_ext VARCHAR (255);
-ALTER TABLE llx_facture_fourn MODIFY COLUMN ref_supplier VARCHAR (255);
+ALTER TABLE llx_facture_fourn
+    MODIFY COLUMN ref VARCHAR(255);
+ALTER TABLE llx_facture_fourn
+    MODIFY COLUMN ref_ext VARCHAR(255);
+ALTER TABLE llx_facture_fourn
+    MODIFY COLUMN ref_supplier VARCHAR(255);
 
 UPDATE llx_facture_fourn
 SET ref = rowid
@@ -3400,8 +3433,9 @@ WHERE ref IS NULL
    or ref = '';
 
 ALTER TABLE llx_facture_rec
-    ADD COLUMN revenuestamp double(24,8) DEFAULT 0;
-ALTER TABLE llx_facturedet_rec MODIFY COLUMN tva_tx double (6,3);
+    ADD COLUMN revenuestamp double(24, 8) DEFAULT 0;
+ALTER TABLE llx_facturedet_rec
+    MODIFY COLUMN tva_tx double(6, 3);
 ALTER TABLE llx_facturedet_rec
     ADD COLUMN fk_contract_line integer NULL;
 
@@ -3437,12 +3471,11 @@ values (212, 21, '18', '0', 7.5, 2, 0, 0, 'IVA standard rate', 1);
 ALTER TABLE llx_livraison MODIFY COLUMN date_delivery DATETIME NULL DEFAULT NULL;
 
 -- This constant is for compatibility if user come from 3.6 or lower. Must not be enabled on 3.7.0 or +
-INSERT INTO llx_const (name, value, type, note, visible, entity)
-SELECT __ENCRYPT('PRODUCT_USE_OLD_PATH_FOR_PHOTO') __,
-       __ENCRYPT('1')                              __,
-       'chaine',
-       'Use old path for products images',
-       1,
-       0
-FROM llx_const
-WHERE __DECRYPT('name')__ = 'MAIN_VERSION_LAST_INSTALL' AND __DECRYPT('value')__ < '3.7.0';
+INSERT INTO llx_const (name, value, type, note, visible, entity) SELECT __ENCRYPT('PRODUCT_USE_OLD_PATH_FOR_PHOTO') __,
+                                                                        __ENCRYPT('1')                              __,
+                                                                        'chaine',
+                                                                        'Use old path for products images',
+                                                                        1,
+                                                                        0
+                                                                 FROM llx_const
+                                                                 WHERE __DECRYPT('name') __ = 'MAIN_VERSION_LAST_INSTALL' AND __DECRYPT('value')__ < '3.7.0';

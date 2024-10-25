@@ -28,9 +28,9 @@ ALTER TABLE llx_societe_account
 -- END MODULEBUILDER INDEXES
 
 ALTER TABLE llx_societe_account
-    ADD UNIQUE INDEX uk_societe_account_login_website_soc(entity, fk_soc, login, site, fk_website);
+    ADD UNIQUE INDEX uk_societe_account_login_website_soc (entity, fk_soc, login, site, fk_website);
 ALTER TABLE llx_societe_account
-    ADD UNIQUE INDEX uk_societe_account_key_account_soc(entity, fk_soc, key_account, site, fk_website);
+    ADD UNIQUE INDEX uk_societe_account_key_account_soc (entity, fk_soc, key_account, site, fk_website);
 
 -- Table website does not always exists
 --ALTER TABLE llx_societe_account ADD CONSTRAINT llx_societe_account_fk_website FOREIGN KEY (fk_website) REFERENCES llx_website(rowid);

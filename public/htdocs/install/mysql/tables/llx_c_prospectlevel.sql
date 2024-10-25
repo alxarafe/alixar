@@ -23,6 +23,6 @@ create table llx_c_prospectlevel
     label     varchar(128),
     sortorder smallint,
     active    smallint DEFAULT 1 NOT NULL,
-    module    varchar(32) NULL
+    module    varchar(32)        NULL
 ) ENGINE=innodb;
 

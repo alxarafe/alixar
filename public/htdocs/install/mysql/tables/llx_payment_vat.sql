@@ -1,6 +1,6 @@
 -- ===================================================================
 -- Copyright (C) 2004      Laurent Destailleur  <eldy@users.sourceforge.net>
--- Copyright (C) 2021       Gauthier VERDOL         <gauthier.verdol@atm-consulting.fr>
+-- Copyright (C) 2021      Gauthier VERDOL      <gauthier.verdol@atm-consulting.fr>
 --
 -- This program is free software; you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -22,9 +22,9 @@ create table llx_payment_vat
     rowid           integer AUTO_INCREMENT PRIMARY KEY,
     fk_tva          integer,
     datec           datetime, -- date de creation
-    tms             timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    tms             timestamp     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     datep           datetime, -- payment date
-    amount double(24,8) DEFAULT 0,
+    amount          double(24, 8) DEFAULT 0,
     fk_typepaiement integer NOT NULL,
     num_paiement    varchar(50),
     note            text,

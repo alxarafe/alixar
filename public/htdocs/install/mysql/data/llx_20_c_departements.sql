@@ -2602,6 +2602,9 @@ insert into llx_c_departements (fk_region, code_departement, cheflieu, tncc, ncc
 values (1101, 'WY', '', 0, 'WYOMING', 'Wyoming');
 
 
+
+
+
 -- Provinces Bolivia (id country=52)
 INSERT INTO llx_c_departements (code_departement, fk_region, cheflieu, tncc, ncc, nom)
 VALUES ('001', 5201, '', 0, '', 'Belisario Boeto');

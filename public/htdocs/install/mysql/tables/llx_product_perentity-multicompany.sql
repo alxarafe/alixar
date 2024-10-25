@@ -27,5 +27,5 @@ create table llx_product_perentity
     accountancy_code_buy         varchar(32),                -- Buying accountancy code
     accountancy_code_buy_intra   varchar(32),                -- Buying accountancy code for vat intracommunity
     accountancy_code_buy_export  varchar(32),                -- Buying accountancy code for vat import
-    pmp double(24,8)
+    pmp                          double(24, 8)
 )ENGINE=innodb;

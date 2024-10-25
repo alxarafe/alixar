@@ -22,9 +22,10 @@
 
 DELETE
 FROM llx_menu
-where module ='holiday';
+where module = 'holiday';
 
-ALTER TABLE llx_c_type_contact MODIFY COLUMN code varchar (32) NOT NULL;
+ALTER TABLE llx_c_type_contact
+    MODIFY COLUMN code varchar(32) NOT NULL;
 UPDATE llx_c_type_contact
 set code = 'PROJECTCONTRIBUTOR'
 where code = 'CONTRIBUTOR'
@@ -38,11 +39,16 @@ insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, localtax1, localtax
 values (143, 14, '5', '0', '9.975', '1', 'TPS and TVQ rate', 1);
 
 -- Fix bad migration of 3.4 that make this text instead of varchar(50)
-alter table llx_don MODIFY COLUMN town varchar (50);
-alter table llx_adherent MODIFY COLUMN town varchar (50);
-alter table llx_entrepot MODIFY COLUMN town varchar (50);
-alter table llx_societe MODIFY COLUMN town varchar (50);
-alter table llx_societe_address MODIFY COLUMN town varchar (50);
+alter table llx_don
+    MODIFY COLUMN town varchar(50);
+alter table llx_adherent
+    MODIFY COLUMN town varchar(50);
+alter table llx_entrepot
+    MODIFY COLUMN town varchar(50);
+alter table llx_societe
+    MODIFY COLUMN town varchar(50);
+alter table llx_societe_address
+    MODIFY COLUMN town varchar(50);
 
 
 ALTER TABLE llx_projet_task
@@ -537,8 +543,10 @@ ALTER TABLE llx_societe
 ALTER TABLE llx_facture_fourn
     ADD fk_mode_reglement integer NULL AFTER fk_cond_reglement;
 
-ALTER TABLE llx_facture_fourn MODIFY COLUMN fk_mode_reglement integer NULL;
-ALTER TABLE llx_facture_fourn MODIFY COLUMN fk_cond_reglement integer NULL;
+ALTER TABLE llx_facture_fourn
+    MODIFY COLUMN fk_mode_reglement integer NULL;
+ALTER TABLE llx_facture_fourn
+    MODIFY COLUMN fk_cond_reglement integer NULL;
 -- VPGSQL8.2 ALTER TABLE llx_facture_fourn ALTER fk_mode_reglement DROP NOT NULL;
 -- VPGSQL8.2 ALTER TABLE llx_facture_fourn ALTER fk_cond_reglement DROP NOT NULL;
 
@@ -562,7 +570,7 @@ create table llx_contrat_extrafields
 
 -- add outstanding bill
 ALTER TABLE llx_societe
-    ADD outstanding_limit double(24,8) DEFAULT NULL AFTER mode_reglement_supplier;
+    ADD outstanding_limit double(24, 8) DEFAULT NULL AFTER mode_reglement_supplier;
 
 UPDATE llx_const
 SET name='COMPANY_DONOTSEARCH_ANYWHERE'

@@ -14,4 +14,4 @@
 -- along with this program.  If not, see https://www.gnu.org/licenses/.
 
 ALTER TABLE llx_takepos_floor_tables
-    ADD UNIQUE INDEX uk_takepos_floor_tables(entity,label);
+    ADD UNIQUE INDEX uk_takepos_floor_tables (entity, label);

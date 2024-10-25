@@ -18,4 +18,4 @@
 
 
 ALTER TABLE llx_accounting_journal
-    ADD UNIQUE INDEX uk_accounting_journal_code (code,entity);
+    ADD UNIQUE INDEX uk_accounting_journal_code (code, entity);

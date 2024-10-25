@@ -32,6 +32,7 @@
 -- -- VPGSQL8.2 SELECT dol_util_rebuild_sequences();
 
 
+
 -- Missing in v15 or lower
 
 -- VMYSQL4.3 ALTER TABLE llx_c_civility ADD PRIMARY KEY(rowid);
@@ -60,10 +61,11 @@ ALTER TABLE llx_entrepot
 ALTER TABLE llx_c_transport_mode
     ADD UNIQUE INDEX uk_c_transport_mode (code, entity);
 
-ALTER TABLE llx_c_shipment_mode MODIFY COLUMN tracking varchar (255) NULL;
+ALTER TABLE llx_c_shipment_mode
+    MODIFY COLUMN tracking varchar(255) NULL;
 
 ALTER TABLE llx_holiday
-    ADD COLUMN nb_open_day double(24,8) DEFAULT NULL;
+    ADD COLUMN nb_open_day double(24, 8) DEFAULT NULL;
 
 ALTER TABLE llx_element_tag
     ADD COLUMN fk_categorie INTEGER;
@@ -74,44 +76,78 @@ values ('RES_ROOMS', 'Rooms', 1);
 insert into llx_c_type_resource (code, label, active)
 values ('RES_CARS', 'Cars', 1);
 
-ALTER TABLE llx_c_actioncomm MODIFY COLUMN libelle varchar (128);
-ALTER TABLE llx_c_availability MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_barcode_type MODIFY COLUMN libelle varchar (128);
-ALTER TABLE llx_c_chargesociales MODIFY COLUMN libelle varchar (128);
-ALTER TABLE llx_c_civility MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_country MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_currencies MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_effectif MODIFY COLUMN libelle varchar (128);
-ALTER TABLE llx_c_exp_tax_cat MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_hrm_department MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_hrm_function MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_input_method MODIFY COLUMN libelle varchar (128);
-ALTER TABLE llx_c_input_reason MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_lead_status MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_paiement MODIFY COLUMN libelle varchar (128);
-ALTER TABLE llx_c_paper_format MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_partnership_type MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_product_nature MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_productbatch_qcstatus MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_propalst MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_prospectcontactlevel MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_prospectlevel MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_recruitment_origin MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_shipment_mode MODIFY COLUMN libelle varchar (128);
-ALTER TABLE llx_c_shipment_package_type MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_stcomm MODIFY COLUMN libelle varchar (128);
-ALTER TABLE llx_c_stcommcontact MODIFY COLUMN libelle varchar (128);
-ALTER TABLE llx_c_type_contact MODIFY COLUMN libelle varchar (128);
-ALTER TABLE llx_c_type_container MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_type_fees MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_type_resource MODIFY COLUMN label varchar (128);
-ALTER TABLE llx_c_typent MODIFY COLUMN libelle varchar (128);
-ALTER TABLE llx_c_units MODIFY COLUMN label varchar (128);
+ALTER TABLE llx_c_actioncomm
+    MODIFY COLUMN libelle varchar(128);
+ALTER TABLE llx_c_availability
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_barcode_type
+    MODIFY COLUMN libelle varchar(128);
+ALTER TABLE llx_c_chargesociales
+    MODIFY COLUMN libelle varchar(128);
+ALTER TABLE llx_c_civility
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_country
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_currencies
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_effectif
+    MODIFY COLUMN libelle varchar(128);
+ALTER TABLE llx_c_exp_tax_cat
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_hrm_department
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_hrm_function
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_input_method
+    MODIFY COLUMN libelle varchar(128);
+ALTER TABLE llx_c_input_reason
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_lead_status
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_paiement
+    MODIFY COLUMN libelle varchar(128);
+ALTER TABLE llx_c_paper_format
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_partnership_type
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_product_nature
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_productbatch_qcstatus
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_propalst
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_prospectcontactlevel
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_prospectlevel
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_recruitment_origin
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_shipment_mode
+    MODIFY COLUMN libelle varchar(128);
+ALTER TABLE llx_c_shipment_package_type
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_stcomm
+    MODIFY COLUMN libelle varchar(128);
+ALTER TABLE llx_c_stcommcontact
+    MODIFY COLUMN libelle varchar(128);
+ALTER TABLE llx_c_type_contact
+    MODIFY COLUMN libelle varchar(128);
+ALTER TABLE llx_c_type_container
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_type_fees
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_type_resource
+    MODIFY COLUMN label varchar(128);
+ALTER TABLE llx_c_typent
+    MODIFY COLUMN libelle varchar(128);
+ALTER TABLE llx_c_units
+    MODIFY COLUMN label varchar(128);
 
 
 UPDATE llx_rights_def
 SET perms = 'writeall'
-WHERE perms = 'writeall_advance' AND module = 'holiday';
+WHERE perms = 'writeall_advance'
+  AND module = 'holiday';
 
 -- Insert company legal forms of Mexico   
 INSERT INTO llx_c_forme_juridique (fk_pays, code, libelle, active)
@@ -165,7 +201,8 @@ ALTER TABLE llx_partnership
 -- Idea is to update this column manually in v15 with value in currency of company for bank that are not into the main currency and the transfer
 -- into accounting will use it in priority if value is not null. The script repair.sql contains the sequence to fix datas in llx_bank.
 ALTER TABLE llx_bank
-    ADD COLUMN amount_main_currency double(24,8) NULL;
+    ADD COLUMN amount_main_currency double(24, 8) NULL;
+
 
 
 -- v16
@@ -203,7 +240,8 @@ ALTER TABLE llx_projet_task_time
 ALTER TABLE llx_projet_task_time
     ADD COLUMN intervention_line_id integer DEFAULT NULL;
 
-ALTER TABLE llx_c_stcomm MODIFY COLUMN code VARCHAR (24) NOT NULL;
+ALTER TABLE llx_c_stcomm
+    MODIFY COLUMN code VARCHAR(24) NOT NULL;
 ALTER TABLE llx_societe_account DROP FOREIGN KEY llx_societe_account_fk_website;
 
 UPDATE llx_cronjob
@@ -219,7 +257,8 @@ ALTER TABLE llx_facture
 ALTER TABLE llx_projet_task_time
     ADD COLUMN fk_product integer NULL;
 
-ALTER TABLE llx_c_action_trigger MODIFY elementtype VARCHAR (64);
+ALTER TABLE llx_c_action_trigger
+    MODIFY elementtype VARCHAR(64);
 
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
 values ('PROPAL_MODIFY', 'Customer proposal modified', 'Executed when a customer proposal is modified', 'propal', 2);
@@ -264,8 +303,8 @@ WHERE name = 'TICKET_AUTO_CREATE_FICHINTER_CREATE';
 
 CREATE TABLE llx_stock_mouvement_extrafields
 (
-    rowid     integer AUTO_INCREMENT PRIMARY KEY,
-    tms       timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    rowid integer AUTO_INCREMENT PRIMARY KEY,
+    tms   timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     fk_object integer NOT NULL,
     import_key varchar(14)
 )ENGINE=innodb;
@@ -277,48 +316,48 @@ ALTER TABLE llx_stock_mouvement_extrafields
 -- Facture fourn rec
 CREATE TABLE llx_facture_fourn_rec
 (
-    rowid              integer AUTO_INCREMENT PRIMARY KEY,
-    titre              varchar(200)          NOT NULL,
-    ref_supplier       varchar(180)          NOT NULL,
-    entity             integer     DEFAULT 1 NOT NULL,
-    fk_soc             integer               NOT NULL,
-    datec              datetime,
-    tms                timestamp   DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    suspended          integer     DEFAULT 0,
-    libelle            varchar(255),
-    amount double(24,8)  DEFAULT 0  NOT NULL,
-    remise             real        DEFAULT 0,
-    vat_src_code       varchar(10) DEFAULT '',
-    localtax1 double(24,8)  DEFAULT 0,
-    localtax2 double(24,8)  DEFAULT 0,
-    total_ht double(24,8)  DEFAULT 0,
-    total_tva double(24,8)  DEFAULT 0,
-    total_ttc double(24,8)  DEFAULT 0,
-    fk_user_author     integer,
-    fk_user_modif      integer,
-    fk_projet          integer,
-    fk_account         integer,
-    fk_cond_reglement  integer,
-    fk_mode_reglement  integer,
-    date_lim_reglement date,
-    note_private       text,
-    note_public        text,
-    modelpdf           varchar(255),
-    fk_multicurrency   integer,
-    multicurrency_code varchar(3),
-    multicurrency_tx double(24,8)  DEFAULT 1,
-    multicurrency_total_ht double(24,8)  DEFAULT 0,
-    multicurrency_total_tva double(24,8)  DEFAULT 0,
-    multicurrency_total_ttc double(24,8)  DEFAULT 0,
-    usenewprice        integer     DEFAULT 0,
-    frequency          integer,
-    unit_frequency     varchar(2)  DEFAULT 'm',
-    date_when          datetime    DEFAULT NULL,
-    date_last_gen      datetime    DEFAULT NULL,
-    nb_gen_done        integer     DEFAULT NULL,
-    nb_gen_max         integer     DEFAULT NULL,
-    auto_validate      integer     DEFAULT 0,
-    generate_pdf       integer     DEFAULT 1
+    rowid                   integer AUTO_INCREMENT PRIMARY KEY,
+    titre                   varchar(200)            NOT NULL,
+    ref_supplier            varchar(180)            NOT NULL,
+    entity                  integer       DEFAULT 1 NOT NULL,
+    fk_soc                  integer                 NOT NULL,
+    datec                   datetime,
+    tms                     timestamp     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    suspended               integer       DEFAULT 0,
+    libelle                 varchar(255),
+    amount                  double(24, 8) DEFAULT 0 NOT NULL,
+    remise                  real          DEFAULT 0,
+    vat_src_code            varchar(10)   DEFAULT '',
+    localtax1               double(24, 8) DEFAULT 0,
+    localtax2               double(24, 8) DEFAULT 0,
+    total_ht                double(24, 8) DEFAULT 0,
+    total_tva               double(24, 8) DEFAULT 0,
+    total_ttc               double(24, 8) DEFAULT 0,
+    fk_user_author          integer,
+    fk_user_modif           integer,
+    fk_projet               integer,
+    fk_account              integer,
+    fk_cond_reglement       integer,
+    fk_mode_reglement       integer,
+    date_lim_reglement      date,
+    note_private            text,
+    note_public             text,
+    modelpdf                varchar(255),
+    fk_multicurrency        integer,
+    multicurrency_code      varchar(3),
+    multicurrency_tx        double(24, 8) DEFAULT 1,
+    multicurrency_total_ht  double(24, 8) DEFAULT 0,
+    multicurrency_total_tva double(24, 8) DEFAULT 0,
+    multicurrency_total_ttc double(24, 8) DEFAULT 0,
+    usenewprice             integer       DEFAULT 0,
+    frequency               integer,
+    unit_frequency          varchar(2)    DEFAULT 'm',
+    date_when               datetime      DEFAULT NULL,
+    date_last_gen           datetime      DEFAULT NULL,
+    nb_gen_done             integer       DEFAULT NULL,
+    nb_gen_max              integer       DEFAULT NULL,
+    auto_validate           integer       DEFAULT 0,
+    generate_pdf            integer       DEFAULT 1
 ) ENGINE=innodb;
 
 ALTER TABLE llx_facture_fourn_rec
@@ -353,45 +392,45 @@ ALTER TABLE llx_facture_fourn_rec_extrafields
 
 CREATE TABLE llx_facture_fourn_det_rec
 (
-    rowid              integer AUTO_INCREMENT PRIMARY KEY,
-    fk_facture_fourn   integer NOT NULL,
-    fk_parent_line     integer NULL,
-    fk_product         integer NULL,
-    ref                varchar(50),
-    label              varchar(255) DEFAULT NULL,
-    description        text,
-    pu_ht double(24,8),
-    pu_ttc double(24,8),
-    qty                real,
-    remise_percent     real         DEFAULT 0,
-    fk_remise_except   integer NULL,
-    vat_src_code       varchar(10)  DEFAULT '',
-    tva_tx double(7,4),
-    localtax1_tx double(7,4)   DEFAULT 0,
-    localtax1_type     varchar(10) NULL,
-    localtax2_tx double(7,4)   DEFAULT 0,
-    localtax2_type     varchar(10) NULL,
-    total_ht double(24,8),
-    total_tva double(24,8),
-    total_localtax1 double(24,8)  DEFAULT 0,
-    total_localtax2 double(24,8)  DEFAULT 0,
-    total_ttc double(24,8),
-    product_type       integer      DEFAULT 0,
-    date_start         integer      DEFAULT NULL,
-    date_end           integer      DEFAULT NULL,
-    info_bits          integer      DEFAULT 0,
-    special_code       integer UNSIGNED DEFAULT 0,
-    rang               integer      DEFAULT 0,
-    fk_unit            integer      DEFAULT NULL,
-    import_key         varchar(14),
-    fk_user_author     integer,
-    fk_user_modif      integer,
-    fk_multicurrency   integer,
-    multicurrency_code varchar(3),
-    multicurrency_subprice double(24,8) DEFAULT 0,
-    multicurrency_total_ht double(24,8) DEFAULT 0,
-    multicurrency_total_tva double(24,8) DEFAULT 0,
-    multicurrency_total_ttc double(24,8) DEFAULT 0
+    rowid                   integer AUTO_INCREMENT PRIMARY KEY,
+    fk_facture_fourn        integer     NOT NULL,
+    fk_parent_line          integer     NULL,
+    fk_product              integer     NULL,
+    ref                     varchar(50),
+    label                   varchar(255)     DEFAULT NULL,
+    description             text,
+    pu_ht                   double(24, 8),
+    pu_ttc                  double(24, 8),
+    qty                     real,
+    remise_percent          real             DEFAULT 0,
+    fk_remise_except        integer     NULL,
+    vat_src_code            varchar(10)      DEFAULT '',
+    tva_tx                  double(7, 4),
+    localtax1_tx            double(7, 4)     DEFAULT 0,
+    localtax1_type          varchar(10) NULL,
+    localtax2_tx            double(7, 4)     DEFAULT 0,
+    localtax2_type          varchar(10) NULL,
+    total_ht                double(24, 8),
+    total_tva               double(24, 8),
+    total_localtax1         double(24, 8)    DEFAULT 0,
+    total_localtax2         double(24, 8)    DEFAULT 0,
+    total_ttc               double(24, 8),
+    product_type            integer          DEFAULT 0,
+    date_start              integer          DEFAULT NULL,
+    date_end                integer          DEFAULT NULL,
+    info_bits               integer          DEFAULT 0,
+    special_code            integer UNSIGNED DEFAULT 0,
+    rang                    integer          DEFAULT 0,
+    fk_unit                 integer          DEFAULT NULL,
+    import_key              varchar(14),
+    fk_user_author          integer,
+    fk_user_modif           integer,
+    fk_multicurrency        integer,
+    multicurrency_code      varchar(3),
+    multicurrency_subprice  double(24, 8)    DEFAULT 0,
+    multicurrency_total_ht  double(24, 8)    DEFAULT 0,
+    multicurrency_total_tva double(24, 8)    DEFAULT 0,
+    multicurrency_total_ttc double(24, 8)    DEFAULT 0
 ) ENGINE=innodb;
 
 
@@ -420,8 +459,10 @@ ALTER TABLE llx_mrp_mo
 ALTER TABLE llx_projet_task
     ADD COLUMN status integer DEFAULT 1 NOT NULL;
 
-ALTER TABLE llx_product_attribute_value MODIFY COLUMN ref VARCHAR (180) NOT NULL;
-ALTER TABLE llx_product_attribute_value MODIFY COLUMN value VARCHAR (255) NOT NULL;
+ALTER TABLE llx_product_attribute_value
+    MODIFY COLUMN ref VARCHAR(180) NOT NULL;
+ALTER TABLE llx_product_attribute_value
+    MODIFY COLUMN value VARCHAR(255) NOT NULL;
 ALTER TABLE llx_product_attribute_value
     ADD COLUMN position INTEGER NOT NULL DEFAULT 0;
 ALTER TABLE llx_product_attribute CHANGE rang position INTEGER DEFAULT 0 NOT NULL;
@@ -447,7 +488,8 @@ create table llx_inventory_extrafields
 ALTER TABLE llx_inventory_extrafields
     ADD INDEX idx_inventory_extrafields (fk_object);
 
-ALTER TABLE llx_reception MODIFY COLUMN ref_supplier varchar (128);
+ALTER TABLE llx_reception
+    MODIFY COLUMN ref_supplier varchar(128);
 
 ALTER TABLE llx_bank_account
     ADD COLUMN pti_in_ctti smallint DEFAULT 0 AFTER domiciliation;
@@ -464,52 +506,54 @@ WHERE code = 'OTHER'
 CREATE TABLE llx_asset
 (
     rowid                   integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    ref                     varchar(128)       NOT NULL,
-    entity                  integer  DEFAULT 1 NOT NULL,
+    ref                     varchar(128)            NOT NULL,
+    entity                  integer       DEFAULT 1 NOT NULL,
     label                   varchar(255),
 
     fk_asset_model          integer,
 
-    reversal_amount_ht double(24,8),
-    acquisition_value_ht double(24,8)    DEFAULT NULL,
-    recovered_vat double(24,8),
+    reversal_amount_ht      double(24, 8),
+    acquisition_value_ht    double(24, 8) DEFAULT NULL,
+    recovered_vat           double(24, 8),
 
     reversal_date           date,
 
-    date_acquisition        date               NOT NULL,
-    date_start              date               NOT NULL,
+    date_acquisition        date                    NOT NULL,
+    date_start              date                    NOT NULL,
 
-    qty                     real     DEFAULT 1 NOT NULL,
+    qty                     real          DEFAULT 1 NOT NULL,
 
-    acquisition_type        smallint DEFAULT 0 NOT NULL,
-    asset_type              smallint DEFAULT 0 NOT NULL,
+    acquisition_type        smallint      DEFAULT 0 NOT NULL,
+    asset_type              smallint      DEFAULT 0 NOT NULL,
 
-    not_depreciated         integer  DEFAULT 0,
+    not_depreciated         integer       DEFAULT 0,
 
     disposal_date           date,
-    disposal_amount_ht double(24,8),
+    disposal_amount_ht      double(24, 8),
     fk_disposal_type        integer,
-    disposal_depreciated    integer  DEFAULT 0,
-    disposal_subject_to_vat integer  DEFAULT 0,
+    disposal_depreciated    integer       DEFAULT 0,
+    disposal_subject_to_vat integer       DEFAULT 0,
 
     note_public             text,
     note_private            text,
 
-    date_creation           datetime           NOT NULL,
+    date_creation           datetime                NOT NULL,
     tms                     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_creat           integer            NOT NULL,
+    fk_user_creat           integer                 NOT NULL,
     fk_user_modif           integer,
     last_main_doc           varchar(255),
     import_key              varchar(14),
     model_pdf               varchar(255),
-    status                  integer            NOT NULL
+    status                  integer                 NOT NULL
 ) ENGINE=innodb;
 
 ALTER TABLE llx_asset DROP FOREIGN KEY fk_asset_asset_type;
 ALTER TABLE llx_asset DROP INDEX idx_asset_fk_asset_type;
 
-ALTER TABLE llx_asset CHANGE COLUMN amount_ht acquisition_value_ht double (24,8) NOT NULL;
-ALTER TABLE llx_asset CHANGE COLUMN amount_vat recovered_vat double (24,8);
+ALTER TABLE llx_asset
+    CHANGE COLUMN amount_ht acquisition_value_ht double(24, 8) NOT NULL;
+ALTER TABLE llx_asset
+    CHANGE COLUMN amount_vat recovered_vat double(24, 8);
 
 DELETE
 FROM llx_asset
@@ -521,7 +565,7 @@ ALTER TABLE llx_asset DROP COLUMN description;
 ALTER TABLE llx_asset
     ADD COLUMN fk_asset_model integer AFTER label;
 ALTER TABLE llx_asset
-    ADD COLUMN reversal_amount_ht double(24,8) AFTER fk_asset_model;
+    ADD COLUMN reversal_amount_ht double(24, 8) AFTER fk_asset_model;
 ALTER TABLE llx_asset
     ADD COLUMN reversal_date date AFTER recovered_vat;
 ALTER TABLE llx_asset
@@ -539,7 +583,7 @@ ALTER TABLE llx_asset
 ALTER TABLE llx_asset
     ADD COLUMN disposal_date date AFTER not_depreciated;
 ALTER TABLE llx_asset
-    ADD COLUMN disposal_amount_ht double(24,8) AFTER disposal_date;
+    ADD COLUMN disposal_amount_ht double(24, 8) AFTER disposal_date;
 ALTER TABLE llx_asset
     ADD COLUMN fk_disposal_type integer AFTER disposal_amount_ht;
 ALTER TABLE llx_asset
@@ -556,7 +600,7 @@ DROP TABLE llx_asset_type;
 
 CREATE TABLE llx_c_asset_disposal_type
 (
-    rowid  integer AUTO_INCREMENT  PRIMARY KEY,
+    rowid  integer AUTO_INCREMENT PRIMARY KEY,
     entity integer     NOT NULL DEFAULT 1,
     code   varchar(16) NOT NULL,
     label  varchar(50) NOT NULL,
@@ -566,7 +610,7 @@ CREATE TABLE llx_c_asset_disposal_type
 
 CREATE TABLE llx_asset_accountancy_codes_economic
 (
-    rowid                    integer AUTO_INCREMENT  PRIMARY KEY  NOT NULL,
+    rowid                    integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
     fk_asset                 integer,
     fk_asset_model           integer,
 
@@ -585,7 +629,7 @@ CREATE TABLE llx_asset_accountancy_codes_economic
 
 CREATE TABLE llx_asset_accountancy_codes_fiscal
 (
-    rowid                              integer AUTO_INCREMENT  PRIMARY KEY  NOT NULL,
+    rowid                              integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
     fk_asset                           integer,
     fk_asset_model                     integer,
 
@@ -600,90 +644,90 @@ CREATE TABLE llx_asset_accountancy_codes_fiscal
 
 CREATE TABLE llx_asset_depreciation_options_economic
 (
-    rowid                           integer AUTO_INCREMENT  PRIMARY KEY  NOT NULL,
-    fk_asset                        integer,
-    fk_asset_model                  integer,
+    rowid                             integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    fk_asset                          integer,
+    fk_asset_model                    integer,
 
-    depreciation_type               smallint  DEFAULT 0 NOT NULL, -- 0:linear, 1:degressive, 2:exceptional
-    accelerated_depreciation_option integer,                      -- activate accelerated depreciation mode (fiscal)
+    depreciation_type                 smallint  DEFAULT 0                NOT NULL, -- 0:linear, 1:degressive, 2:exceptional
+    accelerated_depreciation_option   integer,                                     -- activate accelerated depreciation mode (fiscal)
 
-    degressive_coefficient double(24,8),
-    duration                        smallint            NOT NULL,
-    duration_type                   smallint  DEFAULT 0 NOT NULL, -- 0:annual, 1:monthly, 2:daily
+    degressive_coefficient            double(24, 8),
+    duration                          smallint                           NOT NULL,
+    duration_type                     smallint  DEFAULT 0                NOT NULL, -- 0:annual, 1:monthly, 2:daily
 
-    amount_base_depreciation_ht double(24,8),
-    amount_base_deductible_ht double(24,8),
-    total_amount_last_depreciation_ht double(24,8),
+    amount_base_depreciation_ht       double(24, 8),
+    amount_base_deductible_ht         double(24, 8),
+    total_amount_last_depreciation_ht double(24, 8),
 
-    tms                             timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_modif                   integer
+    tms                               timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    fk_user_modif                     integer
 ) ENGINE=innodb;
 
 
 CREATE TABLE llx_asset_depreciation_options_fiscal
 (
-    rowid             integer AUTO_INCREMENT  PRIMARY KEY  NOT NULL,
-    fk_asset          integer,
-    fk_asset_model    integer,
+    rowid                             integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    fk_asset                          integer,
+    fk_asset_model                    integer,
 
-    depreciation_type smallint  DEFAULT 0 NOT NULL, -- 0:linear, 1:degressive, 2:exceptional
+    depreciation_type                 smallint  DEFAULT 0                NOT NULL, -- 0:linear, 1:degressive, 2:exceptional
 
-    degressive_coefficient double(24,8),
-    duration          smallint            NOT NULL,
-    duration_type     smallint  DEFAULT 0 NOT NULL, -- 0:annual, 1:monthly, 2:daily
+    degressive_coefficient            double(24, 8),
+    duration                          smallint                           NOT NULL,
+    duration_type                     smallint  DEFAULT 0                NOT NULL, -- 0:annual, 1:monthly, 2:daily
 
-    amount_base_depreciation_ht double(24,8),
-    amount_base_deductible_ht double(24,8),
-    total_amount_last_depreciation_ht double(24,8),
+    amount_base_depreciation_ht       double(24, 8),
+    amount_base_deductible_ht         double(24, 8),
+    total_amount_last_depreciation_ht double(24, 8),
 
-    tms               timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_modif     integer
+    tms                               timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    fk_user_modif                     integer
 ) ENGINE=innodb;
 
 
 CREATE TABLE llx_asset_depreciation
 (
-    rowid                   integer AUTO_INCREMENT  PRIMARY KEY  NOT NULL,
+    rowid                      integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
 
-    fk_asset                integer      NOT NULL,
-    depreciation_mode       varchar(255) NOT NULL, -- (economic, fiscal or other)
+    fk_asset                   integer                            NOT NULL,
+    depreciation_mode          varchar(255)                       NOT NULL, -- (economic, fiscal or other)
 
-    ref                     varchar(255) NOT NULL,
-    depreciation_date       datetime     NOT NULL,
-    depreciation_ht double(24,8)	NOT NULL,
-    cumulative_depreciation_ht double(24,8)	NOT NULL,
+    ref                        varchar(255)                       NOT NULL,
+    depreciation_date          datetime                           NOT NULL,
+    depreciation_ht            double(24, 8)                      NOT NULL,
+    cumulative_depreciation_ht double(24, 8)                      NOT NULL,
 
-    accountancy_code_debit  varchar(32),
-    accountancy_code_credit varchar(32),
+    accountancy_code_debit     varchar(32),
+    accountancy_code_credit    varchar(32),
 
-    tms                     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_modif           integer
+    tms                        timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    fk_user_modif              integer
 ) ENGINE=innodb;
 
 
 CREATE TABLE llx_asset_model
 (
-    rowid         integer AUTO_INCREMENT  PRIMARY KEY  NOT NULL,
-    entity        integer   DEFAULT 1 NOT NULL, -- multi company id
-    ref           varchar(128)        NOT NULL,
-    label         varchar(255)        NOT NULL,
+    rowid         integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    entity        integer   DEFAULT 1                NOT NULL, -- multi company id
+    ref           varchar(128)                       NOT NULL,
+    label         varchar(255)                       NOT NULL,
 
-    asset_type    smallint            NOT NULL,
+    asset_type    smallint                           NOT NULL,
     fk_pays       integer   DEFAULT 0,
 
     note_public   text,
     note_private  text,
-    date_creation datetime            NOT NULL,
+    date_creation datetime                           NOT NULL,
     tms           timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_creat integer             NOT NULL,
+    fk_user_creat integer                            NOT NULL,
     fk_user_modif integer,
     import_key    varchar(14),
-    status        smallint            NOT NULL
+    status        smallint                           NOT NULL
 ) ENGINE=innodb;
 
 CREATE TABLE llx_asset_model_extrafields
 (
-    rowid      integer AUTO_INCREMENT  PRIMARY KEY,
+    rowid      integer AUTO_INCREMENT PRIMARY KEY,
     tms        timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     fk_object  integer NOT NULL,
     import_key varchar(14) -- import key
@@ -691,7 +735,7 @@ CREATE TABLE llx_asset_model_extrafields
 
 
 ALTER TABLE llx_c_asset_disposal_type
-    ADD UNIQUE INDEX uk_c_asset_disposal_type(code, entity);
+    ADD UNIQUE INDEX uk_c_asset_disposal_type (code, entity);
 
 ALTER TABLE llx_asset
     ADD INDEX idx_asset_fk_asset_model (fk_asset_model);
@@ -891,7 +935,7 @@ WHERE file IN ('box_bom.php@bom', 'box_bom.php', 'box_members.php', 'box_last_mo
                'box_members_last_subscriptions', 'box_members_last_modified', 'box_members_subscriptions_by_year');
 
 ALTER TABLE llx_takepos_floor_tables
-    ADD UNIQUE INDEX uk_takepos_floor_tables (entity,label);
+    ADD UNIQUE INDEX uk_takepos_floor_tables (entity, label);
 
 ALTER TABLE llx_partnership
     ADD COLUMN url_to_check varchar(255);
@@ -929,7 +973,8 @@ ALTER TABLE llx_c_holiday_types
 ALTER TABLE llx_c_holiday_types
     ADD COLUMN sortorder smallint;
 
-ALTER TABLE llx_expedition MODIFY COLUMN ref_customer varchar (255);
+ALTER TABLE llx_expedition
+    MODIFY COLUMN ref_customer varchar(255);
 
 ALTER TABLE llx_extrafields
     ADD COLUMN css varchar(128);
@@ -941,14 +986,18 @@ ALTER TABLE llx_extrafields
 ALTER TABLE llx_cronjob
     ADD COLUMN email_alert varchar(128);
 
-ALTER TABLE llx_paiement MODIFY COLUMN ext_payment_id varchar (255);
-ALTER TABLE llx_payment_donation MODIFY COLUMN ext_payment_id varchar (255);
-ALTER TABLE llx_prelevement_facture_demande MODIFY COLUMN ext_payment_id varchar (255);
+ALTER TABLE llx_paiement
+    MODIFY COLUMN ext_payment_id varchar(255);
+ALTER TABLE llx_payment_donation
+    MODIFY COLUMN ext_payment_id varchar(255);
+ALTER TABLE llx_prelevement_facture_demande
+    MODIFY COLUMN ext_payment_id varchar(255);
 
 INSERT INTO llx_accounting_system (fk_country, pcg_version, label, active)
 VALUES (140, 'PCN2020-LUXEMBURG', 'Plan comptable normalisé 2020 Luxembourgeois', 1);
 
-ALTER TABLE llx_cronjob MODIFY COLUMN label varchar (255) NOT NULL;
+ALTER TABLE llx_cronjob
+    MODIFY COLUMN label varchar(255) NOT NULL;
 
 -- We need to keep only the PurgeDeleteTemporaryFilesShort with params = 'tempfilsold+logfiles'
 DELETE
@@ -971,7 +1020,7 @@ ALTER TABLE llx_user CHANGE COLUMN note note_private text;
 
 ALTER TABLE llx_overwrite_trans DROP INDEX uk_overwrite_trans;
 ALTER TABLE llx_overwrite_trans
-    ADD UNIQUE INDEX uk_overwrite_trans(lang, transkey, entity);
+    ADD UNIQUE INDEX uk_overwrite_trans (lang, transkey, entity);
 
 
 -- Bank Thirdparty

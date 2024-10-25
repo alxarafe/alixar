@@ -28,4 +28,4 @@ ALTER TABLE llx_product_stock
     ADD CONSTRAINT fk_entrepot_entrepot_rowid FOREIGN KEY (fk_entrepot) REFERENCES llx_entrepot (rowid);
 
 ALTER TABLE llx_product_stock
-    ADD UNIQUE INDEX uk_product_stock (fk_product,fk_entrepot);
+    ADD UNIQUE INDEX uk_product_stock (fk_product, fk_entrepot);

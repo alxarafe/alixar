@@ -30,5 +30,5 @@ create table llx_rights_def
     subperms        varchar(50),
     type            varchar(1),                 -- deprecated
     bydefault       tinyint DEFAULT 0,
-    enabled         text NULL                   -- Condition to show or hide
+    enabled         text              NULL      -- Condition to show or hide
 )ENGINE=innodb;

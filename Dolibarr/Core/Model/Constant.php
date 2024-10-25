@@ -120,16 +120,16 @@ class Constant extends Model
         return $query;
     }
 
-    public static function insert(string $name, string $value, string $type, string $note, int $visible = 0, int $entity = 0): bool
+    public static function insert(string $name, string $value, ?string $type, string $note, int $visible = 0, int $entity = 0): bool
     {
-        return Constant::create([
-            'name' => static::encrypt($name),
-            'value' => static::encrypt($value),
-            'type' => static::encrypt($type),
+        return !empty(Constant::create([
+            'name' => static::encrypt($name, 0),
+            'value' => static::encrypt($value, 0),
+            'type' => isset($type) ? static::encrypt($type, 0) : null,
             'visible' => $visible,
             'note' => $note,
             'entity' => $entity
-        ]);
+        ]));
     }
 
     public static function deleteByName(string $name, ?int $entity = null): ?bool
@@ -176,24 +176,24 @@ class Constant extends Model
         $encrypted_fields = ['name', 'value', 'type'];
         foreach ($encrypted_fields as $field) {
             if (isset($values[$field])) {
-                $values[$field] = static::encrypt($values[$field]);
+                $values[$field] = static::encrypt($values[$field], 0);
             }
         }
 
-        return Constant::where('name', static::encrypt($name))
+        return Constant::where('name', static::encrypt($name), 0)
             ->update($values);
     }
 
     public static function updateValueByName(string $name, string $value): bool
     {
-        return Constant::where('name', static::encrypt($name))
-            ->update(['value', static::encrypt($value)]);
+        return Constant::where('name', static::encrypt($name, 0))
+            ->update(['value', static::encrypt($value, 0)]);
     }
 
     public static function isActivated(string $name, int $entity = 0): ?bool
     {
         $result = Constant::selectRaw(static::decrypt('name') . ' AS value')
-            ->where('name', static::encrypt($name))
+            ->where('name', static::encrypt($name, 0))
             ->whereIn('entity', [0, $entity]);
         if ($result === null) {
             return null;

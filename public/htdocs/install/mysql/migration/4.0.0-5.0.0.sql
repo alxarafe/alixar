@@ -73,7 +73,7 @@ ALTER TABLE llx_don
 
 DELETE
 FROM llx_menu
-where module ='expensereport';
+where module = 'expensereport';
 
 ALTER TABLE llx_facturedet
     ADD COLUMN fk_user_author integer after fk_unit;
@@ -85,7 +85,8 @@ ALTER TABLE llx_user DROP COLUMN phenix_pass;
 ALTER TABLE llx_user
     ADD COLUMN dateemployment datetime;
 
-ALTER TABLE llx_user MODIFY login varchar (50) NOT NULL;
+ALTER TABLE llx_user
+    MODIFY login varchar(50) NOT NULL;
 
 ALTER TABLE llx_societe
     ADD COLUMN fk_account integer;
@@ -166,9 +167,10 @@ ALTER TABLE llx_cotisation RENAME TO llx_subscription;
 -- VPGSQL8.2 ALTER SEQUENCE IF EXISTS llx_cotisation_rowid_seq RENAME TO llx_subscription_rowid_seq;
 
 ALTER TABLE llx_subscription
-    ADD UNIQUE INDEX uk_subscription (fk_adherent,dateadh);
+    ADD UNIQUE INDEX uk_subscription (fk_adherent, dateadh);
 ALTER TABLE llx_subscription CHANGE COLUMN cotisation subscription real;
-ALTER TABLE llx_adherent_type CHANGE COLUMN cotisation subscription varchar (3) NOT NULL DEFAULT '1';
+ALTER TABLE llx_adherent_type
+    CHANGE COLUMN cotisation subscription varchar(3) NOT NULL DEFAULT '1';
 
 UPDATE llx_adherent_type
 SET subscription = '1'
@@ -284,7 +286,8 @@ ALTER TABLE llx_overwrite_trans
 ALTER TABLE llx_mailing_cibles
     ADD COLUMN error_text varchar(255);
 
-ALTER TABLE llx_c_actioncomm MODIFY COLUMN type varchar (50) DEFAULT 'system' NOT NULL;
+ALTER TABLE llx_c_actioncomm
+    MODIFY COLUMN type varchar(50) DEFAULT 'system' NOT NULL;
 -- VPGSQL8.2 ALTER TABLE llx_c_actioncomm ALTER COLUMN type SET DEFAULT 'system';
 -- VPGSQL8.2 ALTER TABLE llx_c_actioncomm ALTER COLUMN type SET NOT NULL;
 
@@ -301,9 +304,9 @@ create table llx_user_employment
     fk_user_modif     integer,
     job               varchar(128),                 -- job position. may be a dictionary
     status            integer             NOT NULL, -- draft, active, closed
-    salary double(24,8),                            -- last and current value stored into llx_user
-    salaryextra double(24,8),                       -- last and current value stored into llx_user
-    weeklyhours double(16,8),                       -- last and current value stored into llx_user
+    salary            double(24, 8),                -- last and current value stored into llx_user
+    salaryextra       double(24, 8),                -- last and current value stored into llx_user
+    weeklyhours       double(16, 8),                -- last and current value stored into llx_user
     dateemployment    date,                         -- last and current value stored into llx_user
     dateemploymentend date                          -- last and current value stored into llx_user
 )ENGINE=innodb;
@@ -340,11 +343,12 @@ CREATE TABLE tmp_links_double AS (SELECT objectid, label, MAX(rowid) AS max_rowi
 --select * from tmp_links_double;
 DELETE
 FROM llx_links
-WHERE (rowid, label) IN (SELECT max_rowid, label FROM tmp_links_double); --update to avoid duplicate, delete to delete
+WHERE (rowid, label) IN (SELECT max_rowid, label FROM tmp_links_double);
+--update to avoid duplicate, delete to delete
 DROP TABLE tmp_links_double;
 
 ALTER TABLE llx_links
-    ADD UNIQUE INDEX uk_links (objectid,label);
+    ADD UNIQUE INDEX uk_links (objectid, label);
 
 ALTER TABLE llx_expensereport
     ADD UNIQUE INDEX idx_expensereport_uk_ref (ref, entity);
@@ -376,7 +380,8 @@ ALTER TABLE llx_product_customer_price_log
 ALTER TABLE llx_product_fournisseur_price
     ADD COLUMN default_vat_code varchar(10) after tva_tx;
 
-ALTER TABLE llx_events MODIFY COLUMN ip varchar (250);
+ALTER TABLE llx_events
+    MODIFY COLUMN ip varchar(250);
 
 UPDATE llx_bank
 SET label= '(SupplierInvoicePayment)'

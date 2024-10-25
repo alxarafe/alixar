@@ -25,7 +25,7 @@ create table llx_c_tva
     fk_pays               integer     NOT NULL,
     type_vat              smallint    NOT NULL DEFAULT 0,  -- 0: all, 1: sell, 2: purchase
     code                  varchar(10)          DEFAULT '', -- a key to describe vat entry, for example FR20
-    taux double NOT NULL,
+    taux                  double      NOT NULL,
     localtax1             varchar(20) NOT NULL DEFAULT '0',
     localtax1_type        varchar(10) NOT NULL DEFAULT '0',
     localtax2             varchar(20) NOT NULL DEFAULT '0',

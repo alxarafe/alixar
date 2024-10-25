@@ -23,7 +23,7 @@ ALTER TABLE llx_don
 ALTER TABLE llx_don
     ADD INDEX idx_don_fk_soc (fk_soc);
 ALTER TABLE llx_don
-    ADD INDEX idx_don_fk_project (fk_project);
+    ADD INDEX idx_don_fk_project (fk_projet);
 ALTER TABLE llx_don
     ADD INDEX idx_don_fk_user_author (fk_user_author);
 ALTER TABLE llx_don

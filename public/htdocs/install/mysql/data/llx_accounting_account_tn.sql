@@ -1,3 +1,4 @@
+
 -- Descriptif plan comptable TN PCT
 -- ID 9000 - 9999
 -- ADD 1000000 to rowid # Do no remove this comment --

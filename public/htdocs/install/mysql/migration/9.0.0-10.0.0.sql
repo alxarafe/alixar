@@ -29,22 +29,23 @@
 
 -- Missing in 9.0
 
-ALTER TABLE llx_actioncomm MODIFY COLUMN code varchar (50);
+ALTER TABLE llx_actioncomm
+    MODIFY COLUMN code varchar(50);
 
 DROP TABLE llx_ticket_logs;
 
 CREATE TABLE llx_pos_cash_fence
 (
     rowid         INTEGER AUTO_INCREMENT PRIMARY KEY,
-    entity        INTEGER DEFAULT 1 NOT NULL,
+    entity        INTEGER       DEFAULT 1 NOT NULL,
     ref           VARCHAR(64),
     label         VARCHAR(255),
-    opening double(24,8) default 0,
-    cash double(24,8) default 0,
-    card double(24,8) default 0,
-    cheque double(24,8) default 0,
+    opening       double(24, 8) default 0,
+    cash          double(24, 8) default 0,
+    card          double(24, 8) default 0,
+    cheque        double(24, 8) default 0,
     status        INTEGER,
-    date_creation DATETIME          NOT NULL,
+    date_creation DATETIME                NOT NULL,
     date_valid    DATETIME,
     day_close     INTEGER,
     month_close   INTEGER,
@@ -53,9 +54,10 @@ CREATE TABLE llx_pos_cash_fence
     posnumber     VARCHAR(30),
     fk_user_creat integer,
     fk_user_valid integer,
-    tms           TIMESTAMP         NOT NULL,
+    tms           TIMESTAMP               NOT NULL,
     import_key    VARCHAR(14)
 ) ENGINE=innodb;
+
 
 
 -- For 10.0
@@ -69,10 +71,11 @@ ALTER TABLE llx_accounting_bookkeeping DROP COLUMN validated;
 ALTER TABLE llx_accounting_bookkeeping_tmp DROP COLUMN validated;
 
 ALTER TABLE llx_loan
-    ADD COLUMN insurance_amount double(24,8) DEFAULT 0;
+    ADD COLUMN insurance_amount double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_facture DROP INDEX idx_facture_uk_facnumber;
-ALTER TABLE llx_facture CHANGE facnumber ref VARCHAR (30) NOT NULL;
+ALTER TABLE llx_facture
+    CHANGE facnumber ref VARCHAR(30) NOT NULL;
 ALTER TABLE llx_facture
     ADD UNIQUE INDEX uk_facture_ref (ref, entity);
 
@@ -102,7 +105,7 @@ create table llx_mailing_unsubscribe
 )ENGINE=innodb;
 
 ALTER TABLE llx_mailing_unsubscribe
-    ADD UNIQUE uk_mailing_unsubscribe(email, entity, unsubscribegroup);
+    ADD UNIQUE uk_mailing_unsubscribe (email, entity, unsubscribegroup);
 
 ALTER TABLE llx_adherent
     ADD gender VARCHAR(10);
@@ -162,7 +165,7 @@ CREATE TABLE llx_c_units
 ) ENGINE=innodb;
 
 ALTER TABLE llx_c_units
-    ADD UNIQUE uk_c_units_code(code);
+    ADD UNIQUE uk_c_units_code (code);
 
 INSERT INTO llx_c_units (code, scale, label, short_label, unit_type, active)
 VALUES ('T', '3', 'WeightUnitton', 'T', 'weight', 1);
@@ -325,28 +328,28 @@ CREATE TABLE llx_bom_bom
 (
     -- BEGIN MODULEBUILDER FIELDS
     rowid         integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    entity        integer   DEFAULT 1 NOT NULL,
-    ref           varchar(128)        NOT NULL,
+    entity        integer   DEFAULT 1                NOT NULL,
+    ref           varchar(128)                       NOT NULL,
     label         varchar(255),
     description   text,
     note_public   text,
     note_private  text,
     fk_product    integer,
-    qty double(24,8),
-    efficiency double(8,4),
-    date_creation datetime            NOT NULL,
+    qty           double(24, 8),
+    efficiency    double(8, 4),
+    date_creation datetime                           NOT NULL,
     tms           timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     date_valid    datetime,
-    fk_user_creat integer             NOT NULL,
+    fk_user_creat integer                            NOT NULL,
     fk_user_modif integer,
     fk_user_valid integer,
     import_key    varchar(14),
-    status        integer             NOT NULL
+    status        integer                            NOT NULL
     -- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;
 
 ALTER TABLE llx_bom_bom
-    ADD COLUMN efficiency double(8,4) DEFAULT 1;
+    ADD COLUMN efficiency double(8, 4) DEFAULT 1;
 ALTER TABLE llx_bom_bom
     ADD COLUMN entity integer DEFAULT 1 NOT NULL;
 ALTER TABLE llx_bom_bom
@@ -364,19 +367,19 @@ CREATE TABLE llx_bom_bomline
 (
     -- BEGIN MODULEBUILDER FIELDS
     rowid        integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    fk_bom       integer NOT NULL,
-    fk_product   integer NOT NULL,
-    fk_bom_child integer NULL,
+    fk_bom       integer                            NOT NULL,
+    fk_product   integer                            NOT NULL,
+    fk_bom_child integer                            NULL,
     description  text,
     import_key   varchar(14),
-    qty double(24,8) NOT NULL,
-    efficiency double(8,4) NOT NULL DEFAULT 1,
-    position     integer NOT NULL
+    qty          double(24, 8)                      NOT NULL,
+    efficiency   double(8, 4)                       NOT NULL DEFAULT 1,
+    position     integer                            NOT NULL
     -- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;
 
 ALTER TABLE llx_bom_bomline
-    ADD COLUMN efficiency double(8,4) DEFAULT 1;
+    ADD COLUMN efficiency double(8, 4) DEFAULT 1;
 ALTER TABLE llx_bom_bomline
     ADD COLUMN fk_bom_child integer NULL;
 ALTER TABLE llx_bom_bomline
@@ -409,7 +412,7 @@ ALTER TABLE llx_bom_bomline
     ADD INDEX idx_bom_bomline_fk_bom (fk_bom);
 
 ALTER TABLE llx_bom_bom
-    ADD UNIQUE INDEX uk_bom_bom_ref(ref, entity);
+    ADD UNIQUE INDEX uk_bom_bom_ref (ref, entity);
 ALTER TABLE llx_bom_bomline
     ADD CONSTRAINT llx_bom_bomline_fk_bom FOREIGN KEY (fk_bom) REFERENCES llx_bom_bom (rowid);
 
@@ -428,7 +431,7 @@ ALTER TABLE llx_product_fournisseur_price
     ADD CONSTRAINT fk_product_fournisseur_price_barcode_type FOREIGN KEY (fk_barcode_type) REFERENCES llx_c_barcode_type (rowid);
 
 ALTER TABLE llx_facturedet_rec
-    ADD COLUMN buy_price_ht double(24,8) DEFAULT 0;
+    ADD COLUMN buy_price_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facturedet_rec
     ADD COLUMN fk_product_fournisseur_price integer DEFAULT NULL;
 
@@ -437,9 +440,10 @@ ALTER TABLE llx_facturedet_rec
 ALTER TABLE llx_facturedet_rec
     ADD COLUMN fk_user_modif integer;
 
-ALTER TABLE llx_expensereport_det MODIFY COLUMN value_unit double (24,8) NOT NULL;
 ALTER TABLE llx_expensereport_det
-    ADD COLUMN subprice double(24,8) DEFAULT 0 NOT NULL after qty;
+    MODIFY COLUMN value_unit double(24, 8) NOT NULL;
+ALTER TABLE llx_expensereport_det
+    ADD COLUMN subprice double(24, 8) DEFAULT 0 NOT NULL after qty;
 
 ALTER TABLE llx_product_attribute_combination
     ADD INDEX idx_product_att_com_product_parent (fk_product_parent);
@@ -475,8 +479,10 @@ DELETE
 FROM llx_const
 WHERE name = __ENCRYPT('THEME_ELDY_USE_CHECKED')__ AND value = __ENCRYPT('0')__;
 
-ALTER TABLE llx_inventorydet DROP COLUMN pmp;
-ALTER TABLE llx_inventorydet DROP COLUMN pa;
+ALTER TABLE llx_inventorydet
+    DROP COLUMN pmp;
+ALTER TABLE llx_inventorydet
+    DROP COLUMN pa;
 ALTER TABLE llx_inventorydet DROP COLUMN new_pmp;
 
 UPDATE llx_c_shipment_mode

@@ -26,7 +26,7 @@ ALTER TABLE llx_recruitment_recruitmentcandidature
 -- END MODULEBUILDER INDEXES
 
 ALTER TABLE llx_recruitment_recruitmentcandidature
-    ADD UNIQUE INDEX uk_recruitmentcandidature_email_msgid(email_msgid);
+    ADD UNIQUE INDEX uk_recruitmentcandidature_email_msgid (email_msgid);
 
 -- ALTER TABLE llx_recruitment_recruitmentcandidature ADD CONSTRAINT llx_mymodule_myobject_fk_field FOREIGN KEY (fk_field) REFERENCES llx_mymodule_myotherobject(rowid);
 

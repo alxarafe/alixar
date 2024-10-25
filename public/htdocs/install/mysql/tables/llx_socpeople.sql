@@ -23,12 +23,12 @@ create table llx_socpeople
 (
     rowid            integer AUTO_INCREMENT PRIMARY KEY,
     datec            datetime,
-    tms              timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_soc           integer,                                -- lien vers la societe
-    entity           integer   DEFAULT 1 NOT NULL,           -- multi company id
-    ref_ext          varchar(255),                           -- reference into an external system (not used by dolibarr)
+    tms              timestamp     DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    fk_soc           integer,                                    -- lien vers la societe
+    entity           integer       DEFAULT 1 NOT NULL,           -- multi company id
+    ref_ext          varchar(255),                               -- reference into an external system (not used by dolibarr)
     name_alias       varchar(255),
-    fk_parent        integer NULL,
+    fk_parent        integer                 NULL,
 
     civility         varchar(6),
     lastname         varchar(50),
@@ -37,11 +37,11 @@ create table llx_socpeople
     zip              varchar(25),
     town             varchar(255),
     fk_departement   integer,
-    fk_pays          integer   DEFAULT 0,
+    fk_pays          integer       DEFAULT 0,
 
-    geolat double(24,8)   DEFAULT NULL,
-    geolong double(24,8)   DEFAULT NULL,
-    geopoint         point     DEFAULT NULL,
+    geolat           double(24, 8) DEFAULT NULL,
+    geolong          double(24, 8) DEFAULT NULL,
+    geopoint         point         DEFAULT NULL,
     georesultcode    varchar(16),
 
     birthday         date,
@@ -50,22 +50,23 @@ create table llx_socpeople
     phone_perso      varchar(30),
     phone_mobile     varchar(30),
     fax              varchar(30),
-    url              varchar(255),                           -- web site
+    url              varchar(255),                               -- web site
     email            varchar(255),
 
-    socialnetworks   text      DEFAULT NULL,                 -- json with socialnetworks
+    socialnetworks   text          DEFAULT NULL,                 -- json with socialnetworks
 
     photo            varchar(255),
-    no_email         smallint            NOT NULL DEFAULT 0, -- deprecated. Use table llx_mailing_unsubscribe instead
-    priv             smallint            NOT NULL DEFAULT 0,
-    fk_prospectlevel varchar(12),                            -- prospect level (in llx_c_prospectcontactlevel)
-    fk_stcommcontact integer   DEFAULT 0 NOT NULL,           -- commercial statut
-    fk_user_creat    integer   DEFAULT 0,                    -- user qui a creel'enregistrement
+    no_email         smallint                NOT NULL DEFAULT 0, -- deprecated. Use table llx_mailing_unsubscribe instead
+    priv             smallint                NOT NULL DEFAULT 0,
+    fk_prospectlevel varchar(12),                                -- prospect level (in llx_c_prospectcontactlevel)
+    fk_stcommcontact integer       DEFAULT 0 NOT NULL,           -- commercial statut
+    fk_user_creat    integer       DEFAULT 0,                    -- user qui a creel'enregistrement
     fk_user_modif    integer,
     note_private     text,
     note_public      text,
     default_lang     varchar(6),
-    canvas           varchar(32),                            -- type of canvas if used (null by default)
+    canvas           varchar(32),                                -- type of canvas if used (null by default)
     import_key       varchar(14),
-    statut           tinyint   DEFAULT 1 NOT NULL
+    statut           tinyint       DEFAULT 1 NOT NULL,
+    ip               varchar(250) --ip used to create record (for public submission page)
 )ENGINE=innodb;

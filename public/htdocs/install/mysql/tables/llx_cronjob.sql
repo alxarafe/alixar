@@ -18,7 +18,7 @@
 -- ===================================================================
 
 
-CREATE TABLE llx_cronjob
+CREATE TABLE llx_cronjob 
 (
     rowid          integer AUTO_INCREMENT PRIMARY KEY,
     tms            timestamp             DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

@@ -77,7 +77,7 @@ CREATE TABLE llx_product_lot
 ) ENGINE=InnoDB;
 
 ALTER TABLE llx_product_lot
-    ADD UNIQUE INDEX uk_product_lot(fk_product, batch);
+    ADD UNIQUE INDEX uk_product_lot (fk_product, batch);
 
 -- VPGSQL8.2 ALTER TABLE llx_product_lot ALTER COLUMN entity SET DEFAULT 1;
 ALTER TABLE llx_product_lot MODIFY COLUMN entity integer DEFAULT 1;
@@ -111,9 +111,10 @@ ALTER TABLE llx_product
 ALTER TABLE llx_product
     ADD COLUMN default_vat_code varchar(10) after cost_price;
 
-ALTER TABLE llx_product MODIFY COLUMN stock real;
+ALTER TABLE llx_product
+    MODIFY COLUMN stock real;
 
-CREATE TABLE llx_categorie_user
+CREATE TABLE llx_categorie_user 
 (
     fk_categorie integer NOT NULL,
     fk_user      integer NOT NULL,
@@ -136,7 +137,8 @@ ALTER TABLE llx_categorie_user
 
 ALTER TABLE llx_accounting_bookkeeping
     ADD COLUMN validated tinyint DEFAULT 0 NOT NULL;
-ALTER TABLE llx_bank_account MODIFY COLUMN accountancy_journal varchar (16) DEFAULT NULL;
+ALTER TABLE llx_bank_account
+    MODIFY COLUMN accountancy_journal varchar(16) DEFAULT NULL;
 
 ALTER TABLE llx_fichinter
     ADD COLUMN datet date after duree;
@@ -146,15 +148,16 @@ ALTER TABLE llx_fichinter
     ADD COLUMN dateo date after duree;
 
 ALTER TABLE llx_projet
-    ADD COLUMN opp_percent double(5,2) after fk_opp_status;
+    ADD COLUMN opp_percent double(5, 2) after fk_opp_status;
 UPDATE llx_projet as p
 set opp_percent = (SELECT percent from llx_c_lead_status as cls where cls.rowid = p.fk_opp_status)
 where opp_percent IS NULL;
 
 ALTER TABLE llx_overwrite_trans
-    ADD UNIQUE INDEX uk_overwrite_trans(lang, transkey);
+    ADD UNIQUE INDEX uk_overwrite_trans (lang, transkey);
 
-ALTER TABLE llx_cronjob MODIFY COLUMN unitfrequency varchar (255) NOT NULL DEFAULT '3600';
+ALTER TABLE llx_cronjob
+    MODIFY COLUMN unitfrequency varchar(255) NOT NULL DEFAULT '3600';
 ALTER TABLE llx_cronjob
     ADD COLUMN test varchar(255) DEFAULT '1';
 
@@ -185,7 +188,7 @@ CREATE TABLE llx_website
 (
     rowid           integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
     entity          integer   DEFAULT 1,
-    ref             varchar(24) NOT NULL,
+    ref             varchar(24)            NOT NULL,
     description     varchar(255),
     status          integer,
     fk_default_home integer,
@@ -195,7 +198,8 @@ CREATE TABLE llx_website
 ) ENGINE=innodb;
 ALTER TABLE llx_website
     ADD COLUMN fk_default_home integer;
-ALTER TABLE llx_website CHANGE COLUMN shortname ref varchar (24) NOT NULL;
+ALTER TABLE llx_website
+    CHANGE COLUMN shortname ref varchar(24) NOT NULL;
 ALTER TABLE llx_website
     ADD UNIQUE INDEX uk_website_ref (ref, entity);
 
@@ -203,7 +207,7 @@ CREATE TABLE llx_website_page
 (
     rowid       integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
     fk_website  integer,
-    pageurl     varchar(16) NOT NULL,
+    pageurl     varchar(16)            NOT NULL,
     title       varchar(255),
     description varchar(255),
     keywords    varchar(255),
@@ -215,31 +219,31 @@ CREATE TABLE llx_website_page
 ) ENGINE=innodb;
 
 ALTER TABLE llx_website_page
-    ADD UNIQUE INDEX uk_website_page_url (fk_website,pageurl);
+    ADD UNIQUE INDEX uk_website_page_url (fk_website, pageurl);
 
 ALTER TABLE llx_website_page
     ADD CONSTRAINT fk_website_page_website FOREIGN KEY (fk_website) REFERENCES llx_website (rowid);
 
 CREATE TABLE llx_c_format_cards
 (
-    rowid       integer     NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    code        varchar(50) NOT NULL,
-    name        varchar(50) NOT NULL,
-    paper_size  varchar(20) NOT NULL,
-    orientation varchar(1)  NOT NULL,
-    metric      varchar(5)  NOT NULL,
-    leftmargin double(24,8) NOT NULL,
-    topmargin double(24,8) NOT NULL,
-    nx          integer     NOT NULL,
-    ny          integer     NOT NULL,
-    spacex double(24,8) NOT NULL,
-    spacey double(24,8) NOT NULL,
-    width double(24,8) NOT NULL,
-    height double(24,8) NOT NULL,
-    font_size   integer     NOT NULL,
-    custom_x double(24,8) NOT NULL,
-    custom_y double(24,8) NOT NULL,
-    active      integer     NOT NULL
+    rowid       integer       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    code        varchar(50)   NOT NULL,
+    name        varchar(50)   NOT NULL,
+    paper_size  varchar(20)   NOT NULL,
+    orientation varchar(1)    NOT NULL,
+    metric      varchar(5)    NOT NULL,
+    leftmargin  double(24, 8) NOT NULL,
+    topmargin   double(24, 8) NOT NULL,
+    nx          integer       NOT NULL,
+    ny          integer       NOT NULL,
+    spacex      double(24, 8) NOT NULL,
+    spacey      double(24, 8) NOT NULL,
+    width       double(24, 8) NOT NULL,
+    height      double(24, 8) NOT NULL,
+    font_size   integer       NOT NULL,
+    custom_x    double(24, 8) NOT NULL,
+    custom_y    double(24, 8) NOT NULL,
+    active      integer       NOT NULL
 ) ENGINE=InnoDB;
 
 INSERT INTO llx_c_format_cards (rowid, code, name, paper_size, orientation, metric, leftmargin, topmargin, nx, ny,
@@ -310,8 +314,8 @@ CREATE TABLE llx_multicurrency
 CREATE TABLE llx_multicurrency_rate
 (
     rowid            integer AUTO_INCREMENT PRIMARY KEY,
-    date_sync        datetime DEFAULT NULL,
-    rate double NOT NULL DEFAULT 0,
+    date_sync        datetime         DEFAULT NULL,
+    rate             double  NOT NULL DEFAULT 0,
     fk_multicurrency integer NOT NULL
 ) ENGINE=innodb;
 
@@ -327,137 +331,137 @@ ALTER TABLE llx_product_price
 ALTER TABLE llx_product_price
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_product_price
-    ADD COLUMN multicurrency_price double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_price double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_commande
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_commande
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_commande
-    ADD COLUMN multicurrency_tx double(24,8) DEFAULT 1;
+    ADD COLUMN multicurrency_tx double(24, 8) DEFAULT 1;
 ALTER TABLE llx_commande
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_commande
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_commande
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_commandedet
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_commandedet
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_commandedet
-    ADD COLUMN multicurrency_subprice double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_subprice double(24, 8) DEFAULT 0;
 ALTER TABLE llx_commandedet
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_commandedet
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_commandedet
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_commande_fournisseur
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_commande_fournisseur
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_commande_fournisseur
-    ADD COLUMN multicurrency_tx double(24,8) DEFAULT 1;
+    ADD COLUMN multicurrency_tx double(24, 8) DEFAULT 1;
 ALTER TABLE llx_commande_fournisseur
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_commande_fournisseur
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_commande_fournisseur
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_commande_fournisseurdet
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_commande_fournisseurdet
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_commande_fournisseurdet
-    ADD COLUMN multicurrency_subprice double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_subprice double(24, 8) DEFAULT 0;
 ALTER TABLE llx_commande_fournisseurdet
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_commande_fournisseurdet
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_commande_fournisseurdet
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_facture_fourn
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_facture_fourn
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_facture_fourn
-    ADD COLUMN multicurrency_tx double(24,8) DEFAULT 1;
+    ADD COLUMN multicurrency_tx double(24, 8) DEFAULT 1;
 ALTER TABLE llx_facture_fourn
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facture_fourn
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facture_fourn
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_facture_fourn_det
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_facture_fourn_det
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_facture_fourn_det
-    ADD COLUMN multicurrency_subprice double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_subprice double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facture_fourn_det
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facture_fourn_det
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facture_fourn_det
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_facture
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_facture
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_facture
-    ADD COLUMN multicurrency_tx double(24,8) DEFAULT 1;
+    ADD COLUMN multicurrency_tx double(24, 8) DEFAULT 1;
 ALTER TABLE llx_facture
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facture
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facture
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_facturedet
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_facturedet
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_facturedet
-    ADD COLUMN multicurrency_subprice double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_subprice double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facturedet
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facturedet
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facturedet
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_propal
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_propal
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_propal
-    ADD COLUMN multicurrency_tx double(24,8) DEFAULT 1;
+    ADD COLUMN multicurrency_tx double(24, 8) DEFAULT 1;
 ALTER TABLE llx_propal
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_propal
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_propal
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_propaldet
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_propaldet
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_propaldet
-    ADD COLUMN multicurrency_subprice double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_subprice double(24, 8) DEFAULT 0;
 ALTER TABLE llx_propaldet
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_propaldet
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_propaldet
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 
 -- Add for recurring template invoices
@@ -472,48 +476,48 @@ ALTER TABLE llx_facture_rec
 ALTER TABLE llx_facture_rec
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_facture_rec
-    ADD COLUMN multicurrency_tx double(24,8) DEFAULT 1;
+    ADD COLUMN multicurrency_tx double(24, 8) DEFAULT 1;
 ALTER TABLE llx_facture_rec
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facture_rec
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facture_rec
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_facturedet_rec
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_facturedet_rec
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_facturedet_rec
-    ADD COLUMN multicurrency_subprice double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_subprice double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facturedet_rec
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facturedet_rec
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_facturedet_rec
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_contratdet
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_contratdet
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_contratdet
-    ADD COLUMN multicurrency_subprice double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_subprice double(24, 8) DEFAULT 0;
 ALTER TABLE llx_contratdet
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_contratdet
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_contratdet
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_paiement
-    ADD COLUMN multicurrency_amount double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_amount double(24, 8) DEFAULT 0;
 ALTER TABLE llx_paiement_facture
-    ADD COLUMN multicurrency_amount double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_amount double(24, 8) DEFAULT 0;
 ALTER TABLE llx_paiementfourn
-    ADD COLUMN multicurrency_amount double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_amount double(24, 8) DEFAULT 0;
 ALTER TABLE llx_paiementfourn_facturefourn
-    ADD COLUMN multicurrency_amount double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_amount double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_societe_remise
     ADD COLUMN entity integer DEFAULT 1 NOT NULL AFTER rowid;
@@ -521,63 +525,63 @@ ALTER TABLE llx_societe_remise
 ALTER TABLE llx_societe_remise_except
     ADD COLUMN entity integer DEFAULT 1 NOT NULL AFTER rowid;
 ALTER TABLE llx_societe_remise_except
-    ADD COLUMN multicurrency_amount_ht double(24,8) DEFAULT 0 NOT NULL;
+    ADD COLUMN multicurrency_amount_ht double(24, 8) DEFAULT 0 NOT NULL;
 ALTER TABLE llx_societe_remise_except
-    ADD COLUMN multicurrency_amount_tva double(24,8) DEFAULT 0 NOT NULL;
+    ADD COLUMN multicurrency_amount_tva double(24, 8) DEFAULT 0 NOT NULL;
 ALTER TABLE llx_societe_remise_except
-    ADD COLUMN multicurrency_amount_ttc double(24,8) DEFAULT 0 NOT NULL;
+    ADD COLUMN multicurrency_amount_ttc double(24, 8) DEFAULT 0 NOT NULL;
 
 ALTER TABLE llx_supplier_proposal
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_supplier_proposal
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_supplier_proposal
-    ADD COLUMN multicurrency_tx double(24,8) DEFAULT 1;
+    ADD COLUMN multicurrency_tx double(24, 8) DEFAULT 1;
 ALTER TABLE llx_supplier_proposal
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_supplier_proposal
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_supplier_proposal
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_supplier_proposaldet
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_supplier_proposaldet
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_supplier_proposaldet
-    ADD COLUMN multicurrency_subprice double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_subprice double(24, 8) DEFAULT 0;
 ALTER TABLE llx_supplier_proposaldet
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_supplier_proposaldet
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_supplier_proposaldet
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_expensereport
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_expensereport
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_expensereport
-    ADD COLUMN multicurrency_tx double(24,8) DEFAULT 1;
+    ADD COLUMN multicurrency_tx double(24, 8) DEFAULT 1;
 ALTER TABLE llx_expensereport
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_expensereport
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_expensereport
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_expensereport_det
     ADD COLUMN fk_multicurrency integer;
 ALTER TABLE llx_expensereport_det
     ADD COLUMN multicurrency_code varchar(255);
 ALTER TABLE llx_expensereport_det
-    ADD COLUMN multicurrency_subprice double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_subprice double(24, 8) DEFAULT 0;
 ALTER TABLE llx_expensereport_det
-    ADD COLUMN multicurrency_total_ht double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ht double(24, 8) DEFAULT 0;
 ALTER TABLE llx_expensereport_det
-    ADD COLUMN multicurrency_total_tva double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_tva double(24, 8) DEFAULT 0;
 ALTER TABLE llx_expensereport_det
-    ADD COLUMN multicurrency_total_ttc double(24,8) DEFAULT 0;
+    ADD COLUMN multicurrency_total_ttc double(24, 8) DEFAULT 0;
 
 ALTER TABLE llx_expensereport_det
     ADD COLUMN fk_facture integer DEFAULT 0;
@@ -585,7 +589,8 @@ ALTER TABLE llx_expensereport_det
 ALTER TABLE llx_product_lang
     ADD COLUMN import_key varchar(14) DEFAULT NULL;
 
-ALTER TABLE llx_actioncomm MODIFY COLUMN elementtype varchar (255) DEFAULT NULL;
+ALTER TABLE llx_actioncomm
+    MODIFY COLUMN elementtype varchar(255) DEFAULT NULL;
 
 
 ALTER TABLE llx_accounting_system DROP COLUMN fk_pays;
@@ -607,7 +612,7 @@ CREATE TABLE llx_c_accounting_category
 ) ENGINE=innodb;
 
 ALTER TABLE llx_c_accounting_category
-    ADD UNIQUE INDEX uk_c_accounting_category(code);
+    ADD UNIQUE INDEX uk_c_accounting_category (code);
 
 INSERT INTO llx_c_accounting_category (rowid, code, label, range_account, sens, category_type, formula, position,
                                        fk_country, active)
@@ -639,7 +644,8 @@ ALTER TABLE llx_accounting_journal
 
 -- VMYSQL4.1 DROP INDEX uk_bordereau_cheque ON llx_bordereau_cheque;
 -- VPGSQL8.2 DROP INDEX uk_bordereau_cheque;
-ALTER TABLE llx_bordereau_cheque CHANGE COLUMN number ref VARCHAR (30) NOT NULL;
+ALTER TABLE llx_bordereau_cheque
+    CHANGE COLUMN number ref VARCHAR(30) NOT NULL;
 CREATE UNIQUE INDEX uk_bordereau_cheque ON llx_bordereau_cheque (ref, entity);
 
 
@@ -765,7 +771,8 @@ update llx_stock_mouvement
 set batch = '000000'
 where batch = 'Undefined';
 
-ALTER TABLE llx_import_model MODIFY COLUMN type varchar (50);
+ALTER TABLE llx_import_model
+    MODIFY COLUMN type varchar(50);
 
 
 UPDATE llx_projet
@@ -781,22 +788,22 @@ where code = 'WON';
 
 CREATE TABLE llx_oauth_token
 (
-    rowid   integer AUTO_INCREMENT PRIMARY KEY,
+    rowid  integer AUTO_INCREMENT PRIMARY KEY,
     service varchar(36),
-    token   text,
+    token  text,
     fk_user integer,
     fk_adherent integer,
-    entity  integer DEFAULT 1
+    entity integer DEFAULT 1
 )ENGINE=InnoDB;
 
 CREATE TABLE llx_oauth_state
 (
-    rowid   integer AUTO_INCREMENT PRIMARY KEY,
+    rowid  integer AUTO_INCREMENT PRIMARY KEY,
     service varchar(36),
-    state   varchar(128),
+    state  varchar(128),
     fk_user integer,
     fk_adherent integer,
-    entity  integer DEFAuLT 1
+    entity integer DEFAuLT 1
 )ENGINE=InnoDB;
 
 -- At end (higher risk of error)
@@ -851,4 +858,5 @@ VALUES (178, '17805', 'Sociedad Anónima', 1);
 ALTER TABLE llx_multicurrency_rate
     ADD COLUMN entity integer DEFAULT 1;
 
-ALTER TABLE llx_user MODIFY COLUMN login varchar (50);
+ALTER TABLE llx_user
+    MODIFY COLUMN login varchar(50);

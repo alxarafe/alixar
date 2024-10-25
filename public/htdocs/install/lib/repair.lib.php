@@ -18,8 +18,6 @@
  * or see https://www.gnu.org/
  */
 
-use Dolibarr\Lib\ViewMain;
-
 /**
  *  \file           htdocs/install/lib/repair.lib.php
  *  \brief          Library of repair functions

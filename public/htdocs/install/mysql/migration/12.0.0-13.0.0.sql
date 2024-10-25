@@ -30,8 +30,10 @@
 
 -- Missing in v12 or lower
 
-ALTER TABLE llx_payment_salary MODIFY COLUMN ref varchar (30) NULL;
-ALTER TABLE llx_payment_various MODIFY COLUMN ref varchar (30) NULL;
+ALTER TABLE llx_payment_salary
+    MODIFY COLUMN ref varchar(30) NULL;
+ALTER TABLE llx_payment_various
+    MODIFY COLUMN ref varchar(30) NULL;
 
 ALTER TABLE llx_prelevement_bons
     ADD COLUMN type varchar(16) DEFAULT 'debit-order';
@@ -45,9 +47,11 @@ ALTER TABLE llx_prelevement_facture_demande
 ALTER TABLE llx_prelevement_facture_demande
     ADD INDEX idx_prelevement_facture_demande_fk_facture_fourn (fk_facture_fourn);
 
-ALTER TABLE llx_document_model MODIFY COLUMN type varchar (64);
+ALTER TABLE llx_document_model
+    MODIFY COLUMN type varchar(64);
 
-ALTER TABLE llx_bom_bom MODIFY COLUMN duration double (24,8);
+ALTER TABLE llx_bom_bom
+    MODIFY COLUMN duration double(24, 8);
 
 ALTER TABLE llx_bom_bom_extrafields
     ADD INDEX idx_bom_bom_extrafields_fk_object (fk_object);
@@ -63,7 +67,7 @@ create table llx_mrp_mo_extrafields
 ALTER TABLE llx_mrp_mo_extrafields DROP INDEX idx_fk_object;
 
 ALTER TABLE llx_mrp_mo_extrafields
-    ADD INDEX idx_mrp_mo_fk_object(fk_object);
+    ADD INDEX idx_mrp_mo_fk_object (fk_object);
 
 
 -- For v13
@@ -120,8 +124,10 @@ ALTER TABLE llx_establishment
 UPDATE llx_establishment
 SET ref = rowid
 WHERE ref IS NULL;
-ALTER TABLE llx_establishment MODIFY COLUMN ref varchar (30) NOT NULL;
-ALTER TABLE llx_establishment MODIFY COLUMN label varchar (128);
+ALTER TABLE llx_establishment
+    MODIFY COLUMN ref varchar(30) NOT NULL;
+ALTER TABLE llx_establishment
+    MODIFY COLUMN label varchar(128);
 
 INSERT INTO llx_const (name, entity, value, type, visible)
 VALUES ('PRODUCT_PRICE_BASE_TYPE', 0, 'HT', 'string', 0);
@@ -218,10 +224,10 @@ ALTER TABLE llx_c_incoterms
 CREATE TABLE llx_recruitment_recruitmentjobposition
 (
     rowid                  integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    ref                    varchar(128) DEFAULT '(PROV)' NOT NULL,
-    entity                 INTEGER      DEFAULT 1        NOT NULL,
-    label                  varchar(255)                  NOT NULL,
-    qty                    integer      DEFAULT 1        NOT NULL,
+    ref                    varchar(128) DEFAULT '(PROV)'      NOT NULL,
+    entity                 INTEGER      DEFAULT 1             NOT NULL,
+    label                  varchar(255)                       NOT NULL,
+    qty                    integer      DEFAULT 1             NOT NULL,
     fk_soc                 integer,
     fk_project             integer,
     fk_user_recruiter      integer,
@@ -232,14 +238,14 @@ CREATE TABLE llx_recruitment_recruitmentjobposition
     description            text,
     note_public            text,
     note_private           text,
-    date_creation          datetime                      NOT NULL,
+    date_creation          datetime                           NOT NULL,
     tms                    timestamp    DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_creat          integer                       NOT NULL,
+    fk_user_creat          integer                            NOT NULL,
     fk_user_modif          integer,
     last_main_doc          varchar(255),
     import_key             varchar(14),
     model_pdf              varchar(255),
-    status                 smallint                      NOT NULL
+    status                 smallint                           NOT NULL
 ) ENGINE=innodb;
 
 ALTER TABLE llx_recruitment_recruitmentjobposition
@@ -277,7 +283,7 @@ create table llx_recruitment_recruitmentjobposition_extrafields
 ) ENGINE=innodb;
 
 ALTER TABLE llx_recruitment_recruitmentjobposition_extrafields
-    ADD INDEX idx_recruitmentjobposition_fk_object(fk_object);
+    ADD INDEX idx_recruitmentjobposition_fk_object (fk_object);
 
 
 
@@ -285,19 +291,19 @@ CREATE TABLE llx_recruitment_recruitmentcandidature
 (
     -- BEGIN MODULEBUILDER FIELDS
     rowid                     integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    entity                    integer  NOT NULL DEFAULT 1,
-    fk_recruitmentjobposition INTEGER NULL,
-    ref                       varchar(128)      DEFAULT '(PROV)' NOT NULL,
+    entity                    integer                            NOT NULL DEFAULT 1,
+    fk_recruitmentjobposition INTEGER                            NULL,
+    ref                       varchar(128)                                DEFAULT '(PROV)' NOT NULL,
     description               text,
     note_public               text,
     note_private              text,
-    date_creation             datetime NOT NULL,
-    tms                       timestamp         DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_creat             integer  NOT NULL,
+    date_creation             datetime                           NOT NULL,
+    tms                       timestamp                                   DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    fk_user_creat             integer                            NOT NULL,
     fk_user_modif             integer,
     import_key                varchar(14),
     model_pdf                 varchar(255),
-    status                    smallint NOT NULL,
+    status                    smallint                           NOT NULL,
     firstname                 varchar(128),
     lastname                  varchar(128),
     email                     varchar(255),
@@ -306,7 +312,7 @@ CREATE TABLE llx_recruitment_recruitmentcandidature
     remuneration_requested    integer,
     remuneration_proposed     integer,
     email_msgid               varchar(255),
-    fk_recruitment_origin     INTEGER NULL
+    fk_recruitment_origin     INTEGER                            NULL
     -- END MODULEBUILDER FIELDS
 ) ENGINE=innodb;
 
@@ -337,10 +343,10 @@ create table llx_recruitment_recruitmentcandidature_extrafields
 ) ENGINE=innodb;
 
 ALTER TABLE llx_recruitment_recruitmentcandidature_extrafields
-    ADD INDEX idx_recruitmentcandidature_fk_object(fk_object);
+    ADD INDEX idx_recruitmentcandidature_fk_object (fk_object);
 
 ALTER TABLE llx_recruitment_recruitmentcandidature
-    ADD UNIQUE INDEX uk_recruitmentcandidature_email_msgid(email_msgid);
+    ADD UNIQUE INDEX uk_recruitmentcandidature_email_msgid (email_msgid);
 
 
 ALTER TABLE llx_product_attribute
@@ -354,12 +360,13 @@ CREATE TABLE llx_product_attribute_combination_price_level
     rowid                            INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
     fk_product_attribute_combination INTEGER DEFAULT 1   NOT NULL,
     fk_price_level                   INTEGER DEFAULT 1   NOT NULL,
-    variation_price DOUBLE(24,8) NOT NULL,
-    variation_price_percentage       INTEGER NULL
+    variation_price                  DOUBLE(24, 8)       NOT NULL,
+    variation_price_percentage       INTEGER             NULL
 )ENGINE=innodb;
 
 ALTER TABLE llx_product_attribute_combination_price_level
     ADD UNIQUE (fk_product_attribute_combination, fk_price_level);
+
 
 
 -- Add dictionary for prospect level and action commercial on contacts (Using this is not recommanded)
@@ -370,7 +377,7 @@ create table llx_c_prospectcontactlevel
     label     varchar(30),
     sortorder smallint,
     active    smallint DEFAULT 1 NOT NULL,
-    module    varchar(32) NULL
+    module    varchar(32)        NULL
 ) ENGINE=innodb;
 insert into llx_c_prospectcontactlevel (code, label, sortorder)
 values ('PL_NONE', 'None', 1);
@@ -390,7 +397,7 @@ create table llx_c_stcommcontact
     active  tinyint default 1 NOT NULL
 )ENGINE=innodb;
 ALTER TABLE llx_c_stcommcontact
-    ADD UNIQUE INDEX uk_c_stcommcontact(code);
+    ADD UNIQUE INDEX uk_c_stcommcontact (code);
 
 insert into llx_c_stcommcontact (id, code, libelle)
 values (-1, 'ST_NO', 'Do not contact');
@@ -418,7 +425,7 @@ create table llx_c_recruitment_origin
 
 
 ALTER TABLE llx_recruitment_recruitmentcandidature
-    ADD UNIQUE INDEX uk_recruitmentcandidature_email_msgid(email_msgid);
+    ADD UNIQUE INDEX uk_recruitmentcandidature_email_msgid (email_msgid);
 
 
 ALTER TABLE llx_product MODIFY COLUMN seuil_stock_alerte float;
@@ -438,7 +445,7 @@ ALTER TABLE llx_actioncomm
     ADD COLUMN reply_to varchar(255);
 
 ALTER TABLE llx_paiement
-    ADD pos_change DOUBLE(24,8) DEFAULT 0 AFTER fk_export_compta;
+    ADD pos_change DOUBLE(24, 8) DEFAULT 0 AFTER fk_export_compta;
 
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
 values ('CONTACT_CREATE', 'Contact address created', 'Executed when a contact is created', 'contact', 50);
@@ -459,7 +466,8 @@ VALUES (0, 'recruitment', 'recruitmentcandidature_send', '', 0, null, null, '(An
         '__(Hello)__ __CANDIDATE_FULLNAME__,<br><br>\n\n__(YourCandidatureAnswer)__<br>\n<br><br>\n__(Sincerely)__<br>__USER_SIGNATURE__',
         null, 0);
 
-ALTER TABLE llx_c_action_trigger MODIFY COLUMN code varchar (64) NOT NULL;
+ALTER TABLE llx_c_action_trigger
+    MODIFY COLUMN code varchar(64) NOT NULL;
 
 insert into llx_c_action_trigger (code, label, description, elementtype, rang)
 values ('RECRUITMENTJOBPOSITION_CREATE', 'Job created', 'Executed when a job is created', 'recruitment', 7500);
@@ -502,7 +510,9 @@ ALTER TABLE llx_actioncomm_reminder
 ALTER TABLE llx_inventorydet
     ADD COLUMN fk_warehouse integer DEFAULT 0;
 ALTER TABLE llx_inventorydet
-    ADD UNIQUE uk_inventorydet(fk_inventory, fk_warehouse, fk_product, batch);
+    ADD COLUMN batch varchar(128) DEFAULT NULL;
+ALTER TABLE llx_inventorydet
+    ADD UNIQUE uk_inventorydet (fk_inventory, fk_warehouse, fk_product, batch);
 
 ALTER TABLE llx_commandedet
     ADD COLUMN ref_ext varchar(255) AFTER label;
@@ -514,7 +524,8 @@ ALTER TABLE llx_c_ticket_category
 ALTER TABLE llx_c_ticket_category
     ADD COLUMN force_severity varchar(32) NULL;
 
-ALTER TABLE llx_c_ticket_severity CHANGE color color VARCHAR (10) NULL;
+ALTER TABLE llx_c_ticket_severity
+    CHANGE color color VARCHAR(10) NULL;
 
 ALTER TABLE llx_expensereport
     ADD COLUMN fk_user_creat integer NULL;
@@ -588,10 +599,12 @@ FROM llx_user_rights
 WHERE fk_id IN (SELECT id FROM llx_rights_def where module = 'holiday' and perms = 'lire_tous');
 DELETE
 FROM llx_rights_def
-where module = 'holiday' and perms = 'lire_tous';
+where module = 'holiday'
+  and perms = 'lire_tous';
 UPDATE llx_rights_def
 set perms = 'readall'
-WHERE perms = 'read_all' and module = 'holiday';
+WHERE perms = 'read_all'
+  and module = 'holiday';
 
 CREATE TABLE llx_c_product_nature
 (
@@ -608,7 +621,7 @@ ALTER TABLE llx_product DROP FOREIGN KEY fk_product_finished;
 -- VPGSQL8.2 DROP INDEX uk_c_product_nature;
 
 ALTER TABLE llx_c_product_nature
-    ADD UNIQUE INDEX uk_c_product_nature(code);
+    ADD UNIQUE INDEX uk_c_product_nature (code);
 
 INSERT INTO llx_c_product_nature (code, label, active)
 VALUES (0, 'RowMaterial', 1);
@@ -734,10 +747,12 @@ WHERE value = 'mod_livraison_saphir'
 -- update llx_rights_def
 UPDATE llx_rights_def
 set perms = 'delivery'
-WHERE perms = 'livraison' and module = 'expedition';
+WHERE perms = 'livraison'
+  and module = 'expedition';
 UPDATE llx_rights_def
 set perms = 'delivery_advance'
-WHERE perms = 'livraison_advance' and module = 'expedition';
+WHERE perms = 'livraison_advance'
+  and module = 'expedition';
 
 
 ALTER TABLE llx_commande_fournisseurdet
@@ -766,9 +781,9 @@ CREATE TABLE llx_session
 (
     session_id       varchar(50) PRIMARY KEY,
     session_variable text,
-    last_accessed    datetime NOT NULL,
-    fk_user          integer  NOT NULL,
-    remote_ip        varchar(64) NULL,
+    last_accessed    datetime     NOT NULL,
+    fk_user          integer      NOT NULL,
+    remote_ip        varchar(64)  NULL,
     user_agent       varchar(128) NULL
 ) ENGINE=innodb;
 
@@ -781,7 +796,8 @@ VALUES (1, 'github', 'Github', 'https://github.com/{socialid}', 'fa-github', 1);
 
 ALTER TABLE llx_product_fournisseur_price
     ADD COLUMN packaging varchar(64) DEFAULT NULL;
-ALTER TABLE llx_product_fournisseur_price MODIFY COLUMN packaging varchar (64) DEFAULT NULL;
+ALTER TABLE llx_product_fournisseur_price
+    MODIFY COLUMN packaging varchar(64) DEFAULT NULL;
 -- VPGSQL8.2 ALTER TABLE llx_product_fournisseur_price ALTER COLUMN packaging DROP DEFAULT;
 
 ALTER TABLE llx_projet
@@ -828,5 +844,6 @@ values (6, 'AC_EMAIL_IN', 'system', 'reception Email', NULL, 1, 4);
 -- VMYSQL4.3 ALTER TABLE llx_accounting_bookkeeping MODIFY COLUMN montant double(24,8) NULL;
 -- VPGSQL8.2 ALTER TABLE llx_accounting_bookkeeping ALTER COLUMN montant DROP NOT NULL;
 
-ALTER TABLE llx_export_model MODIFY COLUMN type varchar (64);
+ALTER TABLE llx_export_model
+    MODIFY COLUMN type varchar(64);
 
