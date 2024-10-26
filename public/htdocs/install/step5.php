@@ -22,7 +22,6 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Core\Classes\Conf;
 use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\Database;
@@ -353,7 +352,7 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
                 // Now delete the flag that say installation is not complete
                 dolibarr_install_syslog('step5: remove MAIN_NOT_INSTALLED const');
                 if (!Constant::deleteByName('MAIN_NOT_INSTALLED')) {
-                    dol_print_error($db, 'Error in setup program');
+                    // dol_print_error($db, 'Error in setup program');
                 }
 
                 // May fail if parameter already defined

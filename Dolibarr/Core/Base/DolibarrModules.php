@@ -539,7 +539,7 @@ abstract class DolibarrModules
 
         // Test if module is activated
         $result = Constant::isActivated($this->const_name, $entity);
-        if ($result === null) {
+        if ($result !== null) {
             if ($result && !empty($this->rights)) {
 
                 // TODO rights parameters with integer indexes are deprecated
@@ -1630,7 +1630,7 @@ abstract class DolibarrModules
 
         dol_syslog(get_only_class($this) . "::_active delete activation constant", LOG_DEBUG);
         if (!Constant::deleteByName($this->db->escape($this->const_name), $entity)) {
-            $err++;
+//            $err++;
         }
 
         $note = json_encode(
