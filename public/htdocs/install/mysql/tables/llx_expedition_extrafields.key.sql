@@ -17,5 +17,4 @@
 -- ===================================================================
 
 
-ALTER TABLE llx_expedition_extrafields
-    ADD UNIQUE INDEX uk_expedition_extrafields (fk_object);
+ALTER TABLE llx_expedition_extrafields ADD UNIQUE INDEX uk_expedition_extrafields (fk_object);

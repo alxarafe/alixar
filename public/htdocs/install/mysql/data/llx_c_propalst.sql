@@ -30,15 +30,9 @@
 -- Types etat propales
 --
 
-delete
-from llx_c_propalst;
-INSERT INTO llx_c_propalst (id, code, label)
-VALUES (0, 'PR_DRAFT', 'Brouillon');
-INSERT INTO llx_c_propalst (id, code, label)
-VALUES (1, 'PR_OPEN', 'Ouverte');
-INSERT INTO llx_c_propalst (id, code, label)
-VALUES (2, 'PR_SIGNED', 'Signée');
-INSERT INTO llx_c_propalst (id, code, label)
-VALUES (3, 'PR_NOTSIGNED', 'Non Signée');
-INSERT INTO llx_c_propalst (id, code, label)
-VALUES (4, 'PR_FAC', 'Facturée');
+delete from llx_c_propalst;
+insert into llx_c_propalst (id,code,label) values (0, 'PR_DRAFT',     'Brouillon');
+insert into llx_c_propalst (id,code,label) values (1, 'PR_OPEN',      'Ouverte');
+insert into llx_c_propalst (id,code,label) values (2, 'PR_SIGNED',    'Signée');
+insert into llx_c_propalst (id,code,label) values (3, 'PR_NOTSIGNED', 'Non Signée');
+insert into llx_c_propalst (id,code,label) values (4, 'PR_FAC',       'Facturée');

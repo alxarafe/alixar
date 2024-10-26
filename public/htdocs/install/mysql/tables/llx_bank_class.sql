@@ -19,6 +19,6 @@
 
 create table llx_category_bankline
 (
-    lineid   integer NOT NULL,
-    fk_categ integer NOT NULL
+  lineid   integer NOT NULL,
+  fk_categ integer NOT NULL
 )ENGINE=innodb;

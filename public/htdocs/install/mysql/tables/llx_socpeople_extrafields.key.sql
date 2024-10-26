@@ -17,5 +17,4 @@
 -- ===================================================================
 
 
-ALTER TABLE llx_socpeople_extrafields
-    ADD UNIQUE INDEX uk_socpeople_extrafields (fk_object);
+ALTER TABLE llx_socpeople_extrafields ADD UNIQUE INDEX uk_socpeople_extrafields (fk_object);

@@ -17,6 +17,5 @@
 
 
 -- BEGIN MODULEBUILDER INDEXES
-ALTER TABLE llx_hrm_skill_extrafields
-    ADD INDEX idx_skill_fk_object (fk_object);
+ALTER TABLE llx_hrm_skill_extrafields ADD INDEX idx_skill_fk_object(fk_object);
 -- END MODULEBUILDER INDEXES

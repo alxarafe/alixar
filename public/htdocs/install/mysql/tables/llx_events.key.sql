@@ -17,5 +17,4 @@
 -- ===========================================================================
 
 
-ALTER TABLE llx_events
-    ADD INDEX idx_events_dateevent (dateevent);
+ALTER TABLE llx_events ADD INDEX idx_events_dateevent (dateevent);

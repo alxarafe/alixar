@@ -30,13 +30,8 @@
 -- Prospect level
 --
 
-delete
-from llx_c_prospectlevel;
-INSERT INTO llx_c_prospectlevel (code, label, sortorder)
-VALUES ('PL_NONE', 'None', 1);
-INSERT INTO llx_c_prospectlevel (code, label, sortorder)
-VALUES ('PL_LOW', 'Low', 2);
-INSERT INTO llx_c_prospectlevel (code, label, sortorder)
-VALUES ('PL_MEDIUM', 'Medium', 3);
-INSERT INTO llx_c_prospectlevel (code, label, sortorder)
-VALUES ('PL_HIGH', 'High', 4);
+delete from llx_c_prospectlevel;
+insert into llx_c_prospectlevel (code,label,sortorder) values ('PL_NONE',      'None',     1);
+insert into llx_c_prospectlevel (code,label,sortorder) values ('PL_LOW',       'Low',      2);
+insert into llx_c_prospectlevel (code,label,sortorder) values ('PL_MEDIUM',    'Medium',   3);
+insert into llx_c_prospectlevel (code,label,sortorder) values ('PL_HIGH',      'High',     4);

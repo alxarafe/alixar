@@ -16,5 +16,4 @@
 --
 -- ========================================================================
 
-ALTER TABLE llx_c_propalst
-    ADD UNIQUE INDEX uk_c_propalst (code);
+ALTER TABLE llx_c_propalst ADD UNIQUE INDEX uk_c_propalst(code);

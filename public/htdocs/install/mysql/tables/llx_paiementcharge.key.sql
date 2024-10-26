@@ -16,5 +16,4 @@
 --
 -- ===================================================================
 
-ALTER TABLE llx_paiementcharge
-    ADD INDEX idx_paiementcharge_fk_charge (fk_charge);
+ALTER TABLE llx_paiementcharge ADD INDEX idx_paiementcharge_fk_charge (fk_charge);

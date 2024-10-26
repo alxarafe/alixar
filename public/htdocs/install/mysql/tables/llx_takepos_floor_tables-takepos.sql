@@ -14,8 +14,7 @@
 -- along with this program.  If not, see https://www.gnu.org/licenses/.
 
 
-CREATE TABLE llx_takepos_floor_tables
-(
+CREATE TABLE llx_takepos_floor_tables(
     -- BEGIN MODULEBUILDER FIELDS
     rowid integer AUTO_INCREMENT PRIMARY KEY,
     entity integer DEFAULT 1 NOT NULL,

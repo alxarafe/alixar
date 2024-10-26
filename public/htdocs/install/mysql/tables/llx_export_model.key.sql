@@ -18,5 +18,4 @@
 -- ===================================================================
 
 
-ALTER TABLE llx_export_model
-    ADD UNIQUE uk_export_model (label, type);
+ALTER TABLE llx_export_model ADD UNIQUE uk_export_model (label,type);

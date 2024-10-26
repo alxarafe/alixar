@@ -16,6 +16,5 @@
 --
 -- ===================================================================
 
-ALTER TABLE llx_loan_schedule
-    ADD UNIQUE INDEX uk_loan_schedule_ref (fk_loan, datep);
+ALTER TABLE llx_loan_schedule ADD UNIQUE INDEX uk_loan_schedule_ref (fk_loan, datep);
 

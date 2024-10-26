@@ -17,5 +17,4 @@
 --
 -- ========================================================================
 
-ALTER TABLE llx_c_payment_term
-    ADD UNIQUE INDEX uk_c_payment_term_code (entity, code);
+ALTER TABLE llx_c_payment_term ADD UNIQUE INDEX uk_c_payment_term_code(entity, code);

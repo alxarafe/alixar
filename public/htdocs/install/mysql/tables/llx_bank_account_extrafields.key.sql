@@ -17,5 +17,4 @@
 -- ===================================================================
 
 
-ALTER TABLE llx_bank_account_extrafields
-    ADD UNIQUE INDEX uk_bank_account_extrafields (fk_object);
+ALTER TABLE llx_bank_account_extrafields ADD UNIQUE INDEX uk_bank_account_extrafields (fk_object);

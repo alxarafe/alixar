@@ -17,5 +17,4 @@
 --
 -- ========================================================================
 
-ALTER TABLE llx_c_input_method
-    ADD UNIQUE INDEX uk_c_input_method (code);
+ALTER TABLE llx_c_input_method ADD UNIQUE INDEX uk_c_input_method(code);

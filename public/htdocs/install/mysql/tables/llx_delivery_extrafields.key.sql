@@ -17,5 +17,4 @@
 -- ===================================================================
 
 
-ALTER TABLE llx_delivery_extrafields
-    ADD UNIQUE INDEX uk_delivery_extrafields (fk_object);
+ALTER TABLE llx_delivery_extrafields ADD UNIQUE INDEX uk_delivery_extrafields (fk_object);

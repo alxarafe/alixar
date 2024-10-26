@@ -16,5 +16,4 @@
 --
 -- ========================================================================
 
-ALTER TABLE llx_c_barcode_type
-    ADD UNIQUE INDEX uk_c_barcode_type (code, entity);
+ALTER TABLE llx_c_barcode_type ADD UNIQUE INDEX uk_c_barcode_type(code, entity);

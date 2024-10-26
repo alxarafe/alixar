@@ -16,5 +16,4 @@
 --
 -- ===================================================================
 
-ALTER TABLE llx_c_holiday_types
-    ADD UNIQUE INDEX uk_c_holiday_types (entity, code);
+ALTER TABLE llx_c_holiday_types ADD UNIQUE INDEX uk_c_holiday_types (entity, code);

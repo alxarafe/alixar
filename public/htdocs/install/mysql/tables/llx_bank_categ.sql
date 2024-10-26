@@ -19,7 +19,7 @@
 
 create table llx_category_bank
 (
-    rowid  integer AUTO_INCREMENT PRIMARY KEY,
-    label  varchar(255),
-    entity integer DEFAULT 1 NOT NULL -- multi company id
+  rowid           integer AUTO_INCREMENT PRIMARY KEY,
+  label           varchar(255),
+  entity          integer DEFAULT 1 NOT NULL  	-- multi company id
 )ENGINE=innodb;

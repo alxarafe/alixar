@@ -17,5 +17,4 @@
 -- ============================================================================
 
 
-ALTER TABLE llx_const
-    ADD UNIQUE INDEX uk_const (name, entity);
+ALTER TABLE llx_const ADD UNIQUE INDEX uk_const (name, entity);
