@@ -306,25 +306,25 @@ ALTER TABLE llx_tva
     ADD COLUMN num_payment varchar(50);
 
 -- Add missing action triggers
-insert into llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
-values (31, 'PROPAL_CLOSE_SIGNED', 'Customer proposal closed signed',
+INSERT INTO llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
+VALUES (31, 'PROPAL_CLOSE_SIGNED', 'Customer proposal closed signed',
         'Executed when a customer proposal is closed signed', 'propal', 31);
-insert into llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
-values (32, 'PROPAL_CLOSE_REFUSED', 'Customer proposal closed refused',
+INSERT INTO llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
+VALUES (32, 'PROPAL_CLOSE_REFUSED', 'Customer proposal closed refused',
         'Executed when a customer proposal is closed refused', 'propal', 32);
-insert into llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
-values (33, 'BILL_SUPPLIER_CANCELED', 'Supplier invoice cancelled', 'Executed when a supplier invoice is cancelled',
+INSERT INTO llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
+VALUES (33, 'BILL_SUPPLIER_CANCELED', 'Supplier invoice cancelled', 'Executed when a supplier invoice is cancelled',
         'invoice_supplier', 33);
-insert into llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
-values (34, 'MEMBER_MODIFY', 'Member modified', 'Executed when a member is modified', 'member', 34);
+INSERT INTO llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
+VALUES (34, 'MEMBER_MODIFY', 'Member modified', 'Executed when a member is modified', 'member', 34);
 
 -- Automatic events for tasks
-insert into llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
-values (35, 'TASK_CREATE', 'Task created', 'Executed when a project task is created', 'project', 35);
-insert into llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
-values (36, 'TASK_MODIFY', 'Task modified', 'Executed when a project task is modified', 'project', 36);
-insert into llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
-values (37, 'TASK_DELETE', 'Task deleted', 'Executed when a project task is deleted', 'project', 37);
+INSERT INTO llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
+VALUES (35, 'TASK_CREATE', 'Task created', 'Executed when a project task is created', 'project', 35);
+INSERT INTO llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
+VALUES (36, 'TASK_MODIFY', 'Task modified', 'Executed when a project task is modified', 'project', 36);
+INSERT INTO llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
+VALUES (37, 'TASK_DELETE', 'Task deleted', 'Executed when a project task is deleted', 'project', 37);
 
 -- New : category translation
 create table llx_categorie_lang

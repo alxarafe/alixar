@@ -1,4 +1,5 @@
--- Copyright (C) 2021-2022 Laurent Destailleur  <eldy@users.sourceforge.net>
+-- Copyright (C) 2021-2022  Laurent Destailleur         <eldy@users.sourceforge.net>
+-- Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
 --
 -- This program is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -12,7 +13,6 @@
 --
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see https://www.gnu.org/licenses/.
-
 
 CREATE TABLE llx_eventorganization_conferenceorboothattendee
 (
@@ -36,24 +36,9 @@ CREATE TABLE llx_eventorganization_conferenceorboothattendee
     fk_user_creat     integer,
     fk_user_modif     integer,
     last_main_doc     varchar(255),
-    ip                varchar(250), -
-    -
-    ip
-    used
-    to
-    create
-    record
-(
-    for
-    public
-    submission
-    page
-)
-    import_key varchar
-(
-    14
-),
-    model_pdf varchar(255),
-    status smallint NOT NULL
+    ip         varchar(250), -- ip used to create record (for public submission page)
+    import_key varchar(14),
+    model_pdf  varchar(255),
+    status     smallint NOT NULL
     -- END MODULEBUILDER FIELDS
-) ENGINE=innodb;
+) ENGINE = innodb;

@@ -343,25 +343,25 @@ VALUES ('VE-V', 23209, '', 0, 'VE-V', 'Zulia', 1);
 INSERT INTO llx_c_departements (code_departement, fk_region, cheflieu, tncc, ncc, nom, active)
 VALUES ('VE-S', 23209, '', 0, 'VE-S', 'Táchira', 1);
 -- Currency Venezuela
-insert into llx_c_currencies (code, code_iso, active, label)
+INSERT INTO llx_c_currencies (code, code_iso, active, label)
 VALUES ('VE', 'VEF', 1, 'Venezuelan Bolívar');
 
 -- VENEZUELA (id country=232)
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
-values (2321, 232, '0', '0', 'No VAT', 1);
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
-values (2322, 232, '12', '0', 'VAT 12%', 1);
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
-values (2323, 232, '8', '0', 'VAT 8%', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
+VALUES (2321, 232, '0', '0', 'No VAT', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
+VALUES (2322, 232, '12', '0', 'VAT 12%', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
+VALUES (2323, 232, '8', '0', 'VAT 8%', 1);
 
 update llx_cotisation
 set fk_bank = null
 where fk_bank not in (select rowid from llx_bank);
 
-insert into llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
-values (12, 'Cotisation foncière des entreprises', 0, 1, 'TAXCFE', '1');
-insert into llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
-values (13, 'Cotisation sur la valeur ajoutée des entreprises', 0, 1, 'TAXCVAE', '1');
+INSERT INTO llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
+VALUES (12, 'Cotisation foncière des entreprises', 0, 1, 'TAXCFE', '1');
+INSERT INTO llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
+VALUES (13, 'Cotisation sur la valeur ajoutée des entreprises', 0, 1, 'TAXCVAE', '1');
 
 ALTER TABLE llx_paiement
     ADD COLUMN entity integer DEFAULT 1 NOT NULL AFTER rowid;

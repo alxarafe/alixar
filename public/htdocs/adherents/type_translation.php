@@ -289,7 +289,7 @@ if ($action == 'create' && $user->hasRight('adherent', 'configurer')) {
 
     print '<table class="border centpercent">';
     print '<tr><td class="tdtop titlefieldcreate fieldrequired">' . $langs->trans('Language') . '</td><td>';
-    print $formadmin->select_language('', 'forcelangprod', 0, $object->multilangs, 1);
+    print FormAdmin::selectLanguage('', 'forcelangprod', 0, $object->multilangs, 1);
     print '</td></tr>';
     print '<tr><td class="tdtop fieldrequired">' . $langs->trans('Label') . '</td><td><input name="libelle" class="minwidth300" value="' . dol_escape_htmltag(GETPOST("libelle", 'alphanohtml')) . '"></td></tr>';
     print '<tr><td class="tdtop">' . $langs->trans('Description') . '</td><td>';

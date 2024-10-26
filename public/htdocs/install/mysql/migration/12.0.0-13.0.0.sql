@@ -71,12 +71,12 @@ ALTER TABLE llx_mrp_mo_extrafields
 
 
 -- For v13
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
-values (111, 11, '0', '0', 'No Sales Tax', 1);
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
-values (112, 11, '4', '0', 'Sales Tax 4%', 1);
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
-values (113, 11, '6', '0', 'Sales Tax 6%', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
+VALUES (111, 11, '0', '0', 'No Sales Tax', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
+VALUES (112, 11, '4', '0', 'Sales Tax 4%', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
+VALUES (113, 11, '6', '0', 'Sales Tax 6%', 1);
 
 ALTER TABLE llx_bom_bom
     ADD COLUMN bomtype integer DEFAULT 0;
@@ -379,14 +379,14 @@ create table llx_c_prospectcontactlevel
     active    smallint DEFAULT 1 NOT NULL,
     module    varchar(32)        NULL
 ) ENGINE=innodb;
-insert into llx_c_prospectcontactlevel (code, label, sortorder)
-values ('PL_NONE', 'None', 1);
-insert into llx_c_prospectcontactlevel (code, label, sortorder)
-values ('PL_LOW', 'Low', 2);
-insert into llx_c_prospectcontactlevel (code, label, sortorder)
-values ('PL_MEDIUM', 'Medium', 3);
-insert into llx_c_prospectcontactlevel (code, label, sortorder)
-values ('PL_HIGH', 'High', 4);
+INSERT INTO llx_c_prospectcontactlevel (code, label, sortorder)
+VALUES ('PL_NONE', 'None', 1);
+INSERT INTO llx_c_prospectcontactlevel (code, label, sortorder)
+VALUES ('PL_LOW', 'Low', 2);
+INSERT INTO llx_c_prospectcontactlevel (code, label, sortorder)
+VALUES ('PL_MEDIUM', 'Medium', 3);
+INSERT INTO llx_c_prospectcontactlevel (code, label, sortorder)
+VALUES ('PL_HIGH', 'High', 4);
 
 create table llx_c_stcommcontact
 (
@@ -399,16 +399,16 @@ create table llx_c_stcommcontact
 ALTER TABLE llx_c_stcommcontact
     ADD UNIQUE INDEX uk_c_stcommcontact (code);
 
-insert into llx_c_stcommcontact (id, code, libelle)
-values (-1, 'ST_NO', 'Do not contact');
-insert into llx_c_stcommcontact (id, code, libelle)
-values (0, 'ST_NEVER', 'Never contacted');
-insert into llx_c_stcommcontact (id, code, libelle)
-values (1, 'ST_TODO', 'To contact');
-insert into llx_c_stcommcontact (id, code, libelle)
-values (2, 'ST_PEND', 'Contact in progress');
-insert into llx_c_stcommcontact (id, code, libelle)
-values (3, 'ST_DONE', 'Contacted');
+INSERT INTO llx_c_stcommcontact (id, code, libelle)
+VALUES (-1, 'ST_NO', 'Do not contact');
+INSERT INTO llx_c_stcommcontact (id, code, libelle)
+VALUES (0, 'ST_NEVER', 'Never contacted');
+INSERT INTO llx_c_stcommcontact (id, code, libelle)
+VALUES (1, 'ST_TODO', 'To contact');
+INSERT INTO llx_c_stcommcontact (id, code, libelle)
+VALUES (2, 'ST_PEND', 'Contact in progress');
+INSERT INTO llx_c_stcommcontact (id, code, libelle)
+VALUES (3, 'ST_DONE', 'Contacted');
 
 ALTER TABLE llx_socpeople
     ADD COLUMN fk_prospectcontactlevel varchar(12) AFTER priv;
@@ -447,13 +447,13 @@ ALTER TABLE llx_actioncomm
 ALTER TABLE llx_paiement
     ADD pos_change DOUBLE(24, 8) DEFAULT 0 AFTER fk_export_compta;
 
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('CONTACT_CREATE', 'Contact address created', 'Executed when a contact is created', 'contact', 50);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('CONTACT_SENTBYMAIL', 'Mails sent from third party card',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('CONTACT_CREATE', 'Contact address created', 'Executed when a contact is created', 'contact', 50);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('CONTACT_SENTBYMAIL', 'Mails sent from third party card',
         'Executed when you send email from contact adress card', 'contact', 51);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('CONTACT_DELETE', 'Contact address deleted', 'Executed when a contact is deleted', 'contact', 52);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('CONTACT_DELETE', 'Contact address deleted', 'Executed when a contact is deleted', 'contact', 52);
 
 ALTER TABLE llx_opensurvey_sondage CHANGE COLUMN tms tms timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
 ALTER TABLE llx_ecm_directories CHANGE COLUMN date_m tms timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
@@ -469,26 +469,26 @@ VALUES (0, 'recruitment', 'recruitmentcandidature_send', '', 0, null, null, '(An
 ALTER TABLE llx_c_action_trigger
     MODIFY COLUMN code varchar(64) NOT NULL;
 
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('RECRUITMENTJOBPOSITION_CREATE', 'Job created', 'Executed when a job is created', 'recruitment', 7500);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('RECRUITMENTJOBPOSITION_MODIFY', 'Job modified', 'Executed when a job is modified', 'recruitment', 7502);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('RECRUITMENTJOBPOSITION_SENTBYMAIL', 'Mails sent from job record',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('RECRUITMENTJOBPOSITION_CREATE', 'Job created', 'Executed when a job is created', 'recruitment', 7500);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('RECRUITMENTJOBPOSITION_MODIFY', 'Job modified', 'Executed when a job is modified', 'recruitment', 7502);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('RECRUITMENTJOBPOSITION_SENTBYMAIL', 'Mails sent from job record',
         'Executed when you send email from job record', 'recruitment', 7504);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('RECRUITMENTJOBPOSITION_DELETE', 'Job deleted', 'Executed when a job is deleted', 'recruitment', 7506);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('RECRUITMENTCANDIDATURE_CREATE', 'Candidature created', 'Executed when a candidature is created', 'recruitment',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('RECRUITMENTJOBPOSITION_DELETE', 'Job deleted', 'Executed when a job is deleted', 'recruitment', 7506);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('RECRUITMENTCANDIDATURE_CREATE', 'Candidature created', 'Executed when a candidature is created', 'recruitment',
         7510);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('RECRUITMENTCANDIDATURE_MODIFY', 'Candidature modified', 'Executed when a candidature is modified',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('RECRUITMENTCANDIDATURE_MODIFY', 'Candidature modified', 'Executed when a candidature is modified',
         'recruitment', 7512);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('RECRUITMENTCANDIDATURE_SENTBYMAIL', 'Mails sent from candidature record',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('RECRUITMENTCANDIDATURE_SENTBYMAIL', 'Mails sent from candidature record',
         'Executed when you send email from candidature record', 'recruitment', 7514);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('RECRUITMENTCANDIDATURE_DELETE', 'Candidature deleted', 'Executed when a candidature is deleted', 'recruitment',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('RECRUITMENTCANDIDATURE_DELETE', 'Candidature deleted', 'Executed when a candidature is deleted', 'recruitment',
         7516);
 
 ALTER TABLE llx_actioncomm_reminder
@@ -813,20 +813,20 @@ where code = 'EXPENSE_REPORT_PAYED';
 UPDATE llx_c_action_trigger
 SET code = 'EXPENSE_REPORT_DELETE'
 where code = 'EXPENSE_DELETE';
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('EXPENSE_REPORT_CREATE', 'Expense report created', 'Executed when an expense report is created',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('EXPENSE_REPORT_CREATE', 'Expense report created', 'Executed when an expense report is created',
         'expensereport', 201);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('EXPENSE_REPORT_VALIDATE', 'Expense report validated', 'Executed when an expense report is validated',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('EXPENSE_REPORT_VALIDATE', 'Expense report validated', 'Executed when an expense report is validated',
         'expensereport', 202);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('EXPENSE_REPORT_APPROVE', 'Expense report approved', 'Executed when an expense report is approved',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('EXPENSE_REPORT_APPROVE', 'Expense report approved', 'Executed when an expense report is approved',
         'expensereport', 203);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('EXPENSE_REPORT_PAID', 'Expense report billed', 'Executed when an expense report is set as billed',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('EXPENSE_REPORT_PAID', 'Expense report billed', 'Executed when an expense report is set as billed',
         'expensereport', 204);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('EXPENSE_REPORT_DELETE', 'Expense report deleted', 'Executed when an expense report is deleted',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('EXPENSE_REPORT_DELETE', 'Expense report deleted', 'Executed when an expense report is deleted',
         'expensereport', 205);
 
 -- Removed no more used function
@@ -837,8 +837,8 @@ values ('EXPENSE_REPORT_DELETE', 'Expense report deleted', 'Executed when an exp
 -- VPGSQL8.2 CREATE TRIGGER update_customer_modtime BEFORE UPDATE ON llx_ecm_files FOR EACH ROW EXECUTE PROCEDURE update_modified_column_tms();
 
 
-insert into llx_c_actioncomm (id, code, type, libelle, module, active, position)
-values (6, 'AC_EMAIL_IN', 'system', 'reception Email', NULL, 1, 4);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, active, position)
+VALUES (6, 'AC_EMAIL_IN', 'system', 'reception Email', NULL, 1, 4);
 
 
 -- VMYSQL4.3 ALTER TABLE llx_accounting_bookkeeping MODIFY COLUMN montant double(24,8) NULL;

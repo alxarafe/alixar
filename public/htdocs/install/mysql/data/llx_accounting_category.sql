@@ -16,7 +16,6 @@
 --
 --
 
-
 -- Group of accounting accounts for report. This is a minimal default setup.
 INSERT INTO llx_c_accounting_category (rowid, code, label, range_account, sens, category_type, formula, position,
                                        fk_country, active)

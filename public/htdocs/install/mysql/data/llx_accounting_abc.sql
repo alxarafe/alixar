@@ -13,7 +13,7 @@
 -- Copyright (C) 2023      Santiago Payà        <santiagopim@gmail.com>
 --
 --
---------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------
 -- License
 -- #######
 -- This program is free software; you can redistribute it and/or modify
@@ -29,7 +29,7 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program. If not, see <https://www.gnu.org/licenses/>.
 --
---------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------
 
 -- Comment
 -- #######
@@ -41,9 +41,9 @@
 -- Ne pas placer de commentaire en fin de ligne, ce fichier est parsé lors
 -- de l'install et tous les sigles '--' sont supprimés.
 --
---------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------
 -- PCG = Plan Comptable Général (FR) - General Accounting Plan (EN)
---------------------------------------------------------------------------------------
+-- ------------------------------------------------------------------------------------
 
 
 -- Accounting Journals 
@@ -165,7 +165,7 @@ INSERT INTO llx_accounting_system (fk_country, pcg_version, label, active)
 VALUES (102, 'Ε.Λ.Π.', 'Ελληνικά Λογιστικά Πρότυπα', 1);
 
 
---DELETE FROM llx_accounting_system WHERE pcg_version = 'SYSCOHADA';
+-- DELETE FROM llx_accounting_system WHERE pcg_version = 'SYSCOHADA';
 
 -- Plans SYSCOAHA Western Africa -- sorted alphabetical by countries abbreviations
 

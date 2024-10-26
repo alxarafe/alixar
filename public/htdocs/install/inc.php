@@ -1,15 +1,16 @@
 <?php
 
-/* Copyright (C) 2004       Rodolphe Quiedeville    <rodolphe@quiedeville.org>
- * Copyright (C) 2004       Benoit Mortier          <benoit.mortier@opensides.be>
- * Copyright (C) 2004       Sebastien DiCintio      <sdicintio@ressource-toi.org>
- * Copyright (C) 2007-2012  Laurent Destailleur     <eldy@users.sourceforge.net>
- * Copyright (C) 2012       Marcos García           <marcosgdf@gmail.com>
- * Copyright (C) 2016       Raphaël Doursenaud      <rdoursenaud@gpcsolutions.fr>
- * Copyright (C) 2021       Charlene Benke      	<charlene@patas-monkey.com>
- * Copyright (C) 2023       Alexandre Janniaux      <alexandre.janniaux@gmail.com>
+/* Copyright (C) 2004       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+ * Copyright (C) 2004       Benoit Mortier              <benoit.mortier@opensides.be>
+ * Copyright (C) 2004       Sebastien DiCintio          <sdicintio@ressource-toi.org>
+ * Copyright (C) 2007-2012  Laurent Destailleur         <eldy@users.sourceforge.net>
+ * Copyright (C) 2012       Marcos García               <marcosgdf@gmail.com>
+ * Copyright (C) 2016       Raphaël Doursenaud          <rdoursenaud@gpcsolutions.fr>
+ * Copyright (C) 2021       Charlene Benke      	    <charlene@patas-monkey.com>
+ * Copyright (C) 2023       Alexandre Janniaux          <alexandre.janniaux@gmail.com>
  * Copyright (C) 2024		MDW							<mdeweerd@users.noreply.github.com>
-*
+ * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or

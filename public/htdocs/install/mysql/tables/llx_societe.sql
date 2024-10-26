@@ -1,11 +1,12 @@
 -- ========================================================================
--- Copyright (C) 2000-2004 Rodolphe Quiedeville <rodolphe@quiedeville.org>
--- Copyright (C) 2004-2017 Laurent Destailleur  <eldy@users.sourceforge.net>
--- Copyright (C) 2005-2010 Regis Houssin        <regis.houssin@inodbox.com>
--- Copyright (C) 2010      Juanjo Menent        <dolibarr@2byte.es>
--- Copyright (C) 2014      Teddy Andreotti      <125155@supinfo.com>
--- Copyright (C) 2015      Marcos García        <marcosgdf@gmail.com>
--- Copyright (C) 2023      Alexandre Spangaro   <aspangaro@open-dsi.fr>
+-- Copyright (C) 2000-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+-- Copyright (C) 2004-2017  Laurent Destailleur         <eldy@users.sourceforge.net>
+-- Copyright (C) 2005-2010  Regis Houssin               <regis.houssin@inodbox.com>
+-- Copyright (C) 2010       Juanjo Menent               <dolibarr@2byte.es>
+-- Copyright (C) 2014       Teddy Andreotti             <125155@supinfo.com>
+-- Copyright (C) 2015       Marcos García               <marcosgdf@gmail.com>
+-- Copyright (C) 2023       Alexandre Spangaro          <aspangaro@open-dsi.fr>
+-- Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
 --
 -- This program is free software; you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -129,21 +130,7 @@ create table llx_societe
     fk_multicurrency          integer,
     multicurrency_code        varchar(3),
 
-    ip                        varchar(250), -
-    -
-    ip
-    used
-    to
-    create
-    record
-(
-    for
-    public
-    submission
-    page
-)
-    import_key varchar
-(
-    14
-) -- import key
-)ENGINE=innodb;
+    ip         varchar(250),                                                                       -- ip used to create record (for public submission page)
+
+    import_key varchar(14)                                                                         -- import key
+) ENGINE = innodb;

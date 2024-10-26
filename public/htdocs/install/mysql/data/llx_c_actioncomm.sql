@@ -39,33 +39,45 @@ from llx_c_actioncomm
 where id in (1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 30, 31, 40, 50);
 
 -- Code kept for backward compatibility < 3.3 
---insert into llx_c_actioncomm (id, code, libelle, type, module, active, position) values (  3, 'AC_PROP',    'Send commercial proposal by email', 'systemauto', 'propal', 0, 10);
---insert into llx_c_actioncomm (id, code, libelle, type, module, active, position) values (  8, 'AC_COM',     'Send customer order by email',      'systemauto', 'order', 0, 8);
---insert into llx_c_actioncomm (id, code, libelle, type, module, active, position) values (  9, 'AC_FAC',     'Send customer invoice by email',    'systemauto', 'invoice', 0, 6);
---insert into llx_c_actioncomm (id, code, libelle, type, module, active, position) values ( 10, 'AC_SHIP',    'Send shipping by email',            'systemauto', 'shipping', 0, 11);
---insert into llx_c_actioncomm (id, code, libelle, type, module, active, position) values ( 30, 'AC_SUP_ORD', 'Send supplier order by email',      'systemauto', 'order_supplier', 0, 9);
---insert into llx_c_actioncomm (id, code, libelle, type, module, active, position) values ( 31, 'AC_SUP_INV', 'Send supplier invoice by email',    'systemauto', 'invoice_supplier', 0, 7);
+--
+INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
+VALUES (3, 'AC_PROP', 'Send commercial proposal by email', 'systemauto', 'propal', 0, 10);
+--
+INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
+VALUES (8, 'AC_COM', 'Send customer order by email', 'systemauto', 'order', 0, 8);
+--
+INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
+VALUES (9, 'AC_FAC', 'Send customer invoice by email', 'systemauto', 'invoice', 0, 6);
+--
+INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
+VALUES (10, 'AC_SHIP', 'Send shipping by email', 'systemauto', 'shipping', 0, 11);
+--
+INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
+VALUES (30, 'AC_SUP_ORD', 'Send supplier order by email', 'systemauto', 'order_supplier', 0, 9);
+--
+INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
+VALUES (31, 'AC_SUP_INV', 'Send supplier invoice by email', 'systemauto', 'invoice_supplier', 0, 7);
 
 -- Code used from 3.3+ when type of event is used
-insert into llx_c_actioncomm (id, code, libelle, type, module, active, position)
-values (1, 'AC_TEL', 'Phone call', 'system', NULL, 1, 2);
-insert into llx_c_actioncomm (id, code, libelle, type, module, active, position)
-values (2, 'AC_FAX', 'Send Fax', 'system', NULL, 0, 3);
-insert into llx_c_actioncomm (id, code, libelle, type, module, active, position)
-values (4, 'AC_EMAIL', 'Send Email', 'system', NULL, 0, 4);
-insert into llx_c_actioncomm (id, code, libelle, type, module, active, position)
-values (5, 'AC_RDV', 'Rendez-vous', 'system', NULL, 1, 1);
-insert into llx_c_actioncomm (id, code, libelle, type, module, active, position)
-values (6, 'AC_EMAIL_IN', 'Reception Email', 'system', NULL, 0, 4);
-insert into llx_c_actioncomm (id, code, libelle, type, module, active, position)
-values (11, 'AC_INT', 'Intervention on site', 'system', NULL, 1, 4);
+INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
+VALUES (1, 'AC_TEL', 'Phone call', 'system', NULL, 1, 2);
+INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
+VALUES (2, 'AC_FAX', 'Send Fax', 'system', NULL, 0, 3);
+INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
+VALUES (4, 'AC_EMAIL', 'Send Email', 'system', NULL, 0, 4);
+INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
+VALUES (5, 'AC_RDV', 'Rendez-vous', 'system', NULL, 1, 1);
+INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
+VALUES (6, 'AC_EMAIL_IN', 'Reception Email', 'system', NULL, 0, 4);
+INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
+VALUES (11, 'AC_INT', 'Intervention on site', 'system', NULL, 1, 4);
 
 -- Code used from 3.3+ when type of event is not used
 
-insert into llx_c_actioncomm (id, code, libelle, type, module, active, position)
-values (40, 'AC_OTH_AUTO', 'Other (automatically inserted events)', 'systemauto', NULL, 1, 20);
-insert into llx_c_actioncomm (id, code, libelle, type, module, active, position)
-values (50, 'AC_OTH', 'Other (manually inserted events)', 'system', NULL, 1, 5);
+INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
+VALUES (40, 'AC_OTH_AUTO', 'Other (automatically inserted events)', 'systemauto', NULL, 1, 20);
+INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
+VALUES (50, 'AC_OTH', 'Other (manually inserted events)', 'system', NULL, 1, 5);
 
 INSERT INTO llx_c_actioncomm (id, code, libelle, type, module, active, position)
 VALUES (60, 'AC_EO_ONLINECONF', 'Online/Virtual conference', 'module', 'conference@eventorganization', 1, 60);

@@ -333,7 +333,7 @@ if ($action == 'add' && ($user->hasRight('produit', 'creer') || $user->hasRight(
 
     print '<table class="border centpercent">';
     print '<tr><td class="titlefield fieldrequired">' . $langs->trans('Translation') . '</td><td>';
-    print $formadmin->select_language(GETPOST('forcelangprod', 'alpha'), 'forcelangprod', 0, $object->multilangs);
+    print FormAdmin::selectLanguage(GETPOST('forcelangprod', 'alpha'), 'forcelangprod', 0, $object->multilangs);
     print '</td></tr>';
     print '<tr><td class="fieldrequired">' . $langs->trans('Label') . '</td>';
     print '<td><input name="libelle" class="minwidth200 maxwidth300" value="' . GETPOST('libelle', 'alpha') . '"></td></tr>';

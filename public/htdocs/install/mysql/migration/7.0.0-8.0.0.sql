@@ -215,14 +215,14 @@ CREATE TABLE llx_societe_remise_supplier
     remise_supplier double(6, 3) DEFAULT 0 NOT NULL, -- discount
     note            text
 )ENGINE=innodb;
-insert into llx_c_type_container (code, label, module, active)
-values ('page', 'Page', 'system', 1);
-insert into llx_c_type_container (code, label, module, active)
-values ('banner', 'Banner', 'system', 1);
-insert into llx_c_type_container (code, label, module, active)
-values ('blogpost', 'BlogPost', 'system', 1);
-insert into llx_c_type_container (code, label, module, active)
-values ('other', 'Other', 'system', 1);
+INSERT INTO llx_c_type_container (code, label, module, active)
+VALUES ('page', 'Page', 'system', 1);
+INSERT INTO llx_c_type_container (code, label, module, active)
+VALUES ('banner', 'Banner', 'system', 1);
+INSERT INTO llx_c_type_container (code, label, module, active)
+VALUES ('blogpost', 'BlogPost', 'system', 1);
+INSERT INTO llx_c_type_container (code, label, module, active)
+VALUES ('other', 'Other', 'system', 1);
 
 -- For supplier product buy price in multicurency
 ALTER TABLE llx_product_fournisseur_price
@@ -709,8 +709,8 @@ ALTER TABLE llx_stock_mouvement
     ADD COLUMN model_pdf VARCHAR(255) AFTER origintype;
 
 
-insert into llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom, active)
-values (118, 11801, '', 0, 'Indonesia', 1);
+INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom, active)
+VALUES (118, 11801, '', 0, 'Indonesia', 1);
 
 INSERT INTO llx_c_departements (code_departement, fk_region, cheflieu, tncc, ncc, nom, active)
 VALUES ('BA', 11801, NULL, 0, 'BA', 'Bali', 1);

@@ -32,12 +32,12 @@
 -- Type fees
 --
 
-insert into llx_c_type_fees (code, label, active)
-values ('TF_OTHER', 'Other', 1);
-insert into llx_c_type_fees (code, label, active)
-values ('TF_TRIP', 'Transportation', 1);
-insert into llx_c_type_fees (code, label, active)
-values ('TF_LUNCH', 'Lunch', 1);
+INSERT INTO llx_c_type_fees (code, label, active)
+VALUES ('TF_OTHER', 'Other', 1);
+INSERT INTO llx_c_type_fees (code, label, active)
+VALUES ('TF_TRIP', 'Transportation', 1);
+INSERT INTO llx_c_type_fees (code, label, active)
+VALUES ('TF_LUNCH', 'Lunch', 1);
 
 
 INSERT INTO llx_c_type_fees (code, label, active)

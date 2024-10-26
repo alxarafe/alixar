@@ -135,8 +135,8 @@ WHERE ref IS NULL;
 
 ALTER TABLE llx_c_email_senderprofile MODIFY COLUMN active tinyint DEFAULT 1 NOT NULL;
 
-insert into llx_c_type_container (code, label, module, active)
-values ('menu', 'Menu', 'system', 1);
+INSERT INTO llx_c_type_container (code, label, module, active)
+VALUES ('menu', 'Menu', 'system', 1);
 
 INSERT INTO llx_c_ticket_type (code, pos, label, active, use_default, description)
 VALUES ('HELP', '15', 'Request for functionnal help', 1, 0, NULL);
@@ -209,8 +209,8 @@ ALTER TABLE llx_societe_rib
 ALTER TABLE llx_societe
     ADD COLUMN logo_squarred varchar(255);
 
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('USER_SENTBYMAIL', 'Email sent', 'Executed when an email is sent from user card', 'user', 300);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('USER_SENTBYMAIL', 'Email sent', 'Executed when an email is sent from user card', 'user', 300);
 
 create table llx_entrepot_extrafields
 (
@@ -753,28 +753,28 @@ ALTER TABLE llx_mrp_mo_extrafields
     ADD INDEX idx_fk_object (fk_object);
 
 
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('BOM_VALIDATE', 'BOM validated', 'Executed when a BOM is validated', 'bom', 650);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('BOM_UNVALIDATE', 'BOM unvalidated', 'Executed when a BOM is unvalidated', 'bom', 651);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('BOM_CLOSE', 'BOM disabled', 'Executed when a BOM is disabled', 'bom', 652);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('BOM_REOPEN', 'BOM reopen', 'Executed when a BOM is re-open', 'bom', 653);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('BOM_DELETE', 'BOM deleted', 'Executed when a BOM deleted', 'bom', 654);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('BOM_VALIDATE', 'BOM validated', 'Executed when a BOM is validated', 'bom', 650);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('BOM_UNVALIDATE', 'BOM unvalidated', 'Executed when a BOM is unvalidated', 'bom', 651);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('BOM_CLOSE', 'BOM disabled', 'Executed when a BOM is disabled', 'bom', 652);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('BOM_REOPEN', 'BOM reopen', 'Executed when a BOM is re-open', 'bom', 653);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('BOM_DELETE', 'BOM deleted', 'Executed when a BOM deleted', 'bom', 654);
 
 DELETE
 FROM llx_c_action_trigger
 where code LIKE 'MO_%';
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('MRP_MO_VALIDATE', 'MO validated', 'Executed when a MO is validated', 'bom', 660);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('MRP_MO_PRODUCED', 'MO produced', 'Executed when a MO is produced', 'bom', 661);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('MRP_MO_DELETE', 'MO deleted', 'Executed when a MO is deleted', 'bom', 662);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('MRP_MO_CANCEL', 'MO canceled', 'Executed when a MO is canceled', 'bom', 663);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('MRP_MO_VALIDATE', 'MO validated', 'Executed when a MO is validated', 'bom', 660);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('MRP_MO_PRODUCED', 'MO produced', 'Executed when a MO is produced', 'bom', 661);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('MRP_MO_DELETE', 'MO deleted', 'Executed when a MO is deleted', 'bom', 662);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('MRP_MO_CANCEL', 'MO canceled', 'Executed when a MO is canceled', 'bom', 663);
 
 ALTER TABLE llx_comment
     ADD COLUMN fk_user_modif integer DEFAULT NULL;

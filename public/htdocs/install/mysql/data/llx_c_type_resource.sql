@@ -30,8 +30,8 @@
 -- Type resources
 --
 
-insert into llx_c_type_resource (code, label, active)
-values ('RES_ROOMS', 'Rooms', 1);
-insert into llx_c_type_resource (code, label, active)
-values ('RES_CARS', 'Cars', 1);
+INSERT INTO llx_c_type_resource (code, label, active)
+VALUES ('RES_ROOMS', 'Rooms', 1);
+INSERT INTO llx_c_type_resource (code, label, active)
+VALUES ('RES_CARS', 'Cars', 1);
 

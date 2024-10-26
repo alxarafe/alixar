@@ -22,8 +22,8 @@
 -- -- VMYSQL4.1 DELETE FROM llx_usergroup_user      WHERE fk_usergroup NOT IN (SELECT rowid from llx_usergroup);
 
 
-insert into llx_const (name, value, type, note, visible, entity)
-values (__ENCRYPT('MAIN_ENABLE_LOG_TO_HTML') __, __ENCRYPT('0') __, 'chaine',
+INSERT INTO llx_const (name, value, type, note, visible, entity)
+VALUES (__ENCRYPT('MAIN_ENABLE_LOG_TO_HTML') __, __ENCRYPT('0') __, 'chaine',
         'If this option is set to 1, it is possible to see log output at end of HTML sources by adding paramater logtohtml=1 on URL',
         1, 0);
 
@@ -84,10 +84,10 @@ set format = 'A'
 where format = 'A+';
 
 INSERT INTO llx_const (name, value, type, note, visible)
-values (__ENCRYPT('MAIN_DELAY_EXPENSEREPORTS_TO_PAY') __, __ENCRYPT('31') __, 'chaine',
+VALUES (__ENCRYPT('MAIN_DELAY_EXPENSEREPORTS_TO_PAY') __, __ENCRYPT('31') __, 'chaine',
         'Tolérance de retard avant alerte (en jours) sur les notes de frais impayées', 0);
 INSERT INTO llx_const (name, value, type, note, visible)
-values (__ENCRYPT('MAIN_SIZE_SHORTLISTE_LIMIT') __, __ENCRYPT('3') __, 'chaine', 'Max length for small lists (tabs)',
+VALUES (__ENCRYPT('MAIN_SIZE_SHORTLISTE_LIMIT') __, __ENCRYPT('3') __, 'chaine', 'Max length for small lists (tabs)',
         0);
 
 ALTER TABLE llx_accounting_system
@@ -549,23 +549,23 @@ ALTER TABLE llx_c_tva
 
 -- Regions Bolivia (id country=52)
 INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom, active)
-values (52, 5201, '', 0, 'Chuquisaca', 1);
+VALUES (52, 5201, '', 0, 'Chuquisaca', 1);
 INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom, active)
-values (52, 5202, '', 0, 'La Paz', 1);
+VALUES (52, 5202, '', 0, 'La Paz', 1);
 INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom, active)
-values (52, 5203, '', 0, 'Cochabamba', 1);
+VALUES (52, 5203, '', 0, 'Cochabamba', 1);
 INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom, active)
-values (52, 5204, '', 0, 'Oruro', 1);
+VALUES (52, 5204, '', 0, 'Oruro', 1);
 INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom, active)
-values (52, 5205, '', 0, 'Potosí', 1);
+VALUES (52, 5205, '', 0, 'Potosí', 1);
 INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom, active)
-values (52, 5206, '', 0, 'Tarija', 1);
+VALUES (52, 5206, '', 0, 'Tarija', 1);
 INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom, active)
-values (52, 5207, '', 0, 'Santa Cruz', 1);
+VALUES (52, 5207, '', 0, 'Santa Cruz', 1);
 INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom, active)
-values (52, 5208, '', 0, 'El Beni', 1);
+VALUES (52, 5208, '', 0, 'El Beni', 1);
 INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom, active)
-values (52, 5209, '', 0, 'Pando', 1);
+VALUES (52, 5209, '', 0, 'Pando', 1);
 
 -- Provinces Bolivia (id country=52)
 INSERT INTO llx_c_departements (code_departement, fk_region, cheflieu, tncc, ncc, nom, active)
@@ -797,7 +797,7 @@ VALUES ('112', 5209, '', 0, '', 'General Federico Román', 1);
 
 -- Regions Austria (id country=41)
 INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom, active)
-values (41, 4101, '', 0, 'Österreich', 1);
+VALUES (41, 4101, '', 0, 'Österreich', 1);
 
 -- Provinces Austria (id country=41)
 INSERT INTO llx_c_departements (fk_region, code_departement, ncc, nom, active)
@@ -853,24 +853,24 @@ INSERT INTO llx_c_forme_juridique (fk_pays, code, libelle, active)
 VALUES (41, '4114', 'e.U. - eingetragener Einzelunternehmer', 1);
 
 -- Social contributions Austria
-insert into llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
-values (4101, 'Krankenversicherung', 1, 1, 'TAXATKV', '41');
-insert into llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
-values (4102, 'Unfallversicherung', 1, 1, 'TAXATUV', '41');
-insert into llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
-values (4103, 'Pensionsversicherung', 1, 1, 'TAXATPV', '41');
-insert into llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
-values (4104, 'Arbeitslosenversicherung', 1, 1, 'TAXATAV', '41');
-insert into llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
-values (4105, 'Insolvenzentgeltsicherungsfond', 1, 1, 'TAXATIESG', '41');
-insert into llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
-values (4106, 'Wohnbauförderung', 1, 1, 'TAXATWF', '41');
-insert into llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
-values (4107, 'Arbeiterkammerumlage', 1, 1, 'TAXATAK', '41');
-insert into llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
-values (4108, 'Mitarbeitervorsorgekasse', 1, 1, 'TAXATMVK', '41');
-insert into llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
-values (4109, 'Familienlastenausgleichsfond', 1, 1, 'TAXATFLAF', '41');
+INSERT INTO llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
+VALUES (4101, 'Krankenversicherung', 1, 1, 'TAXATKV', '41');
+INSERT INTO llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
+VALUES (4102, 'Unfallversicherung', 1, 1, 'TAXATUV', '41');
+INSERT INTO llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
+VALUES (4103, 'Pensionsversicherung', 1, 1, 'TAXATPV', '41');
+INSERT INTO llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
+VALUES (4104, 'Arbeitslosenversicherung', 1, 1, 'TAXATAV', '41');
+INSERT INTO llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
+VALUES (4105, 'Insolvenzentgeltsicherungsfond', 1, 1, 'TAXATIESG', '41');
+INSERT INTO llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
+VALUES (4106, 'Wohnbauförderung', 1, 1, 'TAXATWF', '41');
+INSERT INTO llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
+VALUES (4107, 'Arbeiterkammerumlage', 1, 1, 'TAXATAK', '41');
+INSERT INTO llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
+VALUES (4108, 'Mitarbeitervorsorgekasse', 1, 1, 'TAXATMVK', '41');
+INSERT INTO llx_c_chargesociales (id, libelle, deductible, active, code, fk_pays)
+VALUES (4109, 'Familienlastenausgleichsfond', 1, 1, 'TAXATFLAF', '41');
 
 ALTER TABLE llx_accounting_bookkeeping
     MODIFY COLUMN doc_ref varchar(300) NOT NULL;

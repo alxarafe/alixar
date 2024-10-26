@@ -297,9 +297,9 @@ ALTER TABLE llx_fichinter_rec
 CREATE TABLE llx_product_thirdparty
 (
     rowid                               integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
-    fk_product                          integer  NOT NULL,
-    fk_soc                              integer  NOT NULL,
-    fk_product_thirdparty_relation_type integer  NOT NULL,
+    fk_product                          integer NOT NULL,
+    fk_soc                              integer NOT NULL,
+    fk_product_thirdparty_relation_type integer NOT NULL,
     date_start                          datetime,
     date_end                            datetime,
     fk_project                          integer,
@@ -308,7 +308,7 @@ CREATE TABLE llx_product_thirdparty
     note_private                        text,
     date_creation                       datetime NOT NULL,
     tms                                 timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_user_creat                       integer  NOT NULL,
+    fk_user_creat                       integer NOT NULL,
     fk_user_modif                       integer,
     last_main_doc                       varchar(255),
     import_key                          varchar(14),
@@ -496,7 +496,7 @@ WHERE code = 'BILLREC_AUTOCREATEBILL';
 -- VMYSQL4.3 ALTER TABLE llx_societe_contacts ADD CONSTRAINT fk_societe_contacts_fk_c_type_contact FOREIGN KEY (fk_c_type_contact)  REFERENCES llx_c_type_contact(rowid);
 
 INSERT INTO llx_c_type_contact (element, source, code, libelle, active)
-values ('thirdparty', 'internal', 'SALESREPTHIRD', 'Sales Representative', 1);
+VALUES ('thirdparty', 'internal', 'SALESREPTHIRD', 'Sales Representative', 1);
 
 
 DELETE
@@ -560,29 +560,29 @@ ALTER TABLE llx_socpeople
     ADD COLUMN url varchar(255);
 
 -- knowledge management module
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_CREATE', 'Knowledge article created', 'Executed when a article is created',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('KNOWLEDGERECORD_CREATE', 'Knowledge article created', 'Executed when a article is created',
         'knowledgemanagement', 57001);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_MODIFY', 'Knowledge article modified', 'Executed when a article is modified',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('KNOWLEDGERECORD_MODIFY', 'Knowledge article modified', 'Executed when a article is modified',
         'knowledgemanagement', 57002);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_VALIDATE', 'Knowledge article Evaluation validated',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('KNOWLEDGERECORD_VALIDATE', 'Knowledge article Evaluation validated',
         'Executed when an evaluation is validated', 'knowledgemanagement', 57004);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_REOPEN', 'Knowledge article reopen', 'Executed when an evaluation is back to draft',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('KNOWLEDGERECORD_REOPEN', 'Knowledge article reopen', 'Executed when an evaluation is back to draft',
         'knowledgemanagement', 57004);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_UNVALIDATE', 'Knowledge article invalidated', 'Executed when an evaluation is back to draft',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('KNOWLEDGERECORD_UNVALIDATE', 'Knowledge article invalidated', 'Executed when an evaluation is back to draft',
         'knowledgemanagement', 57004);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_CANCEL', 'Knowledge article cancel', 'Executed when an evaluation to cancel',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('KNOWLEDGERECORD_CANCEL', 'Knowledge article cancel', 'Executed when an evaluation to cancel',
         'knowledgemanagement', 57004);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_SENTBYMAIL', 'Mails sent from article file', 'article when you send email from article file',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('KNOWLEDGERECORD_SENTBYMAIL', 'Mails sent from article file', 'article when you send email from article file',
         'knowledgemanagement', 57004);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('KNOWLEDGERECORD_DELETE', 'Knowledge article deleted', 'Executed when a article is deleted',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('KNOWLEDGERECORD_DELETE', 'Knowledge article deleted', 'Executed when a article is deleted',
         'knowledgemanagement', 57006);
 
 -- table chargesociales indexes
@@ -614,13 +614,13 @@ ALTER TABLE llx_element_categorie
     ADD INDEX idx_element_categorie_fk_categorie (fk_categorie);
 
 INSERT INTO llx_c_revenuestamp(rowid, fk_pays, taux, revenuestamp_type, note, active)
-values (1021, 102, 1.2, 'percent', 'Συντελεστής 1,2 %', 1);
+VALUES (1021, 102, 1.2, 'percent', 'Συντελεστής 1,2 %', 1);
 INSERT INTO llx_c_revenuestamp(rowid, fk_pays, taux, revenuestamp_type, note, active)
-values (1022, 102, 2.4, 'percent', 'Συντελεστής 2,4 %', 1);
+VALUES (1022, 102, 2.4, 'percent', 'Συντελεστής 2,4 %', 1);
 INSERT INTO llx_c_revenuestamp(rowid, fk_pays, taux, revenuestamp_type, note, active)
-values (1023, 102, 3.6, 'percent', 'Συντελεστής 3,6 %', 1);
+VALUES (1023, 102, 3.6, 'percent', 'Συντελεστής 3,6 %', 1);
 INSERT INTO llx_c_revenuestamp(rowid, fk_pays, taux, revenuestamp_type, note, active)
-values (1024, 102, 1.0, 'fixed', 'Λοιπές περιπτώσεις Χαρτοσήμου', 1);
+VALUES (1024, 102, 1.0, 'fixed', 'Λοιπές περιπτώσεις Χαρτοσήμου', 1);
 
 ALTER TABLE llx_hrm_evaluation
     ADD COLUMN entity INTEGER DEFAULT 1 NOT NULL;

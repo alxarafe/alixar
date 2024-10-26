@@ -93,38 +93,38 @@ ALTER TABLE llx_salary_extrafields
 
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailAskConf)', 10, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailAskConf)', 10, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationEmailAskConf)__',
         '__(Hello)__,<br /><br />__(OrganizationEventConfRequestWasReceived)__<br /><br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailAskBooth)', 20, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailAskBooth)', 20, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationEmailAskBooth)__',
         '__(Hello)__,<br /><br />__(OrganizationEventBoothRequestWasReceived)__<br /><br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 -- TODO Add message for registration only to event  __ONLINE_PAYMENT_TEXT_AND_URL__
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailBoothPayment)', 30, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailBoothPayment)', 30, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationEmailBoothPayment)__',
         '__(Hello)__,<br /><br />__(OrganizationEventPaymentOfBoothWasReceived)__<br /><br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailRegistrationPayment)', 40, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailRegistrationPayment)', 40, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationEmailRegistrationPayment)__',
         '__(Hello)__,<br /><br />__(OrganizationEventPaymentOfRegistrationWasReceived)__<br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationMassEmailAttendees)', 50, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationMassEmailAttendees)', 50, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationMassEmailAttendees)__',
         '__(Hello)__,<br /><br />__(OrganizationEventBulkMailToAttendees)__<br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationMassEmailSpeakers)', 60, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationMassEmailSpeakers)', 60, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationMassEmailSpeakers)__',
         '__(Hello)__,<br /><br />__(OrganizationEventBulkMailToSpeakers)__<br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
@@ -260,7 +260,7 @@ WHERE type = 'top'
   AND mainmenu = 'cashdesk';
 
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('MEMBER_EXCLUDE', 'Member excluded', 'Executed when a member is excluded', 'member', 27);
+VALUES ('MEMBER_EXCLUDE', 'Member excluded', 'Executed when a member is excluded', 'member', 27);
 
 CREATE TABLE llx_categorie_knowledgemanagement
 (
@@ -364,14 +364,14 @@ ALTER TABLE llx_hrm_evaluation_extrafields
 CREATE TABLE llx_hrm_evaluationdet
 (
     -- BEGIN MODULEBUILDER FIELDS
-    rowid      integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    rowid     integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
     date_creation datetime NOT NULL,
-    tms        timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    tms       timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     fk_user_creat integer NOT NULL,
     fk_user_modif integer,
-    fk_skill   integer                            NOT NULL,
+    fk_skill  integer                            NOT NULL,
     fk_evaluation integer NOT NULL,
-    rankorder  integer                            NOT NULL,
+    rankorder integer                            NOT NULL,
     required_rank integer NOT NULL,
     import_key varchar(14)
 ) ENGINE=innodb;
@@ -434,16 +434,16 @@ ALTER TABLE llx_hrm_job_extrafields
 
 CREATE TABLE llx_hrm_job_user
 (
-    rowid       integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    rowid      integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
     -- ref varchar(128) NOT NULL,
     description text,
     date_creation datetime NOT NULL,
-    tms         timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    fk_contrat  integer,
-    fk_user     integer,
-    fk_job      integer                            NOT NULL,
-    date_start  date,
-    date_end    date,
+    tms        timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    fk_contrat integer,
+    fk_user    integer,
+    fk_job     integer                            NOT NULL,
+    date_start date,
+    date_end   date,
     abort_comment varchar(255),
     note_public text,
     note_private text,
@@ -498,11 +498,11 @@ ALTER TABLE llx_hrm_skill_extrafields
 
 CREATE TABLE llx_hrm_skilldet
 (
-    rowid     integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    rowid    integer AUTO_INCREMENT PRIMARY KEY NOT NULL,
     description text,
     fk_user_creat integer NOT NULL,
     fk_user_modif integer,
-    fk_skill  integer                            NOT NULL,
+    fk_skill integer                            NOT NULL,
     rankorder integer
 ) ENGINE=innodb;
 
@@ -598,15 +598,15 @@ ALTER TABLE llx_socpeople DROP COLUMN youtube;
 ALTER TABLE llx_socpeople DROP COLUMN whatsapp;
 
 INSERT INTO llx_c_paiement (id, code, libelle, type, active)
-values (100, 'KLA', 'Klarna', 1, 0);
+VALUES (100, 'KLA', 'Klarna', 1, 0);
 INSERT INTO llx_c_paiement (id, code, libelle, type, active)
-values (101, 'SOF', 'Sofort', 1, 0);
+VALUES (101, 'SOF', 'Sofort', 1, 0);
 INSERT INTO llx_c_paiement (id, code, libelle, type, active)
-values (102, 'BAN', 'Bancontact', 1, 0);
+VALUES (102, 'BAN', 'Bancontact', 1, 0);
 INSERT INTO llx_c_paiement (id, code, libelle, type, active)
-values (103, 'IDE', 'iDeal', 1, 0);
+VALUES (103, 'IDE', 'iDeal', 1, 0);
 INSERT INTO llx_c_paiement (id, code, libelle, type, active)
-values (104, 'GIR', 'Giropay', 1, 0);
+VALUES (104, 'GIR', 'Giropay', 1, 0);
 
 ALTER TABLE llx_paiement_facture
     ADD COLUMN multicurrency_code varchar(3);
@@ -699,28 +699,28 @@ WHERE perms = 'writeall_advance'
 
 
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('USER_CREATE', 'User created', 'Executed when a user is created', 'user', 301);
+VALUES ('USER_CREATE', 'User created', 'Executed when a user is created', 'user', 301);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('USER_MODIFY', 'User update', 'Executed when a user is updated', 'user', 302);
+VALUES ('USER_MODIFY', 'User update', 'Executed when a user is updated', 'user', 302);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('USER_DELETE', 'User update', 'Executed when a user is deleted', 'user', 303);
+VALUES ('USER_DELETE', 'User update', 'Executed when a user is deleted', 'user', 303);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('USER_NEW_PASSWORD', 'User update', 'Executed when a user is change password', 'user', 304);
+VALUES ('USER_NEW_PASSWORD', 'User update', 'Executed when a user is change password', 'user', 304);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('USER_ENABLEDISABLE', 'User update', 'Executed when a user is enable or disable', 'user', 305);
+VALUES ('USER_ENABLEDISABLE', 'User update', 'Executed when a user is enable or disable', 'user', 305);
 
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('HOLIDAY_CREATE', 'Holiday created', 'Executed when a holiday is created', 'holiday', 800);
+VALUES ('HOLIDAY_CREATE', 'Holiday created', 'Executed when a holiday is created', 'holiday', 800);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('HOLIDAY_MODIFY', 'Holiday modified', 'Executed when a holiday is modified', 'holiday', 801);
+VALUES ('HOLIDAY_MODIFY', 'Holiday modified', 'Executed when a holiday is modified', 'holiday', 801);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('HOLIDAY_VALIDATE', 'Holiday validated', 'Executed when a holiday is validated', 'holiday', 802);
+VALUES ('HOLIDAY_VALIDATE', 'Holiday validated', 'Executed when a holiday is validated', 'holiday', 802);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('HOLIDAY_APPROVE', 'Holiday aprouved', 'Executed when a holiday is aprouved', 'holiday', 803);
+VALUES ('HOLIDAY_APPROVE', 'Holiday aprouved', 'Executed when a holiday is aprouved', 'holiday', 803);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('HOLIDAY_CANCEL', 'Holiday canceled', 'Executed when a holiday is canceled', 'holiday', 802);
+VALUES ('HOLIDAY_CANCEL', 'Holiday canceled', 'Executed when a holiday is canceled', 'holiday', 802);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('HOLIDAY_DELETE', 'Holiday deleted', 'Executed when a holiday is deleted', 'holiday', 804);
+VALUES ('HOLIDAY_DELETE', 'Holiday deleted', 'Executed when a holiday is deleted', 'holiday', 804);
 
 
 -- We do not delete old mexican legal forms because they may have been used. User will have to insert the new one manually not inserted because of conflict if he need them.

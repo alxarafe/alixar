@@ -50,10 +50,10 @@ ALTER TABLE llx_opensurvey_sondage
 ALTER TABLE llx_expedition
     ADD COLUMN billed smallint DEFAULT 0;
 
-insert into llx_c_type_contact(rowid, element, source, code, libelle, active)
-values (150, 'dolresource', 'internal', 'USERINCHARGE', 'In charge of resource', 1);
-insert into llx_c_type_contact(rowid, element, source, code, libelle, active)
-values (151, 'dolresource', 'external', 'THIRDINCHARGE', 'In charge of resource', 1);
+INSERT INTO llx_c_type_contact(rowid, element, source, code, libelle, active)
+VALUES (150, 'dolresource', 'internal', 'USERINCHARGE', 'In charge of resource', 1);
+INSERT INTO llx_c_type_contact(rowid, element, source, code, libelle, active)
+VALUES (151, 'dolresource', 'external', 'THIRDINCHARGE', 'In charge of resource', 1);
 
 DELETE
 FROM llx_user_param
@@ -182,8 +182,8 @@ ALTER TABLE llx_chargesociales
 ALTER TABLE llx_tva
     ADD COLUMN import_key varchar(14);
 
---DROP TABLE llx_website_page;
---DROP TABLE llx_website;
+-- DROP TABLE llx_website_page;
+-- DROP TABLE llx_website;
 CREATE TABLE llx_website
 (
     rowid           integer AUTO_INCREMENT NOT NULL PRIMARY KEY,
@@ -656,21 +656,21 @@ ALTER TABLE llx_societe_rib
 update llx_c_action_trigger
 set rang = 140
 where code = 'PROJECT_CREATE';
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('PROJECT_MODIFY', 'Project modified', 'Executed when a project is modified', 'project', 141);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('PROJECT_DELETE', 'Project deleted', 'Executed when a project is deleted', 'project', 142);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('ORDER_SUPPLIER_CREATE', 'Supplier order validated', 'Executed when a supplier order is validated',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('PROJECT_MODIFY', 'Project modified', 'Executed when a project is modified', 'project', 141);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('PROJECT_DELETE', 'Project deleted', 'Executed when a project is deleted', 'project', 142);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('ORDER_SUPPLIER_CREATE', 'Supplier order validated', 'Executed when a supplier order is validated',
         'order_supplier', 11);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('ORDER_SUPPLIER_SUBMIT', 'Supplier order request submited', 'Executed when a supplier order is approved',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('ORDER_SUPPLIER_SUBMIT', 'Supplier order request submited', 'Executed when a supplier order is approved',
         'order_supplier', 12);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('ORDER_SUPPLIER_RECEIVE', 'Supplier order request received', 'Executed when a supplier order is received',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('ORDER_SUPPLIER_RECEIVE', 'Supplier order request received', 'Executed when a supplier order is received',
         'order_supplier', 12);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('ORDER_SUPPLIER_CLASSIFY_BILLED', 'Supplier order set billed',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('ORDER_SUPPLIER_CLASSIFY_BILLED', 'Supplier order set billed',
         'Executed when a supplier order is set as billed', 'order_supplier', 14);
 
 ALTER TABLE llx_product_fournisseur_price
@@ -788,9 +788,9 @@ where code = 'WON';
 
 CREATE TABLE llx_oauth_token
 (
-    rowid  integer AUTO_INCREMENT PRIMARY KEY,
+    rowid integer AUTO_INCREMENT PRIMARY KEY,
     service varchar(36),
-    token  text,
+    token text,
     fk_user integer,
     fk_adherent integer,
     entity integer DEFAULT 1
@@ -798,9 +798,9 @@ CREATE TABLE llx_oauth_token
 
 CREATE TABLE llx_oauth_state
 (
-    rowid  integer AUTO_INCREMENT PRIMARY KEY,
+    rowid integer AUTO_INCREMENT PRIMARY KEY,
     service varchar(36),
-    state  varchar(128),
+    state varchar(128),
     fk_user integer,
     fk_adherent integer,
     entity integer DEFAuLT 1
@@ -814,12 +814,12 @@ ALTER TABLE llx_product_batch
     ADD UNIQUE INDEX uk_product_batch (fk_product_stock, batch);
 
 -- Panama datas
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
-values (1781, 178, '7', '0', 'ITBMS standard rate', 1);
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
-values (1782, 178, '0', '0', 'ITBMS Rate 0', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
+VALUES (1781, 178, '7', '0', 'ITBMS standard rate', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
+VALUES (1782, 178, '0', '0', 'ITBMS Rate 0', 1);
 INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom, active)
-values (178, 17801, '', 0, 'Panama', 1);
+VALUES (178, 17801, '', 0, 'Panama', 1);
 INSERT INTO llx_c_departements (code_departement, fk_region, cheflieu, tncc, ncc, nom, active)
 VALUES ('PA-1', 17801, '', 0, '', 'Bocas del Toro', 1);
 INSERT INTO llx_c_departements (code_departement, fk_region, cheflieu, tncc, ncc, nom, active)

@@ -1,9 +1,10 @@
 -- =============================================================================
--- Copyright (C) 2000-2004  Rodolphe Quiedeville    <rodolphe@quiedeville.org>
--- Copyright (C) 2005-2009  Regis Houssin           <regis.houssin@inodbox.com>
--- Copyright (C) 2012       Juanjo Menent           <jmenent@2byte.es>
--- Copyright (C) 2013       Peter Fontaine          <contact@peterfontaine.fr>
--- Copyright (C) 2023       Alexandre Spangaro      <aspangaro@easya.solutions>
+-- Copyright (C) 2000-2004  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+-- Copyright (C) 2005-2009  Regis Houssin               <regis.houssin@inodbox.com>
+-- Copyright (C) 2012       Juanjo Menent               <jmenent@2byte.es>
+-- Copyright (C) 2013       Peter Fontaine              <contact@peterfontaine.fr>
+-- Copyright (C) 2023       Alexandre Spangaro          <aspangaro@easya.solutions>
+-- Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
 --
 -- This program is free software; you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -72,30 +73,23 @@ create table llx_societe_rib
     max_total_amount_of_all_payments double(24, 8),
     preapproval_key                  varchar(255),
     starting_date                    date,
-    total_amount_of_all_payments     double(24, 8), -
-    -
-    For
-    Stripe,
-    Stancer, ..
-    .
-    stripe_card_ref
-    varchar
-(
-    128
-), -- card_...'
-    stripe_account varchar(128), -- 'pk_live_...'
+    total_amount_of_all_payments double(24, 8),
 
-    ext_payment_site varchar(128), -- name of external paymentmode (for example 'StripeLive')
+    -- For Stripe, Stancer, ...
+    stripe_card_ref              varchar(128),                                 -- card_...'
+    stripe_account               varchar(128),                                 -- 'pk_live_...'
 
-    extraparams varchar(255), -- for other parameters with json format
+    ext_payment_site             varchar(128),                                 -- name of external paymentmode (for example 'StripeLive')
+
+    extraparams                  varchar(255),                                 -- for other parameters with json format
 
 -- For Online Sign
-    date_signature datetime,
-    online_sign_ip varchar(48),
-    online_sign_name varchar(64),
+    date_signature               datetime,
+    online_sign_ip               varchar(48),
+    online_sign_name             varchar(64),
 
-    comment varchar(255),
-    ipaddress varchar(68),
-    status integer NOT NULL DEFAULT 1, -- 1=ACTIVE, 0=IN_TRASH
-    import_key varchar(14) -- import key
-)ENGINE=innodb;
+    comment                      varchar(255),
+    ipaddress                    varchar(68),
+    status                       integer NOT NULL DEFAULT 1,                   -- 1=ACTIVE, 0=IN_TRASH
+    import_key                   varchar(14)                                   -- import key
+) ENGINE = innodb;

@@ -681,12 +681,12 @@ VALUES (1142, 114, '12', '0', 'ISV 12%', 1);
 INSERT INTO llx_c_currencies (code, code_iso, active, label)
 VALUES ('MX', 'MXP', 1, 'Pesos Mexicanos');
 -- VAT MEXIQUE
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
-values (1541, 154, '0', '0', 'No VAT', 1);
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
-values (1542, 154, '16', '0', 'VAT 16%', 1);
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
-values (1543, 154, '10', '0', 'VAT Frontero', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
+VALUES (1541, 154, '0', '0', 'No VAT', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
+VALUES (1542, 154, '16', '0', 'VAT 16%', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
+VALUES (1543, 154, '10', '0', 'VAT Frontero', 1);
 
 
 -- Add Barbados data (id pays=46)
@@ -846,25 +846,25 @@ ALTER TABLE llx_societe_prices MODIFY tms timestamp DEFAULT CURRENT_TIMESTAMP ON
 -- ALTER TABLE llx_societe_prices ALTER COLUMN tms DROP NOT NULL;
 
 -- Fix: It seems this is missing for some users
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (1, 'AC_TEL', 'system', 'Phone call', NULL, 2);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (2, 'AC_FAX', 'system', 'Send Fax', NULL, 3);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (3, 'AC_PROP', 'system', 'Send commercial proposal by email', 'propal', 10);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (4, 'AC_EMAIL', 'system', 'Send Email', NULL, 4);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (5, 'AC_RDV', 'system', 'Rendez-vous', NULL, 1);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (8, 'AC_COM', 'system', 'Send customer order by email', 'order', 8);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (9, 'AC_FAC', 'system', 'Send customer invoice by email', 'invoice', 6);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (10, 'AC_SHIP', 'system', 'Send shipping by email', 'shipping', 11);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (30, 'AC_SUP_ORD', 'system', 'Send supplier order by email', 'order_supplier', 9);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (1, 'AC_TEL', 'system', 'Phone call', NULL, 2);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (2, 'AC_FAX', 'system', 'Send Fax', NULL, 3);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (3, 'AC_PROP', 'system', 'Send commercial proposal by email', 'propal', 10);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (4, 'AC_EMAIL', 'system', 'Send Email', NULL, 4);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (5, 'AC_RDV', 'system', 'Rendez-vous', NULL, 1);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (8, 'AC_COM', 'system', 'Send customer order by email', 'order', 8);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (9, 'AC_FAC', 'system', 'Send customer invoice by email', 'invoice', 6);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (10, 'AC_SHIP', 'system', 'Send shipping by email', 'shipping', 11);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (30, 'AC_SUP_ORD', 'system', 'Send supplier order by email', 'order_supplier', 9);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
 values (31, 'AC_SUP_INV', 'system', 'Send supplier invoice by email', 'invoice_supplier', 7);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (50, 'AC_OTH', 'system', 'Other', NULL, 5);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (50, 'AC_OTH', 'system', 'Other', NULL, 5);

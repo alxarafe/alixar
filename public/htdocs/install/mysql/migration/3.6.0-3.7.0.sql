@@ -21,32 +21,36 @@
 INSERT INTO llx_c_forme_juridique (fk_pays, code, libelle, active)
 VALUES (1, '60', 'Entreprise Individuelle à Responsabilité Limitée (EIRL)', 1);
 
---insert into llx_c_action_trigger (code,label,description,elementtype,rang) values ('FICHINTER_MODIFY','Intervention modified','Executed when a intervention is modified','ficheinter',19);
---insert into llx_c_action_trigger (code,label,description,elementtype,rang) values ('FICHINTER_DELETE','Intervention delete','Executed when a intervention is delete','ficheinter',19);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('FICHINTER_CLASSIFY_BILLED', 'Intervention set billed',
+--
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('FICHINTER_MODIFY', 'Intervention modified', 'Executed when a intervention is modified', 'ficheinter', 19);
+--
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('FICHINTER_DELETE', 'Intervention delete', 'Executed when a intervention is delete', 'ficheinter', 19);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('FICHINTER_CLASSIFY_BILLED', 'Intervention set billed',
         'Executed when a intervention is set to billed (when option FICHINTER_CLASSIFY_BILLED is set)', 'ficheinter',
         19);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('FICHINTER_CLASSIFY_UNBILLED', 'Intervention set unbilled',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('FICHINTER_CLASSIFY_UNBILLED', 'Intervention set unbilled',
         'Executed when a intervention is set to unbilled (when option FICHINTER_CLASSIFY_BILLED is set)', 'ficheinter',
         19);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('FICHINTER_SENTBYMAIL', 'Intervention sent by mail', 'Executed when a intervention is sent by mail',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('FICHINTER_SENTBYMAIL', 'Intervention sent by mail', 'Executed when a intervention is sent by mail',
         'ficheinter', 19);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('FICHINTER_REOPEN', 'Intervention opened', 'Executed when a intervention is re-opened', 'ficheinter', 19);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('PROPAL_CLASSIFY_BILLED', 'Customer proposal set billed', 'Executed when a customer proposal is set to billed',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('FICHINTER_REOPEN', 'Intervention opened', 'Executed when a intervention is re-opened', 'ficheinter', 19);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('PROPAL_CLASSIFY_BILLED', 'Customer proposal set billed', 'Executed when a customer proposal is set to billed',
         'propal', 2);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('ORDER_CLOSE', 'Customer order classify delivered', 'Executed when a customer order is set delivered',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('ORDER_CLOSE', 'Customer order classify delivered', 'Executed when a customer order is set delivered',
         'commande', 5);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('ORDER_CLASSIFY_BILLED', 'Customer order classify billed', 'Executed when a customer order is set to billed',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('ORDER_CLASSIFY_BILLED', 'Customer order classify billed', 'Executed when a customer order is set to billed',
         'commande', 5);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('ORDER_CANCEL', 'Customer order canceled', 'Executed when a customer order is canceled', 'commande', 5);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('ORDER_CANCEL', 'Customer order canceled', 'Executed when a customer order is canceled', 'commande', 5);
 
 -- VPGSQL8.2 ALTER TABLE llx_contrat ALTER COLUMN fk_commercial_signature DROP NOT NULL;
 -- VPGSQL8.2 ALTER TABLE llx_contrat ALTER COLUMN fk_commercial_suivi DROP NOT NULL;
@@ -91,7 +95,7 @@ ALTER TABLE llx_c_typent
     ADD COLUMN fk_country integer NULL AFTER libelle;
 
 INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, active, position)
-values (11, 'AC_INT', 'system', 'Intervention on site', NULL, 1, 4);
+VALUES (11, 'AC_INT', 'system', 'Intervention on site', NULL, 1, 4);
 
 ALTER TABLE llx_user
     ADD COLUMN fk_user_creat integer AFTER tms;
@@ -3461,12 +3465,12 @@ ALTER TABLE llx_extrafields
     ADD COLUMN list integer DEFAULT 0 after perms;
 
 -- IVORY COST (id country=21)
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, localtax1, localtax1_type, localtax2, localtax2_type, note,
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, localtax1, localtax1_type, localtax2, localtax2_type, note,
                       active)
-values (211, 21, '0', '0', 0, 0, 0, 0, 'IVA Rate 0', 1);
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, localtax1, localtax1_type, localtax2, localtax2_type, note,
+VALUES (211, 21, '0', '0', 0, 0, 0, 0, 'IVA Rate 0', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, localtax1, localtax1_type, localtax2, localtax2_type, note,
                       active)
-values (212, 21, '18', '0', 7.5, 2, 0, 0, 'IVA standard rate', 1);
+VALUES (212, 21, '18', '0', 7.5, 2, 0, 0, 'IVA standard rate', 1);
 
 ALTER TABLE llx_livraison MODIFY COLUMN date_delivery DATETIME NULL DEFAULT NULL;
 

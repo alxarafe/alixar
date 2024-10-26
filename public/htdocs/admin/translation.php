@@ -369,7 +369,7 @@ if ($mode == 'overwrite') {
     print "\n";
 
     print '<tr class="oddeven"><td>';
-    print $formadmin->select_language(GETPOST('langcode'), 'langcode', 0, null, 1, 0, $disablededit ? 1 : 0, 'maxwidth250', 1);
+    print FormAdmin::selectLanguage(GETPOST('langcode'), 'langcode', 0, null, 1, 0, $disablededit ? 1 : 0, 'maxwidth250', 1);
     print '</td>' . "\n";
     print '<td>';
     print '<input type="text" class="flat maxwidthonsmartphone"' . $disablededit . ' name="transkey" id="transkey" value="' . (!empty($transkey) ? $transkey : "") . '">';
@@ -514,8 +514,8 @@ if ($mode == 'searchkey') {
     print '<table class="noborder centpercent">';
 
     print '<tr class="liste_titre_filter"><td>';
-    //print $formadmin->select_language($langcode,'langcode',0,null,$langs->trans("All"),0,0,'',1);
-    print $formadmin->select_language($langcode, 'langcode', 0, null, 0, 0, 0, 'maxwidth250', 1);
+    //print FormAdmin::selectLanguage($langcode,'langcode',0,null,$langs->trans("All"),0,0,'',1);
+    print FormAdmin::selectLanguage($langcode, 'langcode', 0, null, 0, 0, 0, 'maxwidth250', 1);
     print '</td>' . "\n";
     print '<td>';
     print '<input type="text" class="flat maxwidthonsmartphone" name="transkey" value="' . dol_escape_htmltag($transkey) . '">';

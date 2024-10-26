@@ -54,7 +54,6 @@ $langs->setDefaultLang($setuplang);
 
 $langs->loadLangs(array("admin", "install"));
 
-
 // Choice of DBMS
 
 $choix = 0;
@@ -134,7 +133,6 @@ if ($action == "set") {
             $ok = 0;
         }
     }
-
 
     // Display version / Affiche version
     if ($ok) {
@@ -263,7 +261,6 @@ if ($action == "set") {
         }
     }
 
-
     /***************************************************************************************
      *
      * Load files tables/*.key.sql. Files with '-xxx' in name are excluded (they will be loaded during activation of module 'xxx').
@@ -391,7 +388,6 @@ if ($action == "set") {
         }
     }
 
-
     /***************************************************************************************
      *
      * Load the file 'functions.sql'
@@ -469,7 +465,6 @@ if ($action == "set") {
             }
         }
     }
-
 
     /***************************************************************************************
      *
@@ -559,8 +554,6 @@ if ($action == "set") {
                     if ($resql) {
                         //$db->free($resql);     // Not required as request we launch here does not return memory needs.
                     } else {
-                        dump([$b, $buffer]);
-
                         if ($db->lasterrno() == 'DB_ERROR_RECORD_ALREADY_EXISTS') {
                             //print "<tr><td>Insertion ligne : $buffer</td><td>";
                         } else {

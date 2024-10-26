@@ -1719,7 +1719,7 @@ if ($socid && $action != 'edit' && $action != 'create' && $action != 'editcard' 
                     if ($conf->browser->layout == 'phone') {
                         $morecss = 'maxwidth100';
                     }
-                    $out .= $formadmin->select_language($defaultlang, 'lang_idrib' . $rib->id, 0, 0, 0, 0, 0, $morecss);
+                    $out .= FormAdmin::selectLanguage($defaultlang, 'lang_idrib' . $rib->id, 0, 0, 0, 0, 0, $morecss);
                 }
                 // Button
                 $out .= '<input class="button buttongen reposition nomargintop nomarginbottom" id="' . $forname . '_generatebutton" name="' . $forname . '_generatebutton"';

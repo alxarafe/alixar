@@ -808,7 +808,7 @@ class FormFile
                 if ($conf->browser->layout == 'phone') {
                     $morecss = 'maxwidth100';
                 }
-                $out .= $formadmin->select_language($defaultlang, 'lang_id', 0, null, 0, 0, 0, $morecss);
+                $out .= FormAdmin::selectLanguage($defaultlang, 'lang_id', 0, null, 0, 0, 0, $morecss);
             } else {
                 $out .= '&nbsp;';
             }

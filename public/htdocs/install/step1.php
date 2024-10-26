@@ -156,9 +156,7 @@ if (@file_exists($forcedfile)) {
     }
 }
 
-
 $error = 0;
-
 
 /*
  *	View
@@ -174,7 +172,6 @@ if (!is_writable($conffile)) {
     pFooter(1, $setuplang, 'jscheckparam');
     exit;
 }
-
 
 // Check parameters
 $is_sqlite = false;
@@ -353,6 +350,7 @@ if (!$error && $db->connected) {
         $defaultDBSortingCollation = $db->getDefaultCollationDatabase();
     }
 
+    /*
     // It seems some PHP driver mysqli does not support utf8mb3
     if ($defaultCharacterSet == 'utf8mb3' || $defaultDBSortingCollation == 'utf8mb3_unicode_ci') {
         $defaultCharacterSet = 'utf8';
@@ -364,6 +362,7 @@ if (!$error && $db->connected) {
         $defaultCharacterSet = 'utf8';
         $defaultDBSortingCollation = 'utf8_unicode_ci';
     }
+    */
 
     print '<input type="hidden" name="dolibarr_main_db_character_set" value="' . $defaultCharacterSet . '">';
     print '<input type="hidden" name="dolibarr_main_db_collation" value="' . $defaultDBSortingCollation . '">';

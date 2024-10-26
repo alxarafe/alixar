@@ -202,7 +202,7 @@ ALTER TABLE llx_facturedet
 ALTER TABLE llx_facturedet
     ADD COLUMN fk_prev_id integer;
 
--- Convert SMTP config to main entity, so new entities don't get the old VALUES
+-- Convert SMTP config to main entity, so new entities don't get the old values
 UPDATE llx_const
 SET entity = __ENCRYPT('1') __
 WHERE __DECRYPT('entity') __ = 0 AND __DECRYPT('name') __ = 'MAIN_MAIL_SENDMODE';

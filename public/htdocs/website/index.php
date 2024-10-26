@@ -3356,7 +3356,7 @@ if (!GETPOST('hide_websitemenu')) {
                 $formquestion = array(
                     array('type' => 'checkbox', 'name' => 'delete_also_js', 'label' => $langs->trans("DeleteAlsoJs"), 'value' => 0),
                     array('type' => 'checkbox', 'name' => 'delete_also_medias', 'label' => $langs->trans("DeleteAlsoMedias"), 'value' => 0),
-                    //array('type' => 'other','name' => 'newlang','label' => $langs->trans("Language"), 'value' => $formadmin->select_language(GETPOST('newlang', 'aZ09')?GETPOST('newlang', 'aZ09'):$langs->defaultlang, 'newlang', 0, null, '', 0, 0, 'minwidth200')),
+                    //array('type' => 'other','name' => 'newlang','label' => $langs->trans("Language"), 'value' => FormAdmin::selectLanguage(GETPOST('newlang', 'aZ09')?GETPOST('newlang', 'aZ09'):$langs->defaultlang, 'newlang', 0, null, '', 0, 0, 'minwidth200')),
                     //array('type' => 'other','name' => 'newwebsite','label' => $langs->trans("WebSite"), 'value' => $formwebsite->selectWebsite($object->id, 'newwebsite', 0))
                 );
 
@@ -3413,7 +3413,7 @@ if (!GETPOST('hide_websitemenu')) {
                         $formquestion[] = array('type' => 'checkbox', 'tdclass' => 'maxwidth200', 'name' => 'is_a_translation', 'label' => $langs->trans("PageIsANewTranslation"), 'value' => 0, 'morecss' => 'margintoponly');
                     }
 
-                    $value = $formadmin->select_language($preselectedlanguage, 'newlang', 0, null, $textifempty, 0, 0, 'minwidth200', 1, 0, 0, $onlylang, 1);
+                    $value = FormAdmin::selectLanguage($preselectedlanguage, 'newlang', 0, null, $textifempty, 0, 0, 'minwidth200', 1, 0, 0, $onlylang, 1);
                     $formquestion[] = array('type' => 'other', 'name' => 'newlang', 'label' => $form->textwithpicto($langs->trans("Language"), $langs->trans("DefineListOfAltLanguagesInWebsiteProperties")), 'value' => $value);
 
                     $formconfirm = $form->formconfirm($_SERVER["PHP_SELF"] . '?website=' . $object->ref . '&pageid=' . $pageid, $langs->trans('ClonePage'), '', 'confirm_createpagefromclone', $formquestion, 0, 1, 300, 550);
@@ -3906,7 +3906,7 @@ if ($action == 'editcss') {
     print $form->textwithpicto($langs->trans('MainLanguage'), $htmltext, 1, 'help', '', 0, 2, 'WEBSITE_LANG');
     print '</td><td>';
     print img_picto('', 'language', 'class="picotfixedwidth"');
-    print $formadmin->select_language((GETPOSTISSET('WEBSITE_LANG') ? GETPOST('WEBSITE_LANG', 'aZ09comma') : ($object->lang ? $object->lang : '0')), 'WEBSITE_LANG', 0, null, 1, 0, 0, 'minwidth300', 2, 0, 0, array(), 1);
+    print FormAdmin::selectLanguage((GETPOSTISSET('WEBSITE_LANG') ? GETPOST('WEBSITE_LANG', 'aZ09comma') : ($object->lang ? $object->lang : '0')), 'WEBSITE_LANG', 0, null, 1, 0, 0, 'minwidth300', 2, 0, 0, array(), 1);
     print '</td>';
     print '</tr>';
 
@@ -4117,7 +4117,7 @@ if ($action == 'createsite') {
     print '</td><td>';
     $shortlangcode = preg_replace('/[_-].*$/', '', trim($langs->defaultlang));
     print img_picto('', 'language', 'class="pictofixedwidth"');
-    print $formadmin->select_language((GETPOSTISSET('WEBSITE_LANG') ? GETPOST('WEBSITE_LANG', 'aZ09comma') : $shortlangcode), 'WEBSITE_LANG', 0, null, 1, 0, 0, 'minwidth300', 2, 0, 0, array(), 1);
+    print FormAdmin::selectLanguage((GETPOSTISSET('WEBSITE_LANG') ? GETPOST('WEBSITE_LANG', 'aZ09comma') : $shortlangcode), 'WEBSITE_LANG', 0, null, 1, 0, 0, 'minwidth300', 2, 0, 0, array(), 1);
     print '</td></tr>';
 
     print '<tr><td>';
@@ -4490,7 +4490,7 @@ if ($action == 'editmeta' || $action == 'createcontainer') {    // Edit properti
     if (empty($object->lang) && empty($object->otherlang)) {
         $onlykeys = null; // We keep full list of languages
     }
-    print img_picto('', 'language', 'class="pictofixedwidth"') . $formadmin->select_language($pagelang ? $pagelang : '', 'WEBSITE_LANG', 0, null, '1', 0, 0, 'minwidth200', 0, 0, 0, $onlykeys, 1);
+    print img_picto('', 'language', 'class="pictofixedwidth"') . FormAdmin::selectLanguage($pagelang ? $pagelang : '', 'WEBSITE_LANG', 0, null, '1', 0, 0, 'minwidth200', 0, 0, 0, $onlykeys, 1);
     $htmltext = $langs->trans("AvailableLanguagesAreDefinedIntoWebsiteProperties");
     print $form->textwithpicto('', $htmltext);
     print '</td></tr>';
@@ -4969,7 +4969,7 @@ if ($mode == 'replacesite' || $massaction == 'replace') {
     print $langs->trans("Language");
     print '</div>';
     print '<div class="tagtd">';
-    print img_picto('', 'language', 'class="paddingrightonly"') . ' ' . $formadmin->select_language(GETPOSTISSET('optionlanguage') ? GETPOST('optionlanguage') : '', 'optionlanguage', 0, null, '1', 0, 0, 'minwidth125 maxwidth400 widthcentpercentminusx', 2, 0, 0, null, 1);
+    print img_picto('', 'language', 'class="paddingrightonly"') . ' ' . FormAdmin::selectLanguage(GETPOSTISSET('optionlanguage') ? GETPOST('optionlanguage') : '', 'optionlanguage', 0, null, '1', 0, 0, 'minwidth125 maxwidth400 widthcentpercentminusx', 2, 0, 0, null, 1);
     print '</div>';
     print '</div>';
 

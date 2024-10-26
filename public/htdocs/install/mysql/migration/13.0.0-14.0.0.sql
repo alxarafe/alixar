@@ -80,8 +80,8 @@ ALTER TABLE llx_supplier_proposaldet_extrafields
 ALTER TABLE llx_asset_extrafields
     ADD INDEX idx_asset_extrafields (fk_object);
 
-insert into llx_c_actioncomm (id, code, type, libelle, module, active, position)
-values (6, 'AC_EMAIL_IN', 'system', 'reception Email', NULL, 1, 4);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, active, position)
+VALUES (6, 'AC_EMAIL_IN', 'system', 'reception Email', NULL, 1, 4);
 
 -- VMYSQL4.3 ALTER TABLE llx_accounting_bookkeeping MODIFY COLUMN montant double(24,8) NULL;
 -- VPGSQL8.2 ALTER TABLE llx_accounting_bookkeeping ALTER COLUMN montant DROP NOT NULL;
@@ -438,38 +438,38 @@ ALTER TABLE llx_tva
 -- Event organization 
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailAskConf)', 10, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailAskConf)', 10, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationEmailAskConf)__',
         '__(Hello)__,<br /><br />__(OrganizationEventConfRequestWasReceived)__<br /><br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailAskBooth)', 20, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailAskBooth)', 20, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationEmailAskBooth)__',
         '__(Hello)__,<br /><br />__(OrganizationEventBoothRequestWasReceived)__<br /><br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 -- TODO Add message for registration only to event  __ONLINE_PAYMENT_TEXT_AND_URL__
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailSubsBooth)', 30, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailSubsBooth)', 30, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationEmailBoothPayment)__',
         '__(Hello)__,<br /><br />__(OrganizationEventPaymentOfBoothWasReceived)__<br /><br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailSubsEvent)', 40, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailSubsEvent)', 40, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationEmailRegistrationPayment)__',
         '__(Hello)__,<br /><br />__(OrganizationEventPaymentOfRegistrationWasReceived)__<br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationMassEmailAttendees)', 50, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationMassEmailAttendees)', 50, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationMassEmailAttendees)__',
         '__(Hello)__,<br /><br />__(OrganizationEventBulkMailToAttendees)__<br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationMassEmailSpeakers)', 60, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationMassEmailSpeakers)', 60, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationMassEmailSpeakers)__',
         '__(Hello)__,<br /><br />__(OrganizationEventBulkMailToSpeakers)__<br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
@@ -762,12 +762,12 @@ ALTER TABLE llx_product
 ALTER TABLE llx_product
     ADD COLUMN qc_frequency INTEGER NULL;
 
-insert into llx_c_type_contact(rowid, element, source, code, libelle, active)
-values (210, 'conferenceorbooth', 'internal', 'MANAGER', 'Conference or Booth manager', 1);
-insert into llx_c_type_contact(rowid, element, source, code, libelle, active)
-values (211, 'conferenceorbooth', 'external', 'SPEAKER', 'Conference Speaker', 1);
-insert into llx_c_type_contact(rowid, element, source, code, libelle, active)
-values (212, 'conferenceorbooth', 'external', 'RESPONSIBLE', 'Booth responsible', 1);
+INSERT INTO llx_c_type_contact(rowid, element, source, code, libelle, active)
+VALUES (210, 'conferenceorbooth', 'internal', 'MANAGER', 'Conference or Booth manager', 1);
+INSERT INTO llx_c_type_contact(rowid, element, source, code, libelle, active)
+VALUES (211, 'conferenceorbooth', 'external', 'SPEAKER', 'Conference Speaker', 1);
+INSERT INTO llx_c_type_contact(rowid, element, source, code, libelle, active)
+VALUES (212, 'conferenceorbooth', 'external', 'RESPONSIBLE', 'Booth responsible', 1);
 
 
 CREATE TABLE llx_partnership

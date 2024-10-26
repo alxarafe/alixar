@@ -94,8 +94,6 @@ ALTER TABLE llx_mrp_mo_extrafields DROP INDEX idx_fk_object;
 ALTER TABLE llx_mrp_mo_extrafields
     ADD INDEX idx_mrp_mo_fk_object (fk_object);
 
-
-
 -- This var is per entity now, so we remove const if global if exists
 delete
 from llx_const
@@ -203,29 +201,27 @@ ALTER TABLE llx_ticket
 ALTER TABLE llx_ticket
     ADD INDEX idx_ticket_fk_statut (fk_statut);
 
-
---ALTER TABLE llx_facturerec DROP COLUMN vat_src_code;
-
+-- ALTER TABLE llx_facturerec DROP COLUMN vat_src_code;
 
 -- Migration to the new regions (France)
 UPDATE llx_c_regions
 set nom = 'Centre-Val de Loire'
 WHERE fk_pays = 1
   AND code_region = 24;
-insert into llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
-values (1, 27, '21231', 0, 'Bourgogne-Franche-Comté');
-insert into llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
-values (1, 28, '76540', 0, 'Normandie');
-insert into llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
-values (1, 32, '59350', 4, 'Hauts-de-France');
-insert into llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
-values (1, 44, '67482', 2, 'Grand Est');
-insert into llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
-values (1, 75, '33063', 0, 'Nouvelle-Aquitaine');
-insert into llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
-values (1, 76, '31355', 1, 'Occitanie');
-insert into llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
-values (1, 84, '69123', 1, 'Auvergne-Rhône-Alpes');
+INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
+VALUES (1, 27, '21231', 0, 'Bourgogne-Franche-Comté');
+INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
+VALUES (1, 28, '76540', 0, 'Normandie');
+INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
+VALUES (1, 32, '59350', 4, 'Hauts-de-France');
+INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
+VALUES (1, 44, '67482', 2, 'Grand Est');
+INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
+VALUES (1, 75, '33063', 0, 'Nouvelle-Aquitaine');
+INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
+VALUES (1, 76, '31355', 1, 'Occitanie');
+INSERT INTO llx_c_regions (fk_pays, code_region, cheflieu, tncc, nom)
+VALUES (1, 84, '69123', 1, 'Auvergne-Rhône-Alpes');
 
 UPDATE llx_c_departements
 set fk_region = 27
@@ -548,10 +544,10 @@ ALTER TABLE llx_prelevement_facture_demande
 ALTER TABLE llx_prelevement_facture_demande
     ADD INDEX idx_prelevement_facture_demande_fk_facture_fourn (fk_facture_fourn);
 
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
-values (721, 72, '0', '0', 'VAT Rate 0', 1);
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, localtax1, localtax1_type, note, active)
-values (722, 72, '18', '0', '0.9', '1', 'VAT Rate 18+0.9', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, note, active)
+VALUES (721, 72, '0', '0', 'VAT Rate 0', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, localtax1, localtax1_type, note, active)
+VALUES (722, 72, '18', '0', '0.9', '1', 'VAT Rate 18+0.9', 1);
 
 ALTER TABLE llx_expedition
     ADD COLUMN billed smallint DEFAULT 0;

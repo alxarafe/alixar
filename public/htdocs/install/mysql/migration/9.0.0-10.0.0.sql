@@ -79,19 +79,19 @@ ALTER TABLE llx_facture
 ALTER TABLE llx_facture
     ADD UNIQUE INDEX uk_facture_ref (ref, entity);
 
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('TICKET_CREATE', 'Ticket created', 'Executed when a ticket is created', 'ticket', 161);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('TICKET_MODIFY', 'Ticket modified', 'Executed when a ticket is modified', 'ticket', 163);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('TICKET_ASSIGNED', 'Ticket assigned', 'Executed when a ticket is assigned to another user', 'ticket', 164);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('TICKET_CLOSE', 'Ticket closed', 'Executed when a ticket is closed', 'ticket', 165);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('TICKET_SENTBYMAIL', 'Ticket message sent by email', 'Executed when a message is sent from the ticket record',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('TICKET_CREATE', 'Ticket created', 'Executed when a ticket is created', 'ticket', 161);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('TICKET_MODIFY', 'Ticket modified', 'Executed when a ticket is modified', 'ticket', 163);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('TICKET_ASSIGNED', 'Ticket assigned', 'Executed when a ticket is assigned to another user', 'ticket', 164);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('TICKET_CLOSE', 'Ticket closed', 'Executed when a ticket is closed', 'ticket', 165);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('TICKET_SENTBYMAIL', 'Ticket message sent by email', 'Executed when a message is sent from the ticket record',
         'ticket', 166);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('TICKET_DELETE', 'Ticket deleted', 'Executed when a ticket is deleted', 'ticket', 167);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('TICKET_DELETE', 'Ticket deleted', 'Executed when a ticket is deleted', 'ticket', 167);
 
 create table llx_mailing_unsubscribe
 (
@@ -569,14 +569,14 @@ ALTER TABLE llx_commande_fournisseur_dispatch
 ALTER TABLE llx_accounting_bookkeeping
     ADD COLUMN date_export datetime DEFAULT NULL after date_validated;
 
-insert into llx_c_type_contact(rowid, element, source, code, libelle, active)
-values (110, 'supplier_proposal', 'internal', 'SALESREPFOLL', 'Responsable suivi de la demande', 1);
-insert into llx_c_type_contact(rowid, element, source, code, libelle, active)
-values (111, 'supplier_proposal', 'external', 'BILLING', 'Contact fournisseur facturation', 1);
-insert into llx_c_type_contact(rowid, element, source, code, libelle, active)
-values (112, 'supplier_proposal', 'external', 'SHIPPING', 'Contact fournisseur livraison', 1);
-insert into llx_c_type_contact(rowid, element, source, code, libelle, active)
-values (113, 'supplier_proposal', 'external', 'SERVICE', 'Contact fournisseur prestation', 1);
+INSERT INTO llx_c_type_contact(rowid, element, source, code, libelle, active)
+VALUES (110, 'supplier_proposal', 'internal', 'SALESREPFOLL', 'Responsable suivi de la demande', 1);
+INSERT INTO llx_c_type_contact(rowid, element, source, code, libelle, active)
+VALUES (111, 'supplier_proposal', 'external', 'BILLING', 'Contact fournisseur facturation', 1);
+INSERT INTO llx_c_type_contact(rowid, element, source, code, libelle, active)
+VALUES (112, 'supplier_proposal', 'external', 'SHIPPING', 'Contact fournisseur livraison', 1);
+INSERT INTO llx_c_type_contact(rowid, element, source, code, libelle, active)
+VALUES (113, 'supplier_proposal', 'external', 'SERVICE', 'Contact fournisseur prestation', 1);
 
 ALTER TABLE llx_ticket_extrafields
     ADD INDEX idx_ticket_extrafields (fk_object);

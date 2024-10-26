@@ -117,14 +117,14 @@ ALTER TABLE llx_website_page
 delete
 from llx_c_action_trigger
 where code = 'MEMBER_SUBSCRIPTION';
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('MEMBER_SUBSCRIPTION_CREATE', 'Member subscribtion recorded', 'Executed when a member subscribtion is deleted',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('MEMBER_SUBSCRIPTION_CREATE', 'Member subscribtion recorded', 'Executed when a member subscribtion is deleted',
         'member', 24);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('MEMBER_SUBSCRIPTION_MODIFY', 'Member subscribtion modified', 'Executed when a member subscribtion is modified',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('MEMBER_SUBSCRIPTION_MODIFY', 'Member subscribtion modified', 'Executed when a member subscribtion is modified',
         'member', 24);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('MEMBER_SUBSCRIPTION_DELETE', 'Member subscribtion deleted', 'Executed when a member subscribtion is deleted',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('MEMBER_SUBSCRIPTION_DELETE', 'Member subscribtion deleted', 'Executed when a member subscribtion is deleted',
         'member', 24);
 
 -- VPGSQL8.4 ALTER TABLE llx_product_attribute DROP CONSTRAINT unique_ref;
@@ -173,7 +173,7 @@ ALTER TABLE llx_contratdet
     ADD COLUMN vat_src_code varchar(10) DEFAULT '';
 
 INSERT INTO llx_c_type_contact(rowid, element, source, code, libelle, active)
-values (42, 'propal', 'external', 'SHIPPING', 'Customer contact for delivery', 1);
+VALUES (42, 'propal', 'external', 'SHIPPING', 'Customer contact for delivery', 1);
 
 ALTER TABLE llx_inventory
     ADD date_validation datetime DEFAULT NULL;
@@ -216,8 +216,8 @@ ALTER TABLE llx_product_fournisseur_price
     ADD COLUMN localtax2_type varchar(10) NOT NULL DEFAULT '0';
 
 
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('MEMBER_SENTBYMAIL', 'Mails sent from member card', 'Executed when you send email from member card', 'member',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('MEMBER_SENTBYMAIL', 'Mails sent from member card', 'Executed when you send email from member card', 'member',
         23);
 
 ALTER TABLE llx_ecm_files
@@ -496,11 +496,11 @@ CREATE TABLE IF NOT EXISTS llx_c_exp_tax_cat
 
 CREATE TABLE IF NOT EXISTS llx_c_exp_tax_range
 (
-    rowid            integer AUTO_INCREMENT PRIMARY KEY,
+    rowid    integer AUTO_INCREMENT PRIMARY KEY,
     fk_c_exp_tax_cat integer DEFAULT 1 NOT NULL,
-    range_ik         double  DEFAULT 0 NOT NULL,
-    entity           integer DEFAULT 1 NOT NULL,
-    active           integer DEFAULT 1 NOT NULL
+    range_ik double  DEFAULT 0 NOT NULL,
+    entity   integer DEFAULT 1 NOT NULL,
+    active   integer DEFAULT 1 NOT NULL
 ) ENGINE = innodb;
 
 INSERT INTO llx_c_type_fees (code, label, active, accountancy_code)
@@ -528,125 +528,125 @@ VALUES ('EX_KME', 'ExpLabelKm', 1, '625100'),
        ('EX_CAM_VP', 'ExpLabelMaintenanceRepairPV', 0, '615300');
 
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (1, 4, 1, 0.41, 0);
+VALUES (1, 4, 1, 0.41, 0);
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (2, 4, 2, 0.244, 824);
+VALUES (2, 4, 2, 0.244, 824);
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (3, 4, 3, 0.286, 0);
+VALUES (3, 4, 3, 0.286, 0);
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (4, 5, 4, 0.493, 0);
+VALUES (4, 5, 4, 0.493, 0);
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (5, 5, 5, 0.277, 1082);
+VALUES (5, 5, 5, 0.277, 1082);
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (6, 5, 6, 0.332, 0);
+VALUES (6, 5, 6, 0.332, 0);
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (7, 6, 7, 0.543, 0);
+VALUES (7, 6, 7, 0.543, 0);
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (8, 6, 8, 0.305, 1180);
+VALUES (8, 6, 8, 0.305, 1180);
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (9, 6, 9, 0.364, 0);
+VALUES (9, 6, 9, 0.364, 0);
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (10, 7, 10, 0.568, 0);
+VALUES (10, 7, 10, 0.568, 0);
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (11, 7, 11, 0.32, 1244);
+VALUES (11, 7, 11, 0.32, 1244);
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (12, 7, 12, 0.382, 0);
+VALUES (12, 7, 12, 0.382, 0);
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (13, 8, 13, 0.595, 0);
+VALUES (13, 8, 13, 0.595, 0);
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (14, 8, 14, 0.337, 1288);
+VALUES (14, 8, 14, 0.337, 1288);
 INSERT INTO llx_expensereport_ik (rowid, fk_c_exp_tax_cat, fk_range, coef, ikoffset)
-values (15, 8, 15, 0.401, 0);
+VALUES (15, 8, 15, 0.401, 0);
 
 
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (1, 'ExpAutoCat', 1, 1);
+VALUES (1, 'ExpAutoCat', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (2, 'ExpCycloCat', 1, 1);
+VALUES (2, 'ExpCycloCat', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (3, 'ExpMotoCat', 1, 1);
+VALUES (3, 'ExpMotoCat', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (4, 'ExpAuto3CV', 1, 1);
+VALUES (4, 'ExpAuto3CV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (5, 'ExpAuto4CV', 1, 1);
+VALUES (5, 'ExpAuto4CV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (6, 'ExpAuto5CV', 1, 1);
+VALUES (6, 'ExpAuto5CV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (7, 'ExpAuto6CV', 1, 1);
+VALUES (7, 'ExpAuto6CV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (8, 'ExpAuto7CV', 1, 1);
+VALUES (8, 'ExpAuto7CV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (9, 'ExpAuto8CV', 1, 1);
+VALUES (9, 'ExpAuto8CV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (10, 'ExpAuto9CV', 1, 1);
+VALUES (10, 'ExpAuto9CV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (11, 'ExpAuto10CV', 1, 1);
+VALUES (11, 'ExpAuto10CV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (12, 'ExpAuto11CV', 1, 1);
+VALUES (12, 'ExpAuto11CV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (13, 'ExpAuto12CV', 1, 1);
+VALUES (13, 'ExpAuto12CV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (14, 'ExpAuto3PCV', 1, 1);
+VALUES (14, 'ExpAuto3PCV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (15, 'ExpAuto4PCV', 1, 1);
+VALUES (15, 'ExpAuto4PCV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (16, 'ExpAuto5PCV', 1, 1);
+VALUES (16, 'ExpAuto5PCV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (17, 'ExpAuto6PCV', 1, 1);
+VALUES (17, 'ExpAuto6PCV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (18, 'ExpAuto7PCV', 1, 1);
+VALUES (18, 'ExpAuto7PCV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (19, 'ExpAuto8PCV', 1, 1);
+VALUES (19, 'ExpAuto8PCV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (20, 'ExpAuto9PCV', 1, 1);
+VALUES (20, 'ExpAuto9PCV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (21, 'ExpAuto10PCV', 1, 1);
+VALUES (21, 'ExpAuto10PCV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (22, 'ExpAuto11PCV', 1, 1);
+VALUES (22, 'ExpAuto11PCV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (23, 'ExpAuto12PCV', 1, 1);
+VALUES (23, 'ExpAuto12PCV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (24, 'ExpAuto13PCV', 1, 1);
+VALUES (24, 'ExpAuto13PCV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (25, 'ExpCyclo', 1, 1);
+VALUES (25, 'ExpCyclo', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (26, 'ExpMoto12CV', 1, 1);
+VALUES (26, 'ExpMoto12CV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (27, 'ExpMoto345CV', 1, 1);
+VALUES (27, 'ExpMoto345CV', 1, 1);
 INSERT INTO llx_c_exp_tax_cat (rowid, label, entity, active)
-values (28, 'ExpMoto5PCV', 1, 1);
+VALUES (28, 'ExpMoto5PCV', 1, 1);
 
 
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (1, 4, 0, 1, 1);
+VALUES (1, 4, 0, 1, 1);
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (2, 4, 5000, 1, 1);
+VALUES (2, 4, 5000, 1, 1);
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (3, 4, 20000, 1, 1);
+VALUES (3, 4, 20000, 1, 1);
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (4, 5, 0, 1, 1);
+VALUES (4, 5, 0, 1, 1);
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (5, 5, 5000, 1, 1);
+VALUES (5, 5, 5000, 1, 1);
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (6, 5, 20000, 1, 1);
+VALUES (6, 5, 20000, 1, 1);
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (7, 6, 0, 1, 1);
+VALUES (7, 6, 0, 1, 1);
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (8, 6, 5000, 1, 1);
+VALUES (8, 6, 5000, 1, 1);
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (9, 6, 20000, 1, 1);
+VALUES (9, 6, 20000, 1, 1);
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (10, 7, 0, 1, 1);
+VALUES (10, 7, 0, 1, 1);
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (11, 7, 5000, 1, 1);
+VALUES (11, 7, 5000, 1, 1);
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (12, 7, 20000, 1, 1);
+VALUES (12, 7, 20000, 1, 1);
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (13, 8, 0, 1, 1);
+VALUES (13, 8, 0, 1, 1);
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (14, 8, 5000, 1, 1);
+VALUES (14, 8, 5000, 1, 1);
 INSERT INTO llx_c_exp_tax_range (rowid, fk_c_exp_tax_cat, range_ik, entity, active)
-values (15, 8, 20000, 1, 1);
+VALUES (15, 8, 20000, 1, 1);
 
 CREATE TABLE llx_expensereport_rules
 (
@@ -687,14 +687,14 @@ ALTER TABLE llx_extrafields
     ADD COLUMN tms timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
 
 -- We fix value of 'list' from 0 to 1 for all extrafields created before this migration
---VMYSQL4.1 UPDATE llx_extrafields SET list = 1 WHERE list = 0 AND fk_user_author IS NULL and fk_user_modif IS NULL and datec IS NULL;		
---VMYSQL4.1 UPDATE llx_extrafields SET list = 3 WHERE type = 'separate' AND list <> 3;		
---VPGSQL8.2 UPDATE llx_extrafields SET list = 1 WHERE list::integer = 0 AND fk_user_author IS NULL and fk_user_modif IS NULL and datec IS NULL;		
---VPGSQL8.2 UPDATE llx_extrafields SET list = 3 WHERE type = 'separate' AND list::integer <> 3;		
+-- VMYSQL4.1 UPDATE llx_extrafields SET list = 1 WHERE list = 0 AND fk_user_author IS NULL and fk_user_modif IS NULL and datec IS NULL;
+-- VMYSQL4.1 UPDATE llx_extrafields SET list = 3 WHERE type = 'separate' AND list <> 3;
+-- VPGSQL8.2 UPDATE llx_extrafields SET list = 1 WHERE list::integer = 0 AND fk_user_author IS NULL and fk_user_modif IS NULL and datec IS NULL;
+-- VPGSQL8.2 UPDATE llx_extrafields SET list = 3 WHERE type = 'separate' AND list::integer <> 3;
 
---VMYSQL4.1 ALTER TABLE llx_extrafields MODIFY COLUMN list integer DEFAULT 1;
---VPGSQL8.2 ALTER TABLE llx_extrafields MODIFY COLUMN list integer DEFAULT 1 USING list::integer;
---VPGSQL8.2 ALTER TABLE llx_extrafields ALTER COLUMN list SET DEFAULT 1;
+-- VMYSQL4.1 ALTER TABLE llx_extrafields MODIFY COLUMN list integer DEFAULT 1;
+-- VPGSQL8.2 ALTER TABLE llx_extrafields MODIFY COLUMN list integer DEFAULT 1 USING list::integer;
+-- VPGSQL8.2 ALTER TABLE llx_extrafields ALTER COLUMN list SET DEFAULT 1;
 
 ALTER TABLE llx_extrafields
     MODIFY COLUMN langs varchar(64);
@@ -775,20 +775,20 @@ where pcg_type = 'COMPRAS_GASTOS';
 ALTER TABLE llx_c_action_trigger
     MODIFY COLUMN elementtype varchar(24) NOT NULL;
 
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('CONTRACT_SENTBYMAIL', 'Contract sent by mail', 'Executed when a contract is sent by mail', 'contrat', 18);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('CONTRACT_SENTBYMAIL', 'Contract sent by mail', 'Executed when a contract is sent by mail', 'contrat', 18);
 
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('PROPOSAL_SUPPLIER_VALIDATE', 'Price request validated', 'Executed when a commercial proposal is validated',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('PROPOSAL_SUPPLIER_VALIDATE', 'Price request validated', 'Executed when a commercial proposal is validated',
         'proposal_supplier', 10);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('PROPOSAL_SUPPLIER_SENTBYMAIL', 'Price request sent by mail',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('PROPOSAL_SUPPLIER_SENTBYMAIL', 'Price request sent by mail',
         'Executed when a commercial proposal is sent by mail', 'proposal_supplier', 10);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('PROPOSAL_SUPPLIER_CLOSE_SIGNED', 'Price request closed signed',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('PROPOSAL_SUPPLIER_CLOSE_SIGNED', 'Price request closed signed',
         'Executed when a customer proposal is closed signed', 'proposal_supplier', 10);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('PROPOSAL_SUPPLIER_CLOSE_REFUSED', 'Price request closed refused',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('PROPOSAL_SUPPLIER_CLOSE_REFUSED', 'Price request closed refused',
         'Executed when a customer proposal is closed refused', 'proposal_supplier', 10);
 
 DROP TABLE llx_projet_task_comment;

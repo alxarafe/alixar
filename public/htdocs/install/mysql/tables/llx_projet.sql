@@ -1,6 +1,7 @@
 -- ===========================================================================
--- Copyright (C) 2002 Rodolphe Quiedeville <rodolphe@quiedeville.org>
--- Copyright (C) 2010 Regis Houssin        <regis.houssin@inodbox.com>
+-- Copyright (C) 2002       Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+-- Copyright (C) 2010       Regis Houssin               <regis.houssin@inodbox.com>
+-- Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
 --
 -- This program is free software; you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -44,10 +45,7 @@ create table llx_projet
     note_public                   text,
     email_msgid                   varchar(175),                 -- if project or lead is created by email collector, we store here MSG ID. Do not use a too large value, it generates trouble with unique index
     email_date                    datetime,                     -- if project or lead is created by email collector, we store here Date of message
-    -
-    -
-    budget_days
-    real,                                                       -- budget in days is sum of field planned_workload of tasks
+    -- budget_days     real,                       -- budget in days is sum of field planned_workload of tasks
     opp_amount                    double(24, 8),
     budget_amount                 double(24, 8),
     usage_opportunity             integer   DEFAULT 0,          -- Set to 1 if project is used to follow an opportunity
@@ -67,4 +65,4 @@ create table llx_projet
     last_main_doc                 varchar(255),                 -- relative filepath+filename of last main generated document
     import_key                    varchar(14),                  -- Import key
     extraparams                   varchar(255)                  -- to save other parameters with json format
-)ENGINE=innodb;
+) ENGINE = innodb;

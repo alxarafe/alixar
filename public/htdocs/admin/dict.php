@@ -2683,7 +2683,7 @@ function fieldList($fieldlist, $obj = null, $tabname = '', $context = '')
             print '</td>';
         } elseif ($value == 'lang') {
             print '<td>';
-            print $formadmin->select_language(getDolGlobalString('MAIN_LANG_DEFAULT'), 'lang');
+            print FormAdmin::selectLanguage(getDolGlobalString('MAIN_LANG_DEFAULT'), 'lang');
             print '</td>';
         } elseif (in_array($value, array('element', 'source'))) {   // Example: the type and source of the element (for contact types)
             $tmparray = array();

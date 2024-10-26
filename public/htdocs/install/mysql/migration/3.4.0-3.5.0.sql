@@ -35,8 +35,8 @@ set code = 'TASKCONTRIBUTOR'
 where code = 'CONTRIBUTOR'
   and element = 'project_task';
 
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, localtax1, localtax1_type, note, active)
-values (143, 14, '5', '0', '9.975', '1', 'TPS and TVQ rate', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, localtax1, localtax1_type, note, active)
+VALUES (143, 14, '5', '0', '9.975', '1', 'TPS and TVQ rate', 1);
 
 -- Fix bad migration of 3.4 that make this text instead of varchar(50)
 alter table llx_don
@@ -131,7 +131,7 @@ ALTER TABLE llx_cronjob
     ADD libname VARCHAR(255);
 
 INSERT INTO llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
-values (30, 'PROJECT_CREATE', 'Project creation', 'Executed when a project is created', 'project', 30);
+VALUES (30, 'PROJECT_CREATE', 'Project creation', 'Executed when a project is created', 'project', 30);
 
 create table llx_categorie_contact
 (
@@ -163,12 +163,12 @@ ALTER TABLE llx_categorie_contact
 ALTER TABLE llx_categorie_contact
     ADD CONSTRAINT fk_categorie_contact_fk_socpeople FOREIGN KEY (fk_socpeople) REFERENCES llx_socpeople (rowid);
 
-insert into llx_const (name, value, type, note, visible, entity)
-values ('PROJECT_TASK_ADDON_PDF', '', 'chaine', 'Name of PDF/ODT tasks manager class', 0, 1);
-insert into llx_const (name, value, type, note, visible, entity)
-values ('PROJECT_TASK_ADDON', 'mod_task_simple', 'chaine', 'Name of Numbering Rule task manager class', 0, 1);
-insert into llx_const (name, value, type, note, visible, entity)
-values ('PROJECT_TASK_ADDON_PDF_ODT_PATH', 'DOL_DATA_ROOT/doctemplates/tasks', 'chaine', '', 0, 1);
+INSERT INTO llx_const (name, value, type, note, visible, entity)
+VALUES ('PROJECT_TASK_ADDON_PDF', '', 'chaine', 'Name of PDF/ODT tasks manager class', 0, 1);
+INSERT INTO llx_const (name, value, type, note, visible, entity)
+VALUES ('PROJECT_TASK_ADDON', 'mod_task_simple', 'chaine', 'Name of Numbering Rule task manager class', 0, 1);
+INSERT INTO llx_const (name, value, type, note, visible, entity)
+VALUES ('PROJECT_TASK_ADDON_PDF_ODT_PATH', 'DOL_DATA_ROOT/doctemplates/tasks', 'chaine', '', 0, 1);
 
 ALTER TABLE llx_projet_task
     ADD COLUMN ref varchar(50) AFTER rowid;
@@ -552,7 +552,7 @@ ALTER TABLE llx_facture_fourn
 
 
 INSERT INTO llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
-values (9, 'COMPANY_SENTBYMAIL', 'Mails sent from third party card',
+VALUES (9, 'COMPANY_SENTBYMAIL', 'Mails sent from third party card',
         'Executed when you send email from third party card', 'societe', 1);
 
 

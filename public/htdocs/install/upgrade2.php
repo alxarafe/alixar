@@ -1983,7 +1983,7 @@ function migrate_modeles($db, $langs, $conf)
         $modellist = ModelePDFFactures::liste_modeles($db);
         if (count($modellist) == 0) {
             // Aucun model par default.
-            $sql = " insert into " . MAIN_DB_PREFIX . "document_model(nom,type) values('crabe','invoice')";
+            $sql = " INSERT INTO " . MAIN_DB_PREFIX . "document_model(nom,type) values('crabe','invoice')";
             $resql = $db->query($sql);
             if (!$resql) {
                 dol_print_error($db);
@@ -1995,7 +1995,7 @@ function migrate_modeles($db, $langs, $conf)
         $modellist = ModelePDFCommandes::liste_modeles($db);
         if (count($modellist) == 0) {
             // Aucun model par default.
-            $sql = " insert into " . MAIN_DB_PREFIX . "document_model(nom,type) values('einstein','order')";
+            $sql = " INSERT INTO " . MAIN_DB_PREFIX . "document_model(nom,type) values('einstein','order')";
             $resql = $db->query($sql);
             if (!$resql) {
                 dol_print_error($db);
@@ -2007,7 +2007,7 @@ function migrate_modeles($db, $langs, $conf)
         $modellist = ModelePdfExpedition::liste_modeles($db);
         if (count($modellist) == 0) {
             // Aucun model par default.
-            $sql = " insert into " . MAIN_DB_PREFIX . "document_model(nom,type) values('rouget','shipping')";
+            $sql = " INSERT INTO " . MAIN_DB_PREFIX . "document_model(nom,type) values('rouget','shipping')";
             $resql = $db->query($sql);
             if (!$resql) {
                 dol_print_error($db);

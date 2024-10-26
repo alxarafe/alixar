@@ -447,25 +447,25 @@ ALTER TABLE llx_paiementfourn
 ALTER TABLE llx_paiementfourn
     ADD COLUMN fk_user_modif integer AFTER fk_user_author;
 
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('EXPENSE_REPORT_CREATE', 'Expense report created', 'Executed when an expense report is created',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('EXPENSE_REPORT_CREATE', 'Expense report created', 'Executed when an expense report is created',
         'expensereport', 201);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('EXPENSE_REPORT_VALIDATE', 'Expense report validated', 'Executed when an expense report is validated',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('EXPENSE_REPORT_VALIDATE', 'Expense report validated', 'Executed when an expense report is validated',
         'expensereport', 202);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('EXPENSE_REPORT_APPROVE', 'Expense report approved', 'Executed when an expense report is approved',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('EXPENSE_REPORT_APPROVE', 'Expense report approved', 'Executed when an expense report is approved',
         'expensereport', 203);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('EXPENSE_REPORT_PAYED', 'Expense report billed', 'Executed when an expense report is set as billed',
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('EXPENSE_REPORT_PAYED', 'Expense report billed', 'Executed when an expense report is set as billed',
         'expensereport', 204);
 
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('HOLIDAY_CREATE', 'Leave request created', 'Executed when a leave request is created', 'holiday', 221);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('HOLIDAY_VALIDATE', 'Leave request validated', 'Executed when a leave request is validated', 'holiday', 222);
-insert into llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('HOLIDAY_APPROVE', 'Leave request approved', 'Executed when a leave request is approved', 'holiday', 223);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('HOLIDAY_CREATE', 'Leave request created', 'Executed when a leave request is created', 'holiday', 221);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('HOLIDAY_VALIDATE', 'Leave request validated', 'Executed when a leave request is validated', 'holiday', 222);
+INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
+VALUES ('HOLIDAY_APPROVE', 'Leave request approved', 'Executed when a leave request is approved', 'holiday', 223);
 
 
 ALTER TABLE llx_societe_remise_except
@@ -889,27 +889,27 @@ CREATE TABLE llx_facturedet_rec_extrafields
 ALTER TABLE llx_facturedet_rec_extrafields
     ADD INDEX idx_facturedet_rec_extrafields (fk_object);
 
-insert into llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
+INSERT INTO llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
                       note, active)
-values (1178, 117, 'C+S-5', 0, 2.5, '1', 2.5, '1', 0, 'CGST+SGST - Same state sales', 1);
-insert into llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
+VALUES (1178, 117, 'C+S-5', 0, 2.5, '1', 2.5, '1', 0, 'CGST+SGST - Same state sales', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
                       note, active)
-values (1179, 117, 'I-5', 5, 0, '0', 0, '0', 0, 'IGST', 1);
-insert into llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
+VALUES (1179, 117, 'I-5', 5, 0, '0', 0, '0', 0, 'IGST', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
                       note, active)
-values (1180, 117, 'C+S-12', 0, 6, '1', 6, '1', 0, 'CGST+SGST - Same state sales', 1);
-insert into llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
+VALUES (1180, 117, 'C+S-12', 0, 6, '1', 6, '1', 0, 'CGST+SGST - Same state sales', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
                       note, active)
-values (1181, 117, 'I-12', 12, 0, '0', 0, '0', 0, 'IGST', 1);
-insert into llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
+VALUES (1181, 117, 'I-12', 12, 0, '0', 0, '0', 0, 'IGST', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
                       note, active)
-values (1176, 117, 'C+S-18', 0, 9, '1', 9, '1', 0, 'CGST+SGST - Same state sales', 1);
-insert into llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
+VALUES (1176, 117, 'C+S-18', 0, 9, '1', 9, '1', 0, 'CGST+SGST - Same state sales', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
                       note, active)
-values (1177, 117, 'I-18', 18, 0, '0', 0, '0', 0, 'IGST', 1);
-insert into llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
+VALUES (1177, 117, 'I-18', 18, 0, '0', 0, '0', 0, 'IGST', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
                       note, active)
-values (1182, 117, 'C+S-28', 0, 14, '1', 14, '1', 0, 'CGST+SGST - Same state sales', 1);
-insert into llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
+VALUES (1182, 117, 'C+S-28', 0, 14, '1', 14, '1', 0, 'CGST+SGST - Same state sales', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, code, taux, localtax1, localtax1_type, localtax2, localtax2_type, recuperableonly,
                       note, active)
-values (1183, 117, 'I-28', 28, 0, '0', 0, '0', 0, 'IGST', 1);
+VALUES (1183, 117, 'I-28', 28, 0, '0', 0, '0', 0, 'IGST', 1);

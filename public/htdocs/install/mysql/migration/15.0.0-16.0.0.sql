@@ -71,10 +71,10 @@ ALTER TABLE llx_element_tag
     ADD COLUMN fk_categorie INTEGER;
 
 
-insert into llx_c_type_resource (code, label, active)
-values ('RES_ROOMS', 'Rooms', 1);
-insert into llx_c_type_resource (code, label, active)
-values ('RES_CARS', 'Cars', 1);
+INSERT INTO llx_c_type_resource (code, label, active)
+VALUES ('RES_ROOMS', 'Rooms', 1);
+INSERT INTO llx_c_type_resource (code, label, active)
+VALUES ('RES_CARS', 'Cars', 1);
 
 ALTER TABLE llx_c_actioncomm
     MODIFY COLUMN libelle varchar(128);
@@ -218,12 +218,12 @@ ALTER TABLE llx_societe_contacts DROP FOREIGN KEY fk_societe_contacts_fk_c_type_
 -- VPGSQL8.2 ALTER TABLE llx_c_type_contact ALTER COLUMN rowid SET DEFAULT nextval('llx_c_type_contact_rowid_seq');
 -- VPGSQL8.2 SELECT setval('llx_c_type_contact_rowid_seq', MAX(rowid)) FROM llx_c_type_contact;
 
-insert into llx_c_type_contact(element, source, code, libelle, active)
-values ('conferenceorbooth', 'internal', 'MANAGER', 'Conference or Booth manager', 1);
-insert into llx_c_type_contact(element, source, code, libelle, active)
-values ('conferenceorbooth', 'external', 'SPEAKER', 'Conference Speaker', 1);
-insert into llx_c_type_contact(element, source, code, libelle, active)
-values ('conferenceorbooth', 'external', 'RESPONSIBLE', 'Booth responsible', 1);
+INSERT INTO llx_c_type_contact(element, source, code, libelle, active)
+VALUES ('conferenceorbooth', 'internal', 'MANAGER', 'Conference or Booth manager', 1);
+INSERT INTO llx_c_type_contact(element, source, code, libelle, active)
+VALUES ('conferenceorbooth', 'external', 'SPEAKER', 'Conference Speaker', 1);
+INSERT INTO llx_c_type_contact(element, source, code, libelle, active)
+VALUES ('conferenceorbooth', 'external', 'RESPONSIBLE', 'Booth responsible', 1);
 
 ALTER TABLE llx_element_contact
     ADD CONSTRAINT fk_element_contact_fk_c_type_contact FOREIGN KEY (fk_c_type_contact) REFERENCES llx_c_type_contact (rowid);
@@ -261,34 +261,34 @@ ALTER TABLE llx_c_action_trigger
     MODIFY elementtype VARCHAR(64);
 
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('PROPAL_MODIFY', 'Customer proposal modified', 'Executed when a customer proposal is modified', 'propal', 2);
+VALUES ('PROPAL_MODIFY', 'Customer proposal modified', 'Executed when a customer proposal is modified', 'propal', 2);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('ORDER_MODIFY', 'Customer order modified', 'Executed when a customer order is set modified', 'commande', 5);
+VALUES ('ORDER_MODIFY', 'Customer order modified', 'Executed when a customer order is set modified', 'commande', 5);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('BILL_MODIFY', 'Customer invoice modified', 'Executed when a customer invoice is modified', 'facture', 7);
+VALUES ('BILL_MODIFY', 'Customer invoice modified', 'Executed when a customer invoice is modified', 'facture', 7);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('PROPOSAL_SUPPLIER_MODIFY', 'Price request modified', 'Executed when a commercial proposal is modified',
+VALUES ('PROPOSAL_SUPPLIER_MODIFY', 'Price request modified', 'Executed when a commercial proposal is modified',
         'proposal_supplier', 10);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('ORDER_SUPPLIER_MODIFY', 'Supplier order request modified', 'Executed when a supplier order is modified',
+VALUES ('ORDER_SUPPLIER_MODIFY', 'Supplier order request modified', 'Executed when a supplier order is modified',
         'order_supplier', 13);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('BILL_SUPPLIER_MODIFY', 'Supplier invoice modified', 'Executed when a supplier invoice is modified',
+VALUES ('BILL_SUPPLIER_MODIFY', 'Supplier invoice modified', 'Executed when a supplier invoice is modified',
         'invoice_supplier', 15);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('CONTRACT_MODIFY', 'Contract modified', 'Executed when a contract is modified', 'contrat', 18);
+VALUES ('CONTRACT_MODIFY', 'Contract modified', 'Executed when a contract is modified', 'contrat', 18);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('SHIPPING_MODIFY', 'Shipping modified', 'Executed when a shipping is modified', 'shipping', 20);
+VALUES ('SHIPPING_MODIFY', 'Shipping modified', 'Executed when a shipping is modified', 'shipping', 20);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('FICHINTER_MODIFY', 'Intervention modify', 'Executed when a intervention is modify', 'ficheinter', 30);
+VALUES ('FICHINTER_MODIFY', 'Intervention modify', 'Executed when a intervention is modify', 'ficheinter', 30);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('PRODUCT_MODIFY', 'Product or service modified', 'Executed when a product or sevice is modified', 'product',
+VALUES ('PRODUCT_MODIFY', 'Product or service modified', 'Executed when a product or sevice is modified', 'product',
         41);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('EXPENSE_REPORT_MODIFY', 'Expense report modified', 'Executed when an expense report is modified',
+VALUES ('EXPENSE_REPORT_MODIFY', 'Expense report modified', 'Executed when an expense report is modified',
         'expensereport', 202);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('HOLIDAY_MODIFY', 'Expense report modified', 'Executed when an expense report is modified', 'expensereport',
+VALUES ('HOLIDAY_MODIFY', 'Expense report modified', 'Executed when an expense report is modified', 'expensereport',
         212);
 
 ALTER TABLE llx_ticket
@@ -304,7 +304,7 @@ WHERE name = 'TICKET_AUTO_CREATE_FICHINTER_CREATE';
 CREATE TABLE llx_stock_mouvement_extrafields
 (
     rowid integer AUTO_INCREMENT PRIMARY KEY,
-    tms   timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    tms timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     fk_object integer NOT NULL,
     import_key varchar(14)
 )ENGINE=innodb;
@@ -910,7 +910,7 @@ ALTER TABLE llx_commande
     ADD COLUMN deposit_percent VARCHAR(63) DEFAULT NULL AFTER fk_cond_reglement;
 
 INSERT INTO llx_c_payment_term(code, sortorder, active, libelle, libelle_facture, type_cdr, nbjour, deposit_percent)
-values ('DEP30PCTDEL', 13, 0, '__DEPOSIT_PERCENT__% deposit', '__DEPOSIT_PERCENT__% deposit, remainder on delivery', 0,
+VALUES ('DEP30PCTDEL', 13, 0, '__DEPOSIT_PERCENT__% deposit', '__DEPOSIT_PERCENT__% deposit, remainder on delivery', 0,
         1, '30');
 
 
@@ -1080,39 +1080,39 @@ VALUES (0, 'recruitment', 'recruitmentcandidature_send', '', 0, null, null, '(An
 -- Event organization 
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailAskConf)', 10, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailAskConf)', 10, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationEmailAskConf)__',
         '__(Hello)__,<br /><br />__(OrganizationEventConfRequestWasReceived)__<br /><br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailAskBooth)', 20, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailAskBooth)', 20, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationEmailAskBooth)__',
         '__(Hello)__,<br /><br />__(OrganizationEventBoothRequestWasReceived)__<br /><br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 -- TODO Add message for registration only to event  __ONLINE_PAYMENT_TEXT_AND_URL__
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailBoothPayment)', 30, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailBoothPayment)', 30, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationEmailBoothPayment)__',
         '__(Hello)__,<br /><br />__(OrganizationEventPaymentOfBoothWasReceived)__<br /><br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailRegistrationPayment)', 40, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationEmailRegistrationPayment)', 40, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationEmailRegistrationPayment)__',
         '__(Hello)__,<br /><br />__(OrganizationEventPaymentOfRegistrationWasReceived)__<br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 --
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationMassEmailAttendees)', 50, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationMassEmailAttendees)', 50, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationMassEmailAttendees)__',
         '__(Hello)__,<br /><br />__(OrganizationEventBulkMailToAttendees)__<br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);
 INSERT INTO llx_c_email_templates (entity, module, type_template, lang, private, fk_user, datec, label, position,
                                    active, topic, content, content_lines, enabled, joinfiles)
-values (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationMassEmailSpeakers)', 60, 1,
+VALUES (0, '', 'conferenceorbooth', '', 0, null, null, '(EventOrganizationMassEmailSpeakers)', 60, 1,
         '[__[MAIN_INFO_SOCIETE_NOM]__] __(EventOrganizationMassEmailSpeakers)__',
         '__(Hello)__,<br /><br />__(OrganizationEventBulkMailToSpeakers)__<br /><br />__(Sincerely)__<br />__USER_SIGNATURE__',
         null, '1', null);

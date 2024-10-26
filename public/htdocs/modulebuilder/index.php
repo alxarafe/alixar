@@ -3741,7 +3741,7 @@ if ($module == 'initmodule') {
                 print '<input type="hidden" name="file" value="' . dol_escape_htmltag($file) . '">';
                 print '<input type="hidden" name="tab" value="' . $tab . '">';
                 print '<input type="hidden" name="module" value="' . $module . '">';
-                print $formadmin->select_language(getDolGlobalString('MAIN_LANG_DEFAULT'), 'newlangcode', 0, 0, 1, 0, 0, 'minwidth300', 1);
+                print FormAdmin::selectLanguage(getDolGlobalString('MAIN_LANG_DEFAULT'), 'newlangcode', 0, 0, 1, 0, 0, 'minwidth300', 1);
                 print '<input type="submit" name="addlanguage" class="button smallpaddingimp" value="' . dol_escape_htmltag($langs->trans("AddLanguageFile")) . '"><br>';
                 print '</form>';
 

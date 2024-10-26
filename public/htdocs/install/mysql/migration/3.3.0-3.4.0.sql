@@ -230,8 +230,8 @@ CREATE TABLE llx_c_revenuestamp
     accountancy_code_buy  varchar(15) DEFAULT NULL
 ) ENGINE=innodb;
 
-insert into llx_c_revenuestamp(rowid, fk_pays, taux, note, active)
-values (101, 10, '0.4', 'Timbre fiscal', 1);
+INSERT INTO llx_c_revenuestamp(rowid, fk_pays, taux, note, active)
+VALUES (101, 10, '0.4', 'Timbre fiscal', 1);
 
 ALTER TABLE llx_c_tva
     MODIFY COLUMN localtax1_type varchar(10) DEFAULT NULL;
@@ -291,7 +291,7 @@ ALTER TABLE llx_holiday
 
 -- Add new trigger on Invoice BILL_UNVALIDATE + Index 
 INSERT INTO llx_c_action_trigger (rowid, code, label, description, elementtype, rang)
-values (28, 'BILL_UNVALIDATE', 'Customer invoice unvalidated',
+VALUES (28, 'BILL_UNVALIDATE', 'Customer invoice unvalidated',
         'Executed when a customer invoice status set back to draft', 'facture', 10);
 ALTER TABLE llx_c_action_trigger
     ADD INDEX idx_action_trigger_rang (rang);
@@ -439,7 +439,7 @@ CREATE TABLE llx_opensurvey_comments
     id_comment INTEGER unsigned NOT NULL AUTO_INCREMENT PRIMARY KEY,
     id_sondage CHAR(16) NOT NULL,
     comment text NOT NULL,
-    tms     timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    tms timestamp DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     usercomment text
 ) ENGINE=InnoDB;
 
@@ -532,8 +532,8 @@ ALTER TABLE llx_fichinterdet
 ALTER TABLE llx_societe_address
     CHANGE COLUMN tel phone varchar(20);
 
-insert into llx_c_tva(rowid, fk_pays, taux, recuperableonly, localtax1, localtax1_type, note, active)
-values (143, 14, '5', '0', '9.975', '1', 'TPS and TVQ rate', 1);
+INSERT INTO llx_c_tva(rowid, fk_pays, taux, recuperableonly, localtax1, localtax1_type, note, active)
+VALUES (143, 14, '5', '0', '9.975', '1', 'TPS and TVQ rate', 1);
 
 DELETE
 FROM llx_document_model

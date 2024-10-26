@@ -463,28 +463,28 @@ WHERE nom = 'elevement'
 
 
 -- Fix: It seems this is missing for some users
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (1, 'AC_TEL', 'system', 'Phone call', NULL, 2);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (2, 'AC_FAX', 'system', 'Send Fax', NULL, 3);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (3, 'AC_PROP', 'systemauto', 'Send commercial proposal by email', 'propal', 10);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (4, 'AC_EMAIL', 'system', 'Send Email', NULL, 4);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (5, 'AC_RDV', 'system', 'Rendez-vous', NULL, 1);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (8, 'AC_COM', 'systemauto', 'Send customer order by email', 'order', 8);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (9, 'AC_FAC', 'systemauto', 'Send customer invoice by email', 'invoice', 6);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (10, 'AC_SHIP', 'systemauto', 'Send shipping by email', 'shipping', 11);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (30, 'AC_SUP_ORD', 'systemauto', 'Send supplier order by email', 'order_supplier', 9);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (1, 'AC_TEL', 'system', 'Phone call', NULL, 2);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (2, 'AC_FAX', 'system', 'Send Fax', NULL, 3);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (3, 'AC_PROP', 'systemauto', 'Send commercial proposal by email', 'propal', 10);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (4, 'AC_EMAIL', 'system', 'Send Email', NULL, 4);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (5, 'AC_RDV', 'system', 'Rendez-vous', NULL, 1);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (8, 'AC_COM', 'systemauto', 'Send customer order by email', 'order', 8);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (9, 'AC_FAC', 'systemauto', 'Send customer invoice by email', 'invoice', 6);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (10, 'AC_SHIP', 'systemauto', 'Send shipping by email', 'shipping', 11);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (30, 'AC_SUP_ORD', 'systemauto', 'Send supplier order by email', 'order_supplier', 9);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
 values (31, 'AC_SUP_INV', 'systemauto', 'Send supplier invoice by email', 'invoice_supplier', 7);
-insert into llx_c_actioncomm (id, code, type, libelle, module, position)
-values (50, 'AC_OTH', 'system', 'Other', NULL, 5);
+INSERT INTO llx_c_actioncomm (id, code, type, libelle, module, position)
+VALUES (50, 'AC_OTH', 'system', 'Other', NULL, 5);
 
 
 -- VMYSQL4.1 DELETE T1 FROM llx_boxes_def as T1, llx_boxes_def as T2 where T1.entity = T2.entity AND T1.file = T2.file AND T1.note = T2.note and T1.rowid > T2.rowid;
@@ -677,7 +677,7 @@ where code = 'WIN';
 -- To insert elements into a category
 -- Search idcategory: select rowid from llx_categorie where type=0 and ref like '%xxx%'
 -- Select all products to include: select * from llx_product where ref like '%xxx%'
--- If ok, insert: insert into llx_categorie_product(fk_categorie, fk_product) select idcategory, rowid from llx_product where ref like '%xxx%'
+-- If ok, insert: INSERT INTO llx_categorie_product(fk_categorie, fk_product) select idcategory, rowid from llx_product where ref like '%xxx%'
 -- List of product with a category xxx: select distinct cp.fk_product from llx_categorie_product as cp, llx_categorie as c where cp.fk_categorie = c.rowid and c.label like 'xxx-%' order by fk_product;
 -- List of product into 2 categories xxx: select cp.fk_product, count(cp.fk_product) as nb from llx_categorie_product as cp, llx_categorie as c where cp.fk_categorie = c.rowid and c.label like 'xxx-%' group by fk_product having nb > 1;
 -- List of product with no category xxx yet: select rowid, ref from llx_product where rowid not in (select distinct cp.fk_product from llx_categorie_product as cp, llx_categorie as c where cp.fk_categorie = c.rowid and c.label like 'xxx-%' order by fk_product);

@@ -73,16 +73,16 @@ WHERE frstrecur = 'RECUR';
 
 
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('COMPANY_RIB_CREATE', 'Third party payment information created',
+VALUES ('COMPANY_RIB_CREATE', 'Third party payment information created',
         'Executed when a third party payment information is created', 'societe', 1);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('COMPANY_RIB_MODIFY', 'Third party payment information updated',
+VALUES ('COMPANY_RIB_MODIFY', 'Third party payment information updated',
         'Executed when a third party payment information is updated', 'societe', 1);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('COMPANY_RIB_DELETE', 'Third party payment information deleted',
+VALUES ('COMPANY_RIB_DELETE', 'Third party payment information deleted',
         'Executed when a third party payment information is deleted', 'societe', 1);
 INSERT INTO llx_c_action_trigger (code, label, description, elementtype, rang)
-values ('FICHINTER_CLOSE', 'Intervention is done', 'Executed when a intervention is done', 'ficheinter', 36);
+VALUES ('FICHINTER_CLOSE', 'Intervention is done', 'Executed when a intervention is done', 'ficheinter', 36);
 
 UPDATE llx_bank_url
 SET type = 'direct-debit'
@@ -191,11 +191,11 @@ ALTER TABLE llx_c_invoice_subtype MODIFY COLUMN entity integer DEFAULT 1 NOT NUL
 ALTER TABLE llx_c_invoice_subtype
     MODIFY COLUMN code varchar(5) NOT NULL;
 
-insert into llx_c_invoice_subtype (entity, fk_country, code, label, active)
+INSERT INTO llx_c_invoice_subtype (entity, fk_country, code, label, active)
 VALUES (1, 102, '5.1', 'Πιστωτικό Τιμολόγιο / Συσχετιζόμενο', 0);
-insert into llx_c_invoice_subtype (entity, fk_country, code, label, active)
+INSERT INTO llx_c_invoice_subtype (entity, fk_country, code, label, active)
 VALUES (1, 102, '5.2', 'Πιστωτικό Τιμολόγιο / Μη Συσχετιζόμενο', 1);
-insert into llx_c_invoice_subtype (entity, fk_country, code, label, active)
+INSERT INTO llx_c_invoice_subtype (entity, fk_country, code, label, active)
 VALUES (1, 102, '11.4', 'Πιστωτικό Στοιχ. Λιανικής', 1);
 
 -- Product/service managed in stock

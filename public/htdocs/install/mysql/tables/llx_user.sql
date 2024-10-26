@@ -1,7 +1,8 @@
 -- ============================================================================
--- Copyright (C) 2001-2003 Rodolphe Quiedeville <rodolphe@quiedeville.org>
--- Copyright (C) 2006-2013 Laurent Destailleur  <eldy@users.sourceforge.net>
--- Copyright (C) 2007-2013 Regis Houssin        <regis.houssin@inodbox.com>
+-- Copyright (C) 2001-2003  Rodolphe Quiedeville        <rodolphe@quiedeville.org>
+-- Copyright (C) 2006-2013  Laurent Destailleur         <eldy@users.sourceforge.net>
+-- Copyright (C) 2007-2013  Regis Houssin               <regis.houssin@inodbox.com>
+-- Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
 --
 -- This program is free software; you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -50,7 +51,7 @@ create table llx_user
     fk_state                     integer      DEFAULT 0,
     fk_country                   integer      DEFAULT 0,
     birth                        date,                            -- birthday
-    birth_place                  varchar(64),                     -- birth place (town)
+    birth_place     varchar(64),                                  -- birthplace (town)
     job                          varchar(128),
     office_phone                 varchar(20),
     office_fax                   varchar(20),
@@ -63,17 +64,8 @@ create table llx_user
 
     socialnetworks               text         DEFAULT NULL,       -- json with socialnetworks
 
-    -
-    -
-    module_comm
-    smallint
-    DEFAULT
-    1, -
-    -
-    module_compta
-    smallint
-    DEFAULT
-    1,
+    -- module_comm       smallint DEFAULT 1,
+    -- module_compta     smallint DEFAULT 1,
 
     fk_soc                       integer                NULL,     -- id thirdparty if user linked to a company (external user)
     fk_socpeople                 integer                NULL,     -- id contact origin if user linked to a contact
@@ -97,10 +89,8 @@ create table llx_user
     dateendvalidity              datetime,
     flagdelsessionsbefore        datetime     DEFAULT NULL,       -- set this to a date if we need to launch an external process to invalidate all sessions for the same login created before this date
     iplastlogin                  varchar(250),
-    ippreviouslogin              varchar(250), -
-    -
-    egroupware_id
-    integer,
+    ippreviouslogin varchar(250),
+    -- egroupware_id           integer,
     ldap_sid                     varchar(255) DEFAULT NULL,
     openid                       varchar(255),
     statut                       tinyint      DEFAULT 1,
@@ -125,4 +115,4 @@ create table llx_user
     default_c_exp_tax_cat        integer,
     national_registration_number varchar(50),
     fk_warehouse                 integer                          -- default warehouse of user
-)ENGINE=innodb;
+) ENGINE = innodb;
