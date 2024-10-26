@@ -559,7 +559,7 @@ foreach ($object->fields as $key => $val) {
             print '</div>';
         } elseif ($key == 'lang') {
             $formadmin = new FormAdmin($db);
-            print $formadmin->select_language($search[$key], 'search_lang', 0, null, 1, 0, 0, 'minwidth100imp maxwidth125', 2);
+            print FormAdmin::selectLanguage($search[$key], 'search_lang', 0, null, 1, 0, 0, 'minwidth100imp maxwidth125', 2);
         } else {
             print '<input type="text" class="flat maxwidth75" name="search_' . $key . '" value="' . dol_escape_htmltag(isset($search[$key]) ? $search[$key] : '') . '">';
         }

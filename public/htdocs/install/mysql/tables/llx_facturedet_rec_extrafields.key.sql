@@ -17,5 +17,4 @@
 -- ===================================================================
 
 
-ALTER TABLE llx_facturedet_rec_extrafields
-    ADD UNIQUE INDEX uk_facturedet_rec_extrafields (fk_object);
+ALTER TABLE llx_facturedet_rec_extrafields ADD UNIQUE INDEX uk_facturedet_rec_extrafields (fk_object);

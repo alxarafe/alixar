@@ -23,7 +23,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Lib\ViewMain;
+use Dolibarr\Lib\Version;
 
 /**
  *  \file       htdocs/install/check.php
@@ -87,14 +87,14 @@ if (!empty($useragent)) {
 // Check PHP version min
 $arrayphpminversionerror = array(7, 0, 0);
 $arrayphpminversionwarning = array(7, 1, 0);
-if (versioncompare(versionphparray(), $arrayphpminversionerror) < 0) {        // Minimum to use (error if lower)
-    print '<img src="' . constant('DOL_URL_ROOT') . '/theme/eldy/img/error.png" alt="Error" class="valignmiddle"> ' . $langs->trans("ErrorPHPVersionTooLow", versiontostring($arrayphpminversionerror));
+if (Version::compare(Version::arrayPhp(), $arrayphpminversionerror) < 0) {        // Minimum to use (error if lower)
+    print '<img src="' . constant('DOL_URL_ROOT') . '/theme/eldy/img/error.png" alt="Error" class="valignmiddle"> ' . $langs->trans("ErrorPHPVersionTooLow", Version::toString($arrayphpminversionerror));
     $checksok = 0; // 0=error, 1=warning
-} elseif (versioncompare(versionphparray(), $arrayphpminversionwarning) < 0) {    // Minimum supported (warning if lower)
-    print '<img src="' . constant('DOL_URL_ROOT') . '/theme/eldy/img/warning.png" alt="Error" class="valignmiddle"> ' . $langs->trans("ErrorPHPVersionTooLow", versiontostring($arrayphpminversionwarning));
+} elseif (Version::compare(Version::arrayPhp(), $arrayphpminversionwarning) < 0) {    // Minimum supported (warning if lower)
+    print '<img src="' . constant('DOL_URL_ROOT') . '/theme/eldy/img/warning.png" alt="Error" class="valignmiddle"> ' . $langs->trans("ErrorPHPVersionTooLow", Version::toString($arrayphpminversionwarning));
     $checksok = 1; // 0=error, 1=warning
 } else {
-    print '<img src="' . constant('DOL_URL_ROOT') . '/theme/eldy/img/tick.png" alt="Ok" class="valignmiddle"> ' . $langs->trans("PHPVersion") . " " . versiontostring(versionphparray());
+    print '<img src="' . constant('DOL_URL_ROOT') . '/theme/eldy/img/tick.png" alt="Ok" class="valignmiddle"> ' . $langs->trans("PHPVersion") . " " . Version::toString(Version::arrayPhp());
 }
 if (empty($force_install_nophpinfo)) {
     print ' (<a href="phpinfo.php" target="_blank" rel="noopener noreferrer">' . $langs->trans("MoreInformation") . '</a>)';
@@ -103,8 +103,8 @@ print "<br>\n";
 
 // Check PHP version max
 $arrayphpmaxversionwarning = array(8, 2, 0);
-if (versioncompare(versionphparray(), $arrayphpmaxversionwarning) > 0 && versioncompare(versionphparray(), $arrayphpmaxversionwarning) < 3) {        // Maximum to use (warning if higher)
-    print '<img src="' . constant('DOL_URL_ROOT') . '/theme/eldy/img/error.png" alt="Error" class="valignmiddle"> ' . $langs->trans("ErrorPHPVersionTooHigh", versiontostring($arrayphpmaxversionwarning));
+if (Version::compare(Version::arrayPhp(), $arrayphpmaxversionwarning) > 0 && Version::compare(Version::arrayPhp(), $arrayphpmaxversionwarning) < 3) {        // Maximum to use (warning if higher)
+    print '<img src="' . constant('DOL_URL_ROOT') . '/theme/eldy/img/error.png" alt="Error" class="valignmiddle"> ' . $langs->trans("ErrorPHPVersionTooHigh", Version::toString($arrayphpmaxversionwarning));
     $checksok = 1; // 0=error, 1=warning
     print "<br>\n";
 }
@@ -390,8 +390,8 @@ if (!file_exists($conffile)) {
 
             // Current version is $conf->global->MAIN_VERSION_LAST_UPGRADE
             // Version to install is DOL_VERSION
-            $dolibarrlastupgradeversionarray = preg_split('/[\.-]/', isset($conf->global->MAIN_VERSION_LAST_UPGRADE) ? $conf->global->MAIN_VERSION_LAST_UPGRADE : (isset($conf->global->MAIN_VERSION_LAST_INSTALL) ? $conf->global->MAIN_VERSION_LAST_INSTALL : ''));
-            $dolibarrversiontoinstallarray = versiondolibarrarray();
+            $dolibarrlastupgradeversionarray = preg_split('/[.-]/', isset($conf->global->MAIN_VERSION_LAST_UPGRADE) ? $conf->global->MAIN_VERSION_LAST_UPGRADE : (isset($conf->global->MAIN_VERSION_LAST_INSTALL) ? $conf->global->MAIN_VERSION_LAST_INSTALL : ''));
+            $dolibarrversiontoinstallarray = Version::toArray();
         }
 
         // Show title
@@ -490,14 +490,14 @@ if (!file_exists($conffile)) {
             $version = DOL_VERSION;
             $versionfrom = $migarray['from'];
             $versionto = $migarray['to'];
-            $versionarray = preg_split('/[\.-]/', $version);
-            $dolibarrversionfromarray = preg_split('/[\.-]/', $versionfrom);
-            $dolibarrversiontoarray = preg_split('/[\.-]/', $versionto);
+            $versionarray = preg_split('/[.-]/', $version);
+            $dolibarrversionfromarray = preg_split('/[.-]/', $versionfrom);
+            $dolibarrversiontoarray = preg_split('/[.-]/', $versionto);
             // Define string newversionxxx that are used for text to show
             $newversionfrom = preg_replace('/(\.[0-9]+)$/i', '.*', $versionfrom);
             $newversionto = preg_replace('/(\.[0-9]+)$/i', '.*', $versionto);
             $newversionfrombis = '';
-            if (versioncompare($dolibarrversiontoarray, $versionarray) < -2) {  // From x.y.z -> x.y.z+1
+            if (Version::compare($dolibarrversiontoarray, $versionarray) < -2) {  // From x.y.z -> x.y.z+1
                 $newversionfrombis = ' ' . $langs->trans("or") . ' ' . $versionto;
             }
 
@@ -506,7 +506,7 @@ if (!file_exists($conffile)) {
                     // Now we check if this is the first qualified choice
                     if (
                         $allowupgrade && empty($foundrecommandedchoice) &&
-                        (versioncompare($dolibarrversiontoarray, $dolibarrlastupgradeversionarray) > 0 || versioncompare($dolibarrversiontoarray, $versionarray) < -2)
+                        (Version::compare($dolibarrversiontoarray, $dolibarrlastupgradeversionarray) > 0 || Version::compare($dolibarrversiontoarray, $versionarray) < -2)
                     ) {
                         $foundrecommandedchoice = 1; // To show only once
                         $recommended_choice = true;

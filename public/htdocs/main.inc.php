@@ -35,11 +35,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Code\Core\Classes\Form;
-use Dolibarr\Code\Core\Classes\HookManager;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Lib\Filters;
 use Dolibarr\Tools\Debug;
+use Dolibarr\Lib\Version;
 use Dolibarr\Lib\ViewMain;
 
 /**
@@ -331,7 +330,7 @@ if ($checkifupgraderequired) {
     require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
     $dolibarrversionlastupgrade = preg_split('/[.-]/', $versiontocompare);
     $dolibarrversionprogram = preg_split('/[.-]/', DOL_VERSION);
-    $rescomp = versioncompare($dolibarrversionprogram, $dolibarrversionlastupgrade);
+    $rescomp = Version::compare($dolibarrversionprogram, $dolibarrversionlastupgrade);
     if ($rescomp > 0) {   // Programs have a version higher than database.
         if (!getDolGlobalString('MAIN_NO_UPGRADE_REDIRECT_ON_LEVEL_3_CHANGE') || $rescomp < 3) {
             // We did not add "&& $rescomp < 3" because we want upgrade process for build upgrades

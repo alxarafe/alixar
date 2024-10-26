@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormSetup;
+use Dolibarr\Lib\Version;
 use Dolibarr\Lib\ViewMain;
 
 /**
@@ -81,7 +82,7 @@ $dirmodels = array_merge(array('/'), (array)$conf->modules_parts['models']);
  */
 
 // For retrocompatibility Dolibarr < 15.0
-if (versioncompare(explode('.', DOL_VERSION), array(15)) < 0 && $action == 'update' && !empty($user->admin)) {
+if (Version::compare(explode('.', DOL_VERSION), array(15)) < 0 && $action == 'update' && !empty($user->admin)) {
     $formSetup->saveConfFromPost();
 }
 

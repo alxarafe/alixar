@@ -25,7 +25,7 @@
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Imports\Classes\ModeleImports;
 use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Lib\ViewMain;
+use Dolibarr\Lib\Version;
 
 /**
  *      \file       htdocs/core/modules/import/import_csv.modules.php
@@ -103,7 +103,7 @@ class ImportCsv extends ModeleImports
         $this->phpmin = array(7, 0); // Minimum version of PHP required by module
 
         require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
-        if (versioncompare($this->phpmin, versionphparray()) > 0) {
+        if (Version::compare($this->phpmin, Version::arrayPhp()) > 0) {
             dol_syslog("Module need a higher PHP version");
             $this->error = "Module need a higher PHP version";
             return;

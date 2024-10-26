@@ -17,5 +17,4 @@
 -- ===================================================================
 
 
-ALTER TABLE llx_projet_task_extrafields
-    ADD UNIQUE INDEX uk_projet_task_extrafields (fk_object);
+ALTER TABLE llx_projet_task_extrafields ADD UNIQUE INDEX uk_projet_task_extrafields (fk_object);

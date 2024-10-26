@@ -19,7 +19,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Lib\ViewMain;
+use Dolibarr\Code\Core\Classes\FormAdmin;
 
 /**
  *       \file       htdocs/install/index.php
@@ -28,11 +28,9 @@ use Dolibarr\Lib\ViewMain;
  *                   For a reinstall this page redirect to page check.php
  */
 
-define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
+const ALLOWED_IF_UPGRADE_UNLOCK_FOUND = 1;
 
 include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
-include_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.form.class.php';
-include_once constant('DOL_DOCUMENT_ROOT') . '/core/class/html.formadmin.class.php';
 
 global $langs;
 
@@ -50,8 +48,6 @@ $langs->load("admin");
  * View
  */
 
-$formadmin = new FormAdmin(null); // Note: $db does not exist yet but we don't need it, so we put ''.
-
 pHeader("", "check"); // Next step = check
 
 if (!is_readable($conffile)) {
@@ -65,7 +61,7 @@ print '<table>';
 
 print '<tr>';
 print '<td>' . $langs->trans("DefaultLanguage") . ' : </td><td>';
-print $formadmin->select_language('auto', 'selectlang', 1, 0, 0, 1);
+print FormAdmin::selectLanguage('auto', 'selectlang', 1, 0, 0, 1);
 print '</td>';
 print '</tr>';
 

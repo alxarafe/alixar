@@ -3,8 +3,7 @@
 -- Page ID 1__+MAX_llx_website_page__ - Aliases credits --;
 INSERT INTO llx_website_page(rowid, fk_page, fk_website, pageurl, aliasalt, title, description, lang, image, keywords,
                              status, date_creation, tms, import_key, grabbed_from, type_container, htmlheader, content,
-                             author_alias, allowed_in_frames)
-VALUES (1__ + MAX_llx_website_page__, null, __WEBSITE_ID__, 'credits', '', 'Credits', 'Credits and legal notices', 'en',
+                             author_alias, allowed_in_frames) VALUES (1__ + MAX_llx_website_page__, null, __WEBSITE_ID__, 'credits', '', 'Credits', 'Credits and legal notices', 'en',
         '', '', '1', '2019-08-15 16:39:56', '2024-04-29 15:24:13', null, '', 'page', '',
         '	__N__		<!-- Wrapper -->__N__			<div id=\"wrapper\">__N____N__				<!-- Header -->__N__					<header id=\"header\">__N__						<h1>Mentions légales</h1>__N__						<p>Curriculum Vitae</p>__N__					</header>__N____N__                <!-- Menu -->__N__                <?php includeContainer(\'menu\'); ?>__N____N__				<!-- Main -->__N__					<div id=\"main\">__N____N__						<!-- Content -->__N__							<section id=\"content\" class=\"main\" contenteditable=\"true\">__N____N__								<div class=\"chapo\"><p>__N__								    __N__This site is edited by <?php echo $mysoc->name; ?>__N____N__								    __N__								</div>__N____N__							</section>__N____N__					</div>__N____N__				<!-- Footer -->__N__				<?php includeContainer(\'footer\'); ?>__N____N__			</div>__N____N__',
         '', 0);
@@ -12,8 +11,7 @@ VALUES (1__ + MAX_llx_website_page__, null, __WEBSITE_ID__, 'credits', '', 'Cred
 -- Page ID 2__+MAX_llx_website_page__ - Aliases footer --;
 INSERT INTO llx_website_page(rowid, fk_page, fk_website, pageurl, aliasalt, title, description, lang, image, keywords,
                              status, date_creation, tms, import_key, grabbed_from, type_container, htmlheader, content,
-                             author_alias, allowed_in_frames)
-VALUES (2__ + MAX_llx_website_page__, null, __WEBSITE_ID__, 'footer', '', 'Footer', '', 'fr', '', '', '1',
+                             author_alias, allowed_in_frames) VALUES (2__ + MAX_llx_website_page__, null, __WEBSITE_ID__, 'footer', '', 'Footer', '', 'fr', '', '', '1',
         '2019-08-15 16:42:44', '2020-06-19 10:18:14', null, '', 'page', '',
         '				<!-- Footer -->__N__                    <footer id=\"footer\">__N__						<section contenteditable=\"true\">__N__							<h2>Aliquam sed mauris</h2>__N__							<p>Sed lorem ipsum dolor sit amet et nullam consequat feugiat consequat magna adipiscing tempus etiam dolore veroeros. eget dapibus mauris. Cras aliquet, nisl ut viverra sollicitudin, ligula erat egestas velit, vitae tincidunt odio.</p>__N__							<ul class=\"actions\">__N__								<li><a href=\"generic.php\" class=\"buttonwebsite\">Learn More</a></li>__N__							</ul>__N__						</section>__N__						<section contenteditable=\"true\">__N__							<h2>Etiam feugiat</h2>__N__							<dl class=\"alt\">__N__								<dt>Address</dt>__N__								<dd><?php echo $mysoc->getFullAddress(1, \' <
         br >\'); ?></dd>__N__								<dt>Phone</dt>__N__								<dd><?php echo $mysoc->phone; ?></dd>__N__								<dt>Email</dt>__N__								<dd><a href=\"mailto:<?php echo $mysoc->email; ?>\"><?php echo $mysoc->email; ?></a></dd>__N__							</dl>__N__							<ul class=\"icons\">__N__	                          <ul class=\"list-inline\">__N__                              <?php foreach($mysoc->socialnetworks as $key => $value) {__N__                                print \' <

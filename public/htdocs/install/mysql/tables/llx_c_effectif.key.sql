@@ -16,5 +16,4 @@
 --
 -- ========================================================================
 
-ALTER TABLE llx_c_effectif
-    ADD UNIQUE INDEX uk_c_effectif(code);
+ALTER TABLE llx_c_effectif ADD UNIQUE INDEX uk_c_effectif(code);

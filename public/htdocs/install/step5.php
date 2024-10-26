@@ -22,7 +22,12 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Lib\ViewMain;
+use Dolibarr\Code\Core\Classes\HookManager;
+use Dolibarr\Code\User\Classes\User;
+use Dolibarr\Core\Base\Database;
+use Dolibarr\Core\Base\DolibarrModules;
+use Dolibarr\Core\Model\Constant;
+use Dolibarr\Lib\Version;
 
 /**
  *       \file      htdocs/install/step5.php
@@ -39,9 +44,6 @@ use Dolibarr\Lib\ViewMain;
  *         It updates the value for MAIN_VERSION_LAST_UPGRADE.
  *         It (re)creates the install.lock and shows the final message.
  */
-
-use Dolibarr\Core\Base\DolibarrModules;
-use Dolibarr\Core\Model\Constant;
 
 define('ALLOWED_IF_UPGRADE_UNLOCK_FOUND', 1);
 include_once constant('DOL_DOCUMENT_ROOT') . '/install/inc.php';
@@ -187,6 +189,10 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
         dolibarr_install_syslog('step5: load module user ' . DOL_DOCUMENT_ROOT . "/core/modules/" . $file, LOG_INFO);
         // include_once DOL_DOCUMENT_ROOT . "/core/modules/" . $file;
         // $objMod = new $modName($db);
+
+        $conf->db->prefix = MAIN_DB_PREFIX;
+        new Database();
+
         $objMod = DolibarrModules::getModule($modName);
         $result = $objMod->init();
         if (!$result) {
@@ -273,7 +279,9 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
                 $db->begin();
 
                 dolibarr_install_syslog('step5: set MAIN_VERSION_LAST_INSTALL const to ' . $targetversion, LOG_DEBUG);
-                if (!Constant::deleteByName('MAIN_VERSION_LAST_INSTALL') || !Constant::insert('MAIN_VERSION_LAST_INSTALL', $targetversion, 'chaine', 'Dolibarr version when last install')) {
+
+                Constant::deleteByName('MAIN_VERSION_LAST_INSTALL');
+                if (!Constant::insert('MAIN_VERSION_LAST_INSTALL', $targetversion, 'chaine', 'Dolibarr version when last install')) {
                     dol_print_error($db, 'Error in setup program');
                 }
 
@@ -344,7 +352,7 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
                 // Now delete the flag that say installation is not complete
                 dolibarr_install_syslog('step5: remove MAIN_NOT_INSTALLED const');
                 if (!Constant::deleteByName('MAIN_NOT_INSTALLED')) {
-                    dol_print_error($db, 'Error in setup program');
+                    // dol_print_error($db, 'Error in setup program');
                 }
 
                 // May fail if parameter already defined
@@ -375,7 +383,7 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
             } else {
                 $mainversionlastupgradearray = preg_split('/[.-]/', $conf->global->MAIN_VERSION_LAST_UPGRADE);
                 $targetversionarray = preg_split('/[.-]/', $targetversion);
-                if (versioncompare($targetversionarray, $mainversionlastupgradearray) > 0) {
+                if (Version::compare($targetversionarray, $mainversionlastupgradearray) > 0) {
                     $tagdatabase = true;
                 }
             }

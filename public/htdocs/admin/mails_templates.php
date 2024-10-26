@@ -946,7 +946,7 @@ foreach ($fieldlist as $field => $value) {
         print '<td class="liste_titre"><input type="text" name="search_label" class="maxwidth75" value="' . dol_escape_htmltag($search_label) . '"></td>';
     } elseif ($value == 'lang') {
         print '<td class="liste_titre">';
-        print $formadmin->select_language($search_lang, 'search_lang', 0, null, 1, 0, 0, 'maxwidth100');
+        print FormAdmin::selectLanguage($search_lang, 'search_lang', 0, null, 1, 0, 0, 'maxwidth100');
         print '</td>';
     } elseif ($value == 'fk_user') {
         print '<td class="liste_titre">';
@@ -1410,7 +1410,7 @@ function fieldList($fieldlist, $obj = null, $tabname = '', $context = '')
                 if ($context == 'edit') {
                     $selectedlang = $obj->lang;
                 }
-                print $formadmin->select_language($selectedlang, 'langcode', 0, null, 1, 0, 0, 'maxwidth100');
+                print FormAdmin::selectLanguage($selectedlang, 'langcode', 0, null, 1, 0, 0, 'maxwidth100');
             } else {
                 if (!empty($obj->lang)) {
                     print $obj->lang . ' - ' . $langs->trans('Language_' . $obj->lang);

@@ -813,7 +813,6 @@ class EcmDirectory extends CommonObject
 		// phpcs:enable
         global $langs, $conf;
 
-        include_once DOL_DOCUMENT_ROOT . '/core/class/interfaces.class.php';
         $interface = new Interfaces($this->db);
         $result = $interface->run_triggers($triggerName, $this, $user, $langs, $conf);
         if ($result < 0) {

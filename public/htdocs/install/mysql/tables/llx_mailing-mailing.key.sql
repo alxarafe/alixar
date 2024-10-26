@@ -17,5 +17,4 @@
 -- ===================================================================
 
 
-ALTER TABLE llx_mailing
-    ADD UNIQUE uk_mailing(titre, entity);
+ALTER TABLE llx_mailing ADD UNIQUE uk_mailing(titre, entity);

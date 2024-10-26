@@ -370,7 +370,7 @@ class mailing_thirdparties extends MailingTargets
             $formadmin = new FormAdmin($this->db);
             $s .= img_picto($langs->trans("DefaultLang"), 'language', 'class="pictofixedwidth"');
             //$s .= '<span class="opacitymedium">'.$langs->trans("DefaultLang").':</span> ';
-            $s .= $formadmin->select_language(GETPOST('filter_lang_thirdparties', 'aZ09'), 'filter_lang_thirdparties', 0, null, $langs->trans("DefaultLang"), 0, 0, '', 0, 0, 0, null, 1);
+            $s .= FormAdmin::selectLanguage(GETPOST('filter_lang_thirdparties', 'aZ09'), 'filter_lang_thirdparties', 0, null, $langs->trans("DefaultLang"), 0, 0, '', 0, 0, 0, null, 1);
         }
 
         return $s;

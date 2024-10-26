@@ -24,6 +24,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Dolibarr\Code\Core\Classes\DolEditor;
+use Dolibarr\Code\Core\Classes\Form;
+use Dolibarr\Code\Core\Classes\FormAdmin;
+use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Lib\ViewMain;
 
 /**
@@ -32,12 +36,6 @@ use Dolibarr\Lib\ViewMain;
  */
 
 // Load Dolibarr environment
-use Dolibarr\Code\Core\Classes\DolEditor;
-use Dolibarr\Code\Core\Classes\Form;
-use Dolibarr\Code\Core\Classes\FormAdmin;
-use Dolibarr\Code\Core\Classes\FormOther;
-use Dolibarr\Lib\ViewMain;
-
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/admin.lib.php';
@@ -392,7 +390,7 @@ if ($mode == 'other') {
     // Default language
     print '<tr class="oddeven"><td>' . $langs->trans("DefaultLanguage") . '</td><td>';
     print img_picto('', 'language', 'class="pictofixedwidth"');
-    print $formadmin->select_language(getDolGlobalString('MAIN_LANG_DEFAULT'), 'MAIN_LANG_DEFAULT', 1, null, '', 0, 0, 'minwidth300', 2);
+    print FormAdmin::selectLanguage(getDolGlobalString('MAIN_LANG_DEFAULT'), 'MAIN_LANG_DEFAULT', 1, null, '', 0, 0, 'minwidth300', 2);
     //print '<input class="button button-save smallpaddingimp" type="submit" name="submit" value="'.$langs->trans("Save").'">';
     print '</td>';
     print '</tr>';

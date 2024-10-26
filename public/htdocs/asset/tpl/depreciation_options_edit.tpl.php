@@ -148,7 +148,7 @@ if (empty($reshook)) {
             } else {
                 if ($field_key == 'lang') {
                     print img_picto('', 'language', 'class="pictofixedwidth"');
-                    print $formadmin->select_language($value, $html_name, 0, null, 1, 0, 0, 'minwidth300', 2);
+                    print FormAdmin::selectLanguage($value, $html_name, 0, null, 1, 0, 0, 'minwidth300', 2);
                 } else {
                     print $assetdepreciationoptions->showInputField($field_info, $field_key, $value, '', '', $prefix_html_name, 0);
                 }

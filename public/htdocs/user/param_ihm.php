@@ -372,7 +372,7 @@ if ($action == 'edit') {
     print empty($dolibarr_main_demo) ? '' : ' disabled="disabled"'; // Disabled for demo
     print '> <label for="check_MAIN_LANG_DEFAULT">' . $langs->trans("UsePersonalValue") . '</label></td>';
     print '<td>';
-    print $formadmin->select_language((!empty($object->conf->MAIN_LANG_DEFAULT) ? $object->conf->MAIN_LANG_DEFAULT : ''), 'main_lang_default', 1, null, 0, 0, (!empty($dolibarr_main_demo)));
+    print FormAdmin::selectLanguage((!empty($object->conf->MAIN_LANG_DEFAULT) ? $object->conf->MAIN_LANG_DEFAULT : ''), 'main_lang_default', 1, null, 0, 0, (!empty($dolibarr_main_demo)));
     print '</td></tr>';
 
     // Landing page

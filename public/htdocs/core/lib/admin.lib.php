@@ -28,7 +28,7 @@ use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormMail;
 use Dolibarr\Core\Base\DolibarrModules;
 use Dolibarr\Lib\AveryLabels;
-use Dolibarr\Lib\ViewMain;
+use Dolibarr\Lib\Version;
 
 /**
  *  \file           htdocs/core/lib/admin.lib.php
@@ -36,122 +36,6 @@ use Dolibarr\Lib\ViewMain;
  */
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions2.lib.php';
-
-/**
- *  Renvoi une version en chaine depuis une version en tableau
- *
- * @param array $versionarray Tableau de version (vermajeur,vermineur,autre)
- * @return     string                          Chaine version
- * @see versioncompare()
- */
-function versiontostring($versionarray)
-{
-    $string = '?';
-    if (isset($versionarray[0])) {
-        $string = $versionarray[0];
-    }
-    if (isset($versionarray[1])) {
-        $string .= '.' . $versionarray[1];
-    }
-    if (isset($versionarray[2])) {
-        $string .= '.' . $versionarray[2];
-    }
-    return $string;
-}
-
-/**
- *  Compare 2 versions (stored into 2 arrays).
- *  To check if Dolibarr version is lower than (x,y,z), do "if versioncompare(versiondolibarrarray(), array(x.y.z)) <= 0"
- *  For example: if (versioncompare(versiondolibarrarray(),array(4,0,-5)) >= 0) is true if version is 4.0 alpha or higher.
- *  For example: if (versioncompare(versiondolibarrarray(),array(4,0,0)) >= 0) is true if version is 4.0 final or higher.
- *  For example: if (versioncompare(versiondolibarrarray(),array(4,0,1)) >= 0) is true if version is 4.0.1 or higher.
- *  Alternative way to compare: if ((float) DOL_VERSION >= 4.0) is true if version is 4.0 alpha or higher (works only to compare first and second level)
- *
- * @param array $versionarray1 Array of version (vermajor,verminor,patch)
- * @param array $versionarray2 Array of version (vermajor,verminor,patch)
- * @return     int                             -4,-3,-2,-1 if versionarray1<versionarray2 (value depends on level of difference)
- *                                              0 if same
- *                                              1,2,3,4 if versionarray1>versionarray2 (value depends on level of difference)
- * @see versiontostring()
- */
-function versioncompare($versionarray1, $versionarray2)
-{
-    $ret = 0;
-    $level = 0;
-    $count1 = count($versionarray1);
-    $count2 = count($versionarray2);
-    $maxcount = max($count1, $count2);
-    while ($level < $maxcount) {
-        $operande1 = isset($versionarray1[$level]) ? $versionarray1[$level] : 0;
-        $operande2 = isset($versionarray2[$level]) ? $versionarray2[$level] : 0;
-        if (preg_match('/alpha|dev/i', $operande1)) {
-            $operande1 = -5;
-        }
-        if (preg_match('/alpha|dev/i', $operande2)) {
-            $operande2 = -5;
-        }
-        if (preg_match('/beta$/i', $operande1)) {
-            $operande1 = -4;
-        }
-        if (preg_match('/beta$/i', $operande2)) {
-            $operande2 = -4;
-        }
-        if (preg_match('/beta([0-9])+/i', $operande1)) {
-            $operande1 = -3;
-        }
-        if (preg_match('/beta([0-9])+/i', $operande2)) {
-            $operande2 = -3;
-        }
-        if (preg_match('/rc$/i', $operande1)) {
-            $operande1 = -2;
-        }
-        if (preg_match('/rc$/i', $operande2)) {
-            $operande2 = -2;
-        }
-        if (preg_match('/rc([0-9])+/i', $operande1)) {
-            $operande1 = -1;
-        }
-        if (preg_match('/rc([0-9])+/i', $operande2)) {
-            $operande2 = -1;
-        }
-        $level++;
-        //print 'level '.$level.' '.$operande1.'-'.$operande2.'<br>';
-        if ($operande1 < $operande2) {
-            $ret = -$level;
-            break;
-        }
-        if ($operande1 > $operande2) {
-            $ret = $level;
-            break;
-        }
-    }
-    //print join('.',$versionarray1).'('.count($versionarray1).') / '.join('.',$versionarray2).'('.count($versionarray2).') => '.$ret.'<br>'."\n";
-    return $ret;
-}
-
-
-/**
- *  Return version PHP
- *
- * @return     array               Tableau de version (vermajeur,vermineur,autre)
- * @see versioncompare()
- */
-function versionphparray()
-{
-    return explode('.', PHP_VERSION);
-}
-
-/**
- *  Return version Dolibarr
- *
- * @return     array               Tableau de version (vermajeur,vermineur,autre)
- * @see versioncompare()
- */
-function versiondolibarrarray()
-{
-    return explode('.', DOL_VERSION);
-}
-
 
 /**
  *  Launch a sql file. Function is used by:
@@ -225,7 +109,7 @@ function run_sql($sqlfile, $silent = 1, $entity = 0, $usesavepoint = 1, $handler
                             $versionrequest = explode('.', $reg[2]);
                             //var_dump($versionrequest);
                             //var_dump($versionarray);
-                            if (!count($versionrequest) || !count($versionarray) || versioncompare($versionrequest, $versionarray) > 0) {
+                            if (!count($versionrequest) || !count($versionarray) || Version::compare($versionrequest, $versionarray) > 0) {
                                 $qualified = 0;
                             }
                         } else { // This is a test on a constant. For example when we have -- VMYSQLUTF8UNICODE, we test constant $conf->global->UTF8UNICODE
@@ -575,7 +459,6 @@ function run_sql($sqlfile, $silent = 1, $entity = 0, $usesavepoint = 1, $handler
     return $ok;
 }
 
-
 /**
  *  Delete a constant
  *
@@ -646,7 +529,6 @@ function dolibarr_get_const($db, $name, $entity = 1)
     }
     return $value;
 }
-
 
 /**
  *  Insert a parameter (key,value) into database (delete old key then insert it again).
@@ -722,7 +604,6 @@ function dolibarr_set_const($db, $name, $value, $type = 'chaine', $visible = 0, 
         return -1;
     }
 }
-
 
 /**
  * Prepare array with list of tabs
@@ -815,7 +696,6 @@ function ihm_prepare_head()
 
     return $head;
 }
-
 
 /**
  * Prepare array with list of tabs
@@ -1169,19 +1049,19 @@ function activateModule($value, $withdeps = 1, $noconfverification = 0)
     $objMod = DolibarrModules::getModule($modName);
 
     // Test if PHP version ok
-    $verphp = versionphparray();
+    $verphp = Version::arrayPhp();
     $vermin = isset($objMod->phpmin) ? $objMod->phpmin : 0;
-    if (is_array($vermin) && versioncompare($verphp, $vermin) < 0) {
-        $ret['errors'][] = $langs->trans("ErrorModuleRequirePHPVersion", versiontostring($vermin));
+    if (is_array($vermin) && Version::compare($verphp, $vermin) < 0) {
+        $ret['errors'][] = $langs->trans("ErrorModuleRequirePHPVersion", Version::toString($vermin));
         return $ret;
     }
 
     // Test if Dolibarr version ok
-    $verdol = versiondolibarrarray();
+    $verdol = Version::toArray();
     $vermin = isset($objMod->need_dolibarr_version) ? $objMod->need_dolibarr_version : 0;
-    //print 'version: '.versioncompare($verdol,$vermin).' - '.join(',',$verdol).' - '.join(',',$vermin);exit;
-    if (is_array($vermin) && versioncompare($verdol, $vermin) < 0) {
-        $ret['errors'][] = $langs->trans("ErrorModuleRequireDolibarrVersion", versiontostring($vermin));
+    //print 'version: '.Version::compare($verdol,$vermin).' - '.join(',',$verdol).' - '.join(',',$vermin);exit;
+    if (is_array($vermin) && Version::compare($verdol, $vermin) < 0) {
+        $ret['errors'][] = $langs->trans("ErrorModuleRequireDolibarrVersion", Version::toString($vermin));
         return $ret;
     }
 

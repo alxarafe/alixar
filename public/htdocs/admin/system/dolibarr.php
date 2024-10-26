@@ -21,6 +21,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Core\Model\Constant;
+use Dolibarr\Lib\Version;
 use Dolibarr\Lib\ViewMain;
 
 // Load Dolibarr environment
@@ -116,7 +117,7 @@ if (function_exists('curl_init')) {
                     $newversionarray = explode('.', $newversion);
                     $versionarray = explode('.', $version);
                     //var_dump($newversionarray);var_dump($versionarray);
-                    if (versioncompare($newversionarray, $versionarray) > 0) {
+                    if (Version::compare($newversionarray, $versionarray) > 0) {
                         $version = $newversion;
                     }
                 }

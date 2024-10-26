@@ -610,7 +610,7 @@ foreach ($dirsociete as $dirroot) {
                         //}
                         print "</td>";
                     } else {
-                        if (versioncompare($module->phpmin, versionphparray()) > 0) {
+                        if (Version::compare($module->phpmin, Version::arrayPhp()) > 0) {
                             print '<td class="center">' . "\n";
                             print img_picto(dol_escape_htmltag($langs->trans("ErrorModuleRequirePHPVersion", implode('.', $module->phpmin))), 'switch_off');
                             print "</td>";

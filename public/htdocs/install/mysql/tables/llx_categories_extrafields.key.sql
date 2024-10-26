@@ -17,5 +17,4 @@
 -- ===================================================================
 
 
-ALTER TABLE llx_categories_extrafields
-    ADD UNIQUE INDEX uk_categories_extrafields (fk_object);
+ALTER TABLE llx_categories_extrafields ADD UNIQUE INDEX uk_categories_extrafields (fk_object);
