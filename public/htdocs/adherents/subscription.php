@@ -38,7 +38,6 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Lib\ViewMain;
 use Dolibarr\Modules\User;
-use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/adherents/subscription.php

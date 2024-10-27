@@ -25,8 +25,6 @@ if (!defined('NOTOKENRENEWAL')) {
     define('NOTOKENRENEWAL', 1);
 }
 
-use Dolibarr\Lib\ViewMain;
-
 /**
  *      \file       htdocs/admin/dolistore/ajax/image.php
  *      \ingroup    admin

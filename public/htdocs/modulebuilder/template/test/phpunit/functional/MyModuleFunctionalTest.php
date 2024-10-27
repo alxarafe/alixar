@@ -17,7 +17,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Lib\ViewMain;
+namespace Dolibarr\test\functional;
+
+use PHPUnit_Extensions_Selenium2TestCase_WebDriverException;
 
 /**
  * \file    test/phpunit/MyModuleFunctionalTest.php
@@ -26,10 +28,6 @@ use Dolibarr\Lib\ViewMain;
  *
  * Put detailed description here.
  */
-
-namespace Dolibarr\test\functional;
-
-use PHPUnit_Extensions_Selenium2TestCase_WebDriverException;
 
 /**
  * Class MyModuleFunctionalTest

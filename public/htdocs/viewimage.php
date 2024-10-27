@@ -20,6 +20,7 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\Ecm\Classes\EcmFiles;
 use Dolibarr\Lib\ViewMain;
 
 /**
@@ -29,9 +30,6 @@ use Dolibarr\Lib\ViewMain;
  *                  DOL_URL_ROOT.'/viewimage.php?modulepart=diroffile&file=relativepathofofile&cache=0
  *                  DOL_URL_ROOT.'/viewimage.php?hashp=sharekey
  */
-
-use Dolibarr\Code\Ecm\Classes\EcmFiles;
-use Dolibarr\Lib\ViewMain;
 
 define('MAIN_SECURITY_FORCECSP', "default-src: 'none'");
 
