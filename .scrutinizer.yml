@@ -7,9 +7,8 @@ build:
       version: "8.1"
       ini:
         memory_limit: "-1"
-  nodes:
-    my-node:
-      services:
+    services:
+      image:
         mysql: 5.7
       environment:
         MYSQL_ROOT_PASSWORD: alixar_tests
