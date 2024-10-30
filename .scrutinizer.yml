@@ -13,8 +13,6 @@ build:
       environment:
         MYSQL_ROOT_PASSWORD: "root"
         MYSQL_DATABASE: "alixar_test"
-      ports:
-        - "3306:3306"
   dependencies:
     before:
       - composer install --prefer-dist --no-interaction
