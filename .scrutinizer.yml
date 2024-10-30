@@ -11,7 +11,7 @@ build:
     my-node:
       services:
         mysql: 5.7
-      env:
+      environment:
         MYSQL_ROOT_PASSWORD: alixar_tests
         MYSQL_DATABASE: alixar_tests
   dependencies:
