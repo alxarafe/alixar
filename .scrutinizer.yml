@@ -11,10 +11,11 @@ build:
     my-node:
       services:
         mysql: 5.7
-        MYSQL_ALLOW_EMPTY_PASSWORD:
-          - yes
-        MYSQL_DATABASE:
-          - alixar_tests
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD:
+            - yes
+          MYSQL_DATABASE:
+            - alixar_tests
   dependencies:
     before:
       - composer install --prefer-dist --no-interaction
