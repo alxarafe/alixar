@@ -18,8 +18,8 @@ build:
   dependencies:
     before:
       - composer install --prefer-dist --no-interaction
-      - mysql -u root -h mysql -P 3306 -e 'DROP DATABASE IF EXISTS alixar_tests;'
-      - mysql -u root -h mysql -P 3306 'CREATE DATABASE IF NOT EXISTS alixar_tests;'
+      - mysql -u root -h 127.0.0.1 'DROP DATABASE IF EXISTS alixar_tests;'
+      - mysql -u root -h 127.0.0.1 'CREATE DATABASE IF NOT EXISTS alixar_tests;'
   tests:
     override:
       - php ./vendor/bin/phpunit --configuration phpunit.xml
