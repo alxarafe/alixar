@@ -12,8 +12,9 @@ build:
       services:
         mysql: 5.7
         MYSQL_ALLOW_EMPTY_PASSWORD:
-          'yes'
-        MYSQL_DATABASE: alixar_tests
+          - yes
+        MYSQL_DATABASE:
+          - alixar_tests
   dependencies:
     before:
       - composer install --prefer-dist --no-interaction
