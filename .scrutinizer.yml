@@ -8,8 +8,10 @@ build:
       ini:
         memory_limit: "-1"
   tests:
+    before:
+      - mysql -e 'CREATE DATABASE IF NOT EXISTS alixar_test;'
     override:
-      - echo "Skipping tests"
+      - php ./vendor/bin/phpunit --configuration phpunit.xml
 
 # https://scrutinizer-ci.com/docs/reviews/excluding_files_from_analysis
 filter:
