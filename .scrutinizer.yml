@@ -10,15 +10,10 @@ build:
   dependencies:
     before:
       - composer install --prefer-dist --no-interaction
-  setup:
-    mysql:
-      version: "8.0"
-      databases:
-        alixar_test:
-          username: root
-          encoding: utf8
   tests:
     before:
+      - docker run --name mysql -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=alixar_test -d -p 3306:3306 mysql:8.0
+      - sleep 10
       - mysql -e 'CREATE DATABASE IF NOT EXISTS alixar_test;'
     override:
       - php ./vendor/bin/phpunit --configuration phpunit.xml
