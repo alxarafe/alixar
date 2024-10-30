@@ -3,10 +3,10 @@ build:
   image: default-bionic
   environment:
     timezone: UTC
-  php:
-    version: "8.1"
-    ini:
-      memory_limit: "-1"
+    php:
+      version: "8.1"
+      ini:
+        memory_limit: "-1"
   services:
     mysql:
       image: "mysql:8.0"
