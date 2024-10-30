@@ -8,18 +8,12 @@ build:
       ini:
         memory_limit: "-1"
     mysql: 5.7
-#  services:
-#    mysql:
-#      image: "mysql:8.0"
-#      env:
-#        MYSQL_ROOT_PASSWORD: "root"
-#        MYSQL_DATABASE: "alixar_test"
   dependencies:
     before:
       - composer install --prefer-dist --no-interaction
+      - mysql -uroot -e 'DROP DATABASE IF EXISTS alixar_tests;'
+      - mysql -uroot -e 'CREATE DATABASE IF NOT EXISTS alixar_tests;'
   tests:
-    before:
-      - mysql -e 'CREATE DATABASE IF NOT EXISTS alixar_test;'
     override:
       - php ./vendor/bin/phpunit --configuration phpunit.xml
 
