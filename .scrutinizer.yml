@@ -7,7 +7,10 @@ build:
       version: "8.1"
       ini:
         memory_limit: "-1"
-    mysql: 5.7
+  nodes:
+    my-node:
+      services:
+        mysql: 5.7
   dependencies:
     before:
       - composer install --prefer-dist --no-interaction
