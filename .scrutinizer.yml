@@ -10,7 +10,7 @@ build:
   services:
     mysql:
       image: "mysql:8.0"
-      environment:
+      env:
         MYSQL_ROOT_PASSWORD: "root"
         MYSQL_DATABASE: "alixar_test"
   dependencies:
