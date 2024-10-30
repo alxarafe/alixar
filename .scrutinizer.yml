@@ -11,7 +11,7 @@ build:
     my-node:
       services:
         mysql: 5.7
-        MYSQL_ROOT_PASSWORD: root_password
+        MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
         MYSQL_DATABASE: alixar_tests
   dependencies:
     before:
