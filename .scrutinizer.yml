@@ -7,6 +7,16 @@ build:
       version: "8.1"
       ini:
         memory_limit: "-1"
+  dependencies:
+    before:
+      - composer install --prefer-dist --no-interaction
+  setup:
+    mysql:
+      version: "8.0"
+      databases:
+        alixar_test:
+          username: root
+          encoding: utf8
   tests:
     before:
       - mysql -e 'CREATE DATABASE IF NOT EXISTS alixar_test;'
