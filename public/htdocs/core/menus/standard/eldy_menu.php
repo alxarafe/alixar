@@ -30,7 +30,6 @@ use Dolibarr\Lib\ViewMain;
 use Dolibarr\Code\Core\Classes\Menu;
 use Dolibarr\Code\Core\Classes\Menubase;
 
-
 /**
  *  Class to manage menu Eldy
  */

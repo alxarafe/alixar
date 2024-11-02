@@ -35,10 +35,9 @@ class Paypal extends AbstractService
         CredentialsInterface $credentials,
         ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-                             $scopes = array(),
+        $scopes = array(),
         UriInterface         $baseApiUri = null
-    )
-    {
+    ) {
         parent::__construct($credentials, $httpClient, $storage, $scopes, $baseApiUri);
 
         if (null === $baseApiUri) {

@@ -64,7 +64,6 @@ if (empty($action)) {
 }
 
 if ($element === 'facture') {
-
     $facture = new Facture($db);
     if ($facture->fetch($id) > 0) {
         $facture->call_trigger($action, $user);

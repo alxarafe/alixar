@@ -21,14 +21,12 @@
 
 namespace Dolibarr\Code\Compta\Classes;
 
-
 /**
  *      \file       htdocs/compta/localtax/class/localtax.class.php
  *      \ingroup    tax
  */
 
 use Dolibarr\Core\Base\CommonObject;
-
 
 /**
  *  Class to manage local tax

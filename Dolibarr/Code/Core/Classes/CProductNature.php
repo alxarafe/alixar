@@ -21,7 +21,6 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
-
 /**
  *      \file       htdocs/core/class/cproductnature.class.php
  *      \ingroup    core

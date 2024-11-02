@@ -40,7 +40,6 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObjectLine;
 
-
 /**
  *  \file       htdocs/supplier_proposal/class/supplier_proposal.class.php
  *  \brief      File of class to manage supplier proposals

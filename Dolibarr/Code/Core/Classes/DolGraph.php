@@ -21,7 +21,6 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
-
 /**
  *  \file       htdocs/core/class/dolgraph.class.php
  *  \ingroup    core

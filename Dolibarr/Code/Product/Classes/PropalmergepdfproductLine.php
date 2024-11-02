@@ -23,7 +23,6 @@ namespace Dolibarr\Code\Product\Classes;
 
 use Dolibarr\Core\Base\CommonObjectLine;
 
-
 /**
  *  \file       htdocs/product/class/propalmergepdfproduct.class.php
  *  \ingroup    product

@@ -24,8 +24,7 @@ class SignatureVerificationException extends \Exception implements ExceptionInte
         $message,
         $httpBody = null,
         $sigHeader = null
-    )
-    {
+    ) {
         $instance = new static($message);
         $instance->setHttpBody($httpBody);
         $instance->setSigHeader($sigHeader);

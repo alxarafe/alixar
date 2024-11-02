@@ -38,7 +38,6 @@ use Dolibarr\Code\Core\Classes\CommonOrderLine;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/fourn/class/fournisseur.commande.class.php
  *  \ingroup    fournisseur,commande

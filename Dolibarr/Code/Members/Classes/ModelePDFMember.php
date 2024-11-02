@@ -27,7 +27,6 @@ namespace Dolibarr\Code\Members\Classes;
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/core/modules/member/modules_member.class.php
  *  \ingroup    members

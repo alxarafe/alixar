@@ -26,7 +26,6 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
-
 /**
  *      \file       htdocs/core/class/CSMSFile.class.php
  *      \brief      File of class to send sms

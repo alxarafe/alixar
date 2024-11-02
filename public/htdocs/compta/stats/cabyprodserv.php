@@ -40,7 +40,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\FormCompany;
 use Dolibarr\Code\Core\Classes\FormOther;
 
-
 // Load translation files required by the page
 $langs->loadLangs(array("products", "categories", "errors", 'accountancy'));
 

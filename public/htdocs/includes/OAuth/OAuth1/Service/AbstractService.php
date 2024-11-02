@@ -32,8 +32,7 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
         TokenStorageInterface $storage,
         SignatureInterface   $signature,
         UriInterface         $baseApiUri = null
-    )
-    {
+    ) {
         parent::__construct($credentials, $httpClient, $storage);
 
         $this->signature = $signature;
@@ -205,8 +204,7 @@ abstract class AbstractService extends BaseAbstractService implements ServiceInt
         UriInterface $uri,
         TokenInterface $token,
         $bodyParams = null
-    )
-    {
+    ) {
         $this->signature->setTokenSecret($token->getAccessTokenSecret());
         $authParameters = $this->getBasicAuthorizationHeaderInfo();
         if (isset($authParameters['oauth_callback'])) {

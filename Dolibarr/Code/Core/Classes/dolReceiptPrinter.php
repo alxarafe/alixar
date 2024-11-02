@@ -22,7 +22,6 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
-
 /**
  *  \file           htdocs/core/class/dolreceiptprinter.class.php
  *  \brief          Print receipt ticket on various ESC/POS printer

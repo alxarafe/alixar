@@ -20,7 +20,6 @@
 
 use Dolibarr\Code\Compta\Classes\Paiement;
 use Dolibarr\Code\Societe\Classes\Societe;
-
 /*
  * The payment webservice was initially created by Nicolas Nunge <me@nikkow.eu>
  */

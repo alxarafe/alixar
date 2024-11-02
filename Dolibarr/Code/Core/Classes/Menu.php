@@ -21,7 +21,6 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
-
 /**
  *  \file       htdocs/core/class/menu.class.php
  *  \ingroup    core

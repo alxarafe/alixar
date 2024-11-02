@@ -24,7 +24,6 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
-
 /**
  *      \file       htdocs/core/class/antivir.class.php
  *      \brief      File of class to scan viruses

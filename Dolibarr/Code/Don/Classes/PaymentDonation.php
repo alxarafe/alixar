@@ -23,7 +23,6 @@ namespace Dolibarr\Code\Don\Classes;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/don/class/paymentdonation.class.php
  *  \ingroup    Donation
@@ -584,7 +583,6 @@ class PaymentDonation extends CommonObject
         $error = 0;
 
         if (isModEnabled("bank")) {
-
             $acc = new Account($this->db);
             $acc->fetch($accountid);
 

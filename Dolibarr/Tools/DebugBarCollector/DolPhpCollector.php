@@ -23,7 +23,6 @@ namespace Dolibarr\Tools\DebugBarCollector;
 use DebugBar\DataCollector\DataCollector;
 use DebugBar\DataCollector\Renderable;
 
-
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolPhpCollector.php
  *  \brief      Class for debugbar collection

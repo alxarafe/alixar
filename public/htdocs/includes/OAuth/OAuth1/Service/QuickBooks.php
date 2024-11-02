@@ -22,8 +22,7 @@ class QuickBooks extends AbstractService
         TokenStorageInterface $storage,
         SignatureInterface   $signature,
         UriInterface         $baseApiUri = null
-    )
-    {
+    ) {
         parent::__construct(
             $credentials,
             $httpClient,
@@ -116,8 +115,7 @@ class QuickBooks extends AbstractService
         $method = 'GET',
         $body = null,
         array $extraHeaders = array()
-    )
-    {
+    ) {
         $extraHeaders['Accept'] = 'application/json';
         return parent::request($path, $method, $body, $extraHeaders);
     }

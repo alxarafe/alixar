@@ -24,7 +24,6 @@ namespace Dolibarr\Code\Loan\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
 
-
 /**
  *  \file       htdocs/loan/class/paymentloan.class.php
  *  \ingroup    loan
@@ -538,7 +537,6 @@ class PaymentLoan extends CommonObject
         $this->db->begin();
 
         if (isModEnabled("bank")) {
-
             $acc = new Account($this->db);
             $acc->fetch($accountid);
 

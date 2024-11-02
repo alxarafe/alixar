@@ -39,7 +39,7 @@ use stdClass;
 /**
  *  Description and activation class for module Api
  */
-class  Api extends DolibarrModules
+class Api extends DolibarrModules
 {
     /**
      *   Constructor. Define names, constants, directories, boxes, permissions

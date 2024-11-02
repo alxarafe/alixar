@@ -108,8 +108,7 @@ class ServiceFactory
         $scopes = array(),
         UriInterface $baseApiUri = null,
         $apiVersion = ""
-    )
-    {
+    ) {
         if (!$this->httpClient) {
             // for backwards compatibility.
             $this->httpClient = new StreamClient();
@@ -172,8 +171,7 @@ class ServiceFactory
         array $scopes,
         UriInterface $baseApiUri = null,
         $apiVersion = ""
-    )
-    {
+    ) {
         return new $serviceName(
             $credentials,
             $this->httpClient,
@@ -230,8 +228,7 @@ class ServiceFactory
         TokenStorageInterface $storage,
         $scopes,
         UriInterface $baseApiUri = null
-    )
-    {
+    ) {
         if (!empty($scopes)) {
             throw new Exception(
                 'Scopes passed to ServiceFactory::createService but an OAuth1 service was requested.'

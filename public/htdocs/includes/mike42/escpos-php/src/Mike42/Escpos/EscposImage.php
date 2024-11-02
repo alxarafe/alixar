@@ -428,8 +428,7 @@ abstract class EscposImage
         string $filename,
         bool  $allowOptimisations = true,
         array $preferred = ['imagick', 'gd', 'native']
-    )
-    {
+    ) {
         /* Fail early if file is not readble */
         if (!file_exists($filename) || !is_readable($filename)) {
             throw new Exception("File '$filename' does not exist, or is not readable.");

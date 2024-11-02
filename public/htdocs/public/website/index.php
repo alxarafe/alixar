@@ -79,7 +79,6 @@ $accessallowed = 1;
 $type = '';
 
 if (empty($pageid)) {
-
     $object = new Website($db);
     $object->fetch(0, $websitekey);
 

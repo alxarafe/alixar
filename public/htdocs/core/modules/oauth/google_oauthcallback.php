@@ -20,7 +20,6 @@
 
 use Dolibarr\Code\User\Classes\User;
 use OAuth\Common\Http\Uri\UriFactory;
-
 // This page is used as callback for token generation of an OAUTH request.
 // This page can also be used to make the process to login and get token as described here:
 // https://developers.google.com/identity/protocols/oauth2/openid-connect#server-flow

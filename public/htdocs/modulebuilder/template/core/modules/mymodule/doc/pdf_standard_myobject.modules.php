@@ -282,7 +282,7 @@ class pdf_standard_myobject extends ModelePDFMyObject
             if (file_exists($dir)) {
                 // Add pdfgeneration hook
                 if (!is_object($hookmanager)) {
-					$hookmanager = new HookManager($this->db);
+                    $hookmanager = new HookManager($this->db);
                 }
                 $hookmanager->initHooks(array('pdfgeneration'));
                 $parameters = array('file' => $file, 'object' => $object, 'outputlangs' => $outputlangs);

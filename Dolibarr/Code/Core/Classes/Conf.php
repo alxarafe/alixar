@@ -28,7 +28,6 @@ use Exception;
 use LogHandler;
 use stdClass;
 
-
 /**
  *  \file           htdocs/core/class/conf.class.php
  *  \ingroup        core

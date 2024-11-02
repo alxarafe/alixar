@@ -22,7 +22,6 @@
 
 namespace Dolibarr\Code\Adherents\Classes;
 
-
 /**
  *      \file       htdocs/adherents/class/subscription.class.php
  *      \ingroup    member
@@ -34,7 +33,6 @@ namespace Dolibarr\Code\Adherents\Classes;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
-
 
 /**
  *  Class to manage subscriptions of foundation members

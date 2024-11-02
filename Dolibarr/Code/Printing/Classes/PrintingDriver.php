@@ -24,7 +24,6 @@ namespace Dolibarr\Code\Printing\Classes;
 
 use DoliDB;
 
-
 /**
  *      \file       htdocs/core/modules/printing/modules_printing.php
  *      \ingroup    printing

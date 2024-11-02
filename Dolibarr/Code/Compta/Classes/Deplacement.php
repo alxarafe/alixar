@@ -23,7 +23,6 @@
 
 namespace Dolibarr\Code\Compta\Classes;
 
-
 /**
  *      \file       htdocs/compta/deplacement/class/deplacement.class.php
  *      \ingroup    deplacement

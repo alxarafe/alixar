@@ -20,7 +20,6 @@
 
 namespace Dolibarr\Code\Compta\Classes;
 
-
 /**
  *      \file       compta/facture/class/paymentterm.class.php
  *      \ingroup    invoice

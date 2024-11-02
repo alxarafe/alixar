@@ -34,8 +34,7 @@ class FiveHundredPx extends AbstractService
         TokenStorageInterface $storage,
         SignatureInterface   $signature,
         UriInterface         $baseApiUri = null
-    )
-    {
+    ) {
         parent::__construct(
             $credentials,
             $httpClient,

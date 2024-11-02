@@ -27,7 +27,6 @@ use Dolibarr\Code\Core\Classes\Stats;
 use Dolibarr\Code\Fourn\Classes\CommandeFournisseur;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/commande/class/commandestats.class.php
  *  \ingroup    orders

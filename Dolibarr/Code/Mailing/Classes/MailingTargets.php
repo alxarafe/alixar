@@ -25,7 +25,6 @@ namespace Dolibarr\Code\Mailing\Classes;
 use DoliDB;
 use Exception;
 
-
 /**
  *      \file       htdocs/core/modules/mailings/modules_mailings.php
  *      \ingroup    mailing

@@ -37,7 +37,6 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/compta/bank/class/account.class.php
  *  \ingroup    bank

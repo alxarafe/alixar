@@ -24,7 +24,6 @@ namespace Dolibarr\Code\Expedition\Classes;
 
 use Dolibarr\Code\Core\Classes\Stats;
 
-
 /**
  *  \file       htdocs/expedition/class/expeditionstats.class.php
  *  \ingroup    expedition

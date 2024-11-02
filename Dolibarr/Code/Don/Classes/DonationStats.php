@@ -24,7 +24,6 @@ namespace Dolibarr\Code\Don\Classes;
 
 use Dolibarr\Code\Core\Classes\Stats;
 
-
 /**
  *  \file       htdocs/don/class/donstats.class.php
  *  \ingroup    donations

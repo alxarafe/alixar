@@ -95,7 +95,6 @@ class DolibarrApi
             $handle = @opendir(dol_osencode($dir));
             if (is_resource($handle)) {
                 while (($file = readdir($handle)) !== false) {
-
                     if (is_readable($dir . $file)) {
                         $module = DolibarrModules::_getModuleName($file);
                         if (!DolibarrModules::isActivated($module)) {

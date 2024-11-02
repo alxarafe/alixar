@@ -227,7 +227,6 @@ if (GETPOST("boutonp") || GETPOST("boutonp.x") || GETPOST("boutonp_x")) {       
 
                     //Linked user may not have an email set
                     if ($email) {
-
                         $application = ($conf->global->MAIN_APPLICATION_TITLE ? $conf->global->MAIN_APPLICATION_TITLE : 'Dolibarr ERP/CRM');
 
                         $link = getUrlSondage($numsondage, true);

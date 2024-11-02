@@ -29,7 +29,6 @@ use Dolibarr\Lib\ViewMain;
  *  \brief      File of class to build ODT documents for third parties
  */
 
-
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Societe\Classes\ModeleThirdPartyDoc;

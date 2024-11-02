@@ -22,7 +22,6 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
-
 /**
  *      \file       htdocs/core/class/events.class.php
  *      \ingroup    core

@@ -20,7 +20,6 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
-
 /**
  *  \file       htdocs/core/class/commonhookactions.class.php
  *  \ingroup    core

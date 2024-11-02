@@ -35,7 +35,6 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/delivery/class/delivery.class.php
  *  \ingroup    delivery

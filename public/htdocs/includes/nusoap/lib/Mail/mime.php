@@ -329,8 +329,7 @@ class Mail_mime
         $name = '',
         $isfile = true,
         $content_id = null
-    )
-    {
+    ) {
         $bodyfile = null;
 
         if ($isfile) {
@@ -411,8 +410,7 @@ class Mail_mime
         $description = '',
         $h_charset = null,
         $add_headers = array()
-    )
-    {
+    ) {
         $bodyfile = null;
 
         if ($isfile) {
@@ -716,8 +714,7 @@ class Mail_mime
         $params = null,
         $headers = null,
         $overwrite = false
-    )
-    {
+    ) {
         if ($separation === null) {
             $separation = $this->_build_params['eol'];
         }

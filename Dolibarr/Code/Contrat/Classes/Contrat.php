@@ -35,7 +35,6 @@ namespace Dolibarr\Code\Contrat\Classes;
 use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Core\Base\CommonObject;
 
-
 /**
  *  \file       htdocs/contrat/class/contrat.class.php
  *  \ingroup    contrat

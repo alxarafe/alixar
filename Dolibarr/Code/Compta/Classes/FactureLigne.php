@@ -47,13 +47,11 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/compta/facture/class/facture.class.php
  *  \ingroup    invoice
  *  \brief      File of class to manage invoices
  */
-
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/margin/lib/margins.lib.php';
 

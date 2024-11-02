@@ -208,7 +208,7 @@ class ActionsMyModule extends CommonHookActions
 
         $ret = 0;
         $deltemp = array();
-		dol_syslog(get_only_class($this) . '::executeHooks action=' . $action);
+        dol_syslog(get_only_class($this) . '::executeHooks action=' . $action);
 
         /* print_r($parameters); print_r($object); echo "action: " . $action; */
         if (in_array($parameters['currentcontext'], array('somecontext1', 'somecontext2'))) {       // do something only for the context 'somecontext1' or 'somecontext2'
@@ -236,7 +236,7 @@ class ActionsMyModule extends CommonHookActions
 
         $ret = 0;
         $deltemp = array();
-		dol_syslog(get_only_class($this) . '::executeHooks action=' . $action);
+        dol_syslog(get_only_class($this) . '::executeHooks action=' . $action);
 
         /* print_r($parameters); print_r($object); echo "action: " . $action; */
         if (in_array($parameters['currentcontext'], array('somecontext1', 'somecontext2'))) {

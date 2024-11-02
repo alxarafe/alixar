@@ -35,7 +35,6 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-
 /**
  *      \file       htdocs/projet/class/project.class.php
  *      \ingroup    projet
@@ -1864,7 +1863,6 @@ class Project extends CommonObject
 
             //Duplicate task
             if ($clone_task) {
-                
                 $taskstatic = new Task($this->db);
 
                 // Security check

@@ -26,7 +26,6 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObjectLine;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/fourn/class/fournisseur.commande.dispatch.class.php
  *  \ingroup    fournisseur stock

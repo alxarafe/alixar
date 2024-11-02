@@ -79,7 +79,6 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\UserGroup\Classes\ModelePDFUserGroup;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/core/class/html.formfile.class.php
  *  \ingroup    core

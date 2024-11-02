@@ -1158,7 +1158,6 @@ function getPagesFromSearchCriterias($type, $algo, $searchstring, $max = 25, $so
     $found = 0;
 
     if (!$error && (empty($max) || ($found < $max)) && (preg_match('/meta/', $algo) || preg_match('/content/', $algo))) {
-
         $sql = 'SELECT wp.rowid FROM ' . MAIN_DB_PREFIX . 'website_page as wp';
         if (is_array($otherfilters) && !empty($otherfilters['category'])) {
             $sql .= ', ' . MAIN_DB_PREFIX . 'categorie_website_page as cwp';

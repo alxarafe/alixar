@@ -21,7 +21,6 @@ namespace Dolibarr\Tools\DebugBarCollector;
 
 use DebugBar\DataCollector\ExceptionsCollector;
 
-
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolexceptionsCollector.php
  *  \brief      Class for debugbar collection

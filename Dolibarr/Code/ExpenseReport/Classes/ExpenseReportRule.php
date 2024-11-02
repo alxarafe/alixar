@@ -25,7 +25,6 @@ namespace Dolibarr\Code\ExpenseReport\Classes;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/expensereport/class/expensereport_ik.class.php
  *  \ingroup    expenseik

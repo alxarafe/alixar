@@ -26,7 +26,6 @@ namespace Dolibarr\Code\Core\Classes;
 
 use DoliDB;
 
-
 /**
  *  \file       htdocs/core/class/html.formaccounting.class.php
  *  \ingroup    Accountancy (Double entries)

@@ -30,7 +30,6 @@ use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-
 /**
  *  \file       ticket/class/ticket.class.php
  *  \ingroup    ticket

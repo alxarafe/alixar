@@ -35,7 +35,7 @@ use Dolibarr\Core\Base\DolibarrModules;
 /**
  * Class to describe and enable double entry accounting module
  */
-class  Accounting extends DolibarrModules
+class Accounting extends DolibarrModules
 {
     /**
      *   Constructor. Define names, constants, directories, boxes, permissions

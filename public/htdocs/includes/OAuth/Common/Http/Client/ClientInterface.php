@@ -25,8 +25,8 @@ interface ClientInterface
      */
     public function retrieveResponse(
         UriInterface $endpoint,
-              $requestBody,
+        $requestBody,
         array $extraHeaders = array(),
-              $method = 'POST'
+        $method = 'POST'
     );
 }

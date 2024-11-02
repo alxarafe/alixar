@@ -30,7 +30,6 @@ namespace Dolibarr\Code\Delivery\Classes;
 use Dolibarr\Core\Base\CommonObjectLine;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/delivery/class/delivery.class.php
  *  \ingroup    delivery

@@ -23,7 +23,6 @@ namespace Dolibarr\Code\Salaries\Classes;
 
 use Dolibarr\Code\Core\Classes\Stats;
 
-
 /**
  *  \file       htdocs/salaries/class/salariesstats.class.php
  *  \ingroup    salaries

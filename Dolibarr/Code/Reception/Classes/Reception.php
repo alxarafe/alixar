@@ -47,7 +47,6 @@ use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 use stdClass;
 
-
 /**
  *  \file       htdocs/reception/class/reception.class.php
  *  \ingroup    reception
@@ -555,7 +554,6 @@ class Reception extends CommonObject
 
         // If stock increment is done on reception (recommended choice)
         if (!$error && isModEnabled('stock') && getDolGlobalInt('STOCK_CALCULATE_ON_RECEPTION')) {
-
             $langs->load("agenda");
 
             // Loop on each product line to add a stock movement
@@ -1654,7 +1652,6 @@ class Reception extends CommonObject
 
             // If stock increment is done on closing
             if (!$error && isModEnabled('stock') && getDolGlobalInt('STOCK_CALCULATE_ON_RECEPTION_CLOSE')) {
-
                 $langs->load("agenda");
 
                 // Loop on each product line to add a stock movement
@@ -1946,7 +1943,6 @@ class Reception extends CommonObject
         if ($this->db->query($sql)) {
             // If stock increment is done on closing
             if (!$error && isModEnabled('stock') && getDolGlobalInt('STOCK_CALCULATE_ON_RECEPTION')) {
-
                 $langs->load("agenda");
 
                 // Loop on each product line to add a stock movement

@@ -51,7 +51,6 @@ namespace Dolibarr\Code\Core\Classes;
 use DoliDB;
 use TCPDF;
 
-
 /**
  *  \file       htdocs/core/class/commonstickergenerator.class.php
  *  \ingroup    core

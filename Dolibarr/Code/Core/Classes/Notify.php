@@ -29,7 +29,6 @@ namespace Dolibarr\Code\Core\Classes;
 
 use DoliDB;
 
-
 /**
  *      \file       htdocs/core/class/notify.class.php
  *      \ingroup    notification

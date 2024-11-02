@@ -35,7 +35,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/usergroups.lib.php';
 
 use Dolibarr\Code\User\Classes\User;
 
-
 // Load translation files required by page
 $langs->loadLangs(array("users", "companies", "admin", "website"));
 

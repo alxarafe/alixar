@@ -40,7 +40,6 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/expedition/class/expedition.class.php
  *  \ingroup    expedition
@@ -2482,7 +2481,6 @@ class Expedition extends CommonObject
 
             // If stock increment is done on closing
             if (!$error && isModEnabled('stock') && getDolGlobalString('STOCK_CALCULATE_ON_SHIPMENT_CLOSE')) {
-
                 $langs->load("agenda");
 
                 // Loop on each product line to add a stock movement

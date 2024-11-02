@@ -19,8 +19,7 @@ class ScoopIt extends AbstractService
         TokenStorageInterface $storage,
         SignatureInterface   $signature,
         UriInterface         $baseApiUri = null
-    )
-    {
+    ) {
         parent::__construct($credentials, $httpClient, $storage, $signature, $baseApiUri);
 
         if (null === $baseApiUri) {

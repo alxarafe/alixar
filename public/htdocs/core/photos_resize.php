@@ -192,7 +192,6 @@ if ($modulepart == 'produit' || $modulepart == 'product' || $modulepart == 'serv
         $dir = $conf->adherent->dir_output; // By default
     }
 } elseif ($modulepart == 'societe') {
-
     $object = new Societe($db);
     if ($id > 0) {
         $result = $object->fetch($id);

@@ -24,7 +24,6 @@ use DebugBar\DataCollector\AssetProvider;
 use DebugBar\DataCollector\DataCollector;
 use DebugBar\DataCollector\Renderable;
 
-
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolibarrCollector.php
  *  \brief      Class for debugbar collection

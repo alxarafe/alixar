@@ -24,7 +24,6 @@ namespace Dolibarr\Code\Societe\Classes;
 
 use DoliDB;
 
-
 /**
  *      \file       htdocs/societe/class/client.class.php
  *      \ingroup    societe

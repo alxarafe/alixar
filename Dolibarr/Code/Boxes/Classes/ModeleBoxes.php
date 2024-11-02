@@ -26,7 +26,6 @@ namespace Dolibarr\Code\Boxes\Classes;
 
 use DoliDB;
 
-
 /**
  *      \file       htdocs/core/boxes/modules_boxes.php
  *      \ingroup    core

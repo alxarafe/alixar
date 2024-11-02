@@ -27,7 +27,6 @@ namespace Dolibarr\Code\Core\Classes;
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Societe\Classes\Societe;
 
-
 /**
  *  \file       htdocs/core/class/html.formcompany.class.php
  *  \ingroup    core

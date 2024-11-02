@@ -25,7 +25,6 @@ namespace Dolibarr\Code\Compta\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
 
-
 /**
  *      \file       htdocs/compta/sociales/class/paymentsocialcontribution.class.php
  *      \ingroup    invoice
@@ -584,7 +583,6 @@ class PaymentVAT extends CommonObject
         $error = 0;
 
         if (isModEnabled("bank")) {
-
             $acc = new Account($this->db);
             $acc->fetch($accountid);
 

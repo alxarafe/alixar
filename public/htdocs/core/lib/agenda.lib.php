@@ -40,7 +40,6 @@ use Dolibarr\Code\Resource\Classes\FormResource;
 use Dolibarr\Code\Societe\Classes\Client;
 use Dolibarr\Code\Societe\Classes\Societe;
 
-
 /**
  * Show filter form in agenda view
  *
@@ -85,8 +84,7 @@ function print_actions_filter(
     $excludetype = '',
     $resourceid = 0,
     $search_categ_cus = 0
-)
-{
+) {
     global $user, $langs, $db, $hookmanager;
     global $massaction;
 

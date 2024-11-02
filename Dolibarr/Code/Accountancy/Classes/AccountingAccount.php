@@ -28,7 +28,6 @@ namespace Dolibarr\Code\Accountancy\Classes;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Core\Base\CommonObject;
 
-
 /**
  *  \file       htdocs/accountancy/class/accountingaccount.class.php
  *  \ingroup    Accountancy (Double entries)

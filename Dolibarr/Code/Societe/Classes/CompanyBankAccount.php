@@ -29,7 +29,6 @@ use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/societe/class/companybankaccount.class.php
  *  \ingroup    societe

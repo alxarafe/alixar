@@ -25,7 +25,6 @@
 
 namespace Dolibarr\Code\Adherents\Classes;
 
-
 /**
  *  \file       htdocs/adherents/class/adherent_type.class.php
  *  \ingroup    member
@@ -35,7 +34,6 @@ namespace Dolibarr\Code\Adherents\Classes;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
-
 
 /**
  *  Class to manage members type

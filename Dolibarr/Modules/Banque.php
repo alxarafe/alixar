@@ -37,7 +37,7 @@ use Modules\Banque\DoliDB;
 /**
  *  Class to describe and enable module Banque
  */
-class  Banque extends DolibarrModules
+class Banque extends DolibarrModules
 {
     /**
      *  Constructor.

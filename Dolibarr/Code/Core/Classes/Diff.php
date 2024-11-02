@@ -37,8 +37,7 @@ class Diff
         $file1,
         $file2,
         $compareCharacters = false
-    )
-    {
+    ) {
 
         // return the diff of the files
         return self::compare(

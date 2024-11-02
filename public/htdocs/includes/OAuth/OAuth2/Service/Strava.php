@@ -46,10 +46,9 @@ class Strava extends AbstractService
         CredentialsInterface $credentials,
         ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-                             $scopes = array(),
+        $scopes = array(),
         UriInterface         $baseApiUri = null
-    )
-    {
+    ) {
         if (empty($scopes)) {
             $scopes = array(self::SCOPE_PUBLIC);
         }

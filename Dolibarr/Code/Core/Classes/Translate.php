@@ -24,7 +24,6 @@ namespace Dolibarr\Code\Core\Classes;
 
 use DoliDB;
 
-
 /**
  *      \file       htdocs/core/class/translate.class.php
  *      \ingroup    core

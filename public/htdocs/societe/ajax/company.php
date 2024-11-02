@@ -94,7 +94,6 @@ if (!empty($action) && $action == 'fetch' && !empty($id)) {
 
     echo json_encode($outjson);
 } else {
-
     if (empty($htmlname)) {
         return;
     }

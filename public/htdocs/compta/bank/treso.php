@@ -44,7 +44,6 @@ use Dolibarr\Code\Salaries\Classes\Salary;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 
-
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'bills', 'categories', 'companies', 'salaries'));
 

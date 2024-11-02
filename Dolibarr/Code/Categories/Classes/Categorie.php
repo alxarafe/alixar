@@ -37,7 +37,6 @@ use Dolibarr\Core\Base\CommonObject;
 use Dolibarr\Lib\Misc;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/categories/class/categorie.class.php
  *  \ingroup    categorie

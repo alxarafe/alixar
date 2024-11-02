@@ -31,10 +31,9 @@ class Delicious extends AbstractService
         CredentialsInterface $credentials,
         ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-                             $scopes = array(),
+        $scopes = array(),
         UriInterface         $baseApiUri = null
-    )
-    {
+    ) {
         parent::__construct(
             $credentials,
             $httpClient,

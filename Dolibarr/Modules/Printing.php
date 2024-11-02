@@ -32,7 +32,6 @@ namespace Dolibarr\Modules;
 
 use Dolibarr\Core\Base\DolibarrModules;
 
-
 /**
  *  Class to describe and activate module Direct Printing
  */

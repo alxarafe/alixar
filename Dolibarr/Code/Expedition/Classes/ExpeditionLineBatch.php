@@ -23,7 +23,6 @@ namespace Dolibarr\Code\Expedition\Classes;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/expedition/class/expeditionlinebatch.class.php
  *  \ingroup    productbatch

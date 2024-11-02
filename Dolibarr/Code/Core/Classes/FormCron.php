@@ -23,7 +23,6 @@ namespace Dolibarr\Code\Core\Classes;
 
 use DoliDB;
 
-
 /**
  *      \file       htdocs/core/class/html.formcron.class.php
  *      \brief      Fichier de la class des functions predefinie de composants html cron

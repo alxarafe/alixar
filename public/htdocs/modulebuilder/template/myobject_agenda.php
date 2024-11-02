@@ -198,7 +198,7 @@ if ($object->id > 0) {
     //$title = $object->ref." - ".$langs->trans("Agenda");
     $help_url = 'EN:Module_Agenda_En|DE:Modul_Terminplanung';
 
-	ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-card_agenda');
+    ViewMain::llxHeader('', $title, $help_url, '', 0, 0, '', '', '', 'mod-mymodule page-card_agenda');
 
     if (isModEnabled('notification')) {
         $langs->load("mails");
@@ -277,7 +277,7 @@ if ($object->id > 0) {
     $permok = $user->hasRight('agenda', 'myactions', 'create');
     if ((!empty($objthirdparty->id) || !empty($objcon->id)) && $permok) {
         //$out.='<a href="'.DOL_URL_ROOT.'/comm/action/card.php?action=create';
-		if (get_only_class($objthirdparty) == 'Societe') {
+        if (get_only_class($objthirdparty) == 'Societe') {
             $out .= '&socid=' . urlencode($objthirdparty->id);
         }
         $out .= (!empty($objcon->id) ? '&contactid=' . urlencode($objcon->id) : '');

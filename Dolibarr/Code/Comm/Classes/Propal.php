@@ -39,7 +39,6 @@
 
 namespace Dolibarr\Code\Comm\Classes;
 
-
 /**
  *  \file       htdocs/comm/propal/class/propal.class.php
  *  \brief      File of class to manage proposals
@@ -672,7 +671,6 @@ public $demand_reason;
         dol_syslog(get_only_class($this) . "::fetch_lines", LOG_DEBUG);
         $result = $this->db->query($sql);
         if ($result) {
-
             $num = $this->db->num_rows($result);
 
             $i = 0;

@@ -28,7 +28,6 @@ namespace Dolibarr\Code\Compta\Classes;
 use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Core\Base\CommonObject;
 
-
 /**
  *  \file       htdocs/compta/paiement/cheque/class/remisecheque.class.php
  *  \ingroup    compta

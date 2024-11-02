@@ -21,8 +21,7 @@ class Flickr extends AbstractService
         TokenStorageInterface $storage,
         SignatureInterface   $signature,
         UriInterface         $baseApiUri = null
-    )
-    {
+    ) {
         parent::__construct($credentials, $httpClient, $storage, $signature, $baseApiUri);
         if ($baseApiUri === null) {
             $this->baseApiUri = new Uri('https://api.flickr.com/services/rest/');

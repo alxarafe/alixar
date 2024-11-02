@@ -24,7 +24,6 @@ namespace Dolibarr\Code\OpenSurvey\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
 
-
 /**
  *  \file       htdocs/opensurvey/class/opensurveysondage.class.php
  *  \ingroup    opensurvey

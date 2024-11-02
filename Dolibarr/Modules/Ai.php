@@ -37,7 +37,7 @@ use stdClass;
 /**
  *  Description and activation class for module Ai
  */
-class  Ai extends DolibarrModules
+class Ai extends DolibarrModules
 {
     /**
      * Constructor. Define names, constants, directories, boxes, permissions

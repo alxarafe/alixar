@@ -1,6 +1,6 @@
 <?php
 
-/* Copyright (C) 2024   	Florian Charlaix            <fcharlaix@easya.solutions>
+/* Copyright (C) 2024       Florian Charlaix            <fcharlaix@easya.solutions>
  * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify

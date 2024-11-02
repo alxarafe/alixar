@@ -37,7 +37,6 @@ namespace Dolibarr\Code\Fourn\Classes;
 
 use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
 
-
 /**
  *  \file       htdocs/fourn/class/fournisseur.facture.class.php
  *  \ingroup    fournisseur,facture
@@ -45,7 +44,6 @@ use Dolibarr\Code\Accountancy\Classes\AccountingAccount;
  */
 
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
-
 use Dolibarr\Core\Base\CommonObjectLine;
 
 if (isModEnabled('accounting')) {

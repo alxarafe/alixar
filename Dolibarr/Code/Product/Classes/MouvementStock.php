@@ -29,7 +29,6 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/product/stock/class/mouvementstock.class.php
  *  \ingroup    stock

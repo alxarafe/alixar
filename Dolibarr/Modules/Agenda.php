@@ -27,6 +27,7 @@
  */
 
 namespace Dolibarr\Modules;
+
 /**
  *      \defgroup   agenda     Module agenda
  *      \brief      Module to manage agenda and events
@@ -41,7 +42,7 @@ use Modules\Agenda\DoliDB;
 /**
  *  Class to describe and enable/disable module Agenda
  */
-class  Agenda extends DolibarrModules
+class Agenda extends DolibarrModules
 {
     /**
      *   Constructor. Define names, constants, directories, boxes, permissions

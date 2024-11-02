@@ -40,7 +40,6 @@ use Dolibarr\Code\Core\Classes\CommonInvoiceLine;
 use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 
-
 /**
  *  \file       htdocs/fourn/class/fournisseur.facture.class.php
  *  \ingroup    fournisseur,facture

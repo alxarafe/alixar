@@ -21,7 +21,6 @@
 
 namespace Dolibarr\Code\Compta\Classes;
 
-
 /**
  *  \file       htdocs/compta/bank/class/paymentvarious.class.php
  *  \ingroup    bank
@@ -31,7 +30,6 @@ namespace Dolibarr\Code\Compta\Classes;
 // Put here all includes required by your class file
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
-
 
 /**
  *  Class to manage various payments

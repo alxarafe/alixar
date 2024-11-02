@@ -30,7 +30,6 @@ namespace Dolibarr\Code\Expedition\Classes;
 use Dolibarr\Code\Core\Classes\CommonDocGenerator;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/core/modules/expedition/modules_expedition.php
  *  \ingroup    expedition

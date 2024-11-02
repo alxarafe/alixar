@@ -19,7 +19,6 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
-
 /**
  *  \file       htdocs/core/class/genericobject.class.php
  *  \ingroup    core
@@ -28,7 +27,6 @@ namespace Dolibarr\Code\Core\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
-
 
 /**
  *  Class of a generic business object

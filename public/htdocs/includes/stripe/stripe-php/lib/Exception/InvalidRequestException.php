@@ -31,8 +31,7 @@ class InvalidRequestException extends ApiErrorException
         $httpHeaders = null,
         $stripeCode = null,
         $stripeParam = null
-    )
-    {
+    ) {
         $instance = parent::factory($message, $httpStatus, $httpBody, $jsonBody, $httpHeaders, $stripeCode);
         $instance->setStripeParam($stripeParam);
 

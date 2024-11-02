@@ -23,7 +23,6 @@ namespace Dolibarr\Code\Ecm\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
 
-
 /**
  *  \file       htdocs/ecm/class/ecmdirectory.class.php
  *  \ingroup    ecm

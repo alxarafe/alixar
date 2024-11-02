@@ -37,8 +37,6 @@ use DoliDB;
 use Societe;
 use stdClass;
 
-
-
 /**
  *  Class to describe and enable module TakePos
  */

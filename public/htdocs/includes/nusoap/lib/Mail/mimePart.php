@@ -669,8 +669,7 @@ class Mail_mimePart
         $language = null,
         $encoding = null,
         $maxLength = 75
-    )
-    {
+    ) {
         // RFC 2045:
         // value needs encoding if contains non-ASCII chars or is longer than 78 chars
         if (!preg_match('#[^\x20-\x7E]#', $value)) {
@@ -748,8 +747,7 @@ class Mail_mimePart
         $charset,
         $encoding = 'quoted-printable',
         $maxLength = 76
-    )
-    {
+    ) {
         // WARNING: RFC 2047 says: "An 'encoded-word' MUST NOT be used in
         // parameter of a MIME Content-Type or Content-Disposition field",
         // but... it's supported by many clients/servers
@@ -823,8 +821,7 @@ class Mail_mimePart
         $charset = 'ISO-8859-1',
         $encoding = 'quoted-printable',
         $eol = "\r\n"
-    )
-    {
+    ) {
         // Structured headers
         $comma_headers = array(
             'from', 'to', 'cc', 'bcc', 'sender', 'reply-to',

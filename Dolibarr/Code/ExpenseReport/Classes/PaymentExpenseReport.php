@@ -24,7 +24,6 @@ namespace Dolibarr\Code\ExpenseReport\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
 
-
 /**
  *  \file       htdocs/expensereport/class/paymentexpensereport.class.php
  *  \ingroup    Expense Report
@@ -554,7 +553,6 @@ class PaymentExpenseReport extends CommonObject
         $error = 0;
 
         if (isModEnabled("bank")) {
-
             $acc = new Account($this->db);
             $acc->fetch($accountid);
 

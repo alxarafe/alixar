@@ -60,7 +60,6 @@ if (isset($action) && !empty($action)) {
     $error = 0;
 
     if ($action == 'build' && !empty($element)) {
-
         $ecmdirstatic = new EcmDirectory($db);
         $ecmdirtmp = new EcmDirectory($db);
 

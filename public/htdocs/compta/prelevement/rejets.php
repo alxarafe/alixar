@@ -38,7 +38,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 
-
 // Load translation files required by the page
 $langs->loadLangs(array('banks', 'categories', 'withdrawals', 'companies'));
 

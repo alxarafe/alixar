@@ -203,7 +203,6 @@ foreach ($allModules as $modName => $filename) {
             dol_syslog("Module " . get_only_class($objMod) . " not qualified");
         }
     } catch (Exception $e) {
-
     }
 }
 

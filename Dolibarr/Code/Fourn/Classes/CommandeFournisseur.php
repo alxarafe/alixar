@@ -39,7 +39,6 @@ use Dolibarr\Code\Core\Classes\WorkboardResponse;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/fourn/class/fournisseur.commande.class.php
  *  \ingroup    fournisseur,commande
@@ -3521,7 +3520,6 @@ class CommandeFournisseur extends CommonOrder
     public function calcAndSetStatusDispatch(User $user, $closeopenorder = 1, $comment = '')
     {
         if (isModEnabled("supplier_order")) {
-
             $qtydelivered = array();
             $qtywished = array();
 

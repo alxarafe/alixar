@@ -149,13 +149,13 @@ $leftmenuwidth = 240;
 
     <?php
 if (getDolGlobalString('THEME_DARKMODEENABLED')) {
-    print "/* For dark mode */\n";
-    if (getDolGlobalInt('THEME_DARKMODEENABLED') != 2) {
-        print "@media (prefers-color-scheme: dark) {";  // To test, click on the 3 dots menu, then Other options then Display then emulate prefer-color-schemes
-    } else {
-        print "@media not print {";
-    }
-    print ":root {
+        print "/* For dark mode */\n";
+        if (getDolGlobalInt('THEME_DARKMODEENABLED') != 2) {
+            print "@media (prefers-color-scheme: dark) {";  // To test, click on the 3 dots menu, then Other options then Display then emulate prefer-color-schemes
+            } else {
+            print "@media not print {";
+            }
+        print ":root {
 	            --colorbackhmenu1: #3d3e40;
 	            --colorbackvmenu1: #2b2c2e;
 	            --colorbacktitle1: #2b2d2f;
@@ -1646,12 +1646,12 @@ td.leftborder, td.hide6 {
     <?php
 // Add a nowrap on smartphone, so long list of field used for filter are overflowed with clip
 if ($conf->browser->layout == 'phone') {
-    ?>
+        ?>
     .divsearchfieldfilter {
         white-space: nowrap;
     }
 
-    <?php
+        <?php
 } ?>
     div.confirmmessage {
         padding-top: 6px;
@@ -3536,7 +3536,8 @@ div.statusref {
 
     <?php echo colorAdjustBrightness(colorArrayToHex(colorStringToArray($colorbackhmenu1)), '5'); ?>  , var(--colorbackhmenu1)); */
     <?php if ($colorbackhmenu1 == '255,255,255') { ?> box-shadow: 0px 0px 4px #ddd;
-    <?php } ?><?php } ?>
+    <?php } ?><?php 
+} ?>
     }
 
     div#tmenu_tooltip {
@@ -3835,7 +3836,7 @@ div.statusref {
     );
     $mainmenuused = 'home';
     foreach ($conf->modules as $val) {
-        $mainmenuused .= ',' . (isset($moduletomainmenu[$val]) ? $moduletomainmenu[$val] : $val);
+            $mainmenuused .= ',' . (isset($moduletomainmenu[$val]) ? $moduletomainmenu[$val] : $val);
     }
     $mainmenuusedarray = array_unique(explode(',', $mainmenuused));
 
@@ -3846,54 +3847,54 @@ div.statusref {
     $divnotrequired = array('multicurrency', 'salaries', 'ticket', 'margin', 'opensurvey', 'paybox', 'expensereport', 'incoterm', 'prelevement', 'propal', 'workflow', 'notification', 'supplier_proposal', 'cron', 'product', 'productbatch', 'expedition');
 
     foreach ($mainmenuusedarray as $val) {
-        if (empty($val) || in_array($val, $divalreadydefined)) {
-            continue;
-        }
-        if (in_array($val, $divnotrequired)) {
-            continue;
-        }
-
-        $found = 0;
-        $url = '';
-        $constformoduleicon = 'MAIN_MODULE_' . strtoupper($val) . '_ICON';
-        $iconformodule = getDolGlobalString($constformoduleicon);
-        if ($iconformodule) {
-            if (preg_match('/^fa\-/', $iconformodule)) {
-                // This is a fa icon
-            } else {
-                $url = dol_buildpath('/' . $val . '/img/' . $iconformodule . '.png', 1);
-            }
-            $found = 1;
-        } else {
-            // Search img file in module dir
-            foreach ($conf->file->dol_document_root as $dirroot) {
-                if (file_exists($dirroot . "/" . $val . "/img/" . $val . ".png")) {
-                    $url = dol_buildpath('/' . $val . '/img/' . $val . '.png', 1);
-                    $found = 1;
-                    break;
+            if (empty($val) || in_array($val, $divalreadydefined)) {
+                continue;
                 }
-            }
-        }
-        //print "XXX".$val."->".$found."\n";
+            if (in_array($val, $divnotrequired)) {
+                continue;
+                }
 
-        // Output entry for menu icon in CSS
-        if (!$found) {
+            $found = 0;
+            $url = '';
+            $constformoduleicon = 'MAIN_MODULE_' . strtoupper($val) . '_ICON';
+            $iconformodule = getDolGlobalString($constformoduleicon);
+            if ($iconformodule) {
+                if (preg_match('/^fa\-/', $iconformodule)) {
+                    // This is a fa icon
+                } else {
+                    $url = dol_buildpath('/' . $val . '/img/' . $iconformodule . '.png', 1);
+                }
+                $found = 1;
+                } else {
+                // Search img file in module dir
+                foreach ($conf->file->dol_document_root as $dirroot) {
+                    if (file_exists($dirroot . "/" . $val . "/img/" . $val . ".png")) {
+                        $url = dol_buildpath('/' . $val . '/img/' . $val . '.png', 1);
+                        $found = 1;
+                        break;
+                    }
+                }
+                }
+            //print "XXX".$val."->".$found."\n";
+
+            // Output entry for menu icon in CSS
+            if (!$found) {
             print "/* A mainmenu entry was found but img file " . $val . ".png not found (check /" . $val . "/img/" . $val . ".png), so we use a generic one */\n";
             print 'div.mainmenu.' . $val . ' span::before {' . "\n";
             print 'content: "\f249";' . "\n";
             print '}' . "\n";
             $generic++;
-        } else {
+                } else {
             if ($url) {
-                print "div.mainmenu." . $val . " {\n";
-                print "	background-image: url(" . $url . ");\n";
-                print " background-position-y: 3px;\n";
-                print " filter: saturate(0);\n";
-                print "}\n";
-            } else {
+                    print "div.mainmenu." . $val . " {\n";
+                    print "	background-image: url(" . $url . ");\n";
+                    print " background-position-y: 3px;\n";
+                    print " filter: saturate(0);\n";
+                    print "}\n";
+                } else {
                 print '/* icon for module ' . $val . ' is a fa icon */' . "\n";
-            }
-        }
+                }
+                }
     }
     // End of part to add more div class css
     ?>
@@ -3954,9 +3955,9 @@ div.statusref {
         max-width: 560px;
     <?php
 if (getDolGlobalString('MAIN_LOGIN_BACKGROUND')) {
-    print '	background-color: rgba(255, 255, 255, 0.9);';
+        print '	background-color: rgba(255, 255, 255, 0.9);';
 } else {
-    print '	background-color: #FFFFFF;';
+        print '	background-color: #FFFFFF;';
 }
 ?> -webkit-box-shadow: 0 2px 23px 2px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(60, 60, 60, 0.15);
         box-shadow: 0 2px 23px 2px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(60, 60, 60, 0.15);
@@ -6610,18 +6611,18 @@ div.pagination li:not(.paginationbeforearrows,.paginationafterarrows,.title-butt
 
     <?php
 if (getDolGlobalString('THEME_DARKMODEENABLED')) {
-    print "/* For dark mode */\n";
-    if (getDolGlobalInt('THEME_DARKMODEENABLED') != 2) {
-        print "@media (prefers-color-scheme: dark) {";  // To test, click on the 3 dots menu, then Other options then Display then emulate prefer-color-schemes
-    } else {
-        print "@media not print {";
-    } ?>
+        print "/* For dark mode */\n";
+        if (getDolGlobalInt('THEME_DARKMODEENABLED') != 2) {
+            print "@media (prefers-color-scheme: dark) {";  // To test, click on the 3 dots menu, then Other options then Display then emulate prefer-color-schemes
+            } else {
+            print "@media not print {";
+            } ?>
     div.ui-tooltip.mytooltip {
         border: 1px solid #bbb !important;
     }
 
-    <?php
-    print '}';
+                <?php
+                print '}';
 }
 ?>
 
@@ -10244,13 +10245,13 @@ span.cke_skin_kama { padding: 0 !important; }*/
 
     <?php
 if (getDolUserString('MAIN_OPTIMIZEFORTEXTBROWSER')) {
-    // Set a max height on multiselect when using multiselect
-    ?>
+        // Set a max height on multiselect when using multiselect
+        ?>
     select[multiple] {
         height: 42px;
     }
 
-    <?php
+        <?php
 }
 
 

@@ -34,7 +34,6 @@ require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\FormOther;
 
-
 // Load translation files required by the page
 $langs->loadLangs(array("products", "categories", "errors", 'accountancy'));
 

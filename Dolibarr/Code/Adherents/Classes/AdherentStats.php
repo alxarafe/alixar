@@ -26,7 +26,6 @@ namespace Dolibarr\Code\Adherents\Classes;
 
 use Dolibarr\Code\Core\Classes\Stats;
 
-
 /**
  *  \file       htdocs/adherents/class/adherentstats.class.php
  *  \ingroup    member

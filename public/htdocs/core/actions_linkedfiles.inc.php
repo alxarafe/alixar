@@ -192,7 +192,6 @@ if ($action == 'confirm_deletefile' && $confirm == 'yes' && !empty($permissionto
         }
     }
 } elseif ($action == 'confirm_updateline' && GETPOST('save', 'alpha') && GETPOST('link', 'alpha') && !empty($permissiontoadd)) {
-
     $link = new Link($db);
     $f = $link->fetch(GETPOSTINT('linkid'));
     if ($f) {

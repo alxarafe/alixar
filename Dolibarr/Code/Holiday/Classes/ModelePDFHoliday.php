@@ -28,7 +28,6 @@
 
 namespace Dolibarr\Code\Holiday\Classes;
 
-
 /**
  *  \file       htdocs/core/modules/holiday/modules_holiday.php
  *  \ingroup    contract

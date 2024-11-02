@@ -36,7 +36,7 @@ use stdClass;
 /**
  *  Description and activation class for module FixedAssets
  */
-class  Asset extends DolibarrModules
+class Asset extends DolibarrModules
 {
     /**
      * Constructor. Define names, constants, directories, boxes, permissions

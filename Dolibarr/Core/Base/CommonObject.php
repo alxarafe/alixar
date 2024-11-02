@@ -9952,7 +9952,6 @@ abstract class CommonObject
                     break;
                 case 'task':
                 case 'project_task':
-
                     $project_result = $this->fetch_projet();
                     if ($project_result >= 0) {
                         $element = 'projet/' . dol_sanitizeFileName($this->project->ref) . '/';

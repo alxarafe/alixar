@@ -25,7 +25,6 @@ namespace Dolibarr\Code\Salaries\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
 
-
 /**
  *  \file       htdocs/salaries/class/paymentsalary.class.php
  *  \ingroup    salaries
@@ -606,7 +605,6 @@ class PaymentSalary extends CommonObject
         $error = 0;
 
         if (isModEnabled("bank")) {
-
             $acc = new Account($this->db);
             $acc->fetch($accountid);
 

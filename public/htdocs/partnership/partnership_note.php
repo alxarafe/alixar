@@ -32,6 +32,7 @@ use Dolibarr\Lib\ViewMain;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 use Dolibarr\Code\Partnerships\Classes\Partnership;
+
 require_once constant('DOL_DOCUMENT_ROOT') . '/partnership/lib/partnership.lib.php';
 
 // Load translation files required by the page

@@ -357,7 +357,7 @@ if ($action == "set" || empty($action) || preg_match('/upgrade/i', $action)) {
 
                 // May fail if parameter already defined
                 dolibarr_install_syslog('step5: set the default language');
-                if (!Constant::deleteByName('MAIN_VERSION_LAST_INSTALL') || !Constant::insert('MAIN_LANG_DEFAULT', $targetversion, 'chaine', 'Default language', 0, 1)) {
+                if (!Constant::insert('MAIN_LANG_DEFAULT', $setuplang, 'chaine', 'Default language', 0, 1)) {
                     // dol_print_error($db, 'Error in setup program');
                 }
 

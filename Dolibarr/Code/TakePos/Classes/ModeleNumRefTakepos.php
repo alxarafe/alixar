@@ -26,7 +26,6 @@ namespace Dolibarr\Code\TakePos\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 
-
 /**
  *  \file       htdocs/core/modules/takepos/modules_takepos.php
  *  \ingroup    takepos

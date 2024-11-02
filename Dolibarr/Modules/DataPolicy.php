@@ -36,7 +36,6 @@ use DoliDB;
 use ExtraFields;
 use stdClass;
 
-
 // The class name should start with a lower case mod for Dolibarr to pick it up
 // so we ignore the Squiz.Class.ValidClassName.NotCamelCaps rule.
 // @codingStandardsIgnoreStart

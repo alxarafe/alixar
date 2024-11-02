@@ -63,11 +63,10 @@ class CurlClient extends AbstractClient
      */
     public function retrieveResponse(
         UriInterface $endpoint,
-              $requestBody,
+        $requestBody,
         array $extraHeaders = array(),
-              $method = 'POST'
-    )
-    {
+        $method = 'POST'
+    ) {
         // Normalize method name
         $method = strtoupper($method);
 

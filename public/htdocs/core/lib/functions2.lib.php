@@ -2993,4 +2993,3 @@ function removeGlobalParenthesis($string)
 
     return $string;
 }
-

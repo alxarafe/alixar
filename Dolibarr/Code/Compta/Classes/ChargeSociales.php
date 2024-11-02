@@ -24,7 +24,6 @@
 
 namespace Dolibarr\Code\Compta\Classes;
 
-
 /**
  *      \file       htdocs/compta/sociales/class/chargesociales.class.php
  *      \ingroup    invoice
@@ -34,7 +33,6 @@ namespace Dolibarr\Code\Compta\Classes;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
-
 
 /**
  *  Class for managing the social charges.

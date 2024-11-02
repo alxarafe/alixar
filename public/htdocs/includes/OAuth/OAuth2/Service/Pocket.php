@@ -16,10 +16,9 @@ class Pocket extends AbstractService
         CredentialsInterface $credentials,
         ClientInterface      $httpClient,
         TokenStorageInterface $storage,
-                             $scopes = array(),
+        $scopes = array(),
         UriInterface         $baseApiUri = null
-    )
-    {
+    ) {
         parent::__construct($credentials, $httpClient, $storage, $scopes, $baseApiUri);
         if ($baseApiUri === null) {
             $this->baseApiUri = new Uri('https://getpocket.com/v3/');

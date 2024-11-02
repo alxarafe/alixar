@@ -29,7 +29,6 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-
 /**
  *      \file       htdocs/core/class/discount.class.php
  *      \ingroup    core propal facture commande

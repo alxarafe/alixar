@@ -319,8 +319,7 @@ class FPDF_TPL extends FPDF
         $fitonpage = false,
         $alt = false,
         $altimgs = array()
-    )
-    {
+    ) {
         if (is_subclass_of($this, 'TCPDF')) {
             $args = func_get_args();
             return call_user_func_array(array($this, 'TCPDF::Image'), $args);

@@ -29,7 +29,6 @@ use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 use Exception;
 
-
 /**
  *  \file       htdocs/resource/class/dolresource.class.php
  *  \ingroup    resource

@@ -75,7 +75,6 @@ if (getDolGlobalString('MAIN_APPLICATION_TITLE')) {
 //print 'Directory with '.$appli.' websites.<br>';
 
 if (empty($pageid)) {
-        
     $object = new Website($db);
     if ($websiteid) {
         $object->fetch($websiteid);

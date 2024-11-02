@@ -44,7 +44,6 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObjectLine;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/comm/propal/class/propal.class.php
  *  \brief      File of class to manage proposals

@@ -3057,7 +3057,8 @@ td.showDragHandle {
 #id-top {
 <?php if (GETPOST('optioncss', 'aZ09') == 'print') {  ?> display: none;
 <?php } else { ?><?php if ($colorbackhmenu1 == '255,255,255') { ?> border-bottom: 1px solid rgba(0, 0, 0, 0.2); /* must be same than border-right of .side-nav */
-<?php } ?><?php } ?>
+<?php } ?><?php 
+} ?>
 }
 
 #id-left {
@@ -3280,9 +3281,9 @@ div.fichethirdleft {
 <?php if ($conf->browser->layout != 'phone') {
         print "float: " . $left . ";\n";
     } ?><?php if ($conf->browser->layout != 'phone') {
-        print "width: calc(50% - 16px);\n";
+    print "width: calc(50% - 16px);\n";
     } ?><?php if ($conf->browser->layout == 'phone') {
-        print "padding-bottom: 6px;\n";
+    print "padding-bottom: 6px;\n";
     } ?>
 }
 
@@ -3290,9 +3291,9 @@ div.fichetwothirdright {
 <?php if ($conf->browser->layout != 'phone') {
         print "float: " . $right . ";\n";
     } ?><?php if ($conf->browser->layout != 'phone') {
-        print "width: calc(50% - 16px);\n";
+    print "width: calc(50% - 16px);\n";
     } ?><?php if ($conf->browser->layout == 'phone') {
-        print "padding-bottom: 6px\n";
+    print "padding-bottom: 6px\n";
     } ?>
 }
 
@@ -3300,7 +3301,7 @@ div.fichehalfleft {
 <?php if ($conf->browser->layout != 'phone') {
         print "float: " . $left . ";\n";
     } ?><?php if ($conf->browser->layout != 'phone') {
-        print "width: calc(50% - 16px);\n";
+    print "width: calc(50% - 16px);\n";
     } ?>
 }
 
@@ -3308,7 +3309,7 @@ div.fichehalfright {
 <?php if ($conf->browser->layout != 'phone') {
         print "float: " . $right . ";\n";
     } ?><?php if ($conf->browser->layout != 'phone') {
-        print "width: calc(50% - 16px);\n";
+    print "width: calc(50% - 16px);\n";
     } ?>
 }
 
@@ -3788,7 +3789,8 @@ div.tmenuleft {
     margin-top: 0px;
 <?php if (empty($conf->dol_optimize_smallscreen)) { ?> width: 5px;
 <?php if (!$disableimages) { ?> height: <?php print $heightmenu + 4; ?>px;
-<?php } ?><?php } ?>
+        <?php } ?><?php 
+} ?>
 }
 
 div.tmenucenter {
@@ -5589,8 +5591,6 @@ table.nobottomiftotal tr.liste_total td {
 
 
 <?php if (!$userborderontable) { ?>
-
-
     border-bottom: 0px !important;
 
 

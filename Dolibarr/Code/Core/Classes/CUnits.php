@@ -23,7 +23,6 @@ namespace Dolibarr\Code\Core\Classes;
 use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 
-
 /**
  *      \file       htdocs/core/class/cunits.class.php
  *      \ingroup    core

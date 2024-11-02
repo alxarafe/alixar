@@ -25,7 +25,6 @@ namespace Dolibarr\Code\Core\Classes;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-
 /**
  *      \file       htdocs/core/class/commonnumrefgenerator.class.php
  *      \ingroup    core

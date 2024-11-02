@@ -30,7 +30,6 @@ namespace Dolibarr\Code\Compta\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonInvoiceLine;
 
-
 /**
  *  \file       htdocs/compta/facture/class/facture-rec.class.php
  *  \ingroup    invoice

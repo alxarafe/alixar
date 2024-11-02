@@ -252,7 +252,6 @@ class Documents extends DolibarrApi
                 throw new RestException(500, 'Error generating document');
             }
         } elseif ($modulepart == 'contrat' || $modulepart == 'contract') {
-
             $tmpobject = new Contrat($this->db);
             $result = $tmpobject->fetch(0, preg_replace('/\.[^\.]+$/', '', basename($original_file)));
 
@@ -267,7 +266,6 @@ class Documents extends DolibarrApi
                 throw new RestException(500, 'Error generating document missing doctemplate parameter');
             }
         } elseif ($modulepart == 'expedition' || $modulepart == 'shipment') {
-
             $tmpobject = new Expedition($this->db);
             $result = $tmpobject->fetch(0, preg_replace('/\.[^\.]+$/', '', basename($original_file)));
 
@@ -358,7 +356,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->user->dir_output . '/' . get_exdir(0, 0, 0, 0, $object, 'user') . '/' . $object->id;
         } elseif ($modulepart == 'adherent' || $modulepart == 'member') {
-
             if (!DolibarrApiAccess::$user->hasRight('adherent', 'lire')) {
                 throw new RestException(403);
             }
@@ -383,7 +380,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->propal->multidir_output[$object->entity] . "/" . get_exdir(0, 0, 0, 1, $object, 'propal');
         } elseif ($modulepart == 'supplier_proposal') {
-
             if (!DolibarrApiAccess::$user->hasRight('supplier_proposal', 'read')) {
                 throw new RestException(403);
             }
@@ -423,7 +419,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->fournisseur->dir_output . "/commande/" . dol_sanitizeFileName($object->ref);
         } elseif ($modulepart == 'shipment' || $modulepart == 'expedition') {
-
             if (!DolibarrApiAccess::$user->hasRight('expedition', 'lire')) {
                 throw new RestException(403);
             }
@@ -436,7 +431,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->expedition->dir_output . "/sending/" . get_exdir(0, 0, 0, 1, $object, 'shipment');
         } elseif ($modulepart == 'facture' || $modulepart == 'invoice') {
-
             if (!DolibarrApiAccess::$user->hasRight('facture', 'lire')) {
                 throw new RestException(403);
             }
@@ -464,7 +458,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->fournisseur->dir_output . "/facture/" . get_exdir($object->id, 2, 0, 0, $object, 'invoice_supplier') . dol_sanitizeFileName($object->ref);
         } elseif ($modulepart == 'produit' || $modulepart == 'product') {
-
             if (!DolibarrApiAccess::$user->hasRight('produit', 'lire')) {
                 throw new RestException(403);
             }
@@ -479,7 +472,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->product->multidir_output[$object->entity] . '/' . get_exdir(0, 0, 0, 1, $object, 'product');
         } elseif ($modulepart == 'agenda' || $modulepart == 'action' || $modulepart == 'event') {
-
             if (!DolibarrApiAccess::$user->hasRight('agenda', 'myactions', 'read') && !DolibarrApiAccess::$user->hasRight('agenda', 'allactions', 'read')) {
                 throw new RestException(403);
             }
@@ -492,7 +484,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->agenda->dir_output . '/' . dol_sanitizeFileName($object->ref);
         } elseif ($modulepart == 'expensereport') {
-
             if (!DolibarrApiAccess::$user->hasRight('expensereport', 'read') && !DolibarrApiAccess::$user->hasRight('expensereport', 'read')) {
                 throw new RestException(403);
             }
@@ -505,7 +496,6 @@ class Documents extends DolibarrApi
 
             $upload_dir = $conf->expensereport->dir_output . '/' . dol_sanitizeFileName($object->ref);
         } elseif ($modulepart == 'knowledgemanagement') {
-
             if (!DolibarrApiAccess::$user->hasRight('knowledgemanagement', 'knowledgerecord', 'read') && !DolibarrApiAccess::$user->hasRight('knowledgemanagement', 'knowledgerecord', 'read')) {
                 throw new RestException(403);
             }

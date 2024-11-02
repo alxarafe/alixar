@@ -83,7 +83,6 @@ if ($action == 'getContacts') {
     );
 
     if (!empty($email)) {
-
         $ticket = new Ticket($db);
         $arrayofcontacts = $ticket->searchContactByEmail($email);
         if (is_array($arrayofcontacts)) {

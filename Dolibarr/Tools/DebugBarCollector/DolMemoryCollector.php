@@ -21,7 +21,6 @@ namespace Dolibarr\Tools\DebugBarCollector;
 
 use DebugBar\DataCollector\MemoryCollector;
 
-
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolMemoryCollector.php
  *  \brief      Class for debugbar collection

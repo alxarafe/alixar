@@ -29,7 +29,6 @@ use Dolibarr\Lib\ViewMain;
 
 use Dolibarr\Code\Core\Classes\Link;
 
-
 /**
  * Prepare array with list of tabs
  *

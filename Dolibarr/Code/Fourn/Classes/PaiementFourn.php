@@ -34,7 +34,6 @@ use Dolibarr\Code\Compta\Classes\Paiement;
 use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
 use DoliDB;
 
-
 /**
  *      \file       htdocs/fourn/class/paiementfourn.class.php
  *      \ingroup    fournisseur, facture

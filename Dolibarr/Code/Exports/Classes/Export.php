@@ -24,7 +24,6 @@ namespace Dolibarr\Code\Exports\Classes;
 
 use DoliDB;
 
-
 /**
  *  \file       htdocs/exports/class/export.class.php
  *  \ingroup    export

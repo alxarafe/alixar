@@ -1,6 +1,5 @@
 <?php
 
-
 /* Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
  *
  * This program is free software; you can redistribute it and/or modify
@@ -18,6 +17,7 @@
  */
 
 use Dolibarr\Code\Core\Classes\Form;
+
 define("NOCSRFCHECK", 1); // We accept to go on this page from external web site.
 //define("NOLOGIN",1);      // This means this output page does not require to be logged.
 /*if (!defined('NOSESSION')) {

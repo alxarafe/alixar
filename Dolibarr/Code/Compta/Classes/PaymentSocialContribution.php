@@ -27,7 +27,6 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-
 /**
  *      \file       htdocs/compta/sociales/class/paymentsocialcontribution.class.php
  *      \ingroup    invoice
@@ -586,7 +585,6 @@ class PaymentSocialContribution extends CommonObject
         $error = 0;
 
         if (isModEnabled("bank")) {
-
             $acc = new Account($this->db);
             $acc->fetch($accountid);
 

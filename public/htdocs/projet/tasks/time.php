@@ -420,7 +420,6 @@ if ($action == 'confirm_generateinvoice') {
     if (!($projectstatic->thirdparty->id > 0)) {
         setEventMessages($langs->trans("ThirdPartyRequiredToGenerateInvoice"), null, 'errors');
     } else {
-
         $tmpinvoice = new Facture($db);
         $tmptimespent = new Task($db);
         $tmpproduct = new Product($db);
@@ -802,8 +801,6 @@ if ($action == 'confirm_generateinter') {
     if (!($projectstatic->thirdparty->id > 0)) {
         setEventMessages($langs->trans("ThirdPartyRequiredToGenerateIntervention"), null, 'errors');
     } else {
-
-
         $tmpinter = new Fichinter($db);
         $tmptimespent = new Task($db);
         $fuser = new User($db);

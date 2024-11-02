@@ -24,7 +24,6 @@ use DebugBar\DataCollector\DataCollector;
 use DebugBar\DataCollector\Renderable;
 use Dolibarr\Tools\TraceableDB;
 
-
 /**
  *  \file       htdocs/debugbar/class/DataCollector/DolQueryCollector.php
  *  \brief      Class for debugbar collection

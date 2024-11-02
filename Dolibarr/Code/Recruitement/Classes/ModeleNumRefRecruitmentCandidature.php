@@ -28,7 +28,6 @@ namespace Dolibarr\Code\Recruitement\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 
-
 /**
  *  \file           htdocs/core/modules/recruitment/modules_recruitmentjobposition.php
  *  \ingroup        recruitment

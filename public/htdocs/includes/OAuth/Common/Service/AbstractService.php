@@ -32,8 +32,7 @@ abstract class AbstractService implements ServiceInterface
         CredentialsInterface $credentials,
         ClientInterface      $httpClient,
         TokenStorageInterface $storage
-    )
-    {
+    ) {
         $this->credentials = $credentials;
         $this->httpClient = $httpClient;
         $this->storage = $storage;

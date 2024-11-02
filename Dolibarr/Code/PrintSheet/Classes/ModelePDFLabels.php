@@ -27,7 +27,6 @@ namespace Dolibarr\Code\PrintSheet\Classes;
 use Dolibarr\Code\Core\Classes\Translate;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/core/modules/printsheet/modules_labels.php
  *  \ingroup    member

@@ -28,7 +28,6 @@ namespace Dolibarr\Code\Mrp\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 
-
 /**
  *  \file           htdocs/core/modules/mrp/modules_mo.php
  *  \ingroup        mrp

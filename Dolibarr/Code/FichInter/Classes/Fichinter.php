@@ -30,7 +30,6 @@ namespace Dolibarr\Code\FichInter\Classes;
 
 use Dolibarr\Core\Base\CommonObject;
 
-
 /**
  *  \file       htdocs/fichinter/class/fichinter.class.php
  *  \ingroup    fichinter

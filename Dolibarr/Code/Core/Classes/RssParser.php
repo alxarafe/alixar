@@ -22,7 +22,6 @@ namespace Dolibarr\Code\Core\Classes;
 
 use DoliDB;
 
-
 /**
  *      \file       htdocs/core/class/rssparser.class.php
  *      \ingroup    core

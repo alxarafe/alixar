@@ -22,7 +22,6 @@
 
 namespace Dolibarr\Code\Comm\Classes;
 
-
 /**
  *  \file       htdocs/comm/mailing/class/mailing.class.php
  *  \ingroup    mailing
@@ -30,7 +29,6 @@ namespace Dolibarr\Code\Comm\Classes;
  */
 
 use Dolibarr\Core\Base\CommonObject;
-
 
 /**
  *  Class to manage emailings module
@@ -491,7 +489,6 @@ class Mailing extends CommonObject
         if (!$error) {
             // Clone recipient targets
             if (!empty($option2)) {
-
                 $mailing_target = new MailingTargets($this->db);
 
                 $target_array = array();

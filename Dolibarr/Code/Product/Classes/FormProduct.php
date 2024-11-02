@@ -26,7 +26,6 @@ use Dolibarr\Code\Core\Classes\CUnits;
 use DoliDB;
 use Exception;
 
-
 /**
  *  \file       htdocs/product/class/html.formproduct.class.php
  *  \brief      File for class with methods for building product related HTML components

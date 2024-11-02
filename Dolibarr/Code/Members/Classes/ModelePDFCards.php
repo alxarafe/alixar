@@ -27,7 +27,6 @@ namespace Dolibarr\Code\Members\Classes;
 use Dolibarr\Code\Core\Classes\Translate;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/core/modules/member/modules_cards.php
  *  \ingroup    member

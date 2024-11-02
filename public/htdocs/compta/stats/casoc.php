@@ -43,7 +43,6 @@ use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\FormOther;
 use Dolibarr\Code\Societe\Classes\Societe;
 
-
 // Load translation files required by the page
 $langs->loadLangs(array('companies', 'categories', 'bills', 'compta'));
 

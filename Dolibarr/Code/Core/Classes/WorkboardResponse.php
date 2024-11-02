@@ -20,7 +20,6 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
-
 /**
  *  \file       htdocs/core/class/workboardresponse.class.php
  *  \brief      Class that represents response of load_board functions

@@ -930,7 +930,6 @@ if ($type == Categorie::TYPE_CONTACT) {
 // List of bank accounts
 if ($type == Categorie::TYPE_ACCOUNT) {
     if ($user->hasRight("banque", "read")) {
-
         $permission = $user->hasRight('banque', 'creer');
 
         $accounts = $object->getObjectsInCateg($type, 0, $limit, $offset);
@@ -1019,7 +1018,6 @@ if ($type == Categorie::TYPE_ACCOUNT) {
 // List of Project
 if ($type == Categorie::TYPE_PROJECT) {
     if ($user->hasRight("project", "read")) {
-
         $permission = $user->hasRight('projet', 'creer');
 
         $objects = $object->getObjectsInCateg($type, 0, $limit, $offset);

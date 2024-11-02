@@ -23,7 +23,6 @@ namespace Dolibarr\Code\Projet\Classes;
 
 use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 
-
 /**
  *      \file       htdocs/core/modules/project/modules_project.php
  *      \ingroup    project

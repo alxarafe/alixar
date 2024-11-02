@@ -23,7 +23,6 @@ namespace Dolibarr\Code\Salaries\Api;
 use Dolibarr\Core\Base\DolibarrApi;
 use Luracast\Restler\RestException;
 
-
 /**
  * API class for salaries
  *

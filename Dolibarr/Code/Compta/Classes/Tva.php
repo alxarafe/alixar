@@ -25,7 +25,6 @@
 
 namespace Dolibarr\Code\Compta\Classes;
 
-
 /**
  *      \file       htdocs/compta/tva/class/tva.class.php
  *      \ingroup    tax
@@ -33,7 +32,6 @@ namespace Dolibarr\Code\Compta\Classes;
 
 // Put here all includes required by your class file
 use Dolibarr\Core\Base\CommonObject;
-
 
 /**
  *  Put here description of your class

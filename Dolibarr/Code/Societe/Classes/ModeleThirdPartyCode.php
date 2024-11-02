@@ -29,7 +29,6 @@ use Dolibarr\Code\Core\Classes\CommonNumRefGenerator;
 use Dolibarr\Code\Core\Classes\Translate;
 use DoliDB;
 
-
 /**
  *      \file       htdocs/core/modules/societe/modules_societe.class.php
  *      \ingroup    societe

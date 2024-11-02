@@ -2841,7 +2841,6 @@ if ($action == 'create' || $action == 'adduserldap') {
             print '<tr><td class="tdtop">' . $langs->trans("Signature") . '</td>';
             print '<td>';
             if ($caneditfield) {
-
                 $doleditor = new DolEditor('signature', $object->signature, '', 138, 'dolibarr_notes', 'In', false, $acceptlocallinktomedia, !getDolGlobalString('FCKEDITOR_ENABLE_USERSIGN') ? 0 : 1, ROWS_4, '90%');
                 print $doleditor->Create(1);
             } else {

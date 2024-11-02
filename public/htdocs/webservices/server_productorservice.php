@@ -61,7 +61,6 @@ use Dolibarr\Code\Product\Classes\Entrepot;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\User\Classes\User;
 
-
 require_once DOL_DOCUMENT_ROOT . "/categories/class/categorie.class.php";
 
 

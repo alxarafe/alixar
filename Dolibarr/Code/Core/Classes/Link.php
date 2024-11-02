@@ -23,7 +23,6 @@ namespace Dolibarr\Code\Core\Classes;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/core/class/link.class.php
  *  \ingroup    link

@@ -29,7 +29,6 @@
 
 namespace Dolibarr\Code\FichInter\Classes;
 
-
 /**
  *  \file       htdocs/fichinter/class/fichinterrec.class.php
  *  \ingroup    fichinter

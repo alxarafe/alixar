@@ -35,7 +35,6 @@
 
 namespace Dolibarr\Code\Adherents\Classes;
 
-
 /**
  *  \file       htdocs/adherents/class/adherent.class.php
  *  \ingroup    member
@@ -1727,7 +1726,6 @@ class Adherent extends CommonObject
 
         // Insert into bank account directlty (if option chosen for) + link to llx_subscription if option is 'bankdirect'
         if ($option == 'bankdirect' && $accountid) {
-
             $acct = new Account($this->db);
             $result = $acct->fetch($accountid);
 
@@ -1760,7 +1758,6 @@ class Adherent extends CommonObject
 
         // If option chosen, we create invoice
         if (($option == 'bankviainvoice' && $accountid) || $option == 'invoiceonly') {
-
             $invoice = new Facture($this->db);
             $customer = new Societe($this->db);
 

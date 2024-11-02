@@ -31,7 +31,6 @@ use Dolibarr\Core\Base\CommonObjectLine;
 use Dolibarr\Lib\Misc;
 use DoliDB;
 
-
 /**
  *  \file       cron/class/cronjob.class.php
  *  \ingroup    cron
@@ -1081,7 +1080,6 @@ class Cronjob extends CommonObject
 
         // Run a method
         if ($this->jobtype == 'method') {
-
             // Deny to launch a method from a deactivated module
             if (!empty($this->entity) && !empty($this->module_name) && !isModEnabled(strtolower($this->module_name))) {
                 $this->error = $langs->transnoentitiesnoconv('CronModuleNotEnabledInThisEntity', $this->methodename, $this->objectname);

@@ -36,7 +36,6 @@ use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Product\Classes\StockTransfer;
 use Dolibarr\Code\StockTransfer\Classes\ModeleNumRefStockTransfer;
 
-
 /**
  *  Class to manage customer Bom numbering rules advanced
  */

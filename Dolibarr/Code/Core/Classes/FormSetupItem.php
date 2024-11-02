@@ -690,7 +690,6 @@ class FormSetupItem
                 $out .= $this->langs->trans("NorProspectNorCustomer");
             }
         } elseif ($this->type == 'product') {
-
             $product = new Product($this->db);
             $resprod = $product->fetch($this->fieldValue);
             if ($resprod > 0) {
@@ -699,7 +698,6 @@ class FormSetupItem
                 $this->setErrors($product->errors);
             }
         } elseif ($this->type == 'selectBankAccount') {
-
             $bankaccount = new Account($this->db);
             $resbank = $bankaccount->fetch($this->fieldValue);
             if ($resbank > 0) {

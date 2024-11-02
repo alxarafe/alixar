@@ -5257,7 +5257,7 @@ class wsdl extends nusoap_base
         // unset schema status
         if (
             /*preg_match('/types$/', $name) ||*/
-        preg_match('/schema$/', $name)
+            preg_match('/schema$/', $name)
         ) {
             $this->status = "";
             $this->appendDebug($this->currentSchema->getDebug());

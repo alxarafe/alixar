@@ -76,8 +76,7 @@ class Properties
         \SimpleXMLElement $propertyValue,
         $propertyName,
         DocumentProperties $docProps
-    )
-    {
+    ) {
         $propertyValueAttributes = $propertyValue->attributes($namespacesMeta['meta']);
         $propertyValue = (string)$propertyValue;
         switch ($propertyName) {

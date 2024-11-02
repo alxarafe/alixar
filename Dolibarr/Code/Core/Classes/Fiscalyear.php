@@ -26,7 +26,6 @@ use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
 
-
 /**
  *      \file       htdocs/core/class/fiscalyear.class.php
  *      \ingroup    fiscal year

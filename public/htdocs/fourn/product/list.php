@@ -40,7 +40,6 @@ use Dolibarr\Code\Fourn\Classes\Fournisseur;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
 
-
 // Load translation files required by the page
 $langs->loadLangs(array('products', 'suppliers'));
 

@@ -144,7 +144,6 @@ ViewMain::topHtmlHead('', '', 0, 0, $arrayofjs, $arrayofcss);
     </form>
     <?php
     if ($action == 'freezone' && !getDolGlobalString("TAKEPOS_USE_DEFAULT_VATRATE_FOR_FREEZONE")) {
-
         $form = new Form($db);
         $num = $form->load_cache_vatrates("'" . $mysoc->country_code . "'");
         if ($num > 0) {

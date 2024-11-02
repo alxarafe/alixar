@@ -541,7 +541,6 @@ abstract class DolibarrModules
         $result = Constant::isActivated($this->const_name, $entity);
         if ($result !== null) {
             if ($result && !empty($this->rights)) {
-
                 // TODO rights parameters with integer indexes are deprecated
                 // $this->rights[$key][0] = $this->rights[$key][self::KEY_ID]
                 // $this->rights[$key][1] = $this->rights[$key][self::KEY_LABEL]
@@ -1873,7 +1872,6 @@ abstract class DolibarrModules
                 }
                 if ($res) {
                     dol_syslog(__METHOD__ . " constant '" . $name . "' already exists", LOG_DEBUG);
-
                 }
             }
         }

@@ -37,7 +37,6 @@ use Dolibarr\Code\Core\Classes\CommonOrderLine;
 use Dolibarr\Code\User\Classes\User;
 use DoliDB;
 
-
 /**
  *  \file       htdocs/commande/class/commande.class.php
  *  \ingroup    order

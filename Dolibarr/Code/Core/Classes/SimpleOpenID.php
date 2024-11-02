@@ -19,7 +19,6 @@
 
 namespace Dolibarr\Code\Core\Classes;
 
-
 /**
  *      \file       htdocs/core/class/openid.class.php
  *      \ingroup    core

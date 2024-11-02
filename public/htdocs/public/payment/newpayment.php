@@ -2292,7 +2292,6 @@ if (preg_match('/^dopayment/', $action)) {          // If we chose/clicked on th
         print '<input type="hidden" name="lang" value="' . $getpostlang . '">';
 
         if (getDolGlobalString('STRIPE_USE_INTENT_WITH_AUTOMATIC_CONFIRMATION') || getDolGlobalString('STRIPE_USE_NEW_CHECKOUT')) { // Use a SCA ready method
-
             $service = 'StripeLive';
             $servicestatus = 1;
             if (!getDolGlobalString('STRIPE_LIVE') || GETPOST('forcesandbox', 'alpha')) {
@@ -2601,7 +2600,7 @@ if (preg_match('/^dopayment/', $action)) {          // If we chose/clicked on th
                     save_payment_method:<?php if ($stripecu) {
                         print 'true';
                     } else {
-                        print 'false';
+                                            print 'false';
                     } ?>    /* true when a customer was provided when creating payment intent. true ask to save the card */
                     },
                     }
@@ -2695,7 +2694,7 @@ if (preg_match('/^dopayment/', $action)) {          // If we chose/clicked on th
                     save_payment_method:<?php if ($stripecu) {
                         print 'true';
                     } else {
-                        print 'false';
+                                            print 'false';
                     } ?>    /* true when a customer was provided when creating payment intent. true ask to save the card */
                     }
                     ).then(function(result) {
