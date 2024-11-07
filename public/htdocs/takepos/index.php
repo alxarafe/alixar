@@ -20,6 +20,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Lib\ViewMain;
@@ -35,15 +36,9 @@ use Dolibarr\Lib\ViewMain;
 // if (! defined('NOREQUIRESOC'))       define('NOREQUIRESOC','1');
 // if (! defined('NOREQUIRETRAN'))      define('NOREQUIRETRAN','1');
 
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1');
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1');
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1');
-}
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // Load $user and permissions

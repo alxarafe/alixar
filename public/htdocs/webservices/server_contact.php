@@ -20,36 +20,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\ExtraFields;
-use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/webservices/server_contact.php
  *       \brief      File that is entry point to call Dolibarr WebServices
  */
 
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', '1'); // Do not check anti CSRF attack test
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', '1'); // Do not check anti POST attack test
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1'); // If we don't need to load the html.form.class.php
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1'); // Do not load ajax.lib.php library
-}
-if (!defined("NOLOGIN")) {
-    define("NOLOGIN", '1'); // If this page is public (can be called outside logged session)
-}
-if (!defined("NOSESSION")) {
-    define("NOSESSION", '1');
-}
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
+Functions::defineIfNotDefined('NOSESSION', 1);   // On CLI mode, no need to use web sessions
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
@@ -186,11 +172,11 @@ $server->wsdl->addComplexType(
     '',
     array(
         'contact' => array(
-        'name' => 'contact',
-        'type' => 'tns:contact',
-        'minOccurs' => '0',
-        'maxOccurs' => 'unbounded'
-    )
+            'name' => 'contact',
+            'type' => 'tns:contact',
+            'minOccurs' => '0',
+            'maxOccurs' => 'unbounded'
+        )
     )
 );
 
@@ -260,9 +246,9 @@ $server->register(
 /**
  * Get Contact
  *
- * @param   array       $authentication     Array of authentication information
- * @param   int         $id                 Id of object
- * @param   string      $ref_ext            Ref external of object
+ * @param array $authentication Array of authentication information
+ * @param int $id Id of object
+ * @param string $ref_ext Ref external of object
  * @return  mixed
  */
 function getContact($authentication, $id, $ref_ext)
@@ -378,8 +364,8 @@ function getContact($authentication, $id, $ref_ext)
 /**
  * Create Contact
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array       $contact            $contact
+ * @param array $authentication Array of authentication information
+ * @param array $contact $contact
  * @return  array                           Array result
  */
 function createContact($authentication, $contact)
@@ -486,8 +472,8 @@ function createContact($authentication, $contact)
 /**
  * Get list of contacts for third party
  *
- * @param   array       $authentication     Array of authentication information
- * @param   int         $idthirdparty       Id thirdparty
+ * @param array $authentication Array of authentication information
+ * @param int $idthirdparty Id thirdparty
  * @return  array                           Array result
  */
 function getContactsForThirdParty($authentication, $idthirdparty)
@@ -531,7 +517,7 @@ function getContactsForThirdParty($authentication, $idthirdparty)
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "c_departements as d ON c.fk_departement = d.rowid";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "user as u ON c.rowid = u.fk_socpeople";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "societe as s ON c.fk_soc = s.rowid";
-        $sql .= " WHERE c.fk_soc = " . ((int) $idthirdparty);
+        $sql .= " WHERE c.fk_soc = " . ((int)$idthirdparty);
 
         $resql = $db->query($sql);
         if ($resql) {
@@ -615,8 +601,8 @@ function getContactsForThirdParty($authentication, $idthirdparty)
 /**
  * Update a contact
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array       $contact            Contact
+ * @param array $authentication Array of authentication information
+ * @param array $contact Contact
  * @return  array                           Array result
  */
 function updateContact($authentication, $contact)
@@ -713,8 +699,8 @@ function updateContact($authentication, $contact)
         if ((!$error) && ($objectfound)) {
             $db->commit();
             $objectresp = array(
-            'result' => array('result_code' => 'OK', 'result_label' => ''),
-            'id' => $object->id
+                'result' => array('result_code' => 'OK', 'result_label' => ''),
+                'id' => $object->id
             );
         } elseif ($objectfound) {
             $db->rollback();

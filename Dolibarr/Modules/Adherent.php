@@ -27,6 +27,7 @@
 namespace Dolibarr\Modules;
 
 use Dolibarr\Core\Base\DolibarrModules;
+use DoliDB;
 
 /**
  *      \defgroup   member     Module foundation

@@ -24,8 +24,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Lib\ViewCss;
-use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/theme/eldy/style.css.php
@@ -34,26 +34,16 @@ use Dolibarr\Lib\ViewMain;
 
 //if (! defined('NOREQUIREUSER')) define('NOREQUIREUSER','1');  // Not disabled because need to load personalized language
 //if (! defined('NOREQUIREDB'))   define('NOREQUIREDB','1');    // Not disabled to increase speed. Language code is found on url.
-if (!defined('NOREQUIRESOC')) {
-    define('NOREQUIRESOC', '1');
-}
+Functions::defineIfNotDefined('NOREQUIRESOC', 1);   // No company needed
 //if (! defined('NOREQUIRETRAN')) define('NOREQUIRETRAN','1');  // Not disabled because need to do translations
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', 1);
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', 1);
-}
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
 if (!defined('NOLOGIN')) {
     define('NOLOGIN', 1); // File must be accessed by logon page so without login.
 }
 //if (!defined('NOREQUIREMENU'))   define('NOREQUIREMENU',1);   // We load menu manager class (note that object loaded may have wrong content because NOLOGIN is set and some values depends on login)
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', 1);
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1');
-}
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
 
 
 define('ISLOADEDBYSTEELSHEET', '1');

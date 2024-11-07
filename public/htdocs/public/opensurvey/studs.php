@@ -18,11 +18,11 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Core\Classes\CMailFile;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\OpenSurvey\Classes\Opensurveysondage;
 use Dolibarr\Code\User\Classes\User;
-use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file       htdocs/public/opensurvey/studs.php
@@ -30,18 +30,10 @@ use Dolibarr\Lib\ViewMain;
  *  \brief      Page to list surveys
  */
 
-if (!defined('NOLOGIN')) {
-    define("NOLOGIN", 1); // This means this output page does not require to be logged.
-}
-if (!defined('NOCSRFCHECK')) {
-    define("NOCSRFCHECK", 1); // We accept to go on this page from external web site.
-}
-if (!defined('NOBROWSERNOTIF')) {
-    define('NOBROWSERNOTIF', '1');
-}
-if (!defined('NOIPCHECK')) {
-    define('NOIPCHECK', '1'); // Do not check IP defined into conf $dolibarr_main_restrict_ip
-}
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
+Functions::defineIfNotDefined('NOCSRFCHECK', 1); // We accept to go on this page from external web site.
+Functions::defineIfNotDefined('NOBROWSERNOTIF', 1);  // Disable browser notification
+Functions::defineIfNotDefined('NOIPCHECK', 1); // Do not check IP defined into conf $dolibarr_main_restrict_ip
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';

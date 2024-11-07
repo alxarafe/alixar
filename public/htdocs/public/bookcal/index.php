@@ -22,6 +22,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\BookCal\Classes\Availabilities;
 use Dolibarr\Code\BookCal\Classes\Calendar;
 use Dolibarr\Code\Comm\Classes\ActionComm;
@@ -38,15 +39,9 @@ use Dolibarr\Lib\ViewMain;
  *                  Example of URL: https://localhost/public/bookcal/index.php?id=...
  */
 
-if (!defined('NOLOGIN')) {
-    define("NOLOGIN", 1); // This means this output page does not require to be logged.
-}
-if (!defined('NOCSRFCHECK')) {
-    define("NOCSRFCHECK", 1); // We accept to go on this page from external web site.
-}
-if (!defined('NOBROWSERNOTIF')) {
-    define('NOBROWSERNOTIF', '1');
-}
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
+Functions::defineIfNotDefined('NOCSRFCHECK', 1); // We accept to go on this page from external web site.
+Functions::defineIfNotDefined('NOBROWSERNOTIF', 1);  // Disable browser notification
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';

@@ -20,37 +20,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Lib\ViewMain;
+use Alxarafe\Lib\Functions;
 
 /**
  *       \file       htdocs/core/search.php
  *       \brief      Wrapper that receive any search. Depending on input field, make a redirect to correct URL.
  */
 
-if (!defined('NOREQUIREUSER')) {
-    define('NOREQUIREUSER', '1');
-}
-if (!defined('NOREQUIREDB')) {
-    define('NOREQUIREDB', '1');
-}
-if (!defined('NOREQUIRESOC')) {
-    define('NOREQUIRESOC', '1');
-}
-if (!defined('NOREQUIRETRAN')) {
-    define('NOREQUIRETRAN', '1');
-}
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', 1);
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', 1);
-}
-if (!defined('NOLOGIN')) {
-    define('NOLOGIN', 1);
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', 1);
-}
+Functions::defineIfNotDefined('NOREQUIREUSER', 1);   // No user needed
+Functions::defineIfNotDefined('NOREQUIREDB', 1);   // No database needed
+Functions::defineIfNotDefined('NOREQUIRESOC', 1);   // No company needed
+Functions::defineIfNotDefined('NOREQUIRETRAN', 1);   // No translations needed
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOLOGIN', 1);  // No login needed
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 

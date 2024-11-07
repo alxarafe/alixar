@@ -28,9 +28,9 @@
 
 namespace Dolibarr\Modules;
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Core\Base\DolibarrModules;
 use DoliDB;
-use ExtraFields;
 use stdClass;
 
 /**
@@ -259,7 +259,6 @@ class Dav extends DolibarrModules
     public function init($options = '')
     {
         // Create extrafields
-        include_once DOL_DOCUMENT_ROOT . '/core/class/extrafields.class.php';
         $extrafields = new ExtraFields($this->db);
 
         //$result1=$extrafields->addExtraField('myattr1', "New Attr 1 label", 'boolean', 1,  3, 'thirdparty',   0, 0, '', '', 1, '', 0, 0, '', '', 'dav@dav', '$conf->dav->enabled');

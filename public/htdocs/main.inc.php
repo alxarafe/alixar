@@ -498,7 +498,6 @@ if (is_array($modulepart)) {
     $modulepart = '';
 }
 
-
 /*
  * Phase authentication / login
  */

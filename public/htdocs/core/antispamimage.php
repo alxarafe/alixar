@@ -18,6 +18,7 @@
  * or see https://www.gnu.org/
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Lib\ViewMain;
 
 /**
@@ -27,24 +28,12 @@ use Dolibarr\Lib\ViewMain;
 
 define('NOLOGIN', 1);
 
-if (!defined('NOREQUIREUSER')) {
-    define('NOREQUIREUSER', 1);
-}
-if (!defined('NOREQUIREDB')) {
-    define('NOREQUIREDB', 1);
-}
-if (!defined('NOREQUIRETRAN')) {
-    define('NOREQUIRETRAN', 1);
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', 1);
-}
-if (!defined('NOREQUIRESOC')) {
-    define('NOREQUIRESOC', 1);
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', 1);
-}
+Functions::defineIfNotDefined('NOREQUIREUSER', 1);   // No user needed
+Functions::defineIfNotDefined('NOREQUIREDB', 1);   // No database needed
+Functions::defineIfNotDefined('NOREQUIRETRAN', 1);   // No translations needed
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIRESOC', 1);   // No company needed
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 

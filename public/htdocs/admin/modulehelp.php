@@ -20,6 +20,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\DolibarrModules;
@@ -30,12 +31,10 @@ use Dolibarr\Lib\ViewMain;
  *  \brief      Page to activate/disable all modules
  */
 
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', '1'); // Disabled because this page is into a popup on module search page and we want to avoid to have an Anti CSRF token error (done if MAIN_SECURITY_CSRF_WITH_TOKEN is on) when we make a second search after closing popup.
-}
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+
+// Disabled because this page is into a popup on module search page and we want to avoid to have an Anti CSRF token error (done if MAIN_SECURITY_CSRF_WITH_TOKEN is on) when we make a second search after closing popup.
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';

@@ -21,6 +21,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Product\Classes\ProductCustomerPrice;
@@ -32,18 +33,10 @@ use Dolibarr\Lib\ViewMain;
  * \brief   File to return Ajax response on product list request, with default VAT rate.
  */
 
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', 1); // Disables token renewal
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1');
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1');
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1');
-}
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
 if (empty($_GET['keysearch']) && !defined('NOREQUIREHTML')) {   // Keep $_GET here, GETPOST is not yet defined
     define('NOREQUIREHTML', '1');
 }

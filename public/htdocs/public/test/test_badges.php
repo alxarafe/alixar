@@ -17,10 +17,11 @@
  */
 
 //define("NOLOGIN",1);      // This means this output page does not require to be logged.
+use Alxarafe\Lib\Functions;
+
 define("NOCSRFCHECK", 1); // We accept to go on this page from external web site.
-if (!defined('NOSESSION')) {
-    define('NOSESSION', '1');
-}
+
+Functions::defineIfNotDefined('NOSESSION', 1);   // On CLI mode, no need to use web sessions
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';

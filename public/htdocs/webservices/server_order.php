@@ -21,44 +21,28 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Commande\Classes\OrderLine;
 use Dolibarr\Code\Core\Classes\ExtraFields;
-use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/webservices/server_order.php
  *       \brief      File that is entry point to call Dolibarr WebServices
  */
 
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', '1'); // Do not check anti CSRF attack test
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', '1'); // Do not check anti POST attack test
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1'); // If we don't need to load the html.form.class.php
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1'); // Do not load ajax.lib.php library
-}
-if (!defined("NOLOGIN")) {
-    define("NOLOGIN", '1'); // If this page is public (can be called outside logged session)
-}
-if (!defined("NOSESSION")) {
-    define("NOSESSION", '1');
-}
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
+Functions::defineIfNotDefined('NOSESSION', 1);   // On CLI mode, no need to use web sessions
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ws.lib.php';
 require_once DOL_DOCUMENT_ROOT . "/commande/class/commande.class.php";
-
-
 
 dol_syslog("Call Dolibarr webservices interfaces");
 
@@ -90,12 +74,12 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-                'dolibarrkey' => array('name' => 'dolibarrkey', 'type' => 'xsd:string'),
-                'sourceapplication' => array('name' => 'sourceapplication', 'type' => 'xsd:string'),
-                'login' => array('name' => 'login', 'type' => 'xsd:string'),
-                'password' => array('name' => 'password', 'type' => 'xsd:string'),
-                'entity' => array('name' => 'entity', 'type' => 'xsd:string')
-        )
+        'dolibarrkey' => array('name' => 'dolibarrkey', 'type' => 'xsd:string'),
+        'sourceapplication' => array('name' => 'sourceapplication', 'type' => 'xsd:string'),
+        'login' => array('name' => 'login', 'type' => 'xsd:string'),
+        'password' => array('name' => 'password', 'type' => 'xsd:string'),
+        'entity' => array('name' => 'entity', 'type' => 'xsd:string')
+    )
 );
 // Define WSDL Return object
 $server->wsdl->addComplexType(
@@ -105,9 +89,9 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-                'result_code' => array('name' => 'result_code', 'type' => 'xsd:string'),
-                'result_label' => array('name' => 'result_label', 'type' => 'xsd:string'),
-        )
+        'result_code' => array('name' => 'result_code', 'type' => 'xsd:string'),
+        'result_label' => array('name' => 'result_label', 'type' => 'xsd:string'),
+    )
 );
 
 $line_fields = array(
@@ -196,13 +180,13 @@ $server->wsdl->addComplexType(
     'sequence',
     '',
     array(
-                'line' => array(
-                        'name' => 'line',
-                        'type' => 'tns:line',
-                        'minOccurs' => '0',
-                        'maxOccurs' => 'unbounded'
-                )
+        'line' => array(
+            'name' => 'line',
+            'type' => 'tns:line',
+            'minOccurs' => '0',
+            'maxOccurs' => 'unbounded'
         )
+    )
 );
 
 $order_fields = array(
@@ -299,15 +283,14 @@ $server->wsdl->addComplexType(
     'sequence',
     '',
     array(
-                'order' => array(
-                        'name' => 'order',
-                        'type' => 'tns:order',
-                        'minOccurs' => '0',
-                        'maxOccurs' => 'unbounded'
-                )
+        'order' => array(
+            'name' => 'order',
+            'type' => 'tns:order',
+            'minOccurs' => '0',
+            'maxOccurs' => 'unbounded'
         )
+    )
 );
-
 
 
 // 5 styles: RPC/encoded, RPC/literal, Document/encoded (not WS-I compliant), Document/literal, Document/literal wrapped
@@ -376,10 +359,10 @@ $server->register(
 /**
  * Get order from id, ref or ref_ext.
  *
- * @param   array       $authentication     Array of authentication information
- * @param   int         $id                 Id
- * @param   string      $ref                Ref
- * @param   string      $ref_ext            Ref_ext
+ * @param array $authentication Array of authentication information
+ * @param int $id Id
+ * @param string $ref Ref
+ * @param string $ref_ext Ref_ext
  * @return  array                           Array result
  */
 function getOrder($authentication, $id = 0, $ref = '', $ref_ext = '')
@@ -432,71 +415,71 @@ function getOrder($authentication, $id = 0, $ref = '', $ref_ext = '')
                     foreach ($order->lines as $line) {
                         //var_dump($line); exit;
                         $linesresp[] = array(
-                        'id' => $line->rowid,
-                        'fk_commande' => $line->fk_commande,
-                        'fk_parent_line' => $line->fk_parent_line,
-                        'desc' => $line->desc,
-                        'qty' => $line->qty,
-                        'price' => $line->price,
-                        'unitprice' => $line->subprice,
-                        'vat_rate' => $line->tva_tx,
-                        'remise' => $line->remise,
-                        'remise_percent' => $line->remise_percent,
-                        'product_id' => $line->fk_product,
-                        'product_type' => $line->product_type,
-                        'total_net' => $line->total_ht,
-                        'total_vat' => $line->total_tva,
-                        'total' => $line->total_ttc,
-                        'date_start' => $line->date_start,
-                        'date_end' => $line->date_end,
-                        'product_ref' => $line->product_ref,
-                        'product_label' => $line->product_label,
-                        'product_desc' => $line->product_desc
+                            'id' => $line->rowid,
+                            'fk_commande' => $line->fk_commande,
+                            'fk_parent_line' => $line->fk_parent_line,
+                            'desc' => $line->desc,
+                            'qty' => $line->qty,
+                            'price' => $line->price,
+                            'unitprice' => $line->subprice,
+                            'vat_rate' => $line->tva_tx,
+                            'remise' => $line->remise,
+                            'remise_percent' => $line->remise_percent,
+                            'product_id' => $line->fk_product,
+                            'product_type' => $line->product_type,
+                            'total_net' => $line->total_ht,
+                            'total_vat' => $line->total_tva,
+                            'total' => $line->total_ttc,
+                            'date_start' => $line->date_start,
+                            'date_end' => $line->date_end,
+                            'product_ref' => $line->product_ref,
+                            'product_label' => $line->product_label,
+                            'product_desc' => $line->product_desc
                         );
                         $i++;
                     }
 
                     // Create order
                     $objectresp = array(
-                    'result' => array('result_code' => 'OK', 'result_label' => ''),
-                    'order' => array(
-                    'id' => $order->id,
-                    'ref' => $order->ref,
-                    'ref_client' => $order->ref_client,
-                    'ref_ext' => $order->ref_ext,
-                    'thirdparty_id' => $order->socid,
-                    'status' => $order->statut,
+                        'result' => array('result_code' => 'OK', 'result_label' => ''),
+                        'order' => array(
+                            'id' => $order->id,
+                            'ref' => $order->ref,
+                            'ref_client' => $order->ref_client,
+                            'ref_ext' => $order->ref_ext,
+                            'thirdparty_id' => $order->socid,
+                            'status' => $order->statut,
 
-                    'total_net' => $order->total_ht,
-                    'total_vat' => $order->total_tva,
-                    'total_localtax1' => $order->total_localtax1,
-                    'total_localtax2' => $order->total_localtax2,
-                    'total' => $order->total_ttc,
-                    'project_id' => $order->fk_project,
+                            'total_net' => $order->total_ht,
+                            'total_vat' => $order->total_tva,
+                            'total_localtax1' => $order->total_localtax1,
+                            'total_localtax2' => $order->total_localtax2,
+                            'total' => $order->total_ttc,
+                            'project_id' => $order->fk_project,
 
-                    'date' => $order->date ? dol_print_date($order->date, 'dayrfc') : '',
-                    'date_creation' => $order->date_creation ? dol_print_date($order->date_creation, 'dayhourrfc') : '',
-                    'date_validation' => $order->date_validation ? dol_print_date($order->date_creation, 'dayhourrfc') : '',
-                    'date_modification' => $order->date_modification ? dol_print_date($order->date_modification, 'dayhourrfc') : '',
+                            'date' => $order->date ? dol_print_date($order->date, 'dayrfc') : '',
+                            'date_creation' => $order->date_creation ? dol_print_date($order->date_creation, 'dayhourrfc') : '',
+                            'date_validation' => $order->date_validation ? dol_print_date($order->date_creation, 'dayhourrfc') : '',
+                            'date_modification' => $order->date_modification ? dol_print_date($order->date_modification, 'dayhourrfc') : '',
 
-                    'source' => $order->source,
-                    'billed' => $order->billed,
-                    'note_private' => $order->note_private,
-                    'note_public' => $order->note_public,
-                    'cond_reglement_id' => $order->cond_reglement_id,
-                    'cond_reglement_code' => $order->cond_reglement_code,
-                    'cond_reglement' => $order->cond_reglement,
-                    'mode_reglement_id' => $order->mode_reglement_id,
-                    'mode_reglement_code' => $order->mode_reglement_code,
-                    'mode_reglement' => $order->mode_reglement,
+                            'source' => $order->source,
+                            'billed' => $order->billed,
+                            'note_private' => $order->note_private,
+                            'note_public' => $order->note_public,
+                            'cond_reglement_id' => $order->cond_reglement_id,
+                            'cond_reglement_code' => $order->cond_reglement_code,
+                            'cond_reglement' => $order->cond_reglement,
+                            'mode_reglement_id' => $order->mode_reglement_id,
+                            'mode_reglement_code' => $order->mode_reglement_code,
+                            'mode_reglement' => $order->mode_reglement,
 
-                    'date_livraison' => $order->delivery_date,
+                            'date_livraison' => $order->delivery_date,
 
-                    'demand_reason_id' => $order->demand_reason_id,
-                    'demand_reason_code' => $order->demand_reason_code,
+                            'demand_reason_id' => $order->demand_reason_id,
+                            'demand_reason_code' => $order->demand_reason_code,
 
-                    'lines' => $linesresp
-                    ));
+                            'lines' => $linesresp
+                        ));
                 }
             } else {
                 $error++;
@@ -521,8 +504,8 @@ function getOrder($authentication, $id = 0, $ref = '', $ref_ext = '')
 /**
  * Get list of orders for third party
  *
- * @param   array       $authentication     Array of authentication information
- * @param   int         $idthirdparty       Id of thirdparty
+ * @param array $authentication Array of authentication information
+ * @param int $idthirdparty Id of thirdparty
  * @return  array                           Array result
  */
 function getOrdersForThirdParty($authentication, $idthirdparty)
@@ -560,7 +543,7 @@ function getOrdersForThirdParty($authentication, $idthirdparty)
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'commande as c';
         $sql .= " WHERE c.entity = " . $conf->entity;
         if ($idthirdparty != 'all') {
-            $sql .= " AND c.fk_soc = " . ((int) $idthirdparty);
+            $sql .= " AND c.fk_soc = " . ((int)$idthirdparty);
         }
 
 
@@ -587,73 +570,73 @@ function getOrdersForThirdParty($authentication, $idthirdparty)
                     $linesresp = array();
                     foreach ($order->lines as $line) {
                         $linesresp[] = array(
-                        'id' => $line->rowid,
-                        'type' => $line->product_type,
-                        'fk_commande' => $line->fk_commande,
-                        'fk_parent_line' => $line->fk_parent_line,
-                        'desc' => $line->desc,
-                        'qty' => $line->qty,
-                        'price' => $line->price,
-                        'unitprice' => $line->subprice,
-                        'tva_tx' => $line->tva_tx,
-                        'remise' => $line->remise,
-                        'remise_percent' => $line->remise_percent,
-                        'total_net' => $line->total_ht,
-                        'total_vat' => $line->total_tva,
-                        'total' => $line->total_ttc,
-                        'date_start' => $line->date_start,
-                        'date_end' => $line->date_end,
-                        'product_id' => $line->fk_product,
-                        'product_ref' => $line->product_ref,
-                        'product_label' => $line->product_label,
-                        'product_desc' => $line->product_desc
+                            'id' => $line->rowid,
+                            'type' => $line->product_type,
+                            'fk_commande' => $line->fk_commande,
+                            'fk_parent_line' => $line->fk_parent_line,
+                            'desc' => $line->desc,
+                            'qty' => $line->qty,
+                            'price' => $line->price,
+                            'unitprice' => $line->subprice,
+                            'tva_tx' => $line->tva_tx,
+                            'remise' => $line->remise,
+                            'remise_percent' => $line->remise_percent,
+                            'total_net' => $line->total_ht,
+                            'total_vat' => $line->total_tva,
+                            'total' => $line->total_ttc,
+                            'date_start' => $line->date_start,
+                            'date_end' => $line->date_end,
+                            'product_id' => $line->fk_product,
+                            'product_ref' => $line->product_ref,
+                            'product_label' => $line->product_label,
+                            'product_desc' => $line->product_desc
                         );
                     }
 
                     // Now define invoice
                     $linesorders[] = array(
-                    'id' => $order->id,
-                    'ref' => $order->ref,
-                    'ref_client' => $order->ref_client,
-                    'ref_ext' => $order->ref_ext,
-                    'socid' => $order->socid,
-                    'status' => $order->statut,
+                        'id' => $order->id,
+                        'ref' => $order->ref,
+                        'ref_client' => $order->ref_client,
+                        'ref_ext' => $order->ref_ext,
+                        'socid' => $order->socid,
+                        'status' => $order->statut,
 
-                    'total_net' => $order->total_ht,
-                    'total_vat' => $order->total_tva,
-                    'total_localtax1' => $order->total_localtax1,
-                    'total_localtax2' => $order->total_localtax2,
-                    'total' => $order->total_ttc,
-                    'project_id' => $order->fk_project,
+                        'total_net' => $order->total_ht,
+                        'total_vat' => $order->total_tva,
+                        'total_localtax1' => $order->total_localtax1,
+                        'total_localtax2' => $order->total_localtax2,
+                        'total' => $order->total_ttc,
+                        'project_id' => $order->fk_project,
 
-                    'date' => $order->date_commande ? dol_print_date($order->date_commande, 'dayrfc') : '',
+                        'date' => $order->date_commande ? dol_print_date($order->date_commande, 'dayrfc') : '',
 
-                    'source' => $order->source,
-                    'billed' => $order->billed,
-                    'note_private' => $order->note_private,
-                    'note_public' => $order->note_public,
-                    'cond_reglement_id' => $order->cond_reglement_id,
-                    'cond_reglement' => $order->cond_reglement,
-                    'cond_reglement_doc' => $order->cond_reglement_doc,
-                    'cond_reglement_code' => $order->cond_reglement_code,
-                    'mode_reglement_id' => $order->mode_reglement_id,
-                    'mode_reglement' => $order->mode_reglement,
-                    'mode_reglement_code' => $order->mode_reglement_code,
+                        'source' => $order->source,
+                        'billed' => $order->billed,
+                        'note_private' => $order->note_private,
+                        'note_public' => $order->note_public,
+                        'cond_reglement_id' => $order->cond_reglement_id,
+                        'cond_reglement' => $order->cond_reglement,
+                        'cond_reglement_doc' => $order->cond_reglement_doc,
+                        'cond_reglement_code' => $order->cond_reglement_code,
+                        'mode_reglement_id' => $order->mode_reglement_id,
+                        'mode_reglement' => $order->mode_reglement,
+                        'mode_reglement_code' => $order->mode_reglement_code,
 
-                    'date_livraison' => $order->delivery_date,
+                        'date_livraison' => $order->delivery_date,
 
-                    'demand_reason_id' => $order->demand_reason_id,
-                    'demand_reason_code' => $order->demand_reason_code,
+                        'demand_reason_id' => $order->demand_reason_id,
+                        'demand_reason_code' => $order->demand_reason_code,
 
-                    'lines' => $linesresp
+                        'lines' => $linesresp
                     );
                 }
                 $i++;
             }
 
             $objectresp = array(
-            'result' => array('result_code' => 'OK', 'result_label' => ''),
-            'orders' => $linesorders
+                'result' => array('result_code' => 'OK', 'result_label' => ''),
+                'orders' => $linesorders
 
             );
         } else {
@@ -674,8 +657,8 @@ function getOrdersForThirdParty($authentication, $idthirdparty)
 /**
  * Create order
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array       $order              Order info
+ * @param array $authentication Array of authentication information
+ * @param array $order Order info
  * @return  array                           array of new order
  */
 function createOrder($authentication, $order)
@@ -814,9 +797,9 @@ function createOrder($authentication, $order)
 /**
  * Valid an order
  *
- * @param   array       $authentication     Array of authentication information
- * @param   int         $id                 Id of order to validate
- * @param   int         $id_warehouse       Id of warehouse to use for stock decrease
+ * @param array $authentication Array of authentication information
+ * @param int $id Id of order to validate
+ * @param int $id_warehouse Id of warehouse to use for stock decrease
  * @return  array                           Array result
  */
 function validOrder($authentication, $id = 0, $id_warehouse = 0)
@@ -884,8 +867,8 @@ function validOrder($authentication, $id = 0, $id_warehouse = 0)
 /**
  * Update an order
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array{id:string,ref:string,refext:string}   $order  Order info
+ * @param array $authentication Array of authentication information
+ * @param array{id:string,ref:string,refext:string} $order Order info
  * @return  array                           Array result
  */
 function updateOrder($authentication, $order)
@@ -976,10 +959,10 @@ function updateOrder($authentication, $order)
         if ((!$error) && ($objectfound)) {
             $db->commit();
             $objectresp = array(
-                    'result' => array('result_code' => 'OK', 'result_label' => ''),
-                    'id' => $object->id,
-                    'ref' => $object->ref,
-                    'ref_ext' => $object->ref_ext
+                'result' => array('result_code' => 'OK', 'result_label' => ''),
+                'id' => $object->id,
+                'ref' => $object->ref,
+                'ref_ext' => $object->ref_ext
             );
         } elseif ($objectfound) {
             $db->rollback();

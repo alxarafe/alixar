@@ -18,15 +18,14 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Lib\ViewMain;
 
 // Need global variable $urllogo, $title and $titletruedolibarrversion to be defined by caller (like dol_loginfunction in security2.lib.php)
 // Caller can also set  $morelogincontent = array(['options']=>array('js'=>..., 'table'=>...);
 // $titletruedolibarrversion must be defined
 
-if (!defined('NOBROWSERNOTIF')) {
-    define('NOBROWSERNOTIF', 1);
-}
+Functions::defineIfNotDefined('NOBROWSERNOTIF', 1);  // Disable browser notification
 
 // Protection to avoid direct call of template
 if (empty($conf) || !is_object($conf)) {

@@ -21,6 +21,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Comm\Classes\Mailing;
 use Dolibarr\Code\Core\Classes\CMailFile;
 use Dolibarr\Code\Core\Classes\DolEditor;
@@ -37,9 +38,7 @@ use Dolibarr\Lib\ViewMain;
  *       \brief      Fiche mailing, onglet general
  */
 
-if (!defined('NOSTYLECHECK')) {
-    define('NOSTYLECHECK', '1');
-}
+Functions::defineIfNotDefined('NOSTYLECHECK', 1); // Do not check style html tag into posted data
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';

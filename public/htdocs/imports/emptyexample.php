@@ -17,8 +17,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Imports\Classes\Import;
-use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/imports/emptyexample.php
@@ -26,9 +26,7 @@ use Dolibarr\Lib\ViewMain;
  *      \brief      Show example of import file
  */
 
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', '1'); // Do not roll the Anti CSRF token (used if MAIN_SECURITY_CSRF_WITH_TOKEN is on)
-}
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';

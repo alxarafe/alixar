@@ -18,35 +18,21 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Fourn\Classes\FactureFournisseur;
-use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/webservices/server_supplier_invoice.php
  *       \brief      File that is entry point to call Dolibarr WebServices
  */
 
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', '1'); // Do not check anti CSRF attack test
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', '1'); // Do not check anti POST attack test
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1'); // If we don't need to load the html.form.class.php
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1'); // Do not load ajax.lib.php library
-}
-if (!defined("NOLOGIN")) {
-    define("NOLOGIN", '1'); // If this page is public (can be called outside logged session)
-}
-if (!defined("NOSESSION")) {
-    define("NOSESSION", '1');
-}
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
+Functions::defineIfNotDefined('NOSESSION', 1);   // On CLI mode, no need to use web sessions
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
@@ -201,7 +187,6 @@ $server->wsdl->addComplexType(
 );
 
 
-
 // 5 styles: RPC/encoded, RPC/literal, Document/encoded (not WS-I compliant), Document/literal, Document/literal wrapped
 // Style merely dictates how to translate a WSDL binding to a SOAP message. Nothing more. You can use either style with any programming model.
 // http://www.ibm.com/developerworks/webservices/library/ws-whichwsdl/
@@ -239,10 +224,10 @@ $server->register(
 /**
  * Get invoice from id, ref or ref_ext
  *
- * @param   array       $authentication     Array of authentication information
- * @param   int         $id                 Id
- * @param   string      $ref                Ref
- * @param   string      $ref_ext            Ref_ext
+ * @param array $authentication Array of authentication information
+ * @param int $id Id
+ * @param string $ref Ref
+ * @param string $ref_ext Ref_ext
  * @return  array                           Array result
  */
 function getSupplierInvoice($authentication, $id = 0, $ref = '', $ref_ext = '')
@@ -295,34 +280,34 @@ function getSupplierInvoice($authentication, $id = 0, $ref = '', $ref_ext = '')
                 $objectresp = array(
                     'result' => array('result_code' => 'OK', 'result_label' => ''),
                     'invoice' => array(
-                    'id' => $invoice->id,
-                    'ref' => $invoice->ref,
-                    'ref_supplier' => $invoice->ref_supplier,
-                    'ref_ext' => $invoice->ref_ext,
-                    'fk_user_author' => $invoice->fk_user_author,
-                    'fk_user_valid' => $invoice->fk_user_valid,
-                    'fk_thirdparty' => $invoice->fk_soc,
-                    'type' => $invoice->type,
-                    'status' => $invoice->status,
-                    'total_net' => $invoice->total_ht,
-                    'total_vat' => $invoice->total_tva,
-                    'total' => $invoice->total_ttc,
-                    'date_creation' => dol_print_date($invoice->datec, 'dayhourrfc'),
-                    'date_modification' => dol_print_date($invoice->tms, 'dayhourrfc'),
-                    'date_invoice' => dol_print_date($invoice->date, 'dayhourrfc'),
-                    'date_term' => dol_print_date($invoice->date_echeance, 'dayhourrfc'),
-                    'label' => $invoice->label,
-                    'paid' => $invoice->paid,
-                    'note_private' => $invoice->note_private,
-                    'note_public' => $invoice->note_public,
-                    'close_code' => $invoice->close_code,
-                    'close_note' => $invoice->close_note,
+                        'id' => $invoice->id,
+                        'ref' => $invoice->ref,
+                        'ref_supplier' => $invoice->ref_supplier,
+                        'ref_ext' => $invoice->ref_ext,
+                        'fk_user_author' => $invoice->fk_user_author,
+                        'fk_user_valid' => $invoice->fk_user_valid,
+                        'fk_thirdparty' => $invoice->fk_soc,
+                        'type' => $invoice->type,
+                        'status' => $invoice->status,
+                        'total_net' => $invoice->total_ht,
+                        'total_vat' => $invoice->total_tva,
+                        'total' => $invoice->total_ttc,
+                        'date_creation' => dol_print_date($invoice->datec, 'dayhourrfc'),
+                        'date_modification' => dol_print_date($invoice->tms, 'dayhourrfc'),
+                        'date_invoice' => dol_print_date($invoice->date, 'dayhourrfc'),
+                        'date_term' => dol_print_date($invoice->date_echeance, 'dayhourrfc'),
+                        'label' => $invoice->label,
+                        'paid' => $invoice->paid,
+                        'note_private' => $invoice->note_private,
+                        'note_public' => $invoice->note_public,
+                        'close_code' => $invoice->close_code,
+                        'close_note' => $invoice->close_note,
 
-                    'lines' => $linesresp,
-                    // 'lines' => array('0'=>array('id'=>222,'type'=>1),
-                    // '1'=>array('id'=>333,'type'=>1)),
+                        'lines' => $linesresp,
+                        // 'lines' => array('0'=>array('id'=>222,'type'=>1),
+                        // '1'=>array('id'=>333,'type'=>1)),
 
-                ));
+                    ));
             } else {
                 $error++;
                 $errorcode = 'NOT_FOUND';
@@ -346,8 +331,8 @@ function getSupplierInvoice($authentication, $id = 0, $ref = '', $ref_ext = '')
 /**
  * Get list of invoices for third party
  *
- * @param   array       $authentication     Array of authentication information
- * @param   int         $idthirdparty       Id thirdparty
+ * @param array $authentication Array of authentication information
+ * @param int $idthirdparty Id thirdparty
  * @return  array                           Array result
  */
 function getSupplierInvoicesForThirdParty($authentication, $idthirdparty)
@@ -379,9 +364,9 @@ function getSupplierInvoicesForThirdParty($authentication, $idthirdparty)
 
         $sql = "SELECT f.rowid as facid";
         $sql .= " FROM " . MAIN_DB_PREFIX . "facture_fourn as f";
-        $sql .= " WHERE f.entity = " . ((int) $conf->entity);
+        $sql .= " WHERE f.entity = " . ((int)$conf->entity);
         if ($idthirdparty != 'all') {
-            $sql .= " AND f.fk_soc = " . ((int) $idthirdparty);
+            $sql .= " AND f.fk_soc = " . ((int)$idthirdparty);
         }
 
         $resql = $db->query($sql);

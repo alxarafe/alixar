@@ -19,38 +19,24 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Commande\Classes\Commande;
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Compta\Classes\FactureLigne;
 use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/webservices/server_invoice.php
  *       \brief      File that is entry point to call Dolibarr WebServices
  */
 
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', '1'); // Do not check anti CSRF attack test
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', '1'); // Do not check anti POST attack test
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1'); // If we don't need to load the html.form.class.php
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1'); // Do not load ajax.lib.php library
-}
-if (!defined("NOLOGIN")) {
-    define("NOLOGIN", '1'); // If this page is public (can be called outside logged session)
-}
-if (!defined("NOSESSION")) {
-    define("NOSESSION", '1');
-}
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
+Functions::defineIfNotDefined('NOSESSION', 1);   // On CLI mode, no need to use web sessions
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
@@ -229,7 +215,6 @@ $server->wsdl->addComplexType(
 );
 
 
-
 // 5 styles: RPC/encoded, RPC/literal, Document/encoded (not WS-I compliant), Document/literal, Document/literal wrapped
 // Style merely dictates how to translate a WSDL binding to a SOAP message. Nothing more. You can use either style with any programming model.
 // http://www.ibm.com/developerworks/webservices/library/ws-whichwsdl/
@@ -303,10 +288,10 @@ $server->register(
 /**
  * Get invoice from id, ref or ref_ext.
  *
- * @param   array       $authentication     Array of authentication information
- * @param   int         $id                 Id
- * @param   string      $ref                Ref
- * @param   string      $ref_ext            Ref_ext
+ * @param array $authentication Array of authentication information
+ * @param int $id Id
+ * @param string $ref Ref
+ * @param string $ref_ext Ref_ext
  * @return  array                           Array result
  */
 function getInvoice($authentication, $id = 0, $ref = '', $ref_ext = '')
@@ -346,19 +331,19 @@ function getInvoice($authentication, $id = 0, $ref = '', $ref_ext = '')
                     $linesresp[] = array(
                         'id' => $line->id,
                         'type' => $line->product_type,
-                                                'desc' => dol_htmlcleanlastbr($line->desc),
-                                                'total_net' => $line->total_ht,
-                                                'total_vat' => $line->total_tva,
-                                                'total' => $line->total_ttc,
-                                                'vat_rate' => $line->tva_tx,
-                                                'qty' => $line->qty,
-                                                'unitprice' => $line->subprice,
-                                                'date_start' => $line->date_start ? dol_print_date($line->date_start, 'dayrfc') : '',
-                                                'date_end' => $line->date_end ? dol_print_date($line->date_end, 'dayrfc') : '',
-                                                'product_id' => $line->fk_product,
-                                                'product_ref' => $line->product_ref,
-                                                'product_label' => $line->product_label,
-                                                'product_desc' => $line->product_desc,
+                        'desc' => dol_htmlcleanlastbr($line->desc),
+                        'total_net' => $line->total_ht,
+                        'total_vat' => $line->total_tva,
+                        'total' => $line->total_ttc,
+                        'vat_rate' => $line->tva_tx,
+                        'qty' => $line->qty,
+                        'unitprice' => $line->subprice,
+                        'date_start' => $line->date_start ? dol_print_date($line->date_start, 'dayrfc') : '',
+                        'date_end' => $line->date_end ? dol_print_date($line->date_end, 'dayrfc') : '',
+                        'product_id' => $line->fk_product,
+                        'product_ref' => $line->product_ref,
+                        'product_label' => $line->product_label,
+                        'product_desc' => $line->product_desc,
                     );
                     $i++;
                 }
@@ -414,8 +399,8 @@ function getInvoice($authentication, $id = 0, $ref = '', $ref_ext = '')
 /**
  * Get list of invoices for third party
  *
- * @param   array       $authentication     Array of authentication information
- * @param   int         $idthirdparty       Id thirdparty
+ * @param array $authentication Array of authentication information
+ * @param int $idthirdparty Id thirdparty
  * @return  array                           Array result
  */
 function getInvoicesForThirdParty($authentication, $idthirdparty)
@@ -453,7 +438,7 @@ function getInvoicesForThirdParty($authentication, $idthirdparty)
         $sql .= ' FROM ' . MAIN_DB_PREFIX . 'facture as f';
         $sql .= " WHERE f.entity IN (" . getEntity('invoice') . ")";
         if ($idthirdparty != 'all') {
-            $sql .= " AND f.fk_soc = " . ((int) $idthirdparty);
+            $sql .= " AND f.fk_soc = " . ((int)$idthirdparty);
         }
 
         $resql = $db->query($sql);
@@ -549,8 +534,8 @@ function getInvoicesForThirdParty($authentication, $idthirdparty)
 /**
  * Create an invoice
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array       $invoice            Invoice
+ * @param array $authentication Array of authentication information
+ * @param array $invoice Invoice
  * @return  array                           Array result
  */
 function createInvoice($authentication, $invoice)
@@ -646,7 +631,7 @@ function createInvoice($authentication, $invoice)
         if (!$error) {
             $db->commit();
             $objectresp = array('result' => array('result_code' => 'OK', 'result_label' => ''), 'id' => $new_invoice->id,
-                    'ref' => $new_invoice->ref, 'ref_ext' => $new_invoice->ref_ext);
+                'ref' => $new_invoice->ref, 'ref_ext' => $new_invoice->ref_ext);
         } else {
             $db->rollback();
             $error++;
@@ -666,10 +651,10 @@ function createInvoice($authentication, $invoice)
 /**
  * Create an invoice from an order
  *
- * @param   array{login:string,password:string,entity:?int,dolibarrkey:string}  $authentication     Array of authentication information
- * @param   string      $id_order           id of order to copy invoice from
- * @param   string      $ref_order          ref of order to copy invoice from
- * @param   string      $ref_ext_order      ref_ext of order to copy invoice from
+ * @param array{login:string,password:string,entity:?int,dolibarrkey:string}  $authentication     Array of authentication information
+ * @param string $id_order id of order to copy invoice from
+ * @param string $ref_order ref of order to copy invoice from
+ * @param string $ref_ext_order ref_ext of order to copy invoice from
  * @return  array{result:array{result_code:string,result_label:string},id?:int,ref?:string,ref_ext?:string} Array result
  */
 function createInvoiceFromOrder($authentication, $id_order = '', $ref_order = '', $ref_ext_order = '')
@@ -747,8 +732,8 @@ function createInvoiceFromOrder($authentication, $id_order = '', $ref_order = ''
 /**
  * Update an invoice, only change the state of an invoice
  *
- * @param   array{login:string,password:string,entity:?int,dolibarrkey:string}  $authentication     Array of authentication information
- * @param   array{id:string,ref:string,ref_ext:string,status?:string}           $invoice            Invoice
+ * @param array{login:string,password:string,entity:?int,dolibarrkey:string}  $authentication     Array of authentication information
+ * @param array{id:string,ref:string,ref_ext:string,status?:string} $invoice Invoice
  * @return  array{result:array{result_code:string,result_label:string},id?:int,ref?:string,ref_ext?:string} Array result
  */
 function updateInvoice($authentication, $invoice)
@@ -756,7 +741,7 @@ function updateInvoice($authentication, $invoice)
     global $db, $conf, $langs;
 
     dol_syslog("Function: updateInvoice login=" . $authentication['login'] . " id=" . $invoice['id'] .
-            ", ref=" . $invoice['ref'] . ", ref_ext=" . $invoice['ref_ext']);
+        ", ref=" . $invoice['ref'] . ", ref_ext=" . $invoice['ref_ext']);
 
     if ($authentication['entity']) {
         $conf->entity = $authentication['entity'];
@@ -812,10 +797,10 @@ function updateInvoice($authentication, $invoice)
         if ((!$error) && ($objectfound)) {
             $db->commit();
             $objectresp = array(
-                    'result' => array('result_code' => 'OK', 'result_label' => ''),
-                    'id' => $object->id,
-                    'ref' => $object->ref,
-                    'ref_ext' => $object->ref_ext
+                'result' => array('result_code' => 'OK', 'result_label' => ''),
+                'id' => $object->id,
+                'ref' => $object->ref,
+                'ref_ext' => $object->ref_ext
             );
         } elseif ($objectfound) {
             $db->rollback();

@@ -22,7 +22,10 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Compta\Classes\Facture;
+use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
+use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Lib\ViewMain;
 
 /**
@@ -31,27 +34,16 @@ use Dolibarr\Lib\ViewMain;
  *  \brief      Page to show a receipt.
  */
 
-use Dolibarr\Code\MultiCurrency\Classes\MultiCurrency;
-use Dolibarr\Code\Societe\Classes\Societe;
-
 // Include main (when fie in included into send.php, $action is set and main was already loaded)
 if (!isset($action)) {
     //if (! defined('NOREQUIREUSER'))   define('NOREQUIREUSER', '1');   // Not disabled cause need to load personalized language
     //if (! defined('NOREQUIREDB'))     define('NOREQUIREDB', '1');     // Not disabled cause need to load personalized language
     //if (! defined('NOREQUIRESOC'))        define('NOREQUIRESOC', '1');
     //if (! defined('NOREQUIRETRAN'))       define('NOREQUIRETRAN', '1');
-    if (!defined('NOTOKENRENEWAL')) {
-        define('NOTOKENRENEWAL', '1');
-    }
-    if (!defined('NOREQUIREMENU')) {
-        define('NOREQUIREMENU', '1');
-    }
-    if (!defined('NOREQUIREHTML')) {
-        define('NOREQUIREHTML', '1');
-    }
-    if (!defined('NOREQUIREAJAX')) {
-        define('NOREQUIREAJAX', '1');
-    }
+    Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+    Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // No menu needed
+    Functions::defineIfNotDefined('NOREQUIREHTML', 1);  // No view needed
+    Functions::defineIfNotDefined('NOREQUIREAJAX', 1);  // No AJAX needed
 
     require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php'; // If this file is called from send.php avoid load again
 }

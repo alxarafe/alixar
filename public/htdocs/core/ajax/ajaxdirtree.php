@@ -19,6 +19,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Ecm\Classes\EcmDirectory;
 use Dolibarr\Code\User\Classes\User;
@@ -33,18 +34,10 @@ use Dolibarr\Lib\ViewMain;
 // This script is called with a POST method.
 // Directory to scan (full path) is inside POST['dir'] and encode by js escape() if ajax is used or encoded by urlencode if mode=noajax
 
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', 1); // Disables token renewal
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1');
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1');
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1');
-}
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
 
 if (!isset($mode) || $mode != 'noajax') {    // For ajax call
     $res = @include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';

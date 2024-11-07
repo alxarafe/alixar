@@ -19,11 +19,10 @@
  * or see https://www.gnu.org/
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Lib\ViewMain;
 
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', 1);
-}
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
 
 /**
  *      \file       htdocs/admin/dolistore/ajax/image.php

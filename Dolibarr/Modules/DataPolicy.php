@@ -31,9 +31,9 @@ namespace Dolibarr\Modules;
 
 namespace Dolibarr\Modules;
 
+use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Core\Base\DolibarrModules;
 use DoliDB;
-use ExtraFields;
 use stdClass;
 
 // The class name should start with a lower case mod for Dolibarr to pick it up
@@ -210,7 +210,6 @@ class DataPolicy extends DolibarrModules
         global $langs;
 
         // Create extrafields
-        include_once DOL_DOCUMENT_ROOT . '/core/class/extrafields.class.php';
         $extrafields = new ExtraFields($this->db);
 
         /*

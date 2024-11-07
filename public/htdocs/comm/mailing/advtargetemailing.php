@@ -18,6 +18,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Comm\Classes\AdvanceTargetingMailing;
 use Dolibarr\Code\Comm\Classes\FormAdvTargetEmailing;
 use Dolibarr\Code\Comm\Classes\Mailing;
@@ -32,13 +33,10 @@ use Dolibarr\Lib\ViewMain;
  *       \brief      Page to define emailing targets
  */
 
-if (!defined('NOSTYLECHECK')) {
-    define('NOSTYLECHECK', '1');
-}
+Functions::defineIfNotDefined('NOSTYLECHECK', 1); // Do not check style html tag into posted data
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/emailing.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/modules/mailings/advthirdparties.modules.php';
 

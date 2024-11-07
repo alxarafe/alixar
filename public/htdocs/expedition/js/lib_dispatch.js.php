@@ -17,6 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 // or see https://www.gnu.org/
+
+use Alxarafe\Lib\Functions;
 use Dolibarr\Lib\ViewMain;
 
 /**
@@ -24,27 +26,13 @@ use Dolibarr\Lib\ViewMain;
  * \brief      File that include javascript functions used for dispatching qty/stock/lot
  */
 
-if (!defined('NOREQUIRESOC')) {
-    define('NOREQUIRESOC', '1');
-}
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', 1);
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', 1);
-}
-if (!defined('NOLOGIN')) {
-    define('NOLOGIN', 1);
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', 1);
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', 1);
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1');
-}
+Functions::defineIfNotDefined('NOREQUIRESOC', 1);   // No company needed
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOLOGIN', 1);  // No login needed
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
 
 session_cache_limiter('public');
 
@@ -71,27 +59,26 @@ if (empty($dolibarr_nocache)) {
 function addDispatchLine(index, type, mode) {
     mode = mode || 'qtymissing'
 
-    console.log("expedition/js/lib_dispatch.js.php addDispatchLine Split line type="+type+" index="+index+" mode="+mode);
+    console.log("expedition/js/lib_dispatch.js.php addDispatchLine Split line type=" + type + " index=" + index + " mode=" + mode);
 
-    var $row0 = $("tr[name='"+type+'_0_'+index+"']");
+    var $row0 = $("tr[name='" + type + '_0_' + index + "']");
     var $dpopt = $row0.find('.hasDatepicker').first().datepicker('option', 'all'); // get current datepicker options to apply the same to the cloned datepickers
     var $row = $row0.clone(true);       // clone first batch line to jQuery object
-    var nbrTrs = $("tr[name^='"+type+"_'][name$='_"+index+"']").length; // count nb of tr line with attribute name that starts with 'batch_' or 'dispatch_', and end with _index
-    var qtyOrdered = parseFloat($("#qty_ordered_0_"+index).val());      // Qty ordered is same for all rows
+    var nbrTrs = $("tr[name^='" + type + "_'][name$='_" + index + "']").length; // count nb of tr line with attribute name that starts with 'batch_' or 'dispatch_', and end with _index
+    var qtyOrdered = parseFloat($("#qty_ordered_0_" + index).val());      // Qty ordered is same for all rows
 
-    var qty = parseFloat($("#qty_"+(nbrTrs - 1)+"_"+index).val());
+    var qty = parseFloat($("#qty_" + (nbrTrs - 1) + "_" + index).val());
     if (isNaN(qty)) {
         qty = '';
     }
 
-    console.log("expedition/js/lib_dispatch.js.php addDispatchLine Split line nbrTrs="+nbrTrs+" qtyOrdered="+qtyOrdered+" qty="+qty);
+    console.log("expedition/js/lib_dispatch.js.php addDispatchLine Split line nbrTrs=" + nbrTrs + " qtyOrdered=" + qtyOrdered + " qty=" + qty);
 
     var qtyDispatched;
 
     if (mode === 'lessone') {
         qtyDispatched = parseFloat($("#qty_dispatched_0_" + index).val()) + 1;
-    }
-    else {
+    } else {
         qtyDispatched = parseFloat($("#qty_dispatched_0_" + index).val()) + qty;
         // If user did not reduced the qty to dispatch on old line, we keep only 1 on old line and the rest on new line
         if (qtyDispatched == qtyOrdered && qtyDispatched > 1) {
@@ -99,7 +86,7 @@ function addDispatchLine(index, type, mode) {
             mode = 'lessone';
         }
     }
-    console.log("expedition/js/lib_dispatch.js.php qtyDispatched=" + qtyDispatched + " qtyOrdered=" + qtyOrdered+ " qty=" + qty);
+    console.log("expedition/js/lib_dispatch.js.php qtyDispatched=" + qtyDispatched + " qtyOrdered=" + qtyOrdered + " qty=" + qty);
 
     if (qty <= 1) {
         window.alert("Remain quantity to dispatch is too low to be split");
@@ -109,7 +96,7 @@ function addDispatchLine(index, type, mode) {
         if (newlineqty <= 0) {
             newlineqty = qty - 1;
             oldlineqty = 1;
-            $("#qty_"+(nbrTrs - 1)+"_"+index).val(oldlineqty);
+            $("#qty_" + (nbrTrs - 1) + "_" + index).val(oldlineqty);
         }
 
         //replace tr suffix nbr
@@ -142,8 +129,8 @@ function addDispatchLine(index, type, mode) {
         $(".csswarehouse_" + nbrTrs + "_" + index + ":first-child").parent("span.selection").parent(".select2").detach();
 
         /*  Suffix of lines are:  _ trs.length _ index  */
-        $("#qty_"+nbrTrs+"_"+index).focus();
-        $("#qty_dispatched_0_"+index).val(oldlineqty);
+        $("#qty_" + nbrTrs + "_" + index).focus();
+        $("#qty_dispatched_0_" + index).val(oldlineqty);
 
         //hide all buttons then show only the last one
         $("tr[name^='" + type + "_'][name$='_" + index + "'] .splitbutton").hide();
@@ -165,12 +152,11 @@ function addDispatchLine(index, type, mode) {
             }
         });
 
-        if (mode === 'lessone')
-        {
+        if (mode === 'lessone') {
             qty = 1; // keep 1 in old line
-            $("#qty_"+(nbrTrs-1)+"_"+index).val(qty);
+            $("#qty_" + (nbrTrs - 1) + "_" + index).val(qty);
         }
-        $("#qty_"+nbrTrs+"_"+index).val(newlineqty);
+        $("#qty_" + nbrTrs + "_" + index).val(newlineqty);
         // Store arbitrary data for dispatch qty input field change event
         $("#qty_" + (nbrTrs - 1) + "_" + index).data('qty', qty);
         $("#qty_" + (nbrTrs - 1) + "_" + index).data('type', type);
@@ -202,9 +188,9 @@ function onChangeDispatchLineQty(element) {
     var type = $(element).data('type'),
         qty = parseFloat($(element).data('expected')),
         changedQty, nbrTrs, dispatchingQty, qtyOrdered, qtyDispatched;
-        id = $(element).attr("id");
-        id = id.split("_");
-        index = id[2];
+    id = $(element).attr("id");
+    id = id.split("_");
+    index = id[2];
 
     if (index >= 0 && type && qty >= 0) {
         nbrTrs = $("tr[name^='" + type + "_'][name$='_" + index + "']").length;

@@ -19,6 +19,7 @@
  * or see https://www.gnu.org/
  */
 
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Lib\ViewMain;
 
 /**

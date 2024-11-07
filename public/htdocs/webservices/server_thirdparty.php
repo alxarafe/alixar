@@ -19,36 +19,22 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Societe\Classes\Societe;
-use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/webservices/server_thirdparty.php
  *       \brief      File that is entry point to call Dolibarr WebServices
  */
 
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', '1'); // Do not check anti CSRF attack test
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', '1'); // Do not check anti POST attack test
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1'); // If we don't need to load the html.form.class.php
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1'); // Do not load ajax.lib.php library
-}
-if (!defined("NOLOGIN")) {
-    define("NOLOGIN", '1'); // If this page is public (can be called outside logged session)
-}
-if (!defined("NOSESSION")) {
-    define("NOSESSION", '1');
-}
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
+Functions::defineIfNotDefined('NOSESSION', 1);   // On CLI mode, no need to use web sessions
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
@@ -106,41 +92,41 @@ $server->wsdl->addComplexType(
 
 
 $thirdparty_fields = array(
-        'id' => array('name' => 'id', 'type' => 'xsd:string'),
-        'ref' => array('name' => 'name', 'type' => 'xsd:string'),
-        'ref_ext' => array('name' => 'ref_ext', 'type' => 'xsd:string'),
-        'fk_user_author' => array('name' => 'fk_user_author', 'type' => 'xsd:string'),
-        'status' => array('name' => 'status', 'type' => 'xsd:string'),
-        'client' => array('name' => 'client', 'type' => 'xsd:string'),
-        'supplier' => array('name' => 'supplier', 'type' => 'xsd:string'),
-        'customer_code' => array('name' => 'customer_code', 'type' => 'xsd:string'),
-        'supplier_code' => array('name' => 'supplier_code', 'type' => 'xsd:string'),
-        'customer_code_accountancy' => array('name' => 'customer_code_accountancy', 'type' => 'xsd:string'),
-        'supplier_code_accountancy' => array('name' => 'supplier_code_accountancy', 'type' => 'xsd:string'),
-        'date_creation' => array('name' => 'date_creation', 'type' => 'xsd:dateTime'),
-        'date_modification' => array('name' => 'date_modification', 'type' => 'xsd:dateTime'),
-        'note_private' => array('name' => 'note_private', 'type' => 'xsd:string'),
-        'note_public' => array('name' => 'note_public', 'type' => 'xsd:string'),
-        'address' => array('name' => 'address', 'type' => 'xsd:string'),
-        'zip' => array('name' => 'zip', 'type' => 'xsd:string'),
-        'town' => array('name' => 'town', 'type' => 'xsd:string'),
-        'region_code' => array('name' => 'region_code', 'type' => 'xsd:string'),
-        'country_id' => array('name' => 'country_id', 'type' => 'xsd:string'),
-        'country_code' => array('name' => 'country_code', 'type' => 'xsd:string'),
-        'country' => array('name' => 'country', 'type' => 'xsd:string'),
-        'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
-        'fax' => array('name' => 'fax', 'type' => 'xsd:string'),
-        'email' => array('name' => 'email', 'type' => 'xsd:string'),
-        'url' => array('name' => 'url', 'type' => 'xsd:string'),
-        'profid1' => array('name' => 'profid1', 'type' => 'xsd:string'),
-        'profid2' => array('name' => 'profid2', 'type' => 'xsd:string'),
-        'profid3' => array('name' => 'profid3', 'type' => 'xsd:string'),
-        'profid4' => array('name' => 'profid4', 'type' => 'xsd:string'),
-        'profid5' => array('name' => 'profid5', 'type' => 'xsd:string'),
-        'profid6' => array('name' => 'profid6', 'type' => 'xsd:string'),
-        'capital' => array('name' => 'capital', 'type' => 'xsd:string'),
-        'vat_used' => array('name' => 'vat_used', 'type' => 'xsd:string'),
-        'vat_number' => array('name' => 'vat_number', 'type' => 'xsd:string'));
+    'id' => array('name' => 'id', 'type' => 'xsd:string'),
+    'ref' => array('name' => 'name', 'type' => 'xsd:string'),
+    'ref_ext' => array('name' => 'ref_ext', 'type' => 'xsd:string'),
+    'fk_user_author' => array('name' => 'fk_user_author', 'type' => 'xsd:string'),
+    'status' => array('name' => 'status', 'type' => 'xsd:string'),
+    'client' => array('name' => 'client', 'type' => 'xsd:string'),
+    'supplier' => array('name' => 'supplier', 'type' => 'xsd:string'),
+    'customer_code' => array('name' => 'customer_code', 'type' => 'xsd:string'),
+    'supplier_code' => array('name' => 'supplier_code', 'type' => 'xsd:string'),
+    'customer_code_accountancy' => array('name' => 'customer_code_accountancy', 'type' => 'xsd:string'),
+    'supplier_code_accountancy' => array('name' => 'supplier_code_accountancy', 'type' => 'xsd:string'),
+    'date_creation' => array('name' => 'date_creation', 'type' => 'xsd:dateTime'),
+    'date_modification' => array('name' => 'date_modification', 'type' => 'xsd:dateTime'),
+    'note_private' => array('name' => 'note_private', 'type' => 'xsd:string'),
+    'note_public' => array('name' => 'note_public', 'type' => 'xsd:string'),
+    'address' => array('name' => 'address', 'type' => 'xsd:string'),
+    'zip' => array('name' => 'zip', 'type' => 'xsd:string'),
+    'town' => array('name' => 'town', 'type' => 'xsd:string'),
+    'region_code' => array('name' => 'region_code', 'type' => 'xsd:string'),
+    'country_id' => array('name' => 'country_id', 'type' => 'xsd:string'),
+    'country_code' => array('name' => 'country_code', 'type' => 'xsd:string'),
+    'country' => array('name' => 'country', 'type' => 'xsd:string'),
+    'phone' => array('name' => 'phone', 'type' => 'xsd:string'),
+    'fax' => array('name' => 'fax', 'type' => 'xsd:string'),
+    'email' => array('name' => 'email', 'type' => 'xsd:string'),
+    'url' => array('name' => 'url', 'type' => 'xsd:string'),
+    'profid1' => array('name' => 'profid1', 'type' => 'xsd:string'),
+    'profid2' => array('name' => 'profid2', 'type' => 'xsd:string'),
+    'profid3' => array('name' => 'profid3', 'type' => 'xsd:string'),
+    'profid4' => array('name' => 'profid4', 'type' => 'xsd:string'),
+    'profid5' => array('name' => 'profid5', 'type' => 'xsd:string'),
+    'profid6' => array('name' => 'profid6', 'type' => 'xsd:string'),
+    'capital' => array('name' => 'capital', 'type' => 'xsd:string'),
+    'vat_used' => array('name' => 'vat_used', 'type' => 'xsd:string'),
+    'vat_number' => array('name' => 'vat_number', 'type' => 'xsd:string'));
 
 $elementtype = 'societe';
 
@@ -307,13 +293,13 @@ $server->register(
 /**
  * Get a thirdparty
  *
- * @param   array       $authentication     Array of authentication information
- * @param   string      $id                 internal id
- * @param   string      $ref                internal reference
- * @param   string      $ref_ext            external reference
- * @param   string      $barcode            barcode
- * @param   string      $profid1            profid1
- * @param   string      $profid2            profid2
+ * @param array $authentication Array of authentication information
+ * @param string $id internal id
+ * @param string $ref internal reference
+ * @param string $ref_ext external reference
+ * @param string $barcode barcode
+ * @param string $profid1 profid1
+ * @param string $profid2 profid2
  * @return  array                           Array result
  */
 function getThirdParty($authentication, $id = '', $ref = '', $ref_ext = '', $barcode = '', $profid1 = '', $profid2 = '')
@@ -347,43 +333,43 @@ function getThirdParty($authentication, $id = '', $ref = '', $ref_ext = '', $bar
             $result = $thirdparty->fetch($id, $ref, $ref_ext, $barcode, $profid1, $profid2);
             if ($result > 0) {
                 $thirdparty_result_fields = array(
-                        'id' => $thirdparty->id,
-                        'ref' => $thirdparty->name,
-                        'ref_ext' => $thirdparty->ref_ext,
-                        'status' => $thirdparty->status,
-                        'client' => $thirdparty->client,
-                        'supplier' => $thirdparty->fournisseur,
-                        'customer_code' => $thirdparty->code_client,
-                        'supplier_code' => $thirdparty->code_fournisseur,
-                        'customer_code_accountancy' => $thirdparty->code_compta_client,
-                        'supplier_code_accountancy' => $thirdparty->code_compta_fournisseur,
-                        'user_creation_id' => $thirdparty->user_creation_id,
-                        'date_creation' => dol_print_date($thirdparty->date_creation, 'dayhourrfc'),
-                        'user_modification_id' => $thirdparty->user_modification_id,
-                        'date_modification' => dol_print_date($thirdparty->date_modification, 'dayhourrfc'),
-                        'address' => $thirdparty->address,
-                        'zip' => $thirdparty->zip,
-                        'town' => $thirdparty->town,
-                        'region_code' => $thirdparty->region_code,
-                        'country_id' => $thirdparty->country_id,
-                        'country_code' => $thirdparty->country_code,
-                        'country' => $thirdparty->country,
-                        'phone' => $thirdparty->phone,
-                        'fax' => $thirdparty->fax,
-                        'email' => $thirdparty->email,
-                        'url' => $thirdparty->url,
-                        'profid1' => $thirdparty->idprof1,
-                        'profid2' => $thirdparty->idprof2,
-                        'profid3' => $thirdparty->idprof3,
-                        'profid4' => $thirdparty->idprof4,
-                        'profid5' => $thirdparty->idprof5,
-                        'profid6' => $thirdparty->idprof6,
-                        'capital' => $thirdparty->capital,
-                        'barcode' => $thirdparty->barcode,
-                        'vat_used' => $thirdparty->tva_assuj,
-                        'vat_number' => $thirdparty->tva_intra,
-                        'note_private' => $thirdparty->note_private,
-                        'note_public' => $thirdparty->note_public);
+                    'id' => $thirdparty->id,
+                    'ref' => $thirdparty->name,
+                    'ref_ext' => $thirdparty->ref_ext,
+                    'status' => $thirdparty->status,
+                    'client' => $thirdparty->client,
+                    'supplier' => $thirdparty->fournisseur,
+                    'customer_code' => $thirdparty->code_client,
+                    'supplier_code' => $thirdparty->code_fournisseur,
+                    'customer_code_accountancy' => $thirdparty->code_compta_client,
+                    'supplier_code_accountancy' => $thirdparty->code_compta_fournisseur,
+                    'user_creation_id' => $thirdparty->user_creation_id,
+                    'date_creation' => dol_print_date($thirdparty->date_creation, 'dayhourrfc'),
+                    'user_modification_id' => $thirdparty->user_modification_id,
+                    'date_modification' => dol_print_date($thirdparty->date_modification, 'dayhourrfc'),
+                    'address' => $thirdparty->address,
+                    'zip' => $thirdparty->zip,
+                    'town' => $thirdparty->town,
+                    'region_code' => $thirdparty->region_code,
+                    'country_id' => $thirdparty->country_id,
+                    'country_code' => $thirdparty->country_code,
+                    'country' => $thirdparty->country,
+                    'phone' => $thirdparty->phone,
+                    'fax' => $thirdparty->fax,
+                    'email' => $thirdparty->email,
+                    'url' => $thirdparty->url,
+                    'profid1' => $thirdparty->idprof1,
+                    'profid2' => $thirdparty->idprof2,
+                    'profid3' => $thirdparty->idprof3,
+                    'profid4' => $thirdparty->idprof4,
+                    'profid5' => $thirdparty->idprof5,
+                    'profid6' => $thirdparty->idprof6,
+                    'capital' => $thirdparty->capital,
+                    'barcode' => $thirdparty->barcode,
+                    'vat_used' => $thirdparty->tva_assuj,
+                    'vat_number' => $thirdparty->tva_intra,
+                    'note_private' => $thirdparty->note_private,
+                    'note_public' => $thirdparty->note_public);
 
                 $elementtype = 'societe';
 
@@ -430,12 +416,11 @@ function getThirdParty($authentication, $id = '', $ref = '', $ref_ext = '', $bar
 }
 
 
-
 /**
  * Create a thirdparty
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array       $thirdparty         Thirdparty
+ * @param array $authentication Array of authentication information
+ * @param array $thirdparty Thirdparty
  * @return  array                           Array result
  */
 function createThirdParty($authentication, $thirdparty)
@@ -566,8 +551,8 @@ function createThirdParty($authentication, $thirdparty)
 /**
  * Update a thirdparty
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array       $thirdparty         Thirdparty
+ * @param array $authentication Array of authentication information
+ * @param array $thirdparty Thirdparty
  * @return  array                           Array result
  */
 function updateThirdParty($authentication, $thirdparty)
@@ -677,8 +662,8 @@ function updateThirdParty($authentication, $thirdparty)
         if ((!$error) && ($objectfound)) {
             $db->commit();
             $objectresp = array(
-                    'result' => array('result_code' => 'OK', 'result_label' => ''),
-                    'id' => $object->id
+                'result' => array('result_code' => 'OK', 'result_label' => ''),
+                'id' => $object->id
             );
         } elseif ($objectfound) {
             $db->rollback();
@@ -700,12 +685,11 @@ function updateThirdParty($authentication, $thirdparty)
 }
 
 
-
 /**
  * getListOfThirdParties
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array       $filterthirdparty   Filter fields (key=>value to filer on. For example 'client'=>2, 'supplier'=>1, 'category'=>idcateg, 'name'=>'searchstring', ...)
+ * @param array $authentication Array of authentication information
+ * @param array $filterthirdparty Filter fields (key=>value to filer on. For example 'client'=>2, 'supplier'=>1, 'category'=>idcateg, 'name'=>'searchstring', ...)
  * @return  array                           Array result
  */
 function getListOfThirdParties($authentication, $filterthirdparty)
@@ -729,7 +713,7 @@ function getListOfThirdParties($authentication, $filterthirdparty)
     // Check parameters
 
     if (!$error) {
-        $sql  = "SELECT s.rowid as socRowid, s.nom as ref, s.ref_ext, s.address, s.zip, s.town, c.label as country, s.phone, s.fax, s.url, extra.*";
+        $sql = "SELECT s.rowid as socRowid, s.nom as ref, s.ref_ext, s.address, s.zip, s.town, c.label as country, s.phone, s.fax, s.url, extra.*";
         $sql .= " FROM " . MAIN_DB_PREFIX . "societe as s";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "c_country as c ON s.fk_pays = c.rowid";
         $sql .= " LEFT JOIN " . MAIN_DB_PREFIX . "societe_extrafields as extra ON s.rowid=fk_object";
@@ -739,14 +723,14 @@ function getListOfThirdParties($authentication, $filterthirdparty)
             if ($key == 'name' && $val != '') {
                 $sql .= " AND s.name LIKE '%" . $db->escape($val) . "%'";
             }
-            if ($key == 'client' && (int) $val > 0) {
-                $sql .= " AND s.client = " . ((int) $val);
+            if ($key == 'client' && (int)$val > 0) {
+                $sql .= " AND s.client = " . ((int)$val);
             }
-            if ($key == 'supplier' && (int) $val > 0) {
-                $sql .= " AND s.fournisseur = " . ((int) $val);
+            if ($key == 'supplier' && (int)$val > 0) {
+                $sql .= " AND s.fournisseur = " . ((int)$val);
             }
-            if ($key == 'category' && (int) $val > 0) {
-                $sql .= " AND s.rowid IN (SELECT fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe WHERE fk_categorie = " . ((int) $val) . ") ";
+            if ($key == 'category' && (int)$val > 0) {
+                $sql .= " AND s.rowid IN (SELECT fk_soc FROM " . MAIN_DB_PREFIX . "categorie_societe WHERE fk_categorie = " . ((int)$val) . ") ";
             }
         }
         dol_syslog("Function: getListOfThirdParties", LOG_DEBUG);
@@ -814,10 +798,10 @@ function getListOfThirdParties($authentication, $filterthirdparty)
 /**
  * Delete a thirdparty
  *
- * @param   array       $authentication     Array of authentication information
- * @param   string      $id                 internal id
- * @param   string      $ref                internal reference
- * @param   string      $ref_ext            external reference
+ * @param array $authentication Array of authentication information
+ * @param string $id internal id
+ * @param string $ref internal reference
+ * @param string $ref_ext external reference
  * @return  array                           Array result
  */
 function deleteThirdParty($authentication, $id = '', $ref = '', $ref_ext = '')

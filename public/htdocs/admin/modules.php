@@ -29,6 +29,7 @@
 
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Core\Base\DolibarrModules;
+use Dolibarr\Core\Model\Constant;
 use Dolibarr\Lib\ViewMain;
 
 /**
@@ -69,7 +70,6 @@ $search_status = GETPOST('search_status', 'alpha');
 $search_nature = GETPOST('search_nature', 'alpha');
 $search_version = GETPOST('search_version', 'alpha');
 
-
 // For dolistore search
 $options = array();
 $options['per_page'] = 20;
@@ -78,7 +78,6 @@ $options['start'] = ((int)(GETPOSTINT('start') ? GETPOSTINT('start') : 0));
 $options['end'] = ((int)(GETPOSTINT('end') ? GETPOSTINT('end') : 0));
 $options['search'] = GETPOST('search_keyword', 'alpha');
 $dolistore = new Dolistore(false);
-
 
 if (!$user->admin) {
     accessforbidden();
@@ -137,14 +136,12 @@ if ($max_time && $max_time < $max_execution_time_for_deploy) {
     @ini_set("max_execution_time", $max_execution_time_for_deploy); // This work only if safe mode is off. also web servers has timeout of 300
 }
 
-
 $dolibarrdataroot = preg_replace('/([\\/]+)$/i', '', DOL_DATA_ROOT);
 $allowonlineinstall = true;
 $allowfromweb = 1;
 if (dol_is_file($dolibarrdataroot . '/installmodules.lock')) {
     $allowonlineinstall = false;
 }
-
 
 /*
  * Actions

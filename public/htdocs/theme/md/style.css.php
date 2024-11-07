@@ -26,8 +26,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Lib\ViewCss;
-use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/theme/md/style.css.php
@@ -36,30 +36,16 @@ use Dolibarr\Lib\ViewMain;
 
 //if (! defined('NOREQUIREUSER')) define('NOREQUIREUSER','1');  // Not disabled because need to load personalized language
 //if (! defined('NOREQUIREDB'))   define('NOREQUIREDB','1');    // Not disabled to increase speed. Language code is found on url.
-if (!defined('NOREQUIRESOC')) {
-    define('NOREQUIRESOC', '1');
-}
+Functions::defineIfNotDefined('NOREQUIRESOC', 1);   // No company needed
 //if (! defined('NOREQUIRETRAN')) define('NOREQUIRETRAN','1');  // Not disabled because need to do translations
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', 1);
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', 1);
-}
-if (!defined('NOLOGIN')) {
-    define('NOLOGIN', 1); // File must be accessed by logon page so without login
-}
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
 //if (! defined('NOREQUIREMENU'))   define('NOREQUIREMENU',1);  // We need top menu content
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', 1);
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1');
-}
-
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
 
 define('ISLOADEDBYSTEELSHEET', '1');
-
 
 require __DIR__ . '/theme_vars.inc.php';
 if (defined('THEME_ONLY_CONSTANT')) {
@@ -1655,7 +1641,8 @@ span.fa.fa-plus-circle.paddingleft {
 div.divsearchfield {
     /* float:
 
-<?php print $left; ?>  ; */
+
+<?php print $left; ?>   ; */
     display: inline-block;
     margin- <?php print $right; ?>: 12px;
     margin- <?php print $left; ?>: 2px;
@@ -3102,7 +3089,8 @@ td.showDragHandle {
 <?php } else { ?> background: var(--colorbackvmenu1);
     /* border-
 
-<?php echo $right; ?>  : 1px solid rgba(0,0,0,0.2); */
+
+<?php echo $right; ?>   : 1px solid rgba(0,0,0,0.2); */
     box-shadow: 3px 0 6px -2px #eee;
     bottom: 0;
     color: #333;
@@ -3649,9 +3637,11 @@ div#tmenu_tooltip {
 <?php if (GETPOST('optioncss', 'aZ09') == 'print') {  ?> display: none;
 <?php } else { ?> /* padding-
 
-<?php echo $right; ?>  :
 
-<?php echo($maxwidthloginblock - 10); ?>  px; */
+<?php echo $right; ?>   :
+
+
+<?php echo($maxwidthloginblock - 10); ?>   px; */
 <?php } ?>
 }
 
@@ -3789,7 +3779,7 @@ div.tmenuleft {
     margin-top: 0px;
 <?php if (empty($conf->dol_optimize_smallscreen)) { ?> width: 5px;
 <?php if (!$disableimages) { ?> height: <?php print $heightmenu + 4; ?>px;
-        <?php } ?><?php 
+<?php } ?><?php
 } ?>
 }
 
@@ -4851,7 +4841,8 @@ a.tab:hover {
     /*
     background: var(--colorbacktabcard1) url(
 
-<?php echo dol_buildpath($path . '/theme/' . $theme . '/img/nav-overlay3.png', 1); ?>  ) 50% 0 repeat-x;
+
+<?php echo dol_buildpath($path . '/theme/' . $theme . '/img/nav-overlay3.png', 1); ?>   ) 50% 0 repeat-x;
     color: var(--colortextbacktab);
     */
     text-decoration: underline;
@@ -5449,7 +5440,9 @@ table.hidepaginationnext .paginationnext {
     background: -webkit-linear-gradient(bottom, var(--colorbacklineimpair2) 85%, var(--colorbacklineimpair2) 100%);
     font-family:
 
+
 <?php print $fontlist ?>
+
 
 ;
     border: 0px;
@@ -5465,7 +5458,9 @@ table.hidepaginationnext .paginationnext {
     background: -webkit-linear-gradient(bottom, var(--colorbacklinepair2) 85%, var(--colorbacklinepair2) 100%);
     font-family:
 
+
 <?php print $fontlist ?>
+
 
 ;
     border: 0px;
@@ -5590,11 +5585,15 @@ table.nobottomiftotal tr.liste_total td {
     background-color: var(--inputbackgroundcolor);
 
 
+
 <?php if (!$userborderontable) { ?>
+
     border-bottom: 0px !important;
 
 
+
 <?php } ?>
+
 
 
 }
@@ -6548,7 +6547,8 @@ table.valid {
     border- <?php print $left; ?>: solid 5px #f2cf87;
     /* border-
 
-<?php print $right; ?>  : solid 1px #444444;
+
+<?php print $right; ?>   : solid 1px #444444;
     border-bottom: solid 1px #555555; */
     padding-top: 8px;
     padding-left: 10px;
@@ -6651,10 +6651,12 @@ table.dp {
     /*border-top: solid 2px #f4f4f4;
     border-
 
-<?php print $left; ?>  : solid 2px #f4f4f4;
+
+<?php print $left; ?>   : solid 2px #f4f4f4;
     border-
 
-<?php print $right; ?>  : solid 1px #222222;
+
+<?php print $right; ?>   : solid 1px #222222;
     border-bottom: solid 1px #222222; */
     padding: 0px;
     border-spacing: 0px;
@@ -8677,7 +8679,8 @@ dl.dropdown {
     padding: 7px 8px 7px 8px;
     /* color: rgb(
 
-<?php print $colortext; ?>  ); */
+
+<?php print $colortext; ?>   ); */
     color: #000;
 }
 
@@ -9780,10 +9783,13 @@ table.jPicker {
 
 /* nboftopmenuentries =
 
+
 <?php echo $nbtopmenuentries ?>
+
  , fontsize=
 
-<?php echo is_numeric($fontsize) ? $fontsize . 'px' : $fontsize ?>   */
+
+<?php echo is_numeric($fontsize) ? $fontsize . 'px' : $fontsize ?>    */
 /* rule to reduce top menu - 1st reduction: Reduce width of top menu icons */
 @media only screen and (max-width: <?php echo !getDolGlobalString('THEME_ELDY_WITDHOFFSET_FOR_REDUC1') ? round($nbtopmenuentries * 90, 0) + 340 : $conf->global->THEME_ELDY_WITDHOFFSET_FOR_REDUC1; ?>px)   /* reduction 1 */ {
     div.tmenucenter {
@@ -9856,7 +9862,8 @@ table.jPicker {
     <?php if (GETPOST('optioncss', 'aZ09') == 'print') {  ?> display: none;
     <?php } else { ?> /* padding-
 
-    <?php echo $right; ?>  : 78px; */
+
+    <?php echo $right; ?>   : 78px; */
     <?php } ?>
     }
 

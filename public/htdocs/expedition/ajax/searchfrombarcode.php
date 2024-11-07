@@ -17,6 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Lib\ViewMain;
 
@@ -25,21 +26,12 @@ use Dolibarr\Lib\ViewMain;
  *  \brief      File to make Ajax action on product and stock
  */
 
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', 1); // Disables token renewal
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1');
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1');
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1');
-}
-if (!defined('NOREQUIRESOC')) {
-    define('NOREQUIRESOC', '1');
-}
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
+Functions::defineIfNotDefined('NOREQUIRESOC', 1);   // No company needed
+
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 
 $action = GETPOST("action", "alpha");
@@ -102,22 +94,22 @@ if ($action == "existbarcode" && !empty($barcode)) {
                     $fk_product = $obj->fk_product;
                     $reelqty = $obj->reel;
 
-                    $objectreturn = array('fk_warehouse' => $warehouseid,'fk_product' => $fk_product,'reelqty' => $reelqty);
+                    $objectreturn = array('fk_warehouse' => $warehouseid, 'fk_product' => $fk_product, 'reelqty' => $reelqty);
                 }
             }
         }
         if ($warehousefound < 1) {
-            $response = array('status' => 'error','errorcode' => 'NotFound','message' => 'No warehouse found for barcode' . $barcode);
+            $response = array('status' => 'error', 'errorcode' => 'NotFound', 'message' => 'No warehouse found for barcode' . $barcode);
         } elseif ($warehousefound > 1) {
-            $response = array('status' => 'error','errorcode' => 'TooManyWarehouse','message' => 'Too many warehouse found');
+            $response = array('status' => 'error', 'errorcode' => 'TooManyWarehouse', 'message' => 'Too many warehouse found');
         } else {
-            $response = array('status' => 'success','message' => 'Warehouse found','object' => $objectreturn);
+            $response = array('status' => 'success', 'message' => 'Warehouse found', 'object' => $objectreturn);
         }
     } else {
-        $response = array('status' => 'error','errorcode' => 'NotFound','message' => "No results found for barcode");
+        $response = array('status' => 'error', 'errorcode' => 'NotFound', 'message' => "No results found for barcode");
     }
 } else {
-    $response = array('status' => 'error','errorcode' => 'ActionError','message' => "Error on action");
+    $response = array('status' => 'error', 'errorcode' => 'ActionError', 'message' => "Error on action");
 }
 
 $response = json_encode($response);

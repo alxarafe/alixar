@@ -30,11 +30,11 @@
 
 namespace Dolibarr\Modules;
 
-use Account;
-use Categorie;
+use Dolibarr\Code\Categories\Classes\Categorie;
+use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Core\Base\DolibarrModules;
+use Dolibarr\Code\Societe\Classes\Societe;
 use DoliDB;
-use Societe;
 use stdClass;
 
 /**

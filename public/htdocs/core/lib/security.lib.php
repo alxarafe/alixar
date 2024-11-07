@@ -588,6 +588,8 @@ function restrictedArea(User $user, $features, $object = 0, $tableandshare = '',
         $readok = 1;
     }
 
+    // dump([$feature, $readok, $nbko, $mode]);
+
     if (!$readok) {
         if ($mode) {
             return 0;

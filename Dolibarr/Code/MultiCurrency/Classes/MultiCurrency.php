@@ -25,16 +25,16 @@
 
 namespace Dolibarr\Code\MultiCurrency\Classes;
 
-use Dolibarr\Classes\stdClass;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
 use DoliDB;
+use stdClass;
 
 /**
  * \file    htdocs/multicurrency/class/multicurrency.class.php
  * \ingroup multicurrency
  * \brief   This file is a CRUD class file (Create/Read/Update/Delete) for multicurrency
  */
-
 
 /**
  * Class Currency

@@ -19,10 +19,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Core\Classes\Translate;
 use Dolibarr\Code\Societe\Classes\SocieteAccount;
+use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Code\WebPortal\Classes\Context;
-use Dolibarr\Lib\ViewMain;
+use Dolibarr\Code\WebPortal\Classes\WebPortalMember;
+use Dolibarr\Code\WebPortal\Classes\WebPortalPartnership;
 
 /**
  * \file    htdocs/public/webportal/webportal.main.inc.php
@@ -30,27 +33,13 @@ use Dolibarr\Lib\ViewMain;
  * \brief   Main include file for WebPortal
  */
 
-if (!defined('WEBPORTAL')) {
-    define('WEBPORTAL', 1);
-}
-if (!defined('NOLOGIN')) {
-    define('NOLOGIN', 1);
-}
-if (!defined('NOREQUIREUSER')) {
-    define('NOREQUIREUSER', 1);
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', 1);
-}
-if (!defined('NOREQUIRESOC')) {
-    define('NOREQUIRESOC', 1);
-}
-if (!defined('EVEN_IF_ONLY_LOGIN_ALLOWED')) {
-    define('EVEN_IF_ONLY_LOGIN_ALLOWED', 1);
-}
-if (!defined('NOIPCHECK')) {
-    define('NOIPCHECK', 1);
-}
+Functions::defineIfNotDefined('WEBPORTAL', 1);
+Functions::defineIfNotDefined('NOLOGIN', 1);  // No login needed
+Functions::defineIfNotDefined('NOREQUIREUSER', 1);   // No user needed
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIRESOC', 1);   // No company needed
+Functions::defineIfNotDefined('EVEN_IF_ONLY_LOGIN_ALLOWED', 1);
+Functions::defineIfNotDefined('NOIPCHECK', 1); // Do not check IP defined into conf $dolibarr_main_restrict_ip
 
 
 if (!function_exists('dol_getprefix')) {
@@ -84,10 +73,6 @@ if (!function_exists('dol_getprefix')) {
 
 
 include constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
-
-use Dolibarr\Code\User\Classes\User;
-use Dolibarr\Code\WebPortal\Classes\WebPortalMember;
-use Dolibarr\Code\WebPortal\Classes\WebPortalPartnership;
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/public/webportal/lib/webportal.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/webportal/class/context.class.php';

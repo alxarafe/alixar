@@ -21,48 +21,31 @@
  * Path to WSDL is: http://localhost/dolibarr/webservices/server_productorservice.php?wsdl
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Categories\Classes\Categorie;
 use Dolibarr\Code\Core\Classes\ExtraFields;
-use Dolibarr\Lib\ViewMain;
+use Dolibarr\Code\Product\Classes\Entrepot;
+use Dolibarr\Code\Product\Classes\Product;
 
 /**
  *       \file       htdocs/webservices/server_productorservice.php
  *       \brief      File that is entry point to call Dolibarr WebServices
  */
 
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', '1'); // Do not check anti CSRF attack test
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', '1'); // Do not check anti POST attack test
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1'); // If we don't need to load the html.form.class.php
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1'); // Do not load ajax.lib.php library
-}
-if (!defined("NOLOGIN")) {
-    define("NOLOGIN", '1'); // If this page is public (can be called outside logged session)
-}
-if (!defined("NOSESSION")) {
-    define("NOSESSION", '1');
-}
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
+Functions::defineIfNotDefined('NOSESSION', 1);   // On CLI mode, no need to use web sessions
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ws.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/functions.lib.php';
 
-use Dolibarr\Code\Product\Classes\Entrepot;
-use Dolibarr\Code\Product\Classes\Product;
-use Dolibarr\Code\User\Classes\User;
-
 require_once DOL_DOCUMENT_ROOT . "/categories/class/categorie.class.php";
-
 
 
 dol_syslog("Call Dolibarr webservices interfaces");
@@ -208,10 +191,10 @@ $server->wsdl->addComplexType(
     '',
     array(
         'image' => array(
-        'name' => 'image',
-        'type' => 'tns:image',
-        'minOccurs' => '0',
-        'maxOccurs' => 'unbounded'
+            'name' => 'image',
+            'type' => 'tns:image',
+            'minOccurs' => '0',
+            'maxOccurs' => 'unbounded'
         )
     )
 );
@@ -362,11 +345,11 @@ $server->register(
 /**
  * Get produt or service
  *
- * @param   array       $authentication     Array of authentication information
- * @param   int         $id                 Id of object
- * @param   string      $ref                Ref of object
- * @param   string      $ref_ext            Ref external of object
- * @param   string      $lang               Lang to force
+ * @param array $authentication Array of authentication information
+ * @param int $id Id of object
+ * @param string $ref Ref of object
+ * @param string $ref_ext Ref external of object
+ * @param string $lang Lang to force
  * @return  mixed
  */
 function getProductOrService($authentication, $id = 0, $ref = '', $ref_ext = '', $lang = '')
@@ -505,8 +488,8 @@ function getProductOrService($authentication, $id = 0, $ref = '', $ref_ext = '',
 /**
  * Create an invoice
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array       $product            Product
+ * @param array $authentication Array of authentication information
+ * @param array $product Product
  * @return  array                           Array result
  */
 function createProductOrService($authentication, $product)
@@ -671,8 +654,8 @@ function createProductOrService($authentication, $product)
 /**
  * Update a product or service
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array       $product            Product
+ * @param array $authentication Array of authentication information
+ * @param array $product Product
  * @return  array                           Array result
  */
 function updateProductOrService($authentication, $product)
@@ -838,8 +821,8 @@ function updateProductOrService($authentication, $product)
 /**
  * Delete a product or service
  *
- * @param   array       $authentication     Array of authentication information
- * @param   string      $listofidstring     List of id with comma
+ * @param array $authentication Array of authentication information
+ * @param string $listofidstring List of id with comma
  * @return  array                           Array result
  */
 function deleteProductOrService($authentication, $listofidstring)
@@ -925,8 +908,8 @@ function deleteProductOrService($authentication, $listofidstring)
 /**
  * getListOfProductsOrServices
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array       $filterproduct      Filter fields
+ * @param array $authentication Array of authentication information
+ * @param array $filterproduct Filter fields
  * @return  array                           Array result
  */
 function getListOfProductsOrServices($authentication, $filterproduct)
@@ -954,13 +937,13 @@ function getListOfProductsOrServices($authentication, $filterproduct)
         $sql .= " WHERE entity=" . $conf->entity;
         foreach ($filterproduct as $key => $val) {
             if ($key == 'type' && $val >= 0) {
-                $sql .= " AND fk_product_type = " . ((int) $val);
+                $sql .= " AND fk_product_type = " . ((int)$val);
             }
             if ($key == 'status_tosell') {
-                $sql .= " AND tosell = " . ((int) $val);
+                $sql .= " AND tosell = " . ((int)$val);
             }
             if ($key == 'status_tobuy') {
-                $sql .= " AND tobuy = " . ((int) $val);
+                $sql .= " AND tobuy = " . ((int)$val);
             }
         }
         $resql = $db->query($sql);
@@ -999,9 +982,9 @@ function getListOfProductsOrServices($authentication, $filterproduct)
 /**
  * Get list of products for a category
  *
- * @param   array       $authentication     Array of authentication information
- * @param   int         $id                 Category id
- * @param   string      $lang               Force lang
+ * @param array $authentication Array of authentication information
+ * @param int $id Category id
+ * @param string $lang Force lang
  * @return  array                           Array result
  */
 function getProductsForCategory($authentication, $id, $lang = '')
@@ -1045,8 +1028,8 @@ function getProductsForCategory($authentication, $id, $lang = '')
             if ($result > 0) {
                 $table = "product";
                 $field = "product";
-                $sql  = "SELECT fk_" . $field . " FROM " . MAIN_DB_PREFIX . "categorie_" . $table;
-                $sql .= " WHERE fk_categorie = " . ((int) $id);
+                $sql = "SELECT fk_" . $field . " FROM " . MAIN_DB_PREFIX . "categorie_" . $table;
+                $sql .= " WHERE fk_categorie = " . ((int)$id);
                 $sql .= " ORDER BY fk_" . $field . " ASC";
 
 
@@ -1116,8 +1099,8 @@ function getProductsForCategory($authentication, $id, $lang = '')
 
                     // Retour
                     $objectresp = array(
-                    'result' => array('result_code' => 'OK', 'result_label' => ''),
-                    'products' => $products
+                        'result' => array('result_code' => 'OK', 'result_label' => ''),
+                        'products' => $products
                     );
                 } else {
                     $errorcode = 'NORECORDS_FOR_ASSOCIATION';

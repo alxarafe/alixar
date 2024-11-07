@@ -18,6 +18,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\ExpenseReport\Classes\ExpenseReport;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Lib\ViewMain;
@@ -28,21 +29,11 @@ use Dolibarr\Lib\ViewMain;
  *       \brief      File to return Ajax response on third parties request
  */
 
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', 1); // Disables token renewal
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1');
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1');
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1');
-}
-if (!defined('NOREQUIRESOC')) {
-    define('NOREQUIRESOC', '1');
-}
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
+Functions::defineIfNotDefined('NOREQUIRESOC', 1);   // No company needed
 
 $res = 0;
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
@@ -72,21 +63,21 @@ $rep->errorMessage = '';
 
 
 if (empty($fk_expense) || $fk_expense < 0) {
-    $rep->errorMessage =   $langs->transnoentitiesnoconv('ErrorBadValueForParameter', $fk_expense, 'fk_expense');
+    $rep->errorMessage = $langs->transnoentitiesnoconv('ErrorBadValueForParameter', $fk_expense, 'fk_expense');
 } elseif (empty($fk_c_exp_tax_cat) || $fk_c_exp_tax_cat < 0) {
-    $rep->errorMessage =  $langs->transnoentitiesnoconv('ErrorBadValueForParameter', $fk_c_exp_tax_cat, 'fk_c_exp_tax_cat');
+    $rep->errorMessage = $langs->transnoentitiesnoconv('ErrorBadValueForParameter', $fk_c_exp_tax_cat, 'fk_c_exp_tax_cat');
 
     $rep->response_status = 'error';
 } else {
     // @see ndfp.class.php:3576 (method: compute_total_km)
     $expense = new ExpenseReport($db);
     if ($expense->fetch($fk_expense) <= 0) {
-        $rep->errorMessage =  $langs->transnoentitiesnoconv('ErrorRecordNotFound');
+        $rep->errorMessage = $langs->transnoentitiesnoconv('ErrorRecordNotFound');
         $rep->response_status = 'error';
     } else {
         $userauthor = new User($db);
         if ($userauthor->fetch($expense->fk_user_author) <= 0) {
-            $rep->errorMessage =  $langs->transnoentitiesnoconv('ErrorRecordNotFound');
+            $rep->errorMessage = $langs->transnoentitiesnoconv('ErrorRecordNotFound');
             $rep->response_status = 'error';
         } else {
             $expense = new ExpenseReport($db);

@@ -19,8 +19,8 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\WebPortal\Classes\Context;
-use Dolibarr\Lib\ViewMain;
 
 /**
  * \file        htdocs/public/webportal/logout.php
@@ -32,12 +32,8 @@ define('WEBPORTAL_NOREQUIREUSER', 1);
 define('WEBPORTAL_NOREQUIRETRAN', 1);
 define('WEBPORTAL_NOLOGIN', 1);
 
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1');
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1');
-}
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
 
 include 'webportal.main.inc.php';
 

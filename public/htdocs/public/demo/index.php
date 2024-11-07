@@ -21,6 +21,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Core\Base\DolibarrModules;
 use Dolibarr\Lib\ViewMain;
 
@@ -30,15 +31,9 @@ use Dolibarr\Lib\ViewMain;
  *      \brief      Entry page to access demo
  */
 
-if (!defined('NOLOGIN')) {
-    define('NOLOGIN', '1');
-}
-if (!defined('NOBROWSERNOTIF')) {
-    define('NOBROWSERNOTIF', 1);
-}
-if (!defined('NOIPCHECK')) {
-    define('NOIPCHECK', '1'); // Do not check IP defined into conf $dolibarr_main_restrict_ip
-}
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
+Functions::defineIfNotDefined('NOBROWSERNOTIF', 1);  // Disable browser notification
+Functions::defineIfNotDefined('NOIPCHECK', 1); // Do not check IP defined into conf $dolibarr_main_restrict_ip
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';

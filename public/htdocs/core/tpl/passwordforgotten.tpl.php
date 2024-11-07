@@ -18,9 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-if (!defined('NOBROWSERNOTIF')) {
-    define('NOBROWSERNOTIF', 1);
-}
+use Alxarafe\Lib\Functions;
+
+Functions::defineIfNotDefined('NOBROWSERNOTIF', 1);  // Disable browser notification
 
 // Protection to avoid direct call of template
 if (empty($conf) || !is_object($conf)) {

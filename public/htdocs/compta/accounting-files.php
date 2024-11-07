@@ -23,6 +23,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Compta\Classes\ChargeSociales;
 use Dolibarr\Code\Compta\Classes\Facture;
 use Dolibarr\Code\Compta\Classes\PaymentVarious;
@@ -45,9 +46,7 @@ use Dolibarr\Lib\ViewMain;
  */
 
 if ((array_key_exists('action', $_GET) && $_GET['action'] == 'dl') || (array_key_exists('action', $_POST) && $_POST['action'] == 'dl')) {   // To not replace token when downloading file. Keep $_GET and $_POST here
-    if (!defined('NOTOKENRENEWAL')) {
-        define('NOTOKENRENEWAL', '1');
-    }
+    Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
 }
 
 // Load Dolibarr environment
@@ -55,9 +54,6 @@ require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/company.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/date.lib.php';
-
-if (isModEnabled('project')) {
-}
 
 // Constant to define payment sens
 const PAY_DEBIT = 0;

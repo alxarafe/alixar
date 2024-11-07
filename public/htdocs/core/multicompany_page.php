@@ -21,6 +21,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Lib\ViewMain;
 
 /**
@@ -32,16 +33,10 @@ use Dolibarr\Lib\ViewMain;
 //if (! defined('NOREQUIREDB'))   define('NOREQUIREDB','1');        // Not disabled cause need to load personalized language
 //if (! defined('NOREQUIRESOC'))    define('NOREQUIRESOC','1');
 //if (! defined('NOREQUIRETRAN')) define('NOREQUIRETRAN','1');      // Not disabled cause need to do translations
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', 1);
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', 1);
-}
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
 //if (! defined('NOLOGIN')) define('NOLOGIN',1);                    // Not disabled cause need to load personalized language
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', 1);
-}
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
 //if (! defined('NOREQUIREHTML'))  define('NOREQUIREHTML',1);
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';

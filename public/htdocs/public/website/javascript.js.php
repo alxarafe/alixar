@@ -18,9 +18,9 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Website\Classes\Website;
 use Dolibarr\Code\Website\Classes\WebsitePage;
-use Dolibarr\Lib\ViewMain;
 
 /**
  *      \file       htdocs/public/website/javascript.js.php
@@ -28,30 +28,14 @@ use Dolibarr\Lib\ViewMain;
  *      \brief      Page to output style page. Called with <script async src="/javascript.js.php?websiteid=123"></script>
  */
 
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', 1); // Disables token renewal
-}
-if (!defined('NOLOGIN')) {
-    define("NOLOGIN", 1);
-}
-if (!defined('NOCSRFCHECK')) {
-    define("NOCSRFCHECK", 1); // We accept to go on this page from external web site.
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1');
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1');
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1');
-}
-if (!defined('NOIPCHECK')) {
-    define('NOIPCHECK', '1'); // Do not check IP defined into conf $dolibarr_main_restrict_ip
-}
-if (!defined('NOBROWSERNOTIF')) {
-    define('NOBROWSERNOTIF', '1');
-}
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOLOGIN', 1);  // No login needed
+Functions::defineIfNotDefined('NOCSRFCHECK', 1); // We accept to go on this page from external web site.
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
+Functions::defineIfNotDefined('NOIPCHECK', 1); // Do not check IP defined into conf $dolibarr_main_restrict_ip
+Functions::defineIfNotDefined('NOBROWSERNOTIF', 1);  // Disable browser notification
 
 require '../../master.inc.php';
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/files.lib.php';

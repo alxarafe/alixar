@@ -22,37 +22,23 @@
  * Path to WSDL is: http://localhost/dolibarr/webservices/server_actioncomm.php?wsdl
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Comm\Classes\ActionComm;
 use Dolibarr\Code\Comm\Classes\CActionComm;
 use Dolibarr\Code\Core\Classes\ExtraFields;
-use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/webservices/server_actioncomm.php
  *       \brief      File that is entry point to call Dolibarr WebServices
  */
 
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', '1'); // Do not check anti CSRF attack test
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', '1'); // Do not check anti POST attack test
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1'); // If we don't need to load the html.form.class.php
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1'); // Do not load ajax.lib.php library
-}
-if (!defined("NOLOGIN")) {
-    define("NOLOGIN", '1'); // If this page is public (can be called outside logged session)
-}
-if (!defined("NOSESSION")) {
-    define("NOSESSION", '1');
-}
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
+Functions::defineIfNotDefined('NOSESSION', 1);   // On CLI mode, no need to use web sessions
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
@@ -270,13 +256,11 @@ $server->register(
 );
 
 
-
-
 /**
  * Get ActionComm
  *
- * @param   array       $authentication     Array of authentication information
- * @param   int         $id                 Id of object
+ * @param array $authentication Array of authentication information
+ * @param int $id Id of object
  * @return  mixed
  */
 function getActionComm($authentication, $id)
@@ -310,30 +294,30 @@ function getActionComm($authentication, $id)
             $result = $actioncomm->fetch($id);
             if ($result > 0) {
                 $actioncomm_result_fields = array(
-                        'id' => $actioncomm->id,
-                        'ref' => $actioncomm->ref,
-                        'ref_ext' => $actioncomm->ref_ext,
-                        'type_id' => $actioncomm->type_id,
-                        'type_code' => $actioncomm->type_code,
-                        'type' => $actioncomm->type,
-                        'label' => $actioncomm->label,
-                        'datep' => dol_print_date($actioncomm->datep, 'dayhourrfc'),
-                        'datef' => dol_print_date($actioncomm->datef, 'dayhourrfc'),
-                        'datec' => dol_print_date($actioncomm->datec, 'dayhourrfc'),
-                        'datem' => dol_print_date($actioncomm->datem, 'dayhourrfc'),
-                        'note' => $actioncomm->note_private,
-                        'percentage' => $actioncomm->percentage,
-                        'author' => $actioncomm->authorid,
-                        'usermod' => $actioncomm->usermodid,
-                        'userownerid' => $actioncomm->userownerid,
-                        'priority' => $actioncomm->priority,
-                        'fulldayevent' => $actioncomm->fulldayevent,
-                        'location' => $actioncomm->location,
-                        'socid' => $actioncomm->socid,
-                        'contactid' => $actioncomm->contact_id,
-                        'projectid' => $actioncomm->fk_project,
-                        'fk_element' => $actioncomm->fk_element,
-                        'elementtype' => $actioncomm->elementtype
+                    'id' => $actioncomm->id,
+                    'ref' => $actioncomm->ref,
+                    'ref_ext' => $actioncomm->ref_ext,
+                    'type_id' => $actioncomm->type_id,
+                    'type_code' => $actioncomm->type_code,
+                    'type' => $actioncomm->type,
+                    'label' => $actioncomm->label,
+                    'datep' => dol_print_date($actioncomm->datep, 'dayhourrfc'),
+                    'datef' => dol_print_date($actioncomm->datef, 'dayhourrfc'),
+                    'datec' => dol_print_date($actioncomm->datec, 'dayhourrfc'),
+                    'datem' => dol_print_date($actioncomm->datem, 'dayhourrfc'),
+                    'note' => $actioncomm->note_private,
+                    'percentage' => $actioncomm->percentage,
+                    'author' => $actioncomm->authorid,
+                    'usermod' => $actioncomm->usermodid,
+                    'userownerid' => $actioncomm->userownerid,
+                    'priority' => $actioncomm->priority,
+                    'fulldayevent' => $actioncomm->fulldayevent,
+                    'location' => $actioncomm->location,
+                    'socid' => $actioncomm->socid,
+                    'contactid' => $actioncomm->contact_id,
+                    'projectid' => $actioncomm->fk_project,
+                    'fk_element' => $actioncomm->fk_element,
+                    'elementtype' => $actioncomm->elementtype
                 );
 
                 $elementtype = 'actioncomm';
@@ -378,7 +362,7 @@ function getActionComm($authentication, $id)
 /**
  * Get getListActionCommType
  *
- * @param   array       $authentication     Array of authentication information
+ * @param array $authentication Array of authentication information
  * @return  mixed
  */
 function getListActionCommType($authentication)
@@ -436,8 +420,8 @@ function getListActionCommType($authentication)
 /**
  * Create ActionComm
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array       $actioncomm         $actioncomm
+ * @param array $authentication Array of authentication information
+ * @param array $actioncomm $actioncomm
  * @return  array                           Array result
  */
 function createActionComm($authentication, $actioncomm)
@@ -520,8 +504,8 @@ function createActionComm($authentication, $actioncomm)
 /**
  * Create ActionComm
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array       $actioncomm         $actioncomm
+ * @param array $authentication Array of authentication information
+ * @param array $actioncomm $actioncomm
  * @return  array                           Array result
  */
 function updateActionComm($authentication, $actioncomm)
@@ -599,8 +583,8 @@ function updateActionComm($authentication, $actioncomm)
         if ((!$error) && ($objectfound)) {
             $db->commit();
             $objectresp = array(
-                    'result' => array('result_code' => 'OK', 'result_label' => ''),
-                    'id' => $object->id
+                'result' => array('result_code' => 'OK', 'result_label' => ''),
+                'id' => $object->id
             );
         } elseif ($objectfound) {
             $db->rollback();

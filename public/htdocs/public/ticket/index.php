@@ -18,6 +18,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Core\Classes\Form;
 use Dolibarr\Code\Core\Classes\FormTicket;
 use Dolibarr\Lib\ViewMain;
@@ -28,21 +29,10 @@ use Dolibarr\Lib\ViewMain;
  *    \brief      Public page to add and manage tickets
  */
 
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1');
-}
-
-if (!defined('NOLOGIN')) {
-    define('NOLOGIN', '1');       // If this page is public (can be called outside logged session)
-}
-
-if (!defined('NOIPCHECK')) {
-    define('NOIPCHECK', '1');     // Do not check IP defined into conf $dolibarr_main_restrict_ip
-}
-
-if (!defined('NOBROWSERNOTIF')) {
-    define('NOBROWSERNOTIF', '1');
-}
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOLOGIN', 1);  // If this page is public (can be called outside logged session)
+Functions::defineIfNotDefined('NOIPCHECK', 1); // Do not check IP defined into conf $dolibarr_main_restrict_ip
+Functions::defineIfNotDefined('NOBROWSERNOTIF', 1);  // Disable browser notification
 
 // For MultiCompany module
 // Do not use GETPOST here, function is not defined and define must be done before including main.inc.php

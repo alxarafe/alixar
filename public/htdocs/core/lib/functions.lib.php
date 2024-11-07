@@ -49,7 +49,7 @@ use Dolibarr\Code\Product\Classes\Product;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
 use Dolibarr\Core\Base\CommonObject;
-use Dolibarr\Lib\ViewMain;
+use Dolibarr\Core\Base\Database as BaseDatabaseInstantiate;
 
 /**
  *  \file           htdocs/core/lib/functions.lib.php
@@ -330,6 +330,9 @@ function getDoliDBInstance($type, $host, $user, $pass, $name, $port)
 
     $class = 'DoliDB' . ucfirst($type);
     $db = new $class($type, $host, $user, $pass, $name, $port);
+
+    new BaseDatabaseInstantiate();
+
     return $db;
 }
 
@@ -7088,7 +7091,7 @@ function dol_eval($s, $returnvalue = 1, $hideerrors = 1, $onlysimplestring = '1'
                 $tmps = @eval('return ' . $s . ';');
                 $tmpo = ob_get_clean();
                 $isObBufferActive = false;
-                if ($tmpo) {
+                if ($tmpo === false) {
                     print 'Bad string syntax to evaluate. Some data were output when it should not when evaluating: ' . $s;
                 }
                 return $tmps;
@@ -7098,7 +7101,7 @@ function dol_eval($s, $returnvalue = 1, $hideerrors = 1, $onlysimplestring = '1'
                 $tmps = eval('return ' . $s . ';');
                 $tmpo = ob_get_clean();
                 $isObBufferActive = false;
-                if ($tmpo) {
+                if ($tmpo === false) {
                     print 'Bad string syntax to evaluate. Some data were output when it should not when evaluating: ' . $s;
                 }
                 return $tmps;

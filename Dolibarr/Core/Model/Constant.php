@@ -122,7 +122,7 @@ class Constant extends Model
 
     public static function insert(string $name, string $value, ?string $type, string $note, int $visible = 0, int $entity = 0): bool
     {
-        return !empty(Constant::create([
+        return !empty(Constant::updateOrCreate([
             'name' => static::encrypt($name, 0),
             'value' => static::encrypt($value, 0),
             'type' => isset($type) ? static::encrypt($type, 0) : null,

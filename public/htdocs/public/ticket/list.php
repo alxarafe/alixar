@@ -17,6 +17,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Core\Classes\CMailFile;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Core\Classes\Form;
@@ -31,19 +32,11 @@ use Dolibarr\Lib\ViewMain;
  *       \brief      Public file to list tickets
  */
 
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1');
-}
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
 // If there is no need to load and show top and left menu
-if (!defined("NOLOGIN")) {
-    define("NOLOGIN", '1');
-}
-if (!defined('NOIPCHECK')) {
-    define('NOIPCHECK', '1'); // Do not check IP defined into conf $dolibarr_main_restrict_ip
-}
-if (!defined('NOBROWSERNOTIF')) {
-    define('NOBROWSERNOTIF', '1');
-}
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
+Functions::defineIfNotDefined('NOIPCHECK', 1); // Do not check IP defined into conf $dolibarr_main_restrict_ip
+Functions::defineIfNotDefined('NOBROWSERNOTIF', 1);  // Disable browser notification
 // If this page is public (can be called outside logged session)
 
 // For MultiCompany module.

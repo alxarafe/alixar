@@ -20,34 +20,20 @@
  *
  * Library javascript to enable Browser notifications
  */
-use Dolibarr\Lib\ViewMain;
+use Alxarafe\Lib\Functions;use Dolibarr\Lib\ViewMain;
 
 /**
  *  \file           htdocs/core/js/lib_notification.js.php
  *  \brief          Javascript code to manage browser reminers
  */
 
-if (!defined('NOREQUIREUSER')) {
-    define('NOREQUIREUSER', '1');
-}
-if (!defined('NOREQUIRESOC')) {
-    define('NOREQUIRESOC', '1');
-}
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', 1);
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', 1);
-}
-if (!defined('NOLOGIN')) {
-    define('NOLOGIN', 1);
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', 1);
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', 1);
-}
+Functions::defineIfNotDefined('NOREQUIREUSER', 1);   // No user needed
+Functions::defineIfNotDefined('NOREQUIRESOC', 1);   // No company needed
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOLOGIN', 1);  // No login needed
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
 
 session_cache_limiter('public');
 

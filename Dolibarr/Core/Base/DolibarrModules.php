@@ -1512,6 +1512,7 @@ abstract class DolibarrModules
     {
         // phpcs:enable
         global $conf;
+
         $err = 0;
 
         $this->db->begin();
@@ -1686,7 +1687,7 @@ abstract class DolibarrModules
                         $this->const_name . "_TABS_" . $i,
                         $newvalue,
                         'chaine',
-                        null,
+                        '',
                         0,
                         $entity,
                     );
@@ -1793,7 +1794,7 @@ abstract class DolibarrModules
                         $this->const_name . "_" . strtoupper($key),
                         $newvalue,
                         'chaine',
-                        null,
+                        '',
                         0,
                         $entity
                     );
@@ -1849,31 +1850,23 @@ abstract class DolibarrModules
                 $val = '';
             }
 
-            $res = Constant::getByName($name, $entity);
+            $res = Constant::updateOrCreate([
+                'name' => $name,
+                'value' => $val ?? '',
+                'type' => $type,
+                'note' => $note ?? '',
+                'visible' => $visible,
+                'entity' => $entity,
+            ]);
+
             if ($res === null) {
                 $this->error = $this->db->lasterror();
                 $err++;
                 return $err;
             }
 
-            if (!$res) {
-                $res = Constant::insert(
-                    $name,
-                    $val ?? '',
-                    $type,
-                    $note ?? null,
-                    $visible,
-                    $entity,
-                );
-                if ($res === null) {
-                    $this->error = $this->db->lasterror();
-                    $err++;
-                    return $err;
-                }
-                if ($res) {
-                    dol_syslog(__METHOD__ . " constant '" . $name . "' already exists", LOG_DEBUG);
-                }
-            }
+            dol_syslog(__METHOD__ . " constant '" . $name . "' already exists", LOG_DEBUG);
+
         }
         return $err;
     }
@@ -2127,8 +2120,6 @@ abstract class DolibarrModules
         if (!is_array($this->menu) || empty($this->menu)) {
             return 0;
         }
-
-        include_once DOL_DOCUMENT_ROOT . '/core/class/menubase.class.php';
 
         dol_syslog(get_only_class($this) . "::insert_menus", LOG_DEBUG);
 

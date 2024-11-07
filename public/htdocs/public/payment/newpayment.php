@@ -32,6 +32,7 @@
  * - If no option set, we use old APIS (charge)
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Adherents\Classes\Adherent;
 use Dolibarr\Code\Adherents\Classes\AdherentType;
 use Dolibarr\Code\Adherents\Classes\Subscription;
@@ -54,18 +55,10 @@ use Dolibarr\Lib\ViewMain;
  *      \brief      File to offer a way to make a payment for a particular Dolibarr object
  */
 
-if (!defined('NOLOGIN')) {
-    define("NOLOGIN", 1); // This means this output page does not require to be logged.
-}
-if (!defined('NOCSRFCHECK')) {
-    define("NOCSRFCHECK", 1); // We accept to go on this page from external web site.
-}
-if (!defined('NOIPCHECK')) {
-    define('NOIPCHECK', '1'); // Do not check IP defined into conf $dolibarr_main_restrict_ip
-}
-if (!defined('NOBROWSERNOTIF')) {
-    define('NOBROWSERNOTIF', '1');
-}
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
+Functions::defineIfNotDefined('NOCSRFCHECK', 1); // We accept to go on this page from external web site.
+Functions::defineIfNotDefined('NOIPCHECK', 1); // Do not check IP defined into conf $dolibarr_main_restrict_ip
+Functions::defineIfNotDefined('NOBROWSERNOTIF', 1);  // Disable browser notification
 
 // For MultiCompany module.
 // Do not use GETPOST here, function is not defined and get of entity must be done before including main.inc.php
@@ -2600,7 +2593,7 @@ if (preg_match('/^dopayment/', $action)) {          // If we chose/clicked on th
                     save_payment_method:<?php if ($stripecu) {
                         print 'true';
                     } else {
-                                            print 'false';
+                        print 'false';
                     } ?>    /* true when a customer was provided when creating payment intent. true ask to save the card */
                     },
                     }
@@ -2694,7 +2687,7 @@ if (preg_match('/^dopayment/', $action)) {          // If we chose/clicked on th
                     save_payment_method:<?php if ($stripecu) {
                         print 'true';
                     } else {
-                                            print 'false';
+                        print 'false';
                     } ?>    /* true when a customer was provided when creating payment intent. true ask to save the card */
                     }
                     ).then(function(result) {

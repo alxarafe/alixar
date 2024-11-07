@@ -19,43 +19,28 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Contact\Classes\Contact;
 use Dolibarr\Code\Core\Classes\ExtraFields;
 use Dolibarr\Code\Societe\Classes\Societe;
 use Dolibarr\Code\User\Classes\User;
-use Dolibarr\Lib\ViewMain;
 
 /**
  *       \file       htdocs/webservices/server_user.php
  *       \brief      File that is entry point to call Dolibarr WebServices
  */
 
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', '1'); // Do not check anti CSRF attack test
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', '1'); // Do not check anti POST attack test
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
-}
-if (!defined('NOREQUIREHTML')) {
-    define('NOREQUIREHTML', '1'); // If we don't need to load the html.form.class.php
-}
-if (!defined('NOREQUIREAJAX')) {
-    define('NOREQUIREAJAX', '1'); // Do not load ajax.lib.php library
-}
-if (!defined("NOLOGIN")) {
-    define("NOLOGIN", '1'); // If this page is public (can be called outside logged session)
-}
-if (!defined("NOSESSION")) {
-    define("NOSESSION", '1');
-}
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOREQUIREHTML', 1); // If we don't need to load the html.form.class.php
+Functions::defineIfNotDefined('NOREQUIREAJAX', 1); // Do not load ajax.lib.php library
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
+Functions::defineIfNotDefined('NOSESSION', 1);   // On CLI mode, no need to use web sessions
 
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';
 require_once NUSOAP_PATH . '/nusoap.php'; // Include SOAP
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/ws.lib.php';
-
 
 
 require_once constant('DOL_DOCUMENT_ROOT') . '/core/lib/security2.lib.php';
@@ -159,10 +144,10 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-    'name' => array('name' => 'name', 'type' => 'xsd:string'),
-    'id' => array('name' => 'id', 'type' => 'xsd:string'),
-    'datec' => array('name' => 'datec', 'type' => 'xsd:string'),
-    'nb' => array('name' => 'nb', 'type' => 'xsd:string')
+        'name' => array('name' => 'name', 'type' => 'xsd:string'),
+        'id' => array('name' => 'id', 'type' => 'xsd:string'),
+        'datec' => array('name' => 'datec', 'type' => 'xsd:string'),
+        'nb' => array('name' => 'nb', 'type' => 'xsd:string')
     )
 );
 
@@ -174,7 +159,7 @@ $server->wsdl->addComplexType(
     'SOAP-ENC:Array',
     array(),
     array(
-    array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:group[]')
+        array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:group[]')
     ),
     'tns:group'
 );
@@ -257,12 +242,11 @@ $server->wsdl->addComplexType(
     'all',
     '',
     array(
-    'login' => array('name' => 'login', 'type' => 'xsd:string'),
-    'password' => array('name' => 'password', 'type' => 'xsd:string'),
-    'entity' => array('name' => 'entity', 'type' => 'xsd:string'),
+        'login' => array('name' => 'login', 'type' => 'xsd:string'),
+        'password' => array('name' => 'password', 'type' => 'xsd:string'),
+        'entity' => array('name' => 'entity', 'type' => 'xsd:string'),
     )
 );
-
 
 
 // 5 styles: RPC/encoded, RPC/literal, Document/encoded (not WS-I compliant), Document/literal, Document/literal wrapped
@@ -327,15 +311,13 @@ $server->register(
 );
 
 
-
-
 /**
  * Get produt or service
  *
- * @param   array       $authentication     Array of authentication information
- * @param   int         $id                 Id of object
- * @param   string      $ref                Ref of object
- * @param   string      $ref_ext            Ref external of object
+ * @param array $authentication Array of authentication information
+ * @param int $id Id of object
+ * @param string $ref Ref of object
+ * @param string $ref_ext Ref external of object
  * @return  mixed
  */
 function getUser($authentication, $id, $ref = '', $ref_ext = '')
@@ -427,7 +409,7 @@ function getUser($authentication, $id, $ref = '', $ref_ext = '')
 /**
  * getListOfGroups
  *
- * @param   array       $authentication     Array of authentication information
+ * @param array $authentication Array of authentication information
  * @return  array                           Array result
  */
 function getListOfGroups($authentication)
@@ -478,13 +460,13 @@ function getListOfGroups($authentication)
 
     if ($error) {
         $objectresp = array(
-        'result' => array('result_code' => $errorcode, 'result_label' => $errorlabel),
-        'groups' => $arraygroups
+            'result' => array('result_code' => $errorcode, 'result_label' => $errorlabel),
+            'groups' => $arraygroups
         );
     } else {
         $objectresp = array(
-        'result' => array('result_code' => 'OK', 'result_label' => ''),
-        'groups' => $arraygroups
+            'result' => array('result_code' => 'OK', 'result_label' => ''),
+            'groups' => $arraygroups
         );
     }
 
@@ -495,8 +477,8 @@ function getListOfGroups($authentication)
 /**
  * Create an external user with thirdparty and contact
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array       $thirdpartywithuser Datas
+ * @param array $authentication Array of authentication information
+ * @param array $thirdpartywithuser Datas
  * @return  mixed
  */
 function createUserFromThirdparty($authentication, $thirdpartywithuser)
@@ -694,8 +676,8 @@ function createUserFromThirdparty($authentication, $thirdpartywithuser)
 /**
  * Set password of an user
  *
- * @param   array       $authentication     Array of authentication information
- * @param   array       $shortuser          Array of login/password info
+ * @param array $authentication Array of authentication information
+ * @param array $shortuser Array of login/password info
  * @return  mixed
  */
 function setUserPassword($authentication, $shortuser)

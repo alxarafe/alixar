@@ -20,7 +20,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
-use Dolibarr\Lib\ViewMain;
+use Alxarafe\Lib\Functions;
 
 /**
  *      \file       public/emailing/mailing-read.php
@@ -28,30 +28,14 @@ use Dolibarr\Lib\ViewMain;
  *      \brief      Script use to update mail status if destinaries read it (if images during mail read are display)
  */
 
-if (!defined('NOLOGIN')) {
-    define('NOLOGIN', '1');
-}
-if (!defined('NOCSRFCHECK')) {
-    define('NOCSRFCHECK', '1');
-}
-if (!defined('NOBROWSERNOTIF')) {
-    define('NOBROWSERNOTIF', '1');
-}
-if (!defined('NOREQUIRETRAN')) {
-    define('NOREQUIRETRAN', '1');
-}
-if (!defined('NOTOKENRENEWAL')) {
-    define('NOTOKENRENEWAL', '1'); // Do not check anti POST attack test
-}
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
-}
-if (!defined('NOIPCHECK')) {
-    define('NOIPCHECK', '1'); // Do not check IP defined into conf $dolibarr_main_restrict_ip
-}
-if (!defined('NOSESSION')) {
-    define('NOSESSION', '1');
-}
+Functions::defineIfNotDefined('NOLOGIN', 1);  // File must be accessed by logon page so without login
+Functions::defineIfNotDefined('NOCSRFCHECK', 1);  // Do not check anti CSRF attack test
+Functions::defineIfNotDefined('NOBROWSERNOTIF', 1);  // Disable browser notification
+Functions::defineIfNotDefined('NOREQUIRETRAN', 1);   // No translations needed
+Functions::defineIfNotDefined('NOTOKENRENEWAL', 1);  // Disables token renewal
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOIPCHECK', 1); // Do not check IP defined into conf $dolibarr_main_restrict_ip
+Functions::defineIfNotDefined('NOSESSION', 1);   // On CLI mode, no need to use web sessions
 
 // Load Dolibarr environment
 require constant('DOL_DOCUMENT_ROOT') . '/main.inc.php';

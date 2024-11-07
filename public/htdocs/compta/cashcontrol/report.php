@@ -26,6 +26,7 @@
  * along with this program. If not, see <https://www.gnu.org/licenses/>.
  */
 
+use Alxarafe\Lib\Functions;
 use Dolibarr\Code\Compta\Classes\Account;
 use Dolibarr\Code\Compta\Classes\CashControl;
 use Dolibarr\Code\Compta\Classes\Facture;
@@ -38,12 +39,8 @@ use Dolibarr\Lib\ViewMain;
  *  \brief      List of sales from POS
  */
 
-if (!defined('NOREQUIREMENU')) {
-    define('NOREQUIREMENU', '1'); // If there is no need to load and show top and left menu
-}
-if (!defined('NOBROWSERNOTIF')) {
-    define('NOBROWSERNOTIF', '1'); // Disable browser notification
-}
+Functions::defineIfNotDefined('NOREQUIREMENU', 1);  // If there is no need to load and show top and left menu
+Functions::defineIfNotDefined('NOBROWSERNOTIF', 1);  // Disable browser notification
 
 $optioncss = "print";
 

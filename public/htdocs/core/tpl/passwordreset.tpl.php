@@ -20,9 +20,9 @@
 // Page called to validate a password change
 // To show this page, we need parameters: setnewpassword=1&username=...&passworduidhash=...
 
-if (!defined('NOBROWSERNOTIF')) {
-    define('NOBROWSERNOTIF', 1);
-}
+use Alxarafe\Lib\Functions;
+
+Functions::defineIfNotDefined('NOBROWSERNOTIF', 1);  // Disable browser notification
 
 // Protection to avoid direct call of template
 if (empty($conf) || !is_object($conf)) {
