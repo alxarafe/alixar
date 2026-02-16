@@ -1,58 +1,9 @@
-public/htdocs/conf/conf*.*
-vendor/
-documents/
-test/report/
-nbproject
-default.properties
-config.yaml
-.env
-.settings/
-.buildpath
-.gitmodules
-/.project
-/.pydevproject
-/.vscode
-.DS_Store
-*.iml
-*.orig
-Thumbs.db
-/dolibarr_genesis.mp4
-.phpunit.result.cache
-# Log files
-dolibarr_install.log
-upgrade.log
-doxygen_warnings.log
-# Vagrant generated files
-.vagrant
-# Includes installed repositories
-/htdocs/includes/**/.git
-# Composer autoloader and unwanted files
-composer.phar
-htdocs/vendor/
-htdocs/.well-known/apple-developer-merchantid-domain-association
-/factory/
-/output/
-
-# Node Modules
-build/yarn-error.log
-build/node_modules/
-node_modules/
-
-#yarn
-yarn.lock
-
-#package-lock
-package-lock.json
-
-doc/install.lock
-/.asciidoctorconfig.adoc
-
-.idea
-/composer.lock
-
-/build/phpstan/phpstan
-/build/phpstan/bootstrap_custom.php
-phpstan_custom.neon
-/.php-cs-fixer.cache
+/vendor/
+/.env
+/tmp/
+/config.json
 /.php_cs.cache
-/.github/tmp/
+/.phpunit.result.cache
+/phpstan-results.xml
+/psalm-results.xml
+/metrics/

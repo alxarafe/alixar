@@ -1,0 +1,1 @@
+{"version":2,"defects":{"Tests\\Feature\\DatabaseTest::test_database_connection":7},"times":{"Tests\\Unit\\ExampleTest::test_that_true_is_true":0.003,"Tests\\Feature\\DatabaseTest::test_database_connection":0.065}}

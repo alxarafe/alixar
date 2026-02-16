@@ -1,120 +1,112 @@
 <?php
 
-/**
- * Copyright (C) 2024       Rafael San José             <rsanjose@alxarafe.com>
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
- */
+require __DIR__ . '/../vendor/autoload.php';
 
-use Alxarafe\Lib\Dispatcher;
-use Alxarafe\Lib\Functions;
+use Alxarafe\Tools\Dispatcher\WebDispatcher;
+use Alxarafe\Tools\Dispatcher\ApiDispatcher;
+use Alxarafe\Base\Config;
+use Alxarafe\Lib\Trans;
+use Alxarafe\Tools\Debug;
 
-/**
- * Gets the URL segment corresponding to the controller route.
- *
- * @return string
- */
-function getControllerRoute(): string
-{
-    $full = $_SERVER['REQUEST_URI'] ?? '/index.php';
-    $interrogation_position = strpos($full, '?');
-    if ($interrogation_position !== false) {
-        $full = substr($full, 0, $interrogation_position);
-    }
-    /**
-     * If the URL is formed as a subdirectory, it will have to be accessed through
-     * the public subdirectory. In that case, BASE_URL will end in /public.
-     */
-    $public_cad = '/public';
-    if (str_ends_with(constant('BASE_URL'), $public_cad)) {
-        $public_pos = strpos($full, $public_cad . '/');
-        $full = substr($full, $public_pos + strlen($public_cad));
-    }
-    return $full;
-}
-const BASE_PATH = __DIR__;
+// Define base paths
+define('BASE_PATH', __DIR__); // skeleton/public
+define('BASE_URL', 'http://localhost:8083');
+define('APP_PATH', realpath(__DIR__ . '/../'));    // alixar root
+define('ALX_PATH', APP_PATH . '/vendor/alxarafe/alxarafe'); // framework in vendor
 
-$autoload_filename = realpath(BASE_PATH . '/../vendor/autoload.php');
-if (!file_exists($autoload_filename)) {
-    die('<h1>COMPOSER ERROR</h1><p>You need to run: "composer install"</p>');
-}
+// Load Configuration and Initialize Services
+$config = Config::getConfig();
 
-require_once $autoload_filename;
+// Temporary App Branding (User Request)
+if ($config && isset($config->main)) {
+    $config->main->appName = 'Alxarafe';
+    $config->main->appIcon = 'fas fa-cubes';
 
-define('BASE_URL', Functions::getUrl());
-
-// Define Dolibarr Constants
-define('DOL_DOCUMENT_ROOT', constant('BASE_PATH') . '/htdocs');
-define('DOL_URL_ROOT', constant('BASE_URL') . '/htdocs');
-
-/**
- * Here we would have to check if the variables that determine the use of a
- * modern controller have been received via GET.
- *
- * For the moment, we are taking Dolibarr style routes.
- */
-
-$route = getControllerRoute();
-if (!isset($route) || $route === '/') {
-    $route = '/index.php';
-}
-
-$fullname = DOL_DOCUMENT_ROOT . $route;
-$last_slash_pos = strrpos($fullname, '/');
-$fullpath = $fullname;
-if ($last_slash_pos !== false) {
-    $fullpath = substr($fullpath, 0, $last_slash_pos);
-}
-$relative_path = substr($fullpath, strlen(DOL_DOCUMENT_ROOT));
-
-if (isset($_GET['api_route'])) {
-    $_SERVER['PHP_SELF'] = $route;
-    require_once constant('DOL_DOCUMENT_ROOT') . '/api/index.php';
-    die();
-}
-
-/**
- * Dolibarr uses the $_SERVER['PHP_SELF'] variable in much of the code to know how it
- * has been invoked. Now it doesn't work because the entry point is unique.
- * Here we put a temporary patch while it is migrating.
- */
-$_SERVER['PHP_SELF'] = constant('BASE_URL') . $route;
-
-/**
- * If a value has been defined for the GET controller variable, an attempt
- * is made to launch the controller.const CONTROLLER_VAR = 'controller';
- */
-const MODULE_NAME_VAR = 'module';
-const CONTROLLER_VAR = 'controller';
-const METHOD_VAR = 'method';
-const METHOD_DEFAULT_VALUE = 'action';
-
-$module = filter_input(INPUT_GET, MODULE_NAME_VAR);
-$controller = filter_input(INPUT_GET, CONTROLLER_VAR);
-$method = filter_input(INPUT_GET, METHOD_VAR) ?? METHOD_DEFAULT_VALUE;
-
-$routes = [
-    'Dolibarr\\Code' => '/Dolibarr/Code/',
-    'Module' => '/Module/',
-];
-
-if (isset($module) && isset($controller)) {
-    if (Dispatcher::run($module, $controller, $method, $routes)) {
-        die(); // The controller has been executed succesfully!
+    // Theme Override for Testing
+    if (isset($_COOKIE['alx_theme_test'])) {
+        $config->main->theme = $_COOKIE['alx_theme_test'];
     }
 }
 
-chdir($fullpath);
+// Bootstrapping
+Debug::initialize();
+Trans::initialize();
+class_alias(\Illuminate\Support\Str::class, 'Str');
 
-require_once $fullname;
+if ($config && isset($config->main->language)) {
+    Trans::setLang($config->main->language);
+}
+
+// Check if assets are installed. If not, try to install them.
+// This is useful for Docker environments where volumes might obscure built assets.
+if (!is_dir(__DIR__ . '/themes') || !is_dir(__DIR__ . '/css')) {
+    // Only attempt in specific environments to avoid performance hit on prod?
+    // For now, check if we are in dev/local.
+    if (class_exists(\Alxarafe\Scripts\ComposerScripts::class)) {
+        // We'll use a mocked IO for runtime execution
+        $io = new class {
+            public function write($msg)
+            {
+                error_log("[AssetAutoPublish] " . $msg);
+            }
+            public function getIO()
+            {
+                return $this;
+            }
+        };
+
+        // Wrap in a mock event
+        $event = new class($io) {
+            private $io;
+            public function __construct($io)
+            {
+                $this->io = $io;
+            }
+            public function getIO()
+            {
+                return $this->io;
+            }
+        };
+
+        error_log("Assets missing. Triggering auto-publication...");
+        \Alxarafe\Scripts\ComposerScripts::postUpdate($event);
+    }
+}
+
+// Load Routes
+require_once APP_PATH . '/routes.php';
+
+// Simple Routing for Alixar
+if (php_sapi_name() === 'cli') {
+    $module = $argv[1] ?? 'Alixar';
+    $controller = $argv[2] ?? 'Blog';
+    $method = $argv[3] ?? 'index';
+} else {
+    // Try Router first, but only if no module is explicitly provided in the query string
+    $match = !isset($_GET['module']) ? \Alxarafe\Lib\Router::match($_SERVER['REQUEST_URI']) : null;
+    if ($match) {
+        $module = $match['module'];
+        $controller = $match['controller'];
+        $method = $match['action'];
+        // Merge params into $_GET for transparency
+        $_GET = array_merge($_GET, $match['params']);
+    } else {
+        $module = $_GET['module'] ?? 'Alixar';
+        $controller = $_GET['controller'] ?? 'Dashboard';
+        $method = $_GET['method'] ?? $_GET['action'] ?? 'index';
+    }
+}
+
+try {
+    WebDispatcher::run($module, $controller, $method);
+} catch (Throwable $e) {
+    if (class_exists(\CoreModules\Admin\Controller\ErrorController::class) && !headers_sent()) {
+        $trace = $e->getTraceAsString();
+        $url = \CoreModules\Admin\Controller\ErrorController::url(true, false) . '&message=' . urlencode($e->getMessage()) . '&trace=' . urlencode($trace);
+        \Alxarafe\Lib\Functions::httpRedirect($url);
+    }
+
+    echo "<h1>Error Fatal en la Aplicación</h1>";
+    echo "<pre>" . $e->getMessage() . "</pre>";
+    echo "<pre>" . $e->getTraceAsString() . "</pre>";
+}
