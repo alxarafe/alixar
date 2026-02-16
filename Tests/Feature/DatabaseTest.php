@@ -5,14 +5,13 @@ namespace Tests\Feature;
 use PHPUnit\Framework\TestCase;
 use Alxarafe\Base\Config;
 use Alxarafe\Base\Database;
-use Illuminate\Support\Facades\DB;
 
 class DatabaseTest extends TestCase
 {
     /**
      * Test that we can connect to the database.
      */
-    public function test_database_connection(): void
+    public function testDatabaseConnection(): void
     {
         // Alxarafe uses Config to manage the environment
         $config = Config::getConfig();

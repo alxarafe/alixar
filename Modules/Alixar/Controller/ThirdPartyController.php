@@ -6,15 +6,15 @@ use Alxarafe\Base\Controller\ResourceController;
 use Alxarafe\Component\Fields\Text;
 use Alxarafe\Component\Fields\Boolean;
 use Alxarafe\Component\Fields\Textarea;
-use Modules\Alixar\Model\Societe;
+use Modules\Alixar\Model\ThirdParty;
 
 /**
- * Class SocieteController
+ * Class ThirdPartyController
  * Manages Third Parties (Customers and Suppliers).
  *
  * @package Modules\Alixar\Controller
  */
-class SocieteController extends ResourceController
+class ThirdPartyController extends ResourceController
 {
     /**
      * Define the primary model class for this controller.
@@ -23,7 +23,7 @@ class SocieteController extends ResourceController
      */
     protected function getModelClass(): string
     {
-        return Societe::class;
+        return ThirdParty::class;
     }
 
     /**

@@ -5,12 +5,12 @@ namespace Modules\Alixar\Model;
 use Alxarafe\Base\Model\Model;
 
 /**
- * Class Societe
+ * Class ThirdParty
  * Represents a Third Party (Customer, Vendor, etc.) in Alixar/Dolibarr.
  *
  * @package Modules\Alixar\Model
  */
-class Societe extends Model
+class ThirdParty extends Model
 {
     /**
      * The table associated with the model.

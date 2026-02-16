@@ -18,7 +18,7 @@ Este documento detalla el plan estratégico para clonar y migrar la funcionalida
 
 ## 4. Fase 2: Análisis de Datos (Dolibarr)
 Dolibarr utiliza un prefijo `llx_` para sus tablas. Las entidades críticas identificadas para la primera fase son:
-- **Terceros (Société)**: `llx_societe` maps to `Modules/Alixar/Models/ThirdParty.php`.
+- **Terceros (Société)**: `llx_societe` maps to `Modules/Alixar/Model/ThirdParty.php`.
 - **Productos/Servicios**: `llx_product` maps to `Modules/Alixar/Models/Product.php`.
 - **Facturación**: `llx_facture` y `llx_facturedet` maps to `Invoices` module.
 - **Usuarios/Permisos**: `llx_user` maps to Alxarafe native Auth system.
