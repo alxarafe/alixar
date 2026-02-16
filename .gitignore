@@ -7,3 +7,4 @@
 /phpstan-results.xml
 /psalm-results.xml
 /metrics/
+var/cache/blade/
