@@ -10,8 +10,8 @@
         }
     ],
     "require": {
-        "php": ">=8.5",
-        "alxarafe/alxarafe": "v0.1.1"
+        "php": "^8.2",
+        "alxarafe/alxarafe": "v0.1.5"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.5",
@@ -26,5 +26,18 @@
         "psr-4": {
             "Modules\\": "Modules/"
         }
+    },
+    "config": {
+        "platform": {
+            "php": "8.2.27"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Alxarafe\\Scripts\\ComposerScripts::postInstall"
+        ],
+        "post-update-cmd": [
+            "Alxarafe\\Scripts\\ComposerScripts::postUpdate"
+        ]
     }
 }
