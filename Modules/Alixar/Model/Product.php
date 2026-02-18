@@ -6,94 +6,96 @@ use Alxarafe\Base\Model\Model;
 
 /**
  * Class Product
- * Represents a Product or Service in Alixar/Dolibarr.
- *
- * @package Modules\Alixar\Model
+ * Represents table product
  */
 class Product extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'product';
-
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
     protected $primaryKey = 'rowid';
-
-    /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
-     */
     public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'ref',
+        'entity',
+        'ref_ext',
+        'datec',
+        'fk_parent',
         'label',
         'description',
         'note_public',
         'note',
+        'customcode',
+        'fk_country',
+        'fk_state',
         'price',
         'price_ttc',
         'price_min',
+        'price_min_ttc',
         'price_base_type',
+        'price_label',
+        'cost_price',
+        'default_vat_code',
         'tva_tx',
+        'recuperableonly',
+        'localtax1_tx',
+        'localtax1_type',
+        'localtax2_tx',
+        'localtax2_type',
+        'fk_user_author',
+        'fk_user_modif',
         'tosell',
         'tobuy',
+        'tobatch',
+        'sell_or_eat_by_mandatory',
+        'batch_mask',
         'fk_product_type',
-        'barcode',
+        'duration',
         'seuil_stock_alerte',
+        'url',
+        'barcode',
+        'fk_barcode_type',
+        'accountancy_code_sell',
+        'accountancy_code_sell_intra',
+        'accountancy_code_sell_export',
+        'accountancy_code_buy',
+        'accountancy_code_buy_intra',
+        'accountancy_code_buy_export',
+        'partnumber',
+        'net_measure',
+        'net_measure_units',
+        'weight',
+        'weight_units',
+        'length',
+        'length_units',
+        'width',
+        'width_units',
+        'height',
+        'height_units',
+        'surface',
+        'surface_units',
+        'volume',
+        'volume_units',
+        'stockable_product',
+        'stock',
+        'pmp',
+        'fifo',
+        'lifo',
+        'fk_default_warehouse',
+        'fk_default_bom',
+        'fk_default_workstation',
+        'canvas',
+        'finished',
+        'lifetime',
+        'qc_frequency',
+        'hidden',
+        'import_key',
+        'model_pdf',
+        'fk_price_expression',
+        'desiredstock',
+        'fk_unit',
+        'price_autogen',
+        'fk_project',
+        'mandatory_period',
+        'last_main_doc',
     ];
-
-    /**
-     * Boot function to handle common defaults.
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->datec)) {
-                $model->datec = date('Y-m-d H:i:s');
-            }
-            if (!isset($model->entity)) {
-                $model->entity = 1;
-            }
-        });
-    }
-
-    /**
-     * Scopes for common queries.
-     */
-
-    public function scopeToSell($query)
-    {
-        return $query->where('tosell', 1);
-    }
-
-    public function scopeToBuy($query)
-    {
-        return $query->where('tobuy', 1);
-    }
-
-    public function scopeIsService($query)
-    {
-        return $query->where('fk_product_type', 1);
-    }
-
-    public function scopeIsProduct($query)
-    {
-        return $query->where('fk_product_type', 0);
-    }
 }

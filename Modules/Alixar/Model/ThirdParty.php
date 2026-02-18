@@ -6,39 +6,14 @@ use Alxarafe\Base\Model\Model;
 
 /**
  * Class ThirdParty
- * Represents a Third Party (Customer, Vendor, etc.) in Alixar/Dolibarr.
- *
- * @package Modules\Alixar\Model
+ * Represents table societe
  */
 class ThirdParty extends Model
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
     protected $table = 'societe';
-
-    /**
-     * The primary key for the model.
-     *
-     * @var string
-     */
     protected $primaryKey = 'rowid';
-
-    /**
-     * Indicates if the model should be timestamped.
-     * Dolibarr uses 'tms' for updates and 'datec' for creation.
-     *
-     * @var bool
-     */
     public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'nom',
         'name_alias',
@@ -49,24 +24,92 @@ class ThirdParty extends Model
         'status',
         'code_client',
         'code_fournisseur',
+        'tp_payment_reference',
+        'accountancy_code_customer_general',
+        'code_compta',
+        'accountancy_code_supplier_general',
+        'code_compta_fournisseur',
         'address',
         'zip',
         'town',
         'fk_departement',
         'fk_pays',
+        'geolat',
+        'geolong',
+        'geopoint',
+        'georesultcode',
         'phone',
         'phone_mobile',
         'fax',
         'url',
         'email',
-        'client',
-        'fournisseur',
+        'fk_account',
+        'socialnetworks',
+        'fk_effectif',
+        'fk_typent',
+        'fk_forme_juridique',
+        'fk_currency',
+        'siren',
+        'siret',
+        'ape',
+        'idprof4',
+        'idprof5',
+        'idprof6',
         'tva_intra',
+        'capital',
+        'fk_stcomm',
         'note_private',
         'note_public',
+        'model_pdf',
+        'last_main_doc',
+        'prefix_comm',
+        'client',
+        'fournisseur',
+        'supplier_account',
+        'fk_prospectlevel',
+        'fk_incoterms',
+        'location_incoterms',
+        'customer_bad',
+        'customer_rate',
+        'supplier_rate',
+        'remise_client',
+        'remise_supplier',
+        'mode_reglement',
+        'cond_reglement',
+        'deposit_percent',
+        'transport_mode',
+        'mode_reglement_supplier',
+        'cond_reglement_supplier',
+        'transport_mode_supplier',
+        'fk_shipping_method',
+        'tva_assuj',
+        'vat_reverse_charge',
+        'localtax1_assuj',
+        'localtax1_value',
+        'localtax2_assuj',
+        'localtax2_value',
+        'barcode',
+        'fk_barcode_type',
+        'price_level',
+        'outstanding_limit',
+        'order_min_amount',
+        'supplier_order_min_amount',
+        'default_lang',
+        'logo',
+        'logo_squarred',
+        'canvas',
+        'fk_warehouse',
+        'webservices_url',
+        'webservices_key',
+        'accountancy_code_sell',
+        'accountancy_code_buy',
         'datec',
         'fk_user_creat',
         'fk_user_modif',
+        'fk_multicurrency',
+        'multicurrency_code',
+        'ip',
+        'import_key',
     ];
 
     /**

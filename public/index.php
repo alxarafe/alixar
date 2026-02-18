@@ -13,6 +13,11 @@ define('ALX_PATH', APP_PATH . '/vendor/alxarafe/alxarafe');
 // Load Configuration
 $config = Config::getConfig();
 
+// Define URLs
+$baseUrl = $config->main->url ?? ($_SERVER['REQUEST_SCHEME'] ?? 'http') . '://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
+define('BASE_URL', rtrim($baseUrl, '/'));
+define('APP_URL', BASE_URL);
+
 // Application Branding
 if ($config && isset($config->main)) {
     $config->main->appName = 'Alixar';
