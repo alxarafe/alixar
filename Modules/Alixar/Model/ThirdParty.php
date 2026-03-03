@@ -1,18 +1,51 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Modules\Alixar\Model;
 
 use Alxarafe\Base\Model\Model;
+use Alxarafe\Base\Model\Trait\HasWorkflow;
+use Modules\Alixar\Lib\Trait\HasReference;
 
 /**
  * Class ThirdParty
- * Represents table societe
+ *
+ * Represents the 'societe' table from Dolibarr.
+ * Handles Customers, Prospects and Suppliers.
  */
 class ThirdParty extends Model
 {
+    use HasReference;
+    use HasWorkflow;
+
     protected $table = 'societe';
     protected $primaryKey = 'rowid';
     public $timestamps = false;
+
+    /**
+     * Workflow states for Third Party status.
+     * Field: status (Dolibarr names it 'status', unlike orders/invoices 'fk_statut')
+     * @var array
+     */
+    protected array $states = [
+        0 => ['label' => 'Closed', 'transitions' => [1]],
+        1 => ['label' => 'Active', 'transitions' => [0]],
+    ];
+
+    protected string $stateField = 'status';
+
+    /**
+     * Automatic Reference Configuration
+     *
+     * Dolibarr Templates:
+     * - Monkey: 'CU{yy}{mm}-{0000}'
+     * - Leopard: (Remove field from mask to allow free text)
+     */
+    protected array $referenceConfig = [
+        'code_client' => 'CU{yy}{mm}-{0000}',
+        'code_fournisseur' => 'SU{yy}{mm}-{0000}'
+    ];
 
     protected $fillable = [
         'nom',
@@ -113,33 +146,62 @@ class ThirdParty extends Model
     ];
 
     /**
-     * Boot function to handle creation dates if needed.
+     * Boot function to handle automatic timestamps and defaults.
      */
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
-        static::creating(function ($model) {
+        static::creating(function (self $model): void {
             if (empty($model->datec)) {
                 $model->datec = date('Y-m-d H:i:s');
             }
-            if (empty($model->entity)) {
+            if (!isset($model->entity)) {
                 $model->entity = 1;
             }
         });
     }
 
     /**
-     * Scopes for common queries.
+     * Get the contacts associated with this third party.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class, 'fk_soc', 'rowid');
+    }
+
+    /**
+     * Semantic checks for entity types.
+     */
+
+    public function isCustomer(): bool
+    {
+        return (int)$this->client === 1 || (int)$this->client === 3;
+    }
+
+    public function isProspect(): bool
+    {
+        return (int)$this->client === 2 || (int)$this->client === 3;
+    }
+
+    public function isSupplier(): bool
+    {
+        return (int)$this->fournisseur === 1;
+    }
+
+    /**
+     * Scopes for filtering Third Parties.
      */
 
     public function scopeIsClient($query)
     {
-        return $query->where('client', '>', 0);
+        return $query->whereIn('client', [1, 3]);
     }
 
     public function scopeIsSupplier($query)
     {
-        return $query->where('fournisseur', '>', 0);
+        return $query->where('fournisseur', 1);
     }
 }

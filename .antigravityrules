@@ -1,0 +1,15 @@
+# 🏛️ Alxarafe Core Heritage
+# ASSISTANT: This project follows the core standards of Alxarafe Microframework.
+# READ FIRST: vendor/alxarafe/alxarafe/.antigravity-core-rules
+
+## 🎨 Proyecto: Alixar
+Este archivo describe las reglas específicas para Alixar que complementan las reglas base del Core.
+
+### 📦 Dolibarr Migration & Database Strategy
+- **Legacy Compatibility**: During the migration phase, ALWAYS use the official Dolibarr field names in the database and models (e.g., `fk_statut`, `fk_soc`, `tms`) to ensure zero-change migration from Dolibarr to Alixar.
+- **Model Semantics**: While using legacy field names for DB storage, use descriptive English method names for Eloquent relationships and state checks (e.g., use `getStatusLabel()` instead of just referencing `fk_statut`).
+- **Normalization Path**: Keep in mind that the long-term goal is to restructure and normalize these tables once the system is stable. Avoid adding new technical debt to already messy legacy structures.
+
+### 📝 Frontend & Templates Standard (Alxarafe 0.3.0+)
+- **Blade Components**: Always use the modern `<x-` syntax for components (e.g., `<x-component.card>`, `<x-form.input />`, `<x-component.button />`) instead of `@include` or raw HTML. This applies to all UI elements like alerts, cards, buttons, and form inputs.
+- **Directory Normalization**: All template directories and files MUST be in lowercase and singular form (e.g., `templates/component/`, `templates/layout/`).

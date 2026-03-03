@@ -3,15 +3,9 @@
     "description": "Alixar ERP using Alxarafe Framework",
     "type": "project",
     "license": "GPL-3.0-or-later",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/alxarafe/alxarafe.git"
-        }
-    ],
     "require": {
         "php": "^8.2",
-        "alxarafe/alxarafe": "v0.1.5"
+        "alxarafe/alxarafe": "v0.4.7"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.5",
@@ -27,17 +21,12 @@
             "Modules\\": "Modules/"
         }
     },
-    "config": {
-        "platform": {
-            "php": "8.2.27"
-        }
-    },
     "scripts": {
         "post-install-cmd": [
-            "Alxarafe\\Scripts\\ComposerScripts::postInstall"
+            "php scripts/publish_theme_assets.php"
         ],
         "post-update-cmd": [
-            "Alxarafe\\Scripts\\ComposerScripts::postUpdate"
+            "php scripts/publish_theme_assets.php"
         ]
     }
 }
