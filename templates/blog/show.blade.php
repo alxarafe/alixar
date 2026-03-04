@@ -26,9 +26,9 @@
             </article>
             
             <div class="mt-5 pt-5 mb-5 border-top">
-                <a href="{{ \Modules\Alixar\Controller\BlogController::url('index') }}" class="text-decoration-none text-muted fw-bold">
+                <x-component.button href="{{ \Modules\Alixar\Controller\BlogController::url('index') }}" type="link" class="text-decoration-none text-muted fw-bold">
                     &laquo; Volver al laboratorio
-                </a>
+                </x-component.button>
             </div>
         </div>
     </div>

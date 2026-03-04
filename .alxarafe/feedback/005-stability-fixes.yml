@@ -1,0 +1,19 @@
+id: 005
+title: "Fix: Visibility Collission and ModuleManager Robustness"
+app: Alixar
+date: 2026-03-04
+priority: high
+category: bugfix
+description: |
+  1. Fixes Fatal Error in ModuleController: changed property visibility to public to match parent.
+  2. Improved ModuleManager: added is_dir check before scandir to avoid PHP Warnings when a module folder lacks a Controller directory.
+  3. Corrected ModuleController: replaced invalid 'addVar' with 'addVariable'.
+  4. Core stability: Configured the internal Error Handler (PhpCollector) to ignore E_DEPRECATED and E_USER_DEPRECATED warnings originating from the 'vendor/' directory to avoid noise from legacy libraries like jenssegers/blade.
+  5. Ajax Fix: Removed a debug 'dump()' call in ModuleManager::regenerate() that was corrupting JSON responses when activating/deactivating modules, preventing "Connection Error" messages in the UI.
+  6. Module Configuration (Dolibarr style): Added support for module configuration. If a module has a `SetupController.php`, a configuration icon (cogwheel) appears in the module list, and the system offers to redirect to it immediately upon activation.
+use_case: |
+  Essential for Alixar to manage modules without crashing the whole application due to strict PHP visibility rules or missing directory structures.
+status: accepted
+implementation_notes: |
+  Changes applied to the source repository at /home/rafaelsj/Desarrollo/Alxarafe/alxarafe/.
+  Ready for synchronization to Alixar's vendor folder.

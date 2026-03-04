@@ -4,100 +4,101 @@
 <div class="container-fluid mt-4">
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+            <x-component.card>
+                <x-slot:header_slot class="bg-white d-flex justify-content-between align-items-center py-3">
                     <h5 class="mb-0 fw-bold">
                         <i class="fas fa-edit me-2 text-primary"></i> 
                         {{ $recordId === 'new' ? 'Nuevo Alixar' : 'Editar Alixar' }}
                     </h5>
                     <div>
-                        <a href="{{ $me::url() }}" class="btn btn-outline-secondary btn-sm">
+                        <x-component.button href="{{ $me::url() }}" type="outline-secondary" spacing="btn-sm" tag="link">
                             <i class="fas fa-arrow-left me-1"></i> Volver
-                        </a>
+                        </x-component.button>
                     </div>
-                </div>
-                <div class="card-body p-4">
-                    <form id="post-edit-form" method="POST" action="{{ $me::url('save') }}">
-                        <input type="hidden" name="action" value="save">
-                        <input type="hidden" name="id" value="{{ $recordId }}">
+                </x-slot:header_slot>
+
+                <div class="p-4">
+                    <x-form.form method="POST" action="{{ $me::url('save') }}" id="post-edit-form">
+                        <x-form.input type="hidden" name="action" value="save" hide-label />
+                        <x-form.input type="hidden" name="id" :value="$recordId" hide-label />
 
                         <div class="row">
                             <!-- Left Column: Content -->
                             <div class="col-lg-8">
                                 <div class="mb-3">
-                                    @include('form.text', $fields['title']->jsonSerialize())
+                                    <x-form.input :name="$fields['title']->name" :label="$fields['title']->label" :value="$fields['title']->value" />
                                 </div>
                                 <div class="mb-3">
-                                    @include('form.textarea', array_merge($fields['content']->jsonSerialize(), ['rows' => 20]))
+                                    <x-form.textarea :name="$fields['content']->name" :label="$fields['content']->label" :value="$fields['content']->value" rows="20" />
                                 </div>
                             </div>
 
                             <!-- Right Column: Settings & SEO -->
                             <div class="col-lg-4">
-                                <div class="card bg-light border-0 mb-4">
-                                    <div class="card-body">
+                                <x-component.card class="bg-light border-0 mb-4 shadow-none">
+                                    <div class="p-4">
                                         <h6 class="fw-bold mb-3">Publicación</h6>
                                         <div class="mb-3">
-                                            @include('form.text', $fields['slug']->jsonSerialize())
+                                            <x-form.input :name="$fields['slug']->name" :label="$fields['slug']->label" :value="$fields['slug']->value" />
                                         </div>
                                         <div class="mb-3">
-                                            @include('form.boolean', $fields['is_published']->jsonSerialize())
+                                            <x-form.boolean :name="$fields['is_published']->name" :label="$fields['is_published']->label" :value="$fields['is_published']->value" />
                                         </div>
                                         <div class="mb-3">
-                                            @include('form.datetime', $fields['published_at']->jsonSerialize())
+                                            <x-form.datetime :name="$fields['published_at']->name" :label="$fields['published_at']->label" :value="$fields['published_at']->value" />
                                         </div>
                                     </div>
-                                </div>
+                                </x-component.card>
 
-                                <div class="card bg-light border-0 mb-4">
-                                    <div class="card-body">
+                                <x-component.card class="bg-light border-0 mb-4 shadow-none">
+                                    <div class="p-4">
                                         <h6 class="fw-bold mb-3">Imagen Destacada</h6>
                                         <div id="image-preview-container" class="mb-3 {{ empty($data['featured_image']) ? 'd-none' : '' }}">
                                             <img id="featured-image-preview" src="{{ $data['featured_image'] ?? '' }}" class="img-fluid rounded border shadow-sm" style="max-height: 200px; width: 100%; object-fit: cover;">
                                         </div>
                                         <div class="input-group mb-2">
-                                            <input type="text" name="data[featured_image]" id="featured_image_input" class="form-control" value="{{ $data['featured_image'] ?? '' }}" placeholder="URL de la imagen...">
-                                            <button class="btn btn-primary" type="button" onclick="document.getElementById('image_upload_input').click()">
+                                            <x-form.input name="data[featured_image]" id="featured_image_input" :value="$data['featured_image'] ?? ''" placeholder="URL de la imagen..." hide-label class="flex-grow-1" />
+                                            <x-component.button type="primary" onclick="document.getElementById('image_upload_input').click()">
                                                 <i class="fas fa-upload"></i>
-                                            </button>
+                                            </x-component.button>
                                         </div>
                                         <input type="file" id="image_upload_input" class="d-none" accept="image/*" onchange="uploadFeaturedImage(this)">
                                         <div id="markdown-copy-container" class="mt-2 d-none">
                                             <label class="small text-muted mb-1">Copia esto al contenido:</label>
                                             <div class="input-group input-group-sm">
-                                                <input type="text" id="markdown-code" class="form-control font-monospace" readonly>
-                                                <button class="btn btn-outline-primary" type="button" onclick="copyMarkdownCode()">
+                                                <x-form.input id="markdown-code" value="" hide-label readonly class="font-monospace flex-grow-1" name="markdown" />
+                                                <x-component.button type="outline-primary" onclick="copyMarkdownCode()">
                                                     <i class="fas fa-copy"></i>
-                                                </button>
+                                                </x-component.button>
                                             </div>
                                         </div>
                                         <small class="text-muted d-block mt-2">Puedes pegar una URL o subir un archivo.</small>
                                     </div>
-                                </div>
+                                </x-component.card>
 
-                                <div class="card bg-light border-0">
-                                    <div class="card-body">
+                                <x-component.card class="bg-light border-0 shadow-none">
+                                    <div class="p-4">
                                         <h6 class="fw-bold mb-3">SEO (Opcional)</h6>
                                         <div class="mb-3">
-                                            @include('form.text', $fields['meta_title']->jsonSerialize())
+                                            <x-form.input :name="$fields['meta_title']->name" :label="$fields['meta_title']->label" :value="$fields['meta_title']->value" />
                                         </div>
                                         <div class="mb-3">
-                                            @include('form.textarea', array_merge($fields['meta_description']->jsonSerialize(), ['rows' => 3]))
+                                            <x-form.textarea :name="$fields['meta_description']->name" :label="$fields['meta_description']->label" :value="$fields['meta_description']->value" rows="3" />
                                         </div>
                                         <div class="mb-3">
-                                            @include('form.text', $fields['meta_keywords']->jsonSerialize())
+                                            <x-form.input :name="$fields['meta_keywords']->name" :label="$fields['meta_keywords']->label" :value="$fields['meta_keywords']->value" />
                                         </div>
                                     </div>
-                                </div>
+                                </x-component.card>
                             </div>
                         </div>
 
                         <div class="border-top mt-4 pt-4 text-end">
-                            <button type="submit" class="btn btn-primary btn-lg px-5 shadow-sm">
+                            <x-component.button type="primary" spacing="btn-lg px-5 shadow-sm" class="save-button">
                                 <i class="fas fa-save me-2"></i> Guardar Alixar
-                            </button>
+                            </x-component.button>
                         </div>
-                    </form>
+                    </x-form.form>
                 </div>
             </div>
         </div>

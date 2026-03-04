@@ -57,4 +57,29 @@ class Contact extends Model
         'statut',
         'ip',
     ];
+
+    /**
+     * Boot function to handle creation dates if needed.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->datec)) {
+                $model->datec = date('Y-m-d H:i:s');
+            }
+            if (!isset($model->entity)) {
+                $model->entity = 1;
+            }
+        });
+    }
+
+    /**
+     * Get the third party that owns the contact.
+     */
+    public function thirdParty()
+    {
+        return $this->belongsTo(ThirdParty::class, 'fk_soc', 'rowid');
+    }
 }

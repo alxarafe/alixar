@@ -38,9 +38,9 @@
                             </p>
                         </div>
 
-                        <a href="{{ $me::url('show', ['slug' => $post->slug]) }}" class="btn btn-link p-0 text-decoration-none text-dark fw-bold" style="font-size: 0.9rem;">
+                        <x-component.button href="{{ $me::url('show', ['slug' => $post->slug]) }}" type="link" class="p-0 text-decoration-none text-dark fw-bold" style="font-size: 0.9rem;">
                             Leer entrada &raquo;
-                        </a>
+                        </x-component.button>
                     </article>
                     @endforeach
                 </div>

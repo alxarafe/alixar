@@ -3,6 +3,7 @@
 namespace Modules\Alixar\Model;
 
 use Alxarafe\Base\Model\Model;
+use Modules\Alixar\Lib\HasDolibarrPermissions;
 
 /**
  * Class User
@@ -10,6 +11,8 @@ use Alxarafe\Base\Model\Model;
  */
 class User extends Model
 {
+    use HasDolibarrPermissions;
+
     protected $table = 'user';
     protected $primaryKey = 'rowid';
     public $timestamps = false;

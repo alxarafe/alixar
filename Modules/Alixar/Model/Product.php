@@ -3,6 +3,7 @@
 namespace Modules\Alixar\Model;
 
 use Alxarafe\Base\Model\Model;
+use Modules\Alixar\Lib\Trait\HasReference;
 
 /**
  * Class Product
@@ -10,9 +11,14 @@ use Alxarafe\Base\Model\Model;
  */
 class Product extends Model
 {
+    use HasReference;
+
     protected $table = 'product';
     protected $primaryKey = 'rowid';
     public $timestamps = false;
+
+    protected string $referenceField = 'ref';
+    protected string $referenceMask = 'PR{yy}{mm}-{0000}';
 
     protected $fillable = [
         'ref',

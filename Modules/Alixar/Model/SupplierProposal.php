@@ -3,6 +3,7 @@
 namespace Modules\Alixar\Model;
 
 use Alxarafe\Base\Model\Model;
+use Modules\Alixar\Lib\Trait\HasReference;
 
 /**
  * Class SupplierProposal
@@ -10,6 +11,8 @@ use Alxarafe\Base\Model\Model;
  */
 class SupplierProposal extends Model
 {
+    use HasReference;
+
     protected $table = 'supplier_proposal';
     protected $primaryKey = 'rowid';
     public $timestamps = false;
@@ -56,4 +59,20 @@ class SupplierProposal extends Model
         'multicurrency_total_tva',
         'multicurrency_total_ttc',
     ];
+
+    /**
+     * Get the third party associated with the proposal.
+     */
+    public function thirdParty()
+    {
+        return $this->belongsTo(ThirdParty::class, 'fk_soc', 'rowid');
+    }
+
+    /**
+     * Get the lines of the proposal.
+     */
+    public function lines()
+    {
+        return $this->hasMany(SupplierProposalDetail::class, 'fk_supplier_proposal', 'rowid');
+    }
 }

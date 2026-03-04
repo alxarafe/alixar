@@ -3,6 +3,7 @@
 namespace Modules\Alixar\Model;
 
 use Alxarafe\Base\Model\Model;
+use Modules\Alixar\Lib\Trait\HasReference;
 
 /**
  * Class OrderFournisseur
@@ -10,6 +11,8 @@ use Alxarafe\Base\Model\Model;
  */
 class OrderFournisseur extends Model
 {
+    use HasReference;
+
     protected $table = 'commande_fournisseur';
     protected $primaryKey = 'rowid';
     public $timestamps = false;
@@ -62,4 +65,20 @@ class OrderFournisseur extends Model
         'multicurrency_total_tva',
         'multicurrency_total_ttc',
     ];
+
+    /**
+     * Get the third party associated with the order.
+     */
+    public function thirdParty()
+    {
+        return $this->belongsTo(ThirdParty::class, 'fk_soc', 'rowid');
+    }
+
+    /**
+     * Get the lines of the order.
+     */
+    public function lines()
+    {
+        return $this->hasMany(OrderFournisseurdet::class, 'fk_commande', 'rowid');
+    }
 }

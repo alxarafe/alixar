@@ -1,0 +1,43 @@
+/* Eldy Theme - Modernized for Alixar */
+:root {
+    --alx-primary: #3c5a7a; /* El azul clásico de Eldy */
+    --alx-secondary: #6c757d;
+    --alx-bg-sidebar: #f8f9fa;
+    --alx-sidebar-text: #2b3e50;
+    --alx-navbar-bg: #ffffff;
+    --alx-card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --alx-border-radius: 8px;
+}
+
+body {
+    background-color: #f4f7f6;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+}
+
+.alx-navbar {
+    background: var(--alx-navbar-bg);
+    border-bottom: 2px solid var(--alx-primary);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.nav-link-alx {
+    color: var(--alx-primary);
+    font-weight: 600;
+}
+
+.nav-link-alx:hover {
+    color: #2b3e50;
+}
+
+.btn-primary {
+    background-color: var(--alx-primary);
+    border-color: var(--alx-primary);
+    border-radius: var(--alx-border-radius);
+}
+
+.card {
+    border: none;
+    box-shadow: var(--alx-card-shadow);
+    border-radius: var(--alx-border-radius);
+}

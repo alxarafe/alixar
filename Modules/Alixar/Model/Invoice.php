@@ -3,6 +3,7 @@
 namespace Modules\Alixar\Model;
 
 use Alxarafe\Base\Model\Model;
+use Modules\Alixar\Lib\Trait\HasReference;
 
 /**
  * Class Invoice
@@ -10,6 +11,7 @@ use Alxarafe\Base\Model\Model;
  */
 class Invoice extends Model
 {
+    use HasReference;
     protected $table = 'facture';
     protected $primaryKey = 'rowid';
     public $timestamps = false;
@@ -81,4 +83,20 @@ class Invoice extends Model
         'multicurrency_total_tva',
         'multicurrency_total_ttc',
     ];
+
+    /**
+     * Get the third party associated with the invoice.
+     */
+    public function thirdParty()
+    {
+        return $this->belongsTo(ThirdParty::class, 'fk_soc', 'rowid');
+    }
+
+    /**
+     * Get the lines of the invoice.
+     */
+    public function lines()
+    {
+        return $this->hasMany(InvoiceDetail::class, 'fk_facid', 'rowid');
+    }
 }

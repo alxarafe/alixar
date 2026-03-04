@@ -3,6 +3,7 @@
 namespace Modules\Alixar\Model;
 
 use Alxarafe\Base\Model\Model;
+use Modules\Alixar\Lib\Trait\HasReference;
 
 /**
  * Class Order
@@ -10,6 +11,7 @@ use Alxarafe\Base\Model\Model;
  */
 class Order extends Model
 {
+    use HasReference;
     protected $table = 'commande';
     protected $primaryKey = 'rowid';
     public $timestamps = false;
@@ -71,4 +73,20 @@ class Order extends Model
         'multicurrency_total_tva',
         'multicurrency_total_ttc',
     ];
+
+    /**
+     * Get the third party associated with the order.
+     */
+    public function thirdParty()
+    {
+        return $this->belongsTo(ThirdParty::class, 'fk_soc', 'rowid');
+    }
+
+    /**
+     * Get the lines of the order.
+     */
+    public function lines()
+    {
+        return $this->hasMany(OrderDetail::class, 'fk_commande', 'rowid');
+    }
 }

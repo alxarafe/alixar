@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('societe', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('rowid');
             $table->string('nom', 128)->nullable();
             $table->string('name_alias', 128)->nullable();
             $table->integer('entity')->default(1);
@@ -46,6 +46,9 @@ return new class extends Migration {
             $table->string('siren', 128)->nullable();
             $table->string('siret', 128)->nullable();
             $table->string('ape', 128)->nullable();
+            $table->string('idprof1', 128)->nullable();
+            $table->string('idprof2', 128)->nullable();
+            $table->string('idprof3', 128)->nullable();
             $table->string('idprof4', 128)->nullable();
             $table->string('idprof5', 128)->nullable();
             $table->string('idprof6', 128)->nullable();

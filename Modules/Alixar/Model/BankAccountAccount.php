@@ -10,6 +10,13 @@ use Alxarafe\Base\Model\Model;
  */
 class BankAccountAccount extends Model
 {
+    /**
+     * Get the bank movements for this account.
+     */
+    public function movements()
+    {
+        return $this->hasMany(BankAccount::class, 'fk_account', 'rowid');
+    }
     protected $table = 'bank_account';
     protected $primaryKey = 'rowid';
     public $timestamps = false;

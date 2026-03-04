@@ -3,6 +3,7 @@
 namespace Modules\Alixar\Model;
 
 use Alxarafe\Base\Model\Model;
+use Modules\Alixar\Lib\Trait\HasReference;
 
 /**
  * Class Payment
@@ -10,6 +11,24 @@ use Alxarafe\Base\Model\Model;
  */
 class Payment extends Model
 {
+    use HasReference;
+
+    /**
+     * Get the bank movement associated with this payment.
+     */
+    public function bankMovement()
+    {
+        return $this->belongsTo(BankAccount::class, 'fk_bank', 'rowid');
+    }
+
+    /**
+     * Get the invoices linked to this payment.
+     */
+    public function invoices()
+    {
+        return $this->belongsToMany(Invoice::class, 'paiement_facture', 'fk_paiement', 'fk_facture')->withPivot('amount');
+    }
+
     protected $table = 'paiement';
     protected $primaryKey = 'rowid';
     public $timestamps = false;

@@ -6,10 +6,18 @@ use Alxarafe\Base\Model\Model;
 
 /**
  * Class BankAccount
- * Represents table bank
+ * Represents table bank (Movements)
  */
 class BankAccount extends Model
 {
+    /**
+     * Get the bank account this movement belongs to.
+     */
+    public function account()
+    {
+        return $this->belongsTo(BankAccountAccount::class, 'fk_account', 'rowid');
+    }
+
     protected $table = 'bank';
     protected $primaryKey = 'rowid';
     public $timestamps = false;
