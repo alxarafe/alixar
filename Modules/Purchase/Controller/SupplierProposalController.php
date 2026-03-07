@@ -30,11 +30,13 @@ class SupplierProposalController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     protected function getModelClass(): string
     {
         return SupplierProposal::class;
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Listado Presupuestos',
@@ -48,6 +50,7 @@ class SupplierProposalController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nuevo Presupuesto',
@@ -61,6 +64,7 @@ class SupplierProposalController extends ResourceController
         return parent::doCreate();
     }
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -73,6 +77,7 @@ class SupplierProposalController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -118,6 +123,7 @@ class SupplierProposalController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         $this->addVariable('title', 'Presupuesto Proveedor: ' . ($this->recordId === 'new' ? 'Nuevo' : $this->getRecord()->ref));

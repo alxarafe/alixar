@@ -13,7 +13,7 @@ class InvoiceApiController extends ApiController
      */
     public function doList()
     {
-        if (!static::$user || !static::$user->hasPermission('facture', 'lire')) {
+        if (!static::$user || !static::$user->can('lire', '', 'facture')) {
             static::badApiCall('Permission denied: facture.lire required', 403);
         }
 
@@ -44,7 +44,7 @@ class InvoiceApiController extends ApiController
      */
     public function doGet($id = null)
     {
-        if (!static::$user || !static::$user->hasPermission('facture', 'lire')) {
+        if (!static::$user || !static::$user->can('lire', '', 'facture')) {
             static::badApiCall('Permission denied: facture.lire required', 403);
         }
 

@@ -31,11 +31,13 @@ class SupplierOrderController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     protected function getModelClass(): string
     {
         return OrderFournisseur::class;
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Listado Pedidos',
@@ -49,6 +51,7 @@ class SupplierOrderController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nuevo Pedido',
@@ -62,6 +65,7 @@ class SupplierOrderController extends ResourceController
         return parent::doCreate();
     }
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -75,6 +79,7 @@ class SupplierOrderController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -121,6 +126,7 @@ class SupplierOrderController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         $this->addVariable('title', 'Pedido Proveedor: ' . ($this->recordId === 'new' ? 'Nuevo' : $this->getRecord()->ref));

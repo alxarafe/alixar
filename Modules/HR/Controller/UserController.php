@@ -30,11 +30,13 @@ class UserController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     protected function getModelClass(): string
     {
         return User::class;
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Usuarios',
@@ -48,6 +50,7 @@ class UserController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nuevo Usuario',
@@ -61,6 +64,7 @@ class UserController extends ResourceController
         return parent::doCreate();
     }
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -73,6 +77,7 @@ class UserController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -123,6 +128,7 @@ class UserController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         $this->addVariable('title', 'Usuario: ' . ($this->recordId === 'new' ? 'Nuevo' : $this->getRecord()->login));

@@ -29,6 +29,7 @@ class BankMovementController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Listado Movimientos',
@@ -42,6 +43,7 @@ class BankMovementController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nuevo Movimiento',
@@ -54,11 +56,13 @@ class BankMovementController extends ResourceController
     {
         return parent::doCreate();
     }
+    #[\Override]
     protected function getModelClass(): string
     {
         return BankAccount::class;
     }
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -70,6 +74,7 @@ class BankMovementController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -91,6 +96,7 @@ class BankMovementController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeList()
     {
         $this->addVariable('title', 'Movimientos Bancarios - Alixar');

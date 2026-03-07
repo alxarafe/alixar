@@ -7,6 +7,10 @@ use Illuminate\Database\Capsule\Manager as DB;
 /**
  * Trait HasReference
  * Handles automatic reference generation for models based on masks.
+ * 
+ * @property string|null $referenceField
+ * @property string|null $referenceMask
+ * @property array|null $referenceConfig
  */
 trait HasReference
 {

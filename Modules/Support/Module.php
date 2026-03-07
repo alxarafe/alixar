@@ -9,4 +9,6 @@ use Alxarafe\Attribute\ModuleInfo;
     description: 'Sistema de tickets y soporte al cliente',
     icon: 'fas fa-headset',
 )]
-class Module {}
+class Module
+{
+}

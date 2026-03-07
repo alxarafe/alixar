@@ -15,6 +15,7 @@
 
     <!-- Stats Grid -->
     <div class="row g-4 mb-4">
+        @if($activeModules['crm'])
         <div class="col-md-3 animate__animated animate__zoomIn animate__delay-1s">
             <div class="alixar-card p-4 transition-all">
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -26,6 +27,9 @@
                 <p class="text-muted small mb-0">Terceros registrados</p>
             </div>
         </div>
+        @endif
+
+        @if($activeModules['products'])
         <div class="col-md-3 animate__animated animate__zoomIn animate__delay-1s" style="animation-delay: 1.1s">
             <div class="alixar-card p-4 transition-all">
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -37,6 +41,9 @@
                 <p class="text-muted small mb-0">Productos & Servicios</p>
             </div>
         </div>
+        @endif
+
+        @if($activeModules['sales'])
         <div class="col-md-3 animate__animated animate__zoomIn animate__delay-1s" style="animation-delay: 1.2s">
             <div class="alixar-card p-4 transition-all">
                 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -59,10 +66,26 @@
                 <p class="text-muted small mb-0">Facturas por cobrar</p>
             </div>
         </div>
+        @endif
+
+        @if($activeModules['projects'])
+        <div class="col-md-3 animate__animated animate__zoomIn animate__delay-1s" style="animation-delay: 1.4s">
+            <div class="alixar-card p-4 transition-all">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="stat-icon bg-info-soft text-info p-3 rounded-3">
+                        <i class="fas fa-project-diagram fa-lg"></i>
+                    </div>
+                </div>
+                <h3 class="fw-bold mb-1">{{ $stats['projects'] ?? 0 }}</h3>
+                <p class="text-muted small mb-0">Proyectos activos</p>
+            </div>
+        </div>
+        @endif
     </div>
 
     <!-- Activity Grid -->
     <div class="row g-4 mb-4">
+        @if($activeModules['crm'])
         <!-- Recent Third Parties -->
         <div class="col-md-6">
             <div class="alixar-card p-4">
@@ -79,7 +102,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($recentThirdParties as $tp)
+                            @foreach($recentThirdParties ?? [] as $tp)
                             <tr>
                                 <td>
                                     <a href="index.php?module=CRM&controller=ThirdParty&action=edit&id={{ $tp->rowid }}" class="text-decoration-none fw-medium">
@@ -94,7 +117,9 @@
                 </div>
             </div>
         </div>
+        @endif
 
+        @if($activeModules['sales'])
         <!-- Pending Invoices -->
         <div class="col-md-6">
             <div class="alixar-card p-4">
@@ -112,7 +137,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($pendingInvoices as $inv)
+                            @foreach($pendingInvoices ?? [] as $inv)
                             <tr>
                                 <td>
                                     <a href="index.php?module=Sales&controller=Invoice&action=edit&id={{ $inv->rowid }}" class="text-decoration-none fw-medium text-danger">
@@ -128,6 +153,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 
     <!-- Shortcut Cards -->
@@ -136,6 +162,7 @@
             <div class="alixar-card p-4 h-100">
                 <h5 class="fw-bold mb-4 border-bottom pb-2">Acciones Rápidas</h5>
                 <div class="list-group list-group-flush">
+                    @if($activeModules['crm'])
                     <a href="index.php?module=CRM&controller=ThirdParty&action=edit&id=new" class="list-group-item list-group-item-action border-0 px-0 py-2 d-flex align-items-center bg-transparent">
                         <div class="icon-circle-sm bg-light text-primary me-3">
                             <i class="fas fa-user-plus"></i>
@@ -143,6 +170,8 @@
                         Nuevo Tercero
                         <i class="fas fa-chevron-right ms-auto text-muted small"></i>
                     </a>
+                    @endif
+                    @if($activeModules['sales'])
                     <a href="index.php?module=Sales&controller=Proposal&action=edit&id=new" class="list-group-item list-group-item-action border-0 px-0 py-2 d-flex align-items-center bg-transparent">
                         <div class="icon-circle-sm bg-light text-success me-3">
                             <i class="fas fa-file-invoice"></i>
@@ -157,6 +186,10 @@
                         Nuevo Pedido
                         <i class="fas fa-chevron-right ms-auto text-muted small"></i>
                     </a>
+                    @endif
+                    @if(empty(array_filter($activeModules)))
+                        <p class="text-muted small p-3">Activa módulos de negocio para ver acciones rápidas aquí.</p>
+                    @endif
                 </div>
             </div>
         </div>
@@ -196,7 +229,7 @@
                 <div class="d-flex align-items-center mb-4">
                     <div class="status-indicator active me-3"></div>
                     <div>
-                        <p class="mb-0 fw-bold">Framework Alxarafe: v0.4.9</p>
+                        <p class="mb-0 fw-bold">Framework Alxarafe: v0.5.3</p>
                         <small class="opacity-75">Todas las herramientas disponibles.</small>
                     </div>
                 </div>

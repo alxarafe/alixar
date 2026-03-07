@@ -1,6 +1,8 @@
 #!/bin/bash
 # Description: Runs static analysis tools (PHPStan, Psalm) inside the container.
 
+set -e
+
 echo "Running PHPStan..."
 docker exec alixar_php ./vendor/bin/phpstan analyse Modules --memory-limit=1G
 docker exec alixar_php ./vendor/bin/phpstan analyse Tests --memory-limit=1G

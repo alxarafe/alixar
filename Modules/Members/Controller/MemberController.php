@@ -31,11 +31,13 @@ class MemberController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     protected function getModelClass(): string
     {
         return Member::class;
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Miembros',
@@ -49,6 +51,7 @@ class MemberController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nuevo Miembro',
@@ -62,6 +65,7 @@ class MemberController extends ResourceController
         return parent::doCreate();
     }
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -73,6 +77,7 @@ class MemberController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -114,6 +119,7 @@ class MemberController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         $this->addVariable('title', 'Miembro: ' . ($this->recordId === 'new' ? 'Nuevo' : $this->getRecord()->lastname));

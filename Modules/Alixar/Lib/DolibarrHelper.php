@@ -15,7 +15,7 @@ class DolibarrHelper
      */
     public static function getDolibarrPath(): string
     {
-        return realpath(constant('APP_PATH') . '/../dolibarr/');
+        return realpath(constant('APP_PATH') . '/../dolibarr/') ?: '';
     }
 
     /**

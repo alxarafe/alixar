@@ -12,6 +12,7 @@ use Modules\Alixar\Lib\Trait\HasReference;
 class Order extends Model
 {
     use HasReference;
+
     protected $table = 'commande';
     protected $primaryKey = 'rowid';
     public $timestamps = false;

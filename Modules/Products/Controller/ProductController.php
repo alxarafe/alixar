@@ -29,6 +29,7 @@ class ProductController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Listado Productos',
@@ -42,6 +43,7 @@ class ProductController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nuevo Producto',
@@ -60,6 +62,7 @@ class ProductController extends ResourceController
      *
      * @return string
      */
+    #[\Override]
     protected function getModelClass(): string
     {
         return Product::class;
@@ -70,6 +73,7 @@ class ProductController extends ResourceController
      *
      * @return array
      */
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -87,6 +91,7 @@ class ProductController extends ResourceController
      *
      * @return array
      */
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -131,6 +136,7 @@ class ProductController extends ResourceController
     /**
      * Hook called before building configuration.
      */
+    #[\Override]
     protected function beforeConfig()
     {
         $this->addVariable('title', 'Product Management - Alixar');

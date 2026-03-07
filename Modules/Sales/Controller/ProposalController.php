@@ -29,11 +29,13 @@ class ProposalController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     protected function getModelClass(): string
     {
         return Proposal::class;
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Listado Presupuestos',
@@ -47,6 +49,7 @@ class ProposalController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nuevo Presupuesto',
@@ -63,6 +66,7 @@ class ProposalController extends ResourceController
     /**
      * Define columns for the list view.
      */
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -79,6 +83,7 @@ class ProposalController extends ResourceController
     /**
      * Define fields for the edit form.
      */
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -127,6 +132,7 @@ class ProposalController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         $this->addVariable('title', 'Presupuesto: ' . ($this->recordId === 'new' ? 'Nuevo' : $this->getRecord()->ref));

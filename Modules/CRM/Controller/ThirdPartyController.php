@@ -36,11 +36,13 @@ class ThirdPartyController extends ResourceController
      */
     protected bool $useTabs = true;
 
+    #[\Override]
     protected function getModelClass(): string
     {
         return ThirdParty::class;
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Listado Terceros',
@@ -54,6 +56,7 @@ class ThirdPartyController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nuevo Tercero',
@@ -67,6 +70,7 @@ class ThirdPartyController extends ResourceController
         return parent::doCreate();
     }
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -80,6 +84,7 @@ class ThirdPartyController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -181,6 +186,7 @@ class ThirdPartyController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         if ($this->recordId && $this->recordId !== 'new') {

@@ -28,6 +28,7 @@ class BankAccountController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Listado Cuentas',
@@ -41,6 +42,7 @@ class BankAccountController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nueva Cuenta',
@@ -53,11 +55,13 @@ class BankAccountController extends ResourceController
     {
         return parent::doCreate();
     }
+    #[\Override]
     protected function getModelClass(): string
     {
         return BankAccountAccount::class;
     }
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -70,6 +74,7 @@ class BankAccountController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -104,6 +109,7 @@ class BankAccountController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         $this->addVariable('title', 'Cuentas Bancarias - Alixar');

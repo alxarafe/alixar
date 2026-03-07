@@ -42,13 +42,15 @@ class Configuration extends Model
      * @param string $name
      * @param mixed $value
      * @param int $entity
-     * @return Configuration
+     * @return static
      */
     public static function setValue(string $name, $value, $entity = 1)
     {
-        return self::updateOrCreate(
+        /** @var static $result */
+        $result = self::updateOrCreate(
             ['name' => $name, 'entity' => $entity],
             ['value' => (string)$value]
         );
+        return $result;
     }
 }

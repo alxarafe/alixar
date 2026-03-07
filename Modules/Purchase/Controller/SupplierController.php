@@ -22,6 +22,7 @@ use Modules\CRM\Controller\ThirdPartyController;
 )]
 class SupplierController extends ThirdPartyController
 {
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Listado Proveedores',
@@ -35,6 +36,7 @@ class SupplierController extends ThirdPartyController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nuevo Proveedor',
@@ -50,6 +52,7 @@ class SupplierController extends ThirdPartyController
     /**
      * Override beforeList to set the filter for suppliers only.
      */
+    #[\Override]
     protected function beforeList()
     {
         $this->structConfig['list']['tabs']['general']['conditions']['fournisseur'] = 1;
@@ -60,6 +63,7 @@ class SupplierController extends ThirdPartyController
      * Override detectMode to ensure when creating via this controller, 
      * the 'fournisseur' flag is pre-checked.
      */
+    #[\Override]
     protected function fetchRecordData(): array
     {
         $response = parent::fetchRecordData();

@@ -9,4 +9,6 @@ use Alxarafe\Attribute\ModuleInfo;
     description: 'Gestión de terceros, contactos y relaciones comerciales',
     icon: 'fas fa-id-card',
 )]
-class Module {}
+class Module
+{
+}

@@ -9,4 +9,6 @@ use Alxarafe\Attribute\ModuleInfo;
     description: 'Gestión de socios y cuotas de membresía',
     icon: 'fas fa-address-card',
 )]
-class Module {}
+class Module
+{
+}

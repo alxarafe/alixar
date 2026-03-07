@@ -29,11 +29,13 @@ use Modules\Alixar\Model\BankAccount;
 )]
 class PaymentController extends ResourceController
 {
+    #[\Override]
     protected function getModelClass(): string
     {
         return Payment::class;
     }
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -45,6 +47,7 @@ class PaymentController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -79,6 +82,7 @@ class PaymentController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         $this->addVariable('title', 'Gestión de Cobros (Clientes) - Alixar');

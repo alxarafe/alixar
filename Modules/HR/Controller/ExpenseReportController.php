@@ -11,6 +11,7 @@ use Alxarafe\Component\Fields\Date;
 use Alxarafe\Component\Fields\Decimal;
 use Alxarafe\Component\Fields\Select;
 use Alxarafe\Component\Fields\RelationList;
+use Alxarafe\Component\Fields\Textarea;
 use Alxarafe\Component\Container\Panel;
 use Modules\Alixar\Model\Expensereport;
 use Modules\Alixar\Model\User;
@@ -33,11 +34,13 @@ class ExpenseReportController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     protected function getModelClass(): string
     {
         return Expensereport::class;
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Listado Gastos',
@@ -51,6 +54,7 @@ class ExpenseReportController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nueva Nota de Gastos',
@@ -64,6 +68,7 @@ class ExpenseReportController extends ResourceController
         return parent::doCreate();
     }
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -77,6 +82,7 @@ class ExpenseReportController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -109,6 +115,7 @@ class ExpenseReportController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         $this->addVariable('title', 'Nota de Gastos');

@@ -32,11 +32,13 @@ class ContactController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     protected function getModelClass(): string
     {
         return Contact::class;
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Listado Contactos',
@@ -50,6 +52,7 @@ class ContactController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nuevo Contacto',
@@ -68,6 +71,7 @@ class ContactController extends ResourceController
      */
     protected array $eagerLoad = ['thirdParty'];
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -81,6 +85,7 @@ class ContactController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -134,6 +139,7 @@ class ContactController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         if ($this->recordId && $this->recordId !== 'new') {

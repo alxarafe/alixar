@@ -31,11 +31,13 @@ class InterventionController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     protected function getModelClass(): string
     {
         return Intervention::class;
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Intervenciones',
@@ -49,6 +51,7 @@ class InterventionController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nueva Intervención',
@@ -62,6 +65,7 @@ class InterventionController extends ResourceController
         return parent::doCreate();
     }
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -73,6 +77,7 @@ class InterventionController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -112,6 +117,7 @@ class InterventionController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         $this->addVariable('title', 'Intervención: ' . ($this->recordId === 'new' ? 'Nueva' : $this->getRecord()->ref));

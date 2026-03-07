@@ -13,7 +13,7 @@ class OrderApiController extends ApiController
      */
     public function doList()
     {
-        if (!static::$user || !static::$user->hasPermission('commande', 'lire')) {
+        if (!static::$user || !static::$user->can('lire', '', 'commande')) {
             static::badApiCall('Permission denied: commande.lire required', 403);
         }
 
@@ -44,7 +44,7 @@ class OrderApiController extends ApiController
      */
     public function doGet($id = null)
     {
-        if (!static::$user || !static::$user->hasPermission('commande', 'lire')) {
+        if (!static::$user || !static::$user->can('lire', '', 'commande')) {
             static::badApiCall('Permission denied: commande.lire required', 403);
         }
 

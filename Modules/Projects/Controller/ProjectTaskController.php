@@ -32,11 +32,13 @@ class ProjectTaskController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     protected function getModelClass(): string
     {
         return ProjectTask::class;
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Listado Tareas',
@@ -50,6 +52,7 @@ class ProjectTaskController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nueva Tarea',
@@ -63,6 +66,7 @@ class ProjectTaskController extends ResourceController
         return parent::doCreate();
     }
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -75,6 +79,7 @@ class ProjectTaskController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -109,6 +114,7 @@ class ProjectTaskController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         $this->addVariable('title', 'Tarea: ' . ($this->recordId === 'new' ? 'Nueva' : $this->getRecord()->ref));

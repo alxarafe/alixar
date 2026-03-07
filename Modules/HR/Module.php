@@ -9,4 +9,6 @@ use Alxarafe\Attribute\ModuleInfo;
     description: 'Gestión de recursos humanos, empleados y nóminas',
     icon: 'fas fa-users-cog',
 )]
-class Module {}
+class Module
+{
+}

@@ -9,4 +9,6 @@ use Alxarafe\Attribute\ModuleInfo;
     description: 'Gestión de proyectos y tareas',
     icon: 'fas fa-project-diagram',
 )]
-class Module {}
+class Module
+{
+}

@@ -61,6 +61,7 @@ class Contact extends Model
     /**
      * Boot function to handle creation dates if needed.
      */
+    #[\Override]
     protected static function boot()
     {
         parent::boot();

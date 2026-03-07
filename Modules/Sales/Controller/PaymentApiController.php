@@ -20,7 +20,7 @@ class PaymentApiController extends ApiController
      */
     public function doListCustomer()
     {
-        if (!static::$user || !static::$user->hasPermission('facture', 'paiement-lire')) {
+        if (!static::$user || !static::$user->can('paiement-lire', '', 'facture')) {
             static::badApiCall('Permission denied: facture.paiement-lire required', 403);
         }
 
@@ -48,7 +48,7 @@ class PaymentApiController extends ApiController
      */
     public function doListSupplier()
     {
-        if (!static::$user || !static::$user->hasPermission('fournisseur', 'facture.paiement-lire')) {
+        if (!static::$user || !static::$user->can('facture.paiement-lire', '', 'fournisseur')) {
             static::badApiCall('Permission denied: fournisseur.facture.paiement-lire required', 403);
         }
 

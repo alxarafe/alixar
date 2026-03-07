@@ -30,11 +30,13 @@ class InvoiceController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     protected function getModelClass(): string
     {
         return Invoice::class;
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Listado Facturas',
@@ -48,6 +50,7 @@ class InvoiceController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nueva Factura',
@@ -61,6 +64,7 @@ class InvoiceController extends ResourceController
         return parent::doCreate();
     }
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -74,6 +78,7 @@ class InvoiceController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -121,6 +126,7 @@ class InvoiceController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         $this->addVariable('title', 'Factura: ' . ($this->recordId === 'new' ? 'Nueva' : $this->getRecord()->ref));

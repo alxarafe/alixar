@@ -9,4 +9,6 @@ use Alxarafe\Attribute\ModuleInfo;
     description: 'Gestión de cuentas bancarias y conciliación',
     icon: 'fas fa-university',
 )]
-class Module {}
+class Module
+{
+}

@@ -20,7 +20,7 @@ class SupplierOrderApiController extends ApiController
     public function doList()
     {
         // Dolibarr permission: module 'fournisseur', perm 'commande.lire'
-        if (!static::$user || !static::$user->hasPermission('fournisseur', 'commande.lire')) {
+        if (!static::$user || !static::$user->can('commande.lire', '', 'fournisseur')) {
             static::badApiCall('Permission denied: fournisseur.commande.lire required', 403);
         }
 
@@ -54,7 +54,7 @@ class SupplierOrderApiController extends ApiController
      */
     public function doGet($id = null)
     {
-        if (!static::$user || !static::$user->hasPermission('fournisseur', 'commande.lire')) {
+        if (!static::$user || !static::$user->can('commande.lire', '', 'fournisseur')) {
             static::badApiCall('Permission denied: fournisseur.commande.lire required', 403);
         }
 

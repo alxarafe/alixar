@@ -9,4 +9,6 @@ use Alxarafe\Attribute\ModuleInfo;
     description: 'Gestión de productos, servicios e inventario',
     icon: 'fas fa-boxes',
 )]
-class Module {}
+class Module
+{
+}

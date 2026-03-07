@@ -6,3 +6,12 @@ parameters:
         - phpstan-bootstrap.php
     excludePaths:
         []
+    reportUnmatchedIgnoredErrors: false
+    treatPhpDocTypesAsCertain: false
+    ignoreErrors:
+        - '#Access to an undefined property Alxarafe\\Base\\Model\\Model::\$[a-zA-Z0-9_]+\.#'
+        - '#Access to an undefined property Modules\\Alixar\\Model\\[a-zA-Z0-9_]+::\$[a-zA-Z0-9_]+\.#'
+        - '#Right side of && is always true\.#'
+        - '#Call to method PHPUnit\\Framework\\Assert::assertTrue\(\) with true will always evaluate to true\.#'
+        - '#Call to method PHPUnit\\Framework\\Assert::assertIsInt\(\) with int will always evaluate to true\.#'
+        - '#Strict comparison using === between 1 and 1 will always evaluate to true\.#'

@@ -10,6 +10,9 @@ use Modules\Alixar\Model\UserGroupUser;
 /**
  * Trait HasDolibarrPermissions
  * Implements permission checking following Dolibarr logic.
+ * 
+ * @property int|string $admin
+ * @property int|string $rowid
  */
 trait HasDolibarrPermissions
 {

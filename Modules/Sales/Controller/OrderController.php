@@ -30,11 +30,13 @@ class OrderController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     protected function getModelClass(): string
     {
         return Order::class;
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Listado Pedidos',
@@ -48,6 +50,7 @@ class OrderController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nuevo Pedido',
@@ -61,6 +64,7 @@ class OrderController extends ResourceController
         return parent::doCreate();
     }
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -73,6 +77,7 @@ class OrderController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -115,6 +120,7 @@ class OrderController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         $this->addVariable('title', 'Pedido: ' . ($this->recordId === 'new' ? 'Nuevo' : $this->getRecord()->ref));

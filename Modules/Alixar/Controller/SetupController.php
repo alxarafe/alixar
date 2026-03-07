@@ -19,6 +19,7 @@ use Modules\Alixar\Model\Configuration;
 class SetupController extends ViewController
 {
     use DbTrait;
+
     /**
      * Dashboard-like landing page for the initial setup wizard.
      */

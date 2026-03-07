@@ -9,4 +9,6 @@ use Alxarafe\Attribute\ModuleInfo;
     description: 'Presupuestos, pedidos y facturas de venta',
     icon: 'fas fa-file-invoice-dollar',
 )]
-class Module {}
+class Module
+{
+}

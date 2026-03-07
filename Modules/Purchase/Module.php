@@ -9,4 +9,6 @@ use Alxarafe\Attribute\ModuleInfo;
     description: 'Presupuestos, pedidos y facturas de compra a proveedores',
     icon: 'fas fa-shopping-cart',
 )]
-class Module {}
+class Module
+{
+}

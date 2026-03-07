@@ -21,17 +21,20 @@ class SetupController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     protected function getModelClass()
     {
         return Configuration::class;
     }
 
+    #[\Override]
     protected function detectMode()
     {
         $this->mode = self::MODE_EDIT;
         $this->recordId = 'sales_setup';
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Configuración Ventas',
@@ -46,6 +49,7 @@ class SetupController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [

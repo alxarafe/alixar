@@ -12,6 +12,7 @@ use Modules\Alixar\Lib\Trait\HasReference;
 class Proposal extends Model
 {
     use HasReference;
+
     protected $table = 'propal';
     protected $primaryKey = 'rowid';
     public $timestamps = false;

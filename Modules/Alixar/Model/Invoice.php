@@ -12,6 +12,7 @@ use Modules\Alixar\Lib\Trait\HasReference;
 class Invoice extends Model
 {
     use HasReference;
+
     protected $table = 'facture';
     protected $primaryKey = 'rowid';
     public $timestamps = false;

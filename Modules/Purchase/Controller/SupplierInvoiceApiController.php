@@ -20,7 +20,7 @@ class SupplierInvoiceApiController extends ApiController
     public function doList()
     {
         // Dolibarr permission: module 'fournisseur', perm 'facture.lire'
-        if (!static::$user || !static::$user->hasPermission('fournisseur', 'facture.lire')) {
+        if (!static::$user || !static::$user->can('facture.lire', '', 'fournisseur')) {
             static::badApiCall('Permission denied: fournisseur.facture.lire required', 403);
         }
 
@@ -54,7 +54,7 @@ class SupplierInvoiceApiController extends ApiController
      */
     public function doGet($id = null)
     {
-        if (!static::$user || !static::$user->hasPermission('fournisseur', 'facture.lire')) {
+        if (!static::$user || !static::$user->can('facture.lire', '', 'fournisseur')) {
             static::badApiCall('Permission denied: fournisseur.facture.lire required', 403);
         }
 

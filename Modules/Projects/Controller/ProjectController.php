@@ -31,11 +31,13 @@ class ProjectController extends ResourceController
 {
     protected bool $useTabs = true;
 
+    #[\Override]
     protected function getModelClass(): string
     {
         return Project::class;
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Listado Proyectos',
@@ -49,6 +51,7 @@ class ProjectController extends ResourceController
         return parent::doIndex();
     }
 
+    #[\Override]
     #[Menu(
         menu: 'main_menu',
         label: 'Nuevo Proyecto',
@@ -62,6 +65,7 @@ class ProjectController extends ResourceController
         return parent::doCreate();
     }
 
+    #[\Override]
     protected function getListColumns(): array
     {
         return [
@@ -74,6 +78,7 @@ class ProjectController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function getEditFields(): array
     {
         return [
@@ -115,6 +120,7 @@ class ProjectController extends ResourceController
         ];
     }
 
+    #[\Override]
     protected function beforeConfig()
     {
         $this->addVariable('title', 'Proyecto: ' . ($this->recordId === 'new' ? 'Nuevo' : $this->getRecord()->ref));

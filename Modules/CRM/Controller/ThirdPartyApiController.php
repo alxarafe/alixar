@@ -20,7 +20,7 @@ class ThirdPartyApiController extends ApiController
     public function doList()
     {
         // 1. Check permissions (Dolibarr style: module 'societe', perm 'lire')
-        if (!static::$user || !static::$user->hasPermission('societe', 'lire')) {
+        if (!static::$user || !static::$user->can('lire', '', 'societe')) {
             static::badApiCall('Permission denied: societe.lire required', 403);
         }
 
@@ -58,7 +58,7 @@ class ThirdPartyApiController extends ApiController
     public function doGet($id = null)
     {
         // 1. Check permissions
-        if (!static::$user || !static::$user->hasPermission('societe', 'lire')) {
+        if (!static::$user || !static::$user->can('lire', '', 'societe')) {
             static::badApiCall('Permission denied: societe.lire required', 403);
         }
 
@@ -83,7 +83,7 @@ class ThirdPartyApiController extends ApiController
     public function doSave()
     {
         // 1. Check permissions (Dolibarr: module 'societe', perm 'creer')
-        if (!static::$user || !static::$user->hasPermission('societe', 'creer')) {
+        if (!static::$user || !static::$user->can('creer', '', 'societe')) {
             static::badApiCall('Permission denied: societe.creer required', 403);
         }
 

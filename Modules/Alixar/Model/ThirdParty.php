@@ -5,14 +5,24 @@ declare(strict_types=1);
 namespace Modules\Alixar\Model;
 
 use Alxarafe\Base\Model\Model;
-use Alxarafe\Base\Model\Trait\HasWorkflow;
 use Modules\Alixar\Lib\Trait\HasReference;
+use Modules\Alixar\Traits\HasWorkflow;
 
 /**
  * Class ThirdParty
  *
  * Represents the 'societe' table from Dolibarr.
  * Handles Customers, Prospects and Suppliers.
+ * 
+ * @property int $rowid
+ * @property string $nom
+ * @property string|null $code_client
+ * @property string|null $code_fournisseur
+ * @property string $datec
+ * @property int $entity
+ * @property int $client
+ * @property int $fournisseur
+ * @property int $status
  */
 class ThirdParty extends Model
 {
@@ -24,14 +34,22 @@ class ThirdParty extends Model
     public $timestamps = false;
 
     /**
-     * Workflow states for Third Party status.
-     * Field: status (Dolibarr names it 'status', unlike orders/invoices 'fk_statut')
-     * @var array
+     * Define the states and transitions for the ThirdParty workflow.
      */
-    protected array $states = [
-        0 => ['label' => 'Closed', 'transitions' => [1]],
-        1 => ['label' => 'Active', 'transitions' => [0]],
-    ];
+    #[\Override]
+    protected function getWorkflowDefinition(): array
+    {
+        return [
+            'states' => [
+                0 => 'Closed',
+                1 => 'Active',
+            ],
+            'transitions' => [
+                'activate' => ['from' => [0], 'to' => 1],
+                'close' => ['from' => [1], 'to' => 0],
+            ]
+        ];
+    }
 
     protected string $stateField = 'status';
 
@@ -148,6 +166,7 @@ class ThirdParty extends Model
     /**
      * Boot function to handle automatic timestamps and defaults.
      */
+    #[\Override]
     protected static function boot(): void
     {
         parent::boot();

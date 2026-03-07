@@ -19,7 +19,7 @@ class BankMovementApiController extends ApiController
      */
     public function doList()
     {
-        if (!static::$user || !static::$user->hasPermission('bank', 'lire')) {
+        if (!static::$user || !static::$user->can('lire', '', 'bank')) {
             static::badApiCall('Permission denied: bank.lire required', 403);
         }
 
@@ -53,7 +53,7 @@ class BankMovementApiController extends ApiController
      */
     public function doGet($id = null)
     {
-        if (!static::$user || !static::$user->hasPermission('bank', 'lire')) {
+        if (!static::$user || !static::$user->can('lire', '', 'bank')) {
             static::badApiCall('Permission denied: bank.lire required', 403);
         }
 
