@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('links', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('entity')->default(1);
             $table->dateTime('datea');
             $table->string('url', 255);

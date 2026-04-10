@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('extrafields', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('name', 64);
             $table->integer('entity')->default(1);
             $table->string('elementtype', 64)->default('member');

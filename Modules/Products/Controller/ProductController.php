@@ -27,6 +27,12 @@ use Modules\Alixar\Model\Product;
 )]
 class ProductController extends ResourceController
 {
+    const MENU = 'Productos|Productos';
+    const SIDEBAR_MENU = [
+        ['option' => 'Listado Productos'],
+        ['option' => 'Nuevo Producto'],
+    ];
+
     protected bool $useTabs = true;
 
     #[\Override]
@@ -101,10 +107,8 @@ class ProductController extends ResourceController
                     new Text('ref', 'Reference', ['required' => true]),
                     new Text('label', 'Label', ['required' => true]),
                     new Select('fk_product_type', 'Type', [
-                        'options' => [
-                            0 => 'Product',
-                            1 => 'Service'
-                        ]
+                        0 => 'Product',
+                        1 => 'Service'
                     ]),
                     new Textarea('description', 'Description'),
                 ]
@@ -116,10 +120,8 @@ class ProductController extends ResourceController
                     new Decimal('price_ttc', 'Selling Price (Incl. Tax)'),
                     new Decimal('tva_tx', 'VAT Rate (%)'),
                     new Select('price_base_type', 'Base Type', [
-                        'options' => [
-                            'HT' => 'Net',
-                            'TTC' => 'Incl. Tax'
-                        ]
+                        'HT' => 'Net',
+                        'TTC' => 'Incl. Tax'
                     ]),
                 ]
             ],

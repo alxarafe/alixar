@@ -1,0 +1,30 @@
+meta {
+  name: 04 - Listar solo Clientes (mode=1)
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/thirdparties?mode=1&limit=10
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Accept: application/json
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Todos son clientes (client = 1 o 3)", function() {
+    const body = res.getBody();
+    body.forEach(function(tp) {
+      const clientVal = Number(tp.client);
+      expect(clientVal === 1 || clientVal === 3).to.be.true;
+    });
+  });
+}

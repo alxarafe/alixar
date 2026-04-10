@@ -1,0 +1,133 @@
+# ─────────────────────────────────────────────────────────────
+# Docker Compose para Tests de Compatibilidad API
+#
+# Levanta Dolibarr (fork alxarafe/dolibarr) + Alixar (FlightPHP)
+# contra la MISMA base de datos para comparar las APIs.
+#
+# Prerrequisito: el repo alxarafe/dolibarr debe estar clonado
+# en ../dolibarr/ (hermano de alixar/ en el filesystem).
+#
+# Uso:
+#   ./bin/api_compare.sh up        # Levantar
+#   ./bin/api_compare.sh test      # Tests comparativos
+#   ./bin/api_compare.sh update    # git pull del fork
+#
+#   # Actualizar Dolibarr a la última versión
+#   ./bin/api_compare.sh update
+#
+# Puertos:
+#   Dolibarr API  → http://localhost:8090
+#   Alixar API    → http://localhost:8091
+#   PhpMyAdmin    → http://localhost:9090
+#   MariaDB       → localhost:3490
+# ─────────────────────────────────────────────────────────────
+
+services:
+
+  # ── Base de Datos Compartida ──────────────────────────────
+  apitest_db:
+    image: mariadb:10.11
+    container_name: apitest_db
+    restart: "no"
+    environment:
+      MARIADB_DATABASE: apitest_db
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_USER: dolibarr
+      MARIADB_PASSWORD: dolibarr
+    ports:
+      - "3490:3306"
+    volumes:
+      - apitest_db_data:/var/lib/mysql
+    networks:
+      - apitest_network
+
+  # ── Dolibarr (desde repo Git) ─────────────────────────────
+  # Usa la carpeta .dolibarr/ que es un git clone del repo oficial.
+  # `./bin/api_compare.sh update` hace git pull para actualizar.
+  apitest_dolibarr_php:
+    image: php:8.3-fpm
+    container_name: apitest_dolibarr_php
+    restart: "no"
+    volumes:
+      - "../dolibarr/htdocs:/var/www/html:rw"
+      - "apitest_doli_docs:/var/www/documents"
+    environment:
+      DOLI_DB_HOST: apitest_db
+      DOLI_DB_NAME: apitest_db
+      DOLI_DB_USER: root
+      DOLI_DB_PASSWORD: root
+    networks:
+      - apitest_network
+
+  apitest_dolibarr_nginx:
+    image: nginx:alpine
+    container_name: apitest_dolibarr_nginx
+    restart: "no"
+    ports:
+      - "8090:80"
+    volumes:
+      - "../dolibarr/htdocs:/var/www/html:ro"
+      - "./.docker/nginx/dolibarr.conf:/etc/nginx/conf.d/default.conf:ro"
+    depends_on:
+      - apitest_dolibarr_php
+    networks:
+      - apitest_network
+
+  # ── Alixar Hexagonal API ──────────────────────────────────
+  apitest_alixar_php:
+    container_name: apitest_alixar_php
+    restart: "no"
+    build:
+      context: .
+      dockerfile: .docker/php/Dockerfile
+      args:
+        - USER_ID=${USER_ID:-1000}
+        - GROUP_ID=${GROUP_ID:-1000}
+    environment:
+      MARIADB_HOST: apitest_db
+      MARIADB_PORT: 3306
+      MARIADB_DATABASE: apitest_db
+      MARIADB_USER: root
+      MARIADB_ROOT_PASSWORD: root
+    volumes:
+      - ".:/var/www/html:rw"
+    networks:
+      - apitest_network
+
+  apitest_alixar_nginx:
+    image: nginx:alpine
+    container_name: apitest_alixar_nginx
+    restart: "no"
+    ports:
+      - "8091:80"
+    volumes:
+      - ".:/var/www/html:rw"
+      - "./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf"
+    depends_on:
+      - apitest_alixar_php
+    networks:
+      - apitest_network
+
+  # ── PhpMyAdmin (debug) ────────────────────────────────────
+  apitest_phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: apitest_phpmyadmin
+    restart: "no"
+    ports:
+      - "9090:80"
+    environment:
+      PMA_HOST: apitest_db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root
+    depends_on:
+      - apitest_db
+    networks:
+      - apitest_network
+
+volumes:
+  apitest_db_data:
+  apitest_doli_docs:
+
+networks:
+  apitest_network:
+    name: apitest_network

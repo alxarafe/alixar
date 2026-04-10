@@ -10,7 +10,7 @@ Any changes made here will be overwritten when the cache is cleared or regenerat
 To customize a view (e.g., `list.blade.php`):
 1. Copy the file from this directory.
 2. Paste it into the custom directory:
-   `/var/www/html/public/templates/custom/Products/Warehouse`
+   `/var/www/html/public/templates/custom/Members/Member`
 3. Edit the copied file.
 
 The system automatically prioritizes the file in the custom directory.

@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('entrepot', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('ref', 255);
             $table->dateTime('datec')->nullable();
             $table->dateTime('tms')->nullable()->useCurrent();

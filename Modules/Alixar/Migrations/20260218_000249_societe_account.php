@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('societe_account', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('entity')->nullable()->default(1);
             $table->string('login', 128);
             $table->string('pass_encoding', 24)->nullable();

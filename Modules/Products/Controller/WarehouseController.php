@@ -28,6 +28,12 @@ use Modules\Alixar\Model\Warehouse;
 )]
 class WarehouseController extends ResourceController
 {
+    const MENU = 'Productos|Almacenes';
+    const SIDEBAR_MENU = [
+        ['option' => 'Listado Almacenes'],
+        ['option' => 'Nuevo Almacén'],
+    ];
+
     protected bool $useTabs = true;
 
     #[\Override]

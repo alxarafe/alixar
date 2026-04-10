@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('paiementfourn', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('ref', 30)->nullable();
             $table->integer('entity')->nullable()->default(1);
             $table->dateTime('tms')->nullable()->useCurrent();

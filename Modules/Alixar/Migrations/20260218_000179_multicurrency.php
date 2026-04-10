@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('multicurrency', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->dateTime('date_create')->nullable();
             $table->string('code', 255)->nullable();
             $table->string('name', 255)->nullable();

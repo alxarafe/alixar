@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('propal_merge_pdf_product', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_product');
             $table->string('file_name', 200);
             $table->string('lang', 5)->nullable();

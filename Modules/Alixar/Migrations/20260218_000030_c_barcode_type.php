@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_barcode_type', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('code', 16);
             $table->integer('entity')->default(1);
             $table->string('libelle', 128);

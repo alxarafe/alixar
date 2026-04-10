@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_type_contact', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('element', 64);
             $table->string('source', 8)->default('external');
             $table->string('code', 32);

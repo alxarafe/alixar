@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_product_nature', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('code');
             $table->string('label', 128)->nullable();
             $table->integer('active')->default(1);

@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('usergroup', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('nom', 180);
             $table->integer('entity')->default(1);
             $table->dateTime('datec')->nullable();

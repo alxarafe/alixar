@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_input_method', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('code', 30)->nullable();
             $table->string('libelle', 128)->nullable();
             $table->integer('active')->default(1);

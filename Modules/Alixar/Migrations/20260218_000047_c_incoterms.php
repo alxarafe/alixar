@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_incoterms', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('code', 3);
             $table->string('label', 100)->nullable();
             $table->string('libelle', 255);

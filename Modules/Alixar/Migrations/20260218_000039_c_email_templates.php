@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_email_templates', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('entity')->default(1);
             $table->string('module', 32)->nullable();
             $table->string('type_template', 32)->nullable();

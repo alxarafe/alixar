@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('holiday_config', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('name', 128);
             $table->text('value')->nullable();
         });

@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('menu', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('menu_handler', 16);
             $table->integer('entity')->default(1);
             $table->string('module', 255)->nullable();

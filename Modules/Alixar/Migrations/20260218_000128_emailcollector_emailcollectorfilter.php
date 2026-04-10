@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('emailcollector_emailcollectorfilter', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_emailcollector');
             $table->string('type', 128);
             $table->string('rulevalue', 128)->nullable();

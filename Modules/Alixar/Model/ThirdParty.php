@@ -164,6 +164,81 @@ class ThirdParty extends Model
     ];
 
     /**
+     * Cast numeric columns to their proper types.
+     * This prevents SQL errors when empty strings are submitted for integer/decimal fields.
+     * Covers all known numeric columns in the societe table.
+     */
+    protected $casts = [
+        'entity' => 'integer',
+        'parent' => 'integer',
+        'client' => 'integer',
+        'fournisseur' => 'integer',
+        'status' => 'integer',
+        'statut' => 'integer',
+        'fk_typent' => 'integer',
+        'fk_pays' => 'integer',
+        'fk_departement' => 'integer',
+        'fk_effectif' => 'integer',
+        'fk_forme_juridique' => 'integer',
+        'fk_account' => 'integer',
+        'fk_stcomm' => 'integer',
+        'fk_user_creat' => 'integer',
+        'fk_user_modif' => 'integer',
+        'fk_prospectlevel' => 'integer',
+        'fk_incoterms' => 'integer',
+        'fk_shipping_method' => 'integer',
+        'fk_barcode_type' => 'integer',
+        'fk_warehouse' => 'integer',
+        'fk_multicurrency' => 'integer',
+        'fk_currency' => 'integer',
+        'mode_reglement' => 'integer',
+        'cond_reglement' => 'integer',
+        'mode_reglement_supplier' => 'integer',
+        'cond_reglement_supplier' => 'integer',
+        'transport_mode' => 'integer',
+        'transport_mode_supplier' => 'integer',
+        'tva_assuj' => 'integer',
+        'vat_reverse_charge' => 'integer',
+        'localtax1_assuj' => 'integer',
+        'localtax2_assuj' => 'integer',
+        'price_level' => 'integer',
+        'customer_bad' => 'integer',
+        'deposit_percent' => 'float',
+        'capital' => 'float',
+        'remise_client' => 'float',
+        'remise_supplier' => 'float',
+        'outstanding_limit' => 'float',
+        'order_min_amount' => 'float',
+        'supplier_order_min_amount' => 'float',
+        'customer_rate' => 'float',
+        'supplier_rate' => 'float',
+        'localtax1_value' => 'float',
+        'localtax2_value' => 'float',
+        'geolat' => 'float',
+        'geolong' => 'float',
+    ];
+
+    /**
+     * Override setAttribute to convert empty strings to null for numeric columns.
+     * MySQL strict mode rejects empty strings for integer/decimal columns.
+     */
+    public function setAttribute($key, $value)
+    {
+        if ($value === '') {
+            // Check if the column is cast as a numeric type
+            $castType = $this->casts[$key] ?? null;
+            if ($castType && in_array($castType, ['integer', 'float', 'decimal', 'double'])) {
+                $value = null;
+            }
+            // Also catch any fk_* fields not explicitly in casts
+            elseif (str_starts_with($key, 'fk_')) {
+                $value = null;
+            }
+        }
+        return parent::setAttribute($key, $value);
+    }
+
+    /**
      * Boot function to handle automatic timestamps and defaults.
      */
     #[\Override]

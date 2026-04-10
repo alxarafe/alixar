@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('printing', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->dateTime('tms')->nullable()->useCurrent();
             $table->dateTime('datec')->nullable();
             $table->text('printer_name');

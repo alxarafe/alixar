@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('element_element', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_source');
             $table->string('sourcetype', 64);
             $table->integer('fk_target');

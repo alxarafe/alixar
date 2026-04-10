@@ -1,7 +1,18 @@
 @php
     // Fetch menus
     $top_menu = \CoreModules\Admin\Service\MenuManager::get('top_menu');
-    $all_main_menu = \CoreModules\Admin\Service\MenuManager::get('main_menu');
+    
+    // IMPORTANT: MenuManager::get() applies buildTree() which collapses items
+    // with duplicate class_name keys, losing most menu items. We need the raw
+    // flat array for sidebar construction. Access it via Reflection after
+    // triggering the scan.
+    \CoreModules\Admin\Service\MenuManager::get('main_menu'); // trigger scan + cache
+    $ref = new \ReflectionClass(\CoreModules\Admin\Service\MenuManager::class);
+    $prop = $ref->getProperty('allMenus');
+    $prop->setAccessible(true);
+    $rawMenus = $prop->getValue();
+    $all_main_menu = $rawMenus['main_menu'] ?? [];
+    
     $currentController = $me::getControllerName();
 
     // Build map of top-menu controller names → routes

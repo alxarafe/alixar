@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('reception', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->dateTime('tms')->nullable()->useCurrent();
             $table->string('ref', 30);
             $table->integer('entity')->default(1);

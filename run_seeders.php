@@ -1,5 +1,6 @@
 <?php
 define('BASE_PATH', __DIR__ . '/public');
+define('APP_PATH', __DIR__);
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Alxarafe\Base\Config;
@@ -40,5 +41,5 @@ if (Config::runSeeders()) {
     echo "SUCCESS: Seeders executed (if any).\n";
 } else {
     echo "ERROR: Seeder execution failed.\n";
-    print_r(Messages::getErrors());
+    print_r(Messages::getMessages());
 }

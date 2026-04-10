@@ -1,0 +1,31 @@
+meta {
+  name: 08 - Crear Tercero sin Nombre (422)
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}{{apiBase}}/thirdparties
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "address": "Sin nombre no debería funcionar"
+  }
+}
+
+tests {
+  test("Status 4xx (error de validación)", function() {
+    const status = res.getStatus();
+    // Dolibarr devuelve 500 para campos obligatorios faltantes,
+    // Alixar podría devolver 422. Ambos son aceptables.
+    expect(status).to.be.at.least(400);
+  });
+}

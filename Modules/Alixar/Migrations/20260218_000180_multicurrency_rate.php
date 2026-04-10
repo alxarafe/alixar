@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('multicurrency_rate', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->dateTime('date_sync')->nullable();
             $table->decimal('rate')->default(0);
             $table->decimal('rate_indirect')->nullable()->default(0);

@@ -1,0 +1,29 @@
+meta {
+  name: 09 - Eliminar Tercero
+  type: http
+  seq: 9
+}
+
+delete {
+  url: {{baseUrl}}{{apiBase}}/thirdparties/{{testThirdPartyId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Respuesta indica éxito", function() {
+    const body = res.getBody();
+    // Dolibarr devuelve: { success: { code: 200, message: "Object deleted" } }
+    if (body.success) {
+      expect(body.success.code).to.equal(200);
+    }
+  });
+}

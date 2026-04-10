@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('bank_url', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_bank')->nullable();
             $table->integer('url_id')->nullable();
             $table->string('url', 255)->nullable();

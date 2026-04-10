@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('salary_extrafields', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->dateTime('tms')->nullable()->useCurrent();
             $table->integer('fk_object');
             $table->string('import_key', 14)->nullable();

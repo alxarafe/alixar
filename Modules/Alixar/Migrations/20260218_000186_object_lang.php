@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('object_lang', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_object')->default(0);
             $table->string('type_object', 32);
             $table->string('property', 32);

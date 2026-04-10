@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('accounting_groups_account', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_accounting_account');
             $table->integer('fk_c_accounting_category');
         });

@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('holiday_logs', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->dateTime('date_action');
             $table->integer('fk_user_action');
             $table->integer('fk_user_update');

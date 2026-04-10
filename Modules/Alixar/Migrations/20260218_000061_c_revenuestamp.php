@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_revenuestamp', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_pays');
             $table->decimal('taux');
             $table->string('revenuestamp_type', 16)->default('fixed');

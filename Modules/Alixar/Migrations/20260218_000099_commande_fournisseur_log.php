@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('commande_fournisseur_log', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->dateTime('tms')->nullable()->useCurrent();
             $table->dateTime('datelog');
             $table->integer('fk_commande');

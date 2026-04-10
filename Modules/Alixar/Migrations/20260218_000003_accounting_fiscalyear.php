@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('accounting_fiscalyear', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('label', 128);
             $table->date('date_start')->nullable();
             $table->date('date_end')->nullable();

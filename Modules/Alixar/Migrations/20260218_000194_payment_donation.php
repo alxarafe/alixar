@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('payment_donation', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_donation')->nullable();
             $table->dateTime('datec')->nullable();
             $table->dateTime('tms')->nullable()->useCurrent();

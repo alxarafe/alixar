@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('expedition_package', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_expedition');
             $table->string('description', 255)->nullable();
             $table->decimal('value')->nullable();

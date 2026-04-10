@@ -1,0 +1,46 @@
+meta {
+  name: 01 - Crear Tercero
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}{{apiBase}}/thirdparties
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "BrunoTest S.L.",
+    "name_alias": "BrunoTest",
+    "client": "1",
+    "fournisseur": "0",
+    "address": "Calle de Prueba 42",
+    "zip": "28001",
+    "town": "Madrid",
+    "phone": "912345678",
+    "email": "test@brunotest.es",
+    "status": "1"
+  }
+}
+
+tests {
+  test("Status 200 o 201 (creado)", function() {
+    const status = res.getStatus();
+    expect(status === 200 || status === 201).to.be.true;
+  });
+
+  test("Devuelve ID numérico", function() {
+    const body = res.getBody();
+    // Dolibarr devuelve el ID directamente como número
+    const id = typeof body === 'object' ? (body.id || body) : body;
+    expect(Number(id)).to.be.above(0);
+    bru.setVar("testThirdPartyId", Number(id));
+  });
+}

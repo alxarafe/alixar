@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('element_time', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('ref_ext', 32)->nullable();
             $table->integer('fk_element');
             $table->string('elementtype', 32);

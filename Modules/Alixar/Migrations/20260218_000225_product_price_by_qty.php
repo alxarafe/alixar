@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('product_price_by_qty', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_product_price');
             $table->decimal('price')->nullable();
             $table->string('price_base_type', 3)->nullable()->default('HT');

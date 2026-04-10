@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_action_trigger', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('elementtype', 64);
             $table->string('code', 128);
             $table->string('contexts', 255)->nullable();

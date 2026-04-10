@@ -1,0 +1,22 @@
+meta {
+  name: 10 - Verificar Eliminación (404)
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/thirdparties/{{testThirdPartyId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Accept: application/json
+}
+
+tests {
+  test("Status 404 (ya no existe)", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

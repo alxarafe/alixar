@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_ecotaxe', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('code', 64);
             $table->string('label', 255)->nullable();
             $table->decimal('price')->nullable();

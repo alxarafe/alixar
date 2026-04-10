@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('oauth_token', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('service', 36)->nullable();
             $table->text('token')->nullable();
             $table->text('tokenstring')->nullable();

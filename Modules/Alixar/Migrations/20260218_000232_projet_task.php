@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('projet_task', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('ref', 50)->nullable();
             $table->integer('entity')->default(1);
             $table->integer('fk_projet');

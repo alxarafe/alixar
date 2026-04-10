@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('product_fournisseur_price_log', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->dateTime('datec')->nullable();
             $table->integer('fk_product_fournisseur');
             $table->decimal('price')->nullable();

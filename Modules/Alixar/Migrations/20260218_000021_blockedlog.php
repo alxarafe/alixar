@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('blockedlog', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('entity')->default(1);
             $table->dateTime('date_creation')->nullable();
             $table->dateTime('tms')->nullable()->useCurrent();

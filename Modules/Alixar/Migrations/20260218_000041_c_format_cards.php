@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_format_cards', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('code', 50);
             $table->string('name', 50);
             $table->string('paper_size', 20);

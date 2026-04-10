@@ -1,0 +1,22 @@
+meta {
+  name: 07 - Obtener Tercero Inexistente (404)
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/thirdparties/999999999
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Accept: application/json
+}
+
+tests {
+  test("Status 404", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

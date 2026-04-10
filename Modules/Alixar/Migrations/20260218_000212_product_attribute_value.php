@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('product_attribute_value', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_product_attribute');
             $table->string('ref', 180);
             $table->string('value', 255);

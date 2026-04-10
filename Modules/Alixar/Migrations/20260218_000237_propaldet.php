@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('propaldet', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_propal');
             $table->integer('fk_parent_line')->nullable();
             $table->integer('fk_product')->nullable();

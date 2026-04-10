@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('blockedlog_authority', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->text('blockchain');
             $table->string('signature', 100);
             $table->dateTime('tms')->nullable()->useCurrent();

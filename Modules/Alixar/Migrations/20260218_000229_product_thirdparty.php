@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('product_thirdparty', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_product');
             $table->integer('fk_soc');
             $table->integer('fk_product_thirdparty_relation_type');

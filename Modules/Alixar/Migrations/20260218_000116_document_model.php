@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('document_model', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('nom', 50)->nullable();
             $table->integer('entity')->default(1);
             $table->string('type', 64);

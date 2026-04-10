@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('fichinter', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_soc');
             $table->integer('fk_projet')->nullable()->default(0);
             $table->integer('fk_contrat')->nullable()->default(0);

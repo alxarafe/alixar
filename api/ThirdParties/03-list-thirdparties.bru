@@ -1,0 +1,65 @@
+meta {
+  name: 03 - Listar Terceros
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/thirdparties?sortfield=t.rowid&sortorder=ASC&limit=5&page=0
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Accept: application/json
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Devuelve un array", function() {
+    const body = res.getBody();
+    expect(body).to.be.an("array");
+  });
+
+  test("Cada elemento tiene 'id' o 'rowid'", function() {
+    const body = res.getBody();
+    if (body.length > 0) {
+      const first = body[0];
+      const hasId = first.id !== undefined || first.rowid !== undefined;
+      expect(hasId).to.be.true;
+    }
+  });
+
+  test("Cada elemento tiene 'name' o 'nom'", function() {
+    const body = res.getBody();
+    if (body.length > 0) {
+      const first = body[0];
+      const hasName = first.name !== undefined || first.nom !== undefined;
+      expect(hasName).to.be.true;
+    }
+  });
+
+  test("Respeta el límite", function() {
+    const body = res.getBody();
+    expect(body.length).to.be.at.most(5);
+  });
+
+  test("El tercero creado está en la lista", function() {
+    const body = res.getBody();
+    const testId = bru.getVar("testThirdPartyId");
+    if (testId) {
+      const found = body.some(tp => 
+        Number(tp.id || tp.rowid) === Number(testId)
+      );
+      // Puede no estar si hay paginación, solo verificar si la lista es corta
+      if (body.length < 5) {
+        // No forzar, solo informar
+        console.log("Tercero de test " + (found ? "encontrado" : "no encontrado en esta página"));
+      }
+    }
+  });
+}

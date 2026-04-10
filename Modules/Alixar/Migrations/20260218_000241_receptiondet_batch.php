@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('receptiondet_batch', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_reception')->nullable();
             $table->integer('fk_element')->nullable();
             $table->integer('fk_elementdet')->nullable();

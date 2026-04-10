@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('eventorganization_conferenceorboothattendee', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('ref', 128);
             $table->integer('fk_soc')->nullable();
             $table->integer('fk_actioncomm')->nullable();

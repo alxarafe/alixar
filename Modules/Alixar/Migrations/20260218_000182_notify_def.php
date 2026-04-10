@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('notify_def', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('entity')->nullable()->default(1);
             $table->dateTime('tms')->nullable()->useCurrent();
             $table->date('datec')->nullable();

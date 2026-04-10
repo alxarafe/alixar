@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('boxes_def', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('file', 200);
             $table->integer('entity')->default(1);
             $table->integer('fk_user')->default(0);

@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('element_contact', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->dateTime('datecreate')->nullable();
             $table->integer('statut')->nullable()->default(5);
             $table->integer('element_id');

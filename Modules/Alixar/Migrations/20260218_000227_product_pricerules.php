@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('product_pricerules', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('level');
             $table->integer('fk_level');
             $table->decimal('var_percent');

@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('ecm_directories', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('label', 64);
             $table->integer('entity')->default(1);
             $table->integer('fk_parent')->nullable();

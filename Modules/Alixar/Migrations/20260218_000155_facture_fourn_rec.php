@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('facture_fourn_rec', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('titre', 200);
             $table->string('ref_supplier', 180);
             $table->integer('entity')->default(1);

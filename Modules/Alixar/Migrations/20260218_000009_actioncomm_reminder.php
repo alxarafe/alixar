@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('actioncomm_reminder', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->dateTime('dateremind');
             $table->string('typeremind', 32);
             $table->integer('fk_user');

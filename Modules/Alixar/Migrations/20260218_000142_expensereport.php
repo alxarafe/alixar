@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('expensereport', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('ref', 50);
             $table->integer('entity')->default(1);
             $table->integer('ref_number_int')->nullable();

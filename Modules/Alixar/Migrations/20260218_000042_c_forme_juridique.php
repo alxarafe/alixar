@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_forme_juridique', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('code');
             $table->integer('fk_pays');
             $table->string('libelle', 255)->nullable();

@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('user_alert', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('type')->nullable();
             $table->integer('fk_contact')->nullable();
             $table->integer('fk_user')->nullable();

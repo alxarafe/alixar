@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('projet', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_project')->nullable();
             $table->integer('fk_soc')->nullable();
             $table->dateTime('datec')->nullable();

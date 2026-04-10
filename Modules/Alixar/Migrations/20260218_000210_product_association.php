@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('product_association', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_product_pere')->default(0);
             $table->integer('fk_product_fils')->default(0);
             $table->decimal('qty')->nullable();

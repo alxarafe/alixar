@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_civility', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('code', 6);
             $table->string('label', 128)->nullable();
             $table->integer('active')->default(1);

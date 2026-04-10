@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_hrm_function', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('pos')->default(0);
             $table->string('code', 16);
             $table->string('label', 128)->nullable();

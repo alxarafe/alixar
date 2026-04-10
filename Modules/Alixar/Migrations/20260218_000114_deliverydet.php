@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('deliverydet', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_delivery')->nullable();
             $table->integer('fk_origin_line')->nullable();
             $table->integer('fk_product')->nullable();

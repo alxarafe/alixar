@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_chargesociales', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('libelle', 128)->nullable();
             $table->integer('deductible')->default(0);
             $table->integer('active')->default(1);

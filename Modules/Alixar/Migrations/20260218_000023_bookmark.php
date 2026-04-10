@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('bookmark', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_user');
             $table->dateTime('dateb')->nullable();
             $table->text('url')->nullable();

@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('c_regions', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('code_region');
             $table->integer('fk_pays');
             $table->string('cheflieu', 50)->nullable();

@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('product_lot', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('entity')->nullable()->default(1);
             $table->integer('fk_product');
             $table->string('batch', 128)->nullable();

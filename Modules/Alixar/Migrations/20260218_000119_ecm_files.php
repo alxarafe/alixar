@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('ecm_files', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('ref', 128)->nullable();
             $table->string('label', 128);
             $table->string('share', 128)->nullable();

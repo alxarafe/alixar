@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('societe_rib', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->string('type', 32)->default('ban');
             $table->string('label', 200)->nullable();
             $table->integer('fk_soc');

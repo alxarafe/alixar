@@ -8,7 +8,7 @@ return new class extends Migration {
     public function up(): void
     {
         Capsule::schema()->create('categorie_lang', function (Blueprint $table) {
-            $table->id();
+            $table->id("rowid");
             $table->integer('fk_category')->default(0);
             $table->string('lang', 5)->default('0');
             $table->string('label', 255);
