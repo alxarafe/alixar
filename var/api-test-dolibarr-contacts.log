@@ -23,7 +23,7 @@ Contacts/09-verify-deletion (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
 ├───────────────┼────────────────┤
 │ Assertions    │      0/0       │
 ├───────────────┼────────────────┤
-│ Duration (ms) │     55128      │
+│ Duration (ms) │     55137      │
 └───────────────┴────────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1

@@ -12,7 +12,7 @@
     errorBaseline="psalm-baseline.xml"
 >
     <projectFiles>
-        <directory name="Modules" />
+        <directory name="src" />
         <ignoreFiles>
             <directory name="vendor" />
         </ignoreFiles>

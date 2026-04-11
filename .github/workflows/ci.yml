@@ -47,22 +47,22 @@ jobs:
         run: composer install --no-interaction --no-progress
 
       - name: PHPCBF (autofix)
-        run: vendor/bin/phpcbf --tab-width=4 --encoding=utf-8 --standard=phpcs.xml Modules -s || true
+        run: vendor/bin/phpcbf --tab-width=4 --encoding=utf-8 --standard=phpcs.xml src -s || true
 
       - name: PHPCS (lint)
-        run: vendor/bin/phpcs --tab-width=4 --encoding=utf-8 --standard=phpcs.xml Modules -s
+        run: vendor/bin/phpcs --tab-width=4 --encoding=utf-8 --standard=phpcs.xml src -s
 
       - name: PHPStan
-        run: vendor/bin/phpstan analyse Modules --memory-limit=1G
+        run: vendor/bin/phpstan analyse src --memory-limit=1G
 
       - name: Psalm
-        run: vendor/bin/psalm Modules --output-format=github
+        run: vendor/bin/psalm src --output-format=github
 
       - name: Generate PHP Metrics report
         run: |
           rm -rf public/quality
           mkdir -p public/quality
-          vendor/bin/phpmetrics --report-html=public/quality Modules
+          vendor/bin/phpmetrics --report-html=public/quality src
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

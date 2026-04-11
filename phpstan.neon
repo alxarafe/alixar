@@ -1,7 +1,7 @@
 parameters:
     level: 5
     paths:
-        - Modules
+        - src
     bootstrapFiles:
         - phpstan-bootstrap.php
     excludePaths:

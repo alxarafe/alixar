@@ -1,0 +1,47 @@
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+Products/01-create-product (200 OK) - 24 ms
+Tests
+   ✓ Status 200 o 201 (creado)
+   ✓ Devuelve ID numérico
+Products/02-get-product (200 OK) - 4 ms
+Tests
+   ✕ Propiedades correctas
+      expected 10.5 to equal '10.50000000'
+   ✓ Carga exitosa
+Products/03-update-product (200 OK) - 10 ms
+Tests
+   ✓ Actualización exitosa
+Products/04-list-products (200 OK) - 5 ms
+Tests
+   ✓ Listado existoso
+   ✓ Devuelve array
+Products/05-get-by-ref (200 OK) - 3 ms
+Tests
+   ✓ Carga por REF exitosa
+   ✓ Propiedades correctas actualizadas
+Products/06-delete-product (200 OK) - 11 ms
+Tests
+   ✓ Delete exitoso
+Products/07-verify-deletion (404 Not Found) - 4 ms
+Tests
+   ✓ Status 404 (ya no existe)
+
+📊 Execution Summary
+┌───────────────┬────────────────────────┐
+│ Metric        │         Result         │
+├───────────────┼────────────────────────┤
+│ Status        │         ✗ FAIL         │
+├───────────────┼────────────────────────┤
+│ Requests      │ 7 (6 Passed, 1 Failed) │
+├───────────────┼────────────────────────┤
+│ Tests         │         10/11          │
+├───────────────┼────────────────────────┤
+│ Assertions    │          0/0           │
+├───────────────┼────────────────────────┤
+│ Duration (ms) │          587           │
+└───────────────┴────────────────────────┘
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.12.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+npm notice To update run: npm install -g npm@11.12.1
+npm notice
