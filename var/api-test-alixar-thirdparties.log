@@ -1,0 +1,38 @@
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+ThirdParties/01-create-thirdparty (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/08b-create-bankaccount (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/02-get-thirdparty (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/08c-get-bankaccounts (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/03-list-thirdparties (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/08d-update-bankaccount (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/04-list-customers-only (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/08e-delete-bankaccount (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/05-update-thirdparty (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/06-verify-update (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/07-get-nonexistent (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/08-create-without-name (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/08f-get-categories (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/08g-get-supplier-categories (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/08h-get-representatives (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/09-delete-thirdparty (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+ThirdParties/10-verify-deletion (getaddrinfo EAI_AGAIN apitest_alixar_nginx)
+
+📊 Execution Summary
+┌───────────────┬────────────────┐
+│ Metric        │     Result     │
+├───────────────┼────────────────┤
+│ Status        │     ✗ FAIL     │
+├───────────────┼────────────────┤
+│ Requests      │ 17 (17 Failed) │
+├───────────────┼────────────────┤
+│ Tests         │      0/0       │
+├───────────────┼────────────────┤
+│ Assertions    │      0/0       │
+├───────────────┼────────────────┤
+│ Duration (ms) │     85179      │
+└───────────────┴────────────────┘
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.12.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+npm notice To update run: npm install -g npm@11.12.1
+npm notice

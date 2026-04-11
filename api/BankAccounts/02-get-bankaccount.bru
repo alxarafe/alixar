@@ -1,0 +1,30 @@
+meta {
+  name: 02-get-bankaccount
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/bankaccounts/{{testBankAccountId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Obtiene Banco exitosamente", function() {
+    expect([200]).to.include(res.getStatus());
+  });
+
+  test("Los datos coinciden", function() {
+    const data = res.getBody();
+    expect(data.ref).to.equal("BANK-01");
+    expect(data.label).to.equal("Cuenta Principal BBVA");
+    expect(data.bank).to.equal("BBVA");
+    expect(data.currency_code).to.equal("EUR");
+    expect(data).to.have.property('transactions');
+  });
+}

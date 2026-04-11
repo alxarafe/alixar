@@ -61,7 +61,7 @@ $app->map('error', function (\Throwable $e) {
     echo json_encode([
         'error' => [
             'code' => $code,
-            'message' => $code === 500 ? 'Error interno del servidor' : $e->getMessage(),
+            'message' => $e->getMessage(),
         ],
     ], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 });

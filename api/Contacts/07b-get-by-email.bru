@@ -1,0 +1,29 @@
+meta {
+  name: 07b - Obtener por Email
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/contacts/email/contact@brunotest.es
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Accept: application/json
+}
+
+tests {
+  test("Carga por email exitosa", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Los datos coinciden con el creado", function() {
+    const data = res.getBody();
+    expect(data.email).to.equal("contact@brunotest.es");
+    expect(data.lastname).to.equal("BrunoContact Actualizado");
+    expect(Number(data.id)).to.equal(bru.getVar("testContactId"));
+  });
+}

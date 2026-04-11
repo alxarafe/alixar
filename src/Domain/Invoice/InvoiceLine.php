@@ -68,27 +68,33 @@ class InvoiceLine
     }
 
     /**
-     * @param array<string, mixed> $data Row from `facturedet`.
+     * @param array<string, mixed> $data Clean domain values.
      */
     public static function fromArray(array $data): self
     {
         $line = new self(
-            invoiceId: (int) $data['fk_facture'],
+            invoiceId: isset($data['invoiceId']) ? (int) $data['invoiceId'] : 0, // Fallback if 0 on creation
             qty: (float) ($data['qty'] ?? 0),
             subprice: (float) ($data['subprice'] ?? 0),
-            vatRate: (float) ($data['tva_tx'] ?? 0),
-            description: $data['description'] ?? null,
-            label: $data['label'] ?? null,
-            productId: isset($data['fk_product']) && $data['fk_product'] ? (int) $data['fk_product'] : null,
-            discountPercent: (float) ($data['remise_percent'] ?? 0),
+            vatRate: (float) ($data['vatRate'] ?? 0),
+            description: isset($data['description']) ? (string) $data['description'] : null,
+            label: isset($data['label']) ? (string) $data['label'] : null,
+            productId: isset($data['productId']) && $data['productId'] ? (int) $data['productId'] : null,
+            discountPercent: (float) ($data['discountPercent'] ?? 0),
             rang: (int) ($data['rang'] ?? 0),
-            id: isset($data['rowid']) ? (int) $data['rowid'] : null,
+            id: isset($data['id']) ? (int) $data['id'] : null,
         );
 
         // Override calculated with stored values
-        if (isset($data['total_ht'])) { $line->totalHt = (float) $data['total_ht']; }
-        if (isset($data['total_tva'])) { $line->totalVat = (float) $data['total_tva']; }
-        if (isset($data['total_ttc'])) { $line->totalTtc = (float) $data['total_ttc']; }
+        if (isset($data['totalHt'])) {
+            $line->totalHt = (float) $data['totalHt'];
+        }
+        if (isset($data['totalVat'])) {
+            $line->totalVat = (float) $data['totalVat'];
+        }
+        if (isset($data['totalTtc'])) {
+            $line->totalTtc = (float) $data['totalTtc'];
+        }
 
         return $line;
     }
@@ -97,48 +103,74 @@ class InvoiceLine
     public function toArray(): array
     {
         return [
-            'rowid' => $this->id,
-            'fk_facture' => $this->invoiceId,
-            'fk_product' => $this->productId,
+            'id' => $this->id,
+            'invoiceId' => $this->invoiceId,
+            'productId' => $this->productId,
             'label' => $this->label,
             'description' => $this->description,
             'qty' => $this->qty,
             'subprice' => $this->subprice,
-            'tva_tx' => $this->vatRate,
-            'remise_percent' => $this->discountPercent,
-            'total_ht' => $this->totalHt,
-            'total_tva' => $this->totalVat,
-            'total_ttc' => $this->totalTtc,
+            'vatRate' => $this->vatRate,
+            'discountPercent' => $this->discountPercent,
+            'totalHt' => $this->totalHt,
+            'totalVat' => $this->totalVat,
+            'totalTtc' => $this->totalTtc,
             'rang' => $this->rang,
         ];
     }
 
-    /** @return array<string, mixed> */
-    public function toApiArray(): array
+    public function getId(): ?int
     {
-        $data = $this->toArray();
-        $data['id'] = $data['rowid'];
-        return $data;
+        return $this->id;
+    }
+    public function getInvoiceId(): int
+    {
+        return $this->invoiceId;
+    }
+    public function getTotalHt(): float
+    {
+        return $this->totalHt;
+    }
+    public function getTotalVat(): float
+    {
+        return $this->totalVat;
+    }
+    public function getTotalTtc(): float
+    {
+        return $this->totalTtc;
     }
 
-    public function getId(): ?int { return $this->id; }
-    public function getInvoiceId(): int { return $this->invoiceId; }
-    public function getTotalHt(): float { return $this->totalHt; }
-    public function getTotalVat(): float { return $this->totalVat; }
-    public function getTotalTtc(): float { return $this->totalTtc; }
-
-    public function setId(int $id): void { $this->id = $id; }
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
 
     public function updateFrom(array $data): void
     {
-        if (isset($data['qty'])) { $this->qty = (float) $data['qty']; }
-        if (isset($data['subprice'])) { $this->subprice = (float) $data['subprice']; }
-        if (isset($data['tva_tx'])) { $this->vatRate = (float) $data['tva_tx']; }
-        if (isset($data['remise_percent'])) { $this->discountPercent = (float) $data['remise_percent']; }
-        if (array_key_exists('label', $data)) { $this->label = $data['label']; }
-        if (array_key_exists('description', $data)) { $this->description = $data['description']; }
-        if (array_key_exists('fk_product', $data)) { $this->productId = $data['fk_product'] ? (int) $data['fk_product'] : null; }
-        if (isset($data['rang'])) { $this->rang = (int) $data['rang']; }
+        if (isset($data['qty'])) {
+            $this->qty = (float) $data['qty'];
+        }
+        if (isset($data['subprice'])) {
+            $this->subprice = (float) $data['subprice'];
+        }
+        if (isset($data['vatRate'])) {
+            $this->vatRate = (float) $data['vatRate'];
+        }
+        if (isset($data['discountPercent'])) {
+            $this->discountPercent = (float) $data['discountPercent'];
+        }
+        if (array_key_exists('label', $data)) {
+            $this->label = $data['label'] === null ? null : (string) $data['label'];
+        }
+        if (array_key_exists('description', $data)) {
+            $this->description = $data['description'] === null ? null : (string) $data['description'];
+        }
+        if (array_key_exists('productId', $data)) {
+            $this->productId = $data['productId'] ? (int) $data['productId'] : null;
+        }
+        if (isset($data['rang'])) {
+            $this->rang = (int) $data['rang'];
+        }
 
         $this->recalculate();
     }

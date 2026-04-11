@@ -11,6 +11,39 @@ use PDO;
 
 class MysqlInvoiceRepository implements InvoiceRepository
 {
+    use \App\Infrastructure\DolibarrMappingTrait;
+
+    private const INVOICE_COLUMN_MAP = [
+        'id' => 'rowid',
+        'ref' => 'ref',
+        'entity' => 'entity',
+        'type' => 'type',
+        'thirdPartyId' => 'fk_soc',
+        'date' => 'datef',
+        'dateDue' => 'date_lim_reglement',
+        'status' => 'fk_statut',
+        'isPaid' => 'paye',
+        'totalHt' => 'total_ht',
+        'totalVat' => 'total_tva',
+        'totalTtc' => 'total_ttc',
+        'paymentTerms' => 'fk_cond_reglement',
+        'paymentMode' => 'fk_mode_reglement',
+        'notePrivate' => 'note_private',
+        'notePublic' => 'note_public',
+        'createdAt' => 'datec',
+    ];
+
+    private const LINE_COLUMN_MAP = [
+        'id' => 'rowid',
+        'invoiceId' => 'fk_facture',
+        'productId' => 'fk_product',
+        'vatRate' => 'tva_tx',
+        'discountPercent' => 'remise_percent',
+        'totalHt' => 'total_ht',
+        'totalVat' => 'total_tva',
+        'totalTtc' => 'total_ttc',
+    ];
+
     private string $table;
     private string $tableLines;
 
@@ -35,12 +68,41 @@ class MysqlInvoiceRepository implements InvoiceRepository
         }
 
         $lines = $this->findLinesByInvoiceId($id);
-        return Invoice::fromArray($row, $lines);
+        return Invoice::fromArray($this->mapToClean($row, self::INVOICE_COLUMN_MAP), $lines);
+    }
+
+    public function findByRef(string $ref): ?Invoice
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT * FROM ' . $this->table . ' WHERE ref = :ref LIMIT 1'
+        );
+        $stmt->execute(['ref' => $ref]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) return null;
+
+        $lines = $this->findLinesByInvoiceId((int) $row['rowid']);
+        return Invoice::fromArray($this->mapToClean($row, self::INVOICE_COLUMN_MAP), $lines);
+    }
+
+    public function findByRefExt(string $refExt): ?Invoice
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT * FROM ' . $this->table . ' WHERE ref_ext = :refExt LIMIT 1'
+        );
+        $stmt->execute(['refExt' => $refExt]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) return null;
+
+        $lines = $this->findLinesByInvoiceId((int) $row['rowid']);
+        return Invoice::fromArray($this->mapToClean($row, self::INVOICE_COLUMN_MAP), $lines);
     }
 
     public function save(Invoice $invoice): void
     {
         $data = $invoice->toArray();
+        $dbData = $this->mapToDolibarr($data, self::INVOICE_COLUMN_MAP);
 
         // Transaction is needed to ensure header and lines are saved consistently
         $inTransaction = $this->pdo->inTransaction();
@@ -50,8 +112,8 @@ class MysqlInvoiceRepository implements InvoiceRepository
 
         try {
             if ($invoice->getId() === null) {
-                unset($data['rowid']);
-                $columns = array_keys($data);
+                unset($dbData['rowid']);
+                $columns = array_keys($dbData);
                 $placeholders = array_map(fn($c) => ':' . $c, $columns);
 
                 $sql = sprintf(
@@ -62,12 +124,12 @@ class MysqlInvoiceRepository implements InvoiceRepository
                 );
 
                 $stmt = $this->pdo->prepare($sql);
-                $stmt->execute($data);
+                $stmt->execute($dbData);
                 $invoice->setId((int) $this->pdo->lastInsertId());
             } else {
-                $id = $data['rowid'];
-                unset($data['rowid']);
-                $sets = array_map(fn($c) => "{$c} = :{$c}", array_keys($data));
+                $id = $dbData['rowid'];
+                unset($dbData['rowid']);
+                $sets = array_map(fn($c) => "{$c} = :{$c}", array_keys($dbData));
 
                 $sql = sprintf(
                     'UPDATE %s SET %s WHERE rowid = :id',
@@ -76,7 +138,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
                 );
 
                 $stmt = $this->pdo->prepare($sql);
-                $stmt->execute(['id' => $id] + $data);
+                $stmt->execute(['id' => $id] + $dbData);
             }
 
             foreach ($invoice->getLines() as $line) {
@@ -142,7 +204,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
             $placeholders = implode(',', $ids);
             $where[] = "t.fk_soc IN ({$placeholders})";
         }
-        
+
         if (isset($filters['status']) && $filters['status'] !== '') {
             $where[] = "t.fk_statut = :status";
             $params['status'] = (int) $filters['status'];
@@ -170,7 +232,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
 
         $invoices = [];
         foreach ($rows as $row) {
-            $invoices[] = Invoice::fromArray($row, []);
+            $invoices[] = Invoice::fromArray($this->mapToClean($row, self::INVOICE_COLUMN_MAP), []);
         }
 
         return $invoices;
@@ -186,16 +248,32 @@ class MysqlInvoiceRepository implements InvoiceRepository
         $stmt->execute(['id' => $invoiceId]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        return array_map(fn(array $row) => InvoiceLine::fromArray($row), $rows);
+        return array_map(fn(array $row) => InvoiceLine::fromArray($this->mapToClean($row, self::LINE_COLUMN_MAP)), $rows);
+    }
+
+    public function findLineById(int $id): ?InvoiceLine
+    {
+        $stmt = $this->pdo->prepare(
+            'SELECT * FROM ' . $this->tableLines . ' WHERE rowid = :id LIMIT 1'
+        );
+        $stmt->execute(['id' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) {
+            return null;
+        }
+
+        return InvoiceLine::fromArray($this->mapToClean($row, self::LINE_COLUMN_MAP));
     }
 
     public function saveLine(InvoiceLine $line): void
     {
         $data = $line->toArray();
+        $dbData = $this->mapToDolibarr($data, self::LINE_COLUMN_MAP);
 
         if ($line->getId() === null) {
-            unset($data['rowid']);
-            $columns = array_keys($data);
+            unset($dbData['rowid']);
+            $columns = array_keys($dbData);
             $placeholders = array_map(fn($c) => ':' . $c, $columns);
 
             $sql = sprintf(
@@ -206,13 +284,13 @@ class MysqlInvoiceRepository implements InvoiceRepository
             );
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($data);
+            $stmt->execute($dbData);
             $line->setId((int) $this->pdo->lastInsertId());
         } else {
-            $id = $data['rowid'];
-            unset($data['rowid']);
+            $id = $dbData['rowid'];
+            unset($dbData['rowid']);
 
-            $sets = array_map(fn($c) => "{$c} = :{$c}", array_keys($data));
+            $sets = array_map(fn($c) => "{$c} = :{$c}", array_keys($dbData));
 
             $sql = sprintf(
                 'UPDATE %s SET %s WHERE rowid = :id',
@@ -221,7 +299,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
             );
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute(['id' => $id] + $data);
+            $stmt->execute(['id' => $id] + $dbData);
         }
     }
 
@@ -236,7 +314,9 @@ class MysqlInvoiceRepository implements InvoiceRepository
     public function updateTotals(int $invoiceId): void
     {
         $invoice = $this->findById($invoiceId);
-        if (!$invoice) return;
+        if (!$invoice) {
+            return;
+        }
 
         // Recalculating domain logic
         $invoice->recalculateTotals();

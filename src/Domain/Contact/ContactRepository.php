@@ -23,4 +23,6 @@ interface ContactRepository
         string $sortField = 't.rowid',
         string $sortOrder = 'ASC',
     ): array;
+
+    public function findByEmail(string $email): ?Contact;
 }

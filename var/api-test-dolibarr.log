@@ -1,0 +1,71 @@
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+ThirdParties/01-create-thirdparty (200 OK) - 60 ms
+Tests
+   ✓ Status 200 o 201 (creado)
+   ✓ Devuelve ID numérico
+ThirdParties/02-get-thirdparty (200 OK) - 18 ms
+Tests
+   ✓ Status 200
+   ✓ Tiene campo 'id' o 'rowid'
+   ✓ Nombre es 'BrunoTest S.L.'
+   ✓ Tiene campo 'status'
+   ✓ Tiene campo 'client'
+   ✓ Tiene campo 'address'
+   ✓ Tiene campo 'town'
+   ✓ Tiene campo 'email'
+   ✓ Tiene campo 'phone'
+ThirdParties/03-list-thirdparties (200 OK) - 19 ms
+Tests
+   ✓ Status 200
+   ✓ Devuelve un array
+   ✓ Cada elemento tiene 'id' o 'rowid'
+   ✓ Cada elemento tiene 'name' o 'nom'
+   ✓ Respeta el límite
+   ✓ El tercero creado está en la lista
+ThirdParties/04-list-customers-only (200 OK) - 16 ms
+Tests
+   ✓ Status 200
+   ✓ Todos son clientes (client = 1 o 3)
+ThirdParties/05-update-thirdparty (200 OK) - 28 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta tiene el objeto actualizado
+ThirdParties/06-verify-update (200 OK) - 15 ms
+Tests
+   ✓ Status 200
+   ✓ Nombre actualizado
+   ✓ Ciudad actualizada a Barcelona
+   ✓ Teléfono actualizado
+ThirdParties/07-get-nonexistent (404 Not Found) - 14 ms
+Tests
+   ✓ Status 404
+ThirdParties/08-create-without-name (400 Bad Request) - 14 ms
+Tests
+   ✓ Status 4xx (error de validación)
+ThirdParties/09-delete-thirdparty (200 OK) - 29 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta indica éxito
+ThirdParties/10-verify-deletion (404 Not Found) - 14 ms
+Tests
+   ✓ Status 404 (ya no existe)
+
+📊 Execution Summary
+┌───────────────┬────────────────┐
+│ Metric        │     Result     │
+├───────────────┼────────────────┤
+│ Status        │     ✓ PASS     │
+├───────────────┼────────────────┤
+│ Requests      │ 10 (10 Passed) │
+├───────────────┼────────────────┤
+│ Tests         │     30/30      │
+├───────────────┼────────────────┤
+│ Assertions    │      0/0       │
+├───────────────┼────────────────┤
+│ Duration (ms) │      899       │
+└───────────────┴────────────────┘
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.12.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+npm notice To update run: npm install -g npm@11.12.1
+npm notice

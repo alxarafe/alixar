@@ -10,4 +10,9 @@ class ContactNotFoundException extends \RuntimeException
     {
         return new self("Contacto con ID {$id} no encontrado.", 404);
     }
+
+    public static function withEmail(string $email): self
+    {
+        return new self("Contacto con email {$email} no encontrado.", 404);
+    }
 }

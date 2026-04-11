@@ -11,7 +11,8 @@ class ThirdPartyValidator
         private ThirdPartyRepository $repository,
         private ConfigurationPort $config,
         private ThirdPartyCodeGeneratorPort $codeGenerator
-    ) {}
+    ) {
+    }
 
     /**
      * Validates a ThirdParty entity against constraints mapped from societe.class.php verify().

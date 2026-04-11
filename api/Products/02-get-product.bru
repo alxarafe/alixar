@@ -1,0 +1,28 @@
+meta {
+  name: 02-get-product
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/products/{{testProductId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Carga exitosa", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Propiedades correctas", function() {
+    const data = res.getBody();
+    expect(data.ref).to.equal("TEST-PROD");
+    expect(data.label).to.equal("Producto de Test");
+    expect(data.price).to.equal("10.50000000"); // Dolibarr devuelve normalmente 8 decimales o string
+  });
+}

@@ -1,0 +1,33 @@
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+Invoices/00-create-thirdparty (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+Invoices/01-create-invoice (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+Invoices/02-get-invoice (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+Invoices/03-update-invoice (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+Invoices/04-post-line (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+Invoices/05-get-lines (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+Invoices/06-put-line (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+Invoices/06b-post-second-line (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+Invoices/07-delete-line (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+Invoices/08-validate-invoice (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+Invoices/09-delete-invoice (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+Invoices/10-verify-deletion (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+
+📊 Execution Summary
+┌───────────────┬────────────────┐
+│ Metric        │     Result     │
+├───────────────┼────────────────┤
+│ Status        │     ✗ FAIL     │
+├───────────────┼────────────────┤
+│ Requests      │ 12 (12 Failed) │
+├───────────────┼────────────────┤
+│ Tests         │      0/0       │
+├───────────────┼────────────────┤
+│ Assertions    │      0/0       │
+├───────────────┼────────────────┤
+│ Duration (ms) │     60140      │
+└───────────────┴────────────────┘
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.12.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+npm notice To update run: npm install -g npm@11.12.1
+npm notice

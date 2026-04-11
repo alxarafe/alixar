@@ -27,6 +27,7 @@ return [
         'username' => getenv('MARIADB_USER') ?: 'root',
         'password' => getenv('MARIADB_ROOT_PASSWORD') ?: 'root',
         'charset' => 'utf8mb4',
+        'table_prefix' => getenv('MARIADB_PREFIX') ?: 'llx_',
     ],
 
     // ┌─────────────────────────────────────────────────┐

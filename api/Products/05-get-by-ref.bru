@@ -1,0 +1,27 @@
+meta {
+  name: 05-get-by-ref
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/products/ref/TEST-PROD
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Carga por REF exitosa", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Propiedades correctas actualizadas", function() {
+    const data = res.getBody();
+    expect(data.ref).to.equal("TEST-PROD");
+    expect(data.label).to.equal("Producto de Test Actualizado");
+  });
+}

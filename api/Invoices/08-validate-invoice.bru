@@ -1,0 +1,23 @@
+meta {
+  name: 08 - Validar Factura
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}{{apiBase}}/invoices/{{testInvoiceId}}/validate
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Factura validada exitosamente", function() {
+    expect(res.getStatus()).to.equal(200);
+    const data = res.getBody();
+    expect(Number(data.status)).to.equal(1);
+  });
+}

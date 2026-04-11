@@ -1,0 +1,24 @@
+meta {
+  name: 02 - Obtener Factura
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/invoices/{{testInvoiceId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Carga exitosa y pertenece al tercero", function() {
+    expect(res.getStatus()).to.equal(200);
+    const data = res.getBody();
+    expect(Number(data.socid)).to.equal(bru.getVar("testInvoiceSocId"));
+    expect(data.note_public).to.equal("Factura creada por Bruno");
+  });
+}

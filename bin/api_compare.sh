@@ -15,13 +15,19 @@
 # ─────────────────────────────────────────────────────────────
 
 set -e
+set -o pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 COMPOSE_FILE="$PROJECT_DIR/docker-compose.api-test.yml"
 COLLECTION_DIR="$PROJECT_DIR/api"
 RESULTS_DIR="$PROJECT_DIR/var"
-DOLIBARR_DIR="$PROJECT_DIR/../dolibarr"
+# Cargar variables de entorno desde .env si existe
+if [ -f "$PROJECT_DIR/.env" ]; then
+    export $(grep -v '^#' "$PROJECT_DIR/.env" | xargs)
+fi
+
+DOLIBARR_DIR="${DOLIBARR_PATH:-$PROJECT_DIR/../dolibarr}"
 
 DOLIBARR_URL="http://localhost:8090"
 ALIXAR_URL="http://localhost:8091"
@@ -108,7 +114,7 @@ do_up() {
     check_dolibarr
     echo ""
     echo "╔═══════════════════════════════════════════════════════╗"
-    echo "║  Levantando entorno de tests API                     ║"
+    echo "║  Levantando entorno de tests API                      ║"
     echo "╚═══════════════════════════════════════════════════════╝"
     echo ""
     echo -e "  Dolibarr: ${CYAN}$(dolibarr_version)${NC} (../dolibarr/)"
@@ -126,7 +132,7 @@ do_up() {
 
     echo ""
     echo "╔═══════════════════════════════════════════════════════╗"
-    echo "║  ⚠ PRIMERA VEZ: Configurar Dolibarr                 ║"
+    echo "║  ⚠ PRIMERA VEZ: Configurar Dolibarr                   ║"
     echo "╠═══════════════════════════════════════════════════════╣"
     echo "║                                                       ║"
     echo "║  1. Abrir http://localhost:8090/install/              ║"
@@ -146,7 +152,7 @@ do_up() {
 do_test() {
     echo ""
     echo "╔═══════════════════════════════════════════════════════╗"
-    echo "║  Tests de Compatibilidad API                         ║"
+    echo "║  Tests de Compatibilidad API                          ║"
     echo "╚═══════════════════════════════════════════════════════╝"
     echo -e "  Dolibarr: ${CYAN}$(dolibarr_version)${NC}"
     echo ""
@@ -154,15 +160,33 @@ do_test() {
     local doli_result=0
     local alixar_result=0
 
+    # Suites de test a ejecutar
+    local SUITES=("ThirdParties" "Contacts" "Invoices" "Products" "Proposals" "Orders" "SupplierInvoices" "SupplierOrders" "Projects" "BankAccounts" "Events")
+
     # ── Dolibarr ──────────────────────────────────────────
     echo "━━━ Dolibarr (referencia) ━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo ""
-    if npx --yes @usebruno/cli run "$COLLECTION_DIR/ThirdParties" \
-        --env dolibarr 2>&1 | tee "$RESULTS_DIR/api-test-dolibarr.log"; then
-        echo -e "\n  Dolibarr: ${GREEN}✅ PASS${NC}"
+    for suite in "${SUITES[@]}"; do
+        echo -e "  ── ${BLUE}${suite}${NC} ──"
+        if docker run --rm --network apitest_network \
+            -v "$PROJECT_DIR:/work" -w /work/api \
+            -e DOLAPIKEY="$DOLAPIKEY" \
+            node:20-alpine \
+            npx --yes @usebruno/cli run "$suite" \
+            --env dolibarr \
+            --env-var baseUrl=http://apitest_dolibarr_nginx 2>&1 | tee "$RESULTS_DIR/api-test-dolibarr-${suite,,}.log"; then
+            echo -e "  ${suite}: ${GREEN}✅ PASS${NC}"
+        else
+            doli_result=1
+            echo -e "  ${suite}: ${RED}❌ FAIL${NC}"
+        fi
+        echo ""
+    done
+
+    if [ $doli_result -eq 0 ]; then
+        echo -e "  Dolibarr: ${GREEN}✅ PASS${NC}"
     else
-        doli_result=1
-        echo -e "\n  Dolibarr: ${RED}❌ FAIL${NC}"
+        echo -e "  Dolibarr: ${RED}❌ FAIL${NC}"
     fi
 
     echo ""
@@ -170,18 +194,32 @@ do_test() {
     # ── Alixar ────────────────────────────────────────────
     echo "━━━ Alixar Hexagonal (implementación) ━━━━━━━━━━━━━"
     echo ""
-    if npx --yes @usebruno/cli run "$COLLECTION_DIR/ThirdParties" \
-        --env apitest 2>&1 | tee "$RESULTS_DIR/api-test-alixar.log"; then
-        echo -e "\n  Alixar:   ${GREEN}✅ PASS${NC}"
+    for suite in "${SUITES[@]}"; do
+        echo -e "  ── ${BLUE}${suite}${NC} ──"
+        if docker run --rm --network apitest_network \
+            -v "$PROJECT_DIR:/work" -w /work/api \
+            node:20-alpine \
+            npx --yes @usebruno/cli run "$suite" \
+            --env apitest \
+            --env-var baseUrl=http://apitest_alixar_nginx 2>&1 | tee "$RESULTS_DIR/api-test-alixar-${suite,,}.log"; then
+            echo -e "  ${suite}: ${GREEN}✅ PASS${NC}"
+        else
+            alixar_result=1
+            echo -e "  ${suite}: ${RED}❌ FAIL${NC}"
+        fi
+        echo ""
+    done
+
+    if [ $alixar_result -eq 0 ]; then
+        echo -e "  Alixar:   ${GREEN}✅ PASS${NC}"
     else
-        alixar_result=1
-        echo -e "\n  Alixar:   ${RED}❌ FAIL${NC}"
+        echo -e "  Alixar:   ${RED}❌ FAIL${NC}"
     fi
 
     # ── Resumen ───────────────────────────────────────────
     echo ""
     echo "╔═══════════════════════════════════════════════════════╗"
-    echo "║  RESULTADO                                           ║"
+    echo "║  RESULTADO                                            ║"
     echo "╠═══════════════════════════════════════════════════════╣"
     [ $doli_result -eq 0 ] \
         && echo -e "║  Dolibarr:  ${GREEN}✅ PASS${NC}                                    ║" \
@@ -202,7 +240,7 @@ do_test() {
 do_reset() {
     echo ""
     echo "╔═══════════════════════════════════════════════════════╗"
-    echo "║  Reset: BD aséptica                                  ║"
+    echo "║  Reset: BD aséptica                                   ║"
     echo "╚═══════════════════════════════════════════════════════╝"
     echo ""
     echo "  Destruyendo volúmenes de datos..."

@@ -18,9 +18,9 @@ class MysqlConfigurationAdapter implements ConfigurationPort
 
     public function get(string $key, ?string $default = null): ?string
     {
-        $stmt = $this->pdo->prepare(
-            'SELECT value FROM ' . $this->table . ' WHERE name = :name AND entity IN (0, 1) ORDER BY entity DESC LIMIT 1'
-        );
+        $sql = 'SELECT value FROM ' . $this->table
+            . ' WHERE name = :name AND entity IN (0, 1) ORDER BY entity DESC LIMIT 1';
+        $stmt = $this->pdo->prepare($sql);
         $stmt->execute(['name' => $key]);
         $val = $stmt->fetchColumn();
 

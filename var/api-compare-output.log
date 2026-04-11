@@ -1,0 +1,342 @@
+
+╔═══════════════════════════════════════════════════════╗
+║  Tests de Compatibilidad API                          ║
+╚═══════════════════════════════════════════════════════╝
+  Dolibarr: [0;36m66a9b7b7c31 Debug[0m
+
+━━━ Dolibarr (referencia) ━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ── [0;34mThirdParties[0m ──
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+ThirdParties/01-create-thirdparty (200 OK) - 67 ms
+Tests
+   ✓ Status 200 o 201 (creado)
+   ✓ Devuelve ID numérico
+ThirdParties/08b-create-bankaccount (200 OK) - 38 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta tiene ID numérico
+ThirdParties/02-get-thirdparty (200 OK) - 16 ms
+Tests
+   ✓ Status 200
+   ✓ Tiene campo 'id' o 'rowid'
+   ✓ Nombre es 'BrunoTest S.L.'
+   ✓ Tiene campo 'status'
+   ✓ Tiene campo 'client'
+   ✓ Tiene campo 'address'
+   ✓ Tiene campo 'town'
+   ✓ Tiene campo 'email'
+   ✓ Tiene campo 'phone'
+ThirdParties/08c-get-bankaccounts (200 OK) - 15 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta es un array
+   ✓ Objeto contiene fields correctos
+ThirdParties/03-list-thirdparties (200 OK) - 19 ms
+Tests
+   ✓ Status 200
+   ✓ Devuelve un array
+   ✓ Cada elemento tiene 'id' o 'rowid'
+   ✓ Cada elemento tiene 'name' o 'nom'
+   ✓ Respeta el límite
+   ✓ El tercero creado está en la lista
+ThirdParties/08d-update-bankaccount (200 OK) - 26 ms
+Tests
+   ✓ Status 200
+   ✓ Banco actualizado a BBVA
+ThirdParties/04-list-customers-only (200 OK) - 16 ms
+Tests
+   ✓ Status 200
+   ✓ Todos son clientes (client = 1 o 3)
+ThirdParties/08e-delete-bankaccount (200 OK) - 23 ms
+Tests
+   ✓ Status 200
+ThirdParties/05-update-thirdparty (200 OK) - 26 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta tiene el objeto actualizado
+ThirdParties/06-verify-update (200 OK) - 16 ms
+Tests
+   ✓ Status 200
+   ✓ Nombre actualizado
+   ✓ Ciudad actualizada a Barcelona
+   ✓ Teléfono actualizado
+ThirdParties/07-get-nonexistent (404 Not Found) - 14 ms
+Tests
+   ✓ Status 404
+ThirdParties/08-create-without-name (400 Bad Request) - 13 ms
+Tests
+   ✓ Status 4xx (error de validación)
+ThirdParties/09-delete-thirdparty (200 OK) - 29 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta indica éxito
+ThirdParties/10-verify-deletion (404 Not Found) - 14 ms
+Tests
+   ✓ Status 404 (ya no existe)
+
+📊 Execution Summary
+┌───────────────┬────────────────┐
+│ Metric        │     Result     │
+├───────────────┼────────────────┤
+│ Status        │     ✓ PASS     │
+├───────────────┼────────────────┤
+│ Requests      │ 14 (14 Passed) │
+├───────────────┼────────────────┤
+│ Tests         │     38/38      │
+├───────────────┼────────────────┤
+│ Assertions    │      0/0       │
+├───────────────┼────────────────┤
+│ Duration (ms) │      1268      │
+└───────────────┴────────────────┘
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.12.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+npm notice To update run: npm install -g npm@11.12.1
+npm notice
+  ThirdParties: [0;32m✅ PASS[0m
+
+  ── [0;34mContacts[0m ──
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+Contacts/01-create-contact (200 OK) - 71 ms
+Tests
+   ✓ Status 200 o 201 (creado)
+   ✓ Devuelve ID numérico
+Contacts/02-get-contact (200 OK) - 13 ms
+Tests
+   ✓ Status 200
+   ✓ Tiene campo 'id'
+   ✓ Apellido es 'BrunoContact'
+   ✓ Nombre es 'Test'
+   ✓ Tiene campo 'email'
+   ✓ Tiene campo 'address'
+   ✓ Tiene campo 'town'
+   ✓ Tiene campo 'phone_pro'
+   ✓ Tiene campo 'status'
+Contacts/03-list-contacts (200 OK) - 14 ms
+Tests
+   ✓ Status 200
+   ✓ Devuelve un array
+   ✓ Cada elemento tiene 'id' o 'rowid'
+   ✓ Cada elemento tiene 'lastname'
+   ✓ Respeta el límite
+   ✓ El contacto creado está en la lista
+Contacts/04-update-contact (200 OK) - 22 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta tiene el objeto actualizado
+Contacts/05-verify-update (200 OK) - 16 ms
+Tests
+   ✓ Status 200
+   ✓ Apellido actualizado
+   ✓ Ciudad actualizada a Barcelona
+   ✓ Cargo actualizado
+Contacts/06-get-nonexistent (404 Not Found) - 12 ms
+Tests
+   ✓ Status 404
+Contacts/07-create-without-lastname (400 Bad Request) - 13 ms
+Tests
+   ✓ Status 4xx o 5xx (error de validación)
+Contacts/08-delete-contact (200 OK) - 21 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta indica éxito
+Contacts/09-verify-deletion (404 Not Found) - 13 ms
+Tests
+   ✓ Status 404 (ya no existe)
+
+📊 Execution Summary
+┌───────────────┬──────────────┐
+│ Metric        │    Result    │
+├───────────────┼──────────────┤
+│ Status        │    ✓ PASS    │
+├───────────────┼──────────────┤
+│ Requests      │ 9 (9 Passed) │
+├───────────────┼──────────────┤
+│ Tests         │    28/28     │
+├───────────────┼──────────────┤
+│ Assertions    │     0/0      │
+├───────────────┼──────────────┤
+│ Duration (ms) │     841      │
+└───────────────┴──────────────┘
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.12.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+npm notice To update run: npm install -g npm@11.12.1
+npm notice
+  Contacts: [0;32m✅ PASS[0m
+
+  Dolibarr: [0;32m✅ PASS[0m
+
+━━━ Alixar Hexagonal (implementación) ━━━━━━━━━━━━━
+
+  ── [0;34mThirdParties[0m ──
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+ThirdParties/01-create-thirdparty (200 OK) - 34 ms
+Tests
+   ✓ Status 200 o 201 (creado)
+   ✓ Devuelve ID numérico
+ThirdParties/08b-create-bankaccount (200 OK) - 11 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta tiene ID numérico
+ThirdParties/02-get-thirdparty (200 OK) - 3 ms
+Tests
+   ✓ Status 200
+   ✓ Tiene campo 'id' o 'rowid'
+   ✓ Nombre es 'BrunoTest S.L.'
+   ✓ Tiene campo 'status'
+   ✓ Tiene campo 'client'
+   ✓ Tiene campo 'address'
+   ✓ Tiene campo 'town'
+   ✓ Tiene campo 'email'
+   ✓ Tiene campo 'phone'
+ThirdParties/08c-get-bankaccounts (200 OK) - 4 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta es un array
+   ✓ Objeto contiene fields correctos
+ThirdParties/03-list-thirdparties (200 OK) - 5 ms
+Tests
+   ✓ Status 200
+   ✓ Devuelve un array
+   ✓ Cada elemento tiene 'id' o 'rowid'
+   ✓ Cada elemento tiene 'name' o 'nom'
+   ✓ Respeta el límite
+   ✓ El tercero creado está en la lista
+ThirdParties/08d-update-bankaccount (200 OK) - 10 ms
+Tests
+   ✓ Status 200
+   ✓ Banco actualizado a BBVA
+ThirdParties/04-list-customers-only (200 OK) - 3 ms
+Tests
+   ✓ Status 200
+   ✓ Todos son clientes (client = 1 o 3)
+ThirdParties/08e-delete-bankaccount (200 OK) - 9 ms
+Tests
+   ✓ Status 200
+ThirdParties/05-update-thirdparty (200 OK) - 9 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta tiene el objeto actualizado
+ThirdParties/06-verify-update (200 OK) - 3 ms
+Tests
+   ✓ Status 200
+   ✓ Nombre actualizado
+   ✓ Ciudad actualizada a Barcelona
+   ✓ Teléfono actualizado
+ThirdParties/07-get-nonexistent (404 Not Found) - 3 ms
+Tests
+   ✓ Status 404
+ThirdParties/08-create-without-name (422 ) - 4 ms
+Tests
+   ✓ Status 4xx (error de validación)
+ThirdParties/09-delete-thirdparty (200 OK) - 7 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta indica éxito
+ThirdParties/10-verify-deletion (404 Not Found) - 3 ms
+Tests
+   ✓ Status 404 (ya no existe)
+
+📊 Execution Summary
+┌───────────────┬────────────────┐
+│ Metric        │     Result     │
+├───────────────┼────────────────┤
+│ Status        │     ✓ PASS     │
+├───────────────┼────────────────┤
+│ Requests      │ 14 (14 Passed) │
+├───────────────┼────────────────┤
+│ Tests         │     38/38      │
+├───────────────┼────────────────┤
+│ Assertions    │      0/0       │
+├───────────────┼────────────────┤
+│ Duration (ms) │      1038      │
+└───────────────┴────────────────┘
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.12.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+npm notice To update run: npm install -g npm@11.12.1
+npm notice
+  ThirdParties: [0;32m✅ PASS[0m
+
+  ── [0;34mContacts[0m ──
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+Contacts/01-create-contact (200 OK) - 29 ms
+Tests
+   ✓ Status 200 o 201 (creado)
+   ✓ Devuelve ID numérico
+Contacts/02-get-contact (200 OK) - 4 ms
+Tests
+   ✓ Status 200
+   ✓ Tiene campo 'id'
+   ✓ Apellido es 'BrunoContact'
+   ✓ Nombre es 'Test'
+   ✓ Tiene campo 'email'
+   ✓ Tiene campo 'address'
+   ✓ Tiene campo 'town'
+   ✓ Tiene campo 'phone_pro'
+   ✓ Tiene campo 'status'
+Contacts/03-list-contacts (200 OK) - 3 ms
+Tests
+   ✓ Status 200
+   ✓ Devuelve un array
+   ✓ Cada elemento tiene 'id' o 'rowid'
+   ✓ Cada elemento tiene 'lastname'
+   ✓ Respeta el límite
+   ✓ El contacto creado está en la lista
+Contacts/04-update-contact (200 OK) - 10 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta tiene el objeto actualizado
+Contacts/05-verify-update (200 OK) - 5 ms
+Tests
+   ✓ Status 200
+   ✓ Apellido actualizado
+   ✓ Ciudad actualizada a Barcelona
+   ✓ Cargo actualizado
+Contacts/06-get-nonexistent (404 Not Found) - 4 ms
+Tests
+   ✓ Status 404
+Contacts/07-create-without-lastname (422 ) - 3 ms
+Tests
+   ✓ Status 4xx o 5xx (error de validación)
+Contacts/08-delete-contact (200 OK) - 9 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta indica éxito
+Contacts/09-verify-deletion (404 Not Found) - 5 ms
+Tests
+   ✓ Status 404 (ya no existe)
+
+📊 Execution Summary
+┌───────────────┬──────────────┐
+│ Metric        │    Result    │
+├───────────────┼──────────────┤
+│ Status        │    ✓ PASS    │
+├───────────────┼──────────────┤
+│ Requests      │ 9 (9 Passed) │
+├───────────────┼──────────────┤
+│ Tests         │    28/28     │
+├───────────────┼──────────────┤
+│ Assertions    │     0/0      │
+├───────────────┼──────────────┤
+│ Duration (ms) │     710      │
+└───────────────┴──────────────┘
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.12.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+npm notice To update run: npm install -g npm@11.12.1
+npm notice
+  Contacts: [0;32m✅ PASS[0m
+
+  Alixar:   [0;32m✅ PASS[0m
+
+╔═══════════════════════════════════════════════════════╗
+║  RESULTADO                                            ║
+╠═══════════════════════════════════════════════════════╣
+║  Dolibarr:  [0;32m✅ PASS[0m                                    ║
+║  Alixar:    [0;32m✅ PASS[0m                                    ║
+║  [0;32m★ APIs CERTIFICADAS COMO COMPATIBLES ★[0m               ║
+╚═══════════════════════════════════════════════════════╝
+

@@ -23,10 +23,30 @@ use Flight;
  */
 class ThirdPartyApiController
 {
+    use \App\Infrastructure\DolibarrMappingTrait;
+
+    private const API_MAP = [
+        'nameAlias' => 'name_alias',
+        'type' => 'client',
+        'isSupplier' => 'fournisseur',
+        'customerCode' => 'code_client',
+        'supplierCode' => 'code_fournisseur',
+        'countryId' => 'fk_pays',
+        'vatNumber' => 'tva_intra',
+        'nif' => 'siren',
+        'notePrivate' => 'note_private',
+        'notePublic' => 'note_public',
+        'createdAt' => 'datec',
+    ];
+
     public function __construct(
         private ThirdPartyRepository $repository,
         private \App\Domain\ThirdParty\ThirdPartyValidator $validator,
-    ) {}
+        private ?\App\Domain\ThirdParty\BankAccountRepository $bankAccountRepository = null,
+        private ?\App\Domain\Category\ThirdPartyCategoryRepository $categoryRepository = null,
+        private ?\App\Domain\User\ThirdPartyRepresentativeRepository $representativeRepository = null,
+    ) {
+    }
 
     /**
      * GET /api/thirdparties
@@ -53,8 +73,8 @@ class ThirdPartyApiController
 
         $results = $this->repository->findAll($filters, $limit, $offset, $sortField, $sortOrder);
 
-        // Dolibarr returns an array of objects with 'id' and 'name' keys
-        $response = array_map(fn(ThirdParty $tp) => $tp->toApiArray(), $results);
+        // Dolibarr returns an array of objects with API format
+        $response = array_map(fn(ThirdParty $tp) => $this->mapToDolibarr($tp->toArray(), self::API_MAP), $results);
 
         Flight::json($response);
     }
@@ -70,7 +90,7 @@ class ThirdPartyApiController
             throw ThirdPartyNotFoundException::withId($id);
         }
 
-        Flight::json($tp->toApiArray());
+        Flight::json($this->mapToDolibarr($tp->toArray(), self::API_MAP));
     }
 
     /**
@@ -80,20 +100,21 @@ class ThirdPartyApiController
      */
     public function create(): void
     {
-        $data = json_decode(file_get_contents('php://input'), true) ?? [];
+        $payload = json_decode((string) file_get_contents('php://input'), true) ?? [];
+        $cleanData = $this->mapToClean($payload, self::API_MAP);
 
         $tp = new ThirdParty(
-            name: $data['name'] ?? $data['nom'] ?? '',
-            type: \App\Domain\ThirdParty\ThirdPartyType::from((int) ($data['client'] ?? 0)),
-            isSupplier: (bool) ($data['fournisseur'] ?? false),
-            status: isset($data['status'])
-                ? \App\Domain\ThirdParty\ThirdPartyStatus::from((int) $data['status'])
+            name: (string) ($cleanData['name'] ?? ''),
+            type: \App\Domain\ThirdParty\ThirdPartyType::from((int) ($cleanData['type'] ?? 0)),
+            isSupplier: (bool) ($cleanData['isSupplier'] ?? false),
+            status: isset($cleanData['status'])
+                ? \App\Domain\ThirdParty\ThirdPartyStatus::from((int) $cleanData['status'])
                 : null,
-            nameAlias: $data['name_alias'] ?? null,
+            nameAlias: isset($cleanData['nameAlias']) ? (string) $cleanData['nameAlias'] : null,
         );
 
         // Apply optional fields
-        $tp->updateFrom($data);
+        $tp->updateFrom($cleanData);
 
         // Domain Validation
         $this->validator->validate($tp);
@@ -117,8 +138,10 @@ class ThirdPartyApiController
             throw ThirdPartyNotFoundException::withId($id);
         }
 
-        $data = json_decode(file_get_contents('php://input'), true) ?? [];
-        $tp->updateFrom($data);
+        $payload = json_decode((string) file_get_contents('php://input'), true) ?? [];
+        $cleanData = $this->mapToClean($payload, self::API_MAP);
+        
+        $tp->updateFrom($cleanData);
 
         // Domain Validation
         $this->validator->validate($tp);
@@ -126,7 +149,7 @@ class ThirdPartyApiController
         $this->repository->save($tp);
 
         // Dolibarr returns the updated object
-        Flight::json($tp->toApiArray());
+        Flight::json($this->mapToDolibarr($tp->toArray(), self::API_MAP));
     }
 
     /**
@@ -144,12 +167,212 @@ class ThirdPartyApiController
 
         $this->repository->delete($id);
 
-        // Dolibarr response format
+    // Dolibarr response format
         Flight::json([
             'success' => [
                 'code' => 200,
                 'message' => 'Object deleted',
             ],
         ]);
+    }
+
+    // ── Bank Accounts ───────────────────────────────────
+
+    public function getBankAccounts(int $id): void
+    {
+        $tp = $this->repository->findById($id);
+        if ($tp === null) throw ThirdPartyNotFoundException::withId($id);
+        if (!$this->bankAccountRepository) throw new \RuntimeException('BankAccountRepository is not configured.');
+
+        $accounts = $this->bankAccountRepository->findByThirdPartyId($id);
+        Flight::json(array_map(fn($acc) => $this->mapToDolibarr(
+            $acc->toArray(),
+            \App\Infrastructure\Persistence\Mysql\MysqlBankAccountRepository::COLUMN_MAP
+        ), $accounts));
+    }
+
+    public function postBankAccount(int $id): void
+    {
+        $tp = $this->repository->findById($id);
+        if ($tp === null) throw ThirdPartyNotFoundException::withId($id);
+        if (!$this->bankAccountRepository) throw new \RuntimeException('BankAccountRepository is not configured.');
+
+        $payload = json_decode((string) file_get_contents('php://input'), true) ?? [];
+        $cleanData = $this->mapToClean($payload, \App\Infrastructure\Persistence\Mysql\MysqlBankAccountRepository::COLUMN_MAP);
+
+        $account = new \App\Domain\ThirdParty\BankAccount(thirdPartyId: $id);
+        $account->updateFrom($cleanData);
+        $this->bankAccountRepository->save($account);
+
+        Flight::json($account->getId(), 200);
+    }
+
+    public function putBankAccount(int $id, int $bankaccountId): void
+    {
+        $tp = $this->repository->findById($id);
+        if ($tp === null) throw ThirdPartyNotFoundException::withId($id);
+        if (!$this->bankAccountRepository) throw new \RuntimeException('BankAccountRepository is not configured.');
+
+        $account = $this->bankAccountRepository->findById($bankaccountId);
+        if ($account === null || $account->getThirdPartyId() !== $id) {
+            Flight::halt(404, json_encode(['error' => 'Bank account not found or does not belong to this thirdparty']));
+            return;
+        }
+
+        $payload = json_decode((string) file_get_contents('php://input'), true) ?? [];
+        $cleanData = $this->mapToClean($payload, \App\Infrastructure\Persistence\Mysql\MysqlBankAccountRepository::COLUMN_MAP);
+
+        $account->updateFrom($cleanData);
+        $this->bankAccountRepository->save($account);
+
+        Flight::json($this->mapToDolibarr($account->toArray(), \App\Infrastructure\Persistence\Mysql\MysqlBankAccountRepository::COLUMN_MAP));
+    }
+
+    public function deleteBankAccount(int $id, int $bankaccountId): void
+    {
+        $tp = $this->repository->findById($id);
+        if ($tp === null) throw ThirdPartyNotFoundException::withId($id);
+        if (!$this->bankAccountRepository) throw new \RuntimeException('BankAccountRepository is not configured.');
+
+        $account = $this->bankAccountRepository->findById($bankaccountId);
+        if ($account === null || $account->getThirdPartyId() !== $id) {
+            Flight::halt(404, json_encode(['error' => 'Bank account not found or does not belong to this thirdparty']));
+            return;
+        }
+
+        $this->bankAccountRepository->delete($bankaccountId);
+
+        Flight::json([
+            'success' => [
+                'code' => 200,
+                'message' => 'Object deleted',
+            ],
+        ]);
+    }
+
+    // ── Categories ──────────────────────────────────────
+
+    public function getCategories(int $id): void
+    {
+        $tp = $this->repository->findById($id);
+        if ($tp === null) throw ThirdPartyNotFoundException::withId($id);
+        if (!$this->categoryRepository) throw new \RuntimeException('CategoryRepository is not configured.');
+
+        // Customer type = 2
+        $categories = $this->categoryRepository->findByThirdPartyId($id, 2);
+        Flight::json(array_map(fn($cat) => $this->mapToDolibarr(
+            $cat->toArray(),
+            \App\Infrastructure\Persistence\Mysql\Category\MysqlThirdPartyCategoryRepository::CATEGORY_COLUMN_MAP
+        ), $categories));
+    }
+
+    public function putCategory(int $id, int $categoryId): void
+    {
+        $tp = $this->repository->findById($id);
+        if ($tp === null) throw ThirdPartyNotFoundException::withId($id);
+        if (!$this->categoryRepository) throw new \RuntimeException('CategoryRepository is not configured.');
+
+        $this->categoryRepository->linkCategory($id, $categoryId);
+        Flight::json($this->mapToDolibarr($tp->toArray(), self::API_MAP));
+    }
+
+    public function deleteCategory(int $id, int $categoryId): void
+    {
+        $tp = $this->repository->findById($id);
+        if ($tp === null) throw ThirdPartyNotFoundException::withId($id);
+        if (!$this->categoryRepository) throw new \RuntimeException('CategoryRepository is not configured.');
+
+        $this->categoryRepository->unlinkCategory($id, $categoryId);
+        Flight::json($this->mapToDolibarr($tp->toArray(), self::API_MAP));
+    }
+
+    // ── Supplier Categories ─────────────────────────────
+
+    public function getSupplierCategories(int $id): void
+    {
+        $tp = $this->repository->findById($id);
+        if ($tp === null) throw ThirdPartyNotFoundException::withId($id);
+        if (!$this->categoryRepository) throw new \RuntimeException('CategoryRepository is not configured.');
+
+        // Supplier type = 1
+        $categories = $this->categoryRepository->findByThirdPartyId($id, 1);
+        Flight::json(array_map(fn($cat) => $this->mapToDolibarr(
+            $cat->toArray(),
+            \App\Infrastructure\Persistence\Mysql\Category\MysqlThirdPartyCategoryRepository::CATEGORY_COLUMN_MAP
+        ), $categories));
+    }
+
+    public function putSupplierCategory(int $id, int $categoryId): void
+    {
+        $tp = $this->repository->findById($id);
+        if ($tp === null) throw ThirdPartyNotFoundException::withId($id);
+        if (!$this->categoryRepository) throw new \RuntimeException('CategoryRepository is not configured.');
+
+        $this->categoryRepository->linkCategory($id, $categoryId);
+        Flight::json($this->mapToDolibarr($tp->toArray(), self::API_MAP));
+    }
+
+    public function deleteSupplierCategory(int $id, int $categoryId): void
+    {
+        $tp = $this->repository->findById($id);
+        if ($tp === null) throw ThirdPartyNotFoundException::withId($id);
+        if (!$this->categoryRepository) throw new \RuntimeException('CategoryRepository is not configured.');
+
+        $this->categoryRepository->unlinkCategory($id, $categoryId);
+        Flight::json($this->mapToDolibarr($tp->toArray(), self::API_MAP));
+    }
+
+    // ── Representatives ─────────────────────────────
+
+    public function getRepresentatives(int $id): void
+    {
+        $tp = $this->repository->findById($id);
+        if ($tp === null) throw ThirdPartyNotFoundException::withId($id);
+        if (!$this->representativeRepository) throw new \RuntimeException('RepresentativeRepository is not configured.');
+
+        $users = $this->representativeRepository->findByThirdPartyId($id);
+        Flight::json(array_map(fn($user) => $user->toArray(), $users));
+    }
+
+    public function putRepresentative(int $id, int $userId): void
+    {
+        $tp = $this->repository->findById($id);
+        if ($tp === null) throw ThirdPartyNotFoundException::withId($id);
+        if (!$this->representativeRepository) throw new \RuntimeException('RepresentativeRepository is not configured.');
+
+        $this->representativeRepository->linkRepresentative($id, $userId);
+        Flight::json($this->mapToDolibarr($tp->toArray(), self::API_MAP));
+    }
+
+    public function deleteRepresentative(int $id, int $userId): void
+    {
+        $tp = $this->repository->findById($id);
+        if ($tp === null) throw ThirdPartyNotFoundException::withId($id);
+        if (!$this->representativeRepository) throw new \RuntimeException('RepresentativeRepository is not configured.');
+
+        $this->representativeRepository->unlinkRepresentative($id, $userId);
+        Flight::json($this->mapToDolibarr($tp->toArray(), self::API_MAP));
+    }
+
+    // ── Utilities ─────────────────────────────
+
+    public function generateBankAccountDocument(int $id, int $companybankid, string $model = 'sepamandate'): void
+    {
+        Flight::json([
+            'error' => [
+                'code' => 501,
+                'message' => 'PDF generation is not yet ported to Hexagonal Architecture (Pending Phase 3)',
+            ],
+        ], 501);
+    }
+
+    public function merge(int $id, int $idtodelete): void
+    {
+        Flight::json([
+            'error' => [
+                'code' => 501,
+                'message' => 'ThirdParty Merge feature requires cross-domain orchestration not yet available (Pending Phase 3)',
+            ],
+        ], 501);
     }
 }

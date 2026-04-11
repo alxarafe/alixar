@@ -9,16 +9,18 @@
 
 *[Leer en español](README.es.md)*
 
-**Alixar** is an open-source **ERP/CRM** currently under active development.
-The project started as a clone of [Dolibarr](https://www.dolibarr.org/), progressively rewritten and modernized using the [Alxarafe](https://github.com/alxarafe/alxarafe) microframework.
-Over time, Alixar will evolve independently, incorporating its own architecture, modules, and features while maintaining the functional richness inherited from Dolibarr.
+**Alixar** is an open-source **ERP/CRM** undergoing an ambitious architectural modernization.
+The project started as a fork of [Dolibarr](https://www.dolibarr.org/), but is now being progressively rewritten as a pure **Hexagonal Architecture (Ports and Adapters)** application in PHP 8.2+ alongside a **Headless Vue 3 + TypeScript** modern frontend.
+
+Alixar's core strategy is to *initially* maintain **100% database schema and business logic compatibility** with Dolibarr, allowing users to run both the legacy monolith and the Hexagonal API side-by-side. The long-term vision is to evolve to a more modern, efficient database structure once the decoupling is complete.
 
 ## Goals
 
-- Provide a modern, modular ERP/CRM built on top of the Alxarafe framework.
-- Gradually replace legacy Dolibarr code with clean, well-structured PHP 8.2+ code.
-- Offer a fully Docker-based development and deployment environment.
-- Maintain an extensible module system for billing, CRM, HRM, inventory, accounting, and more.
+- Provide a modern, modular ERP/CRM with strict separation of concerns (Domain, Application, Infrastructure).
+- Encapsulate legacy Dolibarr logic (e.g. `societe.class.php`) into clean Domain Services and Value Objects.
+- Provide a robust REST API ecosystem capable of passing exact parity tests against Dolibarr (`bin/api_compare.sh`).
+- Deliver a state-of-the-art **Headless Frontend** built on Vue.js and TypeScript, completely decoupled from the backend.
+- Offer a fully Docker-based development environment to run both systems side-by-side.
 
 ## LICENSE
 
@@ -55,7 +57,13 @@ Alixar includes a complete Docker environment (PHP-FPM, Nginx, MariaDB, phpMyAdm
    ```bash
    docker exec alixar_php composer install
    ```
-5. Access the application at [http://localhost:8083](http://localhost:8083).
+5. Install and serve the Headless Frontend (Node 20+ required):
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+6. Access the REST API at [http://localhost:8083](http://localhost:8083) and the Frontend at [http://localhost:5173](http://localhost:5173).
 
 ### Manual installation
 
@@ -66,7 +74,7 @@ Alixar includes a complete Docker environment (PHP-FPM, Nginx, MariaDB, phpMyAdm
 
 ## Documentation
 
-Documentation is being developed alongside the project. You can find initial docs in the `doc/` directory.
+Documentation is being developed alongside the project. You can find initial docs in the `docs/` directory.
 
 ## Contributing
 
@@ -80,5 +88,4 @@ Alixar is based on [Dolibarr](https://www.dolibarr.org/) and built with the [Alx
 ## Links
 
 - [Alixar on GitHub](https://github.com/alxarafe/alixar)
-- [Alxarafe Framework](https://github.com/alxarafe/alxarafe)
 - [Dolibarr ERP/CRM](https://www.dolibarr.org/)

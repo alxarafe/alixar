@@ -1,0 +1,21 @@
+meta {
+  name: 06-delete-product
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}{{apiBase}}/products/{{testProductId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Delete exitoso", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

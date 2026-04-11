@@ -24,7 +24,7 @@ class Invoice
     private bool $paid;          // paye
 
     // Dates
-    private ?DateTimeImmutable $date;         // datef
+    private DateTimeImmutable $date;          // datef
     private ?DateTimeImmutable $dateDue;      // date_lim_reglement
 
     // Totals (calculated from lines)
@@ -42,7 +42,7 @@ class Invoice
 
     // Metadata
     private int $entity;
-    private ?DateTimeImmutable $createdAt;
+    private DateTimeImmutable $createdAt;
 
     /** @var InvoiceLine[] */
     private array $lines = [];
@@ -128,9 +128,18 @@ class Invoice
         $this->paid = false;
     }
 
-    public function isDraft(): bool { return $this->status === InvoiceStatus::Draft; }
-    public function isValidated(): bool { return $this->status === InvoiceStatus::Validated; }
-    public function isPaid(): bool { return $this->paid; }
+    public function isDraft(): bool
+    {
+        return $this->status === InvoiceStatus::Draft;
+    }
+    public function isValidated(): bool
+    {
+        return $this->status === InvoiceStatus::Validated;
+    }
+    public function isPaid(): bool
+    {
+        return $this->paid;
+    }
 
     // ── Hydration ────────────────────────────────────────
 
@@ -140,34 +149,39 @@ class Invoice
      */
     public static function fromArray(array $data, array $lines = []): self
     {
+        $parsedDate = null;
+        if (!empty($data['date'])) {
+            $parsedDate = $data['date'] instanceof DateTimeImmutable ? $data['date'] : (is_numeric($data['date']) ? (new DateTimeImmutable())->setTimestamp((int)$data['date']) : new DateTimeImmutable($data['date']));
+        }
+
         $inv = new self(
-            thirdPartyId: (int) $data['fk_soc'],
-            date: !empty($data['datef']) ? new DateTimeImmutable($data['datef']) : null,
+            thirdPartyId: isset($data['thirdPartyId']) ? (int) $data['thirdPartyId'] : 0,
+            date: $parsedDate,
             type: InvoiceType::from((int) ($data['type'] ?? 0)),
-            id: isset($data['rowid']) ? (int) $data['rowid'] : null,
+            id: isset($data['id']) ? (int) $data['id'] : null,
         );
 
         $inv->ref = $data['ref'] ?? null;
-        $inv->status = InvoiceStatus::from((int) ($data['fk_statut'] ?? 0));
-        $inv->paid = (bool) ($data['paye'] ?? false);
+        $inv->status = InvoiceStatus::from((int) ($data['status'] ?? 0));
+        $inv->paid = (bool) ($data['isPaid'] ?? false);
         $inv->entity = (int) ($data['entity'] ?? 1);
 
-        $inv->totalHt = (float) ($data['total_ht'] ?? 0);
-        $inv->totalVat = (float) ($data['total_tva'] ?? 0);
-        $inv->totalTtc = (float) ($data['total_ttc'] ?? 0);
+        $inv->totalHt = (float) ($data['totalHt'] ?? 0);
+        $inv->totalVat = (float) ($data['totalVat'] ?? 0);
+        $inv->totalTtc = (float) ($data['totalTtc'] ?? 0);
 
-        $inv->paymentTerms = (int) ($data['fk_cond_reglement'] ?? 1);
-        $inv->paymentMode = isset($data['fk_mode_reglement']) ? (int) $data['fk_mode_reglement'] : null;
+        $inv->paymentTerms = (int) ($data['paymentTerms'] ?? 1);
+        $inv->paymentMode = isset($data['paymentMode']) ? (int) $data['paymentMode'] : null;
 
-        if (!empty($data['date_lim_reglement'])) {
-            $inv->dateDue = new DateTimeImmutable($data['date_lim_reglement']);
+        if (!empty($data['dateDue'])) {
+            $inv->dateDue = $data['dateDue'] instanceof DateTimeImmutable ? $data['dateDue'] : (is_numeric($data['dateDue']) ? (new DateTimeImmutable())->setTimestamp((int)$data['dateDue']) : new DateTimeImmutable($data['dateDue']));
         }
 
-        $inv->notePrivate = $data['note_private'] ?? null;
-        $inv->notePublic = $data['note_public'] ?? null;
+        $inv->notePrivate = $data['notePrivate'] ?? null;
+        $inv->notePublic = $data['notePublic'] ?? null;
 
-        if (!empty($data['datec'])) {
-            $inv->createdAt = new DateTimeImmutable($data['datec']);
+        if (!empty($data['createdAt'])) {
+            $inv->createdAt = $data['createdAt'] instanceof DateTimeImmutable ? $data['createdAt'] : (is_numeric($data['createdAt']) ? (new DateTimeImmutable())->setTimestamp((int)$data['createdAt']) : new DateTimeImmutable($data['createdAt']));
         }
 
         $inv->lines = $lines;
@@ -179,47 +193,66 @@ class Invoice
     public function toArray(): array
     {
         return [
-            'rowid' => $this->id,
+            'id' => $this->id,
             'ref' => $this->ref ?? '(PROV)',
             'entity' => $this->entity,
             'type' => $this->type->value,
-            'fk_soc' => $this->thirdPartyId,
-            'datef' => $this->date?->format('Y-m-d'),
-            'date_lim_reglement' => $this->dateDue?->format('Y-m-d'),
-            'fk_statut' => $this->status->value,
-            'paye' => $this->paid ? 1 : 0,
-            'total_ht' => $this->totalHt,
-            'total_tva' => $this->totalVat,
-            'total_ttc' => $this->totalTtc,
-            'fk_cond_reglement' => $this->paymentTerms,
-            'fk_mode_reglement' => $this->paymentMode,
-            'note_private' => $this->notePrivate,
-            'note_public' => $this->notePublic,
+            'thirdPartyId' => $this->thirdPartyId,
+            'date' => $this->date->format('Y-m-d'),
+            'dateDue' => $this->dateDue?->format('Y-m-d'),
+            'status' => $this->status->value,
+            'isPaid' => $this->paid ? 1 : 0,
+            'totalHt' => $this->totalHt,
+            'totalVat' => $this->totalVat,
+            'totalTtc' => $this->totalTtc,
+            'paymentTerms' => $this->paymentTerms,
+            'paymentMode' => $this->paymentMode,
+            'notePrivate' => $this->notePrivate,
+            'notePublic' => $this->notePublic,
+            'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
         ];
-    }
-
-    /** @return array<string, mixed> */
-    public function toApiArray(): array
-    {
-        $data = $this->toArray();
-        $data['id'] = $data['rowid'];
-        $data['lines'] = array_map(fn(InvoiceLine $l) => $l->toApiArray(), $this->lines);
-        return $data;
     }
 
     // ── Getters ──────────────────────────────────────────
 
-    public function getId(): ?int { return $this->id; }
-    public function getRef(): ?string { return $this->ref; }
-    public function getThirdPartyId(): int { return $this->thirdPartyId; }
-    public function getStatus(): InvoiceStatus { return $this->status; }
-    public function getTotalHt(): float { return $this->totalHt; }
-    public function getTotalVat(): float { return $this->totalVat; }
-    public function getTotalTtc(): float { return $this->totalTtc; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+    public function getRef(): ?string
+    {
+        return $this->ref;
+    }
+    public function getThirdPartyId(): int
+    {
+        return $this->thirdPartyId;
+    }
+    public function getStatus(): InvoiceStatus
+    {
+        return $this->status;
+    }
+    public function getTotalHt(): float
+    {
+        return $this->totalHt;
+    }
+    public function getTotalVat(): float
+    {
+        return $this->totalVat;
+    }
+    public function getTotalTtc(): float
+    {
+        return $this->totalTtc;
+    }
     /** @return InvoiceLine[] */
-    public function getLines(): array { return $this->lines; }
+    public function getLines(): array
+    {
+        return $this->lines;
+    }
 
-    public function setId(int $id): void { $this->id = $id; }
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
     public function setLines(array $lines): void
     {
         $this->lines = $lines;
@@ -228,13 +261,29 @@ class Invoice
 
     public function updateFrom(array $data): void
     {
-        if (isset($data['fk_soc'])) { $this->thirdPartyId = (int) $data['fk_soc']; }
-        if (isset($data['type'])) { $this->type = InvoiceType::from((int) $data['type']); }
-        if (isset($data['datef'])) { $this->date = new DateTimeImmutable($data['datef']); }
-        if (isset($data['date_lim_reglement'])) { $this->dateDue = new DateTimeImmutable($data['date_lim_reglement']); }
-        if (isset($data['fk_cond_reglement'])) { $this->paymentTerms = (int) $data['fk_cond_reglement']; }
-        if (isset($data['fk_mode_reglement'])) { $this->paymentMode = (int) $data['fk_mode_reglement']; }
-        if (array_key_exists('note_private', $data)) { $this->notePrivate = $data['note_private']; }
-        if (array_key_exists('note_public', $data)) { $this->notePublic = $data['note_public']; }
+        if (isset($data['thirdPartyId'])) {
+            $this->thirdPartyId = (int) $data['thirdPartyId'];
+        }
+        if (isset($data['type'])) {
+            $this->type = InvoiceType::from((int) $data['type']);
+        }
+        if (isset($data['date'])) {
+            $this->date = is_numeric($data['date']) ? (new DateTimeImmutable())->setTimestamp((int)$data['date']) : new DateTimeImmutable($data['date']);
+        }
+        if (isset($data['dateDue'])) {
+            $this->dateDue = is_numeric($data['dateDue']) ? (new DateTimeImmutable())->setTimestamp((int)$data['dateDue']) : new DateTimeImmutable($data['dateDue']);
+        }
+        if (isset($data['paymentTerms'])) {
+            $this->paymentTerms = (int) $data['paymentTerms'];
+        }
+        if (isset($data['paymentMode'])) {
+            $this->paymentMode = (int) $data['paymentMode'];
+        }
+        if (array_key_exists('notePrivate', $data)) {
+            $this->notePrivate = $data['notePrivate'];
+        }
+        if (array_key_exists('notePublic', $data)) {
+            $this->notePublic = $data['notePublic'];
+        }
     }
 }

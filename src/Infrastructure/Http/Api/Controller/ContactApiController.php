@@ -20,9 +20,36 @@ use Flight;
  */
 class ContactApiController
 {
+    use \App\Infrastructure\DolibarrMappingTrait;
+
+    private const API_MAP = [
+        'thirdPartyId' => 'socid',
+        'jobTitle' => 'poste',
+        'phone' => 'phone_pro',
+        'phonePerso' => 'phone_perso',
+        'phoneMobile' => 'phone_mobile',
+        'countryId' => 'fk_pays',
+        'address' => 'address',
+        'zip' => 'zip',
+        'town' => 'town',
+        'email' => 'email',
+        'notePrivate' => 'note_private',
+        'notePublic' => 'note_public',
+        'isPrivate' => 'priv',
+    ];
+
     public function __construct(
         private ContactRepository $repository,
-    ) {}
+        private ?\App\Domain\Category\ContactCategoryRepository $categoryRepository = null,
+    ) {
+    }
+
+    private function mapResponse(Contact $contact): array
+    {
+        $data = $this->mapToDolibarr($contact->toArray(), self::API_MAP);
+        $data['status'] = "1";
+        return $data;
+    }
 
     public function list(): void
     {
@@ -39,7 +66,7 @@ class ContactApiController
 
         $results = $this->repository->findAll($filters, $limit, $offset, $sortField, $sortOrder);
 
-        Flight::json(array_map(fn(Contact $c) => $c->toApiArray(), $results));
+        Flight::json(array_map(fn(Contact $c) => $this->mapResponse($c), $results));
     }
 
     public function show(int $id): void
@@ -50,20 +77,25 @@ class ContactApiController
             throw ContactNotFoundException::withId($id);
         }
 
-        Flight::json($contact->toApiArray());
+        Flight::json($this->mapResponse($contact));
     }
 
     public function create(): void
     {
-        $data = json_decode(file_get_contents('php://input'), true) ?? [];
+        $payload = json_decode((string) file_get_contents('php://input'), true) ?? [];
+        // Map alternative valid fields that might be passed incorrectly in tests
+        if (isset($payload['fk_soc']) && !isset($payload['socid'])) {
+            $payload['socid'] = $payload['fk_soc'];
+        }
+        $cleanData = $this->mapToClean($payload, self::API_MAP);
 
         $contact = new Contact(
-            lastname: $data['lastname'] ?? '',
-            firstname: $data['firstname'] ?? null,
-            thirdPartyId: isset($data['fk_soc']) && $data['fk_soc'] ? (int) $data['fk_soc'] : null,
+            lastname: (string) ($cleanData['lastname'] ?? ''),
+            firstname: isset($cleanData['firstname']) ? (string) $cleanData['firstname'] : null,
+            thirdPartyId: isset($cleanData['thirdPartyId']) && $cleanData['thirdPartyId'] ? (int) $cleanData['thirdPartyId'] : null,
         );
 
-        $contact->updateFrom($data);
+        $contact->updateFrom($cleanData);
         $this->repository->save($contact);
 
         // Dolibarr devuelve el ID como entero
@@ -78,11 +110,16 @@ class ContactApiController
             throw ContactNotFoundException::withId($id);
         }
 
-        $data = json_decode(file_get_contents('php://input'), true) ?? [];
-        $contact->updateFrom($data);
+        $payload = json_decode((string) file_get_contents('php://input'), true) ?? [];
+        if (isset($payload['fk_soc']) && !isset($payload['socid'])) {
+            $payload['socid'] = $payload['fk_soc'];
+        }
+        $cleanData = $this->mapToClean($payload, self::API_MAP);
+        
+        $contact->updateFrom($cleanData);
         $this->repository->save($contact);
 
-        Flight::json($contact->toApiArray());
+        Flight::json($this->mapResponse($contact));
     }
 
     public function destroy(int $id): void
@@ -101,5 +138,62 @@ class ContactApiController
                 'message' => 'Object deleted',
             ],
         ]);
+    }
+
+    // ── Extras & Utilities ──────────────────────────
+
+    public function getByEmail(string $email): void
+    {
+        $contact = $this->repository->findByEmail($email);
+        if ($contact === null) {
+            throw ContactNotFoundException::withEmail($email);
+        }
+
+        Flight::json($this->mapResponse($contact));
+    }
+
+    public function createUser(int $id): void
+    {
+        Flight::json([
+            'error' => [
+                'code' => 501,
+                'message' => 'User orchestration is pending Phase 3 rollout in Hexagonal Architecture',
+            ],
+        ], 501);
+    }
+
+    // ── Categories ──────────────────────────────────────
+
+    public function getCategories(int $id): void
+    {
+        $contact = $this->repository->findById($id);
+        if ($contact === null) throw ContactNotFoundException::withId($id);
+        if (!$this->categoryRepository) throw new \RuntimeException('CategoryRepository is not configured.');
+
+        $categories = $this->categoryRepository->findByContactId($id);
+        Flight::json(array_map(fn($cat) => $this->mapToDolibarr(
+            $cat->toArray(),
+            \App\Infrastructure\Persistence\Mysql\Category\MysqlContactCategoryRepository::CATEGORY_COLUMN_MAP
+        ), $categories));
+    }
+
+    public function putCategory(int $id, int $categoryId): void
+    {
+        $contact = $this->repository->findById($id);
+        if ($contact === null) throw ContactNotFoundException::withId($id);
+        if (!$this->categoryRepository) throw new \RuntimeException('CategoryRepository is not configured.');
+
+        $this->categoryRepository->linkCategory($id, $categoryId);
+        Flight::json($this->mapResponse($contact));
+    }
+
+    public function deleteCategory(int $id, int $categoryId): void
+    {
+        $contact = $this->repository->findById($id);
+        if ($contact === null) throw ContactNotFoundException::withId($id);
+        if (!$this->categoryRepository) throw new \RuntimeException('CategoryRepository is not configured.');
+
+        $this->categoryRepository->unlinkCategory($id, $categoryId);
+        Flight::json($this->mapResponse($contact));
     }
 }

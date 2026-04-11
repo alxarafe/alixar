@@ -1,0 +1,195 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Infrastructure\Persistence\Mysql;
+
+use App\Domain\Order\Order;
+use App\Domain\Order\OrderRepository;
+use App\Infrastructure\DolibarrMappingTrait;
+use PDO;
+
+class MysqlOrderRepository implements OrderRepository
+{
+    use DolibarrMappingTrait;
+
+    private string $table;
+
+    // Dolibarr's 'llx_commande' uses these mapping columns
+    private const COLUMN_MAP = [
+        'id' => 'rowid',
+        'thirdPartyId' => 'fk_soc',
+        'ref' => 'ref',
+        'refClient' => 'ref_client',
+        'refExt' => 'ref_ext',
+        'notePrivate' => 'note_private',
+        'notePublic' => 'note_public',
+        'totalHt' => 'total_ht',
+        'totalTva' => 'total_tva',
+        'totalTtc' => 'total_ttc',
+        'status' => 'fk_statut',
+        'createdAt' => 'date_creation',
+        'updatedAt' => 'tms',
+    ];
+
+    public function __construct(private PDO $pdo, string $prefix = 'llx_')
+    {
+        $this->table = $prefix . 'commande';
+    }
+
+    /**
+     * @return array<Order>
+     */
+    public function findAll(int $limit = 100, int $offset = 0, string $sortField = 'rowid', string $sortOrder = 'ASC'): array
+    {
+        $allowedSortFields = array_values(self::COLUMN_MAP);
+        if (!in_array($sortField, $allowedSortFields, true)) {
+            $sortField = 'rowid';
+        }
+
+        $sortOrder = strtoupper($sortOrder) === 'DESC' ? 'DESC' : 'ASC';
+
+        $sql = sprintf('SELECT * FROM %s ORDER BY %s %s LIMIT %d OFFSET %d', $this->table, $sortField, $sortOrder, $limit, $offset);
+        $stmt = $this->pdo->query($sql);
+        
+        if (!$stmt) return [];
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+
+        $orders = [];
+        foreach ($rows as $row) {
+            $orders[] = Order::fromArray($this->mapToClean($row, self::COLUMN_MAP));
+        }
+
+        return $orders;
+    }
+
+    /**
+     * @param array<string, mixed> $criteria
+     */
+    public function count(array $criteria = []): int
+    {
+        $stmt = $this->pdo->query('SELECT COUNT(*) FROM ' . $this->table);
+        if (!$stmt) return 0;
+        return (int) $stmt->fetchColumn();
+    }
+
+    public function findById(int $id): ?Order
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE rowid = :id');
+        $stmt->execute(['id' => $id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) return null;
+
+        return Order::fromArray($this->mapToClean($row, self::COLUMN_MAP));
+    }
+
+    public function findByRef(string $ref): ?Order
+    {
+        $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE ref = :ref');
+        $stmt->execute(['ref' => $ref]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$row) return null;
+
+        return Order::fromArray($this->mapToClean($row, self::COLUMN_MAP));
+    }
+
+    public function save(Order $order): void
+    {
+        $dbData = $this->mapToDolibarr($order->toArray(), self::COLUMN_MAP);
+        unset($dbData['tms']);
+
+        if ($order->getId() === null) {
+            unset($dbData['rowid']);
+            $dbData['entity'] = 1;
+
+            $columns = array_keys($dbData);
+            $placeholders = array_map(fn($c) => ':' . $c, $columns);
+
+            $sql = sprintf('INSERT INTO %s (%s) VALUES (%s)', $this->table, implode(', ', $columns), implode(', ', $placeholders));
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($dbData);
+            
+            $order->setId((int) $this->pdo->lastInsertId());
+        } else {
+            $id = $dbData['rowid'];
+            unset($dbData['rowid']);
+            unset($dbData['date_creation']);
+
+            $sets = array_map(fn($c) => "{$c} = :{$c}", array_keys($dbData));
+
+            $sql = sprintf('UPDATE %s SET %s WHERE rowid = :id', $this->table, implode(', ', $sets));
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute(['id' => $id] + $dbData);
+        }
+    }
+
+    public function delete(int $id): void
+    {
+        $stmt = $this->pdo->prepare('DELETE FROM ' . $this->table . ' WHERE rowid = :id');
+        $stmt->execute(['id' => $id]);
+    }
+
+    // --- Lines (commandedet) ---
+    public function getLines(int $orderId): array
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM {$this->table}det WHERE fk_commande = :id");
+        $stmt->execute(['id' => $orderId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
+
+    public function addLine(int $orderId, array $data): void
+    {
+        $data['fk_commande'] = $orderId;
+        
+        if (!isset($data['qty'])) $data['qty'] = 1;
+        if (!isset($data['tva_tx'])) $data['tva_tx'] = 0;
+        
+        $columns = array_keys($data);
+        $placeholders = array_map(fn($c) => ':' . $c, $columns);
+        $sql = sprintf("INSERT INTO {$this->table}det (%s) VALUES (%s)", implode(', ', $columns), implode(', ', $placeholders));
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($data);
+    }
+
+    public function updateLine(int $orderId, int $lineId, array $data): void
+    {
+        unset($data['rowid']);
+        unset($data['fk_commande']);
+
+        $sets = array_map(fn($c) => "{$c} = :{$c}", array_keys($data));
+        $sql = sprintf("UPDATE {$this->table}det SET %s WHERE rowid = :lineId AND fk_commande = :orderId", implode(', ', $sets));
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['lineId' => $lineId, 'orderId' => $orderId] + $data);
+    }
+
+    public function deleteLine(int $orderId, int $lineId): void
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM {$this->table}det WHERE rowid = :lineId AND fk_commande = :orderId");
+        $stmt->execute(['lineId' => $lineId, 'orderId' => $orderId]);
+    }
+
+    // --- Contacts ---
+    public function getContacts(int $orderId, string $type = ''): array
+    {
+        $sql = "SELECT * FROM llx_element_contact WHERE element_id = :id AND fk_c_type_contact IN (SELECT rowid FROM llx_c_type_contact WHERE element = 'commande')";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['id' => $orderId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
+    }
+
+    public function addContact(int $orderId, int $contactId, string $type): void
+    {
+        $stmt = $this->pdo->prepare("INSERT INTO llx_element_contact (element_id, fk_socpeople, fk_c_type_contact) VALUES (:id, :contact, (SELECT rowid FROM llx_c_type_contact WHERE element='commande' AND source='external' LIMIT 1))");
+        $stmt->execute(['id' => $orderId, 'contact' => $contactId]);
+    }
+
+    public function deleteContact(int $orderId, int $contactId, string $type): void
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM llx_element_contact WHERE element_id = :id AND fk_socpeople = :contact");
+        $stmt->execute(['id' => $orderId, 'contact' => $contactId]);
+    }
+}

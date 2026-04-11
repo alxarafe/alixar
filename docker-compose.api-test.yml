@@ -45,11 +45,17 @@ services:
   # Usa la carpeta .dolibarr/ que es un git clone del repo oficial.
   # `./bin/api_compare.sh update` hace git pull para actualizar.
   apitest_dolibarr_php:
-    image: php:8.3-fpm
     container_name: apitest_dolibarr_php
     restart: "no"
+    build:
+      context: .
+      dockerfile: .docker/php/Dockerfile
+      args:
+        - PHP_VERSION=8.3
+        - USER_ID=${USER_ID:-1000}
+        - GROUP_ID=${GROUP_ID:-1000}
     volumes:
-      - "../dolibarr/htdocs:/var/www/html:rw"
+      - "${DOLIBARR_PATH:-../dolibarr}/htdocs:/var/www/html:rw"
       - "apitest_doli_docs:/var/www/documents"
     environment:
       DOLI_DB_HOST: apitest_db
@@ -66,7 +72,7 @@ services:
     ports:
       - "8090:80"
     volumes:
-      - "../dolibarr/htdocs:/var/www/html:ro"
+      - "${DOLIBARR_PATH:-../dolibarr}/htdocs:/var/www/html:ro"
       - "./.docker/nginx/dolibarr.conf:/etc/nginx/conf.d/default.conf:ro"
     depends_on:
       - apitest_dolibarr_php
@@ -102,7 +108,7 @@ services:
       - "8091:80"
     volumes:
       - ".:/var/www/html:rw"
-      - "./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf"
+      - "./.docker/nginx/apitest.conf:/etc/nginx/conf.d/default.conf"
     depends_on:
       - apitest_alixar_php
     networks:

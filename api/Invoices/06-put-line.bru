@@ -1,0 +1,33 @@
+meta {
+  name: 06 - Actualizar Linea
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{baseUrl}}{{apiBase}}/invoices/{{testInvoiceId}}/lines/{{testInvoiceLineId}}
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "desc": "Servicio de Consultoría Actualizado",
+    "qty": "3"
+  }
+}
+
+tests {
+  test("Línea actualizada devuelve la factura re-calculada", function() {
+    expect(res.getStatus()).to.equal(200);
+    const data = res.getBody();
+    expect(data.lines).to.be.an('array');
+    expect(data.lines[0].desc).to.equal("Servicio de Consultoría Actualizado");
+    expect(Number(data.lines[0].qty || data.lines[0].qty)).to.equal(3);
+  });
+}

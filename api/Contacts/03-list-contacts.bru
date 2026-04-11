@@ -1,0 +1,53 @@
+meta {
+  name: 03 - Listar Contactos
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/contacts?sortfield=t.rowid&sortorder=ASC&limit=5&page=0
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Accept: application/json
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Devuelve un array", function() {
+    const body = res.getBody();
+    expect(Array.isArray(body)).to.be.true;
+  });
+
+  test("Cada elemento tiene 'id' o 'rowid'", function() {
+    const body = res.getBody();
+    body.forEach(item => {
+      const hasId = item.id !== undefined || item.rowid !== undefined;
+      expect(hasId).to.be.true;
+    });
+  });
+
+  test("Cada elemento tiene 'lastname'", function() {
+    const body = res.getBody();
+    body.forEach(item => {
+      expect(item).to.have.property("lastname");
+    });
+  });
+
+  test("Respeta el límite", function() {
+    const body = res.getBody();
+    expect(body.length).to.be.at.most(5);
+  });
+
+  test("El contacto creado está en la lista", function() {
+    const body = res.getBody();
+    const found = body.some(item => item.lastname === "BrunoContact");
+    expect(found).to.be.true;
+  });
+}

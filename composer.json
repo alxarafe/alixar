@@ -18,16 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/",
-            "Modules\\": "Modules/"
+            "App\\": "src/"
         }
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "php scripts/publish_theme_assets.php"
-        ],
-        "post-update-cmd": [
-            "php scripts/publish_theme_assets.php"
-        ]
     }
 }

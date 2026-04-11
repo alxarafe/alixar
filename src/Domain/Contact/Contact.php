@@ -9,45 +9,72 @@ use DateTimeImmutable;
 /**
  * Contact — Persona física asociada (o no) a un Tercero.
  *
- * Tabla Dolibarr: `socpeople`.
  * Relación: Contact N:1 ThirdParty (vía fk_soc).
  * Un contacto puede existir SIN tercero (contacto independiente).
+ *
+ * @dolibarr-table llx_socpeople
+ * @dolibarr-note  "socpeople" = "société people", mezcla franco-inglesa. Clean name: "contacts"
  */
 class Contact
 {
+    /** @dolibarr-column rowid — Dolibarr PK universal */
     private ?int $id;
+
+    /** @dolibarr-column lastname — ✅ OK */
     private string $lastname;
+
+    /** @dolibarr-column firstname — ✅ OK */
     private ?string $firstname;
+
+    /** @dolibarr-column civility — ✅ OK (stored as code: 'MR', 'MME', etc.) */
     private ?string $civility;
-    private ?int $thirdPartyId;  // fk_soc
+
+    /** @dolibarr-column fk_soc — FK a llx_societe. Clean: third_party_id */
+    private ?int $thirdPartyId;
 
     // Address
+    /** @dolibarr-column address — ✅ OK */
     private ?string $address;
+    /** @dolibarr-column zip — ✅ OK */
     private ?string $zip;
+    /** @dolibarr-column town — ✅ OK */
     private ?string $town;
+    /** @dolibarr-column fk_pays — French: "pays" = country. Clean: country_id */
     private ?int $countryId;
 
     // Contact info
+    /** @dolibarr-column phone — DB: "phone", pero API: "phone_pro". Inconsistencia DB↔API */
     private ?string $phone;
+    /** @dolibarr-column phone_perso — ✅ OK (teléfono personal) */
     private ?string $phonePerso;
+    /** @dolibarr-column phone_mobile — ✅ OK */
     private ?string $phoneMobile;
+    /** @dolibarr-column fax — ✅ OK (obsoleto pero mantenido por compat.) */
     private ?string $fax;
+    /** @dolibarr-column email — ✅ OK */
     private ?string $email;
+    /** @dolibarr-column url — ✅ OK */
     private ?string $url;
 
     // Job
-    private ?string $poste; // Cargo / puesto
+    /** @dolibarr-column poste — French: "poste" = job position/title. Clean: job_title */
+    private ?string $jobTitle;
 
     // Notes
+    /** @dolibarr-column note_private — ✅ OK */
     private ?string $notePrivate;
+    /** @dolibarr-column note_public — ✅ OK */
     private ?string $notePublic;
 
     // Privacy
-    private bool $priv;
+    /** @dolibarr-column priv — Abbreviation: "privé" = private. Clean: is_private */
+    private bool $isPrivate;
 
     // Metadata
+    /** @dolibarr-column entity — Multi-tenant discriminator. ✅ OK */
     private int $entity;
-    private ?DateTimeImmutable $createdAt;
+    /** @dolibarr-column datec — Abbreviation: "date création". Clean: created_at */
+    private DateTimeImmutable $createdAt;
 
     public function __construct(
         string $lastname,
@@ -65,7 +92,7 @@ class Contact
         $this->thirdPartyId = $thirdPartyId;
         $this->civility = null;
         $this->entity = 1;
-        $this->priv = false;
+        $this->isPrivate = false;
         $this->createdAt = new DateTimeImmutable();
 
         $this->address = null;
@@ -78,51 +105,58 @@ class Contact
         $this->fax = null;
         $this->email = null;
         $this->url = null;
-        $this->poste = null;
+        $this->jobTitle = null;
         $this->notePrivate = null;
         $this->notePublic = null;
+        $this->createdAt = new DateTimeImmutable();
     }
 
+    // ── Hydration from Repository ────────────────────────────
+
     /**
-     * @param array<string, mixed> $data Row from `socpeople` table.
+     * @param array<string, mixed> $data Array with clean domain names.
      */
     public static function fromArray(array $data): self
     {
         $c = new self(
-            lastname: $data['lastname'] ?? '',
-            firstname: $data['firstname'] ?? null,
-            thirdPartyId: isset($data['fk_soc']) && $data['fk_soc'] ? (int) $data['fk_soc'] : null,
-            id: isset($data['id']) ? (int) $data['id'] : (isset($data['rowid']) ? (int) $data['rowid'] : null),
+            lastname: (string) ($data['lastname'] ?? ''),
+            firstname: isset($data['firstname']) ? (string) $data['firstname'] : null,
+            thirdPartyId: isset($data['thirdPartyId']) && $data['thirdPartyId'] ? (int) $data['thirdPartyId'] : null,
+            id: isset($data['id']) ? (int) $data['id'] : null,
         );
 
-        $c->civility = $data['civility'] ?? null;
+        $c->civility = isset($data['civility']) ? (string) $data['civility'] : null;
         $c->entity = (int) ($data['entity'] ?? 1);
-        $c->priv = (bool) ($data['priv'] ?? false);
+        $c->isPrivate = (bool) ($data['isPrivate'] ?? false);
 
-        $c->address = $data['address'] ?? null;
-        $c->zip = $data['zip'] ?? null;
-        $c->town = $data['town'] ?? null;
-        $c->countryId = isset($data['fk_pays']) ? (int) $data['fk_pays'] : null;
+        $c->address = isset($data['address']) ? (string) $data['address'] : null;
+        $c->zip = isset($data['zip']) ? (string) $data['zip'] : null;
+        $c->town = isset($data['town']) ? (string) $data['town'] : null;
+        $c->countryId = isset($data['countryId']) ? (int) $data['countryId'] : null;
 
-        $c->phone = $data['phone'] ?? null;
-        $c->phonePerso = $data['phone_perso'] ?? null;
-        $c->phoneMobile = $data['phone_mobile'] ?? null;
-        $c->fax = $data['fax'] ?? null;
-        $c->email = $data['email'] ?? null;
-        $c->url = $data['url'] ?? null;
-        $c->poste = $data['poste'] ?? null;
+        $c->phone = isset($data['phone']) ? (string) $data['phone'] : null;
+        $c->phonePerso = isset($data['phonePerso']) ? (string) $data['phonePerso'] : null;
+        $c->phoneMobile = isset($data['phoneMobile']) ? (string) $data['phoneMobile'] : null;
+        $c->fax = isset($data['fax']) ? (string) $data['fax'] : null;
+        $c->email = isset($data['email']) ? (string) $data['email'] : null;
+        $c->url = isset($data['url']) ? (string) $data['url'] : null;
+        $c->jobTitle = isset($data['jobTitle']) ? (string) $data['jobTitle'] : null;
 
-        $c->notePrivate = $data['note_private'] ?? null;
-        $c->notePublic = $data['note_public'] ?? null;
+        $c->notePrivate = isset($data['notePrivate']) ? (string) $data['notePrivate'] : null;
+        $c->notePublic = isset($data['notePublic']) ? (string) $data['notePublic'] : null;
 
-        if (!empty($data['datec'])) {
-            $c->createdAt = new DateTimeImmutable($data['datec']);
+        if (!empty($data['createdAt'])) {
+            $c->createdAt = $data['createdAt'] instanceof DateTimeImmutable
+                ? $data['createdAt']
+                : new DateTimeImmutable((string) $data['createdAt']);
         }
 
         return $c;
     }
 
     /**
+     * Serialize to clean domain array.
+     *
      * @return array<string, mixed>
      */
     public function toArray(): array
@@ -132,59 +166,107 @@ class Contact
             'lastname' => $this->lastname,
             'firstname' => $this->firstname,
             'civility' => $this->civility,
-            'fk_soc' => $this->thirdPartyId,
+            'thirdPartyId' => $this->thirdPartyId,
             'entity' => $this->entity,
-            'priv' => $this->priv ? 1 : 0,
+            'isPrivate' => $this->isPrivate ? 1 : 0,
             'address' => $this->address,
             'zip' => $this->zip,
             'town' => $this->town,
-            'fk_pays' => $this->countryId,
+            'countryId' => $this->countryId,
             'phone' => $this->phone,
-            'phone_perso' => $this->phonePerso,
-            'phone_mobile' => $this->phoneMobile,
+            'phonePerso' => $this->phonePerso,
+            'phoneMobile' => $this->phoneMobile,
             'fax' => $this->fax,
             'email' => $this->email,
             'url' => $this->url,
-            'poste' => $this->poste,
-            'note_private' => $this->notePrivate,
-            'note_public' => $this->notePublic,
-            'datec' => $this->createdAt?->format('Y-m-d H:i:s'),
+            'jobTitle' => $this->jobTitle,
+            'notePrivate' => $this->notePrivate,
+            'notePublic' => $this->notePublic,
+            'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
         ];
     }
 
-    /**
-     * Dolibarr-API-compatible response format.
-     * @return array<string, mixed>
-     */
-    public function toApiArray(): array
+    public function getId(): ?int
     {
-        return $this->toArray();
+        return $this->id;
+    }
+    public function getLastname(): string
+    {
+        return $this->lastname;
+    }
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+    public function getThirdPartyId(): ?int
+    {
+        return $this->thirdPartyId;
+    }
+    public function getEmail(): ?string
+    {
+        return $this->email;
     }
 
-    public function getId(): ?int { return $this->id; }
-    public function getLastname(): string { return $this->lastname; }
-    public function getFirstname(): ?string { return $this->firstname; }
-    public function getThirdPartyId(): ?int { return $this->thirdPartyId; }
-    public function getEmail(): ?string { return $this->email; }
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
 
-    public function setId(int $id): void { $this->id = $id; }
-
+    /**
+     * @param array<string, mixed> $data
+     */
     public function updateFrom(array $data): void
     {
-        if (isset($data['lastname'])) { $this->lastname = $data['lastname']; }
-        if (array_key_exists('firstname', $data)) { $this->firstname = $data['firstname']; }
-        if (array_key_exists('civility', $data)) { $this->civility = $data['civility']; }
-        if (array_key_exists('fk_soc', $data)) { $this->thirdPartyId = $data['fk_soc'] ? (int) $data['fk_soc'] : null; }
-        if (array_key_exists('address', $data)) { $this->address = $data['address']; }
-        if (array_key_exists('zip', $data)) { $this->zip = $data['zip']; }
-        if (array_key_exists('town', $data)) { $this->town = $data['town']; }
-        if (array_key_exists('phone', $data)) { $this->phone = $data['phone']; }
-        if (array_key_exists('phone_perso', $data)) { $this->phonePerso = $data['phone_perso']; }
-        if (array_key_exists('phone_mobile', $data)) { $this->phoneMobile = $data['phone_mobile']; }
-        if (array_key_exists('email', $data)) { $this->email = $data['email']; }
-        if (array_key_exists('url', $data)) { $this->url = $data['url']; }
-        if (array_key_exists('poste', $data)) { $this->poste = $data['poste']; }
-        if (array_key_exists('note_private', $data)) { $this->notePrivate = $data['note_private']; }
-        if (array_key_exists('note_public', $data)) { $this->notePublic = $data['note_public']; }
+        if (array_key_exists('lastname', $data)) {
+            $this->lastname = (string) $data['lastname'];
+        }
+        if (array_key_exists('firstname', $data)) {
+            $this->firstname = $data['firstname'] === null ? null : (string) $data['firstname'];
+        }
+        if (array_key_exists('civility', $data)) {
+            $this->civility = $data['civility'] === null ? null : (string) $data['civility'];
+        }
+        if (array_key_exists('thirdPartyId', $data)) {
+            $this->thirdPartyId = $data['thirdPartyId'] ? (int) $data['thirdPartyId'] : null;
+        }
+        if (array_key_exists('address', $data)) {
+            $this->address = $data['address'] === null ? null : (string) $data['address'];
+        }
+        if (array_key_exists('zip', $data)) {
+            $this->zip = $data['zip'] === null ? null : (string) $data['zip'];
+        }
+        if (array_key_exists('town', $data)) {
+            $this->town = $data['town'] === null ? null : (string) $data['town'];
+        }
+        if (array_key_exists('phone', $data)) {
+            $this->phone = $data['phone'] === null ? null : (string) $data['phone'];
+        }
+        if (array_key_exists('phonePerso', $data)) {
+            $this->phonePerso = $data['phonePerso'] === null ? null : (string) $data['phonePerso'];
+        }
+        if (array_key_exists('phoneMobile', $data)) {
+            $this->phoneMobile = $data['phoneMobile'] === null ? null : (string) $data['phoneMobile'];
+        }
+        if (array_key_exists('email', $data)) {
+            $this->email = $data['email'] === null ? null : (string) $data['email'];
+        }
+        if (array_key_exists('url', $data)) {
+            $this->url = $data['url'] === null ? null : (string) $data['url'];
+        }
+        if (array_key_exists('jobTitle', $data)) {
+            $this->jobTitle = $data['jobTitle'] === null ? null : (string) $data['jobTitle'];
+        }
+        if (array_key_exists('notePrivate', $data)) {
+            $this->notePrivate = $data['notePrivate'] === null ? null : (string) $data['notePrivate'];
+        }
+        if (array_key_exists('notePublic', $data)) {
+            $this->notePublic = $data['notePublic'] === null ? null : (string) $data['notePublic'];
+        }
+        if (array_key_exists('countryId', $data)) {
+            $this->countryId = $data['countryId'] ? (int) $data['countryId'] : null;
+        }
+        if (array_key_exists('isPrivate', $data)) {
+            $this->isPrivate = (bool) $data['isPrivate'];
+        }
     }
 }

@@ -7,6 +7,8 @@ namespace App\Domain\Invoice;
 interface InvoiceRepository
 {
     public function findById(int $id): ?Invoice;
+    public function findByRef(string $ref): ?Invoice;
+    public function findByRefExt(string $refExt): ?Invoice;
 
     public function save(Invoice $invoice): void;
 
@@ -28,6 +30,8 @@ interface InvoiceRepository
 
     /** @return InvoiceLine[] */
     public function findLinesByInvoiceId(int $invoiceId): array;
+
+    public function findLineById(int $id): ?InvoiceLine;
 
     public function saveLine(InvoiceLine $line): void;
 

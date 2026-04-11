@@ -1,0 +1,25 @@
+meta {
+  name: 08h-get-representatives
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/thirdparties/{{testThirdPartyId}}/representatives
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Respuesta es un array", function() {
+    expect(res.getBody()).to.be.an('array');
+  });
+}

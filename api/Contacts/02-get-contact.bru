@@ -1,0 +1,66 @@
+meta {
+  name: 02 - Obtener Contacto por ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/contacts/{{testContactId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Accept: application/json
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Tiene campo 'id'", function() {
+    const body = res.getBody();
+    const hasId = body.id !== undefined || body.rowid !== undefined;
+    expect(hasId).to.be.true;
+  });
+
+  test("Apellido es 'BrunoContact'", function() {
+    const body = res.getBody();
+    expect(body.lastname).to.equal("BrunoContact");
+  });
+
+  test("Nombre es 'Test'", function() {
+    const body = res.getBody();
+    expect(body.firstname).to.equal("Test");
+  });
+
+  test("Tiene campo 'email'", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("email");
+    expect(body.email).to.equal("contact@brunotest.es");
+  });
+
+  test("Tiene campo 'address'", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("address");
+  });
+
+  test("Tiene campo 'town'", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("town");
+    expect(body.town).to.equal("Madrid");
+  });
+
+  test("Tiene campo 'phone_pro'", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("phone_pro");
+  });
+
+  test("Tiene campo 'status'", function() {
+    const body = res.getBody();
+    const hasStatus = body.status !== undefined || body.statut !== undefined;
+    expect(hasStatus).to.be.true;
+  });
+}

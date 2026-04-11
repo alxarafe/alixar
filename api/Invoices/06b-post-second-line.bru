@@ -1,0 +1,35 @@
+meta {
+  name: 06b - Añadir linea a factura
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}{{apiBase}}/invoices/{{testInvoiceId}}/lines
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "desc": "Línea de Mantenimiento",
+    "subprice": "50.00",
+    "qty": "1",
+    "tva_tx": "21.000",
+    "remise_percent": "0"
+  }
+}
+
+tests {
+  test("Segunda línea creada exitosamente", function() {
+    expect(res.getStatus()).to.equal(200);
+    const body = res.getBody();
+    const id = typeof body === 'object' ? (body.id || body) : body;
+    expect(Number(id)).to.be.above(0);
+  });
+}

@@ -15,6 +15,29 @@ use PDO;
  */
 class MysqlThirdPartyRepository implements ThirdPartyRepository
 {
+    use \App\Infrastructure\DolibarrMappingTrait;
+
+    private const COLUMN_MAP = [
+        'id' => 'rowid',
+        'name' => 'nom',
+        'nameAlias' => 'name_alias',
+        'type' => 'client',
+        'isSupplier' => 'fournisseur',
+        'customerCode' => 'code_client',
+        'supplierCode' => 'code_fournisseur',
+        'address' => 'address',
+        'zip' => 'zip',
+        'town' => 'town',
+        'countryId' => 'fk_pays',
+        'phone' => 'phone',
+        'email' => 'email',
+        'url' => 'url',
+        'vatNumber' => 'tva_intra',
+        'nif' => 'siren',
+        'notePrivate' => 'note_private',
+        'notePublic' => 'note_public',
+        'createdAt' => 'datec',
+    ];
     private string $table;
 
     public function __construct(
@@ -32,17 +55,19 @@ class MysqlThirdPartyRepository implements ThirdPartyRepository
         $stmt->execute(['id' => $id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $row ? ThirdParty::fromArray($row) : null;
+        return $row ? ThirdParty::fromArray($this->mapToClean($row, self::COLUMN_MAP)) : null;
     }
 
     public function save(ThirdParty $thirdParty): void
     {
         $data = $thirdParty->toArray();
+        // Translate clean domain format into Dolibarr DB columns BEFORE generating SQL
+        $dbData = $this->mapToDolibarr($data, self::COLUMN_MAP);
 
         if ($thirdParty->getId() === null) {
             // INSERT
-            unset($data['rowid']);
-            $columns = array_keys($data);
+            unset($dbData['rowid']);
+            $columns = array_keys($dbData);
             $placeholders = array_map(fn($c) => ':' . $c, $columns);
 
             $sql = sprintf(
@@ -53,13 +78,13 @@ class MysqlThirdPartyRepository implements ThirdPartyRepository
             );
 
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($data);
+            $stmt->execute($dbData);
             $thirdParty->setId((int) $this->pdo->lastInsertId());
         } else {
             // UPDATE
-            $id = $data['rowid'];
-            unset($data['rowid']);
-            $sets = array_map(fn($c) => "{$c} = :{$c}", array_keys($data));
+            $id = $dbData['rowid'];
+            unset($dbData['rowid']);
+            $sets = array_map(fn($c) => "{$c} = :{$c}", array_keys($dbData));
 
             $sql = sprintf(
                 'UPDATE %s SET %s WHERE rowid = :rowid',
@@ -67,9 +92,9 @@ class MysqlThirdPartyRepository implements ThirdPartyRepository
                 implode(', ', $sets)
             );
 
-            $data['rowid'] = $id;
+            $dbData['rowid'] = $id;
             $stmt = $this->pdo->prepare($sql);
-            $stmt->execute($data);
+            $stmt->execute($dbData);
         }
     }
 
@@ -128,7 +153,7 @@ class MysqlThirdPartyRepository implements ThirdPartyRepository
         $stmt->execute($params);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        return array_map(fn(array $row) => ThirdParty::fromArray($row), $rows);
+        return array_map(fn(array $row) => ThirdParty::fromArray($this->mapToClean($row, self::COLUMN_MAP)), $rows);
     }
 
     /**
@@ -146,7 +171,7 @@ class MysqlThirdPartyRepository implements ThirdPartyRepository
         $stmt->execute(['email' => $email]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $row ? ThirdParty::fromArray($row) : null;
+        return $row ? ThirdParty::fromArray($this->mapToClean($row, self::COLUMN_MAP)) : null;
     }
 
     public function findByVatNumber(string $vatNumber): ?ThirdParty
@@ -155,6 +180,6 @@ class MysqlThirdPartyRepository implements ThirdPartyRepository
         $stmt->execute(['vat' => $vatNumber]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        return $row ? ThirdParty::fromArray($row) : null;
+        return $row ? ThirdParty::fromArray($this->mapToClean($row, self::COLUMN_MAP)) : null;
     }
 }
