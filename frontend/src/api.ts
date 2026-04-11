@@ -117,33 +117,48 @@ class ApiService {
   }
 
   // --- API Methods ---
-  
+  // --- Third Parties ---
   getThirdParties(): Promise<ThirdParty[]> {
     return this.request<ThirdParty[]>('/thirdparties');
   }
-
+  createThirdParty(data: Partial<ThirdParty>): Promise<number> {
+    return this.request<number>('/thirdparties', 'POST', data);
+  }
   updateThirdParty(id: number, data: Partial<ThirdParty>): Promise<ThirdParty> {
     return this.request<ThirdParty>(`/thirdparties/${id}`, 'PUT', data);
   }
 
-  getBankAccounts(): Promise<BankAccount[]> {
-    return this.request<BankAccount[]>('/bankaccounts');
-  }
-  
-  getProjects(): Promise<Project[]> {
-    return this.request<Project[]>('/projects');
-  }
-
-  getEvents(): Promise<CRMEvent[]> {
-    return this.request<CRMEvent[]>('/events');
-  }
-
+  // --- Contacts ---
   getContacts(): Promise<Contact[]> {
     return this.request<Contact[]>('/contacts');
   }
+  createContact(data: Partial<Contact>): Promise<number> {
+    return this.request<number>('/contacts', 'POST', data);
+  }
+  updateContact(id: number, data: Partial<Contact>): Promise<Contact> {
+    return this.request<Contact>(`/contacts/${id}`, 'PUT', data);
+  }
 
+  // --- Products ---
   getProducts(): Promise<Product[]> {
     return this.request<Product[]>('/products');
+  }
+  createProduct(data: Partial<Product>): Promise<number> {
+    return this.request<number>('/products', 'POST', data);
+  }
+  updateProduct(id: number, data: Partial<Product>): Promise<Product> {
+    return this.request<Product>(`/products/${id}`, 'PUT', data);
+  }
+
+  // --- External Entities ---
+  getBankAccounts(): Promise<BankAccount[]> {
+    return this.request<BankAccount[]>('/bankaccounts');
+  }
+  getProjects(): Promise<Project[]> {
+    return this.request<Project[]>('/projects');
+  }
+  getEvents(): Promise<CRMEvent[]> {
+    return this.request<CRMEvent[]>('/events');
   }
 }
 

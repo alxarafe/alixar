@@ -1,80 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { api } from './api'
-import type { ThirdParty, Project, BankAccount, CRMEvent, Contact, Product } from './api'
+import { ref } from 'vue'
 
-// Dashboard State
-const thirdParties = ref<ThirdParty[]>([])
-const projects = ref<Project[]>([])
-const bankAccounts = ref<BankAccount[]>([])
-const events = ref<CRMEvent[]>([])
-const contacts = ref<Contact[]>([])
-const products = ref<Product[]>([])
-const loading = ref<boolean>(true)
-const error = ref<string | null>(null)
+import DashboardView from './views/DashboardView.vue'
+import ThirdPartiesView from './views/ThirdPartiesView.vue'
+import ContactsView from './views/ContactsView.vue'
+import ProductsView from './views/ProductsView.vue'
 
+// Basic local state for orchestrator
 const currentTab = ref('dashboard')
-
-// Edit State
-const editingThirdParty = ref<ThirdParty | null>(null)
-const thirdPartyForm = ref<Partial<ThirdParty>>({ 
-  name: '', name_alias: '', email: '', phone: '',
-  address: '', zip: '', town: '', siren: '', url: '', code_client: ''
-})
-const isSaving = ref<boolean>(false)
-
-onMounted(async () => {
-  try {
-    const [tpRes, projRes, bankRes, evRes, contactRes, productRes] = await Promise.all([
-      api.getThirdParties(),
-      api.getProjects(),
-      api.getBankAccounts(),
-      api.getEvents(),
-      api.getContacts(),
-      api.getProducts()
-    ])
-    thirdParties.value = tpRes
-    projects.value = projRes
-    bankAccounts.value = bankRes
-    events.value = evRes
-    contacts.value = contactRes
-    products.value = productRes
-  } catch (e: any) {
-    error.value = e.message || 'Unknown error occurred'
-  } finally {
-    loading.value = false
-  }
-})
-
-// --- Controladores CRUD ---
-
-const startEdit = (tp: ThirdParty) => {
-  editingThirdParty.value = tp
-  thirdPartyForm.value = { ...tp }
-}
-
-const cancelEdit = () => {
-  editingThirdParty.value = null
-}
-
-const saveThirdParty = async () => {
-  if (!editingThirdParty.value) return
-  isSaving.value = true
-  try {
-    const updatedTp = await api.updateThirdParty(editingThirdParty.value.id, thirdPartyForm.value)
-    
-    // In-place refresh (reactivity)
-    const index = thirdParties.value.findIndex(t => t.id === updatedTp.id)
-    if (index !== -1) {
-      thirdParties.value[index] = updatedTp
-    }
-    cancelEdit()
-  } catch (e: any) {
-    alert("Error al guardar: " + e.message)
-  } finally {
-    isSaving.value = false
-  }
-}
 </script>
 
 <template>
@@ -87,12 +20,13 @@ const saveThirdParty = async () => {
       </div>
       <nav>
         <a href="#" :class="{ active: currentTab === 'dashboard' }" @click.prevent="currentTab = 'dashboard'">Dashboard</a>
-        <a href="#" :class="{ active: currentTab === 'events' }" @click.prevent="currentTab = 'events'">Historial CRM</a>
         <a href="#" :class="{ active: currentTab === 'thirdparties' }" @click.prevent="currentTab = 'thirdparties'">Terceros</a>
         <a href="#" :class="{ active: currentTab === 'contacts' }" @click.prevent="currentTab = 'contacts'">Contactos</a>
-        <a href="#" :class="{ active: currentTab === 'products' }" @click.prevent="currentTab = 'products'">Productos</a>
-        <a href="#" :class="{ active: currentTab === 'projects' }" @click.prevent="currentTab = 'projects'">Proyectos</a>
-        <a href="#" :class="{ active: currentTab === 'bankaccounts' }" @click.prevent="currentTab = 'bankaccounts'">Tesorería</a>
+        <a href="#" :class="{ active: currentTab === 'products' }" @click.prevent="currentTab = 'products'">Productos/Servicios</a>
+        <!-- Coming soon: -->
+        <a href="#" style="opacity:0.4; cursor:not-allowed;">Historial CRM</a>
+        <a href="#" style="opacity:0.4; cursor:not-allowed;">Proyectos</a>
+        <a href="#" style="opacity:0.4; cursor:not-allowed;">Tesorería</a>
       </nav>
     </aside>
 
@@ -100,297 +34,25 @@ const saveThirdParty = async () => {
     <main class="main-content">
       <header>
         <h1 v-if="currentTab === 'dashboard'">Panel Principal</h1>
-        <h1 v-else-if="currentTab === 'events'">Historial CRM (Eventos)</h1>
         <h1 v-else-if="currentTab === 'thirdparties'">Directorio de Terceros</h1>
-        <h1 v-else-if="currentTab === 'contacts'">Directorio de Contactos</h1>
-        <h1 v-else-if="currentTab === 'products'">Catálogo de Productos y Servicios</h1>
-        <h1 v-else-if="currentTab === 'projects'">Gestión de Proyectos</h1>
-        <h1 v-else-if="currentTab === 'bankaccounts'">Control de Tesorería</h1>
+        <h1 v-else-if="currentTab === 'contacts'">Agenda de Contactos</h1>
+        <h1 v-else-if="currentTab === 'products'">Catálogo de Productos</h1>
         
         <div class="user-profile">
           <div class="avatar">Admin</div>
         </div>
       </header>
 
-      <div v-if="error" class="glass-panel error-panel">
-        ⚠️ Error de conexión: {{ error }}
-      </div>
-
-      <div v-else-if="loading" class="loading">
-         Cargando datos del ERP...
-      </div>
-
-      <div v-else class="content-grid">
-        
-        <!-- DASHBOARD TAB -->
-        <template v-if="currentTab === 'dashboard'">
-          <div class="metrics-row">
-            <div class="metric-card glass-panel">
-              <h3>Terceros Activos</h3>
-              <div class="value">{{ thirdParties.length }}</div>
-            </div>
-            <div class="metric-card glass-panel">
-              <h3>Contactos</h3>
-              <div class="value">{{ contacts.length }}</div>
-            </div>
-            <div class="metric-card glass-panel">
-              <h3>Productos/Servicios</h3>
-              <div class="value">{{ products.length }}</div>
-            </div>
-            <div class="metric-card glass-panel">
-              <h3>Proyectos Abiertos</h3>
-              <div class="value">{{ projects.length }}</div>
-            </div>
-          </div>
-
-          <div class="table-card glass-panel">
-            <div class="card-header">
-              <h3>Últimos Eventos CRM</h3>
-            </div>
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Fecha</th><th>Código</th><th>Asunto / Acción</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="ev in events.slice(0, 5)" :key="ev.id">
-                    <td>{{ ev.dateStart || '-' }}</td>
-                    <td><span class="badge">{{ ev.typeCode }}</span></td>
-                    <td>{{ ev.title }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </template>
-
-        <!-- EVENTS TAB (Timeline Style Simulation) -->
-        <template v-if="currentTab === 'events'">
-          <div class="table-card glass-panel">
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr><th>Fecha</th><th>Tipo</th><th>Asunto</th><th>Nota</th><th>Tercero ID</th></tr>
-                </thead>
-                <tbody>
-                  <tr v-for="ev in events" :key="ev.id">
-                    <td><strong>{{ ev.dateStart || '-' }}</strong></td>
-                    <td><span class="badge">{{ ev.typeCode }}</span></td>
-                    <td>{{ ev.title }}</td>
-                    <td style="max-width:300px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" :title="ev.note">{{ ev.note || '-' }}</td>
-                    <td>{{ ev.thirdPartyId ? `#${ev.thirdPartyId}` : '-' }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </template>
-
-        <!-- THIRDPARTIES TAB -->
-        <template v-if="currentTab === 'thirdparties'">
-          <div class="table-card glass-panel">
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr><th>ID</th><th>Nombre</th><th>Alias</th><th>NIF/CIF</th><th>Población</th><th>Tlf</th><th>Acciones</th></tr>
-                </thead>
-                <tbody>
-                  <tr v-for="tp in thirdParties" :key="tp.id">
-                    <td>#{{ tp.id }}</td>
-                    <td><strong>{{ tp.name }}</strong></td>
-                    <td>{{ tp.name_alias || '-' }}</td>
-                    <td><span class="badge">{{ tp.siren || 'Sin Identificar' }}</span></td>
-                    <td>{{ tp.town || '-' }}</td>
-                    <td>{{ tp.phone || '-' }}</td>
-                    <td>
-                      <button class="btn-icon" @click="startEdit(tp)" title="Editar">✏️</button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </template>
-
-        <!-- CONTACTS TAB -->
-        <template v-if="currentTab === 'contacts'">
-          <div class="table-card glass-panel">
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr><th>ID</th><th>Nombre</th><th>Puesto</th><th>Email</th><th>Tlf. Profesional</th><th>Tercero Asociado</th></tr>
-                </thead>
-                <tbody>
-                  <tr v-for="contact in contacts" :key="contact.id">
-                    <td>#{{ contact.id }}</td>
-                    <td><strong>{{ contact.firstname }} {{ contact.lastname }}</strong></td>
-                    <td>{{ contact.jobTitle || '-' }}</td>
-                    <td>{{ contact.email || '-' }}</td>
-                    <td>{{ contact.phone_pro || '-' }}</td>
-                    <td>{{ contact.thirdPartyId ? `#${contact.thirdPartyId}` : '-' }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </template>
-
-        <!-- PRODUCTS TAB -->
-        <template v-if="currentTab === 'products'">
-          <div class="table-card glass-panel">
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr><th>ID</th><th>Ref</th><th>Etiqueta</th><th>Tipo</th><th>Precio Final</th><th>IVA</th><th>Estado de Compra</th></tr>
-                </thead>
-                <tbody>
-                  <tr v-for="product in products" :key="product.id">
-                    <td>#{{ product.id }}</td>
-                    <td><span class="badge">{{ product.ref }}</span></td>
-                    <td><strong>{{ product.label }}</strong></td>
-                    <td>{{ product.type == '0' ? '📦 Producto' : '🛠️ Servicio' }}</td>
-                    <td>{{ product.price_ttc ? product.price_ttc + ' €' : '-' }}</td>
-                    <td>{{ product.tva_tx ? product.tva_tx + '%' : '-' }}</td>
-                    <td>{{ product.status_buy == '1' ? 'En Compra' : 'No Comprable' }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </template>
-
-        <!-- PROJECTS TAB -->
-        <template v-if="currentTab === 'projects'">
-          <div class="table-card glass-panel">
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr><th>ID</th><th>Ref</th><th>Título</th><th>Estado</th></tr>
-                </thead>
-                <tbody>
-                  <tr v-for="proj in projects" :key="proj.id">
-                    <td>#{{ proj.id }}</td>
-                    <td>{{ proj.ref }}</td>
-                    <td><strong>{{ proj.title }}</strong></td>
-                    <td><span class="badge">{{ proj.status === 1 ? 'Activo' : 'Borrador' }}</span></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </template>
-
-        <!-- BANK ACCOUNTS TAB -->
-        <template v-if="currentTab === 'bankaccounts'">
-          <div class="table-card glass-panel">
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr><th>Ref</th><th>Banco</th><th>Etiqueta</th><th>IBAN</th><th>Divisa</th></tr>
-                </thead>
-                <tbody>
-                  <tr v-for="bank in bankAccounts" :key="bank.id">
-                    <td>{{ bank.ref }}</td>
-                    <td><strong>{{ bank.bank }}</strong></td>
-                    <td>{{ bank.label }}</td>
-                    <td>{{ bank.iban_prefix || '-' }}</td>
-                    <td>{{ bank.currency_code }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </template>
-
+      <div class="content-grid">
+        <DashboardView v-if="currentTab === 'dashboard'" />
+        <ThirdPartiesView v-if="currentTab === 'thirdparties'" />
+        <ContactsView v-if="currentTab === 'contacts'" />
+        <ProductsView v-if="currentTab === 'products'" />
       </div>
     </main>
-
-    <!-- Superposición Modal de Edición -->
-    <div v-if="editingThirdParty" class="modal-overlay" @click.self="cancelEdit">
-      <div class="modal-content glass-panel modal-lg">
-        <h2>Ficha de Tercero #{{ editingThirdParty.id }}</h2>
-        <form @submit.prevent="saveThirdParty" class="form-grid">
-          
-          <div class="form-row">
-            <div class="input-group">
-              <label>Nombre Fiscal (Razón Social)</label>
-              <input v-model="thirdPartyForm.name" type="text" required placeholder="Ej. Corporación Acme S.A." />
-            </div>
-            <div class="input-group">
-              <label>Nombre Comercial / Alias</label>
-              <input v-model="thirdPartyForm.name_alias" type="text" placeholder="Ej. Acme" />
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="input-group">
-              <label>Identidad Fiscal (NIF/CIF/Siren)</label>
-              <input v-model="thirdPartyForm.siren" type="text" placeholder="Ej. B-01234567" />
-            </div>
-            <div class="input-group">
-              <label>Código de Cliente/Proveedor</label>
-              <input v-model="thirdPartyForm.code_client" type="text" placeholder="CLI-001" />
-            </div>
-          </div>
-
-          <hr class="divider"/>
-
-          <div class="input-group">
-            <label>Dirección Completa</label>
-            <input v-model="thirdPartyForm.address" type="text" placeholder="C/ Industrial 42, Nave B" />
-          </div>
-
-          <div class="form-row">
-            <div class="input-group">
-              <label>Código Postal</label>
-              <input v-model="thirdPartyForm.zip" type="text" placeholder="28001" />
-            </div>
-            <div class="input-group">
-              <label>Localidad / Población</label>
-              <input v-model="thirdPartyForm.town" type="text" placeholder="Madrid" />
-            </div>
-          </div>
-
-          <hr class="divider"/>
-
-          <div class="form-row">
-            <div class="input-group">
-              <label>Correo Electrónico Principal</label>
-              <input v-model="thirdPartyForm.email" type="email" placeholder="contacto@empresa.com" />
-            </div>
-            <div class="input-group">
-              <label>Teléfono Oficial</label>
-              <input v-model="thirdPartyForm.phone" type="text" placeholder="+34 600..." />
-            </div>
-          </div>
-
-          <div class="input-group">
-            <label>Sitio Web</label>
-            <input v-model="thirdPartyForm.url" type="url" placeholder="https://..." />
-          </div>
-
-          <div class="modal-actions">
-            <button type="button" class="btn-secondary" @click="cancelEdit" :disabled="isSaving">Cerrar</button>
-            <button type="submit" class="btn-primary" :disabled="isSaving">
-              {{ isSaving ? 'Guardando en Dolibarr...' : 'Guardar Ficha' }}
-            </button>
-          </div>
-
-        </form>
-      </div>
-    </div>
-
   </div>
 </template>
 
-<style scoped>
-.badge {
-  background: rgba(16, 185, 129, 0.2);
-  color: #34D399;
-  padding: 4px 10px;
-  border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 600;
 }
