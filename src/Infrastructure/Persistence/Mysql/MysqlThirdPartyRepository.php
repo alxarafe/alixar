@@ -47,6 +47,7 @@ class MysqlThirdPartyRepository implements ThirdPartyRepository
         $this->table = $tablePrefix . 'societe';
     }
 
+    #[\Override]
     public function findById(int $id): ?ThirdParty
     {
         $stmt = $this->pdo->prepare(
@@ -58,6 +59,7 @@ class MysqlThirdPartyRepository implements ThirdPartyRepository
         return $row ? ThirdParty::fromArray($this->mapToClean($row, self::COLUMN_MAP)) : null;
     }
 
+    #[\Override]
     public function save(ThirdParty $thirdParty): void
     {
         $data = $thirdParty->toArray();
@@ -98,6 +100,7 @@ class MysqlThirdPartyRepository implements ThirdPartyRepository
         }
     }
 
+    #[\Override]
     public function delete(int $id): void
     {
         $stmt = $this->pdo->prepare(
@@ -110,6 +113,7 @@ class MysqlThirdPartyRepository implements ThirdPartyRepository
      * @param array<string, mixed> $filters
      * @return ThirdParty[]
      */
+    #[\Override]
     public function findAll(
         array $filters = [],
         int $limit = 100,
@@ -159,12 +163,14 @@ class MysqlThirdPartyRepository implements ThirdPartyRepository
     /**
      * @param array<string, mixed> $criteria
      */
+    #[\Override]
     public function count(array $criteria = []): int
     {
         $stmt = $this->pdo->query('SELECT COUNT(*) FROM ' . $this->table);
         return (int) $stmt->fetchColumn();
     }
 
+    #[\Override]
     public function findByEmail(string $email): ?ThirdParty
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE email = :email LIMIT 1');
@@ -174,6 +180,7 @@ class MysqlThirdPartyRepository implements ThirdPartyRepository
         return $row ? ThirdParty::fromArray($this->mapToClean($row, self::COLUMN_MAP)) : null;
     }
 
+    #[\Override]
     public function findByVatNumber(string $vatNumber): ?ThirdParty
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE tva_intra = :vat LIMIT 1');

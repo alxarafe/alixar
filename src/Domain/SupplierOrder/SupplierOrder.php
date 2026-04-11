@@ -29,7 +29,7 @@ class SupplierOrder
 
     public function __construct(
         int $thirdPartyId,
-        string $ref='',
+        string $ref = '',
         ?int $id = null
     ) {
         $this->thirdPartyId = $thirdPartyId;

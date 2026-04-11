@@ -38,6 +38,7 @@ class MysqlContactRepository implements ContactRepository
         $this->table = $tablePrefix . 'socpeople';
     }
 
+    #[\Override]
     public function findById(int $id): ?Contact
     {
         $stmt = $this->pdo->prepare(
@@ -49,6 +50,7 @@ class MysqlContactRepository implements ContactRepository
         return $row ? Contact::fromArray($this->mapToClean($row, self::COLUMN_MAP)) : null;
     }
 
+    #[\Override]
     public function save(Contact $contact): void
     {
         $data = $contact->toArray();
@@ -90,6 +92,7 @@ class MysqlContactRepository implements ContactRepository
         }
     }
 
+    #[\Override]
     public function delete(int $id): void
     {
         $stmt = $this->pdo->prepare(
@@ -101,6 +104,7 @@ class MysqlContactRepository implements ContactRepository
     /**
      * @return Contact[]
      */
+    #[\Override]
     public function findAll(
         array $filters = [],
         int $limit = 100,
@@ -141,6 +145,7 @@ class MysqlContactRepository implements ContactRepository
         return array_map(fn(array $row) => Contact::fromArray($this->mapToClean($row, self::COLUMN_MAP)), $rows);
     }
 
+    #[\Override]
     public function findByEmail(string $email): ?Contact
     {
         $stmt = $this->pdo->prepare(

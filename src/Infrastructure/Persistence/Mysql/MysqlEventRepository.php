@@ -42,6 +42,7 @@ class MysqlEventRepository implements EventRepository
     /**
      * @return array<Event>
      */
+    #[\Override]
     public function findAll(int $limit = 100, int $offset = 0, string $sortField = 'datep', string $sortOrder = 'DESC'): array
     {
         $allowedSortFields = array_values(self::COLUMN_MAP);
@@ -68,6 +69,7 @@ class MysqlEventRepository implements EventRepository
     /**
      * @param array<string, mixed> $criteria
      */
+    #[\Override]
     public function count(array $criteria = []): int
     {
         $stmt = $this->pdo->query('SELECT COUNT(*) FROM ' . $this->table);
@@ -75,6 +77,7 @@ class MysqlEventRepository implements EventRepository
         return (int) $stmt->fetchColumn();
     }
 
+    #[\Override]
     public function findById(int $id): ?Event
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE id = :id');
@@ -86,6 +89,7 @@ class MysqlEventRepository implements EventRepository
         return Event::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function save(Event $event): void
     {
         $dbData = $this->mapToDolibarr($event->toArray(), self::COLUMN_MAP);
@@ -129,6 +133,7 @@ class MysqlEventRepository implements EventRepository
         }
     }
 
+    #[\Override]
     public function delete(int $id): void
     {
         $stmt = $this->pdo->prepare('DELETE FROM ' . $this->table . ' WHERE id = :id');

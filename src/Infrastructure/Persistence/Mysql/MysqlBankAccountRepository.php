@@ -38,6 +38,7 @@ class MysqlBankAccountRepository implements BankAccountRepository
         $this->table = $tablePrefix . 'societe_rib';
     }
 
+    #[\Override]
     public function findById(int $id): ?BankAccount
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE rowid = :id');
@@ -52,6 +53,7 @@ class MysqlBankAccountRepository implements BankAccountRepository
         return $this->hydrate($cleanData);
     }
 
+    #[\Override]
     public function findByThirdPartyId(int $thirdPartyId): array
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE fk_soc = :socid');
@@ -64,6 +66,7 @@ class MysqlBankAccountRepository implements BankAccountRepository
         }, $rows);
     }
 
+    #[\Override]
     public function save(BankAccount $account): void
     {
         $data = $account->toArray();
@@ -105,6 +108,7 @@ class MysqlBankAccountRepository implements BankAccountRepository
         }
     }
 
+    #[\Override]
     public function delete(int $id): void
     {
         $stmt = $this->pdo->prepare('DELETE FROM ' . $this->table . ' WHERE rowid = :id');

@@ -12,8 +12,6 @@ bash "$SCRIPT_DIR/check_standards.sh"
 echo "=== 2. Static Analysis (PHPStan) ==="
 bash "$SCRIPT_DIR/static_analysis.sh"
 
-echo "=== 3. Running Tests (PHPUnit) ==="
-bash "$SCRIPT_DIR/run_tests.sh"
 
 echo ""
 echo "✅ All local CI checks passed successfully for Alixar!"

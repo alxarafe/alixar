@@ -4,6 +4,31 @@ export const DOLAPIKEY = 'test-key-or-change-me';
 
 // --- Interfaces ---
 
+export interface Contact {
+  id: number;
+  lastname: string;
+  firstname?: string;
+  email?: string;
+  phone_pro?: string;
+  phone_mobile?: string;
+  jobTitle?: string;
+  town?: string;
+  thirdPartyId?: number;
+  [key: string]: any;
+}
+
+export interface Product {
+  id: number;
+  ref: string;
+  label: string;
+  type: string;
+  price_ttc?: number;
+  tva_tx?: number;
+  status_buy?: string;
+  description?: string;
+  [key: string]: any;
+}
+
 export interface ThirdParty {
   id: number;
   name: string;
@@ -111,6 +136,14 @@ class ApiService {
 
   getEvents(): Promise<CRMEvent[]> {
     return this.request<CRMEvent[]>('/events');
+  }
+
+  getContacts(): Promise<Contact[]> {
+    return this.request<Contact[]>('/contacts');
+  }
+
+  getProducts(): Promise<Product[]> {
+    return this.request<Product[]>('/products');
   }
 }
 

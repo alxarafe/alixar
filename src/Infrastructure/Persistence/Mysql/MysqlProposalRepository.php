@@ -39,6 +39,7 @@ class MysqlProposalRepository implements ProposalRepository
     /**
      * @return array<Proposal>
      */
+    #[\Override]
     public function findAll(int $limit = 100, int $offset = 0, string $sortField = 'rowid', string $sortOrder = 'ASC'): array
     {
         $allowedSortFields = array_values(self::COLUMN_MAP);
@@ -65,6 +66,7 @@ class MysqlProposalRepository implements ProposalRepository
     /**
      * @param array<string, mixed> $criteria
      */
+    #[\Override]
     public function count(array $criteria = []): int
     {
         $stmt = $this->pdo->query('SELECT COUNT(*) FROM ' . $this->table);
@@ -72,6 +74,7 @@ class MysqlProposalRepository implements ProposalRepository
         return (int) $stmt->fetchColumn();
     }
 
+    #[\Override]
     public function findById(int $id): ?Proposal
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE rowid = :id');
@@ -83,6 +86,7 @@ class MysqlProposalRepository implements ProposalRepository
         return Proposal::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function findByRef(string $ref): ?Proposal
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE ref = :ref');
@@ -94,6 +98,7 @@ class MysqlProposalRepository implements ProposalRepository
         return Proposal::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function save(Proposal $proposal): void
     {
         $dbData = $this->mapToDolibarr($proposal->toArray(), self::COLUMN_MAP);
@@ -124,6 +129,7 @@ class MysqlProposalRepository implements ProposalRepository
         }
     }
 
+    #[\Override]
     public function delete(int $id): void
     {
         $stmt = $this->pdo->prepare('DELETE FROM ' . $this->table . ' WHERE rowid = :id');
@@ -131,6 +137,7 @@ class MysqlProposalRepository implements ProposalRepository
     }
 
     // --- Lines (propaldet) ---
+    #[\Override]
     public function getLines(int $proposalId): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->table}det WHERE fk_propal = :id");
@@ -138,6 +145,7 @@ class MysqlProposalRepository implements ProposalRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function addLine(int $proposalId, array $data): void
     {
         $data['fk_propal'] = $proposalId;
@@ -154,6 +162,7 @@ class MysqlProposalRepository implements ProposalRepository
         $stmt->execute($data);
     }
 
+    #[\Override]
     public function updateLine(int $proposalId, int $lineId, array $data): void
     {
         unset($data['rowid']);
@@ -166,6 +175,7 @@ class MysqlProposalRepository implements ProposalRepository
         $stmt->execute(['lineId' => $lineId, 'propId' => $proposalId] + $data);
     }
 
+    #[\Override]
     public function deleteLine(int $proposalId, int $lineId): void
     {
         $stmt = $this->pdo->prepare("DELETE FROM {$this->table}det WHERE rowid = :lineId AND fk_propal = :propId");
@@ -173,6 +183,7 @@ class MysqlProposalRepository implements ProposalRepository
     }
 
     // --- Contacts ---
+    #[\Override]
     public function getContacts(int $proposalId, string $type = ''): array
     {
         $sql = "SELECT * FROM llx_element_contact WHERE element_id = :id AND fk_c_type_contact IN (SELECT rowid FROM llx_c_type_contact WHERE element = 'propal')";
@@ -181,12 +192,14 @@ class MysqlProposalRepository implements ProposalRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function addContact(int $proposalId, int $contactId, string $type): void
     {
         $stmt = $this->pdo->prepare("INSERT INTO llx_element_contact (element_id, fk_socpeople, fk_c_type_contact) VALUES (:id, :contact, (SELECT rowid FROM llx_c_type_contact WHERE element='propal' AND source='external' LIMIT 1))");
         $stmt->execute(['id' => $proposalId, 'contact' => $contactId]);
     }
 
+    #[\Override]
     public function deleteContact(int $proposalId, int $contactId, string $type): void
     {
         $stmt = $this->pdo->prepare("DELETE FROM llx_element_contact WHERE element_id = :id AND fk_socpeople = :contact");

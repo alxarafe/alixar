@@ -37,6 +37,7 @@ class MysqlSupplierInvoiceRepository implements SupplierInvoiceRepository
     /**
      * @return array<SupplierInvoice>
      */
+    #[\Override]
     public function findAll(int $limit = 100, int $offset = 0, string $sortField = 'rowid', string $sortOrder = 'ASC'): array
     {
         $allowedSortFields = array_values(self::COLUMN_MAP);
@@ -63,6 +64,7 @@ class MysqlSupplierInvoiceRepository implements SupplierInvoiceRepository
     /**
      * @param array<string, mixed> $criteria
      */
+    #[\Override]
     public function count(array $criteria = []): int
     {
         $stmt = $this->pdo->query('SELECT COUNT(*) FROM ' . $this->table);
@@ -70,6 +72,7 @@ class MysqlSupplierInvoiceRepository implements SupplierInvoiceRepository
         return (int) $stmt->fetchColumn();
     }
 
+    #[\Override]
     public function findById(int $id): ?SupplierInvoice
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE rowid = :id');
@@ -81,6 +84,7 @@ class MysqlSupplierInvoiceRepository implements SupplierInvoiceRepository
         return SupplierInvoice::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function findByRef(string $ref): ?SupplierInvoice
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE ref = :ref');
@@ -92,6 +96,7 @@ class MysqlSupplierInvoiceRepository implements SupplierInvoiceRepository
         return SupplierInvoice::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function save(SupplierInvoice $invoice): void
     {
         $dbData = $this->mapToDolibarr($invoice->toArray(), self::COLUMN_MAP);
@@ -122,6 +127,7 @@ class MysqlSupplierInvoiceRepository implements SupplierInvoiceRepository
         }
     }
 
+    #[\Override]
     public function delete(int $id): void
     {
         $stmt = $this->pdo->prepare('DELETE FROM ' . $this->table . ' WHERE rowid = :id');
@@ -129,6 +135,7 @@ class MysqlSupplierInvoiceRepository implements SupplierInvoiceRepository
     }
 
     // --- Lines (llx_facture_fourn_det) ---
+    #[\Override]
     public function getLines(int $invoiceId): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->table}_det WHERE fk_facture_fourn = :id");
@@ -136,6 +143,7 @@ class MysqlSupplierInvoiceRepository implements SupplierInvoiceRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function addLine(int $invoiceId, array $data): void
     {
         $data['fk_facture_fourn'] = $invoiceId;
@@ -151,6 +159,7 @@ class MysqlSupplierInvoiceRepository implements SupplierInvoiceRepository
         $stmt->execute($data);
     }
 
+    #[\Override]
     public function updateLine(int $invoiceId, int $lineId, array $data): void
     {
         unset($data['rowid']);
@@ -163,6 +172,7 @@ class MysqlSupplierInvoiceRepository implements SupplierInvoiceRepository
         $stmt->execute(['lineId' => $lineId, 'invoiceId' => $invoiceId] + $data);
     }
 
+    #[\Override]
     public function deleteLine(int $invoiceId, int $lineId): void
     {
         $stmt = $this->pdo->prepare("DELETE FROM {$this->table}_det WHERE rowid = :lineId AND fk_facture_fourn = :invoiceId");
@@ -170,6 +180,7 @@ class MysqlSupplierInvoiceRepository implements SupplierInvoiceRepository
     }
 
     // --- Payments ---
+    #[\Override]
     public function getPayments(int $invoiceId): array
     {
         $sql = "SELECT p.* FROM llx_paiementfourn p
@@ -180,6 +191,7 @@ class MysqlSupplierInvoiceRepository implements SupplierInvoiceRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function addPayment(int $invoiceId, array $data): void
     {
         // Simplistic payment creation linked to the invoice

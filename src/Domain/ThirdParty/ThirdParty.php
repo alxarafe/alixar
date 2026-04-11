@@ -86,7 +86,7 @@ class ThirdParty
     /** @dolibarr-column entity — Multi-tenant discriminator. ✅ OK */
     private int $entity;
     /** @dolibarr-column datec — Abbreviation of "date création". Clean: created_at */
-    private ?DateTimeImmutable $createdAt;
+    private DateTimeImmutable $createdAt;
 
     public function __construct(
         string $name,
@@ -218,7 +218,7 @@ class ThirdParty
             'capital' => $this->capital,
             'notePrivate' => $this->notePrivate,
             'notePublic' => $this->notePublic,
-            'createdAt' => $this->createdAt?->format('Y-m-d H:i:s'),
+            'createdAt' => $this->createdAt->format('Y-m-d H:i:s'),
         ];
     }
 

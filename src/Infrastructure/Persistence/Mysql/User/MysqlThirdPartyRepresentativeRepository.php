@@ -24,6 +24,7 @@ class MysqlThirdPartyRepresentativeRepository implements ThirdPartyRepresentativ
         $this->tableLink = $tablePrefix . 'societe_commerciaux';
     }
 
+    #[\Override]
     public function findByThirdPartyId(int $thirdPartyId): array
     {
         $sql = "SELECT u.rowid, u.login, u.email, u.firstname, u.lastname
@@ -49,6 +50,7 @@ class MysqlThirdPartyRepresentativeRepository implements ThirdPartyRepresentativ
         return $users;
     }
 
+    #[\Override]
     public function linkRepresentative(int $thirdPartyId, int $userId): void
     {
         // Insert ignore basically
@@ -60,6 +62,7 @@ class MysqlThirdPartyRepresentativeRepository implements ThirdPartyRepresentativ
         $stmt->execute(['userid' => $userId, 'socid' => $thirdPartyId]);
     }
 
+    #[\Override]
     public function unlinkRepresentative(int $thirdPartyId, int $userId): void
     {
         $sql = "DELETE FROM {$this->tableLink} WHERE fk_user = :userid AND fk_soc = :socid";

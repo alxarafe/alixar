@@ -38,6 +38,7 @@ class MysqlSupplierOrderRepository implements SupplierOrderRepository
     /**
      * @return array<SupplierOrder>
      */
+    #[\Override]
     public function findAll(int $limit = 100, int $offset = 0, string $sortField = 'rowid', string $sortOrder = 'ASC'): array
     {
         $allowedSortFields = array_values(self::COLUMN_MAP);
@@ -64,6 +65,7 @@ class MysqlSupplierOrderRepository implements SupplierOrderRepository
     /**
      * @param array<string, mixed> $criteria
      */
+    #[\Override]
     public function count(array $criteria = []): int
     {
         $stmt = $this->pdo->query('SELECT COUNT(*) FROM ' . $this->table);
@@ -71,6 +73,7 @@ class MysqlSupplierOrderRepository implements SupplierOrderRepository
         return (int) $stmt->fetchColumn();
     }
 
+    #[\Override]
     public function findById(int $id): ?SupplierOrder
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE rowid = :id');
@@ -82,6 +85,7 @@ class MysqlSupplierOrderRepository implements SupplierOrderRepository
         return SupplierOrder::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function findByRef(string $ref): ?SupplierOrder
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE ref = :ref');
@@ -93,6 +97,7 @@ class MysqlSupplierOrderRepository implements SupplierOrderRepository
         return SupplierOrder::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function save(SupplierOrder $order): void
     {
         $dbData = $this->mapToDolibarr($order->toArray(), self::COLUMN_MAP);
@@ -124,6 +129,7 @@ class MysqlSupplierOrderRepository implements SupplierOrderRepository
         }
     }
 
+    #[\Override]
     public function delete(int $id): void
     {
         $stmt = $this->pdo->prepare('DELETE FROM ' . $this->table . ' WHERE rowid = :id');
@@ -131,6 +137,7 @@ class MysqlSupplierOrderRepository implements SupplierOrderRepository
     }
 
     // --- Lines (llx_commande_fournisseurdet) ---
+    #[\Override]
     public function getLines(int $orderId): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->table}det WHERE fk_commande = :id");
@@ -138,6 +145,7 @@ class MysqlSupplierOrderRepository implements SupplierOrderRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function addLine(int $orderId, array $data): void
     {
         $data['fk_commande'] = $orderId;
@@ -153,6 +161,7 @@ class MysqlSupplierOrderRepository implements SupplierOrderRepository
         $stmt->execute($data);
     }
 
+    #[\Override]
     public function updateLine(int $orderId, int $lineId, array $data): void
     {
         unset($data['rowid']);
@@ -165,6 +174,7 @@ class MysqlSupplierOrderRepository implements SupplierOrderRepository
         $stmt->execute(['lineId' => $lineId, 'orderId' => $orderId] + $data);
     }
 
+    #[\Override]
     public function deleteLine(int $orderId, int $lineId): void
     {
         $stmt = $this->pdo->prepare("DELETE FROM {$this->table}det WHERE rowid = :lineId AND fk_commande = :orderId");

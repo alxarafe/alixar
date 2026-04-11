@@ -37,6 +37,7 @@ class MysqlProjectRepository implements ProjectRepository
     /**
      * @return array<Project>
      */
+    #[\Override]
     public function findAll(int $limit = 100, int $offset = 0, string $sortField = 'rowid', string $sortOrder = 'ASC'): array
     {
         $allowedSortFields = array_values(self::COLUMN_MAP);
@@ -63,6 +64,7 @@ class MysqlProjectRepository implements ProjectRepository
     /**
      * @param array<string, mixed> $criteria
      */
+    #[\Override]
     public function count(array $criteria = []): int
     {
         $stmt = $this->pdo->query('SELECT COUNT(*) FROM ' . $this->table);
@@ -70,6 +72,7 @@ class MysqlProjectRepository implements ProjectRepository
         return (int) $stmt->fetchColumn();
     }
 
+    #[\Override]
     public function findById(int $id): ?Project
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE rowid = :id');
@@ -81,6 +84,7 @@ class MysqlProjectRepository implements ProjectRepository
         return Project::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function findByRef(string $ref): ?Project
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE ref = :ref');
@@ -92,6 +96,7 @@ class MysqlProjectRepository implements ProjectRepository
         return Project::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function save(Project $project): void
     {
         $dbData = $this->mapToDolibarr($project->toArray(), self::COLUMN_MAP);
@@ -123,6 +128,7 @@ class MysqlProjectRepository implements ProjectRepository
         }
     }
 
+    #[\Override]
     public function delete(int $id): void
     {
         $stmt = $this->pdo->prepare('DELETE FROM ' . $this->table . ' WHERE rowid = :id');
@@ -130,6 +136,7 @@ class MysqlProjectRepository implements ProjectRepository
     }
 
     // --- Tasks (llx_projet_task) ---
+    #[\Override]
     public function getTasks(int $projectId): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->table}_task WHERE fk_projet = :id");
@@ -137,6 +144,7 @@ class MysqlProjectRepository implements ProjectRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function addTask(int $projectId, array $data): void
     {
         $data['fk_projet'] = $projectId;
@@ -152,6 +160,7 @@ class MysqlProjectRepository implements ProjectRepository
         $stmt->execute($data);
     }
 
+    #[\Override]
     public function updateTask(int $projectId, int $taskId, array $data): void
     {
         unset($data['rowid']);
@@ -164,6 +173,7 @@ class MysqlProjectRepository implements ProjectRepository
         $stmt->execute(['taskId' => $taskId, 'projectId' => $projectId] + $data);
     }
 
+    #[\Override]
     public function deleteTask(int $projectId, int $taskId): void
     {
         $stmt = $this->pdo->prepare("DELETE FROM {$this->table}_task WHERE rowid = :taskId AND fk_projet = :projectId");

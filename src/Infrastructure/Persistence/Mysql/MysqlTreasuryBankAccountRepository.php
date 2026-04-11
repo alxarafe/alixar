@@ -38,6 +38,7 @@ class MysqlTreasuryBankAccountRepository implements BankAccountRepository
     /**
      * @return array<BankAccount>
      */
+    #[\Override]
     public function findAll(int $limit = 100, int $offset = 0, string $sortField = 'rowid', string $sortOrder = 'ASC'): array
     {
         $allowedSortFields = array_values(self::COLUMN_MAP);
@@ -64,6 +65,7 @@ class MysqlTreasuryBankAccountRepository implements BankAccountRepository
     /**
      * @param array<string, mixed> $criteria
      */
+    #[\Override]
     public function count(array $criteria = []): int
     {
         $stmt = $this->pdo->query('SELECT COUNT(*) FROM ' . $this->table);
@@ -71,6 +73,7 @@ class MysqlTreasuryBankAccountRepository implements BankAccountRepository
         return (int) $stmt->fetchColumn();
     }
 
+    #[\Override]
     public function findById(int $id): ?BankAccount
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE rowid = :id');
@@ -82,6 +85,7 @@ class MysqlTreasuryBankAccountRepository implements BankAccountRepository
         return BankAccount::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function findByRef(string $ref): ?BankAccount
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE ref = :ref');
@@ -93,6 +97,7 @@ class MysqlTreasuryBankAccountRepository implements BankAccountRepository
         return BankAccount::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function save(BankAccount $account): void
     {
         $dbData = $this->mapToDolibarr($account->toArray(), self::COLUMN_MAP);
@@ -131,6 +136,7 @@ class MysqlTreasuryBankAccountRepository implements BankAccountRepository
         }
     }
 
+    #[\Override]
     public function delete(int $id): void
     {
         $stmt = $this->pdo->prepare('DELETE FROM ' . $this->table . ' WHERE rowid = :id');
@@ -138,6 +144,7 @@ class MysqlTreasuryBankAccountRepository implements BankAccountRepository
     }
 
     // --- Transactions (llx_bank) ---
+    #[\Override]
     public function getTransactions(int $accountId): array
     {
         $prefix = str_replace('bank_account', 'bank', $this->table); // Get llx_bank
@@ -146,6 +153,7 @@ class MysqlTreasuryBankAccountRepository implements BankAccountRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function addTransaction(int $accountId, array $data): void
     {
         $prefix = str_replace('bank_account', 'bank', $this->table); // Get llx_bank
@@ -161,6 +169,7 @@ class MysqlTreasuryBankAccountRepository implements BankAccountRepository
         $stmt->execute($data);
     }
 
+    #[\Override]
     public function updateTransaction(int $accountId, int $transactionId, array $data): void
     {
         $prefix = str_replace('bank_account', 'bank', $this->table); // Get llx_bank
@@ -175,6 +184,7 @@ class MysqlTreasuryBankAccountRepository implements BankAccountRepository
         $stmt->execute(['transactionId' => $transactionId, 'accountId' => $accountId] + $data);
     }
 
+    #[\Override]
     public function deleteTransaction(int $accountId, int $transactionId): void
     {
         $prefix = str_replace('bank_account', 'bank', $this->table); // Get llx_bank

@@ -16,6 +16,7 @@ class MysqlConfigurationAdapter implements ConfigurationPort
         $this->table = $prefix . 'const';
     }
 
+    #[\Override]
     public function get(string $key, ?string $default = null): ?string
     {
         $sql = 'SELECT value FROM ' . $this->table
@@ -31,6 +32,7 @@ class MysqlConfigurationAdapter implements ConfigurationPort
         return (string) $val;
     }
 
+    #[\Override]
     public function getBool(string $key, bool $default = false): bool
     {
         $val = $this->get($key);

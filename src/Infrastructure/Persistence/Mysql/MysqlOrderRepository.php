@@ -40,6 +40,7 @@ class MysqlOrderRepository implements OrderRepository
     /**
      * @return array<Order>
      */
+    #[\Override]
     public function findAll(int $limit = 100, int $offset = 0, string $sortField = 'rowid', string $sortOrder = 'ASC'): array
     {
         $allowedSortFields = array_values(self::COLUMN_MAP);
@@ -66,6 +67,7 @@ class MysqlOrderRepository implements OrderRepository
     /**
      * @param array<string, mixed> $criteria
      */
+    #[\Override]
     public function count(array $criteria = []): int
     {
         $stmt = $this->pdo->query('SELECT COUNT(*) FROM ' . $this->table);
@@ -73,6 +75,7 @@ class MysqlOrderRepository implements OrderRepository
         return (int) $stmt->fetchColumn();
     }
 
+    #[\Override]
     public function findById(int $id): ?Order
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE rowid = :id');
@@ -84,6 +87,7 @@ class MysqlOrderRepository implements OrderRepository
         return Order::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function findByRef(string $ref): ?Order
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE ref = :ref');
@@ -95,6 +99,7 @@ class MysqlOrderRepository implements OrderRepository
         return Order::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function save(Order $order): void
     {
         $dbData = $this->mapToDolibarr($order->toArray(), self::COLUMN_MAP);
@@ -125,6 +130,7 @@ class MysqlOrderRepository implements OrderRepository
         }
     }
 
+    #[\Override]
     public function delete(int $id): void
     {
         $stmt = $this->pdo->prepare('DELETE FROM ' . $this->table . ' WHERE rowid = :id');
@@ -132,6 +138,7 @@ class MysqlOrderRepository implements OrderRepository
     }
 
     // --- Lines (commandedet) ---
+    #[\Override]
     public function getLines(int $orderId): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->table}det WHERE fk_commande = :id");
@@ -139,6 +146,7 @@ class MysqlOrderRepository implements OrderRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function addLine(int $orderId, array $data): void
     {
         $data['fk_commande'] = $orderId;
@@ -154,6 +162,7 @@ class MysqlOrderRepository implements OrderRepository
         $stmt->execute($data);
     }
 
+    #[\Override]
     public function updateLine(int $orderId, int $lineId, array $data): void
     {
         unset($data['rowid']);
@@ -166,6 +175,7 @@ class MysqlOrderRepository implements OrderRepository
         $stmt->execute(['lineId' => $lineId, 'orderId' => $orderId] + $data);
     }
 
+    #[\Override]
     public function deleteLine(int $orderId, int $lineId): void
     {
         $stmt = $this->pdo->prepare("DELETE FROM {$this->table}det WHERE rowid = :lineId AND fk_commande = :orderId");
@@ -173,6 +183,7 @@ class MysqlOrderRepository implements OrderRepository
     }
 
     // --- Contacts ---
+    #[\Override]
     public function getContacts(int $orderId, string $type = ''): array
     {
         $sql = "SELECT * FROM llx_element_contact WHERE element_id = :id AND fk_c_type_contact IN (SELECT rowid FROM llx_c_type_contact WHERE element = 'commande')";
@@ -181,12 +192,14 @@ class MysqlOrderRepository implements OrderRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function addContact(int $orderId, int $contactId, string $type): void
     {
         $stmt = $this->pdo->prepare("INSERT INTO llx_element_contact (element_id, fk_socpeople, fk_c_type_contact) VALUES (:id, :contact, (SELECT rowid FROM llx_c_type_contact WHERE element='commande' AND source='external' LIMIT 1))");
         $stmt->execute(['id' => $orderId, 'contact' => $contactId]);
     }
 
+    #[\Override]
     public function deleteContact(int $orderId, int $contactId, string $type): void
     {
         $stmt = $this->pdo->prepare("DELETE FROM llx_element_contact WHERE element_id = :id AND fk_socpeople = :contact");

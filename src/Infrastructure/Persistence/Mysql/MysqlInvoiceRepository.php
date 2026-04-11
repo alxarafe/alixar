@@ -55,6 +55,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
         $this->tableLines = $tablePrefix . 'facturedet';
     }
 
+    #[\Override]
     public function findById(int $id): ?Invoice
     {
         $stmt = $this->pdo->prepare(
@@ -71,6 +72,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
         return Invoice::fromArray($this->mapToClean($row, self::INVOICE_COLUMN_MAP), $lines);
     }
 
+    #[\Override]
     public function findByRef(string $ref): ?Invoice
     {
         $stmt = $this->pdo->prepare(
@@ -85,6 +87,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
         return Invoice::fromArray($this->mapToClean($row, self::INVOICE_COLUMN_MAP), $lines);
     }
 
+    #[\Override]
     public function findByRefExt(string $refExt): ?Invoice
     {
         $stmt = $this->pdo->prepare(
@@ -99,6 +102,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
         return Invoice::fromArray($this->mapToClean($row, self::INVOICE_COLUMN_MAP), $lines);
     }
 
+    #[\Override]
     public function save(Invoice $invoice): void
     {
         $data = $invoice->toArray();
@@ -164,6 +168,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
         }
     }
 
+    #[\Override]
     public function delete(int $id): void
     {
         $inTransaction = $this->pdo->inTransaction();
@@ -189,6 +194,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
         }
     }
 
+    #[\Override]
     public function findAll(
         array $filters = [],
         int $limit = 100,
@@ -240,6 +246,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
 
     // ── Lines ────────────────────────────────────────────
 
+    #[\Override]
     public function findLinesByInvoiceId(int $invoiceId): array
     {
         $stmt = $this->pdo->prepare(
@@ -251,6 +258,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
         return array_map(fn(array $row) => InvoiceLine::fromArray($this->mapToClean($row, self::LINE_COLUMN_MAP)), $rows);
     }
 
+    #[\Override]
     public function findLineById(int $id): ?InvoiceLine
     {
         $stmt = $this->pdo->prepare(
@@ -266,6 +274,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
         return InvoiceLine::fromArray($this->mapToClean($row, self::LINE_COLUMN_MAP));
     }
 
+    #[\Override]
     public function saveLine(InvoiceLine $line): void
     {
         $data = $line->toArray();
@@ -303,6 +312,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
         }
     }
 
+    #[\Override]
     public function deleteLine(int $lineId): void
     {
         $stmt = $this->pdo->prepare(
@@ -311,6 +321,7 @@ class MysqlInvoiceRepository implements InvoiceRepository
         $stmt->execute(['id' => $lineId]);
     }
 
+    #[\Override]
     public function updateTotals(int $invoiceId): void
     {
         $invoice = $this->findById($invoiceId);

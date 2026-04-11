@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Domain\ThirdParty;
 
-use App\Domain\ThirdParty\ThirdPartyId; // Assuming this exists or using int
+use App\Domain\ThirdParty\ThirdPartyId; 
+
+// Assuming this exists or using int
 
 class BankAccount
 {

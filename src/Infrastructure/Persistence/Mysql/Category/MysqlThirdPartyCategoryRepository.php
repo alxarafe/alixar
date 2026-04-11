@@ -33,6 +33,7 @@ class MysqlThirdPartyCategoryRepository implements ThirdPartyCategoryRepository
         $this->tableLink = $tablePrefix . 'categorie_societe';
     }
 
+    #[\Override]
     public function findByThirdPartyId(int $thirdPartyId, int $type): array
     {
         $sql = "SELECT c.* FROM {$this->tableCategory} c
@@ -49,6 +50,7 @@ class MysqlThirdPartyCategoryRepository implements ThirdPartyCategoryRepository
         }, $rows);
     }
 
+    #[\Override]
     public function linkCategory(int $thirdPartyId, int $categoryId): void
     {
         // Insert ignore basically
@@ -60,6 +62,7 @@ class MysqlThirdPartyCategoryRepository implements ThirdPartyCategoryRepository
         $stmt->execute(['catid' => $categoryId, 'socid' => $thirdPartyId]);
     }
 
+    #[\Override]
     public function unlinkCategory(int $thirdPartyId, int $categoryId): void
     {
         $sql = "DELETE FROM {$this->tableLink} WHERE fk_categorie = :catid AND fk_soc = :socid";

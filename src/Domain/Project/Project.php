@@ -26,7 +26,7 @@ class Project
 
     public function __construct(
         string $title,
-        string $ref='',
+        string $ref = '',
         ?int $id = null,
         ?int $thirdPartyId = null
     ) {

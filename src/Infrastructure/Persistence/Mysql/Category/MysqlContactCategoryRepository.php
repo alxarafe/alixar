@@ -30,6 +30,7 @@ class MysqlContactCategoryRepository implements ContactCategoryRepository
         $this->tableCategorieContact = $tablePrefix . 'categorie_contact';
     }
 
+    #[\Override]
     public function findByContactId(int $contactId): array
     {
         $sql = "SELECT c.rowid, c.label, c.type, c.description, c.color
@@ -55,6 +56,7 @@ class MysqlContactCategoryRepository implements ContactCategoryRepository
         return $categories;
     }
 
+    #[\Override]
     public function linkCategory(int $contactId, int $categoryId): void
     {
         $sql = "INSERT INTO {$this->tableCategorieContact} (fk_socpeople, fk_categorie) 
@@ -65,6 +67,7 @@ class MysqlContactCategoryRepository implements ContactCategoryRepository
         $stmt->execute(['categoryid' => $categoryId, 'contactid' => $contactId]);
     }
 
+    #[\Override]
     public function unlinkCategory(int $contactId, int $categoryId): void
     {
         $sql = "DELETE FROM {$this->tableCategorieContact} WHERE fk_categorie = :categoryid AND fk_socpeople = :contactid";

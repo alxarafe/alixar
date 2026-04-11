@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { api } from './api'
-import type { ThirdParty, Project, BankAccount, CRMEvent } from './api'
+import type { ThirdParty, Project, BankAccount, CRMEvent, Contact, Product } from './api'
 
 // Dashboard State
 const thirdParties = ref<ThirdParty[]>([])
 const projects = ref<Project[]>([])
 const bankAccounts = ref<BankAccount[]>([])
 const events = ref<CRMEvent[]>([])
+const contacts = ref<Contact[]>([])
+const products = ref<Product[]>([])
 const loading = ref<boolean>(true)
 const error = ref<string | null>(null)
 
@@ -23,16 +25,20 @@ const isSaving = ref<boolean>(false)
 
 onMounted(async () => {
   try {
-    const [tpRes, projRes, bankRes, evRes] = await Promise.all([
+    const [tpRes, projRes, bankRes, evRes, contactRes, productRes] = await Promise.all([
       api.getThirdParties(),
       api.getProjects(),
       api.getBankAccounts(),
-      api.getEvents()
+      api.getEvents(),
+      api.getContacts(),
+      api.getProducts()
     ])
     thirdParties.value = tpRes
     projects.value = projRes
     bankAccounts.value = bankRes
     events.value = evRes
+    contacts.value = contactRes
+    products.value = productRes
   } catch (e: any) {
     error.value = e.message || 'Unknown error occurred'
   } finally {
@@ -83,6 +89,8 @@ const saveThirdParty = async () => {
         <a href="#" :class="{ active: currentTab === 'dashboard' }" @click.prevent="currentTab = 'dashboard'">Dashboard</a>
         <a href="#" :class="{ active: currentTab === 'events' }" @click.prevent="currentTab = 'events'">Historial CRM</a>
         <a href="#" :class="{ active: currentTab === 'thirdparties' }" @click.prevent="currentTab = 'thirdparties'">Terceros</a>
+        <a href="#" :class="{ active: currentTab === 'contacts' }" @click.prevent="currentTab = 'contacts'">Contactos</a>
+        <a href="#" :class="{ active: currentTab === 'products' }" @click.prevent="currentTab = 'products'">Productos</a>
         <a href="#" :class="{ active: currentTab === 'projects' }" @click.prevent="currentTab = 'projects'">Proyectos</a>
         <a href="#" :class="{ active: currentTab === 'bankaccounts' }" @click.prevent="currentTab = 'bankaccounts'">Tesorería</a>
       </nav>
@@ -94,6 +102,8 @@ const saveThirdParty = async () => {
         <h1 v-if="currentTab === 'dashboard'">Panel Principal</h1>
         <h1 v-else-if="currentTab === 'events'">Historial CRM (Eventos)</h1>
         <h1 v-else-if="currentTab === 'thirdparties'">Directorio de Terceros</h1>
+        <h1 v-else-if="currentTab === 'contacts'">Directorio de Contactos</h1>
+        <h1 v-else-if="currentTab === 'products'">Catálogo de Productos y Servicios</h1>
         <h1 v-else-if="currentTab === 'projects'">Gestión de Proyectos</h1>
         <h1 v-else-if="currentTab === 'bankaccounts'">Control de Tesorería</h1>
         
@@ -120,16 +130,16 @@ const saveThirdParty = async () => {
               <div class="value">{{ thirdParties.length }}</div>
             </div>
             <div class="metric-card glass-panel">
-              <h3>Interacciones CRM</h3>
-              <div class="value">{{ events.length }}</div>
+              <h3>Contactos</h3>
+              <div class="value">{{ contacts.length }}</div>
+            </div>
+            <div class="metric-card glass-panel">
+              <h3>Productos/Servicios</h3>
+              <div class="value">{{ products.length }}</div>
             </div>
             <div class="metric-card glass-panel">
               <h3>Proyectos Abiertos</h3>
               <div class="value">{{ projects.length }}</div>
-            </div>
-            <div class="metric-card glass-panel">
-              <h3>Cuentas Bancarias</h3>
-              <div class="value">{{ bankAccounts.length }}</div>
             </div>
           </div>
 
@@ -197,6 +207,53 @@ const saveThirdParty = async () => {
                     <td>
                       <button class="btn-icon" @click="startEdit(tp)" title="Editar">✏️</button>
                     </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </template>
+
+        <!-- CONTACTS TAB -->
+        <template v-if="currentTab === 'contacts'">
+          <div class="table-card glass-panel">
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr><th>ID</th><th>Nombre</th><th>Puesto</th><th>Email</th><th>Tlf. Profesional</th><th>Tercero Asociado</th></tr>
+                </thead>
+                <tbody>
+                  <tr v-for="contact in contacts" :key="contact.id">
+                    <td>#{{ contact.id }}</td>
+                    <td><strong>{{ contact.firstname }} {{ contact.lastname }}</strong></td>
+                    <td>{{ contact.jobTitle || '-' }}</td>
+                    <td>{{ contact.email || '-' }}</td>
+                    <td>{{ contact.phone_pro || '-' }}</td>
+                    <td>{{ contact.thirdPartyId ? `#${contact.thirdPartyId}` : '-' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </template>
+
+        <!-- PRODUCTS TAB -->
+        <template v-if="currentTab === 'products'">
+          <div class="table-card glass-panel">
+            <div class="table-container">
+              <table>
+                <thead>
+                  <tr><th>ID</th><th>Ref</th><th>Etiqueta</th><th>Tipo</th><th>Precio Final</th><th>IVA</th><th>Estado de Compra</th></tr>
+                </thead>
+                <tbody>
+                  <tr v-for="product in products" :key="product.id">
+                    <td>#{{ product.id }}</td>
+                    <td><span class="badge">{{ product.ref }}</span></td>
+                    <td><strong>{{ product.label }}</strong></td>
+                    <td>{{ product.type == '0' ? '📦 Producto' : '🛠️ Servicio' }}</td>
+                    <td>{{ product.price_ttc ? product.price_ttc + ' €' : '-' }}</td>
+                    <td>{{ product.tva_tx ? product.tva_tx + '%' : '-' }}</td>
+                    <td>{{ product.status_buy == '1' ? 'En Compra' : 'No Comprable' }}</td>
                   </tr>
                 </tbody>
               </table>

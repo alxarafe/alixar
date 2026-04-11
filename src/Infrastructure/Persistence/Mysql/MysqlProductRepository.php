@@ -43,6 +43,7 @@ class MysqlProductRepository implements ProductRepository
     /**
      * @return array<Product>
      */
+    #[\Override]
     public function findAll(int $limit = 100, int $offset = 0, string $sortField = 'rowid', string $sortOrder = 'ASC'): array
     {
         $allowedSortFields = array_values(self::COLUMN_MAP);
@@ -78,6 +79,7 @@ class MysqlProductRepository implements ProductRepository
     /**
      * @param array<string, mixed> $criteria
      */
+    #[\Override]
     public function count(array $criteria = []): int
     {
         // Simple count for now, no criteria applied natively
@@ -88,6 +90,7 @@ class MysqlProductRepository implements ProductRepository
         return (int) $stmt->fetchColumn();
     }
 
+    #[\Override]
     public function findById(int $id): ?Product
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE rowid = :id');
@@ -101,6 +104,7 @@ class MysqlProductRepository implements ProductRepository
         return Product::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function findByRef(string $ref): ?Product
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE ref = :ref');
@@ -114,6 +118,7 @@ class MysqlProductRepository implements ProductRepository
         return Product::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function findByRefExt(string $refExt): ?Product
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE ref_ext = :refExt');
@@ -127,6 +132,7 @@ class MysqlProductRepository implements ProductRepository
         return Product::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function findByBarcode(string $barcode): ?Product
     {
         $stmt = $this->pdo->prepare('SELECT * FROM ' . $this->table . ' WHERE barcode = :barcode');
@@ -140,6 +146,7 @@ class MysqlProductRepository implements ProductRepository
         return Product::fromArray($this->mapToClean($row, self::COLUMN_MAP));
     }
 
+    #[\Override]
     public function save(Product $product): void
     {
         $dbData = $this->mapToDolibarr($product->toArray(), self::COLUMN_MAP);
@@ -181,12 +188,14 @@ class MysqlProductRepository implements ProductRepository
         }
     }
 
+    #[\Override]
     public function delete(int $id): void
     {
         $stmt = $this->pdo->prepare('DELETE FROM ' . $this->table . ' WHERE rowid = :id');
         $stmt->execute(['id' => $id]);
     }
 
+    #[\Override]
     public function getSubproducts(int $productId): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->table}_association WHERE fk_product_pere = :id");
@@ -194,18 +203,21 @@ class MysqlProductRepository implements ProductRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function addSubproduct(int $productId, int $subproductId, float $qty, int $incdec = 1): void
     {
         $stmt = $this->pdo->prepare("INSERT INTO {$this->table}_association (fk_product_pere, fk_product_fils, qty, incdec) VALUES (:id, :subid, :qty, :incdec)");
         $stmt->execute(['id' => $productId, 'subid' => $subproductId, 'qty' => $qty, 'incdec' => $incdec]);
     }
 
+    #[\Override]
     public function deleteSubproduct(int $productId, int $subproductId): void
     {
         $stmt = $this->pdo->prepare("DELETE FROM {$this->table}_association WHERE fk_product_pere = :id AND fk_product_fils = :subid");
         $stmt->execute(['id' => $productId, 'subid' => $subproductId]);
     }
 
+    #[\Override]
     public function getPurchasePrices(int $productId): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->table}_fournisseur_price WHERE fk_product = :id");
@@ -213,6 +225,7 @@ class MysqlProductRepository implements ProductRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function addPurchasePrice(int $productId, array $data): void
     {
         // Minimal array injection
@@ -224,12 +237,14 @@ class MysqlProductRepository implements ProductRepository
         $stmt->execute($data);
     }
 
+    #[\Override]
     public function deletePurchasePrice(int $productId, int $priceId): void
     {
         $stmt = $this->pdo->prepare("DELETE FROM {$this->table}_fournisseur_price WHERE rowid = :id AND fk_product = :prod");
         $stmt->execute(['id' => $priceId, 'prod' => $productId]);
     }
 
+    #[\Override]
     public function getCustomerPrices(int $productId): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->table}_customer_price WHERE fk_product = :id");
@@ -237,6 +252,7 @@ class MysqlProductRepository implements ProductRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function getStock(int $productId, ?int $warehouseId = null): array
     {
         $sql = "SELECT * FROM {$this->table}_stock WHERE fk_product = :id";
@@ -252,6 +268,7 @@ class MysqlProductRepository implements ProductRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function getAttributes(int $limit = 100, int $offset = 0): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->table}_attribute LIMIT :limit OFFSET :offset");
@@ -261,6 +278,7 @@ class MysqlProductRepository implements ProductRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function getVariants(int $productId): array
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->table}_attribute_combination WHERE fk_product_parent = :id");
@@ -268,6 +286,7 @@ class MysqlProductRepository implements ProductRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function getContacts(int $productId, string $type = ''): array
     {
         $sql = "SELECT * FROM llx_element_contact WHERE element_id = :id AND fk_c_type_contact IN (SELECT rowid FROM llx_c_type_contact WHERE element = 'product')";
@@ -276,6 +295,7 @@ class MysqlProductRepository implements ProductRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
     }
 
+    #[\Override]
     public function addContact(int $productId, int $contactId, string $type): void
     {
         // Minimal linkage resolution
@@ -283,6 +303,7 @@ class MysqlProductRepository implements ProductRepository
         $stmt->execute(['id' => $productId, 'contact' => $contactId]);
     }
 
+    #[\Override]
     public function deleteContact(int $productId, int $contactId, string $type): void
     {
         $stmt = $this->pdo->prepare("DELETE FROM llx_element_contact WHERE element_id = :id AND fk_socpeople = :contact");
