@@ -22,12 +22,12 @@ return [
     'database' => [
         'driver' => 'mysql',
         'host' => getenv('MARIADB_HOST') ?: (file_exists('/.dockerenv') ? 'alixar_db' : '127.0.0.1'),
-        'port' => (int) (getenv('MARIADB_PORT') ?: (file_exists('/.dockerenv') ? 3306 : 3401)),
+        'port' => (int) (file_exists('/.dockerenv') ? 3306 : (getenv('MARIADB_PORT') ?: 3401)),
         'database' => getenv('MARIADB_DATABASE') ?: 'alixar_db',
         'username' => getenv('MARIADB_USER') ?: 'root',
         'password' => getenv('MARIADB_ROOT_PASSWORD') ?: 'root',
         'charset' => 'utf8mb4',
-        'table_prefix' => getenv('MARIADB_PREFIX') ?: 'llx_',
+        'table_prefix' => getenv('MARIADB_PREFIX') ?: '',
     ],
 
     // ┌─────────────────────────────────────────────────┐

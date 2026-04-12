@@ -1,6 +1,15 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-Events/01-create-event (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
-Events/02-get-event (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+Events/01-create-event (200 OK) - 37 ms
+Tests
+   ✕ Devuelve id
+      expected 'API not found (failed to include API file)' to be a number or a date
+   ✓ Crea Evento exitoso
+Events/02-get-event (403 Forbidden) - 3 ms
+Tests
+   ✕ Obtiene Evento exitosamente
+      expected [ 200 ] to include 403
+   ✕ Los datos coinciden
+      expected undefined to equal 'Llamada Presentación Alixar'
 
 📊 Execution Summary
 ┌───────────────┬──────────────┐
@@ -10,11 +19,11 @@ Events/02-get-event (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
 ├───────────────┼──────────────┤
 │ Requests      │ 2 (2 Failed) │
 ├───────────────┼──────────────┤
-│ Tests         │     0/0      │
+│ Tests         │     1/4      │
 ├───────────────┼──────────────┤
 │ Assertions    │     0/0      │
 ├───────────────┼──────────────┤
-│ Duration (ms) │    10045     │
+│ Duration (ms) │     258      │
 └───────────────┴──────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1

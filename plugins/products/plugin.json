@@ -1,0 +1,19 @@
+{
+  "name": "products",
+  "version": "1.0.0",
+  "displayName": "Productos y Servicios",
+  "description": "Catálogo de productos, servicios, precios de compra, subproductos, variantes y stock.",
+  "icon": "fas fa-box-open",
+  "author": "Alixar",
+
+  "requires": [],
+  "optionalDeps": ["crm"],
+  "conflicts": [],
+
+  "provides": {
+    "entities": ["Product", "ProductPrice", "ProductLot"],
+    "apiRoutes": "src/Infrastructure/Http/routes.php",
+    "migrations": "migrations/",
+    "schemas": "frontend/schemas/"
+  }
+}

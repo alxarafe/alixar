@@ -1,6 +1,16 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-Proposals/01-create-proposal (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
-Proposals/02-get-proposal (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+Proposals/01-create-proposal (500 Internal Server Error) - 48 ms
+Tests
+   ✕ Crea presupuesto exitoso
+      expected [ 200, 201 ] to include 500
+   ✕ Devuelve id
+      expected [object Object] to be a number or a date
+Proposals/02-get-proposal (403 Forbidden) - 5 ms
+Tests
+   ✕ Obtiene presupuesto exitosamente
+      expected [ 200 ] to include 403
+   ✕ Los datos coinciden
+      expected undefined to equal 1
 
 📊 Execution Summary
 ┌───────────────┬──────────────┐
@@ -10,11 +20,11 @@ Proposals/02-get-proposal (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
 ├───────────────┼──────────────┤
 │ Requests      │ 2 (2 Failed) │
 ├───────────────┼──────────────┤
-│ Tests         │     0/0      │
+│ Tests         │     0/4      │
 ├───────────────┼──────────────┤
 │ Assertions    │     0/0      │
 ├───────────────┼──────────────┤
-│ Duration (ms) │    10045     │
+│ Duration (ms) │     267      │
 └───────────────┴──────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1

@@ -4,7 +4,7 @@
 set -e
 
 echo "Running PHPStan..."
-docker exec alixar_php ./vendor/bin/phpstan analyse src --memory-limit=1G
+docker exec alixar_php ./vendor/bin/phpstan analyse src plugins --memory-limit=1G
 
 echo "Running Psalm..."
-docker exec alixar_php ./vendor/bin/psalm src --output-format=console
+docker exec alixar_php ./vendor/bin/psalm src plugins --output-format=console

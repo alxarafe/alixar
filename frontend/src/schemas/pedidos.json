@@ -1,0 +1,33 @@
+{
+  "title": "Pedidos de Cliente",
+  "endpoint": "/orders",
+  "detailRoute": "order-ficha",
+  "widget": {
+    "titleField": "ref",
+    "subtitleField": "date_commande",
+    "icon": "fas fa-shopping-cart"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Datos del Pedido",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "ref", "label": "Referencia", "inputType": "text", "required": true },
+             { "type": "Field", "key": "ref_client", "label": "Referencia Cliente", "inputType": "text" }
+          ]
+        },
+        { "type": "Field", "key": "date_commande", "label": "Fecha Pedido", "inputType": "date", "required": true }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Tercero Asociado",
+      "children": [
+        { "type": "Field", "key": "fk_soc", "label": "ID Tercero", "inputType": "number", "required": true }
+      ]
+    }
+  ]
+}

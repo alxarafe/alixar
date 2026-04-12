@@ -1,0 +1,42 @@
+{
+  "endpoint": "/thirdparties",
+  "detailRoute": "thirdparty-ficha",
+  "title": "Terceros",
+  "widget": {
+    "titleField": "name",
+    "subtitleField": "town",
+    "icon": "fas fa-building"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Identidad Básica",
+      "children": [
+        { "type": "Field", "key": "name", "label": "Razón Social / Nombre", "inputType": "text", "required": true },
+        {
+          "type": "Row",
+          "children": [
+            { "type": "Field", "key": "client", "label": "¿Es cliente?", "inputType": "select", "required": true, "options": [{"value": "1", "label": "Sí"}, {"value": "0", "label": "No"}] },
+            { "type": "Field", "key": "fournisseur", "label": "¿Es proveedor?", "inputType": "select", "required": true, "options": [{"value": "1", "label": "Sí"}, {"value": "0", "label": "No"}] }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Contacto y Ubicación",
+      "children": [
+        { "type": "Field", "key": "email", "label": "Correo electrónico", "inputType": "text" },
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "phone", "label": "Teléfono", "inputType": "text" },
+             { "type": "Field", "key": "zip", "label": "C.P.", "inputType": "text" }
+          ]
+        },
+        { "type": "Field", "key": "town", "label": "Población", "inputType": "text" },
+        { "type": "Field", "key": "address", "label": "Dirección completa", "inputType": "text" }
+      ]
+    }
+  ]
+}

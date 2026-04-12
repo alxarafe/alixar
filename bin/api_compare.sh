@@ -29,8 +29,8 @@ fi
 
 DOLIBARR_DIR="${DOLIBARR_PATH:-$PROJECT_DIR/../dolibarr}"
 
-DOLIBARR_URL="http://localhost:8090"
-ALIXAR_URL="http://localhost:8091"
+DOLIBARR_URL="http://localhost:${APITEST_DOLIBARR_PORT:-8090}"
+ALIXAR_URL="http://localhost:${APITEST_ALIXAR_PORT:-8091}"
 
 # Colores
 RED='\033[0;31m'
@@ -45,15 +45,28 @@ mkdir -p "$RESULTS_DIR"
 # ── Funciones ─────────────────────────────────────────────
 
 check_dolibarr() {
-    if [ ! -d "$DOLIBARR_DIR/htdocs" ]; then
-        echo -e "${RED}Error: No se encuentra ../dolibarr/htdocs${NC}"
-        echo "  El fork alxarafe/dolibarr debe estar clonado como hermano de alixar/"
-        echo "  Estructura esperada:"
-        echo "    Alxarafe/"
-        echo "    ├── alixar/     ← (estás aquí)"
-        echo "    └── dolibarr/   ← git@github.com:alxarafe/dolibarr.git"
-        exit 1
+    local fatal=${1:-true}
+    if [ -z "$DOLIBARR_PATH" ]; then
+        echo -e "${YELLOW}Advertencia: La variable DOLIBARR_PATH no está definida en .env${NC}"
+        echo "  Se usará el valor por defecto: $PROJECT_DIR/../dolibarr"
+        echo ""
     fi
+
+    if [ ! -d "$DOLIBARR_DIR/htdocs" ]; then
+        echo -e "${RED}Error: No se encuentra el código de Dolibarr en: ${CYAN}$DOLIBARR_DIR/htdocs${NC}"
+        echo ""
+        if [ "$fatal" = "true" ]; then
+            echo "Para ejecutar esta comparación, necesitas clonar el repositorio de Dolibarr."
+            echo "Define su ruta en el archivo .env (ej: DOLIBARR_PATH=/ruta/a/dolibarr)."
+            echo ""
+            exit 1
+        else
+            echo -e "${YELLOW}Continuando solo con el entorno de Alixar (modo test)...${NC}"
+            echo ""
+            return 1
+        fi
+    fi
+    return 0
 }
 
 dolibarr_version() {
@@ -85,7 +98,7 @@ wait_for_url() {
 }
 
 do_update() {
-    check_dolibarr
+    check_dolibarr true
     echo ""
     echo "╔═══════════════════════════════════════════════════════╗"
     echo "║  Actualizar fork alxarafe/dolibarr                   ║"
@@ -111,23 +124,37 @@ do_update() {
 }
 
 do_up() {
-    check_dolibarr
+    local has_dolibarr=true
+    check_dolibarr false || has_dolibarr=false
+
     echo ""
     echo "╔═══════════════════════════════════════════════════════╗"
     echo "║  Levantando entorno de tests API                      ║"
     echo "╚═══════════════════════════════════════════════════════╝"
     echo ""
-    echo -e "  Dolibarr: ${CYAN}$(dolibarr_version)${NC} (../dolibarr/)"
+    if [ "$has_dolibarr" = "true" ]; then
+        echo -e "  Dolibarr: ${CYAN}$(dolibarr_version)${NC} (../dolibarr/)"
+    else
+        echo -e "  Dolibarr: ${RED}No detectado (solo Alixar)${NC}"
+    fi
     echo -e "  Alixar:   ${CYAN}$(git -C "$PROJECT_DIR" log --oneline -1 2>/dev/null || echo 'dev')${NC}"
     echo ""
 
-    docker compose -f "$COMPOSE_FILE" up -d --build 2>&1
+    # Si no hay Dolibarr, podemos arrancar solo lo de Alixar para ahorrar recursos
+    if [ "$has_dolibarr" = "true" ]; then
+        docker compose -f "$COMPOSE_FILE" up -d --build 2>&1
+    else
+        echo "  Arrancando infraestructura Alixar para pruebas manuales..."
+        docker compose -f "$COMPOSE_FILE" up -d --build apitest_alixar_nginx apitest_db apitest_phpmyadmin 2>&1
+    fi
 
     echo ""
     echo "Esperando a que los servicios estén listos..."
     echo ""
 
-    wait_for_url "$DOLIBARR_URL" "Dolibarr" 120
+    if [ "$has_dolibarr" = "true" ]; then
+        wait_for_url "$DOLIBARR_URL" "Dolibarr" 120
+    fi
     wait_for_url "${ALIXAR_URL}/api/status" "Alixar API" 60
 
     echo ""
@@ -135,7 +162,7 @@ do_up() {
     echo "║  ⚠ PRIMERA VEZ: Configurar Dolibarr                   ║"
     echo "╠═══════════════════════════════════════════════════════╣"
     echo "║                                                       ║"
-    echo "║  1. Abrir http://localhost:8090/install/              ║"
+    echo "║  1. Abrir http://localhost:${APITEST_DOLIBARR_PORT:-8090}/install/              ║"
     echo "║  2. Instalar Dolibarr:                                ║"
     echo "║     - DB host: apitest_db                             ║"
     echo "║     - DB name: apitest_db / user: root / pass: root   ║"
@@ -150,6 +177,7 @@ do_up() {
 }
 
 do_test() {
+    check_dolibarr
     echo ""
     echo "╔═══════════════════════════════════════════════════════╗"
     echo "║  Tests de Compatibilidad API                          ║"
@@ -240,7 +268,7 @@ do_test() {
 do_reset() {
     echo ""
     echo "╔═══════════════════════════════════════════════════════╗"
-    echo "║  Reset: BD aséptica                                   ║"
+    echo "║  Reset: BD aséptica (DESTRUCTIVO)                     ║"
     echo "╚═══════════════════════════════════════════════════════╝"
     echo ""
     echo "  Destruyendo volúmenes de datos..."
@@ -250,13 +278,32 @@ do_reset() {
     echo ""
     echo -e "  ${GREEN}✅ BD eliminada. El próximo 'up' arranca con BD limpia.${NC}"
     echo -e "  ${YELLOW}⚠  Dolibarr necesitará reinstalarse (wizard) y regenerar DOLAPIKEY.${NC}"
+    echo -e "  ${CYAN}Si solo quieres borrar datos de prueba, usa: ${YELLOW}./bin/api_compare.sh clean${NC}"
+    echo ""
+}
+
+do_clean() {
+    echo ""
+    echo "╔═══════════════════════════════════════════════════════╗"
+    echo "║  Clean: Limpieza de datos transaccionales             ║"
+    echo "╚═══════════════════════════════════════════════════════╝"
+    echo ""
+    echo "  Purgando tablas de test (Dolibarr & Alixar share DB)..."
+
+    if docker exec -i apitest_db mariadb -u root -proot apitest_db < "$SCRIPT_DIR/clean_apitest.sql" 2>/dev/null; then
+        echo -e "  ${GREEN}✅ Tablas purgadas.${NC}"
+        echo -e "  ${GREEN}✅ Configuración y DOLAPIKEY preservados.${NC}"
+    else
+        echo -e "  ${RED}❌ Error al limpiar la base de datos.${NC}"
+        echo "  Asegúrate de que los contenedores están arrancados: ./bin/api_compare.sh up"
+    fi
     echo ""
 }
 
 do_down() {
     echo "Apagando entorno de tests (datos preservados)..."
     docker compose -f "$COMPOSE_FILE" down
-    echo -e "${CYAN}Datos preservados. Usa 'reset' para BD aséptica.${NC}"
+    echo -e "${CYAN}Datos preservados. Usa 'clean' para purgar o 'reset' para BD aséptica.${NC}"
 }
 
 # ── Main ──────────────────────────────────────────────────
@@ -265,27 +312,27 @@ case "${1:-help}" in
     update)  do_update ;;
     up)      do_up ;;
     test)    do_test ;;
+    clean)   do_clean ;;
     reset)   do_reset ;;
     down)    do_down ;;
     all)
-        do_reset
+        do_clean 2>/dev/null || do_reset
         do_up
-        echo "Pulsa ENTER cuando hayas configurado la DOLAPIKEY de Dolibarr:"
-        read -r
         do_test
         ;;
     *)
         echo ""
         echo "Alixar API — Tests de Compatibilidad"
         echo ""
-        echo "Uso: $0 {up|test|reset|update|down|all}"
+        echo "Uso: $0 {up|test|clean|reset|update|down|all}"
         echo ""
         echo "  up      Levantar Dolibarr + Alixar dockerizados"
         echo "  test    Ejecutar tests Bruno contra ambas APIs"
-        echo "  reset   Destruir BD y empezar limpio (aséptico)"
+        echo "  clean   Borra datos (proposals, etc) pero mantiene API KEY"
+        echo "  reset   Destruir BD y empezar limpio (aséptico, borra todo)"
         echo "  update  git pull del fork alxarafe/dolibarr"
         echo "  down    Apagar contenedores (datos preservados)"
-        echo "  all     reset + up + espera config + test"
+        echo "  all     clean + up + test"
         echo ""
         echo "Estructura requerida:"
         echo "  Alxarafe/"

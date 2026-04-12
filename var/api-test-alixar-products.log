@@ -1,45 +1,55 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-Products/01-create-product (200 OK) - 24 ms
+Products/01-create-product (500 Internal Server Error) - 33 ms
 Tests
-   ✓ Status 200 o 201 (creado)
-   ✓ Devuelve ID numérico
-Products/02-get-product (200 OK) - 4 ms
+   ✕ Status 200 o 201 (creado)
+      expected [ 200, 201 ] to include 500
+   ✕ Devuelve ID numérico
+      expected [object Object] to be a number or a date
+Products/02-get-product (500 Internal Server Error) - 3 ms
 Tests
+   ✕ Carga exitosa
+      expected 500 to equal 200
    ✕ Propiedades correctas
-      expected 10.5 to equal '10.50000000'
-   ✓ Carga exitosa
-Products/03-update-product (200 OK) - 10 ms
+      expected undefined to equal 'TEST-PROD'
+Products/03-update-product (500 Internal Server Error) - 4 ms
 Tests
-   ✓ Actualización exitosa
-Products/04-list-products (200 OK) - 5 ms
+   ✕ Actualización exitosa
+      expected 500 to equal 200
+Products/04-list-products (500 Internal Server Error) - 4 ms
 Tests
-   ✓ Listado existoso
-   ✓ Devuelve array
-Products/05-get-by-ref (200 OK) - 3 ms
+   ✕ Listado existoso
+      expected 500 to equal 200
+   ✕ Devuelve array
+      expected { error: { code: 500, …(1) } } to be an array
+Products/05-get-by-ref (500 Internal Server Error) - 5 ms
 Tests
-   ✓ Carga por REF exitosa
-   ✓ Propiedades correctas actualizadas
-Products/06-delete-product (200 OK) - 11 ms
+   ✕ Carga por REF exitosa
+      expected 500 to equal 200
+   ✕ Propiedades correctas actualizadas
+      expected undefined to equal 'TEST-PROD'
+Products/06-delete-product (500 Internal Server Error) - 4 ms
 Tests
-   ✓ Delete exitoso
-Products/07-verify-deletion (404 Not Found) - 4 ms
+   ✕ Delete exitoso
+      expected 500 to equal 200
+Products/07-verify-deletion (500 Internal Server Error) - 4 ms
 Tests
-   ✓ Status 404 (ya no existe)
+   ✕ Status 404 (ya no existe)
+      expected 500 to equal 404
 
 📊 Execution Summary
-┌───────────────┬────────────────────────┐
-│ Metric        │         Result         │
-├───────────────┼────────────────────────┤
-│ Status        │         ✗ FAIL         │
-├───────────────┼────────────────────────┤
-│ Requests      │ 7 (6 Passed, 1 Failed) │
-├───────────────┼────────────────────────┤
-│ Tests         │         10/11          │
-├───────────────┼────────────────────────┤
-│ Assertions    │          0/0           │
-├───────────────┼────────────────────────┤
-│ Duration (ms) │          587           │
-└───────────────┴────────────────────────┘
+┌───────────────┬──────────────┐
+│ Metric        │    Result    │
+├───────────────┼──────────────┤
+│ Status        │    ✗ FAIL    │
+├───────────────┼──────────────┤
+│ Requests      │ 7 (7 Failed) │
+├───────────────┼──────────────┤
+│ Tests         │     0/11     │
+├───────────────┼──────────────┤
+│ Assertions    │     0/0      │
+├───────────────┼──────────────┤
+│ Duration (ms) │     568      │
+└───────────────┴──────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1
 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1

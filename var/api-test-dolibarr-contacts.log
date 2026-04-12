@@ -1,29 +1,72 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-Contacts/01-create-contact (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
-Contacts/02-get-contact (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
-Contacts/03-list-contacts (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
-Contacts/04-update-contact (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
-Contacts/05-verify-update (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
-Contacts/06-get-nonexistent (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
-Contacts/07-create-without-lastname (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
-Contacts/07b-get-by-email (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
-Contacts/07c-get-categories (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
-Contacts/08-delete-contact (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
-Contacts/09-verify-deletion (getaddrinfo EAI_AGAIN apitest_dolibarr_nginx)
+Contacts/01-create-contact (200 OK) - 53 ms
+Tests
+   ✓ Status 200 o 201 (creado)
+   ✓ Devuelve ID numérico
+Contacts/02-get-contact (200 OK) - 17 ms
+Tests
+   ✓ Status 200
+   ✓ Tiene campo 'id'
+   ✓ Apellido es 'BrunoContact'
+   ✓ Nombre es 'Test'
+   ✓ Tiene campo 'email'
+   ✓ Tiene campo 'address'
+   ✓ Tiene campo 'town'
+   ✓ Tiene campo 'phone_pro'
+   ✓ Tiene campo 'status'
+Contacts/03-list-contacts (200 OK) - 16 ms
+Tests
+   ✓ Status 200
+   ✓ Devuelve un array
+   ✓ Cada elemento tiene 'id' o 'rowid'
+   ✓ Cada elemento tiene 'lastname'
+   ✓ Respeta el límite
+   ✓ El contacto creado está en la lista
+Contacts/04-update-contact (200 OK) - 29 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta tiene el objeto actualizado
+Contacts/05-verify-update (200 OK) - 14 ms
+Tests
+   ✓ Status 200
+   ✓ Apellido actualizado
+   ✓ Ciudad actualizada a Barcelona
+   ✓ Cargo actualizado
+Contacts/06-get-nonexistent (404 Not Found) - 13 ms
+Tests
+   ✓ Status 404
+Contacts/07-create-without-lastname (400 Bad Request) - 13 ms
+Tests
+   ✓ Status 4xx o 5xx (error de validación)
+Contacts/07b-get-by-email (200 OK) - 15 ms
+Tests
+   ✓ Carga por email exitosa
+   ✓ Los datos coinciden con el creado
+Contacts/07c-get-categories (200 OK) - 16 ms
+Tests
+   ✓ Carga de categorias exitosa
+   ✓ Las categorias se devuelven en formato array
+Contacts/08-delete-contact (200 OK) - 20 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta indica éxito
+Contacts/09-verify-deletion (404 Not Found) - 13 ms
+Tests
+   ✓ Status 404 (ya no existe)
 
 📊 Execution Summary
 ┌───────────────┬────────────────┐
 │ Metric        │     Result     │
 ├───────────────┼────────────────┤
-│ Status        │     ✗ FAIL     │
+│ Status        │     ✓ PASS     │
 ├───────────────┼────────────────┤
-│ Requests      │ 11 (11 Failed) │
+│ Requests      │ 11 (11 Passed) │
 ├───────────────┼────────────────┤
-│ Tests         │      0/0       │
+│ Tests         │     32/32      │
 ├───────────────┼────────────────┤
 │ Assertions    │      0/0       │
 ├───────────────┼────────────────┤
-│ Duration (ms) │     55137      │
+│ Duration (ms) │      1010      │
 └───────────────┴────────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1

@@ -48,9 +48,10 @@ Alixar incluye un entorno Docker completo (PHP-FPM, Nginx, MariaDB, phpMyAdmin).
    ```bash
    cp .env.example .env
    ```
-3. Inicia los contenedores:
+3. Inicia los contenedores y verifica el estado:
    ```bash
-   docker compose up -d
+   ./bin/docker_start.sh
+   ./bin/check_status.sh
    ```
 4. Instala las dependencias PHP:
    ```bash
@@ -73,7 +74,9 @@ Alixar incluye un entorno Docker completo (PHP-FPM, Nginx, MariaDB, phpMyAdmin).
 
 ## Documentación
 
-La documentación se está desarrollando junto con el proyecto. Puedes encontrar los documentos iniciales en el directorio `docs/`.
+La documentación se está desarrollando junto con el proyecto. Puedes encontrar información detallada sobre el entorno de ejecución en:
+- [Gestión de Docker y Tests](docs/docker.md)
+- Otros documentos en el directorio `docs/`.
 
 ## Contribuir
 

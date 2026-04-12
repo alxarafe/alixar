@@ -1,13 +1,39 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { api } from './api'
+import type { NavigationTree } from './api'
 
-import DashboardView from './views/DashboardView.vue'
-import ThirdPartiesView from './views/ThirdPartiesView.vue'
-import ContactsView from './views/ContactsView.vue'
-import ProductsView from './views/ProductsView.vue'
+const route = useRoute()
+const menus = ref<NavigationTree | null>(null)
 
-// Basic local state for orchestrator
-const currentTab = ref('dashboard')
+// Fallback sidebar if API menus unavailable
+const sidebarLinks = [
+  { label: '📊 Panel Principal', route: '/' },
+  { label: '🏢 Terceros', route: '/terceros' },
+  { label: '👤 Contactos', route: '/contactos' },
+  { label: '📦 Productos', route: '/productos' },
+  { label: '📋 Presupuestos', route: '/presupuestos' },
+  { label: '🛒 Pedidos', route: '/pedidos' },
+  { label: '🧾 Facturas', route: '/facturas' },
+  { label: '📐 Proyectos', route: '/proyectos' },
+  { label: '🏭 Pedidos Proveedor', route: '/pedidos-proveedor' },
+  { label: '📑 Facturas Proveedor', route: '/facturas-proveedor' },
+  { label: '🏦 Bancos', route: '/bancos' },
+  { label: '📅 Agenda', route: '/agenda' },
+]
+
+const fetchMenus = async () => {
+  try {
+    menus.value = await api.getNavigationTree()
+  } catch (e) {
+    console.warn("Using fallback sidebar (API menus unavailable)", e)
+  }
+}
+
+onMounted(() => {
+  fetchMenus()
+})
 </script>
 
 <template>
@@ -19,43 +45,55 @@ const currentTab = ref('dashboard')
         <span>Headless ERP</span>
       </div>
       <nav>
-        <a href="#" :class="{ active: currentTab === 'dashboard' }" @click.prevent="currentTab = 'dashboard'">Dashboard</a>
-        <a href="#" :class="{ active: currentTab === 'thirdparties' }" @click.prevent="currentTab = 'thirdparties'">Terceros</a>
-        <a href="#" :class="{ active: currentTab === 'contacts' }" @click.prevent="currentTab = 'contacts'">Contactos</a>
-        <a href="#" :class="{ active: currentTab === 'products' }" @click.prevent="currentTab = 'products'">Productos/Servicios</a>
-        <!-- Coming soon: -->
-        <a href="#" style="opacity:0.4; cursor:not-allowed;">Historial CRM</a>
-        <a href="#" style="opacity:0.4; cursor:not-allowed;">Proyectos</a>
-        <a href="#" style="opacity:0.4; cursor:not-allowed;">Tesorería</a>
+        <template v-if="menus?.top?.length">
+          <router-link
+            v-for="menu in menus.top"
+            :key="menu.id"
+            :to="menu.route"
+            active-class="active"
+          >
+            {{ menu.label }}
+          </router-link>
+        </template>
+        <template v-else>
+          <router-link
+            v-for="link in sidebarLinks"
+            :key="link.route"
+            :to="link.route"
+            active-class="active"
+            exact-active-class="active"
+          >
+            {{ link.label }}
+          </router-link>
+        </template>
       </nav>
     </aside>
 
     <!-- Main Content -->
     <main class="main-content">
       <header>
-        <h1 v-if="currentTab === 'dashboard'">Panel Principal</h1>
-        <h1 v-else-if="currentTab === 'thirdparties'">Directorio de Terceros</h1>
-        <h1 v-else-if="currentTab === 'contacts'">Agenda de Contactos</h1>
-        <h1 v-else-if="currentTab === 'products'">Catálogo de Productos</h1>
-        
+        <h1>{{ (route.meta?.title as string) || 'Alixar' }}</h1>
         <div class="user-profile">
           <div class="avatar">Admin</div>
         </div>
       </header>
 
       <div class="content-grid">
-        <DashboardView v-if="currentTab === 'dashboard'" />
-        <ThirdPartiesView v-if="currentTab === 'thirdparties'" />
-        <ContactsView v-if="currentTab === 'contacts'" />
-        <ProductsView v-if="currentTab === 'products'" />
+        <router-view></router-view>
       </div>
     </main>
   </div>
 </template>
 
-  font-size: 0.8rem;
-  font-weight: 600;
-}
+<style scoped>
+  .nav-loading {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+</style>
+
+<style>
 .layout {
   display: flex;
   min-height: 100vh;
@@ -67,11 +105,12 @@ const currentTab = ref('dashboard')
 
 /* Sidebar */
 .sidebar {
-  width: 280px;
-  padding: 2rem;
+  width: 260px;
+  min-width: 260px;
+  padding: 2rem 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 3rem;
+  gap: 2rem;
 }
 
 .logo h2 {
@@ -91,15 +130,16 @@ const currentTab = ref('dashboard')
 nav {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 3px;
 }
 
 nav a {
-  padding: 0.75rem 1rem;
+  padding: 8px 12px;
   border-radius: 8px;
   color: var(--text-muted);
   text-decoration: none;
   font-weight: 500;
+  font-size: 0.875rem;
   transition: all 0.2s;
 }
 
@@ -117,18 +157,19 @@ nav a.active {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
+  min-width: 0;
 }
 
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 0;
+  padding: 0.75rem 0;
 }
 
 header h1 {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 600;
 }
 
@@ -145,7 +186,7 @@ header h1 {
 .content-grid {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .metrics-row {
@@ -265,7 +306,7 @@ header h1 {
   color: rgba(255, 255, 255, 0.7);
   margin-bottom: 5px;
 }
-.input-group input {
+.input-group input, .input-group textarea {
   width: 100%;
   box-sizing: border-box;
   background: rgba(0, 0, 0, 0.2);
@@ -278,7 +319,7 @@ header h1 {
   outline: none;
   transition: border 0.3s;
 }
-.input-group input:focus {
+.input-group input:focus, .input-group textarea:focus {
   border-color: #a855f7;
 }
 

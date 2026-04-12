@@ -1,0 +1,56 @@
+{
+  "title": "Registro de Actividades CRM",
+  "endpoint": "/events",
+  "detailRoute": "event-ficha",
+  "widget": {
+    "titleField": "title",
+    "subtitleField": "dateStart",
+    "icon": "fas fa-calendar-check"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Agenda",
+      "children": [
+        { "type": "Field", "key": "title", "label": "Resumen de Actividad", "inputType": "text", "required": true },
+        {
+          "type": "Row",
+          "children": [
+            { "type": "Field", "key": "dateStart", "label": "Comienzo", "inputType": "date", "required": true },
+            { "type": "Field", "key": "dateEnd", "label": "Finalización", "inputType": "date" }
+          ]
+        },
+        { 
+          "type": "Field", "key": "typeCode", "label": "Naturaleza de Acción", "inputType": "select", "options": [
+            {"value": "AC_TEL", "label": "Llamada Telefónica"},
+            {"value": "AC_FAC", "label": "Envío de Factura"},
+            {"value": "AC_MAIL", "label": "Envío de Correo"},
+            {"value": "AC_RDV", "label": "Reunión Presencial/Videollamada"}
+          ], "required": true 
+        }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Trazabilidad Comercial",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+            { "type": "Field", "key": "thirdPartyId", "label": "ID Tercero", "inputType": "number" },
+            { "type": "Field", "key": "contactId", "label": "ID Contacto Directo", "inputType": "number" }
+          ]
+        },
+        { "type": "Field", "key": "projectId", "label": "ID Proyecto Asociado", "inputType": "number" }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Avance",
+      "children": [
+        { "type": "Field", "key": "percentage", "label": "Progreso (%)", "inputType": "number", "placeholder": "Ej: 100 para Completado" },
+        { "type": "Field", "key": "note", "label": "Cuerpo Completo / Actas", "inputType": "text" }
+      ]
+    }
+  ]
+}

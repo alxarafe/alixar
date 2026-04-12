@@ -1,0 +1,45 @@
+{
+  "title": "Facturas de Proveedor",
+  "endpoint": "/supplierinvoices",
+  "detailRoute": "supplier-invoice-ficha",
+  "widget": {
+    "titleField": "ref",
+    "subtitleField": "datef",
+    "icon": "fas fa-file-invoice"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Datos Comerciales",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+            { "type": "Field", "key": "ref", "label": "Referencia del Sistema", "inputType": "text", "required": true, "placeholder": "PROV-XXXX" },
+            { "type": "Field", "key": "ref_supplier", "label": "Referencia del Proveedor", "inputType": "text", "required": true, "placeholder": "Nº Factura de origen..." }
+          ]
+        },
+        { "type": "Field", "key": "datef", "label": "Fecha Emisión", "inputType": "date", "required": true }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Financiera y Proveedor",
+      "children": [
+        { "type": "Field", "key": "fk_soc", "label": "Tercero Asociado (ID Proveedor)", "inputType": "number", "required": true },
+        { "type": "Field", "key": "paye", "label": "¿Abonada totalmente?", "inputType": "select", "options": [
+          {"value": "0", "label": "No"}, 
+          {"value": "1", "label": "Sí"}
+        ]}
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Anotaciones Internas",
+      "children": [
+        { "type": "Field", "key": "note_private", "label": "Nota Privada", "inputType": "text" },
+        { "type": "Field", "key": "note_public", "label": "Nota Pública", "inputType": "text" }
+      ]
+    }
+  ]
+}

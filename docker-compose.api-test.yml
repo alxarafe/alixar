@@ -35,7 +35,7 @@ services:
       MARIADB_USER: dolibarr
       MARIADB_PASSWORD: dolibarr
     ports:
-      - "3490:3306"
+      - "${APITEST_DB_PORT:-3490}:3306"
     volumes:
       - apitest_db_data:/var/lib/mysql
     networks:
@@ -70,7 +70,7 @@ services:
     container_name: apitest_dolibarr_nginx
     restart: "no"
     ports:
-      - "8090:80"
+      - "${APITEST_DOLIBARR_PORT:-8090}:80"
     volumes:
       - "${DOLIBARR_PATH:-../dolibarr}/htdocs:/var/www/html:ro"
       - "./.docker/nginx/dolibarr.conf:/etc/nginx/conf.d/default.conf:ro"
@@ -105,7 +105,7 @@ services:
     container_name: apitest_alixar_nginx
     restart: "no"
     ports:
-      - "8091:80"
+      - "${APITEST_ALIXAR_PORT:-8091}:80"
     volumes:
       - ".:/var/www/html:rw"
       - "./.docker/nginx/apitest.conf:/etc/nginx/conf.d/default.conf"
@@ -120,7 +120,7 @@ services:
     container_name: apitest_phpmyadmin
     restart: "no"
     ports:
-      - "9090:80"
+      - "${APITEST_PHPMYADMIN_PORT:-9090}:80"
     environment:
       PMA_HOST: apitest_db
       PMA_PORT: 3306

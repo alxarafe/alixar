@@ -87,3 +87,433 @@ tr:hover td {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+
+/* ═══════════════════════════════════════════════════════════
+   Tab Bar (Dolibarr-style)
+   ═══════════════════════════════════════════════════════════ */
+.tab-bar {
+  display: flex;
+  gap: 2px;
+  border-bottom: 2px solid var(--border-light);
+  margin-bottom: 0;
+}
+
+.tab-item {
+  padding: 10px 20px;
+  border: 1px solid var(--border-light);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  position: relative;
+  top: 2px;
+}
+
+.tab-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-main);
+}
+
+.tab-item.tab-active {
+  background: var(--bg-panel);
+  color: var(--text-main);
+  border-color: var(--border-light);
+  border-bottom-color: transparent;
+  font-weight: 600;
+}
+
+.tab-icon {
+  margin-right: 6px;
+}
+
+/* Tab content area (sits below the tab bar) */
+.tab-content {
+  border: 1px solid var(--border-light);
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  padding: 1.5rem;
+  background: var(--bg-panel);
+  backdrop-filter: var(--glass-blur);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Info Card (Ficha de detalle)
+   ═══════════════════════════════════════════════════════════ */
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.detail-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.back-btn-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  text-decoration: none;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  color: var(--text-muted);
+}
+
+.back-btn-title:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(-2px);
+}
+
+.info-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+
+.info-row {
+  display: flex;
+  border-bottom: 1px solid var(--border-light);
+  padding: 10px 16px;
+}
+
+.info-row:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.info-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  min-width: 160px;
+  flex-shrink: 0;
+}
+
+.info-value {
+  font-size: 0.9rem;
+  color: var(--text-main);
+  word-break: break-word;
+}
+
+.info-value a {
+  color: #818CF8;
+  text-decoration: none;
+}
+
+.info-value a:hover {
+  text-decoration: underline;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Status Badge
+   ═══════════════════════════════════════════════════════════ */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: color-mix(in srgb, var(--badge-color, #94A3B8) 20%, transparent);
+  color: var(--badge-color, #94A3B8);
+  border: 1px solid color-mix(in srgb, var(--badge-color, #94A3B8) 40%, transparent);
+}
+
+.badge {
+  display: inline-flex;
+  padding: 2px 10px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: rgba(129, 140, 248, 0.15);
+  color: #818CF8;
+  border: 1px solid rgba(129, 140, 248, 0.25);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Action Bar (botones de acción bajo pestañas)
+   ═══════════════════════════════════════════════════════════ */
+.action-bar {
+  display: flex;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-light);
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+}
+
+.btn-action:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.btn-action.btn-validate {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #34D399;
+}
+
+.btn-action.btn-close-doc {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #60A5FA;
+}
+
+.btn-action.btn-delete {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.25);
+  color: #FCA5A5;
+}
+
+.btn-action:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Lines Table (detalle de documentos comerciales)
+   ═══════════════════════════════════════════════════════════ */
+.lines-table-wrapper {
+  width: 100%;
+}
+
+.lines-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.lines-table th {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 10px 12px;
+  border-bottom: 2px solid var(--border-light);
+}
+
+.lines-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 0.9rem;
+}
+
+.lines-table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.line-subtotal {
+  font-weight: 600;
+  text-align: right;
+  color: #818CF8;
+}
+
+.line-input {
+  width: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border 0.2s;
+  box-sizing: border-box;
+}
+
+.line-input:focus {
+  border-color: #a855f7;
+}
+
+.line-input-sm {
+  width: 90px;
+  text-align: right;
+}
+
+.line-editing td {
+  background: rgba(168, 85, 247, 0.05);
+}
+
+.line-add-row td {
+  border-top: 2px dashed var(--border-light);
+  padding-top: 12px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 0.8rem;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Pagination
+   ═══════════════════════════════════════════════════════════ */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-light);
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.pagination-info {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.pagination-info strong {
+  color: var(--text-main);
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pagination-btn {
+  min-width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-light);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text-muted);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-main);
+}
+
+.pagination-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.pagination-ellipsis {
+  padding: 0 6px;
+  color: var(--text-muted);
+}
+
+.pagination-limit select {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-light);
+  color: var(--text-main);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   Entity List (clickable rows)
+   ═══════════════════════════════════════════════════════════ */
+.row-clickable {
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.row-clickable:hover td {
+  background: rgba(79, 70, 229, 0.06) !important;
+}
+
+/* Detail header (entity title + ref) */
+.detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.detail-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.detail-ref {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Stub tab placeholder */
+.stub-placeholder {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--text-muted);
+}
+
+.stub-placeholder .stub-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.stub-placeholder p {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Glass select (for DynamicForm selects) */
+.glass-select {
+  width: 100%;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border 0.3s;
+  cursor: pointer;
+}
+
+.glass-select:focus {
+  border-color: #a855f7;
+}
+

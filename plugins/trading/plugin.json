@@ -1,0 +1,28 @@
+{
+  "name": "trading",
+  "version": "1.0.0",
+  "displayName": "Comercial — Ventas y Compras",
+  "description": "Presupuestos, pedidos y facturas de clientes y proveedores. Gestión de pagos.",
+  "icon": "fas fa-file-invoice-dollar",
+  "author": "Alixar",
+
+  "requires": ["crm"],
+  "optionalDeps": ["products", "projects"],
+  "conflicts": [],
+
+  "provides": {
+    "entities": [
+      "Proposal", "Order", "Invoice",
+      "SupplierProposal", "SupplierOrder", "SupplierInvoice",
+      "Payment"
+    ],
+    "apiRoutes": "src/Infrastructure/Http/routes.php",
+    "migrations": "migrations/",
+    "schemas": "frontend/schemas/"
+  },
+
+  "submodules": {
+    "sales": { "label": "Ventas", "default": true },
+    "purchases": { "label": "Compras", "default": true }
+  }
+}

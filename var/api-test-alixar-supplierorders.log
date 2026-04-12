@@ -1,11 +1,11 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-SupplierOrders/01-create-supplierorder (500 Internal Server Error) - 30 ms
+SupplierOrders/01-create-supplierorder (500 Internal Server Error) - 34 ms
 Tests
    ✕ Crea pedido de proveedor exitoso
       expected [ 200, 201 ] to include 500
    ✕ Devuelve id
       expected [object Object] to be a number or a date
-SupplierOrders/02-get-supplierorder (500 Internal Server Error) - 3 ms
+SupplierOrders/02-get-supplierorder (500 Internal Server Error) - 4 ms
 Tests
    ✕ Obtiene pedido proveedor exitosamente
       expected [ 200 ] to include 500
@@ -24,7 +24,7 @@ Tests
 ├───────────────┼──────────────┤
 │ Assertions    │     0/0      │
 ├───────────────┼──────────────┤
-│ Duration (ms) │     244      │
+│ Duration (ms) │     255      │
 └───────────────┴──────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1
