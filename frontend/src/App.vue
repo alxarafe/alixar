@@ -50,6 +50,34 @@ const sidebarGroups = ref<MenuGroup[]>([
     children: [
       { id: 'products', label: 'Productos y Servicios', route: '/productos' }
     ]
+  },
+  {
+    id: 'logistics',
+    label: 'Logística',
+    icon: '🚚',
+    isOpen: false,
+    children: [
+      { id: 'shipments', label: 'Expediciones', route: '/expediciones' },
+      { id: 'receptions', label: 'Recepciones', route: '/recepciones' }
+    ]
+  },
+  {
+    id: 'interventions',
+    label: 'Servicios y SAT',
+    icon: '🔧',
+    isOpen: false,
+    children: [
+      { id: 'sat', label: 'Partes de Trabajo', route: '/intervenciones' }
+    ]
+  },
+  {
+    id: 'hr',
+    label: 'Recursos Humanos',
+    icon: '👥',
+    isOpen: false,
+    children: [
+      { id: 'expenses', label: 'Notas de Gasto', route: '/notas-gasto' }
+    ]
   }
 ])
 

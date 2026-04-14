@@ -1,0 +1,33 @@
+{
+  "title": "Recepciones",
+  "endpoint": "/receptions",
+  "detailRoute": "reception-ficha",
+  "widget": {
+    "titleField": "ref",
+    "subtitleField": "thirdPartyId",
+    "icon": "fas fa-box"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Datos de Recepción",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "ref", "label": "Referencia", "inputType": "text" },
+             { "type": "Field", "key": "trackingNumber", "label": "Nº Seguimiento", "inputType": "text" }
+          ]
+        },
+        { "type": "Field", "key": "dateDelivery", "label": "Fecha Recepción", "inputType": "date" }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Tercero Asociado",
+      "children": [
+        { "type": "Field", "key": "thirdPartyId", "label": "ID Proveedor", "inputType": "number", "required": true }
+      ]
+    }
+  ]
+}

@@ -95,6 +95,7 @@ services:
       MARIADB_DATABASE: apitest_db
       MARIADB_USER: root
       MARIADB_ROOT_PASSWORD: root
+      DOLAPIKEY: ${DOLAPIKEY}
     volumes:
       - ".:/var/www/html:rw"
     networks:

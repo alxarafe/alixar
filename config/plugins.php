@@ -20,4 +20,7 @@ return [
     'products',
     'projects',
     'finance',
+    'logistics',
+    'interventions',
+    'hr',
 ];

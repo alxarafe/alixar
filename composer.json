@@ -26,6 +26,9 @@
             "Plugin\\Products\\": "plugins/products/src/",
             "Plugin\\Projects\\": "plugins/projects/src/",
             "Plugin\\Finance\\": "plugins/finance/src/",
+            "Plugin\\Hr\\": "plugins/hr/src/",
+            "Plugin\\Logistics\\": "plugins/logistics/src/",
+            "Plugin\\Interventions\\": "plugins/interventions/src/",
             "Plugin\\Tenant\\": "plugins/tenant/src/",
             "Plugin\\DolibarrCompat\\": "plugins/dolibarr-compat/src/"
         }

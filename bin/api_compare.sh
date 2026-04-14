@@ -143,10 +143,17 @@ do_up() {
     # Si no hay Dolibarr, podemos arrancar solo lo de Alixar para ahorrar recursos
     if [ "$has_dolibarr" = "true" ]; then
         docker compose -f "$COMPOSE_FILE" up -d --build 2>&1
+        docker compose -f "$COMPOSE_FILE" restart apitest_alixar_nginx apitest_dolibarr_nginx 2>&1
     else
         echo "  Arrancando infraestructura Alixar para pruebas manuales..."
         docker compose -f "$COMPOSE_FILE" up -d --build apitest_alixar_nginx apitest_db apitest_phpmyadmin 2>&1
+        docker compose -f "$COMPOSE_FILE" restart apitest_alixar_nginx 2>&1
     fi
+
+    echo ""
+    echo "Ejecutando migraciones Core y Plugins para Alixar V2..."
+    sleep 5 # dar tiempo a que mariadb acepte conexiones
+    docker exec -i apitest_alixar_php php run_plugin_migration.php || true
 
     echo ""
     echo "Esperando a que los servicios estén listos..."
@@ -202,6 +209,7 @@ do_test() {
             node:20-alpine \
             npx --yes @usebruno/cli run "$suite" \
             --env dolibarr \
+            --env-var apiKey="$DOLAPIKEY" \
             --env-var baseUrl=http://apitest_dolibarr_nginx 2>&1 | tee "$RESULTS_DIR/api-test-dolibarr-${suite,,}.log"; then
             echo -e "  ${suite}: ${GREEN}✅ PASS${NC}"
         else
@@ -229,6 +237,7 @@ do_test() {
             node:20-alpine \
             npx --yes @usebruno/cli run "$suite" \
             --env apitest \
+            --env-var apiKey="$DOLAPIKEY" \
             --env-var baseUrl=http://apitest_alixar_nginx 2>&1 | tee "$RESULTS_DIR/api-test-alixar-${suite,,}.log"; then
             echo -e "  ${suite}: ${GREEN}✅ PASS${NC}"
         else

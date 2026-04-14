@@ -1,5 +1,5 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-Orders/01-create-order (400 Bad Request) - 34 ms
+Orders/01-create-order (400 Bad Request) - 29 ms
 Tests
    ✕ Crea pedido exitoso
       expected [ 200, 201 ] to include 400
@@ -11,7 +11,7 @@ Tests
       expected [ 200 ] to include 403
    ✕ Los datos coinciden
       expected undefined to equal 1
-Orders/03-list-orders (200 OK) - 14 ms
+Orders/03-list-orders (200 OK) - 13 ms
 Tests
    ✕ Devuelve array
       expected +0 to be above +0
@@ -47,7 +47,7 @@ Tests
 ├───────────────┼──────────────┤
 │ Assertions    │     0/0      │
 ├───────────────┼──────────────┤
-│ Duration (ms) │     619      │
+│ Duration (ms) │     603      │
 └───────────────┴──────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1

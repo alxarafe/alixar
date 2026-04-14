@@ -185,10 +185,7 @@ class ThirdPartyApiController
         if (!$this->bankAccountRepository) throw new \RuntimeException('BankAccountRepository is not configured.');
 
         $accounts = $this->bankAccountRepository->findByThirdPartyId($id);
-        Flight::json(array_map(fn($acc) => $this->mapToDolibarr(
-            $acc->toArray(),
-            \Plugin\Business\Infrastructure\Persistence\Mysql\MysqlBankAccountRepository::COLUMN_MAP
-        ), $accounts));
+        Flight::json(array_map(fn($acc) => $acc->toArray(), $accounts));
     }
 
     public function postBankAccount(int $id): void
@@ -198,10 +195,9 @@ class ThirdPartyApiController
         if (!$this->bankAccountRepository) throw new \RuntimeException('BankAccountRepository is not configured.');
 
         $payload = json_decode((string) file_get_contents('php://input'), true) ?? [];
-        $cleanData = $this->mapToClean($payload, \Plugin\Business\Infrastructure\Persistence\Mysql\MysqlBankAccountRepository::COLUMN_MAP);
 
         $account = new \Plugin\Business\Domain\BankAccount\BankAccount(thirdPartyId: $id);
-        $account->updateFrom($cleanData);
+        $account->updateFrom($payload);
         $this->bankAccountRepository->save($account);
 
         Flight::json($account->getId(), 200);
@@ -220,12 +216,11 @@ class ThirdPartyApiController
         }
 
         $payload = json_decode((string) file_get_contents('php://input'), true) ?? [];
-        $cleanData = $this->mapToClean($payload, \Plugin\Business\Infrastructure\Persistence\Mysql\MysqlBankAccountRepository::COLUMN_MAP);
 
-        $account->updateFrom($cleanData);
+        $account->updateFrom($payload);
         $this->bankAccountRepository->save($account);
 
-        Flight::json($this->mapToDolibarr($account->toArray(), \Plugin\Business\Infrastructure\Persistence\Mysql\MysqlBankAccountRepository::COLUMN_MAP));
+        Flight::json($account->toArray());
     }
 
     public function deleteBankAccount(int $id, int $bankaccountId): void
@@ -260,10 +255,7 @@ class ThirdPartyApiController
 
         // Customer type = 2
         $categories = $this->categoryRepository->findByThirdPartyId($id, 2);
-        Flight::json(array_map(fn(\Plugin\Business\Domain\Category\Category $cat) => $this->mapToDolibarr(
-            $cat->toArray(),
-            \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Business\DolibarrMysqlThirdPartyCategoryRepository::CATEGORY_COLUMN_MAP
-        ), $categories));
+        Flight::json(array_map(fn(\Plugin\Business\Domain\Category\Category $cat) => $cat->toArray(), $categories));
     }
 
     public function putCategory(int $id, int $categoryId): void
@@ -296,10 +288,7 @@ class ThirdPartyApiController
 
         // Supplier type = 1
         $categories = $this->categoryRepository->findByThirdPartyId($id, 1);
-        Flight::json(array_map(fn(\Plugin\Business\Domain\Category\Category $cat) => $this->mapToDolibarr(
-            $cat->toArray(),
-            \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Business\DolibarrMysqlThirdPartyCategoryRepository::CATEGORY_COLUMN_MAP
-        ), $categories));
+        Flight::json(array_map(fn(\Plugin\Business\Domain\Category\Category $cat) => $cat->toArray(), $categories));
     }
 
     public function putSupplierCategory(int $id, int $categoryId): void

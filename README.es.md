@@ -15,13 +15,14 @@
 **Alixar** es un **ERP/CRM** de código abierto inmerso en una ambiciosa modernización arquitectónica.
 El proyecto nació a partir de [Dolibarr](https://www.dolibarr.org/), pero se está reescribiendo progresivamente implementando una **Arquitectura Hexagonal (Puertos y Adaptadores)** en PHP 8.2+ acompañada de un moderno frontend **Headless en Vue 3 + TypeScript**.
 
-La estrategia principal de Alixar es mantener *inicialmente* una **compatibilidad del 100% con el esquema de base de datos y reglas de negocio** de Dolibarr, lo que permite ejecutar el monolito heredado y la nueva API de transiciòn en paralelo. La visión a futuro es evolucionar a hacia una estructura de datos nativa más moderna y robusta.
+La estrategia principal de Alixar es proporcionar una **compatibilidad nativa del 100% con la API REST** de Dolibarr mediante la capa `dolibarr-compat` (que actúa como un **API Gateway o Anti-Corruption Layer**). Esto permite que el frontend heredado o sistemas de terceros interactúen con Alixar como si fuese Dolibarr, mientras Alixar utiliza en el interior **una base de datos completamente independiente, limpia y normalizada** desde el primer día.
 
 ## Objetivos
 
 - Proporcionar un ERP/CRM moderno estructurado limpiamente en capas (Dominio, Aplicación, Infraestructura).
-- Extraer y aislar la lógica monolítica heredada (ej. `societe.class.php`) en Servicios de Dominio puros y Value Objects.
-- Ofrecer una robusta API REST capaz de superar tests de paridad de comportamiento exactos frente a Dolibarr (`bin/api_compare.sh`).
+- Extraer y aislar la lógica monolítica heredada en Servicios de Dominio puros y Value Objects.
+- Ofrecer una robusta API REST capaz de superar tests de paridad de comportamiento exactos frente a Dolibarr (`bin/api_compare.sh`) mediante su capa de traducción.
+- Desligarse por completo del esquema de base de datos sucio y de los prefijos obligatorios `llx_`.
 - Ofrecer un **Frontend Headless** de última generación construido con Vue.js y TypeScript, completamente desacoplado del backend.
 - Ofrecer un entorno Docker completo para ejecutar ambos sistemas cara a cara de forma local.
 
@@ -89,7 +90,9 @@ Este proyecto existe gracias a todas las personas que contribuyen.
 
 ## Créditos
 
-Alixar está basado en [Dolibarr](https://www.dolibarr.org/) y construido con el microframework [Alxarafe](https://github.com/alxarafe/alxarafe).
+## Créditos
+
+Alixar se inspiró fuertemente en los retos arquitectónicos de [Dolibarr](https://www.dolibarr.org/), y fue modernizado utilizando Flight PHP como microframework base para su enrutamiento y desacople.
 
 ## Enlaces
 

@@ -1,49 +1,50 @@
-# Alixar: Strangler Fig Playbook (Guía Lógica de Migración por Plugin)
+# Alixar: Strangler Fig Playbook (Guía Lógica API-Gateway)
 
-Este documento sirve como un **recordatorio del protocolo a seguir ciegamente** al migrar cualquier módulo heredado (legacy) de Dolibarr hacia el ecosistema modular de Alixar.
+Este documento reemplaza a la antigua guía de persistencia y sirve como el actual manifiesto de la arquitectura **API-Level Anti-Corruption Layer (ACL)** de Alixar.
 
-Ante la directriz de: *"Migrar el Módulo X"*, el agente o desarrollador debe ejecutar exactamente este flujo de forma paralela.
+Ante la directriz de: *"Migrar el Módulo X"*, el agente o desarrollador debe ejecutar exactamente este flujo.
 
 ---
 
 ## 🌊 Flujo Paralelo: Regla de Oro
-**NUNCA debes crear lógica de conexión a la base de datos de Dolibarr dentro del plugin de destino (`crm`, `trading`, `finance`).**
-Toda integración física con la base de datos legacy vive y muere dentro de `dolibarr-compat`.
+**NUNCA debes emular ni conectar con la base de datos de Dolibarr, ni usar el prefijo `llx_`.**
+La base de datos de Alixar es independiente, normalizada, y los dominios de Alixar (`plugins/hr`, `plugins/crm`) poseen sus migraciones limpias y su infraestructura autónoma.
+
+La integración / retrocompatibilidad con el legado de Dolibarr vive puramente como una **traductor HTTP** dentro del plugin `dolibarr-compat`. `dolibarr-compat` intercepta APIs de Dolibarr, mapea el JSON con el formato antiguo, y se lo pasa a Alixar Nativo.
 
 ---
 
 ## 👣 Pasos para cada Plugin / Módulo a Migrar
 
-### Paso 1. Definición Funcional y Pura (En el Plugin de Dominio)
-**(Ejemplo de destino: `plugins/crm`)**
+### Paso 1. Dominio Nativo, Persistencia, y API Limpia (Ej. `plugins/crm`)
 
-1. **Entidades (Domain):** Crear la entidad de negocio pura (e.g. `Domain/ThirdParty/ThirdParty.php`) con sus DTOs y validadores agnósticos. No puede extender de nada que diga "Dolibarr" ni "PDO".
-2. **Interfaces de Repositorio (Domain):** Definir **solo** el contrato de cómo se cargan, guardan y se buscan estos datos (`ThirdPartyRepositoryInterface`).
-3. **Casos de Uso (Application):** Crear las Clases (Ej: `CreateThirdParty`, `GetThirdPartyById`) que utilicen la interfaz del repositorio, no la implementación.
-4. **Controladores Web/API (Infrastructure):** Exponer los endpoints REST (e.g., `GET /api/crm/thirdparties`).
+1. **Entidades (Domain):** Crear entidad de negocio pura (e.g. `ThirdParty.php`) y sus DTOs/Value Objects.
+2. **Migración SQL (DB):** Crear scripts de migración normalizados en `plugins/crm/migrations/` (Ej: `001_create_third_parties.php`) donde la tabla se llame `third_parties` sin usar prefijo forzado `llx_`.
+3. **Repositorio SQL (Infrastructure):** Crear el `MysqlThirdPartyRepository.php` que usa `$pdo` para dialogar con tu nueva y reluciente tabla `third_parties`.
+4. **Casos de Uso (Application):** Crear servicios `CreateThirdParty`, `GetThirdParty` etc.
+5. **Controlador Nativo (API):** Componente que expone `GET /api/v1/thirdparties` en formato ideal moderno para el Frontend.
 
-### Paso 2. Adaptación Heredada e Insalubre (En `dolibarr-compat`)
-**(Ejemplo de destino: `plugins/dolibarr-compat`)**
+### Paso 2. Adaptador de Retrocompatibilidad (En `dolibarr-compat`)
 
-1. **Implementación Física:** Ir a `src/Infrastructure/Persistence/Mysql/...` correspondiente (e.g., `Mysql/Crm/DolibarrMysqlThirdPartyRepository.php`).
-2. **Implementar Interfaces:** Indicar explícitamente que se implementa la Interfaz creada en el paso 1.1 (`implements ThirdPartyRepositoryInterface`).
-3. **Mapeo Sucio (El Estrangulamiento):** Manejar las tablas físicas legacy (ej. `SELECT * FROM llx_societe`). Formatear los resultados para devolver la entidad pura de Dominio que el plugin original demanda.
+Para mantener el 100% de la suite de tests de Dolibarr funcionando:
 
-### Paso 3. Inyección de Dependencias (El Superpegamento)
-
-1. En el contenedor de Dependencias Global / Bootstrapper, vincular (bind) la interfaz del Dominio a la implementación Legacy:
+1. **Definir el Mapper:**
+   Creas un array declarativo dentro del transformador `ThirdPartyLegacyMapper` que relacione los nombres engorrosos legacy con los limpios:
    ```php
-   $container->bind(
-       \Plugin\Crm\Domain\ThirdParty\ThirdPartyRepositoryInterface::class, 
-       \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Crm\DolibarrMysqlThirdPartyRepository::class
-   );
+   protected array $mapping = [
+       'rowid'       => 'id',
+       'nom'         => 'name',
+       'date_crea'   => ['target' => 'createdAt', 'cast' => 'timestamp_to_date'],
+   ];
    ```
 
-### Paso 4. Verificación Estricta (PHPStan)
+2. **Crear el Controlador Legacy:**
+   En `plugins/dolibarr-compat/src/Infrastructure/Http/Api/Controller/` publicas tu controlador (ej. `LegacyThirdPartyApiController.php`). Este hereda las mecánicas base. Se traga el request dirigido a `/api/index.php/thirdparties` (el que hace postman/bruno o un software de terceros creyendo que eres Dolibarr), lo mapea, lanza el Caso de Uso puro de Alixar, recoge la entidad, y responde el JSON mapeado al reverso.
 
-Correr invariablemente `vendor/bin/phpstan analyse`.
-- Si `plugins/crm` lanza un error porque desconoce algo de la BBDD -> **FRACASO**. Hay fuga de dependencia legacy.
-- Si todo pasa y se devuelve una Entidad pura -> **ÉXITO**. El módulo ha sido estrangulado correctamente.
+### Paso 3. Verificación Estricta (Integración)
 
-## 🏁 En el Futuro...
-El día que las tablas de Dolibarr de ese módulo (`llx_societe`, etc.) puedan ser eliminadas porque tenemos nuestro propio schema limpio, el **Paso 1** permanecerá absolutamente idéntico, y el **Paso 2** será simplemente escrito en un nuevo adaptador `TenantMysql...` modificando solo el **Paso 3**.
+- Correr `bin/api_compare.sh` asegurándote de que la vieja API responde lo mismo.
+- Ejecutar PHPStan `vendor/bin/phpstan analyse` asegurando que toda la tipificación está limpia.
+
+## 🏁 Destino Final
+El día que se decida apagar Dolibarr para siempre, simplemente se elimina por completo la carpeta `dolibarr-compat`. Alixar y todo su ecosistema seguirán funcionando a la perfección de forma moderna y sin un solo rastro de dependencias heredadas.

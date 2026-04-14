@@ -1,53 +1,40 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-Events/01-create-event (200 OK) - 25 ms
+Events/01-create-event (200 OK) - 31 ms
 Tests
-   ✕ Devuelve id
-      expected '<br />
-<b>Fatal error</b>:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'apitest_db.translations' doesn't exist in /var/www/html/src/Infrastructure/Persistence/I18n/DatabaseTranslationAdapter.php:109
-Stack trace:
-#0 /var/www/html/src/Infrastructure/Persistence/I18n/DatabaseTranslationAdapter.php(109): PDO-&gt;prepare('\n            IN...')
-#1 /var/www/html/src/Infrastructure/Persistence/I18n/DatabaseTranslationAdapter.php(155): Core\Infrastructure\Persistence\I18n\DatabaseTranslationAdapter-&gt;bulkImport('en', 'core', Array)
-#2 /var/www/html/config/api_routes.php(191): Core\Infrastructure\Persistence\I18n\DatabaseTranslationAdapter-&gt;importFromYaml('/var/www/html/s...', 'en', 'core')
-#3 /var/www/html/public/api.php(94): require('/var/www/html/c...')
-#4 {main}
-  thrown in <b>/var/www/html/src/Infrastructure/Persistence/I18n/DatabaseTranslationAdapter.php</b> on line <b>109</b><br />
-' to be a number or a date
    ✓ Crea Evento exitoso
-Events/02-get-event (200 OK) - 4 ms
+   ✓ Devuelve id
+Events/02-get-event (200 OK) - 10 ms
 Tests
-   ✕ Los datos coinciden
-      expected undefined to equal 'Llamada Presentación Alixar'
    ✓ Obtiene Evento exitosamente
-Events/03-list-events (200 OK) - 4 ms
+   ✓ Los datos coinciden
+Events/03-list-events (200 OK) - 9 ms
 Tests
-   ✕ Devuelve array
-      expected '<br />\n<b>Fatal error</b>:  Uncaught…' to be an array
    ✓ Lista eventos exitosamente
-Events/04-update-event (200 OK) - 6 ms
+   ✓ Devuelve array
+Events/04-update-event (200 OK) - 17 ms
 Tests
    ✓ Actualización exitosa
-Events/05-delete-event (200 OK) - 4 ms
+Events/05-delete-event (200 OK) - 12 ms
 Tests
    ✓ Delete exitoso
-Events/06-verify-deletion (200 OK) - 4 ms
+Events/06-verify-deletion (404 Not Found) - 10 ms
 Tests
-   ✕ El evento eliminado no existe
-      expected 200 to equal 404
+   ✓ El evento eliminado no existe
 
 📊 Execution Summary
-┌───────────────┬────────────────────────┐
-│ Metric        │         Result         │
-├───────────────┼────────────────────────┤
-│ Status        │         ✗ FAIL         │
-├───────────────┼────────────────────────┤
-│ Requests      │ 6 (2 Passed, 4 Failed) │
-├───────────────┼────────────────────────┤
-│ Tests         │          5/9           │
-├───────────────┼────────────────────────┤
-│ Assertions    │          0/0           │
-├───────────────┼────────────────────────┤
-│ Duration (ms) │          506           │
-└───────────────┴────────────────────────┘
+┌───────────────┬──────────────┐
+│ Metric        │    Result    │
+├───────────────┼──────────────┤
+│ Status        │    ✓ PASS    │
+├───────────────┼──────────────┤
+│ Requests      │ 6 (6 Passed) │
+├───────────────┼──────────────┤
+│ Tests         │     9/9      │
+├───────────────┼──────────────┤
+│ Assertions    │     0/0      │
+├───────────────┼──────────────┤
+│ Duration (ms) │     524      │
+└───────────────┴──────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1
 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1

@@ -331,6 +331,13 @@ class ApiService {
 
     try {
       const response = await fetch(url, config)
+      if (response.status === 401) {
+        localStorage.removeItem('alixar_token')
+        localStorage.removeItem('alixar_user')
+        window.location.href = '/login'
+        throw new Error('No autorizado. Sesión expirada.')
+      }
+      
       if (!response.ok) {
         let errorMsg = `Error ${response.status}: ${response.statusText}`
         try {
@@ -710,6 +717,33 @@ class ApiService {
   syncRolePermissions(roleId: number, permissionIds: number[]): Promise<any> {
     return this.request(`/roles/${roleId}/permissions`, 'PUT', { permission_ids: permissionIds })
   }
+
+  // ── Logistics (Shipments & Receptions) ─────────────────
+  getShipments(params?: ListParams): Promise<any[]> { return this.list<any>('/shipments', params) }
+  getShipment(id: number): Promise<any> { return this.request<any>(`/shipments/${id}`) }
+  createShipment(data: any): Promise<number> { return this.request<number>('/shipments', 'POST', data) }
+  updateShipment(id: number, data: any): Promise<any> { return this.request<any>(`/shipments/${id}`, 'PUT', data) }
+  deleteShipment(id: number): Promise<any> { return this.request(`/shipments/${id}`, 'DELETE') }
+
+  getReceptions(params?: ListParams): Promise<any[]> { return this.list<any>('/receptions', params) }
+  getReception(id: number): Promise<any> { return this.request<any>(`/receptions/${id}`) }
+  createReception(data: any): Promise<number> { return this.request<number>('/receptions', 'POST', data) }
+  updateReception(id: number, data: any): Promise<any> { return this.request<any>(`/receptions/${id}`, 'PUT', data) }
+  deleteReception(id: number): Promise<any> { return this.request(`/receptions/${id}`, 'DELETE') }
+
+  // ── Interventions ──────────────────────────────────────
+  getInterventions(params?: ListParams): Promise<any[]> { return this.list<any>('/interventions', params) }
+  getIntervention(id: number): Promise<any> { return this.request<any>(`/interventions/${id}`) }
+  createIntervention(data: any): Promise<number> { return this.request<number>('/interventions', 'POST', data) }
+  updateIntervention(id: number, data: any): Promise<any> { return this.request<any>(`/interventions/${id}`, 'PUT', data) }
+  deleteIntervention(id: number): Promise<any> { return this.request(`/interventions/${id}`, 'DELETE') }
+
+  // ── HR (Expense Reports) ───────────────────────────────
+  getExpenseReports(params?: ListParams): Promise<any[]> { return this.list<any>('/expensereports', params) }
+  getExpenseReport(id: number): Promise<any> { return this.request<any>(`/expensereports/${id}`) }
+  createExpenseReport(data: any): Promise<number> { return this.request<number>('/expensereports', 'POST', data) }
+  updateExpenseReport(id: number, data: any): Promise<any> { return this.request<any>(`/expensereports/${id}`, 'PUT', data) }
+  deleteExpenseReport(id: number): Promise<any> { return this.request(`/expensereports/${id}`, 'DELETE') }
 }
 
 // Ensure you point to your correct port!

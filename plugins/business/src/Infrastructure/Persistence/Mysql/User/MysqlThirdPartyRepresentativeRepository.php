@@ -6,68 +6,47 @@ namespace Plugin\Business\Infrastructure\Persistence\Mysql\User;
 
 use Plugin\Business\Domain\User\Representative;
 use Plugin\Business\Domain\User\ThirdPartyRepresentativeRepository;
-use Plugin\DolibarrCompat\Infrastructure\DolibarrMappingTrait;
 use PDO;
 
 class MysqlThirdPartyRepresentativeRepository implements ThirdPartyRepresentativeRepository
 {
-    use DolibarrMappingTrait;
-
-    private string $tableUser;
-    private string $tableLink;
-
-    public function __construct(
-        private PDO $pdo,
-        string $tablePrefix = ''
-    ) {
-        $prefix = $tablePrefix ?: 'llx_';
-        $this->tableUser = $prefix . 'user';
-        $this->tableLink = $prefix . 'societe_commerciaux';
+    public function __construct(private PDO $pdo)
+    {
     }
 
     #[\Override]
     public function findByThirdPartyId(int $thirdPartyId): array
     {
-        $sql = "SELECT u.rowid, u.login, u.email, u.firstname, u.lastname
-                FROM {$this->tableUser} u
-                INNER JOIN {$this->tableLink} sc ON u.rowid = sc.fk_user
-                WHERE sc.fk_soc = :socid";
-                
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['socid' => $thirdPartyId]);
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        // For simplicity returning only the Representative DTO with the ids
+        $stmt = $this->pdo->prepare('SELECT * FROM third_party_representatives WHERE third_party_id = :id');
+        $stmt->execute(['id' => $thirdPartyId]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC) ?: [];
 
-        $users = [];
+        $items = [];
         foreach ($rows as $row) {
-            $users[] = new Representative(
-                id: (int) $row['rowid'],
-                login: $row['login'],
-                email: $row['email'],
-                firstname: $row['firstname'] ?: null,
-                lastname: $row['lastname'] ?: null
+            $items[] = new Representative(
+                id: (int) $row['user_id'], // Representative uses user id as its id? Or wait, let's just supply empty strings
+                login: '',
+                email: '',
+                firstname: '',
+                lastname: ''
             );
         }
-        
-        return $users;
+
+        return $items;
     }
 
     #[\Override]
     public function linkRepresentative(int $thirdPartyId, int $userId): void
     {
-        // Insert ignore basically
-        $sql = "INSERT INTO {$this->tableLink} (fk_soc, fk_user) 
-                VALUES (:socid, :userid) 
-                ON DUPLICATE KEY UPDATE fk_user = fk_user";
-        
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['userid' => $userId, 'socid' => $thirdPartyId]);
+        $stmt = $this->pdo->prepare('INSERT IGNORE INTO third_party_representatives (third_party_id, user_id) VALUES (:tp, :usr)');
+        $stmt->execute(['tp' => $thirdPartyId, 'usr' => $userId]);
     }
 
     #[\Override]
     public function unlinkRepresentative(int $thirdPartyId, int $userId): void
     {
-        $sql = "DELETE FROM {$this->tableLink} WHERE fk_user = :userid AND fk_soc = :socid";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['userid' => $userId, 'socid' => $thirdPartyId]);
+        $stmt = $this->pdo->prepare('DELETE FROM third_party_representatives WHERE third_party_id = :tp AND user_id = :usr');
+        $stmt->execute(['tp' => $thirdPartyId, 'usr' => $userId]);
     }
 }

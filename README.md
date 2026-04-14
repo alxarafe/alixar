@@ -15,14 +15,14 @@
 **Alixar** is an open-source **ERP/CRM** undergoing an ambitious architectural modernization.
 The project started as a fork of [Dolibarr](https://www.dolibarr.org/), but is now being progressively rewritten as a pure **Hexagonal Architecture (Ports and Adapters)** application in PHP 8.2+ alongside a **Headless Vue 3 + TypeScript** modern frontend.
 
-Alixar's core strategy is to *initially* maintain **100% database schema and business logic compatibility** with Dolibarr, allowing users to run both the legacy monolith and the Hexagonal API side-by-side. The long-term vision is to evolve to a more modern, efficient database structure once the decoupling is complete.
+Alixar's core strategy is to provide **100% REST API compatibility** with Dolibarr via the `dolibarr-compat` plugin, which acts as an **Anti-Corruption Layer (ACL) API Gateway**. This allows legacy frontend or third-party integrations to hit Alixar thinking it's Dolibarr, while Alixar utilizes a **completely independent, clean, and normalized database schema** from day one.
 
 ## Goals
 
 - Provide a modern, modular ERP/CRM with strict separation of concerns (Domain, Application, Infrastructure).
-- Encapsulate legacy Dolibarr logic (e.g. `societe.class.php`) into clean Domain Services and Value Objects.
-- Provide a robust REST API ecosystem capable of passing exact parity tests against Dolibarr (`bin/api_compare.sh`).
-- Deliver a state-of-the-art **Headless Frontend** built on Vue.js and TypeScript, completely decoupled from the backend.
+- Encapsulate legacy Dolibarr logic into clean Domain Services and Value Objects.
+- Provide a robust REST API capable of passing exact parity tests against Dolibarr (`bin/api_compare.sh`) through translation facades.
+- Utilize a standalone, normalized database schema free of legacy `llx_` dependencies.
 - Offer a fully Docker-based development environment to run both systems side-by-side.
 
 ## LICENSE
@@ -89,7 +89,7 @@ Contributions, bug reports, and feature requests are welcome! Please open an iss
 
 ## Credits
 
-Alixar is based on [Dolibarr](https://www.dolibarr.org/) and built with the [Alxarafe](https://github.com/alxarafe/alxarafe) microframework.
+Alixar was heavily inspired by the architectural challenges of [Dolibarr](https://www.dolibarr.org/), modernized using Flight PHP as the base routing microframework.
 
 ## Links
 

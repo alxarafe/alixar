@@ -25,29 +25,29 @@ return function (flight\Engine $app, PDO $pdo, HookRegistryInterface $hooks, Plu
 
 
     // ── Contacts ─────────────────────────────────────────────
-    $contactRepo = new \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Crm\DolibarrMysqlContactRepository($pdo, $tablePrefix);
-    $contactCategoryRepo = new \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Crm\DolibarrMysqlContactCategoryRepository($pdo, $tablePrefix);
+    $contactRepo = new \Plugin\Crm\Infrastructure\Persistence\Mysql\Contact\MysqlContactRepository($pdo);
+    $contactCategoryRepo = new \Plugin\Crm\Infrastructure\Persistence\Mysql\Category\MysqlContactCategoryRepository($pdo);
     $contactCtrl = new \Plugin\Crm\Infrastructure\Http\Api\Controller\ContactApiController($contactRepo, $contactCategoryRepo);
 
-    $app->route('GET /api/contacts', [$contactCtrl, 'list']);
-    $app->route('GET /api/contacts/@id', [$contactCtrl, 'show']);
-    $app->route('POST /api/contacts', [$contactCtrl, 'create']);
-    $app->route('PUT /api/contacts/@id', [$contactCtrl, 'update']);
-    $app->route('DELETE /api/contacts/@id', [$contactCtrl, 'destroy']);
+    $app->route('GET /api/v1/contacts', [$contactCtrl, 'list']);
+    $app->route('GET /api/v1/contacts/@id', [$contactCtrl, 'show']);
+    $app->route('POST /api/v1/contacts', [$contactCtrl, 'create']);
+    $app->route('PUT /api/v1/contacts/@id', [$contactCtrl, 'update']);
+    $app->route('DELETE /api/v1/contacts/@id', [$contactCtrl, 'destroy']);
 
-    $app->route('GET /api/contacts/email/@email', [$contactCtrl, 'getByEmail']);
-    $app->route('POST /api/contacts/@id/createUser', [$contactCtrl, 'createUser']);
-    $app->route('GET /api/contacts/@id/categories', [$contactCtrl, 'getCategories']);
-    $app->route('PUT /api/contacts/@id/categories/@categoryId', [$contactCtrl, 'putCategory']);
-    $app->route('DELETE /api/contacts/@id/categories/@categoryId', [$contactCtrl, 'deleteCategory']);
+    $app->route('GET /api/v1/contacts/email/@email', [$contactCtrl, 'getByEmail']);
+    $app->route('POST /api/v1/contacts/@id/createUser', [$contactCtrl, 'createUser']);
+    $app->route('GET /api/v1/contacts/@id/categories', [$contactCtrl, 'getCategories']);
+    $app->route('PUT /api/v1/contacts/@id/categories/@categoryId', [$contactCtrl, 'putCategory']);
+    $app->route('DELETE /api/v1/contacts/@id/categories/@categoryId', [$contactCtrl, 'deleteCategory']);
 
     // ── Events / Agenda ──────────────────────────────────────
-    $eventRepo = new \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Crm\DolibarrMysqlEventRepository($pdo, $tablePrefix);
+    $eventRepo = new \Plugin\Crm\Infrastructure\Persistence\Mysql\Event\MysqlEventRepository($pdo);
     $eventCtrl = new \Plugin\Crm\Infrastructure\Http\Api\Controller\EventApiController($eventRepo);
 
-    $app->route('GET /api/events', [$eventCtrl, 'list']);
-    $app->route('POST /api/events', [$eventCtrl, 'create']);
-    $app->route('GET /api/events/@id', [$eventCtrl, 'show']);
-    $app->route('PUT /api/events/@id', [$eventCtrl, 'update']);
-    $app->route('DELETE /api/events/@id', [$eventCtrl, 'destroy']);
+    $app->route('GET /api/v1/events', [$eventCtrl, 'list']);
+    $app->route('POST /api/v1/events', [$eventCtrl, 'create']);
+    $app->route('GET /api/v1/events/@id', [$eventCtrl, 'show']);
+    $app->route('PUT /api/v1/events/@id', [$eventCtrl, 'update']);
+    $app->route('DELETE /api/v1/events/@id', [$eventCtrl, 'destroy']);
 };

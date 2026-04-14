@@ -171,9 +171,18 @@ class ContactApiController
         if (!$this->categoryRepository) throw new \RuntimeException('CategoryRepository is not configured.');
 
         $categories = $this->categoryRepository->findByContactId($id);
+        
+        $map = [
+            'id' => 'id',
+            'label' => 'label',
+            'type' => 'type',
+            'description' => 'description',
+            'color' => 'color' 
+        ];
+
         Flight::json(array_map(fn(\Plugin\Business\Domain\Category\Category $cat) => $this->mapToDolibarr(
             $cat->toArray(),
-            \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Crm\DolibarrMysqlContactCategoryRepository::CATEGORY_COLUMN_MAP
+            $map
         ), $categories));
     }
 

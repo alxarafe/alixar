@@ -221,6 +221,44 @@ const router = createRouter({
         { path: 'notas', name: 'event-notas', component: GenericNotasTab },
       ]
     },
+
+    // ── Logistics (Shipments & Receptions) ────────────────
+    { path: '/expediciones', name: 'shipments', component: () => import('../views/logistics/ShipmentListView.vue'), meta: { title: 'Expediciones', requiresAuth: true } },
+    {
+      path: '/expediciones/:id', component: () => import('../views/logistics/ShipmentDetailView.vue'), meta: { title: 'Ficha de Expedición', requiresAuth: true },
+      children: [
+        { path: '', redirect: { name: 'shipment-ficha' } },
+        { path: 'ficha', name: 'shipment-ficha', component: GenericFichaTab },
+      ]
+    },
+    { path: '/recepciones', name: 'receptions', component: () => import('../views/logistics/ReceptionListView.vue'), meta: { title: 'Recepciones', requiresAuth: true } },
+    {
+      path: '/recepciones/:id', component: () => import('../views/logistics/ReceptionDetailView.vue'), meta: { title: 'Ficha de Recepción', requiresAuth: true },
+      children: [
+        { path: '', redirect: { name: 'reception-ficha' } },
+        { path: 'ficha', name: 'reception-ficha', component: GenericFichaTab },
+      ]
+    },
+
+    // ── Interventions ─────────────────────────────────────
+    { path: '/intervenciones', name: 'interventions', component: () => import('../views/interventions/InterventionListView.vue'), meta: { title: 'Partes de Trabajo', requiresAuth: true } },
+    {
+      path: '/intervenciones/:id', component: () => import('../views/interventions/InterventionDetailView.vue'), meta: { title: 'Ficha de Parte', requiresAuth: true },
+      children: [
+        { path: '', redirect: { name: 'intervention-ficha' } },
+        { path: 'ficha', name: 'intervention-ficha', component: GenericFichaTab },
+      ]
+    },
+
+    // ── HR (Expense Reports) ──────────────────────────────
+    { path: '/notas-gasto', name: 'expense-reports', component: () => import('../views/hr/ExpenseReportListView.vue'), meta: { title: 'Notas de Gasto', requiresAuth: true } },
+    {
+      path: '/notas-gasto/:id', component: () => import('../views/hr/ExpenseReportDetailView.vue'), meta: { title: 'Nota de Gasto', requiresAuth: true },
+      children: [
+        { path: '', redirect: { name: 'expensereport-ficha' } },
+        { path: 'ficha', name: 'expensereport-ficha', component: GenericFichaTab },
+      ]
+    },
   ]
 })
 

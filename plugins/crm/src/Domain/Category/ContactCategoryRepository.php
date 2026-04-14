@@ -8,7 +8,9 @@ use Plugin\Business\Domain\Category\Category;
 
 interface ContactCategoryRepository
 {
-    /** @return Category[] */
+    /**
+     * @return Category[]
+     */
     public function findByContactId(int $contactId): array;
 
     public function linkCategory(int $contactId, int $categoryId): void;
