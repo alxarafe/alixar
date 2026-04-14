@@ -6,7 +6,7 @@ namespace Plugin\Crm\Infrastructure\Http\Api\Controller;
 
 use Plugin\Crm\Domain\Event\Event;
 use Plugin\Crm\Domain\Event\EventRepository;
-use Core\Infrastructure\DolibarrMappingTrait;
+use Plugin\DolibarrCompat\Infrastructure\DolibarrMappingTrait;
 use Flight;
 
 class EventApiController

@@ -22,49 +22,11 @@ return function (flight\Engine $app, PDO $pdo, HookRegistryInterface $hooks, Plu
     $dbConfig = $GLOBALS['__api_config']['database'] ?? [];
     $tablePrefix = $dbConfig['table_prefix'] ?? '';
 
-    $configPort = new \Core\Infrastructure\Persistence\Mysql\MysqlConfigurationAdapter($pdo);
 
-    // ── ThirdParties ─────────────────────────────────────────
-    $codeGenerator = new \Plugin\Crm\Application\Codification\NullThirdPartyCodeGenerator();
-    $thirdPartyRepo = new \Plugin\Crm\Infrastructure\Persistence\Mysql\MysqlThirdPartyRepository($pdo, $tablePrefix);
-    $thirdPartyValidator = new \Plugin\Crm\Domain\ThirdParty\ThirdPartyValidator($thirdPartyRepo, $configPort, $codeGenerator);
-    $bankAccountRepo = new \Plugin\Crm\Infrastructure\Persistence\Mysql\MysqlBankAccountRepository($pdo, $tablePrefix);
-    $categoryRepo = new \Plugin\Crm\Infrastructure\Persistence\Mysql\Category\MysqlThirdPartyCategoryRepository($pdo, $tablePrefix);
-    $representativeRepo = new \Plugin\Crm\Infrastructure\Persistence\Mysql\User\MysqlThirdPartyRepresentativeRepository($pdo, $tablePrefix);
-
-    $thirdPartyCtrl = new \Plugin\Crm\Infrastructure\Http\Api\Controller\ThirdPartyApiController(
-        $thirdPartyRepo, $thirdPartyValidator, $bankAccountRepo, $categoryRepo, $representativeRepo
-    );
-
-    $app->route('GET /api/thirdparties', [$thirdPartyCtrl, 'list']);
-    $app->route('GET /api/thirdparties/@id', [$thirdPartyCtrl, 'show']);
-    $app->route('POST /api/thirdparties', [$thirdPartyCtrl, 'create']);
-    $app->route('PUT /api/thirdparties/@id', [$thirdPartyCtrl, 'update']);
-    $app->route('DELETE /api/thirdparties/@id', [$thirdPartyCtrl, 'destroy']);
-
-    $app->route('GET /api/thirdparties/@id/bankaccounts', [$thirdPartyCtrl, 'getBankAccounts']);
-    $app->route('POST /api/thirdparties/@id/bankaccounts', [$thirdPartyCtrl, 'postBankAccount']);
-    $app->route('PUT /api/thirdparties/@id/bankaccounts/@bankaccountId', [$thirdPartyCtrl, 'putBankAccount']);
-    $app->route('DELETE /api/thirdparties/@id/bankaccounts/@bankaccountId', [$thirdPartyCtrl, 'deleteBankAccount']);
-
-    $app->route('GET /api/thirdparties/@id/categories', [$thirdPartyCtrl, 'getCategories']);
-    $app->route('PUT /api/thirdparties/@id/categories/@categoryId', [$thirdPartyCtrl, 'putCategory']);
-    $app->route('DELETE /api/thirdparties/@id/categories/@categoryId', [$thirdPartyCtrl, 'deleteCategory']);
-
-    $app->route('GET /api/thirdparties/@id/supplier_categories', [$thirdPartyCtrl, 'getSupplierCategories']);
-    $app->route('PUT /api/thirdparties/@id/supplier_categories/@categoryId', [$thirdPartyCtrl, 'putSupplierCategory']);
-    $app->route('DELETE /api/thirdparties/@id/supplier_categories/@categoryId', [$thirdPartyCtrl, 'deleteSupplierCategory']);
-
-    $app->route('GET /api/thirdparties/@id/representatives', [$thirdPartyCtrl, 'getRepresentatives']);
-    $app->route('PUT /api/thirdparties/@id/representatives/@userId', [$thirdPartyCtrl, 'putRepresentative']);
-    $app->route('DELETE /api/thirdparties/@id/representatives/@userId', [$thirdPartyCtrl, 'deleteRepresentative']);
-
-    $app->route('GET /api/thirdparties/@id/generateBankAccountDocument/@companybankid(/@model)', [$thirdPartyCtrl, 'generateBankAccountDocument']);
-    $app->route('PUT /api/thirdparties/@id/merge/@idtodelete', [$thirdPartyCtrl, 'merge']);
 
     // ── Contacts ─────────────────────────────────────────────
-    $contactRepo = new \Plugin\Crm\Infrastructure\Persistence\Mysql\MysqlContactRepository($pdo, $tablePrefix);
-    $contactCategoryRepo = new \Plugin\Crm\Infrastructure\Persistence\Mysql\Category\MysqlContactCategoryRepository($pdo, $tablePrefix);
+    $contactRepo = new \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Crm\DolibarrMysqlContactRepository($pdo, $tablePrefix);
+    $contactCategoryRepo = new \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Crm\DolibarrMysqlContactCategoryRepository($pdo, $tablePrefix);
     $contactCtrl = new \Plugin\Crm\Infrastructure\Http\Api\Controller\ContactApiController($contactRepo, $contactCategoryRepo);
 
     $app->route('GET /api/contacts', [$contactCtrl, 'list']);
@@ -80,7 +42,7 @@ return function (flight\Engine $app, PDO $pdo, HookRegistryInterface $hooks, Plu
     $app->route('DELETE /api/contacts/@id/categories/@categoryId', [$contactCtrl, 'deleteCategory']);
 
     // ── Events / Agenda ──────────────────────────────────────
-    $eventRepo = new \Plugin\Crm\Infrastructure\Persistence\Mysql\MysqlEventRepository($pdo, $tablePrefix);
+    $eventRepo = new \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Crm\DolibarrMysqlEventRepository($pdo, $tablePrefix);
     $eventCtrl = new \Plugin\Crm\Infrastructure\Http\Api\Controller\EventApiController($eventRepo);
 
     $app->route('GET /api/events', [$eventCtrl, 'list']);

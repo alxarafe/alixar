@@ -1,0 +1,29 @@
+meta {
+  name: 04-update-proposal
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}{{apiBase}}/proposals/{{testProposalId}}
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "ref_client": "PROP-001X-UPD",
+    "note_private": "Updated commercial proposal"
+  }
+}
+
+tests {
+  test("Actualización exitosa", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

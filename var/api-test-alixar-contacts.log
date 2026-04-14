@@ -1,14 +1,11 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-Contacts/01-create-contact (500 Internal Server Error) - 25 ms
+Contacts/01-create-contact (200 OK) - 24 ms
 Tests
-   ✕ Status 200 o 201 (creado)
-      expected false to be true
    ✕ Devuelve ID numérico
       expected NaN to be above +0
-Contacts/02-get-contact (500 Internal Server Error) - 4 ms
+   ✓ Status 200 o 201 (creado)
+Contacts/02-get-contact (200 OK) - 5 ms
 Tests
-   ✕ Status 200
-      expected 500 to equal 200
    ✕ Tiene campo 'id'
       expected false to be true
    ✕ Apellido es 'BrunoContact'
@@ -16,19 +13,18 @@ Tests
    ✕ Nombre es 'Test'
       expected undefined to equal 'Test'
    ✕ Tiene campo 'email'
-      expected { error: { code: 500, …(1) } } to have property 'email'
+      expected '<br />\n<b>Fatal error</b>:  Uncaught…' to have property 'email'
    ✕ Tiene campo 'address'
-      expected { error: { code: 500, …(1) } } to have property 'address'
+      expected '<br />\n<b>Fatal error</b>:  Uncaught…' to have property 'address'
    ✕ Tiene campo 'town'
-      expected { error: { code: 500, …(1) } } to have property 'town'
+      expected '<br />\n<b>Fatal error</b>:  Uncaught…' to have property 'town'
    ✕ Tiene campo 'phone_pro'
-      expected { error: { code: 500, …(1) } } to have property 'phone_pro'
+      expected '<br />\n<b>Fatal error</b>:  Uncaught…' to have property 'phone_pro'
    ✕ Tiene campo 'status'
       expected false to be true
-Contacts/03-list-contacts (500 Internal Server Error) - 4 ms
+   ✓ Status 200
+Contacts/03-list-contacts (200 OK) - 5 ms
 Tests
-   ✕ Status 200
-      expected 500 to equal 200
    ✕ Devuelve un array
       expected false to be true
    ✕ Cada elemento tiene 'id' o 'rowid'
@@ -36,67 +32,64 @@ Tests
    ✕ Cada elemento tiene 'lastname'
       not a function
    ✕ Respeta el límite
-      expected undefined to be a number or a date
+      expected 935 to be at most 5
    ✕ El contacto creado está en la lista
       not a function
-Contacts/04-update-contact (500 Internal Server Error) - 6 ms
+   ✓ Status 200
+Contacts/04-update-contact (200 OK) - 6 ms
 Tests
-   ✕ Status 200
-      expected 500 to equal 200
+   ✓ Status 200
    ✓ Respuesta tiene el objeto actualizado
-Contacts/05-verify-update (500 Internal Server Error) - 4 ms
+Contacts/05-verify-update (200 OK) - 4 ms
 Tests
-   ✕ Status 200
-      expected 500 to equal 200
    ✕ Apellido actualizado
       expected undefined to equal 'BrunoContact Actualizado'
    ✕ Ciudad actualizada a Barcelona
       expected undefined to equal 'Barcelona'
    ✕ Cargo actualizado
       expected undefined to equal 'Lead Developer'
-Contacts/06-get-nonexistent (500 Internal Server Error) - 4 ms
+   ✓ Status 200
+Contacts/06-get-nonexistent (200 OK) - 4 ms
 Tests
    ✕ Status 404
-      expected 500 to equal 404
-Contacts/07-create-without-lastname (422 ) - 4 ms
+      expected 200 to equal 404
+Contacts/07-create-without-lastname (200 OK) - 4 ms
 Tests
-   ✓ Status 4xx o 5xx (error de validación)
-Contacts/07b-get-by-email (500 Internal Server Error) - 5 ms
+   ✕ Status 4xx o 5xx (error de validación)
+      expected false to be true
+Contacts/07b-get-by-email (200 OK) - 6 ms
 Tests
-   ✕ Carga por email exitosa
-      expected 500 to equal 200
    ✕ Los datos coinciden con el creado
       expected undefined to equal 'contact@brunotest.es'
-Contacts/07c-get-categories (500 Internal Server Error) - 5 ms
+   ✓ Carga por email exitosa
+Contacts/07c-get-categories (200 OK) - 4 ms
 Tests
-   ✕ Carga de categorias exitosa
-      expected 500 to equal 200
    ✕ Las categorias se devuelven en formato array
       expected false to be true
-Contacts/08-delete-contact (500 Internal Server Error) - 5 ms
+   ✓ Carga de categorias exitosa
+Contacts/08-delete-contact (200 OK) - 4 ms
 Tests
-   ✕ Status 200
-      expected 500 to equal 200
+   ✓ Status 200
    ✓ Respuesta indica éxito
-Contacts/09-verify-deletion (500 Internal Server Error) - 4 ms
+Contacts/09-verify-deletion (200 OK) - 4 ms
 Tests
    ✕ Status 404 (ya no existe)
-      expected 500 to equal 404
+      expected 200 to equal 404
 
 📊 Execution Summary
-┌───────────────┬──────────────────────────┐
-│ Metric        │          Result          │
-├───────────────┼──────────────────────────┤
-│ Status        │          ✗ FAIL          │
-├───────────────┼──────────────────────────┤
-│ Requests      │ 11 (1 Passed, 10 Failed) │
-├───────────────┼──────────────────────────┤
-│ Tests         │           3/32           │
-├───────────────┼──────────────────────────┤
-│ Assertions    │           0/0            │
-├───────────────┼──────────────────────────┤
-│ Duration (ms) │           878            │
-└───────────────┴──────────────────────────┘
+┌───────────────┬─────────────────────────┐
+│ Metric        │         Result          │
+├───────────────┼─────────────────────────┤
+│ Status        │         ✗ FAIL          │
+├───────────────┼─────────────────────────┤
+│ Requests      │ 11 (2 Passed, 9 Failed) │
+├───────────────┼─────────────────────────┤
+│ Tests         │          10/32          │
+├───────────────┼─────────────────────────┤
+│ Assertions    │           0/0           │
+├───────────────┼─────────────────────────┤
+│ Duration (ms) │           892           │
+└───────────────┴─────────────────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1
 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1

@@ -6,12 +6,12 @@
   "icon": "fas fa-id-card",
   "author": "Alixar",
 
-  "requires": [],
+  "requires": ["business"],
   "optionalDeps": [],
   "conflicts": [],
 
   "provides": {
-    "entities": ["ThirdParty", "Contact", "BankAccount", "Event"],
+    "entities": ["Contact", "Event"],
     "apiRoutes": "src/Infrastructure/Http/routes.php",
     "migrations": "migrations/",
     "schemas": "frontend/schemas/"

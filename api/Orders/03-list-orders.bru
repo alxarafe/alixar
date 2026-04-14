@@ -1,0 +1,27 @@
+meta {
+  name: 03-list-orders
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/orders
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Lista pedidos exitosamente", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Devuelve array", function() {
+    const data = res.getBody();
+    expect(data).to.be.an('array');
+    expect(data.length).to.be.above(0);
+  });
+}

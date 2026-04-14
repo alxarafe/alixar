@@ -1,0 +1,21 @@
+meta {
+  name: 07-verify-deletion
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/proposals/{{testProposalId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("El presupuesto eliminado no existe", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

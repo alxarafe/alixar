@@ -25,6 +25,13 @@ This directory contains shell scripts to automate testing, code styling, and sta
 *   **Tools:** `phpstan` and `psalm`
 *   **Purpose:** Detects bugs and type inconsistencies early by analyzing code structure.
 
-### `run_tests.sh`
+### `test.sh`
 *   **Tool:** `phpunit`
 *   **Purpose:** Executes the application's Unit and Feature tests.
+
+### `api_test.sh` & `api_compare.sh`
+*   **Tool:** Bruno (`npx @usebruno/cli`) & Docker Compose
+*   **Purpose:** Tests the new Hexagonal API compatibility against Dolibarr Legacy in parallel.
+
+### `test_clean_install.php`
+*   **Purpose:** Development utility to test bootstrapping the ERP tables and defaults from absolute zero.

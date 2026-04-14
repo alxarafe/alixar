@@ -321,6 +321,11 @@ class ApiService {
       'DOLAPIKEY': DOLAPIKEY
     }
 
+    const token = localStorage.getItem('alixar_token')
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+
     const config: RequestInit = { method, headers }
     if (data) config.body = JSON.stringify(data)
 
@@ -651,7 +656,61 @@ class ApiService {
   getNavigationTree(mainmenu: string = ''): Promise<NavigationTree> {
     return this.request<NavigationTree>(`/setup/menus?mainmenu=${mainmenu}`)
   }
+
+  // ── Auth ───────────────────────────────────────────────
+
+  login(credentials: { username?: string, email?: string, password: string }): Promise<{ token: string, expires_at: number, user: any }> {
+    return this.request<{ token: string, expires_at: number, user: any }>('/auth/login', 'POST', credentials)
+  }
+
+  logout(): Promise<any> {
+    return this.request('/auth/logout', 'POST')
+  }
+
+  // ── Core Domain (Users & Roles) ────────────────────────
+  
+  getUsers(params?: ListParams): Promise<any[]> {
+    return this.list<any>('/users', params)
+  }
+  getUser(id: number): Promise<any> {
+    return this.request<any>(`/users/${id}`)
+  }
+  createUser(data: any): Promise<number> {
+    return this.request<number>('/users', 'POST', data)
+  }
+  updateUser(id: number, data: any): Promise<any> {
+    return this.request<any>(`/users/${id}`, 'PUT', data)
+  }
+  deleteUser(id: number): Promise<any> {
+    return this.request(`/users/${id}`, 'DELETE')
+  }
+  updateUserRoles(id: number, roleIds: number[]): Promise<any> {
+    return this.request(`/users/${id}/roles`, 'PUT', { role_ids: roleIds })
+  }
+
+  getRoles(params?: ListParams): Promise<any[]> {
+    return this.list<any>('/roles', params)
+  }
+  getRole(id: number): Promise<any> {
+    return this.request<any>(`/roles/${id}`)
+  }
+  createRole(data: any): Promise<number> {
+    return this.request<number>('/roles', 'POST', data)
+  }
+  updateRole(id: number, data: any): Promise<any> {
+    return this.request<any>(`/roles/${id}`, 'PUT', data)
+  }
+  deleteRole(id: number): Promise<any> {
+    return this.request(`/roles/${id}`, 'DELETE')
+  }
+  getPermissions(plugin: string = ''): Promise<any[]> {
+    const endpoint = plugin ? `/permissions/${plugin}` : '/permissions';
+    return this.request<any[]>(endpoint, 'GET')
+  }
+  syncRolePermissions(roleId: number, permissionIds: number[]): Promise<any> {
+    return this.request(`/roles/${roleId}/permissions`, 'PUT', { permission_ids: permissionIds })
+  }
 }
 
 // Ensure you point to your correct port!
-export const api = new ApiService('http://localhost:8091/api')
+export const api = new ApiService('http://localhost:8083/api')

@@ -1,0 +1,29 @@
+meta {
+  name: 04-update-order
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}{{apiBase}}/orders/{{testOrderId}}
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "ref_client": "CMD-001X-UPD",
+    "note_private": "Updated express delivery"
+  }
+}
+
+tests {
+  test("Actualización exitosa", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

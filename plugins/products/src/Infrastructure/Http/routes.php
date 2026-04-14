@@ -10,7 +10,7 @@ return function (flight\Engine $app, PDO $pdo, HookRegistryInterface $hooks, Plu
     $dbConfig = $GLOBALS['__api_config']['database'] ?? [];
     $tablePrefix = $dbConfig['table_prefix'] ?? '';
 
-    $productRepo = new \Plugin\Products\Infrastructure\Persistence\Mysql\MysqlProductRepository($pdo, $tablePrefix);
+    $productRepo = new \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Products\DolibarrMysqlProductRepository($pdo, $tablePrefix);
     $productCtrl = new \Plugin\Products\Infrastructure\Http\Api\Controller\ProductApiController($productRepo);
 
     $app->route('GET /api/products', [$productCtrl, 'list']);

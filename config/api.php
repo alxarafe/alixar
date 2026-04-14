@@ -27,7 +27,7 @@ return [
         'username' => getenv('MARIADB_USER') ?: 'root',
         'password' => getenv('MARIADB_ROOT_PASSWORD') ?: 'root',
         'charset' => 'utf8mb4',
-        'table_prefix' => getenv('MARIADB_PREFIX') ?: '',
+        'table_prefix' => getenv('DOLIBARR_TABLE_PREFIX') ?: 'llx_',
     ],
 
     // ┌─────────────────────────────────────────────────┐
@@ -37,5 +37,17 @@ return [
         'version' => '1.0.0',
         'prefix' => '/api',
         'debug' => (bool) (getenv('API_DEBUG') ?: false),
+    ],
+
+    // ┌─────────────────────────────────────────────────┐
+    // │  JWT — Autenticación stateless                  │
+    // │  IMPORTANTE: En producción, usar una variable   │
+    // │  de entorno JWT_SECRET con un valor aleatorio   │
+    // │  de 64+ caracteres.                             │
+    // └─────────────────────────────────────────────────┘
+    'jwt' => [
+        'secret'  => getenv('JWT_SECRET') ?: 'alixar-dev-jwt-secret-change-in-production-please!',
+        'ttl'     => (int) (getenv('JWT_TTL') ?: 3600),       // 1 hora por defecto
+        'issuer'  => getenv('JWT_ISSUER') ?: 'alixar',
     ],
 ];

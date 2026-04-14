@@ -1,43 +1,80 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { api } from './api'
 import type { NavigationTree } from './api'
+import { useAuthStore } from './stores/auth'
 
 const route = useRoute()
-const menus = ref<NavigationTree | null>(null)
+const router = useRouter()
+const authStore = useAuthStore()
 
 // Fallback sidebar if API menus unavailable
-const sidebarLinks = [
-  { label: '📊 Panel Principal', route: '/' },
-  { label: '🏢 Terceros', route: '/terceros' },
-  { label: '👤 Contactos', route: '/contactos' },
-  { label: '📦 Productos', route: '/productos' },
-  { label: '📋 Presupuestos', route: '/presupuestos' },
-  { label: '🛒 Pedidos', route: '/pedidos' },
-  { label: '🧾 Facturas', route: '/facturas' },
-  { label: '📐 Proyectos', route: '/proyectos' },
-  { label: '🏭 Pedidos Proveedor', route: '/pedidos-proveedor' },
-  { label: '📑 Facturas Proveedor', route: '/facturas-proveedor' },
-  { label: '🏦 Bancos', route: '/bancos' },
-  { label: '📅 Agenda', route: '/agenda' },
-]
+interface MenuGroup {
+  id: string
+  label: string
+  icon?: string
+  route?: string
+  children?: MenuGroup[]
+  isOpen?: boolean
+}
 
-const fetchMenus = async () => {
-  try {
-    menus.value = await api.getNavigationTree()
-  } catch (e) {
-    console.warn("Using fallback sidebar (API menus unavailable)", e)
+const sidebarGroups = ref<MenuGroup[]>([
+  { id: 'home', label: 'Panel Principal', icon: '📊', route: '/' },
+  {
+    id: 'identity',
+    label: 'Identidad y Seguridad',
+    icon: '🛡️',
+    isOpen: true,
+    children: [
+      { id: 'users', label: 'Usuarios', route: '/usuarios' },
+      { id: 'roles', label: 'Roles y Permisos', route: '/roles' }
+    ]
+  },
+  {
+    id: 'crm',
+    label: 'Facturación y CRM',
+    icon: '🏢',
+    isOpen: false,
+    children: [
+      { id: 'companies', label: 'Terceros (Clientes)', route: '/terceros' },
+      { id: 'contacts', label: 'Contactos', route: '/contactos' },
+      { id: 'invoices', label: 'Facturas', route: '/facturas' }
+    ]
+  },
+  {
+    id: 'catalog',
+    label: 'Almacén y Catálogo',
+    icon: '📦',
+    isOpen: false,
+    children: [
+      { id: 'products', label: 'Productos y Servicios', route: '/productos' }
+    ]
+  }
+])
+
+const toggleGroup = (group: MenuGroup) => {
+  if (group.children) {
+    group.isOpen = !group.isOpen
+  } else if (group.route) {
+    router.push(group.route)
   }
 }
 
-onMounted(() => {
-  fetchMenus()
-})
+const searchSpotlight = ref('')
+const isSpotlightFocused = ref(false)
+
+const handleLogout = () => {
+  authStore.logout()
+  router.push('/login')
+}
 </script>
 
 <template>
-  <div class="layout">
+  <template v-if="route.name === 'login'">
+    <router-view></router-view>
+  </template>
+  <div v-else class="layout">
     <!-- Sidebar -->
     <aside class="sidebar glass-panel">
       <div class="logo">
@@ -45,36 +82,59 @@ onMounted(() => {
         <span>Headless ERP</span>
       </div>
       <nav>
-        <template v-if="menus?.top?.length">
-          <router-link
-            v-for="menu in menus.top"
-            :key="menu.id"
-            :to="menu.route"
-            active-class="active"
-          >
-            {{ menu.label }}
-          </router-link>
-        </template>
-        <template v-else>
-          <router-link
-            v-for="link in sidebarLinks"
-            :key="link.route"
-            :to="link.route"
-            active-class="active"
-            exact-active-class="active"
-          >
-            {{ link.label }}
-          </router-link>
-        </template>
+        <div v-for="group in sidebarGroups" :key="group.id" class="nav-group">
+            <template v-if="group.children">
+              <div class="nav-group-header" @click="toggleGroup(group)">
+                <span class="group-title">{{ group.icon }} {{ group.label }}</span>
+                <span class="chevron" :class="{ open: group.isOpen }">▼</span>
+              </div>
+              <div class="nav-group-items" v-show="group.isOpen">
+                <router-link
+                  v-for="child in group.children"
+                  :key="child.id"
+                  :to="child.route!"
+                  active-class="active"
+                >
+                  {{ child.label }}
+                </router-link>
+              </div>
+            </template>
+            <template v-else>
+              <router-link :to="group.route!" class="nav-single-item" active-class="active" exact-active-class="active">
+                {{ group.icon }} {{ group.label }}
+              </router-link>
+            </template>
+          </div>
       </nav>
     </aside>
 
     <!-- Main Content -->
     <main class="main-content">
       <header>
-        <h1>{{ (route.meta?.title as string) || 'Alixar' }}</h1>
+        <div class="header-left">
+          <h1>{{ (route.meta?.title as string) || 'Alixar' }}</h1>
+        </div>
+        
+        <div class="spotlight-container" :class="{ 'focused': isSpotlightFocused }">
+          <span class="spotlight-icon">🔍</span>
+          <input 
+            type="text" 
+            v-model="searchSpotlight" 
+            placeholder="Buscar o saltar a (Ctrl + K)..." 
+            @focus="isSpotlightFocused = true"
+            @blur="isSpotlightFocused = false"
+          />
+          <div v-if="searchSpotlight" class="spotlight-results glass-panel">
+            <div class="p-4 text-gray-400 text-sm">Buscando "{{ searchSpotlight }}"...</div>
+          </div>
+        </div>
+
         <div class="user-profile">
-          <div class="avatar">Admin</div>
+          <span class="user-name" v-if="authStore.user">{{ authStore.user.username }}</span>
+          <div class="avatar">{{ authStore.user ? authStore.user.username.charAt(0).toUpperCase() : 'A' }}</div>
+          <button @click="handleLogout" class="btn-logout" title="Cerrar Sessión">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          </button>
         </div>
       </header>
 
@@ -130,25 +190,66 @@ onMounted(() => {
 nav {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 12px;
 }
 
-nav a {
+.nav-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-group-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 8px;
+  color: var(--text-main);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.nav-group-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.chevron {
+  font-size: 0.7rem;
+  transition: transform 0.2s;
+  color: var(--text-muted);
+}
+.chevron.open {
+  transform: rotate(180deg);
+}
+
+.nav-group-items {
+  display: flex;
+  flex-direction: column;
+  margin-top: 4px;
+  margin-left: 12px;
+  border-left: 1px solid rgba(255,255,255,0.1);
+  padding-left: 8px;
+  gap: 2px;
+}
+
+nav a, .nav-single-item {
   padding: 8px 12px;
   border-radius: 8px;
   color: var(--text-muted);
   text-decoration: none;
   font-weight: 500;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   transition: all 0.2s;
 }
 
-nav a:hover, nav a.active {
+nav a:hover, nav a.active, .nav-single-item:hover {
   background: rgba(255, 255, 255, 0.05);
   color: var(--text-main);
 }
 nav a.active {
-  border-left: 3px solid var(--primary);
+  color: var(--primary);
   background: linear-gradient(90deg, rgba(79, 70, 229, 0.1) 0%, transparent 100%);
 }
 
@@ -165,21 +266,117 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 0;
+  padding: 0.5rem 0 1rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 1rem;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  width: 250px;
 }
 
 header h1 {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 600;
+  margin: 0;
+}
+
+.spotlight-container {
+  flex: 1;
+  max-width: 500px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 0 1rem;
+  transition: all 0.3s ease;
+}
+
+.spotlight-container.focused {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.2);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.spotlight-icon {
+  font-size: 1rem;
+  opacity: 0.6;
+}
+
+.spotlight-container input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 12px;
+  color: white;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.spotlight-container input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.spotlight-results {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 12px;
+  min-height: 100px;
+  z-index: 50;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .avatar {
   background: var(--primary);
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.875rem;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1rem;
   font-weight: 600;
+  box-shadow: 0 4px 10px rgba(168, 85, 247, 0.3);
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--text-main);
+  font-size: 0.95rem;
+}
+
+.btn-logout {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: 0.5rem;
+}
+
+.btn-logout:hover {
+  background: rgba(239, 68, 68, 0.2);
+  transform: translateY(-1px);
+  color: #fff;
 }
 
 /* Grid & Cards */

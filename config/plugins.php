@@ -12,6 +12,9 @@ declare(strict_types=1);
  * via topological sort based on each plugin's 'requires' declarations.
  */
 return [
+    'tenant',
+    'dolibarr-compat',
+    'business',
     'crm',
     'trading',
     'products',

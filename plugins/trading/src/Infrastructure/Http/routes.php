@@ -26,7 +26,7 @@ return function (flight\Engine $app, PDO $pdo, HookRegistryInterface $hooks, Plu
     // ══════════════════════════════════════════════════════════
 
     // ── Invoices ─────────────────────────────────────────────
-    $invoiceRepo = new \Plugin\Trading\Infrastructure\Persistence\Mysql\MysqlInvoiceRepository($pdo, $tablePrefix);
+    $invoiceRepo = new \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Trading\DolibarrMysqlInvoiceRepository($pdo, $tablePrefix);
     $invoiceCtrl = new \Plugin\Trading\Infrastructure\Http\Api\Controller\InvoiceApiController($invoiceRepo);
 
     $app->route('GET /api/invoices', [$invoiceCtrl, 'list']);
@@ -52,7 +52,7 @@ return function (flight\Engine $app, PDO $pdo, HookRegistryInterface $hooks, Plu
     $app->route('DELETE /api/invoices/@id/contact/@contactid/@type', [$invoiceCtrl, 'deleteContact']);
 
     // ── Proposals ────────────────────────────────────────────
-    $proposalRepo = new \Plugin\Trading\Infrastructure\Persistence\Mysql\MysqlProposalRepository($pdo, $tablePrefix);
+    $proposalRepo = new \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Trading\DolibarrMysqlProposalRepository($pdo, $tablePrefix);
     $proposalCtrl = new \Plugin\Trading\Infrastructure\Http\Api\Controller\ProposalApiController($proposalRepo);
 
     $app->route('GET /api/proposals', [$proposalCtrl, 'list']);
@@ -74,7 +74,7 @@ return function (flight\Engine $app, PDO $pdo, HookRegistryInterface $hooks, Plu
     $app->route('DELETE /api/proposals/@id/contact/@contactid/@type', [$proposalCtrl, 'deleteContact']);
 
     // ── Orders ───────────────────────────────────────────────
-    $orderRepo = new \Plugin\Trading\Infrastructure\Persistence\Mysql\MysqlOrderRepository($pdo, $tablePrefix);
+    $orderRepo = new \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Trading\DolibarrMysqlOrderRepository($pdo, $tablePrefix);
     $orderCtrl = new \Plugin\Trading\Infrastructure\Http\Api\Controller\OrderApiController($orderRepo);
 
     $app->route('GET /api/orders', [$orderCtrl, 'list']);
@@ -100,7 +100,7 @@ return function (flight\Engine $app, PDO $pdo, HookRegistryInterface $hooks, Plu
     // ══════════════════════════════════════════════════════════
 
     // ── Supplier Invoices ────────────────────────────────────
-    $supplierInvoiceRepo = new \Plugin\Trading\Infrastructure\Persistence\Mysql\MysqlSupplierInvoiceRepository($pdo, $tablePrefix);
+    $supplierInvoiceRepo = new \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Trading\DolibarrMysqlSupplierInvoiceRepository($pdo, $tablePrefix);
     $supplierInvoiceCtrl = new \Plugin\Trading\Infrastructure\Http\Api\Controller\SupplierInvoiceApiController($supplierInvoiceRepo);
 
     $app->route('GET /api/supplierinvoices', [$supplierInvoiceCtrl, 'list']);
@@ -124,7 +124,7 @@ return function (flight\Engine $app, PDO $pdo, HookRegistryInterface $hooks, Plu
     $app->route('POST /api/supplierinvoices/@id/settounpaid', [$supplierInvoiceCtrl, 'settounpaid']);
 
     // ── Supplier Orders ──────────────────────────────────────
-    $supplierOrderRepo = new \Plugin\Trading\Infrastructure\Persistence\Mysql\MysqlSupplierOrderRepository($pdo, $tablePrefix);
+    $supplierOrderRepo = new \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Trading\DolibarrMysqlSupplierOrderRepository($pdo, $tablePrefix);
     $supplierOrderCtrl = new \Plugin\Trading\Infrastructure\Http\Api\Controller\SupplierOrderApiController($supplierOrderRepo);
 
     $app->route('GET /api/supplierorders', [$supplierOrderCtrl, 'list']);

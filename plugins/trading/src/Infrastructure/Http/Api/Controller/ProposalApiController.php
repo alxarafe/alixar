@@ -6,7 +6,7 @@ namespace Plugin\Trading\Infrastructure\Http\Api\Controller;
 
 use Plugin\Trading\Domain\Proposal\Proposal;
 use Plugin\Trading\Domain\Proposal\ProposalRepository;
-use Core\Infrastructure\DolibarrMappingTrait;
+use Plugin\DolibarrCompat\Infrastructure\DolibarrMappingTrait;
 use Flight;
 
 class ProposalApiController

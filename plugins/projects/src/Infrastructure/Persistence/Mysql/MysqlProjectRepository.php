@@ -6,7 +6,7 @@ namespace Plugin\Projects\Infrastructure\Persistence\Mysql;
 
 use Plugin\Projects\Domain\Project\Project;
 use Plugin\Projects\Domain\Project\ProjectRepository;
-use Core\Infrastructure\DolibarrMappingTrait;
+use Plugin\DolibarrCompat\Infrastructure\DolibarrMappingTrait;
 use PDO;
 
 class MysqlProjectRepository implements ProjectRepository

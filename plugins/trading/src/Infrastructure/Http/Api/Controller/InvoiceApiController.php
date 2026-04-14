@@ -30,7 +30,7 @@ use Flight;
  */
 class InvoiceApiController
 {
-    use \Core\Infrastructure\DolibarrMappingTrait;
+    use \Plugin\DolibarrCompat\Infrastructure\DolibarrMappingTrait;
 
     private const API_MAP = [
         'thirdPartyId' => 'socid',

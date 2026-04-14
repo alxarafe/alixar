@@ -6,7 +6,7 @@
   "icon": "fas fa-file-invoice-dollar",
   "author": "Alixar",
 
-  "requires": ["crm"],
+  "requires": ["business", "crm"],
   "optionalDeps": ["products", "projects"],
   "conflicts": [],
 

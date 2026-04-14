@@ -1,31 +1,58 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-Orders/01-create-order (500 Internal Server Error) - 32 ms
+Orders/01-create-order (200 OK) - 25 ms
 Tests
-   ✕ Crea pedido exitoso
-      expected [ 200, 201 ] to include 500
    ✕ Devuelve id
-      expected [object Object] to be a number or a date
-Orders/02-get-order (500 Internal Server Error) - 5 ms
+      expected '<br />
+<b>Fatal error</b>:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'apitest_db.translations' doesn't exist in /var/www/html/src/Infrastructure/Persistence/I18n/DatabaseTranslationAdapter.php:109
+Stack trace:
+#0 /var/www/html/src/Infrastructure/Persistence/I18n/DatabaseTranslationAdapter.php(109): PDO-&gt;prepare('\n            IN...')
+#1 /var/www/html/src/Infrastructure/Persistence/I18n/DatabaseTranslationAdapter.php(155): Core\Infrastructure\Persistence\I18n\DatabaseTranslationAdapter-&gt;bulkImport('en', 'core', Array)
+#2 /var/www/html/config/api_routes.php(191): Core\Infrastructure\Persistence\I18n\DatabaseTranslationAdapter-&gt;importFromYaml('/var/www/html/s...', 'en', 'core')
+#3 /var/www/html/public/api.php(94): require('/var/www/html/c...')
+#4 {main}
+  thrown in <b>/var/www/html/src/Infrastructure/Persistence/I18n/DatabaseTranslationAdapter.php</b> on line <b>109</b><br />
+' to be a number or a date
+   ✓ Crea pedido exitoso
+Orders/02-get-order (200 OK) - 4 ms
 Tests
-   ✕ Obtiene pedido exitosamente
-      expected [ 200 ] to include 500
    ✕ Los datos coinciden
       expected undefined to equal 1
+   ✓ Obtiene pedido exitosamente
+Orders/03-list-orders (200 OK) - 4 ms
+Tests
+   ✕ Devuelve array
+      expected '<br />\n<b>Fatal error</b>:  Uncaught…' to be an array
+   ✓ Lista pedidos exitosamente
+Orders/04-update-order (200 OK) - 6 ms
+Tests
+   ✓ Actualización exitosa
+Orders/05-verify-update (200 OK) - 4 ms
+Tests
+   ✕ Datos actualizados correctos
+      expected undefined to equal 'CMD-001X-UPD'
+   ✓ Verifica actualización
+Orders/06-delete-order (200 OK) - 4 ms
+Tests
+   ✓ Delete exitoso
+Orders/07-verify-deletion (200 OK) - 4 ms
+Tests
+   ✕ El pedido eliminado no existe
+      expected 200 to equal 404
 
 📊 Execution Summary
-┌───────────────┬──────────────┐
-│ Metric        │    Result    │
-├───────────────┼──────────────┤
-│ Status        │    ✗ FAIL    │
-├───────────────┼──────────────┤
-│ Requests      │ 2 (2 Failed) │
-├───────────────┼──────────────┤
-│ Tests         │     0/4      │
-├───────────────┼──────────────┤
-│ Assertions    │     0/0      │
-├───────────────┼──────────────┤
-│ Duration (ms) │     254      │
-└───────────────┴──────────────┘
+┌───────────────┬────────────────────────┐
+│ Metric        │         Result         │
+├───────────────┼────────────────────────┤
+│ Status        │         ✗ FAIL         │
+├───────────────┼────────────────────────┤
+│ Requests      │ 7 (2 Passed, 5 Failed) │
+├───────────────┼────────────────────────┤
+│ Tests         │          6/11          │
+├───────────────┼────────────────────────┤
+│ Assertions    │          0/0           │
+├───────────────┼────────────────────────┤
+│ Duration (ms) │          628           │
+└───────────────┴────────────────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1
 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1

@@ -36,7 +36,7 @@ $app->before('start', function () {
 
 // ── Manejo de errores ────────────────────────────────────────
 $app->map('error', function (\Throwable $e) {
-    if ($e instanceof \App\Domain\Exception\DomainValidationException) {
+    if ($e instanceof \Core\Domain\Exception\DomainValidationException) {
         http_response_code(422);
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode([

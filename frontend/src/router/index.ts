@@ -57,17 +57,48 @@ import BankAccountMovimientosTab from '../views/bank-accounts/tabs/MovimientosTa
 import EventListView from '../views/events/EventListView.vue'
 import EventDetailView from '../views/events/EventDetailView.vue'
 
+// ── Views: Core (Auth / Users) ──────────────────────────
+import UserListView from '../views/core/UserListView.vue'
+import UserDetailView from '../views/core/UserDetailView.vue'
+import UserRolesTab from '../views/core/tabs/UserRolesTab.vue'
+
+import RoleListView from '../views/core/RoleListView.vue'
+import RoleDetailView from '../views/core/RoleDetailView.vue'
+import RolePermissionsTab from '../views/core/tabs/RolePermissionsTab.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: '/', name: 'dashboard', component: DashboardView, meta: { title: 'Panel Principal' } },
-    { path: '/comercial', name: 'commercial-dashboard', component: CommercialDashboardView, meta: { title: 'Área Comercial' } },
-    { path: '/crear/:resource', name: 'resource-create', component: GenericCreateView, meta: { title: 'Nuevo Registro' } },
+    { path: '/login', name: 'login', component: () => import('../views/auth/LoginView.vue'), meta: { requiredAuth: false, title: 'Acceso' } },
+    { path: '/', name: 'dashboard', component: DashboardView, meta: { title: 'Panel Principal', requiresAuth: true } },
+    { path: '/comercial', name: 'commercial-dashboard', component: CommercialDashboardView, meta: { title: 'Área Comercial', requiresAuth: true } },
+    { path: '/crear/:resource', name: 'resource-create', component: GenericCreateView, meta: { title: 'Nuevo Registro', requiresAuth: true } },
+
+    // ── Users / Roles ─────────────────────────────────
+    { path: '/usuarios', name: 'users', component: UserListView, meta: { title: 'Gestión de Usuarios', requiresAuth: true } },
+    {
+      path: '/usuarios/:id', component: UserDetailView, meta: { title: 'Ficha de Usuario', requiresAuth: true },
+      children: [
+        { path: '', redirect: { name: 'user-ficha' } },
+        { path: 'ficha', name: 'user-ficha', component: GenericFichaTab },
+        { path: 'roles', name: 'user-roles', component: UserRolesTab }
+      ]
+    },
+
+    { path: '/roles', name: 'roles', component: RoleListView, meta: { title: 'Gestión de Roles', requiresAuth: true } },
+    {
+      path: '/roles/:id', component: RoleDetailView, meta: { title: 'Ficha de Rol', requiresAuth: true },
+      children: [
+        { path: '', redirect: { name: 'role-ficha' } },
+        { path: 'ficha', name: 'role-ficha', component: GenericFichaTab },
+        { path: 'permisos', name: 'role-permissions', component: RolePermissionsTab }
+      ]
+    },
 
     // ── Third Parties ─────────────────────────────────
-    { path: '/terceros', name: 'thirdparties', component: ThirdPartyListView, meta: { title: 'Directorio de Terceros' } },
+    { path: '/terceros', name: 'thirdparties', component: ThirdPartyListView, meta: { title: 'Directorio de Terceros', requiresAuth: true } },
     {
-      path: '/terceros/:id', component: ThirdPartyDetailView, meta: { title: 'Ficha de Tercero' },
+      path: '/terceros/:id', component: ThirdPartyDetailView, meta: { title: 'Ficha de Tercero', requiresAuth: true },
       children: [
         { path: '', redirect: { name: 'thirdparty-ficha' } },
         { path: 'ficha', name: 'thirdparty-ficha', component: GenericFichaTab },
@@ -76,9 +107,9 @@ const router = createRouter({
     },
 
     // ── Contacts ──────────────────────────────────────
-    { path: '/contactos', name: 'contacts', component: ContactListView, meta: { title: 'Agenda de Contactos' } },
+    { path: '/contactos', name: 'contacts', component: ContactListView, meta: { title: 'Agenda de Contactos', requiresAuth: true } },
     {
-      path: '/contactos/:id', component: ContactDetailView, meta: { title: 'Ficha de Contacto' },
+      path: '/contactos/:id', component: ContactDetailView, meta: { title: 'Ficha de Contacto', requiresAuth: true },
       children: [
         { path: '', redirect: { name: 'contact-ficha' } },
         { path: 'ficha', name: 'contact-ficha', component: GenericFichaTab },
@@ -87,9 +118,9 @@ const router = createRouter({
     },
 
     // ── Products ──────────────────────────────────────
-    { path: '/productos', name: 'products', component: ProductListView, meta: { title: 'Catálogo de Productos' } },
+    { path: '/productos', name: 'products', component: ProductListView, meta: { title: 'Catálogo de Productos', requiresAuth: true } },
     {
-      path: '/productos/:id', component: ProductDetailView, meta: { title: 'Ficha de Producto' },
+      path: '/productos/:id', component: ProductDetailView, meta: { title: 'Ficha de Producto', requiresAuth: true },
       children: [
         { path: '', redirect: { name: 'product-ficha' } },
         { path: 'ficha', name: 'product-ficha', component: GenericFichaTab },
@@ -98,9 +129,9 @@ const router = createRouter({
     },
 
     // ── Invoices ──────────────────────────────────────
-    { path: '/facturas', name: 'invoices', component: InvoiceListView, meta: { title: 'Facturas de Cliente' } },
+    { path: '/facturas', name: 'invoices', component: InvoiceListView, meta: { title: 'Facturas de Cliente', requiresAuth: true } },
     {
-      path: '/facturas/:id', component: InvoiceDetailView, meta: { title: 'Factura' },
+      path: '/facturas/:id', component: InvoiceDetailView, meta: { title: 'Factura', requiresAuth: true },
       children: [
         { path: '', redirect: { name: 'invoice-ficha' } },
         { path: 'ficha', name: 'invoice-ficha', component: GenericFichaTab },
@@ -110,9 +141,9 @@ const router = createRouter({
     },
 
     // ── Proposals ─────────────────────────────────────
-    { path: '/presupuestos', name: 'proposals', component: ProposalListView, meta: { title: 'Presupuestos' } },
+    { path: '/presupuestos', name: 'proposals', component: ProposalListView, meta: { title: 'Presupuestos', requiresAuth: true } },
     {
-      path: '/presupuestos/:id', component: ProposalDetailView, meta: { title: 'Presupuesto' },
+      path: '/presupuestos/:id', component: ProposalDetailView, meta: { title: 'Presupuesto', requiresAuth: true },
       children: [
         { path: '', redirect: { name: 'proposal-ficha' } },
         { path: 'ficha', name: 'proposal-ficha', component: GenericFichaTab },
@@ -122,9 +153,9 @@ const router = createRouter({
     },
 
     // ── Orders ────────────────────────────────────────
-    { path: '/pedidos', name: 'orders', component: OrderListView, meta: { title: 'Pedidos de Cliente' } },
+    { path: '/pedidos', name: 'orders', component: OrderListView, meta: { title: 'Pedidos de Cliente', requiresAuth: true } },
     {
-      path: '/pedidos/:id', component: OrderDetailView, meta: { title: 'Pedido' },
+      path: '/pedidos/:id', component: OrderDetailView, meta: { title: 'Pedido', requiresAuth: true },
       children: [
         { path: '', redirect: { name: 'order-ficha' } },
         { path: 'ficha', name: 'order-ficha', component: GenericFichaTab },
@@ -134,9 +165,9 @@ const router = createRouter({
     },
 
     // ── Supplier Invoices ─────────────────────────────
-    { path: '/facturas-proveedor', name: 'supplier-invoices', component: SupplierInvoiceListView, meta: { title: 'Facturas de Proveedor' } },
+    { path: '/facturas-proveedor', name: 'supplier-invoices', component: SupplierInvoiceListView, meta: { title: 'Facturas de Proveedor', requiresAuth: true } },
     {
-      path: '/facturas-proveedor/:id', component: SupplierInvoiceDetailView, meta: { title: 'Factura Proveedor' },
+      path: '/facturas-proveedor/:id', component: SupplierInvoiceDetailView, meta: { title: 'Factura Proveedor', requiresAuth: true },
       children: [
         { path: '', redirect: { name: 'supplier-invoice-ficha' } },
         { path: 'ficha', name: 'supplier-invoice-ficha', component: GenericFichaTab },
@@ -146,9 +177,9 @@ const router = createRouter({
     },
 
     // ── Supplier Orders ──────────────────────────────
-    { path: '/pedidos-proveedor', name: 'supplier-orders', component: SupplierOrderListView, meta: { title: 'Pedidos de Proveedor' } },
+    { path: '/pedidos-proveedor', name: 'supplier-orders', component: SupplierOrderListView, meta: { title: 'Pedidos de Proveedor', requiresAuth: true } },
     {
-      path: '/pedidos-proveedor/:id', component: SupplierOrderDetailView, meta: { title: 'Pedido Proveedor' },
+      path: '/pedidos-proveedor/:id', component: SupplierOrderDetailView, meta: { title: 'Pedido Proveedor', requiresAuth: true },
       children: [
         { path: '', redirect: { name: 'supplier-order-ficha' } },
         { path: 'ficha', name: 'supplier-order-ficha', component: GenericFichaTab },
@@ -158,9 +189,9 @@ const router = createRouter({
     },
 
     // ── Projects ──────────────────────────────────────
-    { path: '/proyectos', name: 'projects', component: ProjectListView, meta: { title: 'Proyectos' } },
+    { path: '/proyectos', name: 'projects', component: ProjectListView, meta: { title: 'Proyectos', requiresAuth: true } },
     {
-      path: '/proyectos/:id', component: ProjectDetailView, meta: { title: 'Proyecto' },
+      path: '/proyectos/:id', component: ProjectDetailView, meta: { title: 'Proyecto', requiresAuth: true },
       children: [
         { path: '', redirect: { name: 'project-ficha' } },
         { path: 'ficha', name: 'project-ficha', component: GenericFichaTab },
@@ -170,9 +201,9 @@ const router = createRouter({
     },
 
     // ── Bank Accounts ─────────────────────────────────
-    { path: '/bancos', name: 'bank-accounts', component: BankAccountListView, meta: { title: 'Cuentas Bancarias' } },
+    { path: '/bancos', name: 'bank-accounts', component: BankAccountListView, meta: { title: 'Cuentas Bancarias', requiresAuth: true } },
     {
-      path: '/bancos/:id', component: BankAccountDetailView, meta: { title: 'Cuenta Bancaria' },
+      path: '/bancos/:id', component: BankAccountDetailView, meta: { title: 'Cuenta Bancaria', requiresAuth: true },
       children: [
         { path: '', redirect: { name: 'bank-ficha' } },
         { path: 'ficha', name: 'bank-ficha', component: GenericFichaTab },
@@ -181,9 +212,9 @@ const router = createRouter({
     },
 
     // ── Events / Agenda ───────────────────────────────
-    { path: '/agenda', name: 'events', component: EventListView, meta: { title: 'Agenda / Eventos' } },
+    { path: '/agenda', name: 'events', component: EventListView, meta: { title: 'Agenda / Eventos', requiresAuth: true } },
     {
-      path: '/agenda/:id', component: EventDetailView, meta: { title: 'Evento' },
+      path: '/agenda/:id', component: EventDetailView, meta: { title: 'Evento', requiresAuth: true },
       children: [
         { path: '', redirect: { name: 'event-ficha' } },
         { path: 'ficha', name: 'event-ficha', component: GenericFichaTab },
@@ -191,6 +222,19 @@ const router = createRouter({
       ]
     },
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('alixar_token')
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth !== false && record.name !== 'login')
+
+  if (requiresAuth && !token) {
+    next({ name: 'login' })
+  } else if (to.name === 'login' && token) {
+    next({ name: 'dashboard' })
+  } else {
+    next()
+  }
 })
 
 export default router

@@ -1,10 +1,14 @@
 # Alixar ERP/CRM
 
+> **🚀 Portfolio Showcase & Architectural Modernization**
+> This repository is a technical showcase developed and led by **Rafael San José**.
+> It demonstrates the end-to-end modernization of a legacy PHP monolithic system into a highly decoupled, scalable platform.
+> **Key Skills Displayed:** Hexagonal Architecture (Ports & Adapters), Vue 3 Headless (Server-Driven UI), Docker/DevOps, and Strangler Fig refactoring patterns.
+
 ![PHP Version](https://img.shields.io/badge/PHP-8.2+-blueviolet?style=flat-square)
 ![CI](https://github.com/alxarafe/alixar/actions/workflows/ci.yml/badge.svg)
 [![Quality Report](https://img.shields.io/badge/quality-report-brightgreen?style=flat-square)](https://alxarafe.github.io/alixar/quality/)
 ![Static Analysis](https://img.shields.io/badge/static%20analysis-PHPStan%20%2B%20Psalm-blue?style=flat-square)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/alxarafe/alixar/issues?utf8=✓&q=is%3Aopen%20is%3Aissue)
 
 *[Leer en español](README.es.md)*
 

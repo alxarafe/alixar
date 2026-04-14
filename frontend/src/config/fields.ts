@@ -132,5 +132,21 @@ export const entityFields = {
     { label: 'Proyecto', value: e.projectId ? `#${e.projectId}` : undefined },
     { label: 'Notas', value: e.note },
     ...extractExtrafields(e)
+  ],
+  user: (e: any): InfoField[] => [
+    { label: 'Username', value: e.username, type: 'badge' },
+    { label: 'Nombre Completo', value: e.full_name || `${e.first_name || ''} ${e.last_name || ''}` },
+    { label: 'Email', value: e.email, type: 'email' },
+    { label: 'Idioma', value: e.language },
+    { label: 'Zona Horaria', value: e.timezone },
+    { label: 'Estado', value: e.is_active ? 'Activo' : 'Inactivo' },
+    { label: 'Superadmin', value: e.is_superadmin ? 'Sí' : 'No' },
+    { label: 'Último Acceso', value: e.last_login_at ? new Date(e.last_login_at).toLocaleString('es-ES') : 'Nunca' }
+  ],
+  role: (e: any): InfoField[] => [
+    { label: 'Rol', value: e.name, type: 'badge' },
+    { label: 'Descripción', value: e.description },
+    { label: 'Es de Sistema', value: e.is_system ? 'Sí' : 'No' },
+    { label: 'Nº Permisos', value: typeof e.permissions_count === 'number' ? e.permissions_count.toString() : 'N/A' }
   ]
 };

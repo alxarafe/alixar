@@ -1,0 +1,54 @@
+{
+  "endpoint": "/users",
+  "detailRoute": "user-ficha",
+  "title": "Usuarios",
+  "widget": {
+    "titleField": "username",
+    "subtitleField": "email",
+    "icon": "fas fa-user"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Perfil y Credenciales",
+      "children": [
+        { "type": "Field", "key": "username", "label": "Nombre de Usuario", "inputType": "text", "required": true },
+        { "type": "Field", "key": "email", "label": "Correo Electrónico", "inputType": "email", "required": true },
+        { "type": "Field", "key": "password", "label": "Cambiar Contraseña (opcional)", "inputType": "password" }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Información Personal",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "first_name", "label": "Nombre", "inputType": "text" },
+             { "type": "Field", "key": "last_name", "label": "Apellidos", "inputType": "text" }
+          ]
+        },
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "language", "label": "Idioma", "inputType": "select", "options": [{"value": "es", "label": "Español"}, {"value": "en", "label": "Inglés"}] },
+             { "type": "Field", "key": "timezone", "label": "Zona Horaria", "inputType": "text" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Configuración de Sistema",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+            { "type": "Field", "key": "is_active", "label": "Estado de la cuenta", "inputType": "select", "options": [{"value": "1", "label": "Activo"}, {"value": "0", "label": "Inactivo"}] },
+            { "type": "Field", "key": "is_superadmin", "label": "Permisos de Superadmin", "inputType": "select", "options": [{"value": "1", "label": "Sí"}, {"value": "0", "label": "No"}] }
+          ]
+        }
+      ]
+    }
+  ]
+}

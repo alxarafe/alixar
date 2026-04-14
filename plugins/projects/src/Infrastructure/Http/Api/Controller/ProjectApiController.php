@@ -6,7 +6,7 @@ namespace Plugin\Projects\Infrastructure\Http\Api\Controller;
 
 use Plugin\Projects\Domain\Project\Project;
 use Plugin\Projects\Domain\Project\ProjectRepository;
-use Core\Infrastructure\DolibarrMappingTrait;
+use Plugin\DolibarrCompat\Infrastructure\DolibarrMappingTrait;
 use Flight;
 
 class ProjectApiController

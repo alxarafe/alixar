@@ -6,7 +6,7 @@ namespace Plugin\Finance\Infrastructure\Persistence\Mysql;
 
 use Plugin\Finance\Domain\BankAccount\BankAccount;
 use Plugin\Finance\Domain\BankAccount\BankAccountRepository;
-use Core\Infrastructure\DolibarrMappingTrait;
+use Plugin\DolibarrCompat\Infrastructure\DolibarrMappingTrait;
 use PDO;
 
 class MysqlTreasuryBankAccountRepository implements BankAccountRepository

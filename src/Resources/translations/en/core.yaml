@@ -1,0 +1,47 @@
+# Alixar Core — English translations
+# Group: core
+
+# ── Authentication ────────────────────────────────────────
+login_success: "Login successful"
+login_failed: "Invalid username or password"
+logout_success: "Logged out successfully"
+account_inactive: "Your account is inactive. Contact an administrator."
+token_expired: "Your session has expired. Please log in again."
+token_invalid: "Invalid authentication token"
+token_revoked: "This session has been revoked"
+unauthorized: "Authentication required"
+
+# ── Authorization ─────────────────────────────────────────
+permission_denied: "You do not have permission to perform this action"
+insufficient_permissions: "Insufficient permissions"
+
+# ── Users ─────────────────────────────────────────────────
+user_created: "User ':username' created successfully"
+user_updated: "User updated successfully"
+user_deleted: "User deleted successfully"
+user_not_found: "User not found"
+username_taken: "Username ':username' is already taken"
+email_taken: "Email ':email' is already registered"
+cannot_delete_superadmin: "Cannot delete a superadmin user"
+
+# ── Roles ─────────────────────────────────────────────────
+role_created: "Role ':name' created successfully"
+role_updated: "Role updated successfully"
+role_deleted: "Role deleted successfully"
+role_not_found: "Role not found"
+role_already_exists: "Role ':name' already exists"
+cannot_delete_system_role: "Cannot delete system role ':name'"
+roles_assigned: "Roles assigned successfully"
+
+# ── Permissions ───────────────────────────────────────────
+permissions_synced: "Permissions synced successfully"
+
+# ── Validation ────────────────────────────────────────────
+field_required: "Field ':field' is required"
+invalid_format: "Invalid format for ':field'"
+value_too_long: "Value for ':field' is too long (max :max characters)"
+
+# ── General ───────────────────────────────────────────────
+not_found: "Resource not found"
+server_error: "An unexpected error occurred"
+success: "Operation completed successfully"

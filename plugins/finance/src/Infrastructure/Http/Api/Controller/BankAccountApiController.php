@@ -6,7 +6,7 @@ namespace Plugin\Finance\Infrastructure\Http\Api\Controller;
 
 use Plugin\Finance\Domain\BankAccount\BankAccount;
 use Plugin\Finance\Domain\BankAccount\BankAccountRepository;
-use Core\Infrastructure\DolibarrMappingTrait;
+use Plugin\DolibarrCompat\Infrastructure\DolibarrMappingTrait;
 use Flight;
 
 class BankAccountApiController

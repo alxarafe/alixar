@@ -6,7 +6,7 @@ namespace Plugin\Trading\Infrastructure\Http\Api\Controller;
 
 use Plugin\Trading\Domain\Order\Order;
 use Plugin\Trading\Domain\Order\OrderRepository;
-use Core\Infrastructure\DolibarrMappingTrait;
+use Plugin\DolibarrCompat\Infrastructure\DolibarrMappingTrait;
 use Flight;
 
 class OrderApiController

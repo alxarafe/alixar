@@ -9,6 +9,7 @@ import pedidosProveedor from '../schemas/pedidos-proveedor.json'
 import proyectos from '../schemas/proyectos.json'
 import bancos from '../schemas/bancos.json'
 import agenda from '../schemas/agenda.json'
+import usuarios from '../schemas/usuarios.json'
 
 // Dictionary that resolves URI resource ID to its JSON schema.
 // In the future this can be replaced by a fetch() call to the backend!
@@ -23,5 +24,6 @@ export const resourceSchemas: Record<string, any> = {
   'pedidos-proveedor': pedidosProveedor,
   proyectos,
   bancos,
-  agenda
+  agenda,
+  usuarios
 }

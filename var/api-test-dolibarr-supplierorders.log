@@ -1,13 +1,26 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-SupplierOrders/01-create-supplierorder (200 OK) - 41 ms
+SupplierOrders/01-create-supplierorder (200 OK) - 50 ms
 Tests
    ✓ Crea pedido de proveedor exitoso
    ✓ Devuelve id
-SupplierOrders/02-get-supplierorder (200 OK) - 17 ms
+SupplierOrders/02-get-supplierorder (200 OK) - 15 ms
 Tests
    ✕ Los datos coinciden
       expected '1' to equal 1
    ✓ Obtiene pedido proveedor exitosamente
+SupplierOrders/03-list-supplierorders (200 OK) - 27 ms
+Tests
+   ✓ Lista pedidos proveedor exitosamente
+   ✓ Devuelve array
+SupplierOrders/04-update-supplierorder (200 OK) - 50 ms
+Tests
+   ✓ Actualización exitosa
+SupplierOrders/05-delete-supplierorder (200 OK) - 28 ms
+Tests
+   ✓ Delete exitoso
+SupplierOrders/06-verify-deletion (404 Not Found) - 24 ms
+Tests
+   ✓ El pedido de proveedor eliminado no existe
 
 📊 Execution Summary
 ┌───────────────┬────────────────────────┐
@@ -15,13 +28,13 @@ Tests
 ├───────────────┼────────────────────────┤
 │ Status        │         ✗ FAIL         │
 ├───────────────┼────────────────────────┤
-│ Requests      │ 2 (1 Passed, 1 Failed) │
+│ Requests      │ 6 (5 Passed, 1 Failed) │
 ├───────────────┼────────────────────────┤
-│ Tests         │          3/4           │
+│ Tests         │          8/9           │
 ├───────────────┼────────────────────────┤
 │ Assertions    │          0/0           │
 ├───────────────┼────────────────────────┤
-│ Duration (ms) │          270           │
+│ Duration (ms) │          774           │
 └───────────────┴────────────────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1

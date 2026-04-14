@@ -1,0 +1,21 @@
+meta {
+  name: 06-verify-deletion
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/events/{{testEventId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("El evento eliminado no existe", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

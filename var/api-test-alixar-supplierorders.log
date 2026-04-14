@@ -1,31 +1,53 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-SupplierOrders/01-create-supplierorder (500 Internal Server Error) - 34 ms
+SupplierOrders/01-create-supplierorder (200 OK) - 23 ms
 Tests
-   ✕ Crea pedido de proveedor exitoso
-      expected [ 200, 201 ] to include 500
    ✕ Devuelve id
-      expected [object Object] to be a number or a date
-SupplierOrders/02-get-supplierorder (500 Internal Server Error) - 4 ms
+      expected '<br />
+<b>Fatal error</b>:  Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'apitest_db.translations' doesn't exist in /var/www/html/src/Infrastructure/Persistence/I18n/DatabaseTranslationAdapter.php:109
+Stack trace:
+#0 /var/www/html/src/Infrastructure/Persistence/I18n/DatabaseTranslationAdapter.php(109): PDO-&gt;prepare('\n            IN...')
+#1 /var/www/html/src/Infrastructure/Persistence/I18n/DatabaseTranslationAdapter.php(155): Core\Infrastructure\Persistence\I18n\DatabaseTranslationAdapter-&gt;bulkImport('en', 'core', Array)
+#2 /var/www/html/config/api_routes.php(191): Core\Infrastructure\Persistence\I18n\DatabaseTranslationAdapter-&gt;importFromYaml('/var/www/html/s...', 'en', 'core')
+#3 /var/www/html/public/api.php(94): require('/var/www/html/c...')
+#4 {main}
+  thrown in <b>/var/www/html/src/Infrastructure/Persistence/I18n/DatabaseTranslationAdapter.php</b> on line <b>109</b><br />
+' to be a number or a date
+   ✓ Crea pedido de proveedor exitoso
+SupplierOrders/02-get-supplierorder (200 OK) - 4 ms
 Tests
-   ✕ Obtiene pedido proveedor exitosamente
-      expected [ 200 ] to include 500
    ✕ Los datos coinciden
       expected undefined to equal 1
+   ✓ Obtiene pedido proveedor exitosamente
+SupplierOrders/03-list-supplierorders (200 OK) - 5 ms
+Tests
+   ✕ Devuelve array
+      expected '<br />\n<b>Fatal error</b>:  Uncaught…' to be an array
+   ✓ Lista pedidos proveedor exitosamente
+SupplierOrders/04-update-supplierorder (200 OK) - 6 ms
+Tests
+   ✓ Actualización exitosa
+SupplierOrders/05-delete-supplierorder (200 OK) - 5 ms
+Tests
+   ✓ Delete exitoso
+SupplierOrders/06-verify-deletion (200 OK) - 6 ms
+Tests
+   ✕ El pedido de proveedor eliminado no existe
+      expected 200 to equal 404
 
 📊 Execution Summary
-┌───────────────┬──────────────┐
-│ Metric        │    Result    │
-├───────────────┼──────────────┤
-│ Status        │    ✗ FAIL    │
-├───────────────┼──────────────┤
-│ Requests      │ 2 (2 Failed) │
-├───────────────┼──────────────┤
-│ Tests         │     0/4      │
-├───────────────┼──────────────┤
-│ Assertions    │     0/0      │
-├───────────────┼──────────────┤
-│ Duration (ms) │     255      │
-└───────────────┴──────────────┘
+┌───────────────┬────────────────────────┐
+│ Metric        │         Result         │
+├───────────────┼────────────────────────┤
+│ Status        │         ✗ FAIL         │
+├───────────────┼────────────────────────┤
+│ Requests      │ 6 (2 Passed, 4 Failed) │
+├───────────────┼────────────────────────┤
+│ Tests         │          5/9           │
+├───────────────┼────────────────────────┤
+│ Assertions    │          0/0           │
+├───────────────┼────────────────────────┤
+│ Duration (ms) │          565           │
+└───────────────┴────────────────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1
 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1

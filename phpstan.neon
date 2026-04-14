@@ -15,3 +15,4 @@ parameters:
         - '#Call to method PHPUnit\\Framework\\Assert::assertTrue\(\) with true will always evaluate to true\.#'
         - '#Call to method PHPUnit\\Framework\\Assert::assertIsInt\(\) with int will always evaluate to true\.#'
         - '#Strict comparison using === between 1 and 1 will always evaluate to true\.#'
+        - '#Trait Plugin\\DolibarrCompat\\Infrastructure\\DolibarrMappingTrait is used zero times and is not analysed\.#'

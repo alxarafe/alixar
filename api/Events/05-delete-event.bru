@@ -1,0 +1,21 @@
+meta {
+  name: 05-delete-event
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}{{apiBase}}/events/{{testEventId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Delete exitoso", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

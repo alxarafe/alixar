@@ -129,15 +129,79 @@ $app->route('GET /api/setup/plugins', function () use ($registry) {
 });
 
 // ═══════════════════════════════════════════════════════════════
-// CORE ROUTES (not plugin-managed)
+// CORE AUTH BOOTSTRAP (JWT, Middleware, Repositories, Controllers)
 // ═══════════════════════════════════════════════════════════════
 
-$configPort = new \Core\Infrastructure\Persistence\Mysql\MysqlConfigurationAdapter($pdo);
+$jwtConfig = $GLOBALS['__api_config']['jwt'] ?? [];
 
-// ── Setup (Menus) — Will migrate to core module later ────────
-$menuAdapter = new \Core\Infrastructure\Persistence\Mysql\Menu\MysqlLegacyDolibarrMenuAdapter($pdo, $configPort, $tablePrefix);
-$getNavigationTree = new \Core\Application\Menu\GetNavigationTree($menuAdapter);
-$setupCtrl = new \Core\Infrastructure\Http\Api\Controller\SetupApiController($getNavigationTree);
+// ── Core Repositories ────────────────────────────────────────
+$userRepository = new \Core\Infrastructure\Persistence\Mysql\MysqlUserRepository($pdo);
+$roleRepository = new \Core\Infrastructure\Persistence\Mysql\MysqlRoleRepository($pdo);
 
-$app->route('GET /api/setup/menus', [$setupCtrl, 'getMenus']);
+// ── JWT Token Adapter ────────────────────────────────────────
+$jwtAdapter = new \Core\Infrastructure\Auth\JwtTokenAdapter(
+    secretKey: $jwtConfig['secret'] ?? 'alixar-dev-jwt-secret-change-in-production-please!',
+    pdo: $pdo,
+    ttl: $jwtConfig['ttl'] ?? 3600,
+    issuer: $jwtConfig['issuer'] ?? 'alixar',
+);
 
+// ── Auth Middleware (protects /api/* except public routes) ────
+$authMiddleware = new \Core\Infrastructure\Http\Middleware\AuthMiddleware($jwtAdapter, $userRepository);
+$app->before('start', function(array &$params, ?string &$output) use ($authMiddleware) {
+    if (!$authMiddleware->handle()) {
+        return false;
+    }
+});
+
+// ── Domain Services ──────────────────────────────────────────
+$authenticationService = new \Core\Domain\Auth\AuthenticationService($userRepository);
+$authorizationService = new \Core\Domain\Auth\AuthorizationService();
+
+// ── Use Cases ────────────────────────────────────────────────
+$loginHandler = new \Core\Application\Auth\LoginHandler($authenticationService, $jwtAdapter);
+$registerUserHandler = new \Core\Application\Auth\RegisterUserHandler($userRepository);
+$assignRoleHandler = new \Core\Application\Auth\AssignRoleHandler($userRepository, $roleRepository);
+
+// ── API Controllers ──────────────────────────────────────────
+$authController = new \Core\Infrastructure\Http\Api\Controller\AuthApiController($loginHandler, $jwtAdapter);
+$userController = new \Core\Infrastructure\Http\Api\Controller\UserApiController(
+    $userRepository, $registerUserHandler, $assignRoleHandler, $authorizationService
+);
+$roleController = new \Core\Infrastructure\Http\Api\Controller\RoleApiController(
+    $roleRepository, $authorizationService
+);
+
+// ── Register Core Auth Routes ────────────────────────────────
+$registerCoreRoutes = require dirname(__DIR__) . '/src/Infrastructure/Http/routes.php';
+
+// ═══════════════════════════════════════════════════════════════
+// CORE i18n BOOTSTRAP (Translations)
+// ═══════════════════════════════════════════════════════════════
+
+// ── Translation Adapter (DB + YAML hybrid) ───────────────────
+$translationAdapter = new \Core\Infrastructure\Persistence\I18n\DatabaseTranslationAdapter($pdo);
+
+// ── Import Core YAML translations on first request ───────────
+// TODO: Move this to a migration or CLI command for production
+$coreTranslationsDir = dirname(__DIR__) . '/src/Resources/translations';
+foreach (['en', 'es'] as $lang) {
+    $yamlFile = $coreTranslationsDir . '/' . $lang . '/core.yaml';
+    if (file_exists($yamlFile)) {
+        $translationAdapter->importFromYaml($yamlFile, $lang, 'core');
+    }
+}
+
+// ── Core Translator ──────────────────────────────────────────
+$coreTranslator = new \Core\Application\I18n\CoreTranslator($translationAdapter, 'en');
+
+// ── i18n API Controller ──────────────────────────────────────
+$i18nController = new \Core\Infrastructure\Http\Api\Controller\I18nApiController(
+    $coreTranslator, $translationAdapter, $authorizationService
+);
+
+// ── Whitelist i18n public routes ─────────────────────────────
+$authMiddleware->addPublicRoute('/api/i18n');
+
+// ── Register all Core routes (Auth + i18n) ───────────────────
+$registerCoreRoutes($authController, $userController, $roleController, $i18nController);

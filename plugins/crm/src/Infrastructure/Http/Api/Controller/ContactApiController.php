@@ -20,7 +20,7 @@ use Flight;
  */
 class ContactApiController
 {
-    use \Core\Infrastructure\DolibarrMappingTrait;
+    use \Plugin\DolibarrCompat\Infrastructure\DolibarrMappingTrait;
 
     private const API_MAP = [
         'thirdPartyId' => 'socid',
@@ -171,9 +171,9 @@ class ContactApiController
         if (!$this->categoryRepository) throw new \RuntimeException('CategoryRepository is not configured.');
 
         $categories = $this->categoryRepository->findByContactId($id);
-        Flight::json(array_map(fn(\Core\Domain\Category\Category $cat) => $this->mapToDolibarr(
+        Flight::json(array_map(fn(\Plugin\Business\Domain\Category\Category $cat) => $this->mapToDolibarr(
             $cat->toArray(),
-            \Plugin\Crm\Infrastructure\Persistence\Mysql\Category\MysqlContactCategoryRepository::CATEGORY_COLUMN_MAP
+            \Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Crm\DolibarrMysqlContactCategoryRepository::CATEGORY_COLUMN_MAP
         ), $categories));
     }
 

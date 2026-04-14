@@ -6,7 +6,7 @@ namespace Plugin\Products\Infrastructure\Http\Api\Controller;
 
 use Plugin\Products\Domain\Product\Product;
 use Plugin\Products\Domain\Product\ProductRepository;
-use Core\Infrastructure\DolibarrMappingTrait;
+use Plugin\DolibarrCompat\Infrastructure\DolibarrMappingTrait;
 use Flight;
 
 class ProductApiController
