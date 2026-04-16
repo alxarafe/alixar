@@ -10,3 +10,4 @@
 var/cache/blade/
 .dolibarr/
 /api/environments/*.bru
+var/*.log

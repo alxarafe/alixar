@@ -289,6 +289,53 @@ export interface NavigationTree {
   left: MenuNode[]
 }
 
+export interface Ticket {
+  id: number
+  ref: string
+  subject: string
+  severity?: string
+  type_code?: string
+  status_code?: string
+  fk_soc?: number
+  socname?: string
+  [key: string]: any
+}
+
+export interface Category {
+  id: number
+  ref?: string
+  label: string
+  type: number
+  description?: string
+  color?: string
+  [key: string]: any
+}
+
+export interface Contract {
+  id: number
+  ref: string
+  ref_customer?: string
+  ref_supplier?: string
+  fk_soc: number
+  socname?: string
+  date_contrat?: string
+  statut?: number
+  [key: string]: any
+}
+
+export interface SupplierProposal {
+  id: number
+  ref: string
+  ref_supplier?: string
+  fk_soc: number
+  socname?: string
+  datep?: string
+  total_ht?: number
+  total_ttc?: number
+  statut?: number
+  [key: string]: any
+}
+
 // ═══════════════════════════════════════════════════════════
 // API Service
 // ═══════════════════════════════════════════════════════════
@@ -744,6 +791,32 @@ class ApiService {
   createExpenseReport(data: any): Promise<number> { return this.request<number>('/expensereports', 'POST', data) }
   updateExpenseReport(id: number, data: any): Promise<any> { return this.request<any>(`/expensereports/${id}`, 'PUT', data) }
   deleteExpenseReport(id: number): Promise<any> { return this.request(`/expensereports/${id}`, 'DELETE') }
+
+  // ── CRM (Tickets & Categories) ─────────────────────────
+  getTickets(params?: ListParams): Promise<Ticket[]> { return this.list<Ticket>('/tickets', params) }
+  getTicket(id: number): Promise<Ticket> { return this.request<Ticket>(`/tickets/${id}`) }
+  createTicket(data: Partial<Ticket>): Promise<number> { return this.request<number>('/tickets', 'POST', data) }
+  updateTicket(id: number, data: Partial<Ticket>): Promise<Ticket> { return this.request<Ticket>(`/tickets/${id}`, 'PUT', data) }
+  deleteTicket(id: number): Promise<any> { return this.request(`/tickets/${id}`, 'DELETE') }
+
+  getCategories(params?: ListParams): Promise<Category[]> { return this.list<Category>('/categories', params) }
+  getCategory(id: number): Promise<Category> { return this.request<Category>(`/categories/${id}`) }
+  createCategory(data: Partial<Category>): Promise<number> { return this.request<number>('/categories', 'POST', data) }
+  updateCategory(id: number, data: Partial<Category>): Promise<Category> { return this.request<Category>(`/categories/${id}`, 'PUT', data) }
+  deleteCategory(id: number): Promise<any> { return this.request(`/categories/${id}`, 'DELETE') }
+
+  // ── Trading (Contracts & Supplier Proposals) ───────────
+  getContracts(params?: ListParams): Promise<Contract[]> { return this.list<Contract>('/contracts', params) }
+  getContract(id: number): Promise<Contract> { return this.request<Contract>(`/contracts/${id}`) }
+  createContract(data: Partial<Contract>): Promise<number> { return this.request<number>('/contracts', 'POST', data) }
+  updateContract(id: number, data: Partial<Contract>): Promise<Contract> { return this.request<Contract>(`/contracts/${id}`, 'PUT', data) }
+  deleteContract(id: number): Promise<any> { return this.request(`/contracts/${id}`, 'DELETE') }
+
+  getSupplierProposals(params?: ListParams): Promise<SupplierProposal[]> { return this.list<SupplierProposal>('/supplierproposals', params) }
+  getSupplierProposal(id: number): Promise<SupplierProposal> { return this.request<SupplierProposal>(`/supplierproposals/${id}`) }
+  createSupplierProposal(data: Partial<SupplierProposal>): Promise<number> { return this.request<number>('/supplierproposals', 'POST', data) }
+  updateSupplierProposal(id: number, data: Partial<SupplierProposal>): Promise<SupplierProposal> { return this.request<SupplierProposal>(`/supplierproposals/${id}`, 'PUT', data) }
+  deleteSupplierProposal(id: number): Promise<any> { return this.request(`/supplierproposals/${id}`, 'DELETE') }
 }
 
 // Ensure you point to your correct port!

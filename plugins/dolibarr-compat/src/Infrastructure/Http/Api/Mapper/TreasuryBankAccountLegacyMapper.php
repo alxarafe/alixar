@@ -23,7 +23,7 @@ class TreasuryBankAccountLegacyMapper extends AbstractLegacyMapper
         ];
     }
 
-    public function toLegacy(array $nativePayload): array
+    public function toLegacy(mixed $nativePayload): array
     {
         $legacy = parent::toLegacy($nativePayload);
         // Ensure some defaults for legacy clients

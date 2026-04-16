@@ -95,6 +95,21 @@ return function (flight\Engine $app, PDO $pdo, HookRegistryInterface $hooks, Plu
     $app->route('POST /api/v1/orders/@id/contact/@contactid/@type', [$orderCtrl, 'postContact']);
     $app->route('DELETE /api/v1/orders/@id/contact/@contactid/@type', [$orderCtrl, 'deleteContact']);
 
+    // ── Contracts ────────────────────────────────────────────────
+    $contractRepo = new \Plugin\Trading\Infrastructure\Persistence\Mysql\Contract\MysqlContractRepository($pdo);
+    $contractCtrl = new \Plugin\Trading\Infrastructure\Http\Api\Controller\ContractApiController($contractRepo);
+
+    $app->route('GET /api/v1/contracts', [$contractCtrl, 'list']);
+    $app->route('POST /api/v1/contracts', [$contractCtrl, 'create']);
+    $app->route('GET /api/v1/contracts/@id', [$contractCtrl, 'show']);
+    $app->route('PUT /api/v1/contracts/@id', [$contractCtrl, 'update']);
+    $app->route('DELETE /api/v1/contracts/@id', [$contractCtrl, 'destroy']);
+
+    $app->route('GET /api/v1/contracts/@id/lines', [$contractCtrl, 'getLines']);
+    $app->route('POST /api/v1/contracts/@id/lines', [$contractCtrl, 'postLine']);
+    $app->route('PUT /api/v1/contracts/@id/lines/@lineId', [$contractCtrl, 'putLine']);
+    $app->route('DELETE /api/v1/contracts/@id/lines/@lineId', [$contractCtrl, 'deleteLine']);
+
     // ══════════════════════════════════════════════════════════
     // PURCHASES
     // ══════════════════════════════════════════════════════════

@@ -1,11 +1,11 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-Projects/01-create-project (500 Internal Server Error) - 36 ms
+Projects/01-create-project (500 Internal Server Error) - 48 ms
 Tests
    ✕ Crea Proyecto exitoso
       expected [ 200, 201 ] to include 500
    ✕ Devuelve id
       expected [object Object] to be a number or a date
-Projects/02-get-project (403 Forbidden) - 2 ms
+Projects/02-get-project (403 Forbidden) - 3 ms
 Tests
    ✕ Obtiene Proyecto exitosamente
       expected [ 200 ] to include 403
@@ -24,7 +24,7 @@ Tests
 ├───────────────┼──────────────┤
 │ Assertions    │     0/0      │
 ├───────────────┼──────────────┤
-│ Duration (ms) │     243      │
+│ Duration (ms) │     440      │
 └───────────────┴──────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1

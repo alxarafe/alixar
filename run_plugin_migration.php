@@ -24,4 +24,6 @@ $ranTrading = $runner->migrate(__DIR__ . '/plugins/trading/migrations');
 $ranCrm = $runner->migrate(__DIR__ . '/plugins/crm/migrations');
 $ranProjects = $runner->migrate(__DIR__ . '/plugins/projects/migrations');
 $ranFinance = $runner->migrate(__DIR__ . '/plugins/finance/migrations');
-echo "Ran migrations: " . implode(', ', array_merge($ranCore, $ranHr, $ranLogistics, $ranInterventions, $ranProducts, $ranBusiness, $ranTrading, $ranCrm, $ranProjects, $ranFinance)) . "\n";
+$ranMembers = $runner->migrate(__DIR__ . '/plugins/members/migrations');
+$ranMrp = $runner->migrate(__DIR__ . '/plugins/mrp/migrations');
+echo "Ran migrations: " . implode(', ', array_merge($ranCore, $ranHr, $ranLogistics, $ranInterventions, $ranProducts, $ranBusiness, $ranTrading, $ranCrm, $ranProjects, $ranFinance, $ranMembers, $ranMrp)) . "\n";

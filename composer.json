@@ -30,7 +30,9 @@
             "Plugin\\Logistics\\": "plugins/logistics/src/",
             "Plugin\\Interventions\\": "plugins/interventions/src/",
             "Plugin\\Tenant\\": "plugins/tenant/src/",
-            "Plugin\\DolibarrCompat\\": "plugins/dolibarr-compat/src/"
+            "Plugin\\DolibarrCompat\\": "plugins/dolibarr-compat/src/",
+            "Plugin\\Members\\": "plugins/members/src/",
+            "Plugin\\Mrp\\": "plugins/mrp/src/"
         }
     },
     "autoload-dev": {

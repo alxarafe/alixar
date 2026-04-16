@@ -1,10 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Migration: Create expense_reports table for Hr Plugin.
  */
+
+declare(strict_types=1);
+
 return new class extends \Core\Infrastructure\Persistence\Migration\MigrationDefinition {
     public function up(\PDO $pdo): void
     {

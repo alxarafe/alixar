@@ -1,7 +1,7 @@
 import type { InfoField } from '../components/InfoCard.vue';
 
 // Interfaces for our types
-import type { ThirdParty, Contact, Product, Invoice, Proposal, Order, SupplierInvoice, SupplierOrder, Project, BankAccount, CRMEvent } from '../api';
+import type { ThirdParty, Contact, Product, Invoice, Proposal, Order, SupplierInvoice, SupplierOrder, Project, BankAccount, CRMEvent, Ticket, Category, Contract, SupplierProposal } from '../api';
 
 const extractExtrafields = (e: any): InfoField[] => {
   if (!e.array_options) return [];
@@ -148,5 +148,36 @@ export const entityFields = {
     { label: 'Descripción', value: e.description },
     { label: 'Es de Sistema', value: e.is_system ? 'Sí' : 'No' },
     { label: 'Nº Permisos', value: typeof e.permissions_count === 'number' ? e.permissions_count.toString() : 'N/A' }
+  ],
+  ticket: (e: Ticket): InfoField[] => [
+    { label: 'Referencia', value: e.ref, type: 'badge' },
+    { label: 'Asunto', value: e.subject },
+    { label: 'Tercero', value: e.socname || (e.fk_soc ? `#${e.fk_soc}` : undefined) },
+    { label: 'Severidad', value: e.severity },
+    { label: 'Tipo', value: e.type_code },
+    { label: 'Estado', value: e.status_code },
+    ...extractExtrafields(e)
+  ],
+  category: (e: Category): InfoField[] => [
+    { label: 'Etiqueta', value: e.label, type: 'badge' },
+    { label: 'Tipo', value: e.type ? e.type.toString() : 'Genérico' },
+    { label: 'Descripción', value: e.description },
+    { label: 'Color', value: e.color }
+  ],
+  contract: (e: Contract): InfoField[] => [
+    { label: 'Referencia', value: e.ref, type: 'badge' },
+    { label: 'Tercero', value: e.socname || (e.fk_soc ? `#${e.fk_soc}` : undefined) },
+    { label: 'Fecha Contrato', value: e.date_contrat ? new Date(e.date_contrat).toLocaleDateString('es-ES') : undefined },
+    { label: 'Estado', value: e.statut !== undefined ? e.statut.toString() : undefined },
+    ...extractExtrafields(e)
+  ],
+  supplierProposal: (e: SupplierProposal): InfoField[] => [
+    { label: 'Referencia', value: e.ref, type: 'badge' },
+    { label: 'Ref. Proveedor', value: e.ref_supplier },
+    { label: 'Proveedor', value: e.socname || (e.fk_soc ? `#${e.fk_soc}` : undefined) },
+    { label: 'Fecha Propuesta', value: e.datep ? new Date(e.datep).toLocaleDateString('es-ES') : undefined },
+    { label: 'Total HT', value: e.total_ht ? `${Number(e.total_ht).toFixed(2)} €` : undefined },
+    { label: 'Total TTC', value: e.total_ttc ? `${Number(e.total_ttc).toFixed(2)} €` : undefined },
+    ...extractExtrafields(e)
   ]
 };

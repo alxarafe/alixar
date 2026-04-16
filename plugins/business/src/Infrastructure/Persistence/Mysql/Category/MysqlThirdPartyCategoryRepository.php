@@ -27,13 +27,13 @@ class MysqlThirdPartyCategoryRepository implements ThirdPartyCategoryRepository
 
         $items = [];
         foreach ($rows as $row) {
-            $items[] = new Category(
-                id: (int) $row['id'],
-                label: $row['label'],
-                description: $row['description'],
-                type: (int) $row['type'],
-                color: $row['color']
-            );
+            $items[] = Category::fromArray([
+                'id' => (int) $row['id'],
+                'label' => $row['label'],
+                'description' => $row['description'],
+                'type' => (int) $row['type'],
+                'color' => $row['color']
+            ]);
         }
 
         return $items;

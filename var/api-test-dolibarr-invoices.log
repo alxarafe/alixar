@@ -1,38 +1,38 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-Invoices/00-create-thirdparty (200 OK) - 56 ms
+Invoices/00-create-thirdparty (200 OK) - 95 ms
 Tests
    ✓ Crea tercero necesario
-Invoices/01-create-invoice (200 OK) - 46 ms
+Invoices/01-create-invoice (200 OK) - 40 ms
 Tests
    ✓ Factura creada con ID numérico
-Invoices/02-get-invoice (200 OK) - 25 ms
+Invoices/02-get-invoice (200 OK) - 27 ms
 Tests
    ✓ Carga exitosa y pertenece al tercero
-Invoices/03-update-invoice (200 OK) - 28 ms
+Invoices/03-update-invoice (200 OK) - 50 ms
 Tests
    ✓ Actualización reflejada
-Invoices/04-post-line (200 OK) - 24 ms
+Invoices/04-post-line (200 OK) - 31 ms
 Tests
    ✓ Línea creada exitosamente
-Invoices/05-get-lines (200 OK) - 19 ms
+Invoices/05-get-lines (200 OK) - 33 ms
 Tests
    ✓ Carga de lineas correcta
-Invoices/06-put-line (200 OK) - 33 ms
+Invoices/06-put-line (200 OK) - 37 ms
 Tests
    ✓ Línea actualizada devuelve la factura re-calculada
-Invoices/06b-post-second-line (200 OK) - 32 ms
+Invoices/06b-post-second-line (200 OK) - 33 ms
 Tests
    ✓ Segunda línea creada exitosamente
-Invoices/07-delete-line (200 OK) - 44 ms
+Invoices/07-delete-line (200 OK) - 38 ms
 Tests
    ✓ Línea borrada exitosamente
-Invoices/08-validate-invoice (200 OK) - 50 ms
+Invoices/08-validate-invoice (200 OK) - 67 ms
 Tests
    ✓ Factura validada exitosamente
-Invoices/09-delete-invoice (200 OK) - 43 ms
+Invoices/09-delete-invoice (200 OK) - 57 ms
 Tests
    ✓ Status 200
-Invoices/10-verify-deletion (404 Not Found) - 19 ms
+Invoices/10-verify-deletion (404 Not Found) - 22 ms
 Tests
    ✓ Status 404 (ya no existe)
 
@@ -48,7 +48,7 @@ Tests
 ├───────────────┼────────────────┤
 │ Assertions    │      0/0       │
 ├───────────────┼────────────────┤
-│ Duration (ms) │      1424      │
+│ Duration (ms) │      1708      │
 └───────────────┴────────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1

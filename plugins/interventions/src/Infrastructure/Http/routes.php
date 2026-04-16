@@ -19,5 +19,4 @@ return function (flight\Engine $app, PDO $pdo, HookRegistryInterface $hooks, Plu
     $app->route('GET /api/v1/interventions/@id', [$ctrl, 'show']);
     $app->route('PUT /api/v1/interventions/@id', [$ctrl, 'update']);
     $app->route('DELETE /api/v1/interventions/@id', [$ctrl, 'destroy']);
-    
 };

@@ -5,8 +5,11 @@ import GenericFichaTab from '../views/shared/GenericFichaTab.vue'
 import GenericLineasTab from '../views/shared/GenericLineasTab.vue'
 import GenericNotasTab from '../views/shared/GenericNotasTab.vue'
 import GenericCreateView from '../views/shared/GenericCreateView.vue'
+import GenericListView from '../views/shared/GenericListView.vue'
+import GenericDetailView from '../views/shared/GenericDetailView.vue'
 
-// ── Views: Dashboard ────────────────────────────────────
+import { pluginsRegistry } from '../plugins/registry'
+
 // ── Views: Dashboard ────────────────────────────────────
 import DashboardView from '../views/DashboardView.vue'
 import CommercialDashboardView from '../views/CommercialDashboardView.vue'
@@ -65,6 +68,7 @@ import UserRolesTab from '../views/core/tabs/UserRolesTab.vue'
 import RoleListView from '../views/core/RoleListView.vue'
 import RoleDetailView from '../views/core/RoleDetailView.vue'
 import RolePermissionsTab from '../views/core/tabs/RolePermissionsTab.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -259,8 +263,41 @@ const router = createRouter({
         { path: 'ficha', name: 'expensereport-ficha', component: GenericFichaTab },
       ]
     },
+
+
+
   ]
 })
+
+// === DYNAMIC PLUGIN ROUTING ===
+pluginsRegistry.forEach(plugin => {
+  // Check if we already registered a manual route (fallback for transition)
+  if (!router.hasRoute(plugin.key)) {
+    // Parent List View
+    router.addRoute({
+      path: `/${plugin.key}`,
+      name: plugin.key,
+      component: GenericListView,
+      meta: { title: plugin.labels.plural, requiresAuth: true, pluginKey: plugin.key }
+    })
+  }
+
+  if (!router.hasRoute(`${plugin.key}-detail`)) {
+    // Detail View
+    router.addRoute({
+      path: `/${plugin.key}/:id`,
+      name: `${plugin.key}-detail`,
+      component: GenericDetailView,
+      meta: { title: plugin.labels.singular, requiresAuth: true, pluginKey: plugin.key },
+      children: [
+        { path: '', redirect: { name: `${plugin.key}-ficha` } },
+        { path: 'ficha', name: `${plugin.key}-ficha`, component: GenericFichaTab },
+        { path: 'notas', name: `${plugin.key}-notas`, component: GenericNotasTab },
+      ]
+    })
+  }
+})
+// ==============================
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('alixar_token')

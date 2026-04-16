@@ -1,12 +1,12 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-BankAccounts/01-create-bankaccount (201 Created) - 37 ms
+BankAccounts/01-create-bankaccount (201 Created) - 53 ms
 Tests
    ✓ Crea Banco exitoso
    ✓ Devuelve id
-BankAccounts/02-get-bankaccount (200 OK) - 10 ms
+BankAccounts/02-get-bankaccount (200 OK) - 15 ms
 Tests
    ✕ Los datos coinciden
-      expected { id: 1, ref: 'BANK-01', …(9) } to have property 'transactions'
+      expected undefined to equal 'BANK-01'
    ✓ Obtiene Banco exitosamente
 
 📊 Execution Summary
@@ -21,7 +21,7 @@ Tests
 ├───────────────┼────────────────────────┤
 │ Assertions    │          0/0           │
 ├───────────────┼────────────────────────┤
-│ Duration (ms) │          257           │
+│ Duration (ms) │          379           │
 └───────────────┴────────────────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1

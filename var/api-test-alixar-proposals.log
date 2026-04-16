@@ -1,28 +1,29 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-Proposals/01-create-proposal (201 Created) - 36 ms
+Proposals/01-create-proposal (201 Created) - 50 ms
 Tests
    ✓ Crea presupuesto exitoso
    ✓ Devuelve id
-Proposals/02-get-proposal (200 OK) - 9 ms
+Proposals/02-get-proposal (200 OK) - 14 ms
 Tests
    ✕ Los datos coinciden
-      expected { id: 1, socid: 1, …(11) } to have property 'lines'
+      expected undefined to equal 1
    ✓ Obtiene presupuesto exitosamente
-Proposals/03-list-proposals (200 OK) - 9 ms
+Proposals/03-list-proposals (200 OK) - 16 ms
 Tests
    ✓ Lista presupuestos exitosamente
    ✓ Devuelve array
-Proposals/04-update-proposal (200 OK) - 20 ms
+Proposals/04-update-proposal (200 OK) - 25 ms
 Tests
    ✓ Actualización exitosa
-Proposals/05-verify-update (200 OK) - 9 ms
+Proposals/05-verify-update (200 OK) - 16 ms
 Tests
+   ✕ Datos actualizados correctos
+      expected undefined to equal 'PROP-001X-UPD'
    ✓ Verifica actualización
-   ✓ Datos actualizados correctos
-Proposals/06-delete-proposal (200 OK) - 18 ms
+Proposals/06-delete-proposal (200 OK) - 25 ms
 Tests
    ✓ Delete exitoso
-Proposals/07-verify-deletion (404 Not Found) - 9 ms
+Proposals/07-verify-deletion (404 Not Found) - 15 ms
 Tests
    ✓ El presupuesto eliminado no existe
 
@@ -32,13 +33,13 @@ Tests
 ├───────────────┼────────────────────────┤
 │ Status        │         ✗ FAIL         │
 ├───────────────┼────────────────────────┤
-│ Requests      │ 7 (6 Passed, 1 Failed) │
+│ Requests      │ 7 (5 Passed, 2 Failed) │
 ├───────────────┼────────────────────────┤
-│ Tests         │         10/11          │
+│ Tests         │          9/11          │
 ├───────────────┼────────────────────────┤
 │ Assertions    │          0/0           │
 ├───────────────┼────────────────────────┤
-│ Duration (ms) │          632           │
+│ Duration (ms) │          892           │
 └───────────────┴────────────────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1

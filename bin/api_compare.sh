@@ -196,7 +196,7 @@ do_test() {
     local alixar_result=0
 
     # Suites de test a ejecutar
-    local SUITES=("Status" "ThirdParties" "Contacts" "Events" "BankAccounts" "Invoices" "Proposals" "Orders" "SupplierInvoices" "SupplierOrders" "Products" "Projects")
+    local SUITES=("Status" "ThirdParties" "Contacts" "Events" "BankAccounts" "Invoices" "Proposals" "Orders" "SupplierInvoices" "SupplierOrders" "Products" "Projects" "Payments" "Categories" "Contracts" "Warehouses" "StockMovements" "Tasks" "Documents" "SupplierProposals" "Tickets" "Accountancy" "ProductLots" "ExpenseReports" "Shipments" "Receptions" "Interventions" "MemberTypes" "Members" "Subscriptions" "Holidays" "Salaries" "Recruitments" "Boms" "Mos" "Workstations" "Multicurrencies" "Donations" "KnowledgeManagement" "ObjectLinks" "EmailTemplates" "Webhooks" "Zapier")
 
     # ── Dolibarr ──────────────────────────────────────────
     echo "━━━ Dolibarr (referencia) ━━━━━━━━━━━━━━━━━━━━━━━━━"

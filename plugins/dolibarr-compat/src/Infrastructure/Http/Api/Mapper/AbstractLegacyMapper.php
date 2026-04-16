@@ -47,7 +47,7 @@ abstract class AbstractLegacyMapper
     /**
      * Translates a native Alixar entity array to the legacy Dolibarr schema format.
      */
-    public function toLegacy(array $nativePayload): array
+    public function toLegacy(mixed $nativePayload): array
     {
         $legacyPayload = [];
         

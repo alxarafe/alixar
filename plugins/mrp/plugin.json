@@ -1,0 +1,12 @@
+{
+    "name": "mrp",
+    "displayName": "Manufacturing Resource Planning",
+    "version": "1.0.0",
+    "description": "BOM and Manufacturing Management",
+    "icon": "CogIcon",
+    "requires": ["products"],
+    "optionalDeps": [],
+    "apiRoutes": "src/Infrastructure/Http/routes.php",
+    "hooks": "src/Infrastructure/Core/hooks.php",
+    "menus": []
+}

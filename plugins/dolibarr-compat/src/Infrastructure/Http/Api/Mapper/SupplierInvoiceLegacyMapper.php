@@ -1,8 +1,13 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Plugin\DolibarrCompat\Infrastructure\Http\Api\Mapper;
-class SupplierInvoiceLegacyMapper extends AbstractLegacyMapper {
-    public function __construct() {
+
+class SupplierInvoiceLegacyMapper extends AbstractLegacyMapper
+{
+    public function __construct()
+    {
         $this->mapping = [
             'id' => 'id', 'socid' => 'thirdPartyId', 'ref' => 'ref',
             'ref_supplier' => 'refSupplier', 'ref_ext' => 'refExt',

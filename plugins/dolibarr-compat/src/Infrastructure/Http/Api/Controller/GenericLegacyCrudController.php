@@ -47,7 +47,7 @@ class GenericLegacyCrudController
             $items = $this->repository->findAll($limit, $offset, 'id', 'ASC');
         }
 
-        $legacyItems = array_map(fn($item) => $this->mapper->toLegacy($item->toArray()), $items);
+        $legacyItems = array_map(fn($item) => $this->mapper->toLegacy($item), $items);
         
         \Flight::json($legacyItems);
     }
@@ -60,7 +60,7 @@ class GenericLegacyCrudController
             return;
         }
 
-        \Flight::json($this->mapper->toLegacy($item->toArray()));
+        \Flight::json($this->mapper->toLegacy($item));
     }
 
     public function create(): void
@@ -95,7 +95,7 @@ class GenericLegacyCrudController
 
         $this->repository->save($updatedEntity);
 
-        \Flight::json($this->mapper->toLegacy($updatedEntity->toArray()));
+        \Flight::json($this->mapper->toLegacy($updatedEntity));
     }
 
     public function destroy(string $id): void

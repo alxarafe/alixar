@@ -33,13 +33,7 @@ class MysqlContactCategoryRepository implements ContactCategoryRepository
         
         $categories = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $categories[] = new Category(
-                type: (int) $row['type'],
-                label: (string) $row['label'],
-                description: $row['description'],
-                color: $row['color'],
-                id: (int) $row['id']
-            );
+            $categories[] = Category::fromArray($row);
         }
         return $categories;
     }

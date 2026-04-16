@@ -19,8 +19,12 @@ return function (
     \Core\Infrastructure\Http\Api\Controller\AuthApiController $authController,
     \Core\Infrastructure\Http\Api\Controller\UserApiController $userController,
     \Core\Infrastructure\Http\Api\Controller\RoleApiController $roleController,
+    \Core\Infrastructure\Http\Api\Controller\StatusApiController $statusController,
     ?\Core\Infrastructure\Http\Api\Controller\I18nApiController $i18nController = null,
 ): void {
+    // ── System Status (public) ──────────────────────────────────
+    \Flight::route('GET /api/status', [$statusController, 'index']);
+
     // ── Authentication (public: login) ──────────────────────────
     \Flight::route('POST /api/auth/login', [$authController, 'login']);
     \Flight::route('POST /api/auth/logout', [$authController, 'logout']);

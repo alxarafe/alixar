@@ -29,10 +29,9 @@ class ContactLegacyMapper extends AbstractLegacyMapper
             'note_public' => 'notePublic',
             'priv' => 'isPrivate',
         ];
-
     }
 
-    public function toLegacy(array $nativePayload): array
+    public function toLegacy(mixed $nativePayload): array
     {
         $legacy = parent::toLegacy($nativePayload);
         $legacy['priv'] = !empty($legacy['priv']) ? 1 : 0;

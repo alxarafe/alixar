@@ -1,10 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Migration: Create products and related tables for Products Plugin.
  */
+
+declare(strict_types=1);
+
 return new class extends \Core\Infrastructure\Persistence\Migration\MigrationDefinition {
     public function up(\PDO $pdo): void
     {

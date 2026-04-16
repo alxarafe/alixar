@@ -171,6 +171,7 @@ $userController = new \Core\Infrastructure\Http\Api\Controller\UserApiController
 $roleController = new \Core\Infrastructure\Http\Api\Controller\RoleApiController(
     $roleRepository, $authorizationService
 );
+$statusController = new \Core\Infrastructure\Http\Api\Controller\StatusApiController();
 
 // ── Register Core Auth Routes ────────────────────────────────
 $registerCoreRoutes = require dirname(__DIR__) . '/src/Infrastructure/Http/routes.php';
@@ -202,6 +203,7 @@ $i18nController = new \Core\Infrastructure\Http\Api\Controller\I18nApiController
 
 // ── Whitelist i18n public routes ─────────────────────────────
 $authMiddleware->addPublicRoute('/api/i18n');
+$authMiddleware->addPublicRoute('/api/status');
 
-// ── Register all Core routes (Auth + i18n) ───────────────────
-$registerCoreRoutes($authController, $userController, $roleController, $i18nController);
+// ── Register all Core routes (Auth + i18n + Status) ───────────
+$registerCoreRoutes($authController, $userController, $roleController, $statusController, $i18nController);

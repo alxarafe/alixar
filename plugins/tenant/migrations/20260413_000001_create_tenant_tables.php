@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 namespace Plugin\Tenant\Infrastructure\Persistence\Migration\migrations;
 
-return new class {
+return new class extends \Core\Infrastructure\Persistence\Migration\MigrationDefinition {
     public function up(\PDO $pdo): void
     {
         $pdo->exec("

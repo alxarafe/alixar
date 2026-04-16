@@ -1,9 +1,9 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-Contacts/01-create-contact (200 OK) - 50 ms
+Contacts/01-create-contact (200 OK) - 58 ms
 Tests
    ✓ Status 200 o 201 (creado)
    ✓ Devuelve ID numérico
-Contacts/02-get-contact (200 OK) - 14 ms
+Contacts/02-get-contact (200 OK) - 15 ms
 Tests
    ✓ Status 200
    ✓ Tiene campo 'id'
@@ -14,7 +14,7 @@ Tests
    ✓ Tiene campo 'town'
    ✓ Tiene campo 'phone_pro'
    ✓ Tiene campo 'status'
-Contacts/03-list-contacts (200 OK) - 14 ms
+Contacts/03-list-contacts (200 OK) - 18 ms
 Tests
    ✓ Status 200
    ✓ Devuelve un array
@@ -22,27 +22,27 @@ Tests
    ✓ Cada elemento tiene 'lastname'
    ✓ Respeta el límite
    ✓ El contacto creado está en la lista
-Contacts/04-update-contact (200 OK) - 25 ms
+Contacts/04-update-contact (200 OK) - 40 ms
 Tests
    ✓ Status 200
    ✓ Respuesta tiene el objeto actualizado
-Contacts/05-verify-update (200 OK) - 12 ms
+Contacts/05-verify-update (200 OK) - 14 ms
 Tests
    ✓ Status 200
    ✓ Apellido actualizado
    ✓ Ciudad actualizada a Barcelona
    ✓ Cargo actualizado
-Contacts/06-get-nonexistent (404 Not Found) - 12 ms
+Contacts/06-get-nonexistent (404 Not Found) - 20 ms
 Tests
    ✓ Status 404
-Contacts/07-create-without-lastname (400 Bad Request) - 11 ms
+Contacts/07-create-without-lastname (400 Bad Request) - 13 ms
 Tests
    ✓ Status 4xx o 5xx (error de validación)
-Contacts/07b-get-by-email (200 OK) - 13 ms
+Contacts/07b-get-by-email (200 OK) - 18 ms
 Tests
    ✓ Carga por email exitosa
    ✓ Los datos coinciden con el creado
-Contacts/07c-get-categories (200 OK) - 11 ms
+Contacts/07c-get-categories (200 OK) - 16 ms
 Tests
    ✓ Carga de categorias exitosa
    ✓ Las categorias se devuelven en formato array
@@ -50,7 +50,7 @@ Contacts/08-delete-contact (200 OK) - 22 ms
 Tests
    ✓ Status 200
    ✓ Respuesta indica éxito
-Contacts/09-verify-deletion (404 Not Found) - 11 ms
+Contacts/09-verify-deletion (404 Not Found) - 15 ms
 Tests
    ✓ Status 404 (ya no existe)
 
@@ -66,7 +66,7 @@ Tests
 ├───────────────┼────────────────┤
 │ Assertions    │      0/0       │
 ├───────────────┼────────────────┤
-│ Duration (ms) │      959       │
+│ Duration (ms) │      1205      │
 └───────────────┴────────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1

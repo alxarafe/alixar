@@ -1,5 +1,5 @@
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
-SupplierOrders/01-create-supplierorder (500 Internal Server Error) - 36 ms
+SupplierOrders/01-create-supplierorder (500 Internal Server Error) - 49 ms
 Tests
    ✕ Crea pedido de proveedor exitoso
       expected [ 200, 201 ] to include 500
@@ -11,20 +11,20 @@ Tests
       expected [ 200 ] to include 403
    ✕ Los datos coinciden
       expected undefined to equal 1
-SupplierOrders/03-list-supplierorders (200 OK) - 12 ms
+SupplierOrders/03-list-supplierorders (200 OK) - 17 ms
 Tests
    ✕ Devuelve array
       expected +0 to be above +0
    ✓ Lista pedidos proveedor exitosamente
-SupplierOrders/04-update-supplierorder (403 Forbidden) - 3 ms
+SupplierOrders/04-update-supplierorder (403 Forbidden) - 6 ms
 Tests
    ✕ Actualización exitosa
       expected 403 to equal 200
-SupplierOrders/05-delete-supplierorder (403 Forbidden) - 2 ms
+SupplierOrders/05-delete-supplierorder (403 Forbidden) - 3 ms
 Tests
    ✕ Delete exitoso
       expected 403 to equal 200
-SupplierOrders/06-verify-deletion (403 Forbidden) - 2 ms
+SupplierOrders/06-verify-deletion (403 Forbidden) - 4 ms
 Tests
    ✕ El pedido de proveedor eliminado no existe
       expected 403 to equal 404
@@ -41,7 +41,7 @@ Tests
 ├───────────────┼──────────────┤
 │ Assertions    │     0/0      │
 ├───────────────┼──────────────┤
-│ Duration (ms) │     497      │
+│ Duration (ms) │     675      │
 └───────────────┴──────────────┘
 npm notice
 npm notice New major version of npm available! 10.8.2 -> 11.12.1
