@@ -1,0 +1,215 @@
+openapi: 3.0.3
+info:
+  title: Alixar ERP API
+  description: |
+    Documentación de la API de Alixar ERP.
+    Esta API permite gestionar clientes, proveedores, facturas, pedidos, presupuestos y más.
+    
+    ### Autenticación
+    La mayoría de los endpoints requieren autenticación mediante un **JWT Token** o **API Key** (para compatibilidad).
+  version: 1.0.0
+servers:
+  - url: /api/v1
+    description: Servidor de producción (v1)
+  - url: /api
+    description: Servidor Core
+
+components:
+  securitySchemes:
+    JwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: DOLAPIKEY
+
+security:
+  - JwtAuth: []
+  - ApiKeyAuth: []
+
+paths:
+  /status:
+    get:
+      tags:
+        - System
+      summary: Obtener el estado del sistema
+      responses:
+        '200':
+          description: Estado del sistema
+          content:
+            application/json:
+              example:
+                status: "OK"
+                version: "1.0.0"
+
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Iniciar sesión
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              example:
+                token: "eyJhbG..."
+
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Listar usuarios
+      responses:
+        '200':
+          description: Lista de usuarios
+    post:
+      tags:
+        - Users
+      summary: Crear usuario
+      responses:
+        '201':
+          description: Usuario creado
+
+  /invoices:
+    get:
+      tags:
+        - Trading
+        - Invoices
+      summary: Listar facturas
+      responses:
+        '200':
+          description: Lista de facturas
+    post:
+      tags:
+        - Trading
+        - Invoices
+      summary: Crear factura (borrador)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                socid:
+                  type: integer
+                date:
+                  type: integer
+                note_public:
+                  type: string
+      responses:
+        '200':
+          description: Factura creada
+
+  /invoices/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Trading
+        - Invoices
+      summary: Obtener detalle de factura
+    put:
+      tags:
+        - Trading
+        - Invoices
+      summary: Actualizar factura
+    delete:
+      tags:
+        - Trading
+        - Invoices
+      summary: Eliminar factura
+
+  /invoices/{id}/validate:
+    post:
+      tags:
+        - Trading
+        - Invoices
+      summary: Validar factura (pasar a estado abierto)
+      responses:
+        '200':
+          description: Factura validada
+
+  /proposals:
+    get:
+      tags:
+        - Trading
+        - Proposals
+      summary: Listar presupuestos
+    post:
+      tags:
+        - Trading
+        - Proposals
+      summary: Crear presupuesto
+
+  /orders:
+    get:
+      tags:
+        - Trading
+        - Orders
+      summary: Listar pedidos
+    post:
+      tags:
+        - Trading
+        - Orders
+      summary: Crear pedido
+
+  /products:
+    get:
+      tags:
+        - Products
+      summary: Listar productos
+    post:
+      tags:
+        - Products
+      summary: Crear producto
+
+  /thirdparties:
+    get:
+      tags:
+        - Business
+        - ThirdParties
+      summary: Listar terceros (clientes/proveedores)
+    post:
+      tags:
+        - Business
+        - ThirdParties
+      summary: Crear tercero
+
+  /contacts:
+    get:
+      tags:
+        - CRM
+        - Contacts
+      summary: Listar contactos
+    post:
+      tags:
+        - CRM
+        - Contacts
+      summary: Crear contacto
+
+  /setup/schemas:
+    get:
+      tags:
+        - System
+      summary: Obtener esquemas JSON de todas las entidades
+      responses:
+        '200':
+          description: Map de esquemas por entidad
