@@ -2,17 +2,157 @@ openapi: 3.0.3
 info:
   title: Alixar ERP API
   description: |
-    Documentación de la API de Alixar ERP.
-    Esta API permite gestionar clientes, proveedores, facturas, pedidos, presupuestos y más.
-    
+    Documentación completa de la API REST de **Alixar ERP**.
+
+    La API está organizada en dos capas:
+    - **`/api/v1/*`** — API nativa de Alixar (arquitectura hexagonal, plugins modulares).
+    - **`/api/*`** — Capa de compatibilidad Dolibarr (Anti-Corruption Layer para migración progresiva).
+
     ### Autenticación
-    La mayoría de los endpoints requieren autenticación mediante un **JWT Token** o **API Key** (para compatibilidad).
+    La mayoría de los endpoints requieren autenticación mediante un **JWT Bearer Token**.
+    Los endpoints legacy también aceptan la cabecera `DOLAPIKEY` para compatibilidad con Dolibarr.
+
+    ### Endpoints públicos (sin autenticación)
+    - `POST /api/auth/login`
+    - `GET /api/status`
+    - `GET /api/i18n/*`
   version: 1.0.0
+  contact:
+    name: Alixar Team
+    url: https://github.com/alxarafe/alixar
+  license:
+    name: GPL-3.0-or-later
+
 servers:
-  - url: /api/v1
-    description: Servidor de producción (v1)
-  - url: /api
-    description: Servidor Core
+  - url: /
+    description: Servidor principal
+
+tags:
+  # ── Core ──
+  - name: System
+    description: Estado del sistema y configuración
+  - name: Auth
+    description: Autenticación y sesión
+  - name: Users
+    description: Gestión de usuarios
+  - name: Roles
+    description: Roles y permisos
+  - name: i18n
+    description: Internacionalización y traducciones
+  - name: Tenants
+    description: Multi-tenancy
+
+  # ── Business ──
+  - name: ThirdParties
+    description: Terceros (clientes, proveedores, prospects)
+  - name: Categories
+    description: Categorías de entidades
+
+  # ── CRM ──
+  - name: Contacts
+    description: Contactos / Direcciones
+  - name: Events
+    description: Eventos de agenda
+  - name: Tickets
+    description: Tickets de soporte
+
+  # ── Trading ──
+  - name: Invoices
+    description: Facturas de cliente
+  - name: Proposals
+    description: Presupuestos
+  - name: Orders
+    description: Pedidos de cliente
+  - name: Contracts
+    description: Contratos
+  - name: SupplierInvoices
+    description: Facturas de proveedor
+  - name: SupplierOrders
+    description: Pedidos de proveedor
+  - name: SupplierProposals
+    description: Presupuestos de proveedor
+
+  # ── Products ──
+  - name: Products
+    description: Productos y servicios
+  - name: ProductLots
+    description: Lotes de producto
+
+  # ── Projects ──
+  - name: Projects
+    description: Proyectos
+  - name: Tasks
+    description: Tareas de proyecto
+
+  # ── Finance ──
+  - name: BankAccounts
+    description: Cuentas bancarias de tesorería
+  - name: Payments
+    description: Pagos
+  - name: Accountancy
+    description: Contabilidad
+  - name: Donations
+    description: Donaciones
+  - name: Multicurrency
+    description: Multi-divisa
+
+  # ── HR ──
+  - name: ExpenseReports
+    description: Notas de gastos
+  - name: Holidays
+    description: Vacaciones / Permisos
+  - name: Salaries
+    description: Nóminas
+  - name: Recruitments
+    description: Reclutamiento
+
+  # ── Logistics ──
+  - name: Shipments
+    description: Expediciones / Envíos
+  - name: Receptions
+    description: Recepciones
+  - name: Warehouses
+    description: Almacenes
+  - name: StockMovements
+    description: Movimientos de stock
+
+  # ── Interventions ──
+  - name: Interventions
+    description: Intervenciones / Servicios
+
+  # ── MRP ──
+  - name: BOMs
+    description: Listas de materiales
+  - name: ManufacturingOrders
+    description: Órdenes de fabricación
+  - name: Workstations
+    description: Puestos de trabajo
+
+  # ── Members ──
+  - name: Members
+    description: Miembros / Socios
+  - name: MemberTypes
+    description: Tipos de miembro
+  - name: Subscriptions
+    description: Suscripciones de miembro
+
+  # ── System Integrations ──
+  - name: Documents
+    description: Documentos adjuntos
+  - name: EmailTemplates
+    description: Plantillas de email
+  - name: KnowledgeManagement
+    description: Base de conocimientos
+  - name: ObjectLinks
+    description: Vínculos entre entidades
+  - name: Webhooks
+    description: Webhooks
+  - name: Zapier
+    description: Integración Zapier
+
+  # ── Legacy ──
+  - name: Legacy
+    description: Endpoints legacy de compatibilidad Dolibarr (/api/*)
 
 components:
   securitySchemes:
@@ -20,196 +160,3084 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+      description: Token JWT obtenido via POST /api/auth/login
     ApiKeyAuth:
       type: apiKey
       in: header
       name: DOLAPIKEY
+      description: Clave API de Dolibarr (compatibilidad legacy)
+
+  parameters:
+    IdParam:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: ID numérico del recurso
+    LineIdParam:
+      name: lineId
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: ID de la línea del documento
+    ContactIdParam:
+      name: contactid
+      in: path
+      required: true
+      schema:
+        type: integer
+      description: ID del contacto
+    TypeParam:
+      name: type
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Tipo de relación del contacto
+    RefParam:
+      name: ref
+      in: path
+      required: true
+      schema:
+        type: string
+      description: Referencia del recurso
+    LimitParam:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        default: 100
+      description: Número máximo de resultados
+    PageParam:
+      name: page
+      in: query
+      schema:
+        type: integer
+        default: 0
+      description: Página de resultados (0-indexed)
+    SortFieldParam:
+      name: sortfield
+      in: query
+      schema:
+        type: string
+      description: Campo por el que ordenar
+    SortOrderParam:
+      name: sortorder
+      in: query
+      schema:
+        type: string
+        enum: [ASC, DESC]
+      description: Orden de los resultados
+
+  responses:
+    NotFound:
+      description: Recurso no encontrado
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+    Unauthorized:
+      description: No autenticado
+    ValidationError:
+      description: Error de validación (422)
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
 
 security:
   - JwtAuth: []
-  - ApiKeyAuth: []
 
+# ═══════════════════════════════════════════════════════════════════
+# PATHS
+# ═══════════════════════════════════════════════════════════════════
 paths:
-  /status:
+
+  # ────────────────────────────────────────────────────────────────
+  # CORE: System
+  # ────────────────────────────────────────────────────────────────
+  /api/status:
     get:
-      tags:
-        - System
-      summary: Obtener el estado del sistema
+      tags: [System]
+      summary: Estado del sistema
+      description: Devuelve el estado del servicio API. No requiere autenticación.
+      security: []
       responses:
         '200':
-          description: Estado del sistema
+          description: Sistema operativo
           content:
             application/json:
-              example:
-                status: "OK"
-                version: "1.0.0"
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  version:
+                    type: string
 
-  /auth/login:
+  /api/setup/menus:
+    get:
+      tags: [System]
+      summary: Árbol de navegación
+      description: Devuelve el árbol de menús para el frontend SPA.
+      responses:
+        '200':
+          description: Árbol de menús en formato JSON
+
+  /api/setup/schemas:
+    get:
+      tags: [System]
+      summary: Esquemas JSON de todas las entidades
+      description: Devuelve los esquemas JSON de los formularios de cada plugin activo.
+      responses:
+        '200':
+          description: Mapa de esquemas por entidad
+
+  /api/setup/plugins:
+    get:
+      tags: [System]
+      summary: Introspección de plugins
+      description: Devuelve la lista de plugins descubiertos con su estado de activación.
+      responses:
+        '200':
+          description: Lista de plugins
+
+  # ────────────────────────────────────────────────────────────────
+  # CORE: Auth
+  # ────────────────────────────────────────────────────────────────
+  /api/auth/login:
     post:
-      tags:
-        - Auth
+      tags: [Auth]
       summary: Iniciar sesión
       security: []
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
+              required: [login, password]
+              properties:
+                login:
+                  type: string
+                  example: admin
+                password:
+                  type: string
+                  example: admin
+      responses:
+        '200':
+          description: Login correcto, devuelve token JWT
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  token:
+                    type: string
+        '401':
+          description: Credenciales incorrectas
+
+  /api/auth/logout:
+    post:
+      tags: [Auth]
+      summary: Cerrar sesión
+      responses:
+        '200':
+          description: Sesión cerrada
+
+  /api/auth/me:
+    get:
+      tags: [Auth]
+      summary: Obtener usuario actual
+      responses:
+        '200':
+          description: Datos del usuario autenticado
+
+  # ────────────────────────────────────────────────────────────────
+  # CORE: Users
+  # ────────────────────────────────────────────────────────────────
+  /api/users:
+    get:
+      tags: [Users]
+      summary: Listar usuarios
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/PageParam'
+      responses:
+        '200':
+          description: Lista de usuarios
+    post:
+      tags: [Users]
+      summary: Crear usuario
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [login, password]
               properties:
                 login:
                   type: string
                 password:
                   type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              example:
-                token: "eyJhbG..."
-
-  /users:
-    get:
-      tags:
-        - Users
-      summary: Listar usuarios
-      responses:
-        '200':
-          description: Lista de usuarios
-    post:
-      tags:
-        - Users
-      summary: Crear usuario
+                email:
+                  type: string
+                firstname:
+                  type: string
+                lastname:
+                  type: string
       responses:
         '201':
           description: Usuario creado
 
-  /invoices:
+  /api/users/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
     get:
-      tags:
-        - Trading
-        - Invoices
+      tags: [Users]
+      summary: Obtener usuario por ID
+      responses:
+        '200':
+          description: Datos del usuario
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [Users]
+      summary: Actualizar usuario
+      responses:
+        '200':
+          description: Usuario actualizado
+    delete:
+      tags: [Users]
+      summary: Eliminar usuario
+      responses:
+        '200':
+          description: Usuario eliminado
+
+  /api/users/{id}/roles:
+    put:
+      tags: [Users]
+      summary: Asignar roles a un usuario
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                roles:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        '200':
+          description: Roles asignados
+
+  # ────────────────────────────────────────────────────────────────
+  # CORE: Roles & Permissions
+  # ────────────────────────────────────────────────────────────────
+  /api/roles:
+    get:
+      tags: [Roles]
+      summary: Listar roles
+      responses:
+        '200':
+          description: Lista de roles
+    post:
+      tags: [Roles]
+      summary: Crear rol
+      responses:
+        '201':
+          description: Rol creado
+
+  /api/roles/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Roles]
+      summary: Obtener rol por ID
+      responses:
+        '200':
+          description: Datos del rol
+    put:
+      tags: [Roles]
+      summary: Actualizar rol
+      responses:
+        '200':
+          description: Rol actualizado
+    delete:
+      tags: [Roles]
+      summary: Eliminar rol
+      responses:
+        '200':
+          description: Rol eliminado
+
+  /api/roles/{id}/permissions:
+    put:
+      tags: [Roles]
+      summary: Sincronizar permisos de un rol
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Permisos sincronizados
+
+  /api/permissions:
+    get:
+      tags: [Roles]
+      summary: Listar todos los permisos
+      responses:
+        '200':
+          description: Lista de permisos
+
+  /api/permissions/{plugin}:
+    get:
+      tags: [Roles]
+      summary: Listar permisos de un plugin
+      parameters:
+        - name: plugin
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Permisos del plugin
+
+  # ────────────────────────────────────────────────────────────────
+  # CORE: i18n
+  # ────────────────────────────────────────────────────────────────
+  /api/i18n/locales:
+    get:
+      tags: [i18n]
+      summary: Listar idiomas disponibles
+      security: []
+      responses:
+        '200':
+          description: Lista de locales
+
+  /api/i18n/{locale}:
+    get:
+      tags: [i18n]
+      summary: Obtener traducciones por idioma
+      security: []
+      parameters:
+        - name: locale
+          in: path
+          required: true
+          schema:
+            type: string
+          example: es
+      responses:
+        '200':
+          description: Traducciones del idioma
+
+  /api/i18n/{locale}/{group}:
+    get:
+      tags: [i18n]
+      summary: Obtener traducciones por idioma y grupo
+      security: []
+      parameters:
+        - name: locale
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: group
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Traducciones del grupo
+
+  /api/i18n/{locale}/{group}/{key}:
+    put:
+      tags: [i18n]
+      summary: Actualizar una traducción
+      parameters:
+        - name: locale
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: group
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Traducción actualizada
+
+  # ────────────────────────────────────────────────────────────────
+  # CORE: Tenants
+  # ────────────────────────────────────────────────────────────────
+  /api/tenants:
+    get:
+      tags: [Tenants]
+      summary: Listar tenants
+      responses:
+        '200':
+          description: Lista de tenants
+    post:
+      tags: [Tenants]
+      summary: Crear tenant
+      responses:
+        '201':
+          description: Tenant creado
+
+  /api/tenants/{id}:
+    get:
+      tags: [Tenants]
+      summary: Obtener tenant por ID
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Datos del tenant
+
+  /api/tenants/{id}/users:
+    post:
+      tags: [Tenants]
+      summary: Añadir usuario a un tenant
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Usuario añadido al tenant
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: Business — ThirdParties (native v1)
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/thirdparties:
+    get:
+      tags: [ThirdParties]
+      summary: Listar terceros
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SortFieldParam'
+        - $ref: '#/components/parameters/SortOrderParam'
+        - name: mode
+          in: query
+          schema:
+            type: integer
+            enum: [0, 1, 2, 3]
+          description: "0=todos, 1=clientes, 2=prospects, 3=proveedores"
+      responses:
+        '200':
+          description: Lista de terceros
+    post:
+      tags: [ThirdParties]
+      summary: Crear tercero
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                client:
+                  type: integer
+                fournisseur:
+                  type: integer
+                email:
+                  type: string
+                phone:
+                  type: string
+                address:
+                  type: string
+                zip:
+                  type: string
+                town:
+                  type: string
+                country_id:
+                  type: integer
+      responses:
+        '200':
+          description: ID del tercero creado
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /api/v1/thirdparties/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [ThirdParties]
+      summary: Obtener tercero por ID
+      responses:
+        '200':
+          description: Datos del tercero
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [ThirdParties]
+      summary: Actualizar tercero
+      responses:
+        '200':
+          description: Tercero actualizado
+    delete:
+      tags: [ThirdParties]
+      summary: Eliminar tercero
+      responses:
+        '200':
+          description: Tercero eliminado
+
+  /api/v1/thirdparties/{id}/bankaccounts:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [ThirdParties]
+      summary: Listar cuentas bancarias del tercero
+      responses:
+        '200':
+          description: Lista de cuentas bancarias
+    post:
+      tags: [ThirdParties]
+      summary: Crear cuenta bancaria del tercero
+      responses:
+        '200':
+          description: Cuenta bancaria creada
+
+  /api/v1/thirdparties/{id}/bankaccounts/{bankaccountId}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - name: bankaccountId
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags: [ThirdParties]
+      summary: Actualizar cuenta bancaria
+      responses:
+        '200':
+          description: Cuenta bancaria actualizada
+    delete:
+      tags: [ThirdParties]
+      summary: Eliminar cuenta bancaria
+      responses:
+        '200':
+          description: Cuenta bancaria eliminada
+
+  /api/v1/thirdparties/{id}/categories:
+    get:
+      tags: [ThirdParties]
+      summary: Obtener categorías del tercero (cliente)
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Categorías del tercero
+
+  /api/v1/thirdparties/{id}/categories/{categoryId}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - name: categoryId
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags: [ThirdParties]
+      summary: Asignar categoría al tercero
+      responses:
+        '200':
+          description: Categoría asignada
+    delete:
+      tags: [ThirdParties]
+      summary: Desasignar categoría del tercero
+      responses:
+        '200':
+          description: Categoría desasignada
+
+  /api/v1/thirdparties/{id}/supplier_categories:
+    get:
+      tags: [ThirdParties]
+      summary: Obtener categorías de proveedor
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Categorías de proveedor
+
+  /api/v1/thirdparties/{id}/supplier_categories/{categoryId}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - name: categoryId
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags: [ThirdParties]
+      summary: Asignar categoría proveedor
+      responses:
+        '200':
+          description: Categoría proveedor asignada
+    delete:
+      tags: [ThirdParties]
+      summary: Desasignar categoría proveedor
+      responses:
+        '200':
+          description: Categoría proveedor desasignada
+
+  /api/v1/thirdparties/{id}/representatives:
+    get:
+      tags: [ThirdParties]
+      summary: Obtener representantes comerciales
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Lista de representantes
+
+  /api/v1/thirdparties/{id}/representatives/{userId}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags: [ThirdParties]
+      summary: Asignar representante comercial
+      responses:
+        '200':
+          description: Representante asignado
+    delete:
+      tags: [ThirdParties]
+      summary: Desasignar representante comercial
+      responses:
+        '200':
+          description: Representante desasignado
+
+  /api/v1/thirdparties/{id}/generateBankAccountDocument/{companybankid}:
+    get:
+      tags: [ThirdParties]
+      summary: Generar documento de cuenta bancaria (RIB/IBAN)
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+        - name: companybankid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Documento generado
+
+  /api/v1/thirdparties/{id}/merge/{idtodelete}:
+    put:
+      tags: [ThirdParties]
+      summary: Fusionar dos terceros
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+        - name: idtodelete
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: ID del tercero a absorber y eliminar
+      responses:
+        '200':
+          description: Terceros fusionados
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: CRM — Contacts
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/contacts:
+    get:
+      tags: [Contacts]
+      summary: Listar contactos
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/SortFieldParam'
+        - $ref: '#/components/parameters/SortOrderParam'
+      responses:
+        '200':
+          description: Lista de contactos
+    post:
+      tags: [Contacts]
+      summary: Crear contacto
+      responses:
+        '200':
+          description: Contacto creado
+
+  /api/v1/contacts/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Contacts]
+      summary: Obtener contacto por ID
+      responses:
+        '200':
+          description: Datos del contacto
+    put:
+      tags: [Contacts]
+      summary: Actualizar contacto
+      responses:
+        '200':
+          description: Contacto actualizado
+    delete:
+      tags: [Contacts]
+      summary: Eliminar contacto
+      responses:
+        '200':
+          description: Contacto eliminado
+
+  /api/v1/contacts/email/{email}:
+    get:
+      tags: [Contacts]
+      summary: Buscar contacto por email
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Contacto encontrado
+
+  /api/v1/contacts/{id}/createUser:
+    post:
+      tags: [Contacts]
+      summary: Crear usuario a partir del contacto
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Usuario creado
+
+  /api/v1/contacts/{id}/categories:
+    get:
+      tags: [Contacts]
+      summary: Obtener categorías del contacto
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Categorías del contacto
+
+  /api/v1/contacts/{id}/categories/{categoryId}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - name: categoryId
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags: [Contacts]
+      summary: Asignar categoría al contacto
+      responses:
+        '200':
+          description: Categoría asignada
+    delete:
+      tags: [Contacts]
+      summary: Desasignar categoría del contacto
+      responses:
+        '200':
+          description: Categoría desasignada
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: CRM — Events
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/events:
+    get:
+      tags: [Events]
+      summary: Listar eventos de agenda
+      responses:
+        '200':
+          description: Lista de eventos
+    post:
+      tags: [Events]
+      summary: Crear evento
+      responses:
+        '200':
+          description: Evento creado
+
+  /api/v1/events/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Events]
+      summary: Obtener evento por ID
+      responses:
+        '200':
+          description: Datos del evento
+    put:
+      tags: [Events]
+      summary: Actualizar evento
+      responses:
+        '200':
+          description: Evento actualizado
+    delete:
+      tags: [Events]
+      summary: Eliminar evento
+      responses:
+        '200':
+          description: Evento eliminado
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: Trading — Invoices
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/invoices:
+    get:
+      tags: [Invoices]
       summary: Listar facturas
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/PageParam'
       responses:
         '200':
           description: Lista de facturas
     post:
-      tags:
-        - Trading
-        - Invoices
+      tags: [Invoices]
       summary: Crear factura (borrador)
       requestBody:
         content:
           application/json:
             schema:
               type: object
+              required: [socid]
               properties:
                 socid:
                   type: integer
+                  description: ID del tercero
                 date:
                   type: integer
+                  description: Fecha (timestamp UNIX)
                 note_public:
                   type: string
       responses:
         '200':
-          description: Factura creada
+          description: ID de la factura creada
 
-  /invoices/{id}:
+  /api/v1/invoices/{id}:
     parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
+      - $ref: '#/components/parameters/IdParam'
     get:
-      tags:
-        - Trading
-        - Invoices
-      summary: Obtener detalle de factura
+      tags: [Invoices]
+      summary: Obtener factura por ID
+      responses:
+        '200':
+          description: Datos de la factura
     put:
-      tags:
-        - Trading
-        - Invoices
+      tags: [Invoices]
       summary: Actualizar factura
+      responses:
+        '200':
+          description: Factura actualizada
     delete:
-      tags:
-        - Trading
-        - Invoices
+      tags: [Invoices]
       summary: Eliminar factura
+      responses:
+        '200':
+          description: Factura eliminada
 
-  /invoices/{id}/validate:
+  /api/v1/invoices/ref/{ref}:
+    get:
+      tags: [Invoices]
+      summary: Obtener factura por referencia
+      parameters:
+        - $ref: '#/components/parameters/RefParam'
+      responses:
+        '200':
+          description: Datos de la factura
+
+  /api/v1/invoices/ref_ext/{ref_ext}:
+    get:
+      tags: [Invoices]
+      summary: Obtener factura por referencia externa
+      parameters:
+        - name: ref_ext
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Datos de la factura
+
+  /api/v1/invoices/{id}/lines:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Invoices]
+      summary: Listar líneas de factura
+      responses:
+        '200':
+          description: Líneas de la factura
     post:
-      tags:
-        - Trading
-        - Invoices
-      summary: Validar factura (pasar a estado abierto)
+      tags: [Invoices]
+      summary: Añadir línea a factura
+      responses:
+        '200':
+          description: Línea añadida
+
+  /api/v1/invoices/{id}/lines/{lineId}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - $ref: '#/components/parameters/LineIdParam'
+    put:
+      tags: [Invoices]
+      summary: Actualizar línea de factura
+      responses:
+        '200':
+          description: Línea actualizada
+    delete:
+      tags: [Invoices]
+      summary: Eliminar línea de factura
+      responses:
+        '200':
+          description: Línea eliminada
+
+  /api/v1/invoices/{id}/validate:
+    post:
+      tags: [Invoices]
+      summary: Validar factura
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
       responses:
         '200':
           description: Factura validada
 
-  /proposals:
-    get:
-      tags:
-        - Trading
-        - Proposals
-      summary: Listar presupuestos
+  /api/v1/invoices/{id}/settopaid:
     post:
-      tags:
-        - Trading
-        - Proposals
-      summary: Crear presupuesto
-
-  /orders:
-    get:
-      tags:
-        - Trading
-        - Orders
-      summary: Listar pedidos
-    post:
-      tags:
-        - Trading
-        - Orders
-      summary: Crear pedido
-
-  /products:
-    get:
-      tags:
-        - Products
-      summary: Listar productos
-    post:
-      tags:
-        - Products
-      summary: Crear producto
-
-  /thirdparties:
-    get:
-      tags:
-        - Business
-        - ThirdParties
-      summary: Listar terceros (clientes/proveedores)
-    post:
-      tags:
-        - Business
-        - ThirdParties
-      summary: Crear tercero
-
-  /contacts:
-    get:
-      tags:
-        - CRM
-        - Contacts
-      summary: Listar contactos
-    post:
-      tags:
-        - CRM
-        - Contacts
-      summary: Crear contacto
-
-  /setup/schemas:
-    get:
-      tags:
-        - System
-      summary: Obtener esquemas JSON de todas las entidades
+      tags: [Invoices]
+      summary: Marcar factura como pagada
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
       responses:
         '200':
-          description: Map de esquemas por entidad
+          description: Factura marcada como pagada
+
+  /api/v1/invoices/createfromorder/{orderid}:
+    post:
+      tags: [Invoices]
+      summary: Crear factura desde pedido
+      parameters:
+        - name: orderid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Factura creada
+
+  /api/v1/invoices/createfromcontract/{contractid}:
+    post:
+      tags: [Invoices]
+      summary: Crear factura desde contrato
+      parameters:
+        - name: contractid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Factura creada
+
+  /api/v1/invoices/{id}/contacts:
+    get:
+      tags: [Invoices]
+      summary: Listar contactos de la factura
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Lista de contactos
+
+  /api/v1/invoices/{id}/contact/{contactid}/{type}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - $ref: '#/components/parameters/ContactIdParam'
+      - $ref: '#/components/parameters/TypeParam'
+    post:
+      tags: [Invoices]
+      summary: Asociar contacto a factura
+      responses:
+        '200':
+          description: Contacto asociado
+    delete:
+      tags: [Invoices]
+      summary: Desasociar contacto de factura
+      responses:
+        '200':
+          description: Contacto desasociado
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: Trading — Proposals
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/proposals:
+    get:
+      tags: [Proposals]
+      summary: Listar presupuestos
+      responses:
+        '200':
+          description: Lista de presupuestos
+    post:
+      tags: [Proposals]
+      summary: Crear presupuesto
+      responses:
+        '200':
+          description: Presupuesto creado
+
+  /api/v1/proposals/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Proposals]
+      summary: Obtener presupuesto por ID
+      responses:
+        '200':
+          description: Datos del presupuesto
+    put:
+      tags: [Proposals]
+      summary: Actualizar presupuesto
+      responses:
+        '200':
+          description: Presupuesto actualizado
+    delete:
+      tags: [Proposals]
+      summary: Eliminar presupuesto
+      responses:
+        '200':
+          description: Presupuesto eliminado
+
+  /api/v1/proposals/ref/{ref}:
+    get:
+      tags: [Proposals]
+      summary: Obtener presupuesto por referencia
+      parameters:
+        - $ref: '#/components/parameters/RefParam'
+      responses:
+        '200':
+          description: Datos del presupuesto
+
+  /api/v1/proposals/{id}/lines:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Proposals]
+      summary: Listar líneas del presupuesto
+      responses:
+        '200':
+          description: Líneas del presupuesto
+    post:
+      tags: [Proposals]
+      summary: Añadir línea al presupuesto
+      responses:
+        '200':
+          description: Línea añadida
+
+  /api/v1/proposals/{id}/lines/{lineId}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - $ref: '#/components/parameters/LineIdParam'
+    put:
+      tags: [Proposals]
+      summary: Actualizar línea del presupuesto
+      responses:
+        '200':
+          description: Línea actualizada
+    delete:
+      tags: [Proposals]
+      summary: Eliminar línea del presupuesto
+      responses:
+        '200':
+          description: Línea eliminada
+
+  /api/v1/proposals/{id}/validate:
+    post:
+      tags: [Proposals]
+      summary: Validar presupuesto
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Presupuesto validado
+
+  /api/v1/proposals/{id}/close:
+    post:
+      tags: [Proposals]
+      summary: Cerrar presupuesto
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Presupuesto cerrado
+
+  /api/v1/proposals/{id}/contacts:
+    get:
+      tags: [Proposals]
+      summary: Listar contactos del presupuesto
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Lista de contactos
+
+  /api/v1/proposals/{id}/contact/{contactid}/{type}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - $ref: '#/components/parameters/ContactIdParam'
+      - $ref: '#/components/parameters/TypeParam'
+    post:
+      tags: [Proposals]
+      summary: Asociar contacto al presupuesto
+      responses:
+        '200':
+          description: Contacto asociado
+    delete:
+      tags: [Proposals]
+      summary: Desasociar contacto del presupuesto
+      responses:
+        '200':
+          description: Contacto desasociado
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: Trading — Orders
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/orders:
+    get:
+      tags: [Orders]
+      summary: Listar pedidos
+      responses:
+        '200':
+          description: Lista de pedidos
+    post:
+      tags: [Orders]
+      summary: Crear pedido
+      responses:
+        '200':
+          description: Pedido creado
+
+  /api/v1/orders/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Orders]
+      summary: Obtener pedido por ID
+      responses:
+        '200':
+          description: Datos del pedido
+    put:
+      tags: [Orders]
+      summary: Actualizar pedido
+      responses:
+        '200':
+          description: Pedido actualizado
+    delete:
+      tags: [Orders]
+      summary: Eliminar pedido
+      responses:
+        '200':
+          description: Pedido eliminado
+
+  /api/v1/orders/ref/{ref}:
+    get:
+      tags: [Orders]
+      summary: Obtener pedido por referencia
+      parameters:
+        - $ref: '#/components/parameters/RefParam'
+      responses:
+        '200':
+          description: Datos del pedido
+
+  /api/v1/orders/{id}/lines:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Orders]
+      summary: Listar líneas del pedido
+      responses:
+        '200':
+          description: Líneas del pedido
+    post:
+      tags: [Orders]
+      summary: Añadir línea al pedido
+      responses:
+        '200':
+          description: Línea añadida
+
+  /api/v1/orders/{id}/lines/{lineId}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - $ref: '#/components/parameters/LineIdParam'
+    put:
+      tags: [Orders]
+      summary: Actualizar línea del pedido
+      responses:
+        '200':
+          description: Línea actualizada
+    delete:
+      tags: [Orders]
+      summary: Eliminar línea del pedido
+      responses:
+        '200':
+          description: Línea eliminada
+
+  /api/v1/orders/{id}/validate:
+    post:
+      tags: [Orders]
+      summary: Validar pedido
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Pedido validado
+
+  /api/v1/orders/{id}/close:
+    post:
+      tags: [Orders]
+      summary: Cerrar pedido
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Pedido cerrado
+
+  /api/v1/orders/{id}/contacts:
+    get:
+      tags: [Orders]
+      summary: Listar contactos del pedido
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Lista de contactos
+
+  /api/v1/orders/{id}/contact/{contactid}/{type}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - $ref: '#/components/parameters/ContactIdParam'
+      - $ref: '#/components/parameters/TypeParam'
+    post:
+      tags: [Orders]
+      summary: Asociar contacto al pedido
+      responses:
+        '200':
+          description: Contacto asociado
+    delete:
+      tags: [Orders]
+      summary: Desasociar contacto del pedido
+      responses:
+        '200':
+          description: Contacto desasociado
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: Trading — Contracts
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/contracts:
+    get:
+      tags: [Contracts]
+      summary: Listar contratos
+      responses:
+        '200':
+          description: Lista de contratos
+    post:
+      tags: [Contracts]
+      summary: Crear contrato
+      responses:
+        '200':
+          description: Contrato creado
+
+  /api/v1/contracts/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Contracts]
+      summary: Obtener contrato por ID
+      responses:
+        '200':
+          description: Datos del contrato
+    put:
+      tags: [Contracts]
+      summary: Actualizar contrato
+      responses:
+        '200':
+          description: Contrato actualizado
+    delete:
+      tags: [Contracts]
+      summary: Eliminar contrato
+      responses:
+        '200':
+          description: Contrato eliminado
+
+  /api/v1/contracts/{id}/lines:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Contracts]
+      summary: Listar líneas del contrato
+      responses:
+        '200':
+          description: Líneas del contrato
+    post:
+      tags: [Contracts]
+      summary: Añadir línea al contrato
+      responses:
+        '200':
+          description: Línea añadida
+
+  /api/v1/contracts/{id}/lines/{lineId}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - $ref: '#/components/parameters/LineIdParam'
+    put:
+      tags: [Contracts]
+      summary: Actualizar línea del contrato
+      responses:
+        '200':
+          description: Línea actualizada
+    delete:
+      tags: [Contracts]
+      summary: Eliminar línea del contrato
+      responses:
+        '200':
+          description: Línea eliminada
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: Trading — Supplier Invoices
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/supplierinvoices:
+    get:
+      tags: [SupplierInvoices]
+      summary: Listar facturas de proveedor
+      responses:
+        '200':
+          description: Lista de facturas de proveedor
+    post:
+      tags: [SupplierInvoices]
+      summary: Crear factura de proveedor
+      responses:
+        '200':
+          description: Factura de proveedor creada
+
+  /api/v1/supplierinvoices/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [SupplierInvoices]
+      summary: Obtener factura de proveedor por ID
+      responses:
+        '200':
+          description: Datos de la factura
+    put:
+      tags: [SupplierInvoices]
+      summary: Actualizar factura de proveedor
+      responses:
+        '200':
+          description: Factura actualizada
+    delete:
+      tags: [SupplierInvoices]
+      summary: Eliminar factura de proveedor
+      responses:
+        '200':
+          description: Factura eliminada
+
+  /api/v1/supplierinvoices/ref/{ref}:
+    get:
+      tags: [SupplierInvoices]
+      summary: Obtener factura de proveedor por referencia
+      parameters:
+        - $ref: '#/components/parameters/RefParam'
+      responses:
+        '200':
+          description: Datos de la factura
+
+  /api/v1/supplierinvoices/{id}/lines:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [SupplierInvoices]
+      summary: Listar líneas de factura de proveedor
+      responses:
+        '200':
+          description: Líneas de la factura
+    post:
+      tags: [SupplierInvoices]
+      summary: Añadir línea a factura de proveedor
+      responses:
+        '200':
+          description: Línea añadida
+
+  /api/v1/supplierinvoices/{id}/lines/{lineId}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - $ref: '#/components/parameters/LineIdParam'
+    put:
+      tags: [SupplierInvoices]
+      summary: Actualizar línea de factura de proveedor
+      responses:
+        '200':
+          description: Línea actualizada
+    delete:
+      tags: [SupplierInvoices]
+      summary: Eliminar línea de factura de proveedor
+      responses:
+        '200':
+          description: Línea eliminada
+
+  /api/v1/supplierinvoices/{id}/payments:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [SupplierInvoices]
+      summary: Listar pagos de factura de proveedor
+      responses:
+        '200':
+          description: Pagos de la factura
+    post:
+      tags: [SupplierInvoices]
+      summary: Añadir pago a factura de proveedor
+      responses:
+        '200':
+          description: Pago registrado
+
+  /api/v1/supplierinvoices/{id}/validate:
+    post:
+      tags: [SupplierInvoices]
+      summary: Validar factura de proveedor
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Factura validada
+
+  /api/v1/supplierinvoices/{id}/settodraft:
+    post:
+      tags: [SupplierInvoices]
+      summary: Volver a borrador
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Factura en borrador
+
+  /api/v1/supplierinvoices/{id}/settopaid:
+    post:
+      tags: [SupplierInvoices]
+      summary: Marcar como pagada
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Factura pagada
+
+  /api/v1/supplierinvoices/{id}/settounpaid:
+    post:
+      tags: [SupplierInvoices]
+      summary: Marcar como no pagada
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Factura marcada como no pagada
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: Trading — Supplier Orders
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/supplierorders:
+    get:
+      tags: [SupplierOrders]
+      summary: Listar pedidos de proveedor
+      responses:
+        '200':
+          description: Lista de pedidos de proveedor
+    post:
+      tags: [SupplierOrders]
+      summary: Crear pedido de proveedor
+      responses:
+        '200':
+          description: Pedido creado
+
+  /api/v1/supplierorders/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [SupplierOrders]
+      summary: Obtener pedido de proveedor por ID
+      responses:
+        '200':
+          description: Datos del pedido
+    put:
+      tags: [SupplierOrders]
+      summary: Actualizar pedido de proveedor
+      responses:
+        '200':
+          description: Pedido actualizado
+    delete:
+      tags: [SupplierOrders]
+      summary: Eliminar pedido de proveedor
+      responses:
+        '200':
+          description: Pedido eliminado
+
+  /api/v1/supplierorders/ref/{ref}:
+    get:
+      tags: [SupplierOrders]
+      summary: Obtener pedido de proveedor por referencia
+      parameters:
+        - $ref: '#/components/parameters/RefParam'
+      responses:
+        '200':
+          description: Datos del pedido
+
+  /api/v1/supplierorders/{id}/lines:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [SupplierOrders]
+      summary: Listar líneas del pedido de proveedor
+      responses:
+        '200':
+          description: Líneas del pedido
+    post:
+      tags: [SupplierOrders]
+      summary: Añadir línea al pedido de proveedor
+      responses:
+        '200':
+          description: Línea añadida
+
+  /api/v1/supplierorders/{id}/lines/{lineId}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - $ref: '#/components/parameters/LineIdParam'
+    put:
+      tags: [SupplierOrders]
+      summary: Actualizar línea del pedido de proveedor
+      responses:
+        '200':
+          description: Línea actualizada
+    delete:
+      tags: [SupplierOrders]
+      summary: Eliminar línea del pedido de proveedor
+      responses:
+        '200':
+          description: Línea eliminada
+
+  /api/v1/supplierorders/{id}/validate:
+    post:
+      tags: [SupplierOrders]
+      summary: Validar pedido de proveedor
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Pedido validado
+
+  /api/v1/supplierorders/{id}/close:
+    post:
+      tags: [SupplierOrders]
+      summary: Cerrar pedido de proveedor
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Pedido cerrado
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: Products
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/products:
+    get:
+      tags: [Products]
+      summary: Listar productos
+      parameters:
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/PageParam'
+      responses:
+        '200':
+          description: Lista de productos
+    post:
+      tags: [Products]
+      summary: Crear producto
+      responses:
+        '200':
+          description: Producto creado
+
+  /api/v1/products/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Products]
+      summary: Obtener producto por ID
+      responses:
+        '200':
+          description: Datos del producto
+    put:
+      tags: [Products]
+      summary: Actualizar producto
+      responses:
+        '200':
+          description: Producto actualizado
+    delete:
+      tags: [Products]
+      summary: Eliminar producto
+      responses:
+        '200':
+          description: Producto eliminado
+
+  /api/v1/products/ref/{ref}:
+    get:
+      tags: [Products]
+      summary: Obtener producto por referencia
+      parameters:
+        - $ref: '#/components/parameters/RefParam'
+      responses:
+        '200':
+          description: Datos del producto
+
+  /api/v1/products/ref_ext/{ref_ext}:
+    get:
+      tags: [Products]
+      summary: Obtener producto por referencia externa
+      parameters:
+        - name: ref_ext
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Datos del producto
+
+  /api/v1/products/barcode/{barcode}:
+    get:
+      tags: [Products]
+      summary: Obtener producto por código de barras
+      parameters:
+        - name: barcode
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Datos del producto
+
+  /api/v1/products/attributes:
+    get:
+      tags: [Products]
+      summary: Listar atributos de producto (variantes)
+      responses:
+        '200':
+          description: Lista de atributos
+
+  /api/v1/products/{id}/purchase_prices:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Products]
+      summary: Obtener precios de compra
+      responses:
+        '200':
+          description: Precios de compra
+    post:
+      tags: [Products]
+      summary: Añadir precio de compra
+      responses:
+        '200':
+          description: Precio de compra añadido
+
+  /api/v1/products/{id}/purchase_prices/{priceid}:
+    delete:
+      tags: [Products]
+      summary: Eliminar precio de compra
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+        - name: priceid
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Precio eliminado
+
+  /api/v1/products/{id}/subproducts:
+    get:
+      tags: [Products]
+      summary: Obtener sub-productos
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Sub-productos
+
+  /api/v1/products/{id}/subproducts/{subproductid}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - name: subproductid
+        in: path
+        required: true
+        schema:
+          type: integer
+    post:
+      tags: [Products]
+      summary: Añadir sub-producto
+      responses:
+        '200':
+          description: Sub-producto añadido
+    delete:
+      tags: [Products]
+      summary: Eliminar sub-producto
+      responses:
+        '200':
+          description: Sub-producto eliminado
+
+  /api/v1/products/{id}/stock:
+    get:
+      tags: [Products]
+      summary: Obtener stock del producto
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Info de stock
+
+  /api/v1/products/{id}/variants:
+    get:
+      tags: [Products]
+      summary: Obtener variantes del producto
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Variantes
+
+  /api/v1/products/{id}/customer_prices:
+    get:
+      tags: [Products]
+      summary: Obtener precios por cliente
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Precios por cliente
+
+  /api/v1/products/{id}/contacts:
+    get:
+      tags: [Products]
+      summary: Obtener contactos del producto
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Contactos del producto
+
+  /api/v1/products/{id}/contact/{contactid}/{type}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - $ref: '#/components/parameters/ContactIdParam'
+      - $ref: '#/components/parameters/TypeParam'
+    post:
+      tags: [Products]
+      summary: Asociar contacto al producto
+      responses:
+        '200':
+          description: Contacto asociado
+    delete:
+      tags: [Products]
+      summary: Desasociar contacto del producto
+      responses:
+        '200':
+          description: Contacto desasociado
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: Projects
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/projects:
+    get:
+      tags: [Projects]
+      summary: Listar proyectos
+      responses:
+        '200':
+          description: Lista de proyectos
+    post:
+      tags: [Projects]
+      summary: Crear proyecto
+      responses:
+        '200':
+          description: Proyecto creado
+
+  /api/v1/projects/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Projects]
+      summary: Obtener proyecto por ID
+      responses:
+        '200':
+          description: Datos del proyecto
+    put:
+      tags: [Projects]
+      summary: Actualizar proyecto
+      responses:
+        '200':
+          description: Proyecto actualizado
+    delete:
+      tags: [Projects]
+      summary: Eliminar proyecto
+      responses:
+        '200':
+          description: Proyecto eliminado
+
+  /api/v1/projects/ref/{ref}:
+    get:
+      tags: [Projects]
+      summary: Obtener proyecto por referencia
+      parameters:
+        - $ref: '#/components/parameters/RefParam'
+      responses:
+        '200':
+          description: Datos del proyecto
+
+  /api/v1/projects/{id}/tasks:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Projects, Tasks]
+      summary: Listar tareas del proyecto
+      responses:
+        '200':
+          description: Tareas del proyecto
+    post:
+      tags: [Projects, Tasks]
+      summary: Crear tarea en el proyecto
+      responses:
+        '200':
+          description: Tarea creada
+
+  /api/v1/projects/{id}/tasks/{taskId}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - name: taskId
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags: [Projects, Tasks]
+      summary: Actualizar tarea
+      responses:
+        '200':
+          description: Tarea actualizada
+    delete:
+      tags: [Projects, Tasks]
+      summary: Eliminar tarea
+      responses:
+        '200':
+          description: Tarea eliminada
+
+  /api/v1/projects/{id}/validate:
+    post:
+      tags: [Projects]
+      summary: Validar proyecto
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Proyecto validado
+
+  /api/v1/projects/{id}/close:
+    post:
+      tags: [Projects]
+      summary: Cerrar proyecto
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+      responses:
+        '200':
+          description: Proyecto cerrado
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: Finance — Bank Accounts
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/bankaccounts:
+    get:
+      tags: [BankAccounts]
+      summary: Listar cuentas bancarias de tesorería
+      responses:
+        '200':
+          description: Lista de cuentas
+    post:
+      tags: [BankAccounts]
+      summary: Crear cuenta bancaria
+      responses:
+        '200':
+          description: Cuenta creada
+
+  /api/v1/bankaccounts/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [BankAccounts]
+      summary: Obtener cuenta bancaria por ID
+      responses:
+        '200':
+          description: Datos de la cuenta
+    put:
+      tags: [BankAccounts]
+      summary: Actualizar cuenta bancaria
+      responses:
+        '200':
+          description: Cuenta actualizada
+    delete:
+      tags: [BankAccounts]
+      summary: Eliminar cuenta bancaria
+      responses:
+        '200':
+          description: Cuenta eliminada
+
+  /api/v1/bankaccounts/{id}/transactions:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [BankAccounts]
+      summary: Listar transacciones de la cuenta
+      responses:
+        '200':
+          description: Lista de transacciones
+    post:
+      tags: [BankAccounts]
+      summary: Crear transacción
+      responses:
+        '200':
+          description: Transacción creada
+
+  /api/v1/bankaccounts/{id}/transactions/{transactionId}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - name: transactionId
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags: [BankAccounts]
+      summary: Actualizar transacción
+      responses:
+        '200':
+          description: Transacción actualizada
+    delete:
+      tags: [BankAccounts]
+      summary: Eliminar transacción
+      responses:
+        '200':
+          description: Transacción eliminada
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: HR — Expense Reports
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/expensereports:
+    get:
+      tags: [ExpenseReports]
+      summary: Listar notas de gastos
+      responses:
+        '200':
+          description: Lista de notas de gastos
+    post:
+      tags: [ExpenseReports]
+      summary: Crear nota de gastos
+      responses:
+        '200':
+          description: Nota de gastos creada
+
+  /api/v1/expensereports/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [ExpenseReports]
+      summary: Obtener nota de gastos por ID
+      responses:
+        '200':
+          description: Datos de la nota
+    put:
+      tags: [ExpenseReports]
+      summary: Actualizar nota de gastos
+      responses:
+        '200':
+          description: Nota actualizada
+    delete:
+      tags: [ExpenseReports]
+      summary: Eliminar nota de gastos
+      responses:
+        '200':
+          description: Nota eliminada
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: Logistics — Shipments
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/shipments:
+    get:
+      tags: [Shipments]
+      summary: Listar expediciones
+      responses:
+        '200':
+          description: Lista de expediciones
+    post:
+      tags: [Shipments]
+      summary: Crear expedición
+      responses:
+        '200':
+          description: Expedición creada
+
+  /api/v1/shipments/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Shipments]
+      summary: Obtener expedición por ID
+      responses:
+        '200':
+          description: Datos de la expedición
+    put:
+      tags: [Shipments]
+      summary: Actualizar expedición
+      responses:
+        '200':
+          description: Expedición actualizada
+    delete:
+      tags: [Shipments]
+      summary: Eliminar expedición
+      responses:
+        '200':
+          description: Expedición eliminada
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: Logistics — Receptions
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/receptions:
+    get:
+      tags: [Receptions]
+      summary: Listar recepciones
+      responses:
+        '200':
+          description: Lista de recepciones
+    post:
+      tags: [Receptions]
+      summary: Crear recepción
+      responses:
+        '200':
+          description: Recepción creada
+
+  /api/v1/receptions/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Receptions]
+      summary: Obtener recepción por ID
+      responses:
+        '200':
+          description: Datos de la recepción
+    put:
+      tags: [Receptions]
+      summary: Actualizar recepción
+      responses:
+        '200':
+          description: Recepción actualizada
+    delete:
+      tags: [Receptions]
+      summary: Eliminar recepción
+      responses:
+        '200':
+          description: Recepción eliminada
+
+  # ════════════════════════════════════════════════════════════════
+  # PLUGIN: Interventions
+  # ════════════════════════════════════════════════════════════════
+  /api/v1/interventions:
+    get:
+      tags: [Interventions]
+      summary: Listar intervenciones
+      responses:
+        '200':
+          description: Lista de intervenciones
+    post:
+      tags: [Interventions]
+      summary: Crear intervención
+      responses:
+        '200':
+          description: Intervención creada
+
+  /api/v1/interventions/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Interventions]
+      summary: Obtener intervención por ID
+      responses:
+        '200':
+          description: Datos de la intervención
+    put:
+      tags: [Interventions]
+      summary: Actualizar intervención
+      responses:
+        '200':
+          description: Intervención actualizada
+    delete:
+      tags: [Interventions]
+      summary: Eliminar intervención
+      responses:
+        '200':
+          description: Intervención eliminada
+
+  # ════════════════════════════════════════════════════════════════
+  # DOLIBARR COMPAT LEGACY LAYER (/api/*)
+  # Los siguientes endpoints son la capa de compatibilidad.
+  # Replican la misma funcionalidad que los nativos /api/v1/*
+  # pero con la estructura de respuesta de Dolibarr.
+  # ════════════════════════════════════════════════════════════════
+
+  # ── Legacy: Expense Reports ──
+  /api/expensereports:
+    get:
+      tags: [Legacy, ExpenseReports]
+      summary: "[Legacy] Listar notas de gastos"
+      responses:
+        '200':
+          description: Lista de notas de gastos
+    post:
+      tags: [Legacy, ExpenseReports]
+      summary: "[Legacy] Crear nota de gastos"
+      responses:
+        '200':
+          description: Nota creada
+
+  /api/expensereports/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, ExpenseReports]
+      summary: "[Legacy] Obtener nota de gastos"
+      responses:
+        '200':
+          description: Datos de la nota
+    put:
+      tags: [Legacy, ExpenseReports]
+      summary: "[Legacy] Actualizar nota de gastos"
+      responses:
+        '200':
+          description: Nota actualizada
+    delete:
+      tags: [Legacy, ExpenseReports]
+      summary: "[Legacy] Eliminar nota de gastos"
+      responses:
+        '200':
+          description: Nota eliminada
+
+  # ── Legacy: Shipments ──
+  /api/shipments:
+    get:
+      tags: [Legacy, Shipments]
+      summary: "[Legacy] Listar expediciones"
+      responses:
+        '200':
+          description: Lista
+    post:
+      tags: [Legacy, Shipments]
+      summary: "[Legacy] Crear expedición"
+      responses:
+        '200':
+          description: Creada
+
+  /api/shipments/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Shipments]
+      summary: "[Legacy] Obtener expedición"
+    put:
+      tags: [Legacy, Shipments]
+      summary: "[Legacy] Actualizar expedición"
+    delete:
+      tags: [Legacy, Shipments]
+      summary: "[Legacy] Eliminar expedición"
+
+  # ── Legacy: Receptions ──
+  /api/receptions:
+    get:
+      tags: [Legacy, Receptions]
+      summary: "[Legacy] Listar recepciones"
+    post:
+      tags: [Legacy, Receptions]
+      summary: "[Legacy] Crear recepción"
+
+  /api/receptions/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Receptions]
+      summary: "[Legacy] Obtener recepción"
+    put:
+      tags: [Legacy, Receptions]
+      summary: "[Legacy] Actualizar recepción"
+    delete:
+      tags: [Legacy, Receptions]
+      summary: "[Legacy] Eliminar recepción"
+
+  # ── Legacy: Interventions ──
+  /api/interventions:
+    get:
+      tags: [Legacy, Interventions]
+      summary: "[Legacy] Listar intervenciones"
+    post:
+      tags: [Legacy, Interventions]
+      summary: "[Legacy] Crear intervención"
+
+  /api/interventions/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Interventions]
+      summary: "[Legacy] Obtener intervención"
+    put:
+      tags: [Legacy, Interventions]
+      summary: "[Legacy] Actualizar intervención"
+    delete:
+      tags: [Legacy, Interventions]
+      summary: "[Legacy] Eliminar intervención"
+
+  # ── Legacy: Products ──
+  /api/products:
+    get:
+      tags: [Legacy, Products]
+      summary: "[Legacy] Listar productos"
+    post:
+      tags: [Legacy, Products]
+      summary: "[Legacy] Crear producto"
+
+  /api/products/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Products]
+      summary: "[Legacy] Obtener producto"
+    put:
+      tags: [Legacy, Products]
+      summary: "[Legacy] Actualizar producto"
+    delete:
+      tags: [Legacy, Products]
+      summary: "[Legacy] Eliminar producto"
+
+  # ── Legacy: ThirdParties ──
+  /api/thirdparties:
+    get:
+      tags: [Legacy, ThirdParties]
+      summary: "[Legacy] Listar terceros"
+    post:
+      tags: [Legacy, ThirdParties]
+      summary: "[Legacy] Crear tercero"
+
+  /api/thirdparties/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, ThirdParties]
+      summary: "[Legacy] Obtener tercero"
+    put:
+      tags: [Legacy, ThirdParties]
+      summary: "[Legacy] Actualizar tercero"
+    delete:
+      tags: [Legacy, ThirdParties]
+      summary: "[Legacy] Eliminar tercero"
+
+  /api/thirdparties/{id}/bankaccounts:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, ThirdParties]
+      summary: "[Legacy] Cuentas bancarias del tercero"
+    post:
+      tags: [Legacy, ThirdParties]
+      summary: "[Legacy] Crear cuenta bancaria del tercero"
+
+  /api/thirdparties/{id}/bankaccounts/{bankaccountId}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+      - name: bankaccountId
+        in: path
+        required: true
+        schema:
+          type: integer
+    put:
+      tags: [Legacy, ThirdParties]
+      summary: "[Legacy] Actualizar cuenta bancaria"
+    delete:
+      tags: [Legacy, ThirdParties]
+      summary: "[Legacy] Eliminar cuenta bancaria"
+
+  /api/thirdparties/{id}/categories:
+    get:
+      tags: [Legacy, ThirdParties]
+      summary: "[Legacy] Categorías del tercero"
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+
+  /api/thirdparties/{id}/supplier_categories:
+    get:
+      tags: [Legacy, ThirdParties]
+      summary: "[Legacy] Categorías proveedor del tercero"
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+
+  /api/thirdparties/{id}/representatives:
+    get:
+      tags: [Legacy, ThirdParties]
+      summary: "[Legacy] Representantes del tercero"
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+
+  # ── Legacy: Invoices ──
+  /api/invoices:
+    get:
+      tags: [Legacy, Invoices]
+      summary: "[Legacy] Listar facturas"
+    post:
+      tags: [Legacy, Invoices]
+      summary: "[Legacy] Crear factura"
+
+  /api/invoices/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Invoices]
+      summary: "[Legacy] Obtener factura"
+    put:
+      tags: [Legacy, Invoices]
+      summary: "[Legacy] Actualizar factura"
+    delete:
+      tags: [Legacy, Invoices]
+      summary: "[Legacy] Eliminar factura"
+
+  # ── Legacy: Orders ──
+  /api/orders:
+    get:
+      tags: [Legacy, Orders]
+      summary: "[Legacy] Listar pedidos"
+    post:
+      tags: [Legacy, Orders]
+      summary: "[Legacy] Crear pedido"
+
+  /api/orders/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Orders]
+      summary: "[Legacy] Obtener pedido"
+    put:
+      tags: [Legacy, Orders]
+      summary: "[Legacy] Actualizar pedido"
+    delete:
+      tags: [Legacy, Orders]
+      summary: "[Legacy] Eliminar pedido"
+
+  # ── Legacy: Proposals ──
+  /api/proposals:
+    get:
+      tags: [Legacy, Proposals]
+      summary: "[Legacy] Listar presupuestos"
+    post:
+      tags: [Legacy, Proposals]
+      summary: "[Legacy] Crear presupuesto"
+
+  /api/proposals/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Proposals]
+      summary: "[Legacy] Obtener presupuesto"
+    put:
+      tags: [Legacy, Proposals]
+      summary: "[Legacy] Actualizar presupuesto"
+    delete:
+      tags: [Legacy, Proposals]
+      summary: "[Legacy] Eliminar presupuesto"
+
+  # ── Legacy: Supplier Invoices ──
+  /api/supplierinvoices:
+    get:
+      tags: [Legacy, SupplierInvoices]
+      summary: "[Legacy] Listar facturas de proveedor"
+    post:
+      tags: [Legacy, SupplierInvoices]
+      summary: "[Legacy] Crear factura de proveedor"
+
+  /api/supplierinvoices/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, SupplierInvoices]
+      summary: "[Legacy] Obtener factura de proveedor"
+    put:
+      tags: [Legacy, SupplierInvoices]
+      summary: "[Legacy] Actualizar factura de proveedor"
+    delete:
+      tags: [Legacy, SupplierInvoices]
+      summary: "[Legacy] Eliminar factura de proveedor"
+
+  # ── Legacy: Supplier Orders ──
+  /api/supplierorders:
+    get:
+      tags: [Legacy, SupplierOrders]
+      summary: "[Legacy] Listar pedidos de proveedor"
+    post:
+      tags: [Legacy, SupplierOrders]
+      summary: "[Legacy] Crear pedido de proveedor"
+
+  /api/supplierorders/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, SupplierOrders]
+      summary: "[Legacy] Obtener pedido de proveedor"
+    put:
+      tags: [Legacy, SupplierOrders]
+      summary: "[Legacy] Actualizar pedido de proveedor"
+    delete:
+      tags: [Legacy, SupplierOrders]
+      summary: "[Legacy] Eliminar pedido de proveedor"
+
+  # ── Legacy: Supplier Proposals ──
+  /api/supplierproposals:
+    get:
+      tags: [Legacy, SupplierProposals]
+      summary: "[Legacy] Listar presupuestos de proveedor"
+    post:
+      tags: [Legacy, SupplierProposals]
+      summary: "[Legacy] Crear presupuesto de proveedor"
+
+  /api/supplierproposals/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, SupplierProposals]
+      summary: "[Legacy] Obtener presupuesto de proveedor"
+    put:
+      tags: [Legacy, SupplierProposals]
+      summary: "[Legacy] Actualizar presupuesto de proveedor"
+    delete:
+      tags: [Legacy, SupplierProposals]
+      summary: "[Legacy] Eliminar presupuesto de proveedor"
+
+  # ── Legacy: Contacts ──
+  /api/contacts:
+    get:
+      tags: [Legacy, Contacts]
+      summary: "[Legacy] Listar contactos"
+    post:
+      tags: [Legacy, Contacts]
+      summary: "[Legacy] Crear contacto"
+
+  /api/contacts/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Contacts]
+      summary: "[Legacy] Obtener contacto"
+    put:
+      tags: [Legacy, Contacts]
+      summary: "[Legacy] Actualizar contacto"
+    delete:
+      tags: [Legacy, Contacts]
+      summary: "[Legacy] Eliminar contacto"
+
+  /api/contacts/email/{email}:
+    get:
+      tags: [Legacy, Contacts]
+      summary: "[Legacy] Buscar contacto por email"
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+
+  /api/contacts/{id}/categories:
+    get:
+      tags: [Legacy, Contacts]
+      summary: "[Legacy] Categorías del contacto"
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+
+  # ── Legacy: Events ──
+  /api/agendaevents:
+    get:
+      tags: [Legacy, Events]
+      summary: "[Legacy] Listar eventos (agendaevents)"
+    post:
+      tags: [Legacy, Events]
+      summary: "[Legacy] Crear evento"
+
+  /api/agendaevents/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Events]
+      summary: "[Legacy] Obtener evento"
+    put:
+      tags: [Legacy, Events]
+      summary: "[Legacy] Actualizar evento"
+    delete:
+      tags: [Legacy, Events]
+      summary: "[Legacy] Eliminar evento"
+
+  /api/events:
+    get:
+      tags: [Legacy, Events]
+      summary: "[Legacy] Listar eventos (/events alias)"
+    post:
+      tags: [Legacy, Events]
+      summary: "[Legacy] Crear evento (/events alias)"
+
+  /api/events/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Events]
+      summary: "[Legacy] Obtener evento (/events alias)"
+    put:
+      tags: [Legacy, Events]
+      summary: "[Legacy] Actualizar evento (/events alias)"
+    delete:
+      tags: [Legacy, Events]
+      summary: "[Legacy] Eliminar evento (/events alias)"
+
+  # ── Legacy: Projects & Tasks ──
+  /api/projects:
+    get:
+      tags: [Legacy, Projects]
+      summary: "[Legacy] Listar proyectos"
+    post:
+      tags: [Legacy, Projects]
+      summary: "[Legacy] Crear proyecto"
+
+  /api/projects/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Projects]
+      summary: "[Legacy] Obtener proyecto"
+    put:
+      tags: [Legacy, Projects]
+      summary: "[Legacy] Actualizar proyecto"
+    delete:
+      tags: [Legacy, Projects]
+      summary: "[Legacy] Eliminar proyecto"
+
+  /api/tasks:
+    get:
+      tags: [Legacy, Tasks]
+      summary: "[Legacy] Listar tareas"
+    post:
+      tags: [Legacy, Tasks]
+      summary: "[Legacy] Crear tarea"
+
+  /api/tasks/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Tasks]
+      summary: "[Legacy] Obtener tarea"
+    put:
+      tags: [Legacy, Tasks]
+      summary: "[Legacy] Actualizar tarea"
+    delete:
+      tags: [Legacy, Tasks]
+      summary: "[Legacy] Eliminar tarea"
+
+  # ── Legacy: Finance ──
+  /api/bankaccounts:
+    get:
+      tags: [Legacy, BankAccounts]
+      summary: "[Legacy] Listar cuentas bancarias"
+    post:
+      tags: [Legacy, BankAccounts]
+      summary: "[Legacy] Crear cuenta bancaria"
+
+  /api/bankaccounts/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, BankAccounts]
+      summary: "[Legacy] Obtener cuenta bancaria"
+    put:
+      tags: [Legacy, BankAccounts]
+      summary: "[Legacy] Actualizar cuenta bancaria"
+    delete:
+      tags: [Legacy, BankAccounts]
+      summary: "[Legacy] Eliminar cuenta bancaria"
+
+  /api/paiements:
+    get:
+      tags: [Legacy, Payments]
+      summary: "[Legacy] Listar pagos (paiements)"
+    post:
+      tags: [Legacy, Payments]
+      summary: "[Legacy] Crear pago"
+
+  /api/paiements/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Payments]
+      summary: "[Legacy] Obtener pago"
+    put:
+      tags: [Legacy, Payments]
+      summary: "[Legacy] Actualizar pago"
+    delete:
+      tags: [Legacy, Payments]
+      summary: "[Legacy] Eliminar pago"
+
+  /api/categories:
+    get:
+      tags: [Legacy, Categories]
+      summary: "[Legacy] Listar categorías"
+    post:
+      tags: [Legacy, Categories]
+      summary: "[Legacy] Crear categoría"
+
+  /api/categories/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Categories]
+      summary: "[Legacy] Obtener categoría"
+    put:
+      tags: [Legacy, Categories]
+      summary: "[Legacy] Actualizar categoría"
+    delete:
+      tags: [Legacy, Categories]
+      summary: "[Legacy] Eliminar categoría"
+
+  /api/contracts:
+    get:
+      tags: [Legacy, Contracts]
+      summary: "[Legacy] Listar contratos"
+    post:
+      tags: [Legacy, Contracts]
+      summary: "[Legacy] Crear contrato"
+
+  /api/contracts/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Contracts]
+      summary: "[Legacy] Obtener contrato"
+    put:
+      tags: [Legacy, Contracts]
+      summary: "[Legacy] Actualizar contrato"
+    delete:
+      tags: [Legacy, Contracts]
+      summary: "[Legacy] Eliminar contrato"
+
+  # ── Legacy: Logistics ──
+  /api/warehouses:
+    get:
+      tags: [Legacy, Warehouses]
+      summary: "[Legacy] Listar almacenes"
+    post:
+      tags: [Legacy, Warehouses]
+      summary: "[Legacy] Crear almacén"
+
+  /api/warehouses/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Warehouses]
+      summary: "[Legacy] Obtener almacén"
+    put:
+      tags: [Legacy, Warehouses]
+      summary: "[Legacy] Actualizar almacén"
+    delete:
+      tags: [Legacy, Warehouses]
+      summary: "[Legacy] Eliminar almacén"
+
+  /api/stockmovements:
+    get:
+      tags: [Legacy, StockMovements]
+      summary: "[Legacy] Listar movimientos de stock"
+    post:
+      tags: [Legacy, StockMovements]
+      summary: "[Legacy] Crear movimiento de stock"
+
+  /api/stockmovements/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, StockMovements]
+      summary: "[Legacy] Obtener movimiento de stock"
+    put:
+      tags: [Legacy, StockMovements]
+      summary: "[Legacy] Actualizar movimiento de stock"
+    delete:
+      tags: [Legacy, StockMovements]
+      summary: "[Legacy] Eliminar movimiento de stock"
+
+  # ── Legacy: Tickets ──
+  /api/tickets:
+    get:
+      tags: [Legacy, Tickets]
+      summary: "[Legacy] Listar tickets"
+    post:
+      tags: [Legacy, Tickets]
+      summary: "[Legacy] Crear ticket"
+
+  /api/tickets/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Tickets]
+      summary: "[Legacy] Obtener ticket"
+    put:
+      tags: [Legacy, Tickets]
+      summary: "[Legacy] Actualizar ticket"
+    delete:
+      tags: [Legacy, Tickets]
+      summary: "[Legacy] Eliminar ticket"
+
+  # ── Legacy: Accountancy ──
+  /api/accountancy/accounts:
+    get:
+      tags: [Legacy, Accountancy]
+      summary: "[Legacy] Listar cuentas contables"
+    post:
+      tags: [Legacy, Accountancy]
+      summary: "[Legacy] Crear cuenta contable"
+
+  # ── Legacy: Product Lots ──
+  /api/productlots:
+    get:
+      tags: [Legacy, ProductLots]
+      summary: "[Legacy] Listar lotes de producto"
+    post:
+      tags: [Legacy, ProductLots]
+      summary: "[Legacy] Crear lote de producto"
+
+  /api/productlots/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, ProductLots]
+      summary: "[Legacy] Obtener lote"
+    put:
+      tags: [Legacy, ProductLots]
+      summary: "[Legacy] Actualizar lote"
+    delete:
+      tags: [Legacy, ProductLots]
+      summary: "[Legacy] Eliminar lote"
+
+  # ── Legacy: Members ──
+  /api/memberstypes:
+    get:
+      tags: [Legacy, MemberTypes]
+      summary: "[Legacy] Listar tipos de miembro"
+    post:
+      tags: [Legacy, MemberTypes]
+      summary: "[Legacy] Crear tipo de miembro"
+
+  /api/memberstypes/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, MemberTypes]
+      summary: "[Legacy] Obtener tipo de miembro"
+    put:
+      tags: [Legacy, MemberTypes]
+      summary: "[Legacy] Actualizar tipo de miembro"
+    delete:
+      tags: [Legacy, MemberTypes]
+      summary: "[Legacy] Eliminar tipo de miembro"
+
+  /api/members:
+    get:
+      tags: [Legacy, Members]
+      summary: "[Legacy] Listar miembros"
+    post:
+      tags: [Legacy, Members]
+      summary: "[Legacy] Crear miembro"
+
+  /api/members/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Members]
+      summary: "[Legacy] Obtener miembro"
+    put:
+      tags: [Legacy, Members]
+      summary: "[Legacy] Actualizar miembro"
+    delete:
+      tags: [Legacy, Members]
+      summary: "[Legacy] Eliminar miembro"
+
+  /api/subscriptions:
+    get:
+      tags: [Legacy, Subscriptions]
+      summary: "[Legacy] Listar suscripciones"
+    post:
+      tags: [Legacy, Subscriptions]
+      summary: "[Legacy] Crear suscripción"
+
+  /api/subscriptions/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Subscriptions]
+      summary: "[Legacy] Obtener suscripción"
+    put:
+      tags: [Legacy, Subscriptions]
+      summary: "[Legacy] Actualizar suscripción"
+    delete:
+      tags: [Legacy, Subscriptions]
+      summary: "[Legacy] Eliminar suscripción"
+
+  # ── Legacy: HR ──
+  /api/holidays:
+    get:
+      tags: [Legacy, Holidays]
+      summary: "[Legacy] Listar vacaciones"
+    post:
+      tags: [Legacy, Holidays]
+      summary: "[Legacy] Crear solicitud de vacaciones"
+
+  /api/holidays/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Holidays]
+      summary: "[Legacy] Obtener vacaciones"
+    put:
+      tags: [Legacy, Holidays]
+      summary: "[Legacy] Actualizar vacaciones"
+    delete:
+      tags: [Legacy, Holidays]
+      summary: "[Legacy] Eliminar vacaciones"
+
+  /api/salaries:
+    get:
+      tags: [Legacy, Salaries]
+      summary: "[Legacy] Listar nóminas"
+    post:
+      tags: [Legacy, Salaries]
+      summary: "[Legacy] Crear nómina"
+
+  /api/salaries/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Salaries]
+      summary: "[Legacy] Obtener nómina"
+    put:
+      tags: [Legacy, Salaries]
+      summary: "[Legacy] Actualizar nómina"
+    delete:
+      tags: [Legacy, Salaries]
+      summary: "[Legacy] Eliminar nómina"
+
+  /api/recruitments:
+    get:
+      tags: [Legacy, Recruitments]
+      summary: "[Legacy] Listar ofertas de reclutamiento"
+    post:
+      tags: [Legacy, Recruitments]
+      summary: "[Legacy] Crear oferta de reclutamiento"
+
+  /api/recruitments/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Recruitments]
+      summary: "[Legacy] Obtener oferta"
+    put:
+      tags: [Legacy, Recruitments]
+      summary: "[Legacy] Actualizar oferta"
+    delete:
+      tags: [Legacy, Recruitments]
+      summary: "[Legacy] Eliminar oferta"
+
+  # ── Legacy: MRP ──
+  /api/boms:
+    get:
+      tags: [Legacy, BOMs]
+      summary: "[Legacy] Listar listas de materiales"
+    post:
+      tags: [Legacy, BOMs]
+      summary: "[Legacy] Crear lista de materiales"
+
+  /api/boms/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, BOMs]
+      summary: "[Legacy] Obtener BOM"
+    put:
+      tags: [Legacy, BOMs]
+      summary: "[Legacy] Actualizar BOM"
+    delete:
+      tags: [Legacy, BOMs]
+      summary: "[Legacy] Eliminar BOM"
+
+  /api/mos:
+    get:
+      tags: [Legacy, ManufacturingOrders]
+      summary: "[Legacy] Listar órdenes de fabricación"
+    post:
+      tags: [Legacy, ManufacturingOrders]
+      summary: "[Legacy] Crear orden de fabricación"
+
+  /api/mos/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, ManufacturingOrders]
+      summary: "[Legacy] Obtener MO"
+    put:
+      tags: [Legacy, ManufacturingOrders]
+      summary: "[Legacy] Actualizar MO"
+    delete:
+      tags: [Legacy, ManufacturingOrders]
+      summary: "[Legacy] Eliminar MO"
+
+  /api/workstations:
+    get:
+      tags: [Legacy, Workstations]
+      summary: "[Legacy] Listar puestos de trabajo"
+    post:
+      tags: [Legacy, Workstations]
+      summary: "[Legacy] Crear puesto de trabajo"
+
+  /api/workstations/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Workstations]
+      summary: "[Legacy] Obtener puesto de trabajo"
+    put:
+      tags: [Legacy, Workstations]
+      summary: "[Legacy] Actualizar puesto de trabajo"
+    delete:
+      tags: [Legacy, Workstations]
+      summary: "[Legacy] Eliminar puesto de trabajo"
+
+  # ── Legacy: Finance Specials ──
+  /api/multicurrencies:
+    get:
+      tags: [Legacy, Multicurrency]
+      summary: "[Legacy] Listar multi-divisas"
+    post:
+      tags: [Legacy, Multicurrency]
+      summary: "[Legacy] Crear multi-divisa"
+
+  /api/donations:
+    get:
+      tags: [Legacy, Donations]
+      summary: "[Legacy] Listar donaciones"
+    post:
+      tags: [Legacy, Donations]
+      summary: "[Legacy] Crear donación"
+
+  /api/donations/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParam'
+    get:
+      tags: [Legacy, Donations]
+      summary: "[Legacy] Obtener donación"
+    put:
+      tags: [Legacy, Donations]
+      summary: "[Legacy] Actualizar donación"
+    delete:
+      tags: [Legacy, Donations]
+      summary: "[Legacy] Eliminar donación"
+
+  # ── Legacy: Documents ──
+  /api/documents:
+    get:
+      tags: [Legacy, Documents]
+      summary: "[Legacy] Listar documentos adjuntos"
+    post:
+      tags: [Legacy, Documents]
+      summary: "[Legacy] Subir documento"
+
+  /api/documents/{id}:
+    get:
+      tags: [Legacy, Documents]
+      summary: "[Legacy] Obtener documento"
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+    delete:
+      tags: [Legacy, Documents]
+      summary: "[Legacy] Eliminar documento"
+      parameters:
+        - $ref: '#/components/parameters/IdParam'
+
+  # ── Legacy: System Integrations ──
+  /api/knowledgemanagement:
+    get:
+      tags: [Legacy, KnowledgeManagement]
+      summary: "[Legacy] Listar artículos de conocimiento"
+    post:
+      tags: [Legacy, KnowledgeManagement]
+      summary: "[Legacy] Crear artículo"
+
+  /api/objectlinks:
+    get:
+      tags: [Legacy, ObjectLinks]
+      summary: "[Legacy] Listar vínculos entre objetos"
+    post:
+      tags: [Legacy, ObjectLinks]
+      summary: "[Legacy] Crear vínculo"
+
+  /api/emailtemplates:
+    get:
+      tags: [Legacy, EmailTemplates]
+      summary: "[Legacy] Listar plantillas de email"
+    post:
+      tags: [Legacy, EmailTemplates]
+      summary: "[Legacy] Crear plantilla"
+
+  /api/webhook:
+    get:
+      tags: [Legacy, Webhooks]
+      summary: "[Legacy] Listar webhooks"
+    post:
+      tags: [Legacy, Webhooks]
+      summary: "[Legacy] Crear webhook"
+
+  /api/zapier:
+    get:
+      tags: [Legacy, Zapier]
+      summary: "[Legacy] Listar integraciones Zapier"
+    post:
+      tags: [Legacy, Zapier]
+      summary: "[Legacy] Crear integración Zapier"
