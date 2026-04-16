@@ -1,0 +1,39 @@
+{
+  "title": "Notas de Gasto",
+  "endpoint": "/expensereports",
+  "detailRoute": "expensereport-ficha",
+  "widget": {
+    "titleField": "ref",
+    "subtitleField": "amountTotal",
+    "icon": "fas fa-receipt"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Datos de Gasto",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "ref", "label": "Referencia", "inputType": "text" },
+             { "type": "Field", "key": "amountTotal", "label": "Importe Total", "inputType": "number" }
+          ]
+        },
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "dateStart", "label": "Fecha Inicio", "inputType": "date" },
+             { "type": "Field", "key": "dateEnd", "label": "Fecha Fin", "inputType": "date" }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Empleado",
+      "children": [
+        { "type": "Field", "key": "userId", "label": "ID Empleado", "inputType": "number", "required": true }
+      ]
+    }
+  ]
+}

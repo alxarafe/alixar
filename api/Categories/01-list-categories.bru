@@ -1,0 +1,27 @@
+meta {
+  name: 01 - Listar Categorías
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/categories?limit=10
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Accept: application/json
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Devuelve un array", function() {
+    const body = res.getBody();
+    expect(body).to.be.an("array");
+  });
+}

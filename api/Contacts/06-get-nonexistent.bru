@@ -1,0 +1,22 @@
+meta {
+  name: 06 - Contacto Inexistente
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/contacts/999999999
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Accept: application/json
+}
+
+tests {
+  test("Status 404", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

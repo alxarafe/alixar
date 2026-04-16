@@ -1,0 +1,32 @@
+meta {
+  name: 02-get-bankaccounts
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/thirdparties/{{testThirdPartyId}}/bankaccounts
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Respuesta es un array", function() {
+    expect(res.getBody()).to.be.an('array');
+  });
+  
+  test("Objeto contiene fields correctos", function() {
+    const list = res.getBody();
+    expect(list.length).to.be.greaterThan(0);
+    const acc = list[0];
+    expect(acc.bank).to.equal("Banco Santander");
+  });
+}

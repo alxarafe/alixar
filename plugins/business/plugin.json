@@ -1,0 +1,19 @@
+{
+  "name": "business",
+  "version": "1.0.0",
+  "displayName": "Business Foundation",
+  "description": "Entidades base de negocio: Terceros (Tercero, Cuenta Bancaria, Categoría), etc.",
+  "icon": "fas fa-building",
+  "author": "Alixar",
+
+  "requires": [],
+  "optionalDeps": [],
+  "conflicts": [],
+
+  "provides": {
+    "entities": ["ThirdParty", "BankAccount", "Category", "Representative"],
+    "apiRoutes": "src/Infrastructure/Http/routes.php",
+    "migrations": "migrations/",
+    "schemas": "frontend/schemas/"
+  }
+}

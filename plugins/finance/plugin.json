@@ -1,0 +1,19 @@
+{
+  "name": "finance",
+  "version": "1.0.0",
+  "displayName": "Tesorería — Cuentas Bancarias",
+  "description": "Gestión de cuentas bancarias, transacciones y conciliación.",
+  "icon": "fas fa-university",
+  "author": "Alixar",
+
+  "requires": [],
+  "optionalDeps": ["trading"],
+  "conflicts": [],
+
+  "provides": {
+    "entities": ["BankAccount", "BankTransaction", "Reconciliation"],
+    "apiRoutes": "src/Infrastructure/Http/routes.php",
+    "migrations": "migrations/",
+    "schemas": "frontend/schemas/"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "interventions",
+  "version": "1.0.0",
+  "displayName": "Intervenciones y Servicios",
+  "description": "Partes de trabajo y servicios técnicos.",
+  "icon": "fas fa-wrench",
+  "author": "Alixar",
+
+  "requires": ["business"],
+  "optionalDeps": ["projects", "products"],
+  "conflicts": [],
+
+  "provides": {
+    "entities": [
+      "Intervention"
+    ],
+    "apiRoutes": "src/Infrastructure/Http/routes.php",
+    "migrations": "migrations/"
+  }
+}

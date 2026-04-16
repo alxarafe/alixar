@@ -1,0 +1,42 @@
+meta {
+  name: 00 - Crear Tercero Requisito
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}{{apiBase}}/thirdparties
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "BrunoTerceroFacturas",
+    "name_alias": "BrunoFact",
+    "code_client": "auto",
+    "code_fournisseur": "auto",
+    "client": "1",
+    "fournisseur": "0",
+    "address": "Calle de Prueba Fact",
+    "zip": "28010",
+    "town": "Madrid",
+    "phone": "910000000",
+    "email": "facturas@brunotest.es",
+    "status": "1"
+  }
+}
+
+tests {
+  test("Crea tercero necesario", function() {
+    const body = res.getBody();
+    const id = typeof body === 'object' ? (body.id || body) : body;
+    expect(Number(id)).to.be.above(0);
+    bru.setVar("testInvoiceSocId", Number(id));
+  });
+}

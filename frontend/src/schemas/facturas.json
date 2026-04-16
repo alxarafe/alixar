@@ -1,0 +1,57 @@
+{
+  "title": "Facturas a Clientes",
+  "endpoint": "/invoices",
+  "detailRoute": "invoice-ficha",
+  "widget": {
+    "titleField": "ref",
+    "subtitleField": "datef",
+    "icon": "fas fa-file-invoice-dollar"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Datos del Documento",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "ref", "label": "Referencia", "inputType": "text", "required": true, "placeholder": "Ej: FAC24-001" },
+             { "type": "Field", "key": "ref_ext", "label": "Referencia Externa / Pedido", "inputType": "text", "placeholder": "Opcional" }
+          ]
+        },
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "datef", "label": "Fecha Facturación", "inputType": "date", "required": true },
+             { "type": "Field", "key": "date_lim_reglement", "label": "Fecha Vencimiento", "inputType": "date", "required": true }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Clasificación y Relojería",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "type", "label": "Tipo de Factura", "inputType": "select", "required": true, "options": [
+                {"value": "0", "label": "Estándar"}, 
+                {"value": "1", "label": "Reemplazo"}, 
+                {"value": "2", "label": "Abono (Rectificativa)"}
+             ]},
+             { "type": "Field", "key": "fk_soc", "label": "Tercero Asociado (ID Numérico)", "inputType": "number", "required": true }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Anotaciones",
+      "children": [
+        { "type": "Field", "key": "note_public", "label": "Nota Pública (Visible en PDF)", "inputType": "text" },
+        { "type": "Field", "key": "note_private", "label": "Nota Privada (Alineación Interna)", "inputType": "text" }
+      ]
+    }
+  ]
+}

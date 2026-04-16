@@ -1,2 +1,0 @@
-In order to separate API classes by modules, a folder is created with the name of the original folder concatenated with the name of the subfolder containing the class.
-This is only maintained for compatibility with Dolibarr.

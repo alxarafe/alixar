@@ -1,0 +1,21 @@
+meta {
+  name: 07-verify-deletion
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/products/{{testProductId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Status 404 (ya no existe)", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

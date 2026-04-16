@@ -1,0 +1,40 @@
+{
+  "title": "Cartera de Proyectos",
+  "endpoint": "/projects",
+  "detailRoute": "project-ficha",
+  "widget": {
+    "titleField": "ref",
+    "subtitleField": "title",
+    "icon": "fas fa-project-diagram"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Identidad del Proyecto",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+            { "type": "Field", "key": "ref", "label": "Referencia PMP", "inputType": "text", "required": true },
+            { "type": "Field", "key": "title", "label": "Título del Proyecto", "inputType": "text", "required": true }
+          ]
+        },
+        { "type": "Field", "key": "fk_soc", "label": "Tercero Relacionado (Opcional)", "inputType": "number" },
+        { "type": "Field", "key": "description", "label": "Descripción Global", "inputType": "text" }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Ventana Temporal",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+            { "type": "Field", "key": "dateo", "label": "Inicio Previsto", "inputType": "date" },
+            { "type": "Field", "key": "datee", "label": "Entrega / Fin Previsto", "inputType": "date" }
+          ]
+        }
+      ]
+    }
+  ]
+}

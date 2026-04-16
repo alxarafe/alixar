@@ -1,0 +1,27 @@
+meta {
+  name: 03-list-proposals
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/proposals
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Lista presupuestos exitosamente", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Devuelve array", function() {
+    const data = res.getBody();
+    expect(data).to.be.an('array');
+    expect(data.length).to.be.above(0);
+  });
+}

@@ -1,0 +1,29 @@
+meta {
+  name: 07c - Obtener Categorias de Contacto
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/contacts/{{testContactId}}/categories
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Accept: application/json
+}
+
+tests {
+  test("Carga de categorias exitosa", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Las categorias se devuelven en formato array", function() {
+    const data = res.getBody();
+    expect(Array.isArray(data)).to.be.true;
+    // Como es un contacto nuevo no debe tener categorias por defecto
+    expect(data.length).to.equal(0);
+  });
+}

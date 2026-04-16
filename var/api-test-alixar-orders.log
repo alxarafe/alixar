@@ -1,0 +1,48 @@
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+Orders/01-create-order (201 Created) - 49 ms
+Tests
+   ✓ Crea pedido exitoso
+   ✓ Devuelve id
+Orders/02-get-order (200 OK) - 15 ms
+Tests
+   ✕ Los datos coinciden
+      expected undefined to equal 1
+   ✓ Obtiene pedido exitosamente
+Orders/03-list-orders (200 OK) - 15 ms
+Tests
+   ✓ Lista pedidos exitosamente
+   ✓ Devuelve array
+Orders/04-update-order (200 OK) - 25 ms
+Tests
+   ✓ Actualización exitosa
+Orders/05-verify-update (200 OK) - 24 ms
+Tests
+   ✕ Datos actualizados correctos
+      expected undefined to equal 'CMD-001X-UPD'
+   ✓ Verifica actualización
+Orders/06-delete-order (200 OK) - 20 ms
+Tests
+   ✓ Delete exitoso
+Orders/07-verify-deletion (404 Not Found) - 20 ms
+Tests
+   ✓ El pedido eliminado no existe
+
+📊 Execution Summary
+┌───────────────┬────────────────────────┐
+│ Metric        │         Result         │
+├───────────────┼────────────────────────┤
+│ Status        │         ✗ FAIL         │
+├───────────────┼────────────────────────┤
+│ Requests      │ 7 (5 Passed, 2 Failed) │
+├───────────────┼────────────────────────┤
+│ Tests         │          9/11          │
+├───────────────┼────────────────────────┤
+│ Assertions    │          0/0           │
+├───────────────┼────────────────────────┤
+│ Duration (ms) │          942           │
+└───────────────┴────────────────────────┘
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.12.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+npm notice To update run: npm install -g npm@11.12.1
+npm notice

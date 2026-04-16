@@ -1,0 +1,30 @@
+meta {
+  name: 08 - Eliminar Contacto
+  type: http
+  seq: 8
+}
+
+delete {
+  url: {{baseUrl}}{{apiBase}}/contacts/{{testContactId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Respuesta indica éxito", function() {
+    const body = res.getBody();
+    if (typeof body === 'object' && body !== null) {
+      if (body.success) {
+        expect(body.success.code).to.equal(200);
+      }
+    }
+  });
+}

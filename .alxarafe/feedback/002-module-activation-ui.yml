@@ -1,0 +1,15 @@
+id: 002
+title: Module Activation UI
+app: alixar
+date: 2026-03-04
+priority: high
+category: feature
+description: |
+  The ModuleManager already discovers Modules/ directories. What's missing is an admin UI screen
+  where the administrator can activate/deactivate modules, storing the state as a config constant
+  (e.g., module_enabled_{name}). When a module is deactivated, its menus and controllers should
+  be hidden from navigation and routing.
+use_case: |
+  Alixar has 12+ planned modules (CRM, Sales, Purchases, Stock, Finance, HRM, etc.).
+  An admin needs to enable only the modules relevant to their business. This is standard
+  ERP functionality and useful for any modular Alxarafe application.

@@ -1,0 +1,28 @@
+meta {
+  name: 02-get-proposal
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/proposals/{{testProposalId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Obtiene presupuesto exitosamente", function() {
+    expect([200]).to.include(res.getStatus());
+  });
+
+  test("Los datos coinciden", function() {
+    const data = res.getBody();
+    expect(data.socid).to.equal(1);
+    expect(data.ref_client).to.equal("CLIENT-REF-123");
+    expect(data).to.have.property('lines');
+  });
+}

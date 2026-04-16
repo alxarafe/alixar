@@ -1,0 +1,46 @@
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+Products/01-create-product (200 OK) - 72 ms
+Tests
+   ✓ Status 200 o 201 (creado)
+   ✓ Devuelve ID numérico
+Products/02-get-product (200 OK) - 21 ms
+Tests
+   ✓ Carga exitosa
+   ✓ Propiedades correctas
+Products/03-update-product (200 OK) - 36 ms
+Tests
+   ✓ Actualización exitosa
+Products/04-list-products (200 OK) - 23 ms
+Tests
+   ✓ Listado existoso
+   ✓ Devuelve array
+Products/05-get-by-ref (200 OK) - 21 ms
+Tests
+   ✓ Carga por REF exitosa
+   ✓ Propiedades correctas actualizadas
+Products/06-delete-product (200 OK) - 39 ms
+Tests
+   ✓ Delete exitoso
+Products/07-verify-deletion (404 Not Found) - 23 ms
+Tests
+   ✓ Status 404 (ya no existe)
+
+📊 Execution Summary
+┌───────────────┬──────────────┐
+│ Metric        │    Result    │
+├───────────────┼──────────────┤
+│ Status        │    ✓ PASS    │
+├───────────────┼──────────────┤
+│ Requests      │ 7 (7 Passed) │
+├───────────────┼──────────────┤
+│ Tests         │    11/11     │
+├───────────────┼──────────────┤
+│ Assertions    │     0/0      │
+├───────────────┼──────────────┤
+│ Duration (ms) │     944      │
+└───────────────┴──────────────┘
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.12.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+npm notice To update run: npm install -g npm@11.12.1
+npm notice

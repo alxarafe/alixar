@@ -1,0 +1,21 @@
+meta {
+  name: 06-delete-proposal
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}{{apiBase}}/proposals/{{testProposalId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Delete exitoso", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

@@ -1,0 +1,29 @@
+meta {
+  name: 03 - Actualizar Factura
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}{{apiBase}}/invoices/{{testInvoiceId}}
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "note_public": "Factura ACTUALIZADA"
+  }
+}
+
+tests {
+  test("Actualización reflejada", function() {
+    expect(res.getStatus()).to.equal(200);
+    expect(res.getBody().note_public).to.equal("Factura ACTUALIZADA");
+  });
+}

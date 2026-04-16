@@ -1,0 +1,43 @@
+meta {
+  name: 01 - Crear Contacto
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}{{apiBase}}/contacts
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "lastname": "BrunoContact",
+    "firstname": "Test",
+    "email": "contact@brunotest.es",
+    "phone_pro": "912345678",
+    "address": "Calle de Prueba 42",
+    "zip": "28001",
+    "town": "Madrid",
+    "poste": "Developer"
+  }
+}
+
+tests {
+  test("Status 200 o 201 (creado)", function() {
+    const status = res.getStatus();
+    expect(status === 200 || status === 201).to.be.true;
+  });
+
+  test("Devuelve ID numérico", function() {
+    const body = res.getBody();
+    const id = typeof body === 'object' ? (body.id || body) : body;
+    expect(Number(id)).to.be.above(0);
+    bru.setVar("testContactId", Number(id));
+  });
+}

@@ -1,0 +1,15 @@
+id: 004
+title: Email Template Engine
+app: alixar
+date: 2026-03-04
+priority: medium
+category: feature
+description: |
+  Management engine for email templates with substitutable variables ({user_name}, {app_name},
+  {reset_link}). Provides CRUD for templates + rendering. The application defines WHICH templates
+  it needs (e.g., password_reset, order_validated), the framework manages HOW they are stored,
+  edited, and rendered. Templates should be editable by the admin via UI and support Blade syntax.
+use_case: |
+  Alixar needs email templates for workflow transitions (order validated, invoice sent), password
+  resets, and notifications. The framework should handle template storage and rendering generically,
+  while the application provides the specific template content and variables.

@@ -1,0 +1,155 @@
+ ------ ----------------------------------------------------------------------- 
+  Line   business/src/Infrastructure/Http/Api/Controller/ThirdPartyApiControll  
+         er.php                                                                 
+ ------ ----------------------------------------------------------------------- 
+  45     Parameter $bankAccountRepository of method                             
+         Plugin\Business\Infrastructure\Http\Api\Controller\ThirdPartyApiContr  
+         oller::__construct() has invalid type                                  
+         Plugin\Business\Domain\ThirdParty\BankAccountRepository.               
+         🪪  class.notFound                                                     
+  45     Property                                                               
+         Plugin\Business\Infrastructure\Http\Api\Controller\ThirdPartyApiContr  
+         oller::$bankAccountRepository has unknown class                        
+         Plugin\Business\Domain\ThirdParty\BankAccountRepository as its type.   
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  187    Call to method findByThirdPartyId() on an unknown class                
+         Plugin\Business\Domain\ThirdParty\BankAccountRepository.               
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  203    Instantiated class Plugin\Business\Domain\ThirdParty\BankAccount not   
+         found.                                                                 
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  204    Call to method updateFrom() on an unknown class                        
+         Plugin\Business\Domain\ThirdParty\BankAccount.                         
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  205    Call to method save() on an unknown class                              
+         Plugin\Business\Domain\ThirdParty\BankAccountRepository.               
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  207    Call to method getId() on an unknown class                             
+         Plugin\Business\Domain\ThirdParty\BankAccount.                         
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  216    Call to method findById() on an unknown class                          
+         Plugin\Business\Domain\ThirdParty\BankAccountRepository.               
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  226    Call to method save() on an unknown class                              
+         Plugin\Business\Domain\ThirdParty\BankAccountRepository.               
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  237    Call to method findById() on an unknown class                          
+         Plugin\Business\Domain\ThirdParty\BankAccountRepository.               
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  243    Call to method delete() on an unknown class                            
+         Plugin\Business\Domain\ThirdParty\BankAccountRepository.               
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  265    Access to constant CATEGORY_COLUMN_MAP on an unknown class             
+         Plugin\Business\Infrastructure\Persistence\Mysql\Category\MysqlThirdP  
+         artyCategoryRepository.                                                
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  301    Access to constant CATEGORY_COLUMN_MAP on an unknown class             
+         Plugin\Business\Infrastructure\Persistence\Mysql\Category\MysqlThirdP  
+         artyCategoryRepository.                                                
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   business/src/Infrastructure/Http/routes.php                            
+ ------ ----------------------------------------------------------------------- 
+  32     Parameter #3 $bankAccountRepository of class                           
+         Plugin\Business\Infrastructure\Http\Api\Controller\ThirdPartyApiContr  
+         oller constructor expects                                              
+         Plugin\Business\Domain\ThirdParty\BankAccountRepository|null,          
+         Plugin\Business\Infrastructure\Persistence\Mysql\MysqlBankAccountRepo  
+         sitory given.                                                          
+         🪪  argument.type                                                      
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   crm/src/Infrastructure/Http/Api/Controller/ContactApiController.php    
+ ------ ----------------------------------------------------------------------- 
+  176    Access to constant CATEGORY_COLUMN_MAP on an unknown class             
+         Plugin\Crm\Infrastructure\Persistence\Mysql\Category\MysqlContactCate  
+         goryRepository.                                                        
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   crm/src/Infrastructure/Http/Api/Controller/ThirdPartyApiController.ph  
+         p                                                                      
+ ------ ----------------------------------------------------------------------- 
+  265    Access to constant CATEGORY_COLUMN_MAP on an unknown class             
+         Plugin\Crm\Infrastructure\Persistence\Mysql\Category\MysqlThirdPartyC  
+         ategoryRepository.                                                     
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  301    Access to constant CATEGORY_COLUMN_MAP on an unknown class             
+         Plugin\Crm\Infrastructure\Persistence\Mysql\Category\MysqlThirdPartyC  
+         ategoryRepository.                                                     
+         🪪  class.notFound                                                     
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   crm/src/Infrastructure/Http/routes.php                                 
+ ------ ----------------------------------------------------------------------- 
+  30     Parameter #2 $categoryRepository of class                              
+         Plugin\Crm\Infrastructure\Http\Api\Controller\ContactApiController     
+         constructor expects                                                    
+         Plugin\Crm\Domain\Category\ContactCategoryRepository|null,             
+         Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Crm\DolibarrMy  
+         sqlContactCategoryRepository given.                                    
+         🪪  argument.type                                                      
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   dolibarr-compat/src/Infrastructure/Persistence/Mysql/Crm/DolibarrMysq  
+         lContactCategoryRepository.php                                         
+ ------ ----------------------------------------------------------------------- 
+  11     Class                                                                  
+         Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Crm\DolibarrMy  
+         sqlContactCategoryRepository implements unknown interface              
+         Plugin\Business\Domain\Category\ContactCategoryRepository.             
+         🪪  interface.notFound (non-ignorable)                                 
+         💡  Learn more at https://phpstan.org/user-guide/discovering-symbols   
+  25     Method                                                                 
+         Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Crm\DolibarrMy  
+         sqlContactCategoryRepository::findByContactId() has #[\Override]       
+         attribute but does not override any method.                            
+         🪪  method.override (non-ignorable)                                    
+  51     Method                                                                 
+         Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Crm\DolibarrMy  
+         sqlContactCategoryRepository::linkCategory() has #[\Override]          
+         attribute but does not override any method.                            
+         🪪  method.override (non-ignorable)                                    
+  62     Method                                                                 
+         Plugin\DolibarrCompat\Infrastructure\Persistence\Mysql\Crm\DolibarrMy  
+         sqlContactCategoryRepository::unlinkCategory() has #[\Override]        
+         attribute but does not override any method.                            
+         🪪  method.override (non-ignorable)                                    
+ ------ ----------------------------------------------------------------------- 
+
+ ------ ----------------------------------------------------------------------- 
+  Line   dolibarr-compat/src/Infrastructure/Persistence/Mysql/Menu/MysqlLegacy  
+         DolibarrMenuAdapter.php                                                
+ ------ ----------------------------------------------------------------------- 
+  54     Result of || is always true.                                           
+         🪪  booleanOr.alwaysTrue                                               
+  54     Strict comparison using === between 'always' and 'always' will always  
+         evaluate to true.                                                      
+         🪪  identical.alwaysTrue                                               
+  55     If condition is always true.                                           
+         🪪  if.alwaysTrue                                                      
+ ------ ----------------------------------------------------------------------- 
+
+ [ERROR] Found 25 errors                                                        
+

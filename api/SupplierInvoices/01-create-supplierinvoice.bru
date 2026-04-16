@@ -1,0 +1,41 @@
+meta {
+  name: 01-create-supplierinvoice
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}{{apiBase}}/supplierinvoices
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "socid": 1,
+    "ref_supplier": "SI-1455-X",
+    "total_ht": 1000.5
+  }
+}
+
+tests {
+  test("Crea factura de compra exitosa", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+  
+  test("Devuelve id", function() {
+    const data = res.getBody();
+    if (typeof data === 'object' && data.id) {
+       expect(data.id).to.be.above(0);
+       bru.setEnvVar("testSupplierInvoiceId", data.id);
+    } else {
+       expect(data).to.be.above(0);
+       bru.setEnvVar("testSupplierInvoiceId", data);
+    }
+  });
+}

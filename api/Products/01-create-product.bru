@@ -1,0 +1,48 @@
+meta {
+  name: 01-create-product
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}{{apiBase}}/products
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "ref": "TEST-PROD",
+    "label": "Producto de Test",
+    "description": "Un producto creado por Bruno.",
+    "price": "10.50",
+    "price_ttc": "12.705",
+    "tva_tx": "21.0",
+    "type": "0",
+    "status": "1",
+    "status_buy": "1"
+  }
+}
+
+tests {
+  test("Status 200 o 201 (creado)", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+
+  test("Devuelve ID numérico", function() {
+    const data = res.getBody();
+    // A veces devuelve { id: 1 }, a veces solo el id numérico
+    if (typeof data === 'object' && data.id) {
+       expect(data.id).to.be.above(0);
+       bru.setEnvVar("testProductId", data.id);
+    } else {
+       expect(data).to.be.above(0);
+       bru.setEnvVar("testProductId", data);
+    }
+  });
+}

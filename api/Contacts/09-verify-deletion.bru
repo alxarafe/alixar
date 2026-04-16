@@ -1,0 +1,22 @@
+meta {
+  name: 09 - Verificar Eliminación
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/contacts/{{testContactId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Accept: application/json
+}
+
+tests {
+  test("Status 404 (ya no existe)", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

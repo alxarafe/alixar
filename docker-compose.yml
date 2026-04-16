@@ -1,0 +1,84 @@
+networks:
+    alixar_network:
+        name: alixar_network
+
+services:
+    alixar_nginx:
+        image: nginx:alpine
+        container_name: alixar_nginx
+        restart: ${RESTART}
+        env_file: ".env"
+        ports:
+            - "${HTTP_PORT}:80"
+        networks:
+            - alixar_network
+        volumes:
+            - ".:/var/www/html:rw"
+            - "./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf"
+        depends_on:
+            - alixar_php
+            - alixar_db
+
+    alixar_php:
+        container_name: alixar_php
+        restart: ${RESTART}
+        env_file: ".env"
+        build:
+            context: .
+            dockerfile: .docker/php/Dockerfile
+            args:
+                - USER_ID=${USER_ID}
+                - GROUP_ID=${GROUP_ID}
+        networks:
+            - alixar_network
+        volumes:
+            - ".:/var/www/html:rw"
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+
+    alixar_db:
+        image: mariadb:10.11
+        container_name: alixar_db
+        restart: ${RESTART}
+        env_file: ".env"
+        ports:
+            - "${MARIADB_PORT}:3306"
+        environment:
+            - MARIADB_DATABASE=${MARIADB_DATABASE}
+            - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+        networks:
+            - alixar_network
+        volumes:
+            - "alixar_db_data:/var/lib/mysql"
+
+    alixar_phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: alixar_phpmyadmin
+        restart: ${RESTART}
+        env_file: ".env"
+        ports:
+            - "${PHPMYADMIN_PORT}:80"
+        environment:
+            - PMA_HOST=alixar_db
+            - PMA_PORT=3306
+            - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+        networks:
+            - alixar_network
+        depends_on:
+            - alixar_db
+
+    alixar_frontend:
+        image: node:20-alpine
+        container_name: alixar_frontend
+        restart: ${RESTART}
+        working_dir: /app/frontend
+        ports:
+            - "5173:5173"
+        networks:
+            - alixar_network
+        volumes:
+            - ".:/app:rw"
+        command: "npm run dev -- --host 0.0.0.0"
+
+volumes:
+    alixar_db_data:

@@ -1,0 +1,20 @@
+meta {
+  name: "List Tickets"
+  type: "http"
+  seq: 1
+}
+
+get {
+  url: "{{baseUrl}}/api/tickets"
+  body: "none"
+  auth: "none"
+}
+
+headers {
+  DOLAPIKEY: "{{apiKey}}"
+}
+
+assert {
+  res.status: eq 200
+  res.body: isArray
+}

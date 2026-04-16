@@ -1,0 +1,43 @@
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+SupplierOrders/01-create-supplierorder (201 Created) - 95 ms
+Tests
+   ✓ Crea pedido de proveedor exitoso
+   ✓ Devuelve id
+SupplierOrders/02-get-supplierorder (200 OK) - 20 ms
+Tests
+   ✕ Los datos coinciden
+      expected undefined to equal 1
+   ✓ Obtiene pedido proveedor exitosamente
+SupplierOrders/03-list-supplierorders (200 OK) - 15 ms
+Tests
+   ✓ Lista pedidos proveedor exitosamente
+   ✓ Devuelve array
+SupplierOrders/04-update-supplierorder (200 OK) - 21 ms
+Tests
+   ✓ Actualización exitosa
+SupplierOrders/05-delete-supplierorder (200 OK) - 19 ms
+Tests
+   ✓ Delete exitoso
+SupplierOrders/06-verify-deletion (404 Not Found) - 18 ms
+Tests
+   ✓ El pedido de proveedor eliminado no existe
+
+📊 Execution Summary
+┌───────────────┬────────────────────────┐
+│ Metric        │         Result         │
+├───────────────┼────────────────────────┤
+│ Status        │         ✗ FAIL         │
+├───────────────┼────────────────────────┤
+│ Requests      │ 6 (5 Passed, 1 Failed) │
+├───────────────┼────────────────────────┤
+│ Tests         │          8/9           │
+├───────────────┼────────────────────────┤
+│ Assertions    │          0/0           │
+├───────────────┼────────────────────────┤
+│ Duration (ms) │          952           │
+└───────────────┴────────────────────────┘
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.12.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+npm notice To update run: npm install -g npm@11.12.1
+npm notice

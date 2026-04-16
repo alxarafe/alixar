@@ -1,0 +1,66 @@
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+Invoices/00-create-thirdparty (200 OK) - 60 ms
+Tests
+   ✓ Crea tercero necesario
+Invoices/01-create-invoice (500 Internal Server Error) - 15 ms
+Tests
+   ✕ Factura creada con ID numérico
+      expected NaN to be above +0
+Invoices/02-get-invoice (404 Not Found) - 17 ms
+Tests
+   ✕ Carga exitosa y pertenece al tercero
+      expected 404 to equal 200
+Invoices/03-update-invoice (404 Not Found) - 17 ms
+Tests
+   ✕ Actualización reflejada
+      expected 404 to equal 200
+Invoices/04-post-line (404 Not Found) - 15 ms
+Tests
+   ✕ Línea creada exitosamente
+      expected 404 to equal 200
+Invoices/05-get-lines (404 Not Found) - 13 ms
+Tests
+   ✕ Carga de lineas correcta
+      expected 404 to equal 200
+Invoices/06-put-line (404 Not Found) - 15 ms
+Tests
+   ✕ Línea actualizada devuelve la factura re-calculada
+      expected 404 to equal 200
+Invoices/06b-post-second-line (404 Not Found) - 16 ms
+Tests
+   ✕ Segunda línea creada exitosamente
+      expected 404 to equal 200
+Invoices/07-delete-line (404 Not Found) - 14 ms
+Tests
+   ✕ Línea borrada exitosamente
+      expected 404 to equal 200
+Invoices/08-validate-invoice (404 Not Found) - 16 ms
+Tests
+   ✕ Factura validada exitosamente
+      expected 404 to equal 200
+Invoices/09-delete-invoice (200 OK) - 12 ms
+Tests
+   ✓ Status 200
+Invoices/10-verify-deletion (404 Not Found) - 14 ms
+Tests
+   ✓ Status 404 (ya no existe)
+
+📊 Execution Summary
+┌───────────────┬─────────────────────────┐
+│ Metric        │         Result          │
+├───────────────┼─────────────────────────┤
+│ Status        │         ✗ FAIL          │
+├───────────────┼─────────────────────────┤
+│ Requests      │ 12 (3 Passed, 9 Failed) │
+├───────────────┼─────────────────────────┤
+│ Tests         │          3/12           │
+├───────────────┼─────────────────────────┤
+│ Assertions    │           0/0           │
+├───────────────┼─────────────────────────┤
+│ Duration (ms) │          1310           │
+└───────────────┴─────────────────────────┘
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.12.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+npm notice To update run: npm install -g npm@11.12.1
+npm notice

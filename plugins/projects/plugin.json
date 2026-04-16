@@ -1,0 +1,19 @@
+{
+  "name": "projects",
+  "version": "1.0.0",
+  "displayName": "Proyectos y Tareas",
+  "description": "Gestión de proyectos, tareas y seguimiento de tiempo.",
+  "icon": "fas fa-project-diagram",
+  "author": "Alixar",
+
+  "requires": [],
+  "optionalDeps": ["crm", "trading"],
+  "conflicts": [],
+
+  "provides": {
+    "entities": ["Project", "Task", "Timetracking"],
+    "apiRoutes": "src/Infrastructure/Http/routes.php",
+    "migrations": "migrations/",
+    "schemas": "frontend/schemas/"
+  }
+}

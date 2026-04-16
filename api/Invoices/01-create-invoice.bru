@@ -1,0 +1,33 @@
+meta {
+  name: 01 - Crear Factura Borrador
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}{{apiBase}}/invoices
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "socid": "{{testInvoiceSocId}}",
+    "date": 1712850000,
+    "note_public": "Factura creada por Bruno"
+  }
+}
+
+tests {
+  test("Factura creada con ID numérico", function() {
+    const body = res.getBody();
+    const id = typeof body === 'object' ? (body.id || body) : body;
+    expect(Number(id)).to.be.above(0);
+    bru.setVar("testInvoiceId", Number(id));
+  });
+}

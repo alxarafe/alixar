@@ -1,0 +1,21 @@
+meta {
+  name: 05-delete-supplierorder
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}{{apiBase}}/supplierorders/{{testSupplierOrderId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Delete exitoso", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

@@ -1,0 +1,47 @@
+{
+  "title": "Producto o Servicio",
+  "endpoint": "/products",
+  "detailRoute": "product-ficha",
+  "widget": {
+    "titleField": "label",
+    "subtitleField": "ref",
+    "icon": "fas fa-box"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Clasificación Principal",
+      "children": [
+        { 
+          "type": "Row", 
+          "children": [
+             { "type": "Field", "key": "ref", "label": "Referencia", "inputType": "text", "required": true },
+             { "type": "Field", "key": "type", "label": "Tipo", "inputType": "select", "required": true, "options": [{"value": "0", "label": "Producto"}, {"value": "1", "label": "Servicio"}] }
+          ]
+        },
+        { "type": "Field", "key": "label", "label": "Etiqueta (Nombre Comercial)", "inputType": "text", "required": true },
+        { "type": "Field", "key": "description", "label": "Descripción detallada", "inputType": "text" }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Gestión Comercial",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+            { "type": "Field", "key": "price", "label": "Base Imponible (€)", "inputType": "number", "step": "0.01" },
+            { "type": "Field", "key": "tva_tx", "label": "IVA Aplicado (%)", "inputType": "number", "step": "0.1" }
+          ]
+        },
+        {
+          "type": "Row",
+          "children": [
+            { "type": "Field", "key": "status", "label": "Disponibilidad Venta", "inputType": "select", "options": [{"value": "1", "label": "En Venta"}, {"value": "0", "label": "Fuera de Venta"}] },
+            { "type": "Field", "key": "status_buy", "label": "Disponibilidad Compra", "inputType": "select", "options": [{"value": "1", "label": "En Compra"}, {"value": "0", "label": "Fuera de Compra"}] }
+          ]
+        }
+      ]
+    }
+  ]
+}

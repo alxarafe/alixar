@@ -1,0 +1,40 @@
+meta {
+  name: 01-create-supplierorder
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}{{apiBase}}/supplierorders
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "socid": 1,
+    "ref_supplier": "SO-PROV-11"
+  }
+}
+
+tests {
+  test("Crea pedido de proveedor exitoso", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+  
+  test("Devuelve id", function() {
+    const data = res.getBody();
+    if (typeof data === 'object' && data.id) {
+       expect(data.id).to.be.above(0);
+       bru.setEnvVar("testSupplierOrderId", data.id);
+    } else {
+       expect(data).to.be.above(0);
+       bru.setEnvVar("testSupplierOrderId", data);
+    }
+  });
+}

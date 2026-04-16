@@ -1,0 +1,12 @@
+{
+    "name": "members",
+    "displayName": "Members & Association Management",
+    "version": "1.0.0",
+    "description": "Association and membership management plugin for Alixar",
+    "icon": "UsersIcon",
+    "requires": ["business"],
+    "optionalDeps": [],
+    "apiRoutes": "src/Infrastructure/Http/routes.php",
+    "hooks": "src/Infrastructure/Core/hooks.php",
+    "menus": []
+}

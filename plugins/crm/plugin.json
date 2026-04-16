@@ -1,0 +1,19 @@
+{
+  "name": "crm",
+  "version": "1.0.0",
+  "displayName": "CRM — Terceros, Contactos y Agenda",
+  "description": "Gestión de terceros (clientes, proveedores, prospectos), contactos y eventos comerciales.",
+  "icon": "fas fa-id-card",
+  "author": "Alixar",
+
+  "requires": ["business"],
+  "optionalDeps": [],
+  "conflicts": [],
+
+  "provides": {
+    "entities": ["Contact", "Event"],
+    "apiRoutes": "src/Infrastructure/Http/routes.php",
+    "migrations": "migrations/",
+    "schemas": "frontend/schemas/"
+  }
+}

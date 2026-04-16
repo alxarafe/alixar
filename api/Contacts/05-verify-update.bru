@@ -1,0 +1,37 @@
+meta {
+  name: 05 - Verificar Actualización
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/contacts/{{testContactId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Accept: application/json
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Apellido actualizado", function() {
+    const body = res.getBody();
+    expect(body.lastname).to.equal("BrunoContact Actualizado");
+  });
+
+  test("Ciudad actualizada a Barcelona", function() {
+    const body = res.getBody();
+    expect(body.town).to.equal("Barcelona");
+  });
+
+  test("Cargo actualizado", function() {
+    const body = res.getBody();
+    expect(body.poste).to.equal("Lead Developer");
+  });
+}

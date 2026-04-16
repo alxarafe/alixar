@@ -1,0 +1,15 @@
+id: 005
+title: PDF Generation Service
+app: alixar
+date: 2026-03-04
+priority: medium
+category: feature
+description: |
+  A generic PdfService::render($template, $data) that generates PDF documents from Blade templates
+  and a data array. The framework provides the rendering engine; the application provides the
+  specific templates (invoice.blade.php, proposal.blade.php). Should use a library like DOMPDF
+  or wkhtmltopdf under the hood, configurable via settings.
+use_case: |
+  Alixar needs to generate PDFs for invoices, proposals, orders, shipments, etc. — all with
+  different layouts but the same rendering mechanism. Any business application needs PDF generation
+  and this is a generic service.

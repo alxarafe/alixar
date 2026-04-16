@@ -1,0 +1,47 @@
+# Alixar Core — Traducciones en español
+# Grupo: core
+
+# ── Autenticación ─────────────────────────────────────────
+login_success: "Inicio de sesión exitoso"
+login_failed: "Usuario o contraseña incorrectos"
+logout_success: "Sesión cerrada correctamente"
+account_inactive: "Tu cuenta está inactiva. Contacta con un administrador."
+token_expired: "Tu sesión ha expirado. Inicia sesión de nuevo."
+token_invalid: "Token de autenticación no válido"
+token_revoked: "Esta sesión ha sido revocada"
+unauthorized: "Autenticación requerida"
+
+# ── Autorización ──────────────────────────────────────────
+permission_denied: "No tienes permiso para realizar esta acción"
+insufficient_permissions: "Permisos insuficientes"
+
+# ── Usuarios ──────────────────────────────────────────────
+user_created: "Usuario ':username' creado correctamente"
+user_updated: "Usuario actualizado correctamente"
+user_deleted: "Usuario eliminado correctamente"
+user_not_found: "Usuario no encontrado"
+username_taken: "El nombre de usuario ':username' ya está en uso"
+email_taken: "El email ':email' ya está registrado"
+cannot_delete_superadmin: "No se puede eliminar un usuario superadmin"
+
+# ── Roles ─────────────────────────────────────────────────
+role_created: "Rol ':name' creado correctamente"
+role_updated: "Rol actualizado correctamente"
+role_deleted: "Rol eliminado correctamente"
+role_not_found: "Rol no encontrado"
+role_already_exists: "El rol ':name' ya existe"
+cannot_delete_system_role: "No se puede eliminar el rol de sistema ':name'"
+roles_assigned: "Roles asignados correctamente"
+
+# ── Permisos ──────────────────────────────────────────────
+permissions_synced: "Permisos sincronizados correctamente"
+
+# ── Validación ────────────────────────────────────────────
+field_required: "El campo ':field' es obligatorio"
+invalid_format: "Formato no válido para ':field'"
+value_too_long: "El valor de ':field' es demasiado largo (máx. :max caracteres)"
+
+# ── General ───────────────────────────────────────────────
+not_found: "Recurso no encontrado"
+server_error: "Ha ocurrido un error inesperado"
+success: "Operación completada correctamente"

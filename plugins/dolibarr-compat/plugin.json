@@ -1,0 +1,18 @@
+{
+  "name": "dolibarr-compat",
+  "version": "1.0.0",
+  "displayName": "Dolibarr Compatibility Layer",
+  "description": "Capa de compatibilidad para integrarse con bases de datos heredadas de Dolibarr, exponiendo sus parámetros de configuración y árboles de menú.",
+  "icon": "fas fa-database",
+  "author": "Alixar",
+
+  "requires": [],
+  "optionalDeps": [],
+  "conflicts": [],
+
+  "provides": {
+    "entities": [],
+    "apiRoutes": "src/Infrastructure/Http/routes.php",
+    "migrations": null
+  }
+}

@@ -1,0 +1,29 @@
+meta {
+  name: 04-update-event
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}{{apiBase}}/events/{{testEventId}}
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "label": "Evento Actualizado",
+    "note": "Updated event note"
+  }
+}
+
+tests {
+  test("Actualización exitosa", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

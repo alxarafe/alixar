@@ -1,0 +1,29 @@
+meta {
+  name: 02-get-project
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/projects/{{testProjectId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Obtiene Proyecto exitosamente", function() {
+    expect([200]).to.include(res.getStatus());
+  });
+
+  test("Los datos coinciden", function() {
+    const data = res.getBody();
+    expect(data.socid).to.equal(1);
+    expect(data.title).to.equal("Migración Arquitectura Hexagonal");
+    expect(data.ref).to.equal("PRJ-HEX-01");
+    expect(data).to.have.property('tasks');
+  });
+}

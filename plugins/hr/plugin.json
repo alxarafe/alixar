@@ -1,0 +1,20 @@
+{
+  "name": "hr",
+  "version": "1.0.0",
+  "displayName": "Recursos Humanos (HR)",
+  "description": "Gestión del personal civil, vacaciones, notas de gasto y nóminas.",
+  "icon": "fas fa-users",
+  "author": "Alixar",
+
+  "requires": ["business"],
+  "optionalDeps": ["projects", "finance"],
+  "conflicts": [],
+
+  "provides": {
+    "entities": [
+      "ExpenseReport"
+    ],
+    "apiRoutes": "src/Infrastructure/Http/routes.php",
+    "migrations": "migrations/"
+  }
+}

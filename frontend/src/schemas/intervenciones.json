@@ -1,0 +1,40 @@
+{
+  "title": "Intervenciones",
+  "endpoint": "/interventions",
+  "detailRoute": "intervention-ficha",
+  "widget": {
+    "titleField": "ref",
+    "subtitleField": "title",
+    "icon": "fas fa-wrench"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Datos del Parte",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "ref", "label": "Referencia", "inputType": "text" },
+             { "type": "Field", "key": "title", "label": "Título", "inputType": "text" }
+          ]
+        },
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "dateStart", "label": "Fecha Inicio", "inputType": "date" },
+             { "type": "Field", "key": "dateEnd", "label": "Fecha Fin", "inputType": "date" }
+          ]
+        },
+        { "type": "Field", "key": "description", "label": "Descripción", "inputType": "textarea" }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Asignación",
+      "children": [
+        { "type": "Field", "key": "thirdPartyId", "label": "ID Cliente", "inputType": "number", "required": true }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "title": "Pedidos a Proveedores",
+  "endpoint": "/supplierorders",
+  "detailRoute": "supplier-order-ficha",
+  "widget": {
+    "titleField": "ref",
+    "subtitleField": "date_commande",
+    "icon": "fas fa-parachute-box"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Documento de Compra",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+            { "type": "Field", "key": "ref", "label": "Referencia ERP", "inputType": "text", "required": true },
+            { "type": "Field", "key": "ref_supplier", "label": "Referencia de Confirmación (Proveedor)", "inputType": "text" }
+          ]
+        },
+        { "type": "Field", "key": "date_commande", "label": "Fecha del Pedido", "inputType": "date", "required": true }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Aprovisionamiento",
+      "children": [
+        { "type": "Field", "key": "fk_soc", "label": "Proveedor (ID numérico)", "inputType": "number", "required": true }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Circulares y Notas",
+      "children": [
+        { "type": "Field", "key": "note_private", "label": "Observaciones para Almacén", "inputType": "text" },
+        { "type": "Field", "key": "note_public", "label": "Observaciones Impresas", "inputType": "text" }
+      ]
+    }
+  ]
+}

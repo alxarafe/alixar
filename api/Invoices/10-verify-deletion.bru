@@ -1,0 +1,21 @@
+meta {
+  name: 10 - Verificar borrado
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/invoices/{{testInvoiceId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Status 404 (ya no existe)", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

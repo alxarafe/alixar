@@ -1,0 +1,29 @@
+meta {
+  name: 04-update-supplierorder
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}{{apiBase}}/supplierorders/{{testSupplierOrderId}}
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "ref_supplier": "SO-001X-UPD",
+    "note_private": "Updated supplier order"
+  }
+}
+
+tests {
+  test("Actualización exitosa", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+}

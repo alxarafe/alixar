@@ -1,0 +1,28 @@
+meta {
+  name: 02-get-supplierorder
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/supplierorders/{{testSupplierOrderId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Obtiene pedido proveedor exitosamente", function() {
+    expect([200]).to.include(res.getStatus());
+  });
+
+  test("Los datos coinciden", function() {
+    const data = res.getBody();
+    expect(data.socid).to.equal(1);
+    expect(data.ref_supplier).to.equal("SO-PROV-11");
+    expect(data).to.have.property('lines');
+  });
+}

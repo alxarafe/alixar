@@ -1,0 +1,21 @@
+meta {
+  name: 06-verify-deletion
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/supplierinvoices/{{testSupplierInvoiceId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("La factura de proveedor eliminada no existe", function() {
+    expect(res.getStatus()).to.equal(404);
+  });
+}

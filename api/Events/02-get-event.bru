@@ -1,0 +1,28 @@
+meta {
+  name: 02-get-event
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/events/{{testEventId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Obtiene Evento exitosamente", function() {
+    expect([200]).to.include(res.getStatus());
+  });
+
+  test("Los datos coinciden", function() {
+    const data = res.getBody();
+    expect(data.title).to.equal("Llamada Presentación Alixar");
+    expect(data.typeCode).to.equal("AC_TEL");
+    expect(data.note).to.equal("Reunión súper satisfactoria con el cliente.");
+  });
+}

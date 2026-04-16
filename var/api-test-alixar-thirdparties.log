@@ -1,0 +1,100 @@
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+ThirdParties/01-create-thirdparty (200 OK) - 59 ms
+Tests
+   ✓ Status 200 o 201 (creado)
+   ✓ Devuelve ID numérico
+ThirdParties/08b-create-bankaccount (200 OK) - 23 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta tiene ID numérico
+ThirdParties/02-get-thirdparty (200 OK) - 20 ms
+Tests
+   ✓ Status 200
+   ✓ Tiene campo 'id' o 'rowid'
+   ✓ Nombre es 'BrunoTest S.L.'
+   ✓ Tiene campo 'status'
+   ✓ Tiene campo 'client'
+   ✓ Tiene campo 'address'
+   ✓ Tiene campo 'town'
+   ✓ Tiene campo 'email'
+   ✓ Tiene campo 'phone'
+ThirdParties/08c-get-bankaccounts (200 OK) - 19 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta es un array
+   ✓ Objeto contiene fields correctos
+ThirdParties/03-list-thirdparties (200 OK) - 17 ms
+Tercero de test encontrado
+Tests
+   ✓ Status 200
+   ✓ Devuelve un array
+   ✓ Cada elemento tiene 'id' o 'rowid'
+   ✓ Cada elemento tiene 'name' o 'nom'
+   ✓ Respeta el límite
+   ✓ El tercero creado está en la lista
+ThirdParties/08d-update-bankaccount (200 OK) - 25 ms
+Tests
+   ✓ Status 200
+   ✓ Banco actualizado a BBVA
+ThirdParties/04-list-customers-only (200 OK) - 17 ms
+Tests
+   ✓ Status 200
+   ✓ Todos son clientes (client = 1 o 3)
+ThirdParties/08e-delete-bankaccount (200 OK) - 21 ms
+Tests
+   ✓ Status 200
+ThirdParties/05-update-thirdparty (200 OK) - 23 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta tiene el objeto actualizado
+ThirdParties/06-verify-update (200 OK) - 17 ms
+Tests
+   ✓ Status 200
+   ✓ Nombre actualizado
+   ✓ Ciudad actualizada a Barcelona
+   ✓ Teléfono actualizado
+ThirdParties/07-get-nonexistent (404 Not Found) - 18 ms
+Tests
+   ✓ Status 404
+ThirdParties/08-create-without-name (422 ) - 19 ms
+Tests
+   ✓ Status 4xx (error de validación)
+ThirdParties/08f-get-categories (200 OK) - 19 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta es un array
+ThirdParties/08g-get-supplier-categories (200 OK) - 18 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta es un array
+ThirdParties/08h-get-representatives (200 OK) - 17 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta es un array
+ThirdParties/09-delete-thirdparty (200 OK) - 26 ms
+Tests
+   ✓ Status 200
+   ✓ Respuesta indica éxito
+ThirdParties/10-verify-deletion (404 Not Found) - 16 ms
+Tests
+   ✓ Status 404 (ya no existe)
+
+📊 Execution Summary
+┌───────────────┬────────────────┐
+│ Metric        │     Result     │
+├───────────────┼────────────────┤
+│ Status        │     ✓ PASS     │
+├───────────────┼────────────────┤
+│ Requests      │ 17 (17 Passed) │
+├───────────────┼────────────────┤
+│ Tests         │     44/44      │
+├───────────────┼────────────────┤
+│ Assertions    │      0/0       │
+├───────────────┼────────────────┤
+│ Duration (ms) │      2044      │
+└───────────────┴────────────────┘
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.12.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+npm notice To update run: npm install -g npm@11.12.1
+npm notice

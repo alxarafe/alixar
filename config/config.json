@@ -1,0 +1,29 @@
+{
+    "main": {
+        "path": "/var/www/html/public",
+        "url": "http://localhost:8083",
+        "data": "",
+        "theme": "default",
+        "language": "es_ES",
+        "timezone": "Europe/Madrid"
+    },
+    "db": {
+        "type": "mysql",
+        "host": "alixar_db",
+        "user": "root",
+        "pass": "root",
+        "name": "alixar_db",
+        "port": "3306",
+        "prefix": "",
+        "charset": "utf8mb4",
+        "collation": "utf8mb4_unicode_ci",
+        "encryption": "",
+        "encrypt_type": ""
+    },
+    "security": {
+        "debug": true,
+        "unique_id": "",
+        "https": false,
+        "jwt_secret_key": ""
+    }
+}

@@ -1,0 +1,31 @@
+# AI Agent Workflow Rules for Alixar ERP
+
+You are contributing to the Alixar project, an open-source ERP/CRM under aggressive modernization towards a Hexagonal Architecture (Ports and Adapters) with a Vue 3 Headless Frontend.
+
+## 核心 (Core) Development Policy: TDD & API-First
+
+Whenever you are tasked with creating a new feature, domain module, or infrastructural adapter, you MUST strictly adhere to the following workflow:
+
+### 1. Database State & Migrations
+- The current SQL database (`alixar_db`) should contain ONLY native, modern Alixar schema tables.
+- Legacy (Dolibarr) tables must NOT be mixed here. Legacy structures are accessed via the `dolibarr-compat` plugin and bridging adapters.
+- Any new entity requires a modern Migration script.
+
+### 2. Test-Driven Development (TDD)
+Before modifying the Vue Frontend or finalizing the API logic:
+- **Write PHPUnit Integration/Feature Tests** covering the newly requested functionality (e.g., in `tests/Core/...` or `tests/Plugins/{Name}/...`). 
+- Tests MUST simulate HTTP interactions to verify that the Controller, Use Cases, Repositories, Authorization roles, and I18n translations are functioning in complete isolation from the frontend.
+- Tests MUST guarantee full compliance with Dolibarr business logic (unless explicitly deprecated).
+
+### 3. API-First Validation
+- The endpoint and Hexagonal flow must be thoroughly built and verified passing the PHPUnit test suite.
+- If applicable, implement the mapping translation (Adapter) inside the `dolibarr-compat` plugin to ensure that legacy Dolibarr schema interactions work synchronously behind the scenes.
+
+### 4. Frontend (Server-Driven UI)
+- ONLY after the API tests pass, proceed to build or modify the Vue 3 Headless interface.
+- Ensure the Frontend dynamically respects the Schema provided by the Hexagonal API.
+
+### 5. Professionalism Standards & Optimization (La Navaja de Guillermo)
+- **DRY (Don't Repeat Yourself) & Simplicity**: Antes de escribir código nuevo, detente a pensar. ¿Se puede abstraer? ¿Se está repitiendo lógica? Aplica el principio de *Guillermo de Ockham*: la solución más sencilla, sin código redundante ni sobreingeniería, siempre es la mejor. Optimiza el código repetido siempre que lo detectes.
+- **Wait for explicit USER approval** before making destructive database drops unless explicitly requested in the prompt.
+- **Do not bypass the Domain layer**. All business logic must live inside Domain entities and Use Cases, absolutely no `llx_` hardcoded constants inside application code.

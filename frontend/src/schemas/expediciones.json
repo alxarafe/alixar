@@ -1,0 +1,33 @@
+{
+  "title": "Expediciones",
+  "endpoint": "/shipments",
+  "detailRoute": "shipment-ficha",
+  "widget": {
+    "titleField": "ref",
+    "subtitleField": "thirdPartyId",
+    "icon": "fas fa-truck"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Datos de Expedición",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "ref", "label": "Referencia", "inputType": "text" },
+             { "type": "Field", "key": "trackingNumber", "label": "Nº Seguimiento", "inputType": "text" }
+          ]
+        },
+        { "type": "Field", "key": "dateDelivery", "label": "Fecha Entrega", "inputType": "date" }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Tercero Asociado",
+      "children": [
+        { "type": "Field", "key": "thirdPartyId", "label": "ID Tercero", "inputType": "number", "required": true }
+      ]
+    }
+  ]
+}

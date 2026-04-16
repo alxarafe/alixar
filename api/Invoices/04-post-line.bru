@@ -1,0 +1,36 @@
+meta {
+  name: 04 - Añadir linea a factura
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}{{apiBase}}/invoices/{{testInvoiceId}}/lines
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "desc": "Servicio de Consultoría",
+    "subprice": "100.00",
+    "qty": "2",
+    "tva_tx": "21.000",
+    "remise_percent": "10.0"
+  }
+}
+
+tests {
+  test("Línea creada exitosamente", function() {
+    expect(res.getStatus()).to.equal(200);
+    const body = res.getBody();
+    const id = typeof body === 'object' ? (body.id || body) : body;
+    expect(Number(id)).to.be.above(0);
+    bru.setVar("testInvoiceLineId", Number(id));
+  });
+}

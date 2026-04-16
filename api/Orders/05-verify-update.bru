@@ -1,0 +1,26 @@
+meta {
+  name: 05-verify-update
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}{{apiBase}}/orders/{{testOrderId}}
+  body: none
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+}
+
+tests {
+  test("Verifica actualización", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+
+  test("Datos actualizados correctos", function() {
+    const data = res.getBody();
+    expect(data.ref_client).to.equal("CMD-001X-UPD");
+  });
+}

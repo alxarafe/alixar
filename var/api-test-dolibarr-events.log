@@ -1,0 +1,49 @@
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+Events/01-create-event (200 OK) - 34 ms
+Tests
+   ✕ Devuelve id
+      expected 'API not found (failed to include API file)' to be a number or a date
+   ✓ Crea Evento exitoso
+Events/02-get-event (403 Forbidden) - 3 ms
+Tests
+   ✕ Obtiene Evento exitosamente
+      expected [ 200 ] to include 403
+   ✕ Los datos coinciden
+      expected undefined to equal 'Llamada Presentación Alixar'
+Events/03-list-events (200 OK) - 7 ms
+Tests
+   ✕ Devuelve array
+      expected 'API not found (failed to include API …' to be an array
+   ✓ Lista eventos exitosamente
+Events/04-update-event (403 Forbidden) - 4 ms
+Tests
+   ✕ Actualización exitosa
+      expected 403 to equal 200
+Events/05-delete-event (403 Forbidden) - 3 ms
+Tests
+   ✕ Delete exitoso
+      expected 403 to equal 200
+Events/06-verify-deletion (403 Forbidden) - 2 ms
+Tests
+   ✕ El evento eliminado no existe
+      expected 403 to equal 404
+
+📊 Execution Summary
+┌───────────────┬──────────────┐
+│ Metric        │    Result    │
+├───────────────┼──────────────┤
+│ Status        │    ✗ FAIL    │
+├───────────────┼──────────────┤
+│ Requests      │ 6 (6 Failed) │
+├───────────────┼──────────────┤
+│ Tests         │     2/9      │
+├───────────────┼──────────────┤
+│ Assertions    │     0/0      │
+├───────────────┼──────────────┤
+│ Duration (ms) │     578      │
+└───────────────┴──────────────┘
+npm notice
+npm notice New major version of npm available! 10.8.2 -> 11.12.1
+npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.12.1
+npm notice To update run: npm install -g npm@11.12.1
+npm notice

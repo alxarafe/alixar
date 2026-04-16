@@ -1,0 +1,16 @@
+id: 001
+title: Generic Dictionary Editor Controller
+app: alixar
+date: 2026-03-04
+priority: high
+category: feature
+description: |
+  A configurable ResourceController that generates automatic CRUD for any reference/lookup table.
+  Example: `?model=CCountry` → list/edit countries. Any app has lookup tables (countries, currencies,
+  categories, statuses...). This controller should accept a model class as parameter and auto-generate
+  list columns and edit fields from the model's $fillable property.
+use_case: |
+  In Alixar (Dolibarr migration), there are 20+ dictionary tables (c_country, c_paiement,
+  c_payment_term, c_typent, c_tva, c_units, c_forme_juridique, c_incoterms, etc.).
+  Writing a controller for each is impractical. A generic editor that works with any Model
+  would save weeks of development and benefit any Alxarafe application.

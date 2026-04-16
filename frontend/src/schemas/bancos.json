@@ -1,0 +1,53 @@
+{
+  "title": "Activos Financieros Bancarios",
+  "endpoint": "/bankaccounts",
+  "detailRoute": "bank-ficha",
+  "widget": {
+    "titleField": "label",
+    "subtitleField": "bank",
+    "icon": "fas fa-piggy-bank"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Entidad y Cuenta",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+            { "type": "Field", "key": "ref", "label": "Referencia Corta", "inputType": "text", "required": true },
+            { "type": "Field", "key": "label", "label": "Etiqueta Contable", "inputType": "text", "required": true }
+          ]
+        },
+        {
+          "type": "Row",
+          "children": [
+            { "type": "Field", "key": "bank", "label": "Nombre del Banco", "inputType": "text", "required": true },
+            { "type": "Field", "key": "currency_code", "label": "Divisa", "inputType": "text", "placeholder": "EUR", "required": true }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Coordenadas SEPA",
+      "children": [
+        { "type": "Field", "key": "iban_prefix", "label": "Código IBAN completo", "inputType": "text" },
+        { "type": "Field", "key": "bic", "label": "Código SWIFT/BIC", "inputType": "text" }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Restricciones de Liquidez",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+            { "type": "Field", "key": "min_allowed", "label": "Mínimo Autorizado (Riesgo)", "inputType": "number" },
+            { "type": "Field", "key": "min_desired", "label": "Mínimo Deseado (Alerta)", "inputType": "number" }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "logistics",
+  "version": "1.0.0",
+  "displayName": "Logística — Expediciones y Recepciones",
+  "description": "Gestión de envíos y recepción de mercancías.",
+  "icon": "fas fa-truck",
+  "author": "Alixar",
+
+  "requires": ["business", "trading", "products"],
+  "optionalDeps": [],
+  "conflicts": [],
+
+  "provides": {
+    "entities": [
+      "Shipment", "Reception"
+    ],
+    "apiRoutes": "src/Infrastructure/Http/routes.php",
+    "migrations": "migrations/"
+  }
+}

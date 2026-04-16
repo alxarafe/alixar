@@ -1,0 +1,18 @@
+{
+  "name": "tenant",
+  "version": "1.0.0",
+  "displayName": "Multi-Tenant — Gestión de Instalaciones",
+  "description": "Permite gestionar múltiples instalaciones, bases de datos y accesos de usuarios por tenant.",
+  "icon": "fas fa-building",
+  "author": "Alixar",
+
+  "requires": [],
+  "optionalDeps": [],
+  "conflicts": [],
+
+  "provides": {
+    "entities": ["Tenant", "TenantGroup", "TenantUser"],
+    "apiRoutes": "src/Infrastructure/Http/routes.php",
+    "migrations": "migrations/"
+  }
+}

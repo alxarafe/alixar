@@ -1,0 +1,35 @@
+{
+  "title": "Contacto / Dirección",
+  "endpoint": "/contacts",
+  "detailRoute": "contact-ficha",
+  "widget": {
+    "titleField": "lastname",
+    "subtitleField": "email",
+    "icon": "fas fa-user-circle"
+  },
+  "schema": [
+    {
+       "type": "Panel",
+       "title": "Datos Personales",
+       "children": [
+          { "type": "Row", "children": [
+             { "type": "Field", "key": "firstname", "label": "Nombre", "inputType": "text" },
+             { "type": "Field", "key": "lastname", "label": "Apellidos", "inputType": "text", "required": true }
+          ]},
+          { "type": "Field", "key": "fk_soc", "label": "Tercero Asociado (ID)", "inputType": "number", "placeholder": "ID numérico del tercero" }
+       ]
+    },
+    {
+       "type": "Panel",
+       "title": "Contacto de Empresa",
+       "children": [
+          { "type": "Field", "key": "email", "label": "Correo electrónico", "inputType": "text" },
+          { "type": "Row", "children": [
+             { "type": "Field", "key": "phone_pro", "label": "Tlf. Profesional", "inputType": "text" },
+             { "type": "Field", "key": "phone_mobile", "label": "Tlf. Móvil", "inputType": "text" }
+          ]},
+          { "type": "Field", "key": "town", "label": "Población", "inputType": "text" }
+       ]
+    }
+  ]
+}

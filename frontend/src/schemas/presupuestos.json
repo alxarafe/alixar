@@ -1,0 +1,39 @@
+{
+  "title": "Presupuestos Comerciales",
+  "endpoint": "/proposals",
+  "detailRoute": "proposal-ficha",
+  "widget": {
+    "titleField": "ref",
+    "subtitleField": "datep",
+    "icon": "fas fa-file-signature"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Datos del Presupuesto",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "ref", "label": "Referencia", "inputType": "text", "required": true },
+             { "type": "Field", "key": "ref_client", "label": "Referencia Cliente", "inputType": "text" }
+          ]
+        },
+        {
+          "type": "Row",
+          "children": [
+             { "type": "Field", "key": "datep", "label": "Fecha Emisión", "inputType": "date", "required": true },
+             { "type": "Field", "key": "fin_validite", "label": "Fin Validez", "inputType": "date", "required": true }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Tercero Asociado",
+      "children": [
+        { "type": "Field", "key": "fk_soc", "label": "ID Tercero", "inputType": "number", "required": true }
+      ]
+    }
+  ]
+}

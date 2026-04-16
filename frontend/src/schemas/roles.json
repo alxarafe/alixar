@@ -1,0 +1,32 @@
+{
+  "endpoint": "/roles",
+  "detailRoute": "role-ficha",
+  "title": "Roles del Sistema",
+  "widget": {
+    "titleField": "name",
+    "subtitleField": "description",
+    "icon": "fas fa-shield-alt"
+  },
+  "schema": [
+    {
+      "type": "Panel",
+      "title": "Configuración del Rol",
+      "children": [
+        { "type": "Field", "key": "name", "label": "Nombre Mnemotécnico", "inputType": "text", "required": true },
+        { "type": "Field", "key": "description", "label": "Descripción Corta", "inputType": "text" }
+      ]
+    },
+    {
+      "type": "Panel",
+      "title": "Propiedades Avanzadas",
+      "children": [
+        {
+          "type": "Row",
+          "children": [
+            { "type": "Field", "key": "is_system", "label": "Es Rol de Sistema (Inborrable)", "inputType": "select", "options": [{"value": "1", "label": "Sí"}, {"value": "0", "label": "No"}] }
+          ]
+        }
+      ]
+    }
+  ]
+}

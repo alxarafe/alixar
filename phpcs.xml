@@ -6,12 +6,7 @@
     <arg name="extensions" value="php"/>
     <arg name="parallel" value="80"/>
 
-    <file>Core</file>
-    <file>Dolibarr</file>
-    <file>dev</file>
-    <file>public</file>
-    <file>scripts</file>
-    <file>test</file>
+    <file>src</file>
     <exclude-pattern>vendor/*</exclude-pattern>
 
     <!-- Include the whole PSR-1 standard -->
@@ -57,10 +52,6 @@
         <severity>0</severity>
     </rule>
 
-    <rule ref="Generic.Functions.CallTimePassByReference">
-        <severity>0</severity>
-    </rule>
-
     <rule ref="Generic.NamingConventions.UpperCaseConstantName">
         <severity>0</severity>
     </rule>
@@ -72,15 +63,6 @@
     <rule ref="Generic.Strings.UnnecessaryStringConcat.Found">
         <severity>0</severity>
     </rule>
-
-    <!--
-    <rule ref="Generic.Files.LineLength">
-        <properties>
-            <property name="lineLimit" value="1000"/>
-            <property name="absoluteLineLimit" value="0"/>
-        </properties>
-    </rule>
-    -->
 
     <rule ref="Generic.Files.LineLength.MaxExceeded">
         <severity>0</severity>
@@ -239,11 +221,4 @@
     <rule ref="Zend.NamingConventions.ValidVariableName.MemberVarContainsNumbers">
         <severity>0</severity>
     </rule>
-
-    <!-- The testing bootstrap file uses string concats to stop IDEs seeing the class aliases -->
-    <!--
-    <rule ref="Generic.Strings.UnnecessaryStringConcat">
-        <exclude-pattern>src/Alxarafe/Test/BootStrap.php</exclude-pattern>
-    </rule>
-    -->
 </ruleset>

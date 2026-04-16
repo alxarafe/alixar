@@ -1,0 +1,48 @@
+meta {
+  name: 01-create-bankaccount
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}{{apiBase}}/thirdparties/{{testThirdPartyId}}/bankaccounts
+  body: json
+  auth: none
+}
+
+headers {
+  DOLAPIKEY: {{apiKey}}
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "bank": "Banco Santander",
+    "code_banque": "0049",
+    "code_guichet": "1234",
+    "number": "5678901234",
+    "cle_rib": "56",
+    "proprio": "Juan Perez",
+    "owner_address": "Calle Falsa 123",
+    "label": "Cuenta de Pagos"
+  }
+}
+
+tests {
+  test("Status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Respuesta tiene ID numérico", function() {
+    const body = res.getBody();
+    const id = typeof body === 'object' ? (body.id || body) : body;
+    expect(Number(id)).to.be.above(0);
+  });
+  
+  // Guardamos el ID para siguientes tests
+  const body = res.getBody();
+  const idValue = typeof body === 'object' ? (body.id || body) : body;
+  if (idValue) {
+    bru.setEnvVar("testBankAccountId", Number(idValue));
+  }
+}
