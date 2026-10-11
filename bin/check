@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# bin/check — Complete local validation authority for Alixar
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
+cd "${PROJECT_ROOT}"
+
+echo "=== Alixar local validation ==="
+echo ""
+
+# 1. Build image (runs tests in build stage)
+echo "[1/4] Building image (includes tests)..."
+docker compose build app
+echo ""
+
+# 2. Start container
+echo "[2/4] Starting container..."
+export ALIXAR_JAVA_PORT="${ALIXAR_JAVA_PORT:-48081}"
+docker compose up --detach --wait --wait-timeout 60 app
+echo ""
+
+# 3. Verify health endpoint
+echo "[3/4] Verifying /health endpoint..."
+HEALTH_URL="http://127.0.0.1:${ALIXAR_JAVA_PORT}/health"
+for i in {1..30}; do
+    if response=$(curl --silent --show-error --max-time 5 \
+        --header 'Accept: application/json' \
+        --write-out '\n%{http_code}\n%{content_type}' "${HEALTH_URL}" 2>/dev/null); then
+        http_code=$(echo "${response}" | tail -n2 | head -n1)
+        content_type=$(echo "${response}" | tail -n1)
+        body=$(echo "${response}" | head -n -2)
+        if [[ "${http_code}" == "200" ]] && \
+           [[ "${content_type,,}" =~ ^application/json([[:space:]]*;.*)?$ ]] && \
+           [[ "${body}" == '{"status":"ok"}' ]]; then
+            echo "Health check passed: ${HEALTH_URL}"
+            break
+        fi
+    fi
+    if [[ $i -eq 30 ]]; then
+        echo "ERROR: /health did not become available within 60 seconds" >&2
+        docker compose logs app
+        exit 1
+    fi
+    sleep 2
+done
+echo ""
+
+# 4. Cleanup
+echo "[4/4] Cleaning up..."
+docker compose down --remove-orphans
+echo ""
+
+echo "=== All checks passed ==="
