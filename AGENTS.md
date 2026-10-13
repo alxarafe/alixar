@@ -84,7 +84,7 @@ conversation is not a final decision unless explicitly approved.
 The current technical baseline is a proposal unless separately approved:
 
 - Java 25 LTS;
-- a stable Spring Boot release officially compatible with Java 25;
+- Spring Boot 4.1.1 (stable, compatible with Java 25);
 - Maven and Maven Wrapper;
 - Docker and Docker Compose as the only supported project environment.
 
@@ -139,29 +139,79 @@ is required, dynamically assigned host ports should be preferred and discovered
 programmatically. Infrastructure services such as PostgreSQL must not publish
 host ports unless host access is explicitly required.
 
-## Domain boundary
+## Pragmatic hexagonal architecture
 
-The future domain of Alixar must not depend directly on:
+Alixar follows a pragmatic hexagonal architecture that **emerges from real use
+cases**. Domain and application logic must not depend directly on Spring, Docker,
+Flyway, PostgreSQL, HTTP, JSON, Dolibarr, or other infrastructure technologies.
+Infrastructure should remain replaceable behind appropriate boundaries when actual
+use cases require them. Controllers, persistence implementations, and external
+integrations belong to adapters or infrastructure rather than business logic.
 
-- Spring
-- HTTP
-- JSON
-- jOOQ
-- Flyway
-- Docker
-- Dolibarr
-- llx_*
+**Ports, adapters, repositories, services, domain types and package structures
+exist only when a concrete capability needs them.** Hexagonal architecture is used
+to keep business logic and external systems replaceable, not to produce visual
+package symmetry.
 
-No domain objects are created in this bootstrap to demonstrate this rule.
-The rule applies when domain code is introduced in future tasks.
+Do not create speculative ports, adapters, repositories, domain entities,
+services, or empty package structures before a real use case needs them. Do not
+create architecture for visual package symmetry; avoid both framework-driven
+domain design and unnecessary abstraction.
 
-## Legacy boundary
+**Small duplication is preferable to a more complex abstraction when abstraction
+would reduce clarity.**
 
-`alixar-legacy` and Dolibarr are references of behaviour and knowledge.
+## Validation-layer separation
 
-Do not copy code from either of them.
+Alixar has three complementary validation levels that must not be treated as
+interchangeable:
 
-Do not import packages or files from `alixar-legacy`.
+- **`./bin/test`** — Deterministic application/component tests. Runs in Docker,
+  uses controlled HTTP doubles. Proves internal logic correctness.
+
+- **`./bin/check`** — Self-contained complete validation of Alixar itself. Builds
+  image, runs tests, starts container, verifies `/health`, cleans up. Does not
+  depend on any external reference system.
+
+- **`./bin/check-reference`** — Real compatibility/integration verification
+  against the sibling `dolibarr-reference` repository. Uses actual Dolibarr 24.0.1
+  to prove the adapter works against observed legacy behavior.
+
+A green `./bin/test` does not prove real Dolibarr compatibility.
+A passing `./bin/check-reference` does not replace normal tests or CI.
+Do not make `./bin/check` depend on the sibling reference repository.
+
+## Dolibarr reference authority rule
+
+`dolibarr-reference` is the authority for reproducible observed legacy behavior.
+
+But:
+- `dolibarr-reference` is **not** Alixar's domain model,
+- `dolibarr-reference` is **not** Alixar's canonical API,
+- `dolibarr-reference` is **not** an implementation dependency of the domain/application layers.
+
+The transformation flow is:
+
+```text
+observed Dolibarr behavior
+        ↓
+explicit Alixar contract decision
+        ↓
+anti-corruption adapter
+```
+
+Never:
+
+```text
+Dolibarr Swagger/DTO
+        ↓
+copied Alixar API
+```
+
+Swagger and source inspection are evidence sources only.
+Observed behavior wins over assumptions or incomplete documentation.
+Legacy names such as `llx_*`, `fk_soc`, `socid`, `lastname` must remain confined
+to the legacy boundary when needed.
 
 ## Verification requirements
 
@@ -183,13 +233,16 @@ cleanup evidence. Do not claim a check that was not actually executed.
 
 ## Safe repository changes
 
-Preserve unrelated user changes. Inspect the working tree before editing. Use
-`apply_patch` for repository edits.
+Preserve unrelated user changes. **Inspect staged, unstaged, and untracked
+changes before editing.** Use focused patches for repository edits.
 
 Do not use destructive commands such as broad recursive deletion, hard resets,
-or checkout-based overwrites unless the human explicitly requests the exact
-operation. Resolve targets before destructive actions and prefer recoverable
-operations where practical.
+stash, checkout-based overwrites, or broad deletes unless the human explicitly
+requests the exact operation. Resolve targets before destructive actions and
+prefer recoverable operations where practical.
+
+If an approved change cannot be isolated from unrelated user work, stop and
+report the conflict.
 
 Do not expose secrets, credentials, tokens, or private data in source code,
 logs, documentation, commits, or final reports.
@@ -202,6 +255,93 @@ Detailed Spanish working documentation may be kept under the local `private/`
 directory. That directory must remain excluded by `.gitignore` and must not be
 included in Docker build contexts or deployed artifacts. It is not a security
 boundary and must not be used to store secrets.
+
+## Public documentation policy
+
+`README.md` is a **stable public landing page** for project purpose, high-level
+capabilities, architecture and ecosystem relationships, essential quick start,
+onboarding and configuration, principal limitations, verifiable badges, and
+links to detailed documentation.
+
+README is **NOT**:
+- a changelog;
+- a task history;
+- an endpoint catalogue;
+- a test inventory;
+- a running list of completed slices.
+
+Functional and technical detail belongs primarily under `docs/`.
+
+**Every task must review documentation impact** after implementation, validation
+and scope review, before the final local commit. If the change makes public
+behavior, architecture, configuration, workflow, capability or limitations
+materially false or incomplete, update the relevant documentation **within the
+same task**. Do not modify docs merely to record that a review happened.
+
+## Cross-repository documentation policy
+
+Alixar participates in:
+- `dolibarr-reference`
+- `alxarafe/alixar`
+- `alxarafe/solucar-web`
+
+Cross-repository documentation synchronization is required only when a change
+affects:
+- shared policy;
+- canonical API/contract expectations;
+- architecture/ecosystem relationship;
+- materially false information in another repository;
+- a significant milestone genuinely visible across repositories.
+
+Do not modify multiple repositories for every small feature.
+Changes in each repository must remain separate commits/tasks.
+Historical reports must remain historical and must not be rewritten to appear
+current.
+
+## Badge policy
+
+Badges may represent only **real and verifiable facts**.
+
+Distinguish at least:
+- GitHub CI status;
+- local Alixar validation (`./bin/check`);
+- real `dolibarr-reference` compatibility check (`./bin/check-reference`);
+- future full-stack Solucar → Alixar verification.
+
+Never use a static green badge to imply a check that GitHub does not actually
+execute continuously.
+Badge links and workflow names must remain current.
+
+## No magic literals
+
+Any literal with meaningful **domain, contract, protocol, configuration, or
+behavioral** semantics should have an explicit source of truth rather than being
+scattered. This includes, where applicable:
+
+- endpoint paths;
+- HTTP headers;
+- media types;
+- status/error codes;
+- configuration keys;
+- environment-variable names;
+- legacy integration header names;
+- timeouts;
+- limits;
+- state names;
+- regular expressions;
+- database/schema identifiers with semantic meaning.
+
+Preference order:
+1. framework/platform constant or enum;
+2. existing project/domain type or constant;
+3. configuration;
+4. narrowly scoped named constant.
+
+Do not mechanically replace all literals. Explicitly allow incidental fixture
+values, array indexes, loop counters, and obvious structural values to remain
+inline. Do not create useless constants such as `ZERO`, `ONE`, `TRUE`.
+
+During final scope review, inspect newly introduced meaningful literals.
 
 ## Engineering simplicity
 
@@ -220,3 +360,42 @@ Do not introduce layers, helpers, factories, interfaces, services or abstraction
 Simplicity must not compromise correctness, security, performance, clarity, testability or contractual behavior.
 
 When duplication is small and removing it would create a more complex abstraction, prefer the clearer solution over mechanically applying DRY.
+
+## Deployment authorization
+
+Implementation approval permits implementation, validation, staging, and final
+local atomic commit. It does **NOT** authorize:
+
+- push
+- PR creation
+- merge
+- tag
+- release
+- publication
+- deployment
+
+Deployment requires separate express authorization.
+Post-deployment checks only apply when deployment itself has been authorized.
+
+## Legacy boundary
+
+`alixar-legacy` and Dolibarr are references for behavior and knowledge only.
+
+Do not copy code from either of them.
+
+Do not import packages or files from `alixar-legacy`.
+
+## Domain boundary
+
+The domain layer must not depend directly on:
+
+- Spring
+- HTTP
+- JSON
+- jOOQ
+- Flyway
+- Docker
+- Dolibarr
+- llx_* naming conventions
+
+This rule applies when domain code is introduced in future tasks.

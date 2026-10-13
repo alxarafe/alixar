@@ -22,6 +22,12 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 | Legacy boundary: no code copied from alixar-legacy or Dolibarr | Approved |
 | Apache-2.0 license | Approved |
 
+## Implemented
+
+- Canonical Contact read (`GET /api/contacts/{id}`)
+- Dolibarr adapter for Contact read (anti-corruption layer)
+- Real integration verification against `dolibarr-reference` 24.0.1
+
 ## Planned (Not Implemented)
 
 - PostgreSQL persistence
@@ -31,7 +37,6 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - OpenAPI specification
 - ERP modules (thirdparties, catalog, sales, billing, inventory, accounting)
 - Module system
-- Dolibarr adapters
 - Testcontainers for integration tests
 - Bruno for API conformance tests
 - Event-driven architecture
@@ -40,7 +45,7 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 
 ## Not Implemented
 
-Everything not listed as "Approved" above.
+Everything not listed as "Approved" or "Implemented" above.
 
 ## Domain Boundary
 
