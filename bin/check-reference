@@ -1,0 +1,268 @@
+#!/usr/bin/env bash
+# bin/check-reference — Real integration validation against dolibarr-reference
+# Validates that Alixar's contact read adapter works against a real Dolibarr 24.0.1 instance.
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ALIXAR_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+REF_ROOT="${ALIXAR_ROOT}/../dolibarr-reference"
+
+# Configuration
+ALIXAR_PORT="${ALIXAR_JAVA_PORT:-48081}"
+REF_PORT="${DOLIBARR_REFERENCE_PORT:-48240}"
+# Use host networking for Alixar container so 127.0.0.1 reaches host's Dolibarr
+# Dolibarr REST API is at /api/index.php
+ALIXAR_BASE_URL="http://127.0.0.1:${REF_PORT}/api/index.php"
+REF_BASE_URL="http://127.0.0.1:${REF_PORT}"
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+log_info() { echo -e "${GREEN}[INFO]${NC} $*"; }
+log_warn() { echo -e "${YELLOW}[WARN]${NC} $*"; }
+log_error() { echo -e "${RED}[ERROR]${NC} $*"; }
+
+ALIXAR_CONTAINER_NAME="alixar-integration-$(date +%s)"
+
+cleanup() {
+    local exit_code=$?
+    if [[ -n "${ALIXAR_CONTAINER_NAME:-}" ]]; then
+        log_info "Stopping Alixar container..."
+        docker stop "${ALIXAR_CONTAINER_NAME}" >/dev/null 2>&1 || true
+        docker rm "${ALIXAR_CONTAINER_NAME}" >/dev/null 2>&1 || true
+    fi
+    if [[ -n "${TMP_CONTACT_JSON:-}" && -f "${TMP_CONTACT_JSON}" ]]; then
+        rm -f "${TMP_CONTACT_JSON}"
+    fi
+    if [[ $exit_code -ne 0 ]]; then
+        log_error "Integration check failed with exit code $exit_code"
+    fi
+}
+trap cleanup EXIT
+
+# 1. Verify sibling repository exists
+log_info "Checking for sibling dolibarr-reference repository..."
+if [[ ! -d "${REF_ROOT}" ]]; then
+    log_error "dolibarr-reference not found at ${REF_ROOT}"
+    exit 1
+fi
+if [[ ! -f "${REF_ROOT}/.env" ]]; then
+    log_error "dolibarr-reference .env not found"
+    exit 1
+fi
+if [[ ! -f "${REF_ROOT}/bin/up" ]]; then
+    log_error "dolibarr-reference bin/up not found"
+    exit 1
+fi
+log_info "Found dolibarr-reference at ${REF_ROOT}"
+
+# 2. Source reference environment to get API key
+log_info "Loading dolibarr-reference configuration..."
+# shellcheck source=/dev/null
+source "${REF_ROOT}/.env"
+if [[ -z "${DOLIBARR_REFERENCE_API_KEY:-}" ]]; then
+    log_error "DOLIBARR_REFERENCE_API_KEY not set in ${REF_ROOT}/.env"
+    exit 1
+fi
+REF_API_KEY="${DOLIBARR_REFERENCE_API_KEY}"
+log_info "Loaded API key (masked: ${REF_API_KEY:0:8}****${REF_API_KEY: -4})"
+
+# 3. Reset/start reference environment
+log_info "Starting dolibarr-reference environment..."
+cd "${REF_ROOT}"
+# Use up instead of reset to avoid interactive confirmation
+./bin/up
+
+# 4. Create a deterministic contact in Dolibarr
+log_info "Creating test contact in Dolibarr..."
+CONTACT_PAYLOAD='{"lastname": "Integration", "firstname": "Alixar", "email": "alixar.integration@example.test"}'
+CREATE_RESPONSE=$(curl -s -X POST "${REF_BASE_URL}/api/index.php/contacts" \
+    -H "DOLAPIKEY: ${REF_API_KEY}" \
+    -H "Content-Type: application/json" \
+    -d "${CONTACT_PAYLOAD}")
+
+if [[ -z "${CREATE_RESPONSE}" ]] || [[ "${CREATE_RESPONSE}" == "null" ]]; then
+    log_error "Failed to create contact in Dolibarr (empty response)"
+    exit 1
+fi
+
+# Extract contact ID from response (Dolibarr returns just the ID as string)
+CONTACT_ID=$(echo "${CREATE_RESPONSE}" | sed 's/[^0-9]//g')
+if [[ -z "${CONTACT_ID}" ]] || [[ ! "${CONTACT_ID}" =~ ^[0-9]+$ ]]; then
+    log_error "Failed to parse contact ID from response: ${CREATE_RESPONSE}"
+    exit 1
+fi
+log_info "Created contact with ID: ${CONTACT_ID}"
+
+# Verify contact exists in Dolibarr
+log_info "Verifying contact in Dolibarr..."
+REF_CONTACT=$(curl -s "${REF_BASE_URL}/api/index.php/contacts/${CONTACT_ID}" \
+    -H "DOLAPIKEY: ${REF_API_KEY}" \
+    -H "Accept: application/json")
+if [[ -z "${REF_CONTACT}" ]] || ! echo "${REF_CONTACT}" | grep -q '"id"'; then
+    log_error "Created contact not found in Dolibarr"
+    exit 1
+fi
+
+# 5. Build Alixar image
+log_info "Building Alixar image..."
+cd "${ALIXAR_ROOT}"
+docker compose build app >/dev/null
+
+# 6. Start Alixar with host networking to reach Dolibarr on 127.0.0.1
+log_info "Starting Alixar configured for dolibarr-reference (host networking)..."
+
+docker run -d \
+    --name "${ALIXAR_CONTAINER_NAME}" \
+    --network host \
+    -e ALIXAR_DOLIBARR_BASE_URL="${ALIXAR_BASE_URL}" \
+    -e ALIXAR_DOLIBARR_API_KEY="${REF_API_KEY}" \
+    -e ALIXAR_JAVA_PORT="${ALIXAR_PORT}" \
+    -e SERVER_PORT="${ALIXAR_PORT}" \
+    alixar-app:latest
+
+# Wait for container to be running
+sleep 3
+
+# 7. Wait for Alixar health
+log_info "Waiting for Alixar /health..."
+HEALTH_URL="http://127.0.0.1:${ALIXAR_PORT}/health"
+for i in {1..30}; do
+    if response=$(curl --silent --show-error --max-time 5 \
+        --header 'Accept: application/json' \
+        --write-out '\n%{http_code}\n%{content_type}' "${HEALTH_URL}" 2>/dev/null); then
+        http_code=$(echo "${response}" | tail -n2 | head -n1)
+        content_type=$(echo "${response}" | tail -n1)
+        body=$(echo "${response}" | head -n -2)
+        if [[ "${http_code}" == "200" ]] && \
+           [[ "${content_type,,}" =~ ^application/json([[:space:]]*;.*)?$ ]] && \
+           [[ "${body}" == '{"status":"ok"}' ]]; then
+            log_info "Alixar health check passed"
+            break
+        fi
+    fi
+    if [[ $i -eq 30 ]]; then
+        log_error "Alixar /health did not become available within 60 seconds"
+        docker logs "${ALIXAR_CONTAINER_NAME}"
+        exit 1
+    fi
+    sleep 2
+done
+
+# 8. Read contact through Alixar
+log_info "Reading contact through Alixar canonical API..."
+ALIXAR_URL="http://127.0.0.1:${ALIXAR_PORT}/api/contacts/${CONTACT_ID}"
+ALIXAR_RESPONSE=$(curl -s -w "\n%{http_code}" \
+    -H "Accept: application/json" \
+    "${ALIXAR_URL}")
+
+HTTP_CODE=$(echo "${ALIXAR_RESPONSE}" | tail -n1)
+RESPONSE_BODY=$(echo "${ALIXAR_RESPONSE}" | head -n -1)
+
+if [[ "${HTTP_CODE}" != "200" ]]; then
+    log_error "Alixar returned HTTP ${HTTP_CODE}, expected 200"
+    log_error "Response: ${RESPONSE_BODY}"
+    docker logs "${ALIXAR_CONTAINER_NAME}"
+    exit 1
+fi
+
+log_info "Alixar response: ${RESPONSE_BODY}"
+
+# 9. Verify canonical mapping
+log_info "Verifying canonical response structure..."
+
+# Check required fields
+if ! echo "${RESPONSE_BODY}" | grep -q '"id"'; then
+    log_error "Missing 'id' field in response"
+    exit 1
+fi
+if ! echo "${RESPONSE_BODY}" | grep -q '"lastName"'; then
+    log_error "Missing 'lastName' field in response"
+    exit 1
+fi
+if ! echo "${RESPONSE_BODY}" | grep -q '"firstName"'; then
+    log_error "Missing 'firstName' field in response"
+    exit 1
+fi
+if ! echo "${RESPONSE_BODY}" | grep -q '"email"'; then
+    log_error "Missing 'email' field in response"
+    exit 1
+fi
+if ! echo "${RESPONSE_BODY}" | grep -q '"thirdPartyId"'; then
+    log_error "Missing 'thirdPartyId' field in response"
+    exit 1
+fi
+
+# Verify values
+RETURNED_ID=$(echo "${RESPONSE_BODY}" | sed -n 's/.*"id":[[:space:]]*\([0-9]*\).*/\1/p')
+if [[ "${RETURNED_ID}" != "${CONTACT_ID}" ]]; then
+    log_error "ID mismatch: expected ${CONTACT_ID}, got ${RETURNED_ID}"
+    exit 1
+fi
+
+if ! echo "${RESPONSE_BODY}" | grep -q '"lastName":[[:space:]]*"Integration"'; then
+    log_error "lastName mismatch: expected 'Integration'"
+    exit 1
+fi
+
+if ! echo "${RESPONSE_BODY}" | grep -q '"firstName":[[:space:]]*"Alixar"'; then
+    log_error "firstName mismatch: expected 'Alixar'"
+    exit 1
+fi
+
+if ! echo "${RESPONSE_BODY}" | grep -q '"email":[[:space:]]*"alixar.integration@example.test"'; then
+    log_error "email mismatch: expected 'alixar.integration@example.test'"
+    exit 1
+fi
+
+# 10. Verify thirdPartyId is null (standalone contact)
+if ! echo "${RESPONSE_BODY}" | grep -q '"thirdPartyId":[[:space:]]*null'; then
+    log_error "thirdPartyId should be null for standalone contact"
+    exit 1
+fi
+log_info "thirdPartyId correctly null for standalone contact"
+
+# 11. Verify no legacy fields leak
+LEGACY_FIELDS=("lastname" "firstname" "fk_soc" "socid" "socname" "statut" "array_options")
+for field in "${LEGACY_FIELDS[@]}"; do
+    if echo "${RESPONSE_BODY}" | grep -q "\"${field}\""; then
+        log_error "Legacy field '${field}' leaked into canonical response"
+        exit 1
+    fi
+done
+log_info "No legacy fields leaked into canonical response"
+
+# 12. Test real 404 mapping
+log_info "Testing real 404 mapping..."
+MISSING_ID=999999
+NOT_FOUND_URL="http://127.0.0.1:${ALIXAR_PORT}/api/contacts/${MISSING_ID}"
+NOT_FOUND_RESPONSE=$(curl -s -w "\n%{http_code}" \
+    -H "Accept: application/json" \
+    "${NOT_FOUND_URL}")
+
+NOT_FOUND_CODE=$(echo "${NOT_FOUND_RESPONSE}" | tail -n1)
+if [[ "${NOT_FOUND_CODE}" != "404" ]]; then
+    log_error "Expected 404 for missing contact, got ${NOT_FOUND_CODE}"
+    exit 1
+fi
+log_info "Real Dolibarr 404 correctly maps to Alixar 404"
+
+# 13. Cleanup Alixar
+log_info "Cleaning up Alixar..."
+docker stop "${ALIXAR_CONTAINER_NAME}" >/dev/null 2>&1 || true
+docker rm "${ALIXAR_CONTAINER_NAME}" >/dev/null 2>&1 || true
+ALIXAR_CONTAINER_NAME=""
+
+# 14. Leave reference in documented state
+log_info "Reference environment left running at ${REF_BASE_URL}"
+log_info "To reset: cd ${REF_ROOT} && ./bin/reset"
+
+log_info "=== Integration check PASSED ==="
+log_info "Real contact ID: ${CONTACT_ID}"
+log_info "Canonical response verified against dolibarr-reference 24.0.1"
+
+exit 0
