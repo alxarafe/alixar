@@ -3,8 +3,9 @@ package es.alxarafe.alixar.contact.api;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
 import es.alxarafe.alixar.contact.application.CreateContactCommand;
 import es.alxarafe.alixar.contact.application.GetContactUseCase;
-import es.alxarafe.alixar.contact.application.InvalidContactDataException;
 import es.alxarafe.alixar.contact.domain.Contact;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,7 @@ class ContactController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<CreateContactResponse> createContact(@RequestBody CreateContactRequest request) {
+    ResponseEntity<CreateContactResponse> createContact(@Valid @RequestBody CreateContactRequest request) {
         long createdId = createContactUseCase.execute(toCommand(request));
         return ResponseEntity.created(java.net.URI.create("/api/contacts/" + createdId))
             .body(new CreateContactResponse(createdId));
@@ -68,7 +69,7 @@ class ContactController {
     }
 
     record CreateContactRequest(
-        String lastName,
+        @NotBlank(message = "{validation.required}") String lastName,
         String firstName,
         String email,
         Long thirdPartyId

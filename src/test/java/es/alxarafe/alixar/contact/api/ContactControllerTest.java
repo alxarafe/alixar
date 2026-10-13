@@ -121,51 +121,50 @@ class ContactControllerTest {
     }
 
     @Test
-    void createContact_missingLastName_returns400() throws Exception {
-        when(createContactUseCase.execute(
-            new es.alxarafe.alixar.contact.application.CreateContactCommand(null, "John", "john@example.test", null)
-        )).thenThrow(new InvalidContactDataException("lastName is required"));
-
+    void createContact_missingLastName_returns400WithValidationError() throws Exception {
         mockMvc.perform(post("/api/contacts")
                 .contentType("application/json")
                 .content("{\"firstName\":\"John\",\"email\":\"john@example.test\"}"))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("VALIDATION_REQUIRED"))
+            .andExpect(jsonPath("$.field").value("lastName"))
+            .andExpect(jsonPath("$.detail").value("The field Last name is required."));
     }
 
     @Test
-    void createContact_blankLastName_returns400() throws Exception {
-        when(createContactUseCase.execute(
-            new es.alxarafe.alixar.contact.application.CreateContactCommand("  ", "John", "john@example.test", null)
-        )).thenThrow(new InvalidContactDataException("lastName is required"));
-
+    void createContact_blankLastName_returns400WithValidationError() throws Exception {
         mockMvc.perform(post("/api/contacts")
                 .contentType("application/json")
                 .content("{\"lastName\":\"  \",\"firstName\":\"John\",\"email\":\"john@example.test\"}"))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("VALIDATION_REQUIRED"))
+            .andExpect(jsonPath("$.field").value("lastName"))
+            .andExpect(jsonPath("$.detail").value("The field Last name is required."));
     }
 
     @Test
-    void createContact_emptyLastName_returns400() throws Exception {
-        when(createContactUseCase.execute(
-            new es.alxarafe.alixar.contact.application.CreateContactCommand("", "John", "john@example.test", null)
-        )).thenThrow(new InvalidContactDataException("lastName is required"));
-
+    void createContact_emptyLastName_returns400WithValidationError() throws Exception {
         mockMvc.perform(post("/api/contacts")
                 .contentType("application/json")
                 .content("{\"lastName\":\"\",\"firstName\":\"John\",\"email\":\"john@example.test\"}"))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("VALIDATION_REQUIRED"))
+            .andExpect(jsonPath("$.field").value("lastName"))
+            .andExpect(jsonPath("$.detail").value("The field Last name is required."));
     }
 
     @Test
     void createContact_invalidThirdParty_returns422() throws Exception {
         when(createContactUseCase.execute(
             new es.alxarafe.alixar.contact.application.CreateContactCommand("Doe", "John", "john@example.test", 999L)
-        )).thenThrow(new InvalidThirdPartyReferenceException("Invalid third party reference"));
+        )).thenThrow(new InvalidThirdPartyReferenceException());
 
         mockMvc.perform(post("/api/contacts")
                 .contentType("application/json")
                 .content("{\"lastName\":\"Doe\",\"firstName\":\"John\",\"email\":\"john@example.test\",\"thirdPartyId\":999}"))
-            .andExpect(status().isUnprocessableEntity());
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(jsonPath("$.code").value("CONTACT_INVALID_THIRD_PARTY_REFERENCE"))
+            .andExpect(jsonPath("$.detail").value("The referenced third party does not exist."));
     }
 
     @Test

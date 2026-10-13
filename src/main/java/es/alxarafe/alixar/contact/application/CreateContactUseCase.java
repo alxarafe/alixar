@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.contact.application;
 
+import es.alxarafe.alixar.core.application.ErrorCode;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,7 +14,7 @@ public class CreateContactUseCase {
 
     public long execute(CreateContactCommand command) {
         if (command.lastName() == null || command.lastName().isBlank()) {
-            throw new InvalidContactDataException("lastName is required");
+            throw new InvalidContactDataException(ErrorCode.VALIDATION_REQUIRED, "lastName");
         }
         return contactRepository.create(command);
     }

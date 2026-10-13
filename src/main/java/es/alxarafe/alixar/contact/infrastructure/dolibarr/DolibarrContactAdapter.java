@@ -63,7 +63,7 @@ class DolibarrContactAdapter implements ContactRepository {
             if (e.getStatusCode() == org.springframework.http.HttpStatus.NOT_FOUND) {
                 String body = e.getResponseBodyAsString();
                 if (body != null && body.contains("Thirdparty") && body.contains("not found")) {
-                    throw new InvalidThirdPartyReferenceException("Invalid third party reference");
+                    throw new InvalidThirdPartyReferenceException();
                 }
                 throw new DolibarrAdapterException("Dolibarr returned 404 during contact creation: " + e.getResponseBodyAsString(), e);
             }

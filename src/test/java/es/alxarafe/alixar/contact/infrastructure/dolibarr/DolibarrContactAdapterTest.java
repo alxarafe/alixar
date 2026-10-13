@@ -185,7 +185,7 @@ class DolibarrContactAdapterTest {
 
         assertThatThrownBy(() -> adapter.create(new CreateContactCommand("Doe", "John", "john@example.test", 999L)))
             .isInstanceOf(InvalidThirdPartyReferenceException.class)
-            .hasMessageContaining("Invalid third party reference");
+            .hasMessageContaining("CONTACT_INVALID_THIRD_PARTY_REFERENCE");
     }
 
     @Test

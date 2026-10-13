@@ -66,3 +66,57 @@ This rule applies when domain code is introduced in future tasks.
 `alixar-legacy` and Dolibarr are references for behavior and knowledge only.
 - No code copying from either
 - No package/file imports from `alixar-legacy`
+
+## Internationalization (i18n) Architecture
+
+### Module-owned translations
+
+Each functional module owns translations for its own concepts:
+
+- **Core module** (`i18n/core/messages*.properties`): Genuinely cross-module messages and templates (e.g., `validation.required`, `validation.required.title`)
+- **Contact module** (`i18n/contact/messages*.properties`): Contact-specific messages (e.g., `contact.notFound`, `contact.invalidThirdPartyReference`, `field.contact.lastName`)
+
+### Localization boundary
+
+- Application/domain layers carry stable machine-readable identifiers: error codes, field names, message arguments
+- Presentation/infrastructure boundary (`ControllerAdvice`, `MessageSource`) resolves localized human-readable text
+- Application code does not depend on `MessageSource`, `Locale`, `Accept-Language`, `ProblemDetail`, or HTTP
+
+### Canonical error representation
+
+Errors use RFC 9457 `ProblemDetail` with stable identifiers:
+
+```json
+{
+  "type": "urn:alixar:error:validation-required",
+  "title": "Validation Error",
+  "status": 400,
+  "detail": "The field Last name is required.",
+  "code": "VALIDATION_REQUIRED",
+  "field": "lastName"
+}
+```
+
+- `type`: Stable URN identifier (non-localized, machine-readable)
+- `title`: Localized short summary via `MessageSource`
+- `detail`: Localized descriptive message via parameterized template resolution
+- `code`: Stable error code (non-localized)
+- `field`: Canonical API field name when applicable (non-localized)
+
+### Nested message resolution
+
+Reusable validation templates receive localized field labels:
+
+```properties
+validation.required=The field {0} is required.
+validation.required.title=Validation Error
+field.contact.lastName=Last name
+```
+
+Resolution: `validation.required` receives `field.contact.lastName` (localized) as `{0}` argument.
+
+### Supported locales
+
+- Default/fallback: English (`en`)
+- Supported: `en`, `es` (including regional variants like `es-ES`)
+- Resolution: HTTP `Accept-Language` header via Spring `AcceptHeaderLocaleResolver`

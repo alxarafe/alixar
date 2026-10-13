@@ -361,6 +361,54 @@ Simplicity must not compromise correctness, security, performance, clarity, test
 
 When duplication is small and removing it would create a more complex abstraction, prefer the clearer solution over mechanically applying DRY.
 
+## Internationalization (i18n)
+
+### Human-readable text
+
+User-facing localizable human-readable text must not be hardcoded in domain, application, controller, adapter or frontend-facing response logic when it belongs to i18n.
+
+Use the project's standard i18n infrastructure (Spring `MessageSource`, Jakarta Validation, `ProblemDetail`).
+
+### Do not translate stable technical identifiers
+
+Do not translate:
+- error codes;
+- canonical API field names;
+- enum/state identifiers;
+- paths;
+- media types;
+- configuration keys;
+- protocol/header names;
+- database identifiers.
+
+### Reusable parameterized messages
+
+Prefer:
+```text
+validation.required + localized field name
+```
+over:
+```text
+one required-message key per field
+```
+when semantics are genuinely shared.
+
+### Module ownership
+
+Translations belong to the module or feature that owns the translated concept. Shared/core bundles contain only genuinely cross-module messages.
+
+Message keys for module-owned concepts must be namespaced by the owning module/feature so modules can evolve, package or disappear independently without relying on a global monolithic translation catalogue.
+
+### Standard mechanisms first
+
+Explicitly require use of Jakarta Validation / Spring MessageSource and related standard facilities before introducing custom translation mechanisms.
+
+### Final literal review
+
+During final scope review, inspect newly introduced human-readable literals and verify whether they should use i18n.
+
+Integrate this cleanly with the existing `No magic literals` policy rather than duplicating that entire section.
+
 ## Deployment authorization
 
 Implementation approval permits implementation, validation, staging, and final
