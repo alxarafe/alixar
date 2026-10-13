@@ -236,7 +236,106 @@ for field in "${LEGACY_FIELDS[@]}"; do
 done
 log_info "No legacy fields leaked into canonical response"
 
-# 12. Test real 404 mapping
+# 13. Test real reference CREATE through Alixar
+log_info "Testing real reference CREATE through Alixar..."
+CREATE_PAYLOAD='{"lastName": "IntegrationCreate", "firstName": "Alixar", "email": "alixar.create@example.test"}'
+CREATE_URL="http://127.0.0.1:${ALIXAR_PORT}/api/contacts"
+# Use -i to include headers in output, and -w to get HTTP code
+CREATE_RESPONSE=$(curl -i -s -w "\n%{http_code}" \
+    -H "Content-Type: application/json" \
+    -H "Accept: application/json" \
+    -d "${CREATE_PAYLOAD}" \
+    "${CREATE_URL}")
+
+# Extract HTTP code (last line)
+CREATE_HTTP_CODE=$(echo "${CREATE_RESPONSE}" | tail -n1)
+# Extract headers and body (everything except last line)
+CREATE_HEADERS_AND_BODY=$(echo "${CREATE_RESPONSE}" | head -n -1)
+# Extract body (after blank line)
+CREATE_RESPONSE_BODY=$(echo "${CREATE_HEADERS_AND_BODY}" | sed -n '/^\r*$/,$p' | tail -n +2)
+
+if [[ "${CREATE_HTTP_CODE}" != "201" ]]; then
+    log_error "Alixar CREATE returned HTTP ${CREATE_HTTP_CODE}, expected 201"
+    log_error "Response: ${CREATE_RESPONSE_BODY}"
+    exit 1
+fi
+
+log_info "Alixar CREATE response: ${CREATE_RESPONSE_BODY}"
+
+# Verify CREATE response structure
+if ! echo "${CREATE_RESPONSE_BODY}" | grep -q '"id"'; then
+    log_error "Missing 'id' field in CREATE response"
+    exit 1
+fi
+
+# Extract created ID
+CREATED_ID=$(echo "${CREATE_RESPONSE_BODY}" | sed -n 's/.*"id":[[:space:]]*\([0-9]*\).*/\1/p')
+if [[ -z "${CREATED_ID}" ]] || [[ ! "${CREATED_ID}" =~ ^[0-9]+$ ]]; then
+    log_error "Failed to parse created ID from response: ${CREATE_RESPONSE_BODY}"
+    exit 1
+fi
+log_info "Created contact via Alixar with ID: ${CREATED_ID}"
+
+# Verify Location header
+if ! echo "${CREATE_HEADERS_AND_BODY}" | grep -qi "Location: /api/contacts/${CREATED_ID}"; then
+    log_error "Location header missing or incorrect"
+    log_error "Headers: $(echo "${CREATE_HEADERS_AND_BODY}" | head -n -1)"
+    exit 1
+fi
+log_info "Location header correct: /api/contacts/${CREATED_ID}"
+
+# 14. GET the created contact through Alixar
+log_info "Reading created contact through Alixar canonical API..."
+GET_URL="http://127.0.0.1:${ALIXAR_PORT}/api/contacts/${CREATED_ID}"
+GET_RESPONSE=$(curl -s -w "\n%{http_code}" \
+    -H "Accept: application/json" \
+    "${GET_URL}")
+
+GET_HTTP_CODE=$(echo "${GET_RESPONSE}" | tail -n1)
+GET_RESPONSE_BODY=$(echo "${GET_RESPONSE}" | head -n -1)
+
+if [[ "${GET_HTTP_CODE}" != "200" ]]; then
+    log_error "Alixar GET returned HTTP ${GET_HTTP_CODE}, expected 200"
+    log_error "Response: ${GET_RESPONSE_BODY}"
+    exit 1
+fi
+
+log_info "Alixar GET response: ${GET_RESPONSE_BODY}"
+
+# Verify canonical mapping for created contact
+if ! echo "${GET_RESPONSE_BODY}" | grep -q '"lastName":[[:space:]]*"IntegrationCreate"'; then
+    log_error "lastName mismatch: expected 'IntegrationCreate'"
+    exit 1
+fi
+
+if ! echo "${GET_RESPONSE_BODY}" | grep -q '"firstName":[[:space:]]*"Alixar"'; then
+    log_error "firstName mismatch: expected 'Alixar'"
+    exit 1
+fi
+
+if ! echo "${GET_RESPONSE_BODY}" | grep -q '"email":[[:space:]]*"alixar.create@example.test"'; then
+    log_error "email mismatch: expected 'alixar.create@example.test'"
+    exit 1
+fi
+
+if ! echo "${GET_RESPONSE_BODY}" | grep -q '"thirdPartyId":[[:space:]]*null'; then
+    log_error "thirdPartyId should be null for standalone contact"
+    exit 1
+fi
+log_info "Created contact canonical values verified"
+
+# 15. Optionally verify directly in Dolibarr
+log_info "Verifying contact directly in Dolibarr..."
+REF_CREATE_VERIFY=$(curl -s "${REF_BASE_URL}/api/index.php/contacts/${CREATED_ID}" \
+    -H "DOLAPIKEY: ${REF_API_KEY}" \
+    -H "Accept: application/json")
+if [[ -z "${REF_CREATE_VERIFY}" ]] || ! echo "${REF_CREATE_VERIFY}" | grep -q '"lastname":[[:space:]]*"IntegrationCreate"'; then
+    log_error "Contact not found or mismatch in Dolibarr"
+    exit 1
+fi
+log_info "Legacy mapping verified in Dolibarr"
+
+# 16. Test real 404 mapping
 log_info "Testing real 404 mapping..."
 MISSING_ID=999999
 NOT_FOUND_URL="http://127.0.0.1:${ALIXAR_PORT}/api/contacts/${MISSING_ID}"

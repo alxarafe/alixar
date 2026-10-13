@@ -1,7 +1,10 @@
 package es.alxarafe.alixar.contact.api;
 
 import es.alxarafe.alixar.contact.application.ContactNotFoundException;
+import es.alxarafe.alixar.contact.application.CreateContactUseCase;
 import es.alxarafe.alixar.contact.application.GetContactUseCase;
+import es.alxarafe.alixar.contact.application.InvalidContactDataException;
+import es.alxarafe.alixar.contact.application.InvalidThirdPartyReferenceException;
 import es.alxarafe.alixar.contact.ContactTestConfig;
 import es.alxarafe.alixar.contact.domain.Contact;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +18,9 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,6 +33,9 @@ class ContactControllerTest {
 
     @Autowired
     private GetContactUseCase getContactUseCase;
+
+    @Autowired
+    private CreateContactUseCase createContactUseCase;
 
     private MockMvc mockMvc;
 
@@ -82,6 +90,98 @@ class ContactControllerTest {
             .andExpect(jsonPath("$.socid").doesNotExist())
             .andExpect(jsonPath("$.socname").doesNotExist())
             .andExpect(jsonPath("$.statut").doesNotExist());
+    }
+
+    @Test
+    void createContact_returns201AndLocation() throws Exception {
+        when(createContactUseCase.execute(
+            new es.alxarafe.alixar.contact.application.CreateContactCommand("Doe", "John", "john@example.test", null)
+        )).thenReturn(42L);
+
+        mockMvc.perform(post("/api/contacts")
+                .contentType("application/json")
+                .content("{\"lastName\":\"Doe\",\"firstName\":\"John\",\"email\":\"john@example.test\"}"))
+            .andExpect(status().isCreated())
+            .andExpect(header().string("Location", "/api/contacts/42"))
+            .andExpect(jsonPath("$.id").value(42));
+    }
+
+    @Test
+    void createContact_withThirdPartyId_returns201() throws Exception {
+        when(createContactUseCase.execute(
+            new es.alxarafe.alixar.contact.application.CreateContactCommand("Doe", "John", "john@example.test", 42L)
+        )).thenReturn(43L);
+
+        mockMvc.perform(post("/api/contacts")
+                .contentType("application/json")
+                .content("{\"lastName\":\"Doe\",\"firstName\":\"John\",\"email\":\"john@example.test\",\"thirdPartyId\":42}"))
+            .andExpect(status().isCreated())
+            .andExpect(header().string("Location", "/api/contacts/43"))
+            .andExpect(jsonPath("$.id").value(43));
+    }
+
+    @Test
+    void createContact_missingLastName_returns400() throws Exception {
+        when(createContactUseCase.execute(
+            new es.alxarafe.alixar.contact.application.CreateContactCommand(null, "John", "john@example.test", null)
+        )).thenThrow(new InvalidContactDataException("lastName is required"));
+
+        mockMvc.perform(post("/api/contacts")
+                .contentType("application/json")
+                .content("{\"firstName\":\"John\",\"email\":\"john@example.test\"}"))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createContact_blankLastName_returns400() throws Exception {
+        when(createContactUseCase.execute(
+            new es.alxarafe.alixar.contact.application.CreateContactCommand("  ", "John", "john@example.test", null)
+        )).thenThrow(new InvalidContactDataException("lastName is required"));
+
+        mockMvc.perform(post("/api/contacts")
+                .contentType("application/json")
+                .content("{\"lastName\":\"  \",\"firstName\":\"John\",\"email\":\"john@example.test\"}"))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createContact_emptyLastName_returns400() throws Exception {
+        when(createContactUseCase.execute(
+            new es.alxarafe.alixar.contact.application.CreateContactCommand("", "John", "john@example.test", null)
+        )).thenThrow(new InvalidContactDataException("lastName is required"));
+
+        mockMvc.perform(post("/api/contacts")
+                .contentType("application/json")
+                .content("{\"lastName\":\"\",\"firstName\":\"John\",\"email\":\"john@example.test\"}"))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createContact_invalidThirdParty_returns422() throws Exception {
+        when(createContactUseCase.execute(
+            new es.alxarafe.alixar.contact.application.CreateContactCommand("Doe", "John", "john@example.test", 999L)
+        )).thenThrow(new InvalidThirdPartyReferenceException("Invalid third party reference"));
+
+        mockMvc.perform(post("/api/contacts")
+                .contentType("application/json")
+                .content("{\"lastName\":\"Doe\",\"firstName\":\"John\",\"email\":\"john@example.test\",\"thirdPartyId\":999}"))
+            .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void createContact_usesCanonicalNamesNotLegacy() throws Exception {
+        when(createContactUseCase.execute(
+            new es.alxarafe.alixar.contact.application.CreateContactCommand("Doe", "John", "john@example.test", null)
+        )).thenReturn(42L);
+
+        mockMvc.perform(post("/api/contacts")
+                .contentType("application/json")
+                .content("{\"lastName\":\"Doe\",\"firstName\":\"John\",\"email\":\"john@example.test\"}"))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.lastname").doesNotExist())
+            .andExpect(jsonPath("$.firstname").doesNotExist())
+            .andExpect(jsonPath("$.fk_soc").doesNotExist())
+            .andExpect(jsonPath("$.socid").doesNotExist());
     }
 
 }

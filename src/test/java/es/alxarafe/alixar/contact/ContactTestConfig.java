@@ -1,6 +1,8 @@
 package es.alxarafe.alixar.contact;
 
+import es.alxarafe.alixar.contact.api.ContactExceptionHandler;
 import es.alxarafe.alixar.contact.application.ContactRepository;
+import es.alxarafe.alixar.contact.application.CreateContactUseCase;
 import es.alxarafe.alixar.contact.application.GetContactUseCase;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +21,18 @@ public @Configuration class ContactTestConfig {
     @Primary
     GetContactUseCase getContactUseCase(ContactRepository contactRepository) {
         return new GetContactUseCase(contactRepository);
+    }
+
+    @Bean
+    @Primary
+    CreateContactUseCase createContactUseCase() {
+        return Mockito.mock(CreateContactUseCase.class);
+    }
+
+    @Bean
+    @Primary
+    ContactExceptionHandler contactExceptionHandler() {
+        return new ContactExceptionHandler();
     }
 
 }
