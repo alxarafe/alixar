@@ -12,7 +12,7 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 | Decision | Status |
 |----------|--------|
 | Java 25 LTS | Approved |
-| Spring Boot 3.4.x (stable, compatible with Java 25) | Approved |
+| Spring Boot 4.1.1 (stable, compatible with Java 25) | Approved |
 | Maven + Maven Wrapper | Approved |
 | Docker + Docker Compose as only supported environment | Approved |
 | Modular monolith | Approved |
