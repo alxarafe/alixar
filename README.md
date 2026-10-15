@@ -17,12 +17,19 @@ progressive migration away from legacy architecture.
 **Solucar → frontend**  
 **Alixar  → backend and business authority**
 
-## Status
+## Related repository
 
-Canonical **Contact read** capability exists (`GET /api/contacts/{id}`).
-Alixar currently uses a **Dolibarr adapter** for that capability.
-Real integration against `dolibarr-reference` has been demonstrated.
-Persistence, authentication, and broad ERP functionality are **not implemented**.
+Alixar is the backend and business authority of the Solucar / Alixar ERP.
+
+Frontend:
+- [Solucar](https://github.com/alxarafe/solucar-web)
+
+## Project status
+
+Alixar is under active development.
+
+See [Current implementation status](docs/status.md) for implemented capabilities,
+integration boundaries and known pending areas.
 
 ## Development
 
@@ -38,6 +45,7 @@ Requires Docker and Docker Compose. No host Java or Maven installation needed.
 
 ## Documentation
 
+- [Current implementation status](docs/status.md)
 - [Architecture](docs/architecture.md)
 - [Development](docs/development.md)
 - [Agent working agreement](AGENTS.md)
