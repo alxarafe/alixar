@@ -30,9 +30,35 @@ The port 48081 was chosen to avoid collisions with:
 - ERBAS (48080)
 - Solucar (44200)
 
+## Database Configuration
+
+PostgreSQL is included as normal Alixar infrastructure in `compose.yaml`:
+
+- Image: `postgres:18.6-alpine`
+- Internal port: `5432`
+- No host port exposure (internal Docker network only)
+- Health check: `pg_isready`
+- Named volume: `alixar-db-data` for persistence
+
+Environment variables (with development-safe defaults):
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `ALIXAR_DB_NAME` | `alixar` | Database name |
+| `ALIXAR_DB_USER` | `alixar` | Database username |
+| `ALIXAR_DB_PASSWORD` | `alixar` | Database password |
+| `SPRING_DATASOURCE_URL` | `jdbc:postgresql://database:5432/alixar` | JDBC URL (internal) |
+| `SPRING_DATASOURCE_USERNAME` | `alixar` | Datasource username |
+| `SPRING_DATASOURCE_PASSWORD` | `alixar` | Datasource password |
+| `SPRING_JOOQ_SQL_DIALECT` | `POSTGRES` | jOOQ SQL dialect |
+
+**Do not commit production credentials.** Use `.env` files or environment overrides for non-development values.
+
 ## Docker Compose
 
-The `compose.yaml` defines only the `app` service. No infrastructure services (PostgreSQL, Redis, Kafka, etc.) are included in this bootstrap.
+The `compose.yaml` defines:
+- `database` — PostgreSQL 18.6 service (normal Alixar infrastructure)
+- `app` — Alixar application (depends on healthy database)
 
 ### Reference Check Override
 
@@ -52,9 +78,11 @@ This override is used **only** by `./bin/check-reference`.
 
 1. Build and test (`mvnw clean verify`)
 2. Runtime image build
-3. Container startup with health check wait
-4. HTTP `GET /health` verification (exact `{"status":"ok"}` response)
-5. Cleanup
+3. Container startup with health check wait (database + app)
+4. PostgreSQL health verification (`pg_isready`)
+5. Flyway schema history table verification
+6. HTTP `GET /health` verification (exact `{"status":"ok"}` response)
+7. Cleanup (containers and volumes)
 
 **No external dependencies.** Does not require `dolibarr-reference`.
 

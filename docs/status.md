@@ -15,6 +15,12 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
 - **English/Spanish API error internationalization**: RFC 9457 `ProblemDetail` responses with stable error codes (`VALIDATION_REQUIRED`, `CONTACT_NOT_FOUND`, etc.) and localized human-readable text via module-owned translation bundles (`i18n/core/`, `i18n/contact/`)
 - **Real compatibility validation**: Verified against `dolibarr-reference` 24.0.1 through `./bin/check-reference`
 
+### Persistence Infrastructure
+
+- **PostgreSQL 18.6**: Normal Alixar infrastructure service in Docker Compose
+- **Flyway**: Migration infrastructure enabled and verified (schema history table created)
+- **jOOQ runtime**: PostgreSQL dialect configured; `DSLContext` available in application context
+
 ## Transitional integrations
 
 Dolibarr is a **temporary compatibility/reference backend** for capabilities still being migrated. It is:
@@ -37,7 +43,7 @@ See [Development](development.md) for full validation workflow details.
 
 ## Not yet implemented
 
-- Alixar-owned persistence for migrated ERP capabilities
+- Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
 - Authentication
 - Authorization
 - Broad ERP functionality beyond the currently implemented slices

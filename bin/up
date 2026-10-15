@@ -9,6 +9,9 @@ PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 cd "${PROJECT_ROOT}"
 
 export ALIXAR_JAVA_PORT="${ALIXAR_JAVA_PORT:-48081}"
+export ALIXAR_DB_NAME="${ALIXAR_DB_NAME:-alixar}"
+export ALIXAR_DB_USER="${ALIXAR_DB_USER:-alixar}"
+export ALIXAR_DB_PASSWORD="${ALIXAR_DB_PASSWORD:-alixar}"
 
 echo "Starting Alixar on http://127.0.0.1:${ALIXAR_JAVA_PORT}"
 

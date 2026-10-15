@@ -12,18 +12,53 @@ echo "=== Alixar local validation ==="
 echo ""
 
 # 1. Build image (runs tests in build stage)
-echo "[1/4] Building image (includes tests)..."
+echo "[1/5] Building image (includes tests)..."
 docker compose build app
 echo ""
 
-# 2. Start container
-echo "[2/4] Starting container..."
+# 2. Start all services (database + app)
+echo "[2/5] Starting services..."
 export ALIXAR_JAVA_PORT="${ALIXAR_JAVA_PORT:-48081}"
-docker compose up --detach --wait --wait-timeout 60 app
+export ALIXAR_DB_NAME="${ALIXAR_DB_NAME:-alixar}"
+export ALIXAR_DB_USER="${ALIXAR_DB_USER:-alixar}"
+export ALIXAR_DB_PASSWORD="${ALIXAR_DB_PASSWORD:-alixar}"
+docker compose up --detach --wait --wait-timeout 120
 echo ""
 
-# 3. Verify health endpoint
-echo "[3/4] Verifying /health endpoint..."
+# 3. Verify database is healthy
+echo "[3/5] Verifying PostgreSQL health..."
+for i in {1..30}; do
+    if docker compose exec -T database pg_isready -U "${ALIXAR_DB_USER}" -d "${ALIXAR_DB_NAME}" >/dev/null 2>&1; then
+        echo "PostgreSQL health check passed"
+        break
+    fi
+    if [[ $i -eq 30 ]]; then
+        echo "ERROR: PostgreSQL did not become healthy within 60 seconds" >&2
+        docker compose logs database
+        exit 1
+    fi
+    sleep 2
+done
+echo ""
+
+# 4. Verify Flyway schema history table exists
+echo "[4/5] Verifying Flyway initialization..."
+for i in {1..15}; do
+    if docker compose exec -T database psql -U "${ALIXAR_DB_USER}" -d "${ALIXAR_DB_NAME}" -c "SELECT 1 FROM flyway_schema_history LIMIT 1" >/dev/null 2>&1; then
+        echo "Flyway schema history table verified"
+        break
+    fi
+    if [[ $i -eq 15 ]]; then
+        echo "ERROR: Flyway schema history table not found" >&2
+        docker compose logs app
+        exit 1
+    fi
+    sleep 2
+done
+echo ""
+
+# 5. Verify health endpoint
+echo "[5/5] Verifying /health endpoint..."
 HEALTH_URL="http://127.0.0.1:${ALIXAR_JAVA_PORT}/health"
 for i in {1..30}; do
     if response=$(curl --silent --show-error --max-time 5 \
@@ -48,9 +83,9 @@ for i in {1..30}; do
 done
 echo ""
 
-# 4. Cleanup
-echo "[4/4] Cleaning up..."
-docker compose down --remove-orphans
+# 6. Cleanup
+echo "[6/6] Cleaning up..."
+docker compose down --remove-orphans --volumes
 echo ""
 
 echo "=== All checks passed ==="

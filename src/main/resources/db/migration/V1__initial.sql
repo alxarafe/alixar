@@ -1,0 +1,3 @@
+-- Initial migration to establish Flyway schema history
+-- This is a no-op migration to establish the Flyway baseline
+-- Future migrations will add actual schema changes

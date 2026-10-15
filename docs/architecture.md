@@ -21,18 +21,23 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 | Domain isolated from infrastructure (Spring, HTTP, JSON, jOOQ, Flyway, Docker, Dolibarr, llx_*) | Approved |
 | Legacy boundary: no code copied from alixar-legacy or Dolibarr | Approved |
 | Apache-2.0 license | Approved |
+| PostgreSQL 18.6 for persistence | Approved |
+| Flyway for database migrations | Approved |
+| jOOQ for type-safe SQL | Approved |
 
 ## Implemented
 
 - Canonical Contact read (`GET /api/contacts/{id}`)
+- Canonical Contact creation (`POST /api/contacts`)
 - Dolibarr adapter for Contact read (anti-corruption layer)
 - Real integration verification against `dolibarr-reference` 24.0.1
+- PostgreSQL 18.6 persistence infrastructure
+- Flyway migration infrastructure
+- jOOQ runtime infrastructure (PostgreSQL dialect)
 
 ## Planned (Not Implemented)
 
-- PostgreSQL persistence
-- Flyway migrations
-- jOOQ for type-safe SQL
+- Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Spring Security authentication/authorization
 - OpenAPI specification
 - ERP modules (thirdparties, catalog, sales, billing, inventory, accounting)
