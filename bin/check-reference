@@ -11,9 +11,7 @@ REF_ROOT="${ALIXAR_ROOT}/../dolibarr-reference"
 # Configuration
 ALIXAR_PORT="${ALIXAR_JAVA_PORT:-48081}"
 REF_PORT="${DOLIBARR_REFERENCE_PORT:-48240}"
-# Use host networking for Alixar container so 127.0.0.1 reaches host's Dolibarr
-# Dolibarr REST API is at /api/index.php
-ALIXAR_BASE_URL="http://127.0.0.1:${REF_PORT}/api/index.php"
+# Dolibarr REST API is at /api/index.php (reached via Docker service DNS)
 REF_BASE_URL="http://127.0.0.1:${REF_PORT}"
 
 # Colors for output
@@ -26,15 +24,16 @@ log_info() { echo -e "${GREEN}[INFO]${NC} $*"; }
 log_warn() { echo -e "${YELLOW}[WARN]${NC} $*"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $*"; }
 
-ALIXAR_CONTAINER_NAME="alixar-integration-$(date +%s)"
+# Compose project name for reference check (isolated from normal development)
+COMPOSE_PROJECT="alixar-reference"
+# Container name for Alixar in reference check (distinct from normal alixar-app)
+ALIXAR_CONTAINER_NAME="alixar-reference"
 
 cleanup() {
     local exit_code=$?
-    if [[ -n "${ALIXAR_CONTAINER_NAME:-}" ]]; then
-        log_info "Stopping Alixar container..."
-        docker stop "${ALIXAR_CONTAINER_NAME}" >/dev/null 2>&1 || true
-        docker rm "${ALIXAR_CONTAINER_NAME}" >/dev/null 2>&1 || true
-    fi
+    log_info "Cleaning up Alixar reference check environment..."
+    cd "${ALIXAR_ROOT}"
+    docker compose -p "${COMPOSE_PROJECT}" -f compose.yaml -f compose.reference.yaml down --remove-orphans >/dev/null 2>&1 || true
     if [[ -n "${TMP_CONTACT_JSON:-}" && -f "${TMP_CONTACT_JSON}" ]]; then
         rm -f "${TMP_CONTACT_JSON}"
     fi
@@ -50,34 +49,70 @@ if [[ ! -d "${REF_ROOT}" ]]; then
     log_error "dolibarr-reference not found at ${REF_ROOT}"
     exit 1
 fi
-if [[ ! -f "${REF_ROOT}/.env" ]]; then
-    log_error "dolibarr-reference .env not found"
-    exit 1
-fi
 if [[ ! -f "${REF_ROOT}/bin/up" ]]; then
     log_error "dolibarr-reference bin/up not found"
     exit 1
 fi
 log_info "Found dolibarr-reference at ${REF_ROOT}"
 
-# 2. Source reference environment to get API key
+# 2. Start reference environment (handles .env and API key provisioning)
+log_info "Starting dolibarr-reference environment..."
+cd "${REF_ROOT}"
+./bin/up
+
+# 3. Load reference environment to get API key
 log_info "Loading dolibarr-reference configuration..."
 # shellcheck source=/dev/null
 source "${REF_ROOT}/.env"
 if [[ -z "${DOLIBARR_REFERENCE_API_KEY:-}" ]]; then
-    log_error "DOLIBARR_REFERENCE_API_KEY not set in ${REF_ROOT}/.env"
+    log_error "DOLIBARR_REFERENCE_API_KEY not set in ${REF_ROOT}/.env after startup"
     exit 1
 fi
 REF_API_KEY="${DOLIBARR_REFERENCE_API_KEY}"
 log_info "Loaded API key (masked: ${REF_API_KEY:0:8}****${REF_API_KEY: -4})"
 
-# 3. Reset/start reference environment
-log_info "Starting dolibarr-reference environment..."
-cd "${REF_ROOT}"
-# Use up instead of reset to avoid interactive confirmation
-./bin/up
+# 4. Discover the Dolibarr container and its network
+log_info "Discovering Dolibarr container and network..."
+DOLIBARR_CONTAINER=$(docker compose -f "${REF_ROOT}/compose.yaml" ps -q dolibarr)
+if [[ -z "${DOLIBARR_CONTAINER}" ]]; then
+    log_error "Dolibarr container not found"
+    exit 1
+fi
+log_info "Dolibarr container: ${DOLIBARR_CONTAINER}"
 
-# 4. Create a deterministic contact in Dolibarr
+# Discover the Docker network by Compose labels (deterministic)
+# The dolibarr service declares network key "dolibarr_net" in compose.yaml
+# Docker Compose adds labels: com.docker.compose.project and com.docker.compose.network
+DOLIBARR_NETWORK=$(docker network ls \
+    --filter "label=com.docker.compose.project=dolibarr-reference" \
+    --filter "label=com.docker.compose.network=dolibarr_net" \
+    --format '{{.Name}}' | head -n1)
+
+if [[ -z "${DOLIBARR_NETWORK}" ]]; then
+    log_error "Could not find Dolibarr network with Compose labels (project=dolibarr-reference, network=dolibarr_net)"
+    exit 1
+fi
+
+# Verify exactly one network matches
+NETWORK_COUNT=$(docker network ls \
+    --filter "label=com.docker.compose.project=dolibarr-reference" \
+    --filter "label=com.docker.compose.network=dolibarr_net" \
+    --format '{{.Name}}' | wc -l)
+if [[ "${NETWORK_COUNT}" -ne 1 ]]; then
+    log_error "Expected exactly one Dolibarr network, found ${NETWORK_COUNT}"
+    docker network ls --filter "label=com.docker.compose.project=dolibarr-reference" --filter "label=com.docker.compose.network=dolibarr_net" --format '{{.Name}}'
+    exit 1
+fi
+
+# Verify the container is attached to this network
+if ! docker inspect "${DOLIBARR_CONTAINER}" --format '{{json .NetworkSettings.Networks}}' | grep -q "\"${DOLIBARR_NETWORK}\""; then
+    log_error "Dolibarr container not attached to network ${DOLIBARR_NETWORK}"
+    exit 1
+fi
+
+log_info "Dolibarr network: ${DOLIBARR_NETWORK}"
+
+# 5. Create a deterministic contact in Dolibarr
 log_info "Creating test contact in Dolibarr..."
 CONTACT_PAYLOAD='{"lastname": "Integration", "firstname": "Alixar", "email": "alixar.integration@example.test"}'
 CREATE_RESPONSE=$(curl -s -X POST "${REF_BASE_URL}/api/index.php/contacts" \
@@ -108,27 +143,23 @@ if [[ -z "${REF_CONTACT}" ]] || ! echo "${REF_CONTACT}" | grep -q '"id"'; then
     exit 1
 fi
 
-# 5. Build Alixar image
+# 6. Build Alixar image
 log_info "Building Alixar image..."
 cd "${ALIXAR_ROOT}"
 docker compose build app >/dev/null
 
-# 6. Start Alixar with host networking to reach Dolibarr on 127.0.0.1
-log_info "Starting Alixar configured for dolibarr-reference (host networking)..."
+# 7. Start Alixar with compose override for reference check
+log_info "Starting Alixar configured for dolibarr-reference (Compose)..."
+export ALIXAR_JAVA_PORT="${ALIXAR_PORT}"
+export ALIXAR_DOLIBARR_API_KEY="${REF_API_KEY}"
+export DOLIBARR_REFERENCE_NETWORK="${DOLIBARR_NETWORK}"
 
-docker run -d \
-    --name "${ALIXAR_CONTAINER_NAME}" \
-    --network host \
-    -e ALIXAR_DOLIBARR_BASE_URL="${ALIXAR_BASE_URL}" \
-    -e ALIXAR_DOLIBARR_API_KEY="${REF_API_KEY}" \
-    -e ALIXAR_JAVA_PORT="${ALIXAR_PORT}" \
-    -e SERVER_PORT="${ALIXAR_PORT}" \
-    alixar-app:latest
+docker compose -p "${COMPOSE_PROJECT}" -f compose.yaml -f compose.reference.yaml up -d
 
 # Wait for container to be running
 sleep 3
 
-# 7. Wait for Alixar health
+# 8. Wait for Alixar health
 log_info "Waiting for Alixar /health..."
 HEALTH_URL="http://127.0.0.1:${ALIXAR_PORT}/health"
 for i in {1..30}; do
@@ -147,13 +178,13 @@ for i in {1..30}; do
     fi
     if [[ $i -eq 30 ]]; then
         log_error "Alixar /health did not become available within 60 seconds"
-        docker logs "${ALIXAR_CONTAINER_NAME}"
+        docker compose -p "${COMPOSE_PROJECT}" -f compose.yaml -f compose.reference.yaml logs app
         exit 1
     fi
     sleep 2
 done
 
-# 8. Read contact through Alixar
+# 9. Read contact through Alixar
 log_info "Reading contact through Alixar canonical API..."
 ALIXAR_URL="http://127.0.0.1:${ALIXAR_PORT}/api/contacts/${CONTACT_ID}"
 ALIXAR_RESPONSE=$(curl -s -w "\n%{http_code}" \
@@ -166,13 +197,13 @@ RESPONSE_BODY=$(echo "${ALIXAR_RESPONSE}" | head -n -1)
 if [[ "${HTTP_CODE}" != "200" ]]; then
     log_error "Alixar returned HTTP ${HTTP_CODE}, expected 200"
     log_error "Response: ${RESPONSE_BODY}"
-    docker logs "${ALIXAR_CONTAINER_NAME}"
+    docker compose -p "${COMPOSE_PROJECT}" -f compose.yaml -f compose.reference.yaml logs app
     exit 1
 fi
 
 log_info "Alixar response: ${RESPONSE_BODY}"
 
-# 9. Verify canonical mapping
+# 10. Verify canonical mapping
 log_info "Verifying canonical response structure..."
 
 # Check required fields
@@ -219,14 +250,14 @@ if ! echo "${RESPONSE_BODY}" | grep -q '"email":[[:space:]]*"alixar.integration@
     exit 1
 fi
 
-# 10. Verify thirdPartyId is null (standalone contact)
+# 11. Verify thirdPartyId is null (standalone contact)
 if ! echo "${RESPONSE_BODY}" | grep -q '"thirdPartyId":[[:space:]]*null'; then
     log_error "thirdPartyId should be null for standalone contact"
     exit 1
 fi
 log_info "thirdPartyId correctly null for standalone contact"
 
-# 11. Verify no legacy fields leak
+# 12. Verify no legacy fields leak
 LEGACY_FIELDS=("lastname" "firstname" "fk_soc" "socid" "socname" "statut" "array_options")
 for field in "${LEGACY_FIELDS[@]}"; do
     if echo "${RESPONSE_BODY}" | grep -q "\"${field}\""; then
@@ -350,13 +381,7 @@ if [[ "${NOT_FOUND_CODE}" != "404" ]]; then
 fi
 log_info "Real Dolibarr 404 correctly maps to Alixar 404"
 
-# 13. Cleanup Alixar
-log_info "Cleaning up Alixar..."
-docker stop "${ALIXAR_CONTAINER_NAME}" >/dev/null 2>&1 || true
-docker rm "${ALIXAR_CONTAINER_NAME}" >/dev/null 2>&1 || true
-ALIXAR_CONTAINER_NAME=""
-
-# 14. Leave reference in documented state
+# 17. Leave reference in documented state
 log_info "Reference environment left running at ${REF_BASE_URL}"
 log_info "To reset: cd ${REF_ROOT} && ./bin/reset"
 
