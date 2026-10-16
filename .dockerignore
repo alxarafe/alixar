@@ -1,0 +1,12 @@
+.git
+private
+target
+tmp
+.idea
+.vscode
+.DS_Store
+.env
+.env.*
+*.log
+*.swp
+*~

@@ -1,0 +1,16 @@
+services:
+  persistence-test:
+    profiles: [verification]
+    build:
+      context: .
+      target: build
+    command: ["./mvnw", "--batch-mode", "--no-transfer-progress", "-Dtest=PersistenceIT", "test"]
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/${ALIXAR_DB_NAME:-alixar}
+      SPRING_DATASOURCE_USERNAME: ${ALIXAR_DB_USER:-alixar}
+      SPRING_DATASOURCE_PASSWORD: ${ALIXAR_DB_PASSWORD:-alixar}
+    networks:
+      - alixar-network
+    depends_on:
+      database:
+        condition: service_healthy

@@ -17,9 +17,15 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
 
 ### Persistence Infrastructure
 
-- **PostgreSQL 18.6**: Normal Alixar infrastructure service in Docker Compose
-- **Flyway**: Migration infrastructure enabled and verified (schema history table created)
-- **jOOQ runtime**: PostgreSQL dialect configured; `DSLContext` available in application context
+- **PostgreSQL 18.6**: Docker Compose service with a pinned image digest, internal
+  connectivity, healthcheck, and a persistent development volume retained by `bin/down`
+- **Flyway 12.4.0**: Managed by Spring Boot 4.1.1; verified startup with zero
+  migrations and an empty schema history table, without a fictitious initial migration
+- **jOOQ runtime**: PostgreSQL dialect and Spring-provided `DSLContext` verified
+  with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
+- **Validation isolation**: Each self-contained/reference check owns a fresh Compose
+  project and cleans only its own containers, network, and database volume;
+  the 45 existing deterministic tests remain enabled
 
 ## Transitional integrations
 
