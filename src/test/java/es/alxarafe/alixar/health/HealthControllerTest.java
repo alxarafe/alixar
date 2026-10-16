@@ -32,4 +32,5 @@ class HealthControllerTest {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(content().json("{\"status\":\"ok\"}"));
     }
+
 }

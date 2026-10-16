@@ -1,6 +1,5 @@
 services:
   app:
-    container_name: alixar-reference
     environment:
       - ALIXAR_DOLIBARR_BASE_URL=http://dolibarr/api/index.php
       - ALIXAR_DOLIBARR_API_KEY=${ALIXAR_DOLIBARR_API_KEY:?ALIXAR_DOLIBARR_API_KEY is required}

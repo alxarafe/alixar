@@ -9,7 +9,7 @@ ALIXAR_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 REF_ROOT="${ALIXAR_ROOT}/../dolibarr-reference"
 
 # Configuration
-ALIXAR_PORT="${ALIXAR_JAVA_PORT:-48081}"
+export ALIXAR_JAVA_PORT="${ALIXAR_JAVA_PORT:-0}"
 REF_PORT="${DOLIBARR_REFERENCE_PORT:-48240}"
 # Dolibarr REST API is at /api/index.php (reached via Docker service DNS)
 REF_BASE_URL="http://127.0.0.1:${REF_PORT}"
@@ -24,24 +24,56 @@ log_info() { echo -e "${GREEN}[INFO]${NC} $*"; }
 log_warn() { echo -e "${YELLOW}[WARN]${NC} $*"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $*"; }
 
-# Compose project name for reference check (isolated from normal development)
-COMPOSE_PROJECT="alixar-reference"
-# Container name for Alixar in reference check (distinct from normal alixar-app)
-ALIXAR_CONTAINER_NAME="alixar-reference"
+# Each invocation owns a fresh Alixar project; the reference network is external.
+COMPOSE_PROJECT="alixar-reference-check-$$-${RANDOM}${RANDOM}"
+COMPOSE=(docker compose -p "${COMPOSE_PROJECT}" -f "${ALIXAR_ROOT}/compose.yaml" -f "${ALIXAR_ROOT}/compose.reference.yaml")
+for resource in container network volume; do
+    resource_args=(ls -q)
+    if [[ "${resource}" == container ]]; then resource_args+=(--all); fi
+    existing=$(docker "${resource}" "${resource_args[@]}" --filter "label=com.docker.compose.project=${COMPOSE_PROJECT}")
+    if [[ -n "${existing}" ]]; then
+        log_error "Project already exists: ${COMPOSE_PROJECT}"
+        exit 1
+    fi
+done
 
+ALIXAR_STARTED=false
 cleanup() {
-    local exit_code=$?
-    log_info "Cleaning up Alixar reference check environment..."
-    cd "${ALIXAR_ROOT}"
-    docker compose -p "${COMPOSE_PROJECT}" -f compose.yaml -f compose.reference.yaml down --remove-orphans >/dev/null 2>&1 || true
-    if [[ -n "${TMP_CONTACT_JSON:-}" && -f "${TMP_CONTACT_JSON}" ]]; then
-        rm -f "${TMP_CONTACT_JSON}"
+    local exit_code=$? cleanup_code=0
+    trap - EXIT
+    if [[ "${ALIXAR_STARTED}" == true ]]; then
+        log_info "Cleaning up ${COMPOSE_PROJECT}..."
+        if ! "${COMPOSE[@]}" down --volumes; then
+            log_error "Cleanup failed for ${COMPOSE_PROJECT}"
+            cleanup_code=1
+        fi
+        for resource in container network volume; do
+            local remaining
+            local -a resource_args=(ls -q)
+            if [[ "${resource}" == container ]]; then resource_args+=(--all); fi
+            if remaining=$(docker "${resource}" "${resource_args[@]}" --filter "label=com.docker.compose.project=${COMPOSE_PROJECT}"); then
+                if [[ -n "${remaining}" ]]; then
+                    log_error "Remaining ${resource} resources: ${remaining}"
+                    cleanup_code=1
+                fi
+            else
+                cleanup_code=1
+            fi
+        done
     fi
-    if [[ $exit_code -ne 0 ]]; then
-        log_error "Integration check failed with exit code $exit_code"
+    if [[ ${exit_code} -eq 0 ]]; then
+        exit_code=${cleanup_code}
+        if [[ ${exit_code} -eq 0 ]]; then
+            log_info "Integration check PASSED; ${COMPOSE_PROJECT} cleaned"
+        fi
+    else
+        log_error "Integration check failed with exit code ${exit_code}"
     fi
+    exit "${exit_code}"
 }
 trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM
 
 # 1. Verify sibling repository exists
 log_info "Checking for sibling dolibarr-reference repository..."
@@ -58,7 +90,7 @@ log_info "Found dolibarr-reference at ${REF_ROOT}"
 # 2. Start reference environment (handles .env and API key provisioning)
 log_info "Starting dolibarr-reference environment..."
 cd "${REF_ROOT}"
-./bin/up
+COMPOSE_PROJECT_NAME=dolibarr-reference ./bin/up
 
 # 3. Load reference environment to get API key
 log_info "Loading dolibarr-reference configuration..."
@@ -69,11 +101,11 @@ if [[ -z "${DOLIBARR_REFERENCE_API_KEY:-}" ]]; then
     exit 1
 fi
 REF_API_KEY="${DOLIBARR_REFERENCE_API_KEY}"
-log_info "Loaded API key (masked: ${REF_API_KEY:0:8}****${REF_API_KEY: -4})"
+log_info "Loaded reference API key"
 
 # 4. Discover the Dolibarr container and its network
 log_info "Discovering Dolibarr container and network..."
-DOLIBARR_CONTAINER=$(docker compose -f "${REF_ROOT}/compose.yaml" ps -q dolibarr)
+DOLIBARR_CONTAINER=$(docker compose -p dolibarr-reference -f "${REF_ROOT}/compose.yaml" ps -q dolibarr)
 if [[ -z "${DOLIBARR_CONTAINER}" ]]; then
     log_error "Dolibarr container not found"
     exit 1
@@ -143,21 +175,25 @@ if [[ -z "${REF_CONTACT}" ]] || ! echo "${REF_CONTACT}" | grep -q '"id"'; then
     exit 1
 fi
 
-# 6. Build Alixar image
-log_info "Building Alixar image..."
+# 6. Build and start exactly the same project image from current code.
 cd "${ALIXAR_ROOT}"
-docker compose build app >/dev/null
-
-# 7. Start Alixar with compose override for reference check
-log_info "Starting Alixar configured for dolibarr-reference (Compose)..."
-export ALIXAR_JAVA_PORT="${ALIXAR_PORT}"
 export ALIXAR_DOLIBARR_API_KEY="${REF_API_KEY}"
 export DOLIBARR_REFERENCE_NETWORK="${DOLIBARR_NETWORK}"
-
-docker compose -p "${COMPOSE_PROJECT}" -f compose.yaml -f compose.reference.yaml up -d
-
-# Wait for container to be running
-sleep 3
+log_info "Building current Alixar code for ${COMPOSE_PROJECT}..."
+"${COMPOSE[@]}" build app
+BUILT_IMAGE=$(docker image inspect "${COMPOSE_PROJECT}-app" --format '{{.Id}}')
+log_info "Starting isolated Alixar configured for dolibarr-reference..."
+ALIXAR_STARTED=true
+"${COMPOSE[@]}" up --no-build --detach --wait --wait-timeout 120 app
+APP_CONTAINER=$("${COMPOSE[@]}" ps -q app)
+RUNNING_IMAGE=$(docker inspect "${APP_CONTAINER}" --format '{{.Image}}')
+if [[ "${RUNNING_IMAGE}" != "${BUILT_IMAGE}" ]]; then
+    log_error "Running Alixar image differs from the image just built"
+    exit 1
+fi
+log_info "Running the current build: ${RUNNING_IMAGE}"
+APP_ADDRESS=$("${COMPOSE[@]}" port app 8080)
+ALIXAR_PORT="${APP_ADDRESS##*:}"
 
 # 8. Wait for Alixar health
 log_info "Waiting for Alixar /health..."
@@ -178,7 +214,7 @@ for i in {1..30}; do
     fi
     if [[ $i -eq 30 ]]; then
         log_error "Alixar /health did not become available within 60 seconds"
-        docker compose -p "${COMPOSE_PROJECT}" -f compose.yaml -f compose.reference.yaml logs app
+        "${COMPOSE[@]}" logs app
         exit 1
     fi
     sleep 2
@@ -197,7 +233,7 @@ RESPONSE_BODY=$(echo "${ALIXAR_RESPONSE}" | head -n -1)
 if [[ "${HTTP_CODE}" != "200" ]]; then
     log_error "Alixar returned HTTP ${HTTP_CODE}, expected 200"
     log_error "Response: ${RESPONSE_BODY}"
-    docker compose -p "${COMPOSE_PROJECT}" -f compose.yaml -f compose.reference.yaml logs app
+    "${COMPOSE[@]}" logs app
     exit 1
 fi
 
@@ -385,7 +421,6 @@ log_info "Real Dolibarr 404 correctly maps to Alixar 404"
 log_info "Reference environment left running at ${REF_BASE_URL}"
 log_info "To reset: cd ${REF_ROOT} && ./bin/reset"
 
-log_info "=== Integration check PASSED ==="
 log_info "Real contact ID: ${CONTACT_ID}"
 log_info "Canonical response verified against dolibarr-reference 24.0.1"
 
