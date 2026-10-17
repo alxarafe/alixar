@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.contact.api;
 
+import es.alxarafe.alixar.authentication.AuthenticationTestConfig;
 import es.alxarafe.alixar.contact.ContactTestConfig;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
 import es.alxarafe.alixar.contact.application.InvalidThirdPartyReferenceException;
@@ -15,8 +16,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
-@Import(ContactTestConfig.class)
+@Import({ContactTestConfig.class, AuthenticationTestConfig.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class ContactI18nTest {
 
@@ -30,7 +32,7 @@ class ContactI18nTest {
 
     @org.junit.jupiter.api.BeforeEach
     void setup() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
     }
 
     @Test

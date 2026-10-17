@@ -15,7 +15,11 @@ public class I18nConfig {
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasenames("classpath:i18n/core/messages", "classpath:i18n/contact/messages");
+        messageSource.setBasenames(
+            "classpath:i18n/core/messages",
+            "classpath:i18n/contact/messages",
+            "classpath:i18n/authentication/messages"
+        );
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(true);
         messageSource.setCacheSeconds(60);

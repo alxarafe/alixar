@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import java.net.URI;
 import java.util.Locale;
 
-@ControllerAdvice
+@ControllerAdvice(assignableTypes = ContactController.class)
 public class ContactExceptionHandler {
 
     private MessageSource messageSource;

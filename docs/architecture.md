@@ -24,6 +24,7 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 | PostgreSQL 18.6 for persistence | Approved |
 | Flyway for database migrations | Approved |
 | jOOQ for type-safe SQL | Approved |
+| Spring Security 7.1.1 for the initial web-session authentication foundation | Approved |
 
 ## Implemented
 
@@ -34,11 +35,15 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - PostgreSQL 18.6 persistence infrastructure
 - Flyway migration infrastructure
 - jOOQ runtime infrastructure (PostgreSQL dialect)
+- Alixar-owned authentication users persisted through Flyway and jOOQ
+- Username/email credential validation with adaptive password hashing
+- Initial Spring Security HTTP-session authentication for web clients
 
 ## Planned (Not Implemented)
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
-- Spring Security authentication/authorization
+- Authorization and protected business capabilities
+- Definitive authentication contract for independent API consumers
 - OpenAPI specification
 - ERP modules (thirdparties, catalog, sales, billing, inventory, accounting)
 - Module system
@@ -72,6 +77,18 @@ This rule applies when domain code is introduced in future tasks.
 - No code copying from either
 - No package/file imports from `alixar-legacy`
 
+## Authentication Boundary
+
+Credential validation depends on application ports for user persistence and
+password hashing. It does not depend on HTTP sessions or Spring Security.
+Spring Security adapts a validated Alixar user into an authenticated principal
+and persists that principal in the servlet session.
+
+The current process-local session mechanism is intentionally a web-client
+foundation, not a definitive authentication contract for independent API
+consumers. See [Authentication](authentication.md) for the contract and pending
+decisions.
+
 ## Internationalization (i18n) Architecture
 
 ### Module-owned translations
@@ -80,6 +97,7 @@ Each functional module owns translations for its own concepts:
 
 - **Core module** (`i18n/core/messages*.properties`): Genuinely cross-module messages and templates (e.g., `validation.required`, `validation.required.title`)
 - **Contact module** (`i18n/contact/messages*.properties`): Contact-specific messages (e.g., `contact.notFound`, `contact.invalidThirdPartyReference`, `field.contact.lastName`)
+- **Authentication module** (`i18n/authentication/messages*.properties`): Authentication errors and authentication field labels
 
 ### Localization boundary
 

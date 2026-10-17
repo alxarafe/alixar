@@ -19,13 +19,27 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
 
 - **PostgreSQL 18.6**: Docker Compose service with a pinned image digest, internal
   connectivity, healthcheck, and a persistent development volume retained by `bin/down`
-- **Flyway 12.4.0**: Managed by Spring Boot 4.1.1; verified startup with zero
-  migrations and an empty schema history table, without a fictitious initial migration
+- **Flyway 12.4.0**: Managed by Spring Boot 4.1.1; applies the first real
+  migration for Alixar-owned authentication users
 - **jOOQ runtime**: PostgreSQL dialect and Spring-provided `DSLContext` verified
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 45 existing deterministic tests remain enabled
+  the 61 deterministic tests remain enabled
+
+### Authentication
+
+- **Alixar-owned identity**: Stable UUID with unique case-insensitive username
+  and email identifiers, adaptive password hash, enabled state, and timestamps
+- **Credential validation**: Login by username or email through an application
+  use case that is independent of HTTP session mechanics
+- **Initial web authentication**: Spring Security 7.1.1 process-local HTTP
+  session with fixation protection, cookie-only tracking, CSRF protection, and
+  explicit login, logout and current-user endpoints
+- **Safe bootstrap**: Optional environment-provided initial user with immediate
+  adaptive hashing and no fixed credential in source or migration data
+- **Scope boundary**: No roles, permissions, Contact relationship, Dolibarr
+  authentication integration, registration, password recovery, or bearer-token mechanism
 
 ## Transitional integrations
 
@@ -50,6 +64,6 @@ See [Development](development.md) for full validation workflow details.
 ## Not yet implemented
 
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
-- Authentication
 - Authorization
+- Definitive authentication for independent API consumers
 - Broad ERP functionality beyond the currently implemented slices

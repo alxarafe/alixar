@@ -65,8 +65,8 @@ echo "Building current code and running component tests..."
 echo "Starting isolated PostgreSQL and application..."
 "${COMPOSE[@]}" up --no-build --detach --wait --wait-timeout 120 app
 
-# The integration test checks the real Boot beans, an empty Flyway history,
-# SELECT 1 through jOOQ, and the absence of business tables.
+# The integration test checks the real Boot beans, Flyway V1, SELECT 1 through
+# jOOQ, and the authentication schema constraints.
 echo "Verifying PostgreSQL/Flyway/jOOQ integration..."
 "${COMPOSE[@]}" run --rm --no-deps persistence-test
 
