@@ -80,6 +80,13 @@ The optional initial development user is configured with
 commit or reuse real credentials. The initializer hashes the password and never
 resets an existing matching user's password. See [Authentication](authentication.md).
 
+These environment variables are a **development/testing convenience only**.
+Passing `ALIXAR_BOOTSTRAP_PASSWORD` through the environment exposes the
+plaintext secret to process/container inspection, so it is not a production
+secret-management mechanism; production credential provisioning is a separate
+pending decision. No Docker Secrets, Vault, or other secret manager is
+implemented.
+
 Session configuration:
 
 | Variable | Default | Description |

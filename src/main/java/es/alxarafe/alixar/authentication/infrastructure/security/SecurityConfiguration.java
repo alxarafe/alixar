@@ -77,6 +77,10 @@ public class SecurityConfiguration {
             .csrf(csrf -> {
                 csrf.spa();
                 csrf.csrfTokenRepository(csrfTokenRepository);
+                // TODO(ALIXAR-DEV-003A): tracked debt. This temporary exclusion covers the
+                // whole CONTACTS_PATH_PATTERN, so it also weakens CSRF protection for future
+                // mutating Contact methods (PUT/PATCH/DELETE). Removing it changes the Contact
+                // contract and requires a dedicated iteration. See docs/authentication.md.
                 csrf.ignoringRequestMatchers(CONTACTS_PATH_PATTERN);
             })
             .authorizeHttpRequests(authorize -> authorize

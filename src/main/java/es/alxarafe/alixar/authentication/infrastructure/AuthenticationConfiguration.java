@@ -7,15 +7,15 @@ import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqUserRepo
 import es.alxarafe.alixar.authentication.infrastructure.security.SpringPasswordHasher;
 import es.alxarafe.alixar.authentication.infrastructure.security.UserAuthenticationProvider;
 import org.jooq.DSLContext;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@Configuration
+@AutoConfiguration
 public class AuthenticationConfiguration {
 
     @Bean

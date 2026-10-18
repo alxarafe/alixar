@@ -94,6 +94,16 @@ The password is hashed immediately with Spring Security's delegating adaptive
 password encoder, which writes bcrypt hashes in this version. No plaintext or
 fixed bootstrap password is stored in a migration or source file.
 
+> **Development/testing mechanism only.** Supplying `ALIXAR_BOOTSTRAP_PASSWORD`
+> through an environment variable places the plaintext secret in the process
+> environment, where it can be observed through `docker inspect`, the container
+> runtime, or host process inspection. It is intended exclusively to seed one
+> initial user in local development and automated testing. It is **not** a
+> production secret-management recommendation, and it does not replace a
+> dedicated secret manager. Production credential provisioning requires a
+> separate, explicit decision that is outside the scope of ALIXAR-DEV-003A; no
+> Docker Secrets, Vault, or other secret manager is implemented here.
+
 All three variables must be supplied together. The initializer creates the
 user only when neither identifier exists. Restarting with the same username
 and email does not reset its password; conflicting identifiers fail startup.
@@ -110,6 +120,17 @@ and the real Dolibarr compatibility check during this authentication
 foundation. Its existing POST is temporarily excluded from CSRF protection.
 Protecting migrated business capabilities is an authorization decision for a
 later iteration.
+
+### Tracked debt: CSRF exclusion for Contact
+
+The temporary CSRF exclusion covers the whole `/api/contacts/**` pattern, not
+only its current POST method. It is **pending/trackable debt**, not a target
+state: it currently weakens CSRF protection for any Contact request and would
+also exempt future mutating Contact methods (`PUT`, `PATCH`, `DELETE`) once they
+are introduced. Removing the exclusion requires Contact to obtain a CSRF
+token/header pair, which is a change to the Contact contract and must be
+decided explicitly in a dedicated iteration. ALIXAR-DEV-003A intentionally
+leaves the Contact contract unchanged.
 
 ## Mandatory pending decision
 
