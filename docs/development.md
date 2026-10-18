@@ -65,12 +65,37 @@ the approved 18.6 Alpine image rather than following changes to the tag.
 retaining the database volume. Starting again reuses its data. Destruction of
 development data is a separate, explicit operation; no reset command is provided.
 
-Spring Boot 4.1.1 manages Flyway 12.4.0, jOOQ 3.21.7, and PostgreSQL JDBC
-42.7.13. There is no Flyway override, jOOQ code generation, or business migration.
+Spring Boot 4.1.1 manages Flyway 12.4.0, jOOQ 3.21.7, PostgreSQL JDBC
+42.7.13, and Spring Security 7.1.1. There is no Flyway override or jOOQ code
+generation. `V1__create_authentication_user.sql` is the first real migration.
 Boot calls Flyway on startup using its default `classpath:db/migration` location.
-With no migrations, the verified result is an empty `flyway_schema_history`
-table and no business tables. Flyway's warning that no migrations were found
-is expected at this foundation stage; no fictitious migration suppresses it.
+`PersistenceIT` verifies that migration and its username/email uniqueness
+constraints against PostgreSQL.
+
+## Authentication Configuration
+
+The optional initial development user is configured with
+`ALIXAR_BOOTSTRAP_USERNAME`, `ALIXAR_BOOTSTRAP_EMAIL`, and
+`ALIXAR_BOOTSTRAP_PASSWORD`. Set all three before the first `./bin/up`; do not
+commit or reuse real credentials. The initializer hashes the password and never
+resets an existing matching user's password. See [Authentication](authentication.md).
+
+These environment variables are a **development/testing convenience only**.
+Passing `ALIXAR_BOOTSTRAP_PASSWORD` through the environment exposes the
+plaintext secret to process/container inspection, so it is not a production
+secret-management mechanism; production credential provisioning is a separate
+pending decision. No Docker Secrets, Vault, or other secret manager is
+implemented.
+
+Session configuration:
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `ALIXAR_SESSION_TIMEOUT` | `30m` | Inactivity timeout for the process-local HTTP session |
+| `ALIXAR_SESSION_COOKIE_SECURE` | `false` | Set to `true` whenever HTTPS is used |
+
+The session cookie is always `HttpOnly` and `SameSite=Lax`. CSRF uses the
+Angular-compatible `XSRF-TOKEN` cookie and `X-XSRF-TOKEN` header.
 
 ## Docker Compose
 
@@ -94,13 +119,13 @@ This override is used **only** by `./bin/check-reference`.
 
 `./bin/check` is the complete validation authority for Alixar itself. It runs entirely in Docker and performs:
 
-1. Build and run the 45 deterministic tests (`mvnw clean verify`)
+1. Build and run the 61 deterministic tests (`mvnw clean verify`)
 2. Runtime image build
 3. Container startup with health check wait (database + app)
 4. PostgreSQL health verification (`pg_isready`)
 5. Run `PersistenceIT` against the real isolated PostgreSQL service: verify the
-   Boot datasource, Flyway bean and empty history, a jOOQ `DSLContext` executing
-   `SELECT 1`, PostgreSQL 18.6, and absence of business tables
+   Boot datasource, Flyway `V1`, a jOOQ `DSLContext` executing `SELECT 1`,
+   PostgreSQL 18.6, the authentication table, and identifier uniqueness
 6. HTTP `GET /health` verification (exact `{"status":"ok"}` response)
 7. Cleanup of this invocation's containers, network, and volume; verify none remain
 
@@ -116,7 +141,7 @@ the invocation's project. Cleanup errors are reported and fail an otherwise
 successful check; an earlier failure retains its exit code. Images/build cache
 are retained. No fixed development or previous check project is cleaned.
 
-`./bin/test` runs the original 45 component/unit tests without PostgreSQL.
+`./bin/test` runs the 61 component/unit tests without PostgreSQL.
 Their persistence exclusions are centralized in `src/test/resources/application.properties`.
 The additional `PersistenceIT` uses Surefire's separate `*IT` naming convention
 and is explicitly selected by `bin/check` through `compose.check.yaml`, with
