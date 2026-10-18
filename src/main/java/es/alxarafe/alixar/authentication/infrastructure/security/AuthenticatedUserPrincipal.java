@@ -6,6 +6,7 @@ import java.util.UUID;
 public record AuthenticatedUserPrincipal(
     UUID id,
     String username,
-    String email
+    String email,
+    long credentialsVersion
 ) implements Serializable {
 }

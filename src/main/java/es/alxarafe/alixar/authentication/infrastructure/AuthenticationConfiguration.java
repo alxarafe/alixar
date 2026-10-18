@@ -1,27 +1,39 @@
 package es.alxarafe.alixar.authentication.infrastructure;
 
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
+import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
+import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
+import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
+import es.alxarafe.alixar.authentication.application.TokenHasher;
 import es.alxarafe.alixar.authentication.application.UserRepository;
+import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqPasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqUserRepository;
+import es.alxarafe.alixar.authentication.infrastructure.security.Sha256TokenHasher;
 import es.alxarafe.alixar.authentication.infrastructure.security.SpringPasswordHasher;
 import es.alxarafe.alixar.authentication.infrastructure.security.UserAuthenticationProvider;
 import org.jooq.DSLContext;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-@AutoConfiguration
+@Configuration
 public class AuthenticationConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean(UserRepository.class)
+    @Profile("!test")
     UserRepository userRepository(DSLContext dsl) {
         return new JooqUserRepository(dsl);
+    }
+
+    @Bean
+    @Profile("!test")
+    PasswordResetTokenRepository passwordResetTokenRepository(DSLContext dsl) {
+        return new JooqPasswordResetTokenRepository(dsl);
     }
 
     @Bean
@@ -35,11 +47,37 @@ public class AuthenticationConfiguration {
     }
 
     @Bean
+    TokenHasher tokenHasher() {
+        return new Sha256TokenHasher();
+    }
+
+    @Bean
     AuthenticateUserUseCase authenticateUserUseCase(
         UserRepository userRepository,
         PasswordHasher passwordHasher
     ) {
         return new AuthenticateUserUseCase(userRepository, passwordHasher);
+    }
+
+    @Bean
+    ForgotPasswordUseCase forgotPasswordUseCase(
+        UserRepository userRepository,
+        PasswordResetTokenRepository tokenRepository,
+        TokenHasher tokenHasher,
+        es.alxarafe.alixar.authentication.application.PasswordResetNotifier notifier,
+        @org.springframework.beans.factory.annotation.Value("${alixar.authentication.password-reset.frontend-url:}") String frontendResetUrlBase
+    ) {
+        return new ForgotPasswordUseCase(userRepository, tokenRepository, tokenHasher, notifier, frontendResetUrlBase);
+    }
+
+    @Bean
+    ResetPasswordUseCase resetPasswordUseCase(
+        UserRepository userRepository,
+        PasswordResetTokenRepository tokenRepository,
+        TokenHasher tokenHasher,
+        PasswordHasher passwordHasher
+    ) {
+        return new ResetPasswordUseCase(userRepository, tokenRepository, tokenHasher, passwordHasher);
     }
 
     @Bean

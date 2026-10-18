@@ -1,22 +1,35 @@
 package es.alxarafe.alixar.authentication;
 
+import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.UserRepository;
+import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 
 @TestConfiguration
 public class AuthenticationTestConfig {
 
     @Bean
     @Primary
-    public TestUserRepository testUserRepository() {
+    @Profile("test")
+    public UserRepository testUserRepository() {
         return new TestUserRepository();
+    }
+
+    @Bean
+    @Primary
+    @Profile("test")
+    public PasswordResetTokenRepository testPasswordResetTokenRepository() {
+        return new TestPasswordResetTokenRepository();
     }
 
     public static class TestUserRepository implements UserRepository {
@@ -50,8 +63,33 @@ public class AuthenticationTestConfig {
         }
 
         @Override
+        public Optional<User> findById(UUID id) {
+            return users.stream().filter(u -> u.id().equals(id)).findFirst();
+        }
+
+        @Override
         public void create(User user) {
             users.add(user);
+        }
+
+        @Override
+        public void updatePasswordAndCredentialsVersion(UUID userId, String newPasswordHash, long newCredentialsVersion) {
+            users.stream()
+                .filter(u -> u.id().equals(userId))
+                .findFirst()
+                .ifPresent(u -> {
+                    int index = users.indexOf(u);
+                    users.set(index, new User(
+                        u.id(),
+                        u.username(),
+                        u.email(),
+                        newPasswordHash,
+                        u.enabled(),
+                        newCredentialsVersion,
+                        u.createdAt(),
+                        Instant.now()
+                    ));
+                });
         }
 
         private Optional<User> find(java.util.function.Predicate<User> predicate) {
@@ -60,6 +98,63 @@ public class AuthenticationTestConfig {
 
         private String normalize(String value) {
             return value.strip().toLowerCase(Locale.ROOT);
+        }
+    }
+
+    public static class TestPasswordResetTokenRepository implements PasswordResetTokenRepository {
+
+        private final List<PasswordResetToken> tokens = new ArrayList<>();
+
+        public void replaceWith(PasswordResetToken... replacementTokens) {
+            tokens.clear();
+            tokens.addAll(List.of(replacementTokens));
+        }
+
+        @Override
+        public Optional<PasswordResetToken> findByTokenHash(String tokenHash) {
+            return tokens.stream()
+                .filter(t -> t.tokenHash().equals(tokenHash))
+                .findFirst();
+        }
+
+        @Override
+        public void create(PasswordResetToken token) {
+            tokens.add(token);
+        }
+
+        @Override
+        public void markAsUsed(UUID tokenId, Instant usedAt) {
+            tokens.stream()
+                .filter(t -> t.id().equals(tokenId))
+                .findFirst()
+                .ifPresent(t -> {
+                    int index = tokens.indexOf(t);
+                    tokens.set(index, new PasswordResetToken(
+                        t.id(),
+                        t.userId(),
+                        t.tokenHash(),
+                        t.expiresAt(),
+                        usedAt,
+                        t.createdAt()
+                    ));
+                });
+        }
+
+        @Override
+        public void invalidatePendingTokensForUser(UUID userId) {
+            tokens.stream()
+                .filter(t -> t.userId().equals(userId) && t.usedAt() == null)
+                .forEach(t -> {
+                    int index = tokens.indexOf(t);
+                    tokens.set(index, new PasswordResetToken(
+                        t.id(),
+                        t.userId(),
+                        t.tokenHash(),
+                        t.expiresAt(),
+                        Instant.now(),
+                        t.createdAt()
+                    ));
+                });
         }
     }
 }

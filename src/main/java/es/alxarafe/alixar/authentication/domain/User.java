@@ -9,6 +9,7 @@ public record User(
     String email,
     String passwordHash,
     boolean enabled,
+    long credentialsVersion,
     Instant createdAt,
     Instant updatedAt
 ) {

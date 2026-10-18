@@ -26,6 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
+import org.springframework.test.context.ActiveProfiles;
+
+@ActiveProfiles("test")
 @Import({ContactTestConfig.class, AuthenticationTestConfig.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class ContactControllerTest {

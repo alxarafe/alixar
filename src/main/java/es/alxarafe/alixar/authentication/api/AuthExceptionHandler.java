@@ -1,6 +1,8 @@
 package es.alxarafe.alixar.authentication.api;
 
 import es.alxarafe.alixar.authentication.application.AuthenticationErrorCode;
+import es.alxarafe.alixar.authentication.application.InvalidPasswordException;
+import es.alxarafe.alixar.authentication.application.InvalidResetTokenException;
 import es.alxarafe.alixar.core.application.ErrorCode;
 import java.net.URI;
 import java.util.Locale;
@@ -18,6 +20,10 @@ class AuthExceptionHandler {
 
     private static final URI INVALID_CREDENTIALS_TYPE =
         URI.create("urn:alixar:error:authentication-invalid-credentials");
+    private static final URI INVALID_RESET_TOKEN_TYPE =
+        URI.create("urn:alixar:error:authentication-invalid-reset-token");
+    private static final URI INVALID_PASSWORD_TYPE =
+        URI.create("urn:alixar:error:authentication-invalid-password");
 
     private final MessageSource messageSource;
 
@@ -34,6 +40,30 @@ class AuthExceptionHandler {
         problem.setType(INVALID_CREDENTIALS_TYPE);
         problem.setTitle(messageSource.getMessage("authentication.invalidCredentials.title", null, locale));
         problem.setProperty("code", AuthenticationErrorCode.AUTH_INVALID_CREDENTIALS.name());
+        return problem;
+    }
+
+    @ExceptionHandler(InvalidResetTokenException.class)
+    ProblemDetail handleInvalidResetToken(Locale locale) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST,
+            messageSource.getMessage("authentication.invalidResetToken", null, locale)
+        );
+        problem.setType(INVALID_RESET_TOKEN_TYPE);
+        problem.setTitle(messageSource.getMessage("authentication.invalidResetToken.title", null, locale));
+        problem.setProperty("code", AuthenticationErrorCode.AUTH_INVALID_RESET_TOKEN.name());
+        return problem;
+    }
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    ProblemDetail handleInvalidPassword(Locale locale) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST,
+            messageSource.getMessage("authentication.invalidPassword", null, locale)
+        );
+        problem.setType(INVALID_PASSWORD_TYPE);
+        problem.setTitle(messageSource.getMessage("authentication.invalidPassword.title", null, locale));
+        problem.setProperty("code", AuthenticationErrorCode.AUTH_INVALID_PASSWORD.name());
         return problem;
     }
 

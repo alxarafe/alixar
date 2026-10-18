@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.authentication.infrastructure.security;
 
+import es.alxarafe.alixar.authentication.application.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import static es.alxarafe.alixar.authentication.api.AuthenticationEndpoints.LOGIN_PATH;
 import static es.alxarafe.alixar.authentication.api.AuthenticationEndpoints.LOGOUT_PATH;
 import static es.alxarafe.alixar.authentication.api.AuthenticationEndpoints.ME_PATH;
+import static es.alxarafe.alixar.authentication.api.AuthenticationEndpoints.BASE_PATH;
 
 @Configuration
 public class SecurityConfiguration {
@@ -60,13 +62,19 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    CredentialsVersionCheckFilter credentialsVersionCheckFilter(UserRepository userRepository) {
+        return new CredentialsVersionCheckFilter(userRepository);
+    }
+
+    @Bean
     SecurityFilterChain securityFilterChain(
         HttpSecurity http,
         AuthenticationManager authenticationManager,
         SecurityContextRepository securityContextRepository,
         CsrfTokenRepository csrfTokenRepository,
         AuthenticationEntryPoint authenticationEntryPoint,
-        AccessDeniedHandler accessDeniedHandler
+        AccessDeniedHandler accessDeniedHandler,
+        CredentialsVersionCheckFilter credentialsVersionCheckFilter
     ) throws Exception {
         http
             .authenticationManager(authenticationManager)
@@ -83,8 +91,9 @@ public class SecurityConfiguration {
                 // contract and requires a dedicated iteration. See docs/authentication.md.
                 csrf.ignoringRequestMatchers(CONTACTS_PATH_PATTERN);
             })
+            .addFilterAfter(credentialsVersionCheckFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(HEALTH_PATH, CONTACTS_PATH_PATTERN, LOGIN_PATH).permitAll()
+                .requestMatchers(HEALTH_PATH, CONTACTS_PATH_PATTERN, LOGIN_PATH, BASE_PATH + "/password/forgot", BASE_PATH + "/password/reset").permitAll()
                 .requestMatchers(ME_PATH).authenticated()
                 .anyRequest().denyAll())
             .exceptionHandling(exceptions -> exceptions

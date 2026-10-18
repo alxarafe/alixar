@@ -23,7 +23,7 @@ public class UserAuthenticationProvider implements AuthenticationProvider {
         try {
             User user = authenticateUser.execute(authentication.getName(), authentication.getCredentials().toString());
             AuthenticatedUserPrincipal principal = new AuthenticatedUserPrincipal(
-                user.id(), user.username(), user.email()
+                user.id(), user.username(), user.email(), user.credentialsVersion()
             );
             return UsernamePasswordAuthenticationToken.authenticated(principal, null, List.of());
         } catch (InvalidCredentialsException exception) {
