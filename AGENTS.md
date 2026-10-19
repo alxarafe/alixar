@@ -231,6 +231,61 @@ may include:
 Report commands, results, relevant warnings, environment limitations, and
 cleanup evidence. Do not claim a check that was not actually executed.
 
+## Efficient validation execution
+
+The full validation authority is unchanged. This section only changes how
+wait-heavy checks are executed during agent-assisted work; it does not relax
+whether required checks must pass.
+
+During implementation, use the narrowest applicable validation first:
+
+- focused unit tests;
+- focused integration tests;
+- feature/module-specific tests;
+- repository-provided fast or scoped checks, when they actually exist;
+- broader or full validation only when required.
+
+Do not run a long-running repository-wide, integration, end-to-end, conformance,
+build/deployment or full validation command inside an agent session merely to
+wait for it when the developer or CI can execute it directly. Repeated polling
+of long-running commands is specifically discouraged: it can trigger additional
+agent turns that reprocess the existing repository and conversation context even
+though the external process needs no reasoning, consuming model resources without
+adding engineering value.
+
+When a required complete validation is expected to take materially longer than
+focused checks:
+
+- normally provide the exact command for the developer or CI to execute;
+- stop and wait for its result when that validation is required before task
+  completion or commit;
+- continue only once the actual result is known;
+- never claim a validation passed unless its result was actually observed or
+  provided.
+
+Any validation currently required before task completion, commit, deployment or
+publication remains required, and any missing or failed mandatory validation
+remains blocking. This policy changes execution responsibility, not validation
+authority.
+
+When a long-running command genuinely must be executed by the agent, avoid
+repeated polling, wait as efficiently as the available tooling permits, do not
+repeatedly reread unchanged files, and do not rerun unchanged validations without
+a concrete reason. Whether a validation is long-running depends on the repository
+and the task; do not fix a duration threshold, and keep this policy model- and
+tool-neutral.
+
+For Alixar, the validation levels defined under *Validation-layer separation*
+keep their exact meaning: `./bin/test` for deterministic application/component
+tests, `./bin/check` as the complete local validation authority (mandatory
+wherever this agreement already requires it), and `./bin/check-reference` for
+real Dolibarr compatibility. Use the narrower tests for iterative implementation
+work. Relatively expensive suites — `./bin/check`, `./bin/check-reference`,
+persistence/Flyway/jOOQ integration, and Docker build/deployment checks — should
+normally be executed by the developer or CI; when such a check is mandatory
+before task completion or commit, require its actual successful result before
+closing the task. Do not invent fast or scoped commands that do not exist.
+
 ## Safe repository changes
 
 Preserve unrelated user changes. **Inspect staged, unstaged, and untracked
