@@ -1,6 +1,8 @@
 package es.alxarafe.alixar.persistence;
 
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
+import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
+import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
 import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
@@ -9,6 +11,7 @@ import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepositor
 import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.TokenHasher;
 import es.alxarafe.alixar.authentication.application.UserRepository;
+import es.alxarafe.alixar.authentication.application.UsernameAlreadyExistsException;
 import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
 import java.time.Instant;
@@ -312,6 +315,163 @@ class PersistenceIT {
         assertThat(isTransactional(controller, "resetPassword")).isFalse();
         assertThat(isTransactional(facade, "forgotPassword")).isTrue();
         assertThat(isTransactional(facade, "resetPassword")).isTrue();
+    }
+
+    @Test
+    void selfServiceTransactionBoundary_livesInInfrastructureFacade() throws Exception {
+        Class<?> controller = Class.forName("es.alxarafe.alixar.authentication.api.UserController");
+        Class<?> facade = Class.forName(
+            "es.alxarafe.alixar.authentication.infrastructure.TransactionalUserSelfService"
+        );
+
+        assertThat(isTransactional(controller, "updateUsername")).isFalse();
+        assertThat(isTransactional(controller, "changePassword")).isFalse();
+        assertThat(isTransactional(facade, "changeUsername")).isTrue();
+        assertThat(isTransactional(facade, "changePassword")).isTrue();
+    }
+
+    @Test
+    void updateUsername_changesUsernameWithCaseInsensitiveLookupAndUniqueConstraint() {
+        var firstId = UUID.fromString("10101010-2020-3030-4040-505050505050");
+        var secondId = UUID.fromString("60606060-7070-8080-9090-000000000000");
+        var now = Instant.now();
+
+        try {
+            userRepository.create(new User(
+                firstId,
+                "first-user",
+                "first-user@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                0,
+                now,
+                now
+            ));
+            userRepository.create(new User(
+                secondId,
+                "second-user",
+                "second-user@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                0,
+                now,
+                now
+            ));
+
+            var useCase = new ChangeUsernameUseCase(userRepository);
+            useCase.execute(firstId, "Renamed-User");
+
+            assertThat(userRepository.findByUsername("RENAMED-USER")).map(User::id).contains(firstId);
+            assertThat(userRepository.findByUsername("first-user")).isEmpty();
+            assertThat(userRepository.findById(firstId).orElseThrow().email())
+                .isEqualTo("first-user@example.test");
+
+            assertThatThrownBy(() -> useCase.execute(firstId, "Second-User"))
+                .isInstanceOf(UsernameAlreadyExistsException.class);
+            assertThatThrownBy(() -> userRepository.updateUsername(firstId, "SECOND-USER"))
+                .isInstanceOf(UsernameAlreadyExistsException.class);
+        } finally {
+            deleteUser(firstId);
+            deleteUser(secondId);
+        }
+    }
+
+    @Test
+    void changePassword_incrementsCredentialsVersionAndInvalidatesPendingTokens() {
+        var userId = UUID.fromString("0a0a0a0a-1b1b-2c2c-3d3d-4e4e4e4e4e4e");
+        var now = Instant.now();
+        String originalPassword = "original-password-123";
+        String newPassword = "new-secure-password-123";
+        String rawToken = PasswordResetTokenGenerator.generate();
+        String tokenHash = tokenHasher.hash(rawToken);
+        var token = new PasswordResetToken(
+            UUID.randomUUID(),
+            userId,
+            tokenHash,
+            now.plusSeconds(30 * 60),
+            null,
+            now
+        );
+
+        try {
+            userRepository.create(new User(
+                userId,
+                "change-password",
+                "change-password@example.test",
+                passwordHasher.hash(originalPassword),
+                true,
+                2,
+                now,
+                now
+            ));
+            passwordResetTokenRepository.create(token);
+
+            var useCase = new ChangePasswordUseCase(userRepository, passwordResetTokenRepository, passwordHasher);
+            var transactionTemplate = new TransactionTemplate(transactionManager);
+            transactionTemplate.execute(status -> {
+                useCase.execute(userId, originalPassword, newPassword);
+                return null;
+            });
+
+            var persisted = userRepository.findById(userId).orElseThrow();
+            assertThat(persisted.credentialsVersion()).isEqualTo(3);
+            assertThat(passwordHasher.matches(newPassword, persisted.passwordHash())).isTrue();
+            assertThat(passwordHasher.matches(originalPassword, persisted.passwordHash())).isFalse();
+            assertThat(passwordResetTokenRepository.findByTokenHash(tokenHash).orElseThrow().isUsed()).isTrue();
+        } finally {
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void changePassword_whenTokenInvalidationFails_rollsBackPasswordAndCredentialsVersion() {
+        var userId = UUID.fromString("5a5a5a5a-6b6b-7c7c-8d8d-9e9e9e9e9e9e");
+        var now = Instant.now();
+        String originalPassword = "original-password-123";
+        String rawToken = PasswordResetTokenGenerator.generate();
+        String tokenHash = tokenHasher.hash(rawToken);
+        var token = new PasswordResetToken(
+            UUID.randomUUID(),
+            userId,
+            tokenHash,
+            now.plusSeconds(30 * 60),
+            null,
+            now
+        );
+
+        try {
+            userRepository.create(new User(
+                userId,
+                "rollback-change",
+                "rollback-change@example.test",
+                passwordHasher.hash(originalPassword),
+                true,
+                4,
+                now,
+                now
+            ));
+            passwordResetTokenRepository.create(token);
+
+            PasswordResetTokenRepository failingRepository = new DelegatingPasswordResetTokenRepository() {
+                @Override
+                public void invalidatePendingTokensForUser(UUID failingUserId) {
+                    throw new IllegalStateException("simulated token invalidation failure");
+                }
+            };
+            var useCase = new ChangePasswordUseCase(userRepository, failingRepository, passwordHasher);
+            var transactionTemplate = new TransactionTemplate(transactionManager);
+
+            assertThatThrownBy(() -> transactionTemplate.execute(status -> {
+                useCase.execute(userId, originalPassword, "new-secure-password-123");
+                return null;
+            })).isInstanceOf(IllegalStateException.class);
+
+            var persisted = userRepository.findById(userId).orElseThrow();
+            assertThat(persisted.credentialsVersion()).isEqualTo(4);
+            assertThat(passwordHasher.matches(originalPassword, persisted.passwordHash())).isTrue();
+        } finally {
+            deleteUser(userId);
+        }
     }
 
     private boolean isTransactional(Class<?> controller, String methodName) {

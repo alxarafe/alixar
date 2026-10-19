@@ -7,8 +7,6 @@ import java.util.UUID;
 
 public class ResetPasswordUseCase {
 
-    private static final int MIN_PASSWORD_LENGTH = 12;
-
     private final UserRepository userRepository;
     private final PasswordResetTokenRepository tokenRepository;
     private final TokenHasher tokenHasher;
@@ -27,7 +25,7 @@ public class ResetPasswordUseCase {
     }
 
     public void execute(String rawToken, String newPassword) {
-        validatePassword(newPassword);
+        PasswordPolicy.ensureValid(newPassword);
 
         String tokenHash = tokenHasher.hash(rawToken);
 
@@ -51,11 +49,5 @@ public class ResetPasswordUseCase {
         userRepository.updatePasswordAndCredentialsVersion(user.id(), newPasswordHash, newCredentialsVersion);
         tokenRepository.markAsUsed(token.id(), Instant.now());
         tokenRepository.invalidatePendingTokensForUser(user.id());
-    }
-
-    private void validatePassword(String password) {
-        if (password == null || password.length() < MIN_PASSWORD_LENGTH) {
-            throw new InvalidPasswordException();
-        }
     }
 }
