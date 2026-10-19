@@ -25,21 +25,30 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 61 deterministic tests remain enabled
+  the 82 deterministic tests remain enabled
 
 ### Authentication
 
 - **Alixar-owned identity**: Stable UUID with unique case-insensitive username
-  and email identifiers, adaptive password hash, enabled state, and timestamps
+  and email identifiers, adaptive password hash, enabled state, credentials
+  version, and timestamps
 - **Credential validation**: Login by username or email through an application
   use case that is independent of HTTP session mechanics
 - **Initial web authentication**: Spring Security 7.1.1 process-local HTTP
   session with fixation protection, cookie-only tracking, CSRF protection, and
   explicit login, logout and current-user endpoints
+- **Password recovery**: Constant-time `forgot`/`reset` endpoints, single-use
+  SHA-256-hashed tokens with 30-minute expiry, configurable frontend URL, and an
+  SMTP/no-op `PasswordResetNotifier` port. `reset` changes the password, bumps
+  `credentials_version`, marks the token used and invalidates other pending
+  tokens atomically; `forgot` invalidates and recreates tokens atomically
+- **Session revocation**: Sessions created before a credential change, or whose
+  user was deleted or disabled, are rejected and invalidated on their next
+  request, including on public endpoints
 - **Safe bootstrap**: Optional environment-provided initial user with immediate
   adaptive hashing and no fixed credential in source or migration data
 - **Scope boundary**: No roles, permissions, Contact relationship, Dolibarr
-  authentication integration, registration, password recovery, or bearer-token mechanism
+  authentication integration, registration, or bearer-token mechanism
 
 ## Transitional integrations
 

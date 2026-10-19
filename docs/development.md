@@ -67,10 +67,12 @@ development data is a separate, explicit operation; no reset command is provided
 
 Spring Boot 4.1.1 manages Flyway 12.4.0, jOOQ 3.21.7, PostgreSQL JDBC
 42.7.13, and Spring Security 7.1.1. There is no Flyway override or jOOQ code
-generation. `V1__create_authentication_user.sql` is the first real migration.
-Boot calls Flyway on startup using its default `classpath:db/migration` location.
-`PersistenceIT` verifies that migration and its username/email uniqueness
-constraints against PostgreSQL.
+generation. `V1__create_authentication_user.sql` creates the authentication
+user table and `V2__add_credentials_version_and_password_reset.sql` adds
+`credentials_version` and the password reset token table. Boot calls Flyway on
+startup using its default `classpath:db/migration` location. `PersistenceIT`
+verifies both migrations, their constraints, and password reset transaction
+rollback against PostgreSQL.
 
 ## Authentication Configuration
 
@@ -97,6 +99,24 @@ Session configuration:
 The session cookie is always `HttpOnly` and `SameSite=Lax`. CSRF uses the
 Angular-compatible `XSRF-TOKEN` cookie and `X-XSRF-TOKEN` header.
 
+Password reset configuration:
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `ALIXAR_PASSWORD_RESET_FRONTEND_URL` | empty | Base URL of the frontend page that receives `?token=<raw-token>` |
+| `ALIXAR_PASSWORD_RESET_MAIL_FROM` | `spring.mail.username` | Sender address of reset emails |
+| `SPRING_MAIL_HOST` | unset | Enables the SMTP reset notifier when set |
+| `SPRING_MAIL_PORT` | Spring default (`25`) | SMTP port |
+| `SPRING_MAIL_USERNAME` | unset | SMTP username |
+| `SPRING_MAIL_PASSWORD` | unset | SMTP password (never commit a real value) |
+| `SPRING_MAIL_AUTH` | Spring default | Enable SMTP authentication |
+| `SPRING_MAIL_STARTTLS_ENABLE` | Spring default | Enable STARTTLS |
+
+When no `spring.mail.host` is configured, reset emails are not sent and a no-op
+notifier logs a warning. `compose.yaml` passes the mail variables through from
+the host environment only when they are defined, so no mail sender is created by
+default.
+
 ## Docker Compose
 
 The `compose.yaml` defines:
@@ -119,13 +139,14 @@ This override is used **only** by `./bin/check-reference`.
 
 `./bin/check` is the complete validation authority for Alixar itself. It runs entirely in Docker and performs:
 
-1. Build and run the 61 deterministic tests (`mvnw clean verify`)
+1. Build and run the 82 deterministic tests (`mvnw clean verify`)
 2. Runtime image build
 3. Container startup with health check wait (database + app)
 4. PostgreSQL health verification (`pg_isready`)
 5. Run `PersistenceIT` against the real isolated PostgreSQL service: verify the
-   Boot datasource, Flyway `V1`, a jOOQ `DSLContext` executing `SELECT 1`,
-   PostgreSQL 18.6, the authentication table, and identifier uniqueness
+   Boot datasource, Flyway `V1`/`V2`, a jOOQ `DSLContext` executing `SELECT 1`,
+   PostgreSQL 18.6, the authentication tables and constraints, and password
+   reset transaction rollback
 6. HTTP `GET /health` verification (exact `{"status":"ok"}` response)
 7. Cleanup of this invocation's containers, network, and volume; verify none remain
 
@@ -141,7 +162,7 @@ the invocation's project. Cleanup errors are reported and fail an otherwise
 successful check; an earlier failure retains its exit code. Images/build cache
 are retained. No fixed development or previous check project is cleaned.
 
-`./bin/test` runs the 61 component/unit tests without PostgreSQL.
+`./bin/test` runs the 82 component/unit tests without PostgreSQL.
 Their persistence exclusions are centralized in `src/test/resources/application.properties`.
 The additional `PersistenceIT` uses Surefire's separate `*IT` naming convention
 and is explicitly selected by `bin/check` through `compose.check.yaml`, with

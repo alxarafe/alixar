@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockHttpSession;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -34,7 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles("test")
 @Import(AuthenticationTestConfig.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class AuthControllerTest {
@@ -296,12 +294,6 @@ class AuthControllerTest {
     // Reset Password Tests
 
     @Test
-    void debug_tokenRepositoryType() {
-        System.err.println("Token repository class: " + tokenRepository.getClass().getName());
-        System.err.println("User repository class: " + userRepository.getClass().getName());
-    }
-
-    @Test
     void resetPassword_withValidToken_changesPasswordAndIncrementsCredentialsVersion() throws Exception {
         Cookie csrfCookie = csrfCookieFromSafeRequest();
         String rawToken = PasswordResetTokenGenerator.generate();
@@ -558,6 +550,142 @@ class AuthControllerTest {
         login("alice", PASSWORD)
             .andExpect(status().isUnauthorized())
             .andExpect(jsonPath("$.code").value(AuthenticationErrorCode.AUTH_INVALID_CREDENTIALS.name()));
+    }
+
+    // Stale session (created before a password reset) on public and protected endpoints
+
+    @Test
+    void staleSession_isInvalidatedOnMe() throws Exception {
+        MockHttpSession staleSession = authenticatedSession();
+
+        resetPasswordForEnabledUser("new-secure-password-123");
+
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH).session(staleSession))
+            .andExpect(status().isUnauthorized());
+
+        assertThat(staleSession.isInvalid()).isTrue();
+    }
+
+    @Test
+    void staleSession_allowsLoginWithNewPassword() throws Exception {
+        MockHttpSession staleSession = authenticatedSession();
+
+        resetPasswordForEnabledUser("new-secure-password-123");
+
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        mockMvc.perform(post(AuthenticationEndpoints.LOGIN_PATH)
+                .session(staleSession)
+                .cookie(csrfCookie)
+                .header("X-XSRF-TOKEN", csrfCookie.getValue())
+                .contentType("application/json")
+                .content(loginJson("alice", "new-secure-password-123")))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(ENABLED_USER_ID.toString()));
+    }
+
+    @Test
+    void staleSession_allowsForgotPassword() throws Exception {
+        MockHttpSession staleSession = authenticatedSession();
+
+        resetPasswordForEnabledUser("new-secure-password-123");
+
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        mockMvc.perform(post("/api/auth/password/forgot")
+                .session(staleSession)
+                .cookie(csrfCookie)
+                .header("X-XSRF-TOKEN", csrfCookie.getValue())
+                .contentType("application/json")
+                .content("{\"email\":\"alice@example.test\"}"))
+            .andExpect(status().isAccepted());
+    }
+
+    @Test
+    void staleSession_allowsResetPassword() throws Exception {
+        MockHttpSession staleSession = authenticatedSession();
+
+        resetPasswordForEnabledUser("new-secure-password-123");
+
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        String rawToken = PasswordResetTokenGenerator.generate();
+        ((AuthenticationTestConfig.TestPasswordResetTokenRepository) tokenRepository).replaceWith(
+            new PasswordResetToken(
+                UUID.randomUUID(),
+                ENABLED_USER_ID,
+                tokenHasher.hash(rawToken),
+                Instant.now().plusSeconds(30 * 60),
+                null,
+                Instant.now()
+            )
+        );
+
+        mockMvc.perform(post("/api/auth/password/reset")
+                .session(staleSession)
+                .cookie(csrfCookie)
+                .header("X-XSRF-TOKEN", csrfCookie.getValue())
+                .contentType("application/json")
+                .content("{\"token\":\"" + rawToken + "\",\"password\":\"another-secure-pass-456\"}"))
+            .andExpect(status().isOk());
+
+        assertThat(passwordHasher.matches("another-secure-pass-456",
+            userRepository.findById(ENABLED_USER_ID).orElseThrow().passwordHash())).isTrue();
+    }
+
+    @Test
+    void staleSession_withUnknownUser_isInvalidated() throws Exception {
+        MockHttpSession staleSession = authenticatedSession();
+
+        ((AuthenticationTestConfig.TestUserRepository) userRepository).replaceWith();
+
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH).session(staleSession))
+            .andExpect(status().isUnauthorized());
+
+        assertThat(staleSession.isInvalid()).isTrue();
+    }
+
+    @Test
+    void staleSession_withDisabledUser_isInvalidated() throws Exception {
+        MockHttpSession staleSession = authenticatedSession();
+
+        User alice = userRepository.findById(ENABLED_USER_ID).orElseThrow();
+        ((AuthenticationTestConfig.TestUserRepository) userRepository).replaceWith(
+            new User(
+                alice.id(),
+                alice.username(),
+                alice.email(),
+                alice.passwordHash(),
+                false,
+                alice.credentialsVersion(),
+                alice.createdAt(),
+                alice.updatedAt()
+            )
+        );
+
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH).session(staleSession))
+            .andExpect(status().isUnauthorized());
+
+        assertThat(staleSession.isInvalid()).isTrue();
+    }
+
+    private void resetPasswordForEnabledUser(String newPassword) throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        String rawToken = PasswordResetTokenGenerator.generate();
+        ((AuthenticationTestConfig.TestPasswordResetTokenRepository) tokenRepository).replaceWith(
+            new PasswordResetToken(
+                UUID.randomUUID(),
+                ENABLED_USER_ID,
+                tokenHasher.hash(rawToken),
+                Instant.now().plusSeconds(30 * 60),
+                null,
+                Instant.now()
+            )
+        );
+
+        mockMvc.perform(post("/api/auth/password/reset")
+                .cookie(csrfCookie)
+                .header("X-XSRF-TOKEN", csrfCookie.getValue())
+                .contentType("application/json")
+                .content("{\"token\":\"" + rawToken + "\",\"password\":\"" + newPassword + "\"}"))
+            .andExpect(status().isOk());
     }
 
     private org.springframework.test.web.servlet.ResultActions login(String identifier, String password)

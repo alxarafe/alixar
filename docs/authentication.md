@@ -7,6 +7,11 @@ such as Solucar. It stores Alixar-owned security identities in PostgreSQL and
 authenticates them through a server-side HTTP session managed by Spring
 Security.
 
+ALIXAR-DEV-003B adds password recovery on top of that foundation: constant-time
+forgot/reset endpoints, single-use hashed reset tokens, credential-version based
+session revocation, and email delivery of the reset link through a replaceable
+application port.
+
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
 Username and email comparisons and uniqueness checks are case-insensitive.
@@ -56,6 +61,25 @@ present, clears the security context and CSRF token, expires the session cookie,
 and returns `204`. The operation is intentionally idempotent for an anonymous
 client with a valid CSRF token.
 
+### `POST /api/auth/password/forgot`
+
+Requires a valid CSRF cookie/header pair and accepts `{"email": "..."}`. It
+always returns `202 Accepted` with an empty body, whether or not the email
+belongs to an enabled user, to avoid disclosing account existence. For an
+enabled matching user it invalidates previous pending tokens, creates a new
+single-use token, and asks the configured `PasswordResetNotifier` to deliver the
+reset link.
+
+### `POST /api/auth/password/reset`
+
+Requires a valid CSRF cookie/header pair and accepts
+`{"token": "...", "password": "..."}`. A successful response is `200` with an
+empty body. Invalid, expired, already-used, or superseded tokens return `400`
+with code `AUTH_INVALID_RESET_TOKEN`; a password shorter than 12 characters
+returns `400` with code `AUTH_INVALID_PASSWORD`. On success it changes the
+password hash, increments `credentials_version`, marks the token as used and
+invalidates any other pending tokens in one transaction.
+
 ## Browser session policy
 
 - Authentication is stored in the servlet container's process-local session.
@@ -77,6 +101,46 @@ subsequent safe request before its next unsafe request.
 No CORS policy is defined in this iteration. A cross-origin Solucar deployment
 requires an explicit future decision covering trusted origins, credentials and
 cookie attributes.
+
+## Password recovery
+
+Reset tokens are 256-bit random values, Base64 URL-safe encoded. Only the
+SHA-256 hash is stored, tokens expire after 30 minutes, and a token is
+single-use. Requesting a new token invalidates previous pending tokens.
+
+The reset link is built from `ALIXAR_PASSWORD_RESET_FRONTEND_URL` concatenated
+with `?token=<raw-token>`. No frontend is hardcoded; the base URL must be
+provided by deployment configuration.
+
+Delivery goes through the `PasswordResetNotifier` application port. When a
+standard Spring mail host is configured (`SPRING_MAIL_HOST` or `spring.mail.host`,
+plus optional `SPRING_MAIL_PORT`, `SPRING_MAIL_USERNAME`, `SPRING_MAIL_PASSWORD`,
+`SPRING_MAIL_AUTH`, `SPRING_MAIL_STARTTLS_ENABLE`), the SMTP adapter sends the
+email. The sender address is `ALIXAR_PASSWORD_RESET_MAIL_FROM`, falling back to
+`spring.mail.username`. When no mail host is configured the application uses a
+no-op notifier that logs a warning and sends nothing; this is the default for
+local development and tests. Credentials are never hardcoded and must come from
+external configuration.
+
+`forgot` and `reset` are atomic. In `reset`, changing the password hash,
+incrementing `credentials_version`, marking the token as used and invalidating
+other pending tokens happen in a single transaction. In `forgot`, invalidating
+previous tokens and creating the new token happen in a single transaction; if
+creation fails the previous token is not left invalidated. jOOQ repositories
+participate in the same Spring transaction through Boot's
+`TransactionAwareDataSourceProxy`.
+
+## Session revocation
+
+`credentials_version` is stored per user and embedded in the authenticated
+principal. `CredentialsVersionCheckFilter` runs on every request, including
+`permitAll` endpoints. For an authenticated principal it reloads the user and, if
+the user no longer exists, is disabled, or its `credentials_version` changed, it
+clears the security context and invalidates the HTTP session. The affected
+request then proceeds unauthenticated: `GET /api/auth/me` returns `401`, while
+the public `forgot`/`reset` endpoints still run and a fresh `login` creates a new
+session. Changing a password through `reset` increments `credentials_version`, so
+sessions created before the reset stop being valid.
 
 ## Bootstrap user
 
@@ -114,10 +178,11 @@ the database uniqueness constraint.
 
 ## Current public access
 
-`/health`, the login endpoint, and the existing Contact endpoints remain
-anonymous. Contact remains public solely to preserve its established contract
-and the real Dolibarr compatibility check during this authentication
-foundation. Its existing POST is temporarily excluded from CSRF protection.
+`/health`, the login endpoint, the `password/forgot` and `password/reset`
+endpoints, and the existing Contact endpoints remain anonymous. Contact remains
+public solely to preserve its established contract and the real Dolibarr
+compatibility check during this authentication foundation. Its existing POST is
+temporarily excluded from CSRF protection.
 Protecting migrated business capabilities is an authorization decision for a
 later iteration.
 
@@ -145,7 +210,7 @@ OAuth 2.x, OpenID Connect, machine-to-machine authentication, and credential
 revocation and renewal.
 
 Roles, permissions and functional authorization are also not implemented.
-Rate limiting/password-attempt policy and immediate invalidation of existing
-sessions when a user is disabled are pending security decisions. Currently,
-disabling a user blocks new logins while an existing session remains valid
-until logout or timeout.
+Rate limiting and password-attempt policy remain pending security decisions.
+Disabling a user or deleting it now invalidates its existing session on the next
+request through `CredentialsVersionCheckFilter`, but that check requires a
+database read per authenticated request and executes on public endpoints too.

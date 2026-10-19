@@ -13,21 +13,18 @@ import java.util.UUID;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
 
 @TestConfiguration
 public class AuthenticationTestConfig {
 
     @Bean
     @Primary
-    @Profile("test")
     public UserRepository testUserRepository() {
         return new TestUserRepository();
     }
 
     @Bean
     @Primary
-    @Profile("test")
     public PasswordResetTokenRepository testPasswordResetTokenRepository() {
         return new TestPasswordResetTokenRepository();
     }

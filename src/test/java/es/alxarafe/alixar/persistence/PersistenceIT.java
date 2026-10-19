@@ -1,9 +1,20 @@
 package es.alxarafe.alixar.persistence;
 
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
+import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
+import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
+import es.alxarafe.alixar.authentication.application.PasswordResetTokenGenerator;
+import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
+import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
+import es.alxarafe.alixar.authentication.application.TokenHasher;
 import es.alxarafe.alixar.authentication.application.UserRepository;
+import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.UUID;
 import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.jooq.DSLContext;
@@ -11,6 +22,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -41,6 +55,15 @@ class PersistenceIT {
 
     @Autowired
     private AuthenticateUserUseCase authenticateUser;
+
+    @Autowired
+    private PasswordResetTokenRepository passwordResetTokenRepository;
+
+    @Autowired
+    private TokenHasher tokenHasher;
+
+    @Autowired
+    private PlatformTransactionManager transactionManager;
 
     @Test
     void bootIntegratesPostgresqlFlywayJooqAndAuthenticationMigration() throws Exception {
@@ -168,6 +191,156 @@ class PersistenceIT {
 
         assertThatThrownBy(() -> insertToken(tokenId, nonExistentUserId, "TOKENHASH123", now.plusMinutes(30), null))
             .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void resetPassword_whenTokenUpdateFails_rollsBackPasswordAndCredentialsVersion() {
+        var userId = UUID.fromString("11111111-2222-3333-4444-555555555555");
+        var now = Instant.now();
+        String originalPassword = "original-password-123";
+        String rawToken = PasswordResetTokenGenerator.generate();
+        String tokenHash = tokenHasher.hash(rawToken);
+        var token = new PasswordResetToken(
+            UUID.randomUUID(),
+            userId,
+            tokenHash,
+            now.plusSeconds(30 * 60),
+            null,
+            now
+        );
+
+        try {
+            userRepository.create(new User(
+                userId,
+                "rollback-reset",
+                "rollback-reset@example.test",
+                passwordHasher.hash(originalPassword),
+                true,
+                3,
+                now,
+                now
+            ));
+            passwordResetTokenRepository.create(token);
+
+            PasswordResetTokenRepository failingRepository = new DelegatingPasswordResetTokenRepository() {
+                @Override
+                public void markAsUsed(UUID tokenId, Instant usedAt) {
+                    throw new IllegalStateException("simulated token update failure");
+                }
+            };
+            var useCase = new ResetPasswordUseCase(userRepository, failingRepository, tokenHasher, passwordHasher);
+            var transactionTemplate = new TransactionTemplate(transactionManager);
+
+            assertThatThrownBy(() -> transactionTemplate.execute(status -> {
+                useCase.execute(rawToken, "new-secure-password-123");
+                return null;
+            })).isInstanceOf(IllegalStateException.class);
+
+            var persisted = userRepository.findById(userId).orElseThrow();
+            assertThat(persisted.credentialsVersion()).isEqualTo(3);
+            assertThat(passwordHasher.matches(originalPassword, persisted.passwordHash())).isTrue();
+        } finally {
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void forgotPassword_whenTokenCreationFails_keepsPreviousTokenPending() {
+        var userId = UUID.fromString("66666666-7777-8888-9999-000000000000");
+        var now = Instant.now();
+        String existingRawToken = PasswordResetTokenGenerator.generate();
+        String existingTokenHash = tokenHasher.hash(existingRawToken);
+        var existingToken = new PasswordResetToken(
+            UUID.randomUUID(),
+            userId,
+            existingTokenHash,
+            now.plusSeconds(30 * 60),
+            null,
+            now
+        );
+
+        try {
+            userRepository.create(new User(
+                userId,
+                "rollback-forgot",
+                "rollback-forgot@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                0,
+                now,
+                now
+            ));
+            passwordResetTokenRepository.create(existingToken);
+
+            PasswordResetTokenRepository failingRepository = new DelegatingPasswordResetTokenRepository() {
+                @Override
+                public void create(PasswordResetToken token) {
+                    throw new IllegalStateException("simulated token creation failure");
+                }
+            };
+            PasswordResetNotifier notifier = (email, token, resetUrl) -> {
+            };
+            var useCase = new ForgotPasswordUseCase(
+                userRepository,
+                failingRepository,
+                tokenHasher,
+                notifier,
+                "https://front.example/reset"
+            );
+            var transactionTemplate = new TransactionTemplate(transactionManager);
+
+            assertThatThrownBy(() -> transactionTemplate.execute(status -> {
+                useCase.execute("rollback-forgot@example.test");
+                return null;
+            })).isInstanceOf(IllegalStateException.class);
+
+            var pending = passwordResetTokenRepository.findByTokenHash(existingTokenHash).orElseThrow();
+            assertThat(pending.usedAt()).isNull();
+        } finally {
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void passwordRecoveryEndpoints_declareTransactionalBoundary() throws Exception {
+        Class<?> controller = Class.forName("es.alxarafe.alixar.authentication.api.AuthController");
+        assertThat(isTransactional(controller, "forgotPassword")).isTrue();
+        assertThat(isTransactional(controller, "resetPassword")).isTrue();
+    }
+
+    private boolean isTransactional(Class<?> controller, String methodName) {
+        return Arrays.stream(controller.getDeclaredMethods())
+            .filter(method -> method.getName().equals(methodName))
+            .anyMatch(method -> method.isAnnotationPresent(Transactional.class));
+    }
+
+    private void deleteUser(UUID userId) {
+        dsl.deleteFrom(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(USER_TABLE)))
+            .where(org.jooq.impl.DSL.field(org.jooq.impl.DSL.name("id"), java.util.UUID.class).eq(userId))
+            .execute();
+    }
+
+    private abstract class DelegatingPasswordResetTokenRepository implements PasswordResetTokenRepository {
+
+        @Override
+        public Optional<PasswordResetToken> findByTokenHash(String tokenHash) {
+            return passwordResetTokenRepository.findByTokenHash(tokenHash);
+        }
+
+        @Override
+        public void create(PasswordResetToken token) {
+            passwordResetTokenRepository.create(token);
+        }
+
+        @Override
+        public void markAsUsed(UUID tokenId, Instant usedAt) {
+            passwordResetTokenRepository.markAsUsed(tokenId, usedAt);
+        }
+
+        @Override
+        public void invalidatePendingTokensForUser(UUID userId) {
+            passwordResetTokenRepository.invalidatePendingTokensForUser(userId);
+        }
     }
 
     private void insertUser(java.util.UUID id, String username, String email) {
