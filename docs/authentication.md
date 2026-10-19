@@ -126,7 +126,9 @@ external configuration.
 incrementing `credentials_version`, marking the token as used and invalidating
 other pending tokens happen in a single transaction. In `forgot`, invalidating
 previous tokens and creating the new token happen in a single transaction; if
-creation fails the previous token is not left invalidated. jOOQ repositories
+creation fails the previous token is not left invalidated. The transaction
+boundary is declared by the infrastructure facade
+`TransactionalPasswordRecovery`, not by the HTTP controller. jOOQ repositories
 participate in the same Spring transaction through Boot's
 `TransactionAwareDataSourceProxy`.
 

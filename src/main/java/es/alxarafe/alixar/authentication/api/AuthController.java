@@ -1,11 +1,10 @@
 package es.alxarafe.alixar.authentication.api;
 
-import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.InvalidCredentialsException;
 import es.alxarafe.alixar.authentication.application.InvalidPasswordException;
 import es.alxarafe.alixar.authentication.application.InvalidResetTokenException;
 import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
-import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
+import es.alxarafe.alixar.authentication.infrastructure.TransactionalPasswordRecovery;
 import es.alxarafe.alixar.authentication.infrastructure.security.AuthenticatedUserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,7 +20,6 @@ import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.security.web.context.SecurityContextRepository;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,8 +34,7 @@ class AuthController {
     private final AuthenticationManager authenticationManager;
     private final SecurityContextRepository securityContextRepository;
     private final SessionAuthenticationStrategy sessionAuthenticationStrategy;
-    private final ForgotPasswordUseCase forgotPasswordUseCase;
-    private final ResetPasswordUseCase resetPasswordUseCase;
+    private final TransactionalPasswordRecovery passwordRecovery;
     private final SecurityContextHolderStrategy securityContextHolderStrategy =
         SecurityContextHolder.getContextHolderStrategy();
 
@@ -45,14 +42,12 @@ class AuthController {
         AuthenticationManager authenticationManager,
         SecurityContextRepository securityContextRepository,
         SessionAuthenticationStrategy sessionAuthenticationStrategy,
-        ForgotPasswordUseCase forgotPasswordUseCase,
-        ResetPasswordUseCase resetPasswordUseCase
+        TransactionalPasswordRecovery passwordRecovery
     ) {
         this.authenticationManager = authenticationManager;
         this.securityContextRepository = securityContextRepository;
         this.sessionAuthenticationStrategy = sessionAuthenticationStrategy;
-        this.forgotPasswordUseCase = forgotPasswordUseCase;
-        this.resetPasswordUseCase = resetPasswordUseCase;
+        this.passwordRecovery = passwordRecovery;
     }
 
     @PostMapping(
@@ -91,9 +86,8 @@ class AuthController {
         consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @Transactional
     public void forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
-        forgotPasswordUseCase.execute(request.email());
+        passwordRecovery.forgotPassword(request.email());
     }
 
     @PostMapping(
@@ -101,9 +95,8 @@ class AuthController {
         consumes = MediaType.APPLICATION_JSON_VALUE,
         produces = MediaType.APPLICATION_JSON_VALUE
     )
-    @Transactional
     public void resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
-        resetPasswordUseCase.execute(request.token(), request.password());
+        passwordRecovery.resetPassword(request.token(), request.password());
     }
 
     private AuthenticatedUserResponse toResponse(AuthenticatedUserPrincipal principal) {

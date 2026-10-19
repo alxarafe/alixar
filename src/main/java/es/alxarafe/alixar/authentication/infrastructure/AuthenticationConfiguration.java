@@ -83,6 +83,14 @@ public class AuthenticationConfiguration {
     }
 
     @Bean
+    TransactionalPasswordRecovery transactionalPasswordRecovery(
+        ForgotPasswordUseCase forgotPasswordUseCase,
+        ResetPasswordUseCase resetPasswordUseCase
+    ) {
+        return new TransactionalPasswordRecovery(forgotPasswordUseCase, resetPasswordUseCase);
+    }
+
+    @Bean
     AuthenticationManager authenticationManager(AuthenticateUserUseCase authenticateUserUseCase) {
         return new ProviderManager(new UserAuthenticationProvider(authenticateUserUseCase));
     }

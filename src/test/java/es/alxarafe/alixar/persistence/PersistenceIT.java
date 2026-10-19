@@ -302,10 +302,16 @@ class PersistenceIT {
     }
 
     @Test
-    void passwordRecoveryEndpoints_declareTransactionalBoundary() throws Exception {
+    void passwordRecoveryTransactionBoundary_livesInInfrastructureFacade() throws Exception {
         Class<?> controller = Class.forName("es.alxarafe.alixar.authentication.api.AuthController");
-        assertThat(isTransactional(controller, "forgotPassword")).isTrue();
-        assertThat(isTransactional(controller, "resetPassword")).isTrue();
+        Class<?> facade = Class.forName(
+            "es.alxarafe.alixar.authentication.infrastructure.TransactionalPasswordRecovery"
+        );
+
+        assertThat(isTransactional(controller, "forgotPassword")).isFalse();
+        assertThat(isTransactional(controller, "resetPassword")).isFalse();
+        assertThat(isTransactional(facade, "forgotPassword")).isTrue();
+        assertThat(isTransactional(facade, "resetPassword")).isTrue();
     }
 
     private boolean isTransactional(Class<?> controller, String methodName) {
