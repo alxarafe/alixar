@@ -68,6 +68,7 @@ class BootstrapUserInitializer implements ApplicationRunner {
             normalizedEmail,
             passwordHasher.hash(password),
             true,
+            0,
             now,
             now
         ));

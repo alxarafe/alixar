@@ -32,6 +32,18 @@ services:
       ALIXAR_BOOTSTRAP_USERNAME: ${ALIXAR_BOOTSTRAP_USERNAME:-}
       ALIXAR_BOOTSTRAP_EMAIL: ${ALIXAR_BOOTSTRAP_EMAIL:-}
       ALIXAR_BOOTSTRAP_PASSWORD: ${ALIXAR_BOOTSTRAP_PASSWORD:-}
+      # Password reset: frontend URL and optional SMTP delivery. Mail settings
+      # are passed through from the host environment only when defined, so no
+      # mail sender is configured unless an operator opts in. Never commit real
+      # mail credentials; provide them through the environment.
+      ALIXAR_PASSWORD_RESET_FRONTEND_URL: ${ALIXAR_PASSWORD_RESET_FRONTEND_URL:-}
+      ALIXAR_PASSWORD_RESET_MAIL_FROM:
+      SPRING_MAIL_HOST:
+      SPRING_MAIL_PORT:
+      SPRING_MAIL_USERNAME:
+      SPRING_MAIL_PASSWORD:
+      SPRING_MAIL_AUTH:
+      SPRING_MAIL_STARTTLS_ENABLE:
     networks:
       - alixar-network
     depends_on:

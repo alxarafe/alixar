@@ -2,6 +2,7 @@ package es.alxarafe.alixar.authentication.application;
 
 import es.alxarafe.alixar.authentication.domain.User;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface UserRepository {
 
@@ -11,5 +12,9 @@ public interface UserRepository {
 
     Optional<User> findByEmail(String email);
 
+    Optional<User> findById(UUID id);
+
     void create(User user);
+
+    void updatePasswordAndCredentialsVersion(UUID userId, String newPasswordHash, long newCredentialsVersion);
 }

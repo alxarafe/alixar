@@ -26,6 +26,7 @@ class BootstrapUserInitializerTest {
         var user = userRepository.findByUsername("bootstrap").orElseThrow();
         assertThat(user.email()).isEqualTo("bootstrap@example.test");
         assertThat(user.enabled()).isTrue();
+        assertThat(user.credentialsVersion()).isEqualTo(0);
         assertThat(user.passwordHash()).doesNotContain("temporary-password");
         assertThat(passwordHasher.matches("temporary-password", user.passwordHash())).isTrue();
     }
