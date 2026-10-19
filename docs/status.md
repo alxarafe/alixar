@@ -25,7 +25,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 82 deterministic tests remain enabled
+  the 96 deterministic tests remain enabled
 
 ### Authentication
 
@@ -45,6 +45,12 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
 - **Session revocation**: Sessions created before a credential change, or whose
   user was deleted or disabled, are rejected and invalidated on their next
   request, including on public endpoints
+- **Self-service profile management**: The authenticated user can change its own
+  username (`PATCH /api/users/me`) and password (`POST /api/users/me/password`).
+  A password change bumps `credentials_version`, invalidates pending password
+  reset tokens and revokes other sessions while keeping the current session
+  authenticated. Changing the email, or administering other users, is not
+  implemented
 - **Safe bootstrap**: Optional environment-provided initial user with immediate
   adaptive hashing and no fixed credential in source or migration data
 - **Scope boundary**: No roles, permissions, Contact relationship, Dolibarr
@@ -75,4 +81,6 @@ See [Development](development.md) for full validation workflow details.
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
 - Authorization
 - Definitive authentication for independent API consumers
+- Email change (requires new-address verification)
+- Administration of other users (creation, listing, edition, enable/disable, administrative reset)
 - Broad ERP functionality beyond the currently implemented slices

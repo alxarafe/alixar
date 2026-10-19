@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.authentication.infrastructure.security;
 
+import es.alxarafe.alixar.authentication.api.UserEndpoints;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -94,7 +95,7 @@ public class SecurityConfiguration {
             .addFilterAfter(credentialsVersionCheckFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(HEALTH_PATH, CONTACTS_PATH_PATTERN, LOGIN_PATH, BASE_PATH + "/password/forgot", BASE_PATH + "/password/reset").permitAll()
-                .requestMatchers(ME_PATH).authenticated()
+                .requestMatchers(ME_PATH, UserEndpoints.ME_PATH, UserEndpoints.PASSWORD_PATH).authenticated()
                 .anyRequest().denyAll())
             .exceptionHandling(exceptions -> exceptions
                 .authenticationEntryPoint(authenticationEntryPoint)

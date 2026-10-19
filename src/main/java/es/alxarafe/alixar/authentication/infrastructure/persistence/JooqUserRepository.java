@@ -1,6 +1,7 @@
 package es.alxarafe.alixar.authentication.infrastructure.persistence;
 
 import es.alxarafe.alixar.authentication.application.UserRepository;
+import es.alxarafe.alixar.authentication.application.UsernameAlreadyExistsException;
 import es.alxarafe.alixar.authentication.domain.User;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -12,6 +13,7 @@ import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.Table;
+import org.springframework.dao.DuplicateKeyException;
 
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.lower;
@@ -90,6 +92,19 @@ public class JooqUserRepository implements UserRepository {
             .set(UPDATED_AT, OffsetDateTime.now(ZoneOffset.UTC))
             .where(ID.eq(userId))
             .execute();
+    }
+
+    @Override
+    public void updateUsername(UUID userId, String newUsername) {
+        try {
+            dsl.update(USER_TABLE)
+                .set(USERNAME, newUsername)
+                .set(UPDATED_AT, OffsetDateTime.now(ZoneOffset.UTC))
+                .where(ID.eq(userId))
+                .execute();
+        } catch (DuplicateKeyException exception) {
+            throw new UsernameAlreadyExistsException();
+        }
     }
 
     private Optional<User> findOne(Field<String> identifierField, String identifier) {

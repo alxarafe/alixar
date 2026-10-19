@@ -38,11 +38,15 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - Alixar-owned authentication users persisted through Flyway and jOOQ
 - Username/email credential validation with adaptive password hashing
 - Initial Spring Security HTTP-session authentication for web clients
+- Self-service management of the authenticated identity (own username and own
+  password; password change invalidates pending reset tokens and other sessions)
 
 ## Planned (Not Implemented)
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Authorization and protected business capabilities
+- Email change with new-address verification
+- Administration of other users (creation, listing, edition, enable/disable, administrative reset)
 - Definitive authentication contract for independent API consumers
 - OpenAPI specification
 - ERP modules (thirdparties, catalog, sales, billing, inventory, accounting)

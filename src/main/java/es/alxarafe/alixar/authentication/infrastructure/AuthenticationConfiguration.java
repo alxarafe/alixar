@@ -1,6 +1,8 @@
 package es.alxarafe.alixar.authentication.infrastructure;
 
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
+import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
+import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
 import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
@@ -88,6 +90,28 @@ public class AuthenticationConfiguration {
         ResetPasswordUseCase resetPasswordUseCase
     ) {
         return new TransactionalPasswordRecovery(forgotPasswordUseCase, resetPasswordUseCase);
+    }
+
+    @Bean
+    ChangeUsernameUseCase changeUsernameUseCase(UserRepository userRepository) {
+        return new ChangeUsernameUseCase(userRepository);
+    }
+
+    @Bean
+    ChangePasswordUseCase changePasswordUseCase(
+        UserRepository userRepository,
+        PasswordResetTokenRepository tokenRepository,
+        PasswordHasher passwordHasher
+    ) {
+        return new ChangePasswordUseCase(userRepository, tokenRepository, passwordHasher);
+    }
+
+    @Bean
+    TransactionalUserSelfService transactionalUserSelfService(
+        ChangeUsernameUseCase changeUsernameUseCase,
+        ChangePasswordUseCase changePasswordUseCase
+    ) {
+        return new TransactionalUserSelfService(changeUsernameUseCase, changePasswordUseCase);
     }
 
     @Bean

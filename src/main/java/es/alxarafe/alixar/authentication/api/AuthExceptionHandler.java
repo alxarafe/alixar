@@ -1,8 +1,11 @@
 package es.alxarafe.alixar.authentication.api;
 
 import es.alxarafe.alixar.authentication.application.AuthenticationErrorCode;
+import es.alxarafe.alixar.authentication.application.InvalidCredentialsException;
+import es.alxarafe.alixar.authentication.application.InvalidCurrentPasswordException;
 import es.alxarafe.alixar.authentication.application.InvalidPasswordException;
 import es.alxarafe.alixar.authentication.application.InvalidResetTokenException;
+import es.alxarafe.alixar.authentication.application.UsernameAlreadyExistsException;
 import es.alxarafe.alixar.core.application.ErrorCode;
 import java.net.URI;
 import java.util.Locale;
@@ -15,7 +18,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice(assignableTypes = AuthController.class)
+@RestControllerAdvice(assignableTypes = {AuthController.class, UserController.class})
 class AuthExceptionHandler {
 
     private static final URI INVALID_CREDENTIALS_TYPE =
@@ -24,6 +27,10 @@ class AuthExceptionHandler {
         URI.create("urn:alixar:error:authentication-invalid-reset-token");
     private static final URI INVALID_PASSWORD_TYPE =
         URI.create("urn:alixar:error:authentication-invalid-password");
+    private static final URI INVALID_CURRENT_PASSWORD_TYPE =
+        URI.create("urn:alixar:error:authentication-invalid-current-password");
+    private static final URI USERNAME_ALREADY_EXISTS_TYPE =
+        URI.create("urn:alixar:error:authentication-username-already-exists");
 
     private final MessageSource messageSource;
 
@@ -33,6 +40,18 @@ class AuthExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     ProblemDetail handleBadCredentials(Locale locale) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.UNAUTHORIZED,
+            messageSource.getMessage("authentication.invalidCredentials", null, locale)
+        );
+        problem.setType(INVALID_CREDENTIALS_TYPE);
+        problem.setTitle(messageSource.getMessage("authentication.invalidCredentials.title", null, locale));
+        problem.setProperty("code", AuthenticationErrorCode.AUTH_INVALID_CREDENTIALS.name());
+        return problem;
+    }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    ProblemDetail handleInvalidCredentials(Locale locale) {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
             HttpStatus.UNAUTHORIZED,
             messageSource.getMessage("authentication.invalidCredentials", null, locale)
@@ -64,6 +83,30 @@ class AuthExceptionHandler {
         problem.setType(INVALID_PASSWORD_TYPE);
         problem.setTitle(messageSource.getMessage("authentication.invalidPassword.title", null, locale));
         problem.setProperty("code", AuthenticationErrorCode.AUTH_INVALID_PASSWORD.name());
+        return problem;
+    }
+
+    @ExceptionHandler(InvalidCurrentPasswordException.class)
+    ProblemDetail handleInvalidCurrentPassword(Locale locale) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST,
+            messageSource.getMessage("authentication.invalidCurrentPassword", null, locale)
+        );
+        problem.setType(INVALID_CURRENT_PASSWORD_TYPE);
+        problem.setTitle(messageSource.getMessage("authentication.invalidCurrentPassword.title", null, locale));
+        problem.setProperty("code", AuthenticationErrorCode.AUTH_INVALID_CURRENT_PASSWORD.name());
+        return problem;
+    }
+
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    ProblemDetail handleUsernameAlreadyExists(Locale locale) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.CONFLICT,
+            messageSource.getMessage("authentication.usernameAlreadyExists", null, locale)
+        );
+        problem.setType(USERNAME_ALREADY_EXISTS_TYPE);
+        problem.setTitle(messageSource.getMessage("authentication.usernameAlreadyExists.title", null, locale));
+        problem.setProperty("code", AuthenticationErrorCode.AUTH_USERNAME_ALREADY_EXISTS.name());
         return problem;
     }
 

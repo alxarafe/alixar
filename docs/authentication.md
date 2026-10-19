@@ -12,6 +12,10 @@ forgot/reset endpoints, single-use hashed reset tokens, credential-version based
 session revocation, and email delivery of the reset link through a replaceable
 application port.
 
+ALIXAR-DEV-003C adds self-service management of the authenticated identity: the
+user can change its own username and its own password. Administration of other
+users, roles, permissions, and email change are explicitly out of scope.
+
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
 Username and email comparisons and uniqueness checks are case-insensitive.
@@ -132,6 +136,88 @@ boundary is declared by the infrastructure facade
 participate in the same Spring transaction through Boot's
 `TransactionAwareDataSourceProxy`.
 
+## Self-service profile management
+
+ALIXAR-DEV-003C lets an authenticated user manage only its own security
+identity. No endpoint in this iteration creates, lists, edits, enables,
+disables or administratively resets another user, and role or permission
+checks are not involved. Every request acts on the identity of the
+authenticated principal and never on another user's identifier.
+
+### `PATCH /api/users/me`
+
+Requires an authenticated session and a valid CSRF cookie/header pair, and
+accepts:
+
+```json
+{
+  "username": "nueva-identidad"
+}
+```
+
+A successful response is `200` with the same explicit identity DTO returned by
+`GET /api/auth/me`:
+
+```json
+{
+  "id": "8f796219-e501-44e8-a4ab-4c014821ba58",
+  "username": "nueva-identidad",
+  "email": "alice@example.test"
+}
+```
+
+Only the authenticated user's own username is modified. The `id` is immutable
+and the `email`, `enabled` flag and `credentials_version` are never changed or
+exposed. The username is normalized to stripped lowercase, matching existing
+username handling, and uniqueness remains case-insensitive. A blank username
+returns `400` with code `VALIDATION_REQUIRED`; a username already taken by
+another user returns `409` with code `AUTH_USERNAME_ALREADY_EXISTS`. `GET
+/api/auth/me` reflects the new username immediately because the current
+session principal is refreshed after the change. Changing the email is **not**
+part of this iteration.
+
+### `POST /api/users/me/password`
+
+Requires an authenticated session and a valid CSRF cookie/header pair, and
+accepts:
+
+```json
+{
+  "currentPassword": "contraseña-actual",
+  "newPassword": "nueva-contraseña-segura"
+}
+```
+
+A successful response is `204` with an empty body. The current password is
+verified against the stored hash; the new password must be at least 12
+characters and has no artificial uppercase, digit or symbol rules. An incorrect
+current password returns `400` with code `AUTH_INVALID_CURRENT_PASSWORD`; a new
+password shorter than the minimum returns `400` with code
+`AUTH_INVALID_PASSWORD`. Password hashes, `credentials_version` and other
+security internals are never returned.
+
+A successful change is atomic: it updates the password hash, increments
+`credentials_version` and invalidates all pending password reset tokens for the
+user within a single transaction. The transaction boundary is declared by the
+infrastructure facade `TransactionalUserSelfService`, not by the HTTP
+controller.
+
+### Current session after a password change
+
+The user who just changed its password is not logged out. After the persistent
+change succeeds, the controller rebuilds the authenticated principal with the
+new `credentials_version` and stores it in the current session's security
+context. The next request on that session stays authenticated.
+
+Sessions created before the change, and not the current one, keep the previous
+`credentials_version` and are revoked by `CredentialsVersionCheckFilter` on
+their next request, exactly like a password reset. This reuses the existing
+`credentials_version` mechanism: there is no central session store and no
+`JSESSIONID` enumeration.
+
+Changing the username does not revoke sessions and does not increment
+`credentials_version`.
+
 ## Session revocation
 
 `credentials_version` is stored per user and embedded in the authenticated
@@ -181,7 +267,9 @@ the database uniqueness constraint.
 ## Current public access
 
 `/health`, the login endpoint, the `password/forgot` and `password/reset`
-endpoints, and the existing Contact endpoints remain anonymous. Contact remains
+endpoints, and the existing Contact endpoints remain anonymous. The
+`GET /api/auth/me`, `PATCH /api/users/me` and `POST /api/users/me/password`
+endpoints require an authenticated session. Contact remains
 public solely to preserve its established contract and the real Dolibarr
 compatibility check during this authentication foundation. Its existing POST is
 temporarily excluded from CSRF protection.
@@ -216,3 +304,12 @@ Rate limiting and password-attempt policy remain pending security decisions.
 Disabling a user or deleting it now invalidates its existing session on the next
 request through `CredentialsVersionCheckFilter`, but that check requires a
 database read per authenticated request and executes on public endpoints too.
+
+Two capabilities are intentionally deferred to later iterations:
+
+- **Email change.** The email is currently the password-recovery channel.
+  Changing it without verifying the new address would weaken account recovery,
+  so it is pending a dedicated email-verification iteration.
+- **Administration of other users.** Creating, listing, editing,
+  enabling/disabling or administratively resetting another user requires an
+  explicit future authorization decision and is not implemented here.

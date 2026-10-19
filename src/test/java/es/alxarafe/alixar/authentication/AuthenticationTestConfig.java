@@ -70,6 +70,26 @@ public class AuthenticationTestConfig {
         }
 
         @Override
+        public void updateUsername(UUID userId, String newUsername) {
+            users.stream()
+                .filter(u -> u.id().equals(userId))
+                .findFirst()
+                .ifPresent(u -> {
+                    int index = users.indexOf(u);
+                    users.set(index, new User(
+                        u.id(),
+                        newUsername,
+                        u.email(),
+                        u.passwordHash(),
+                        u.enabled(),
+                        u.credentialsVersion(),
+                        u.createdAt(),
+                        Instant.now()
+                    ));
+                });
+        }
+
+        @Override
         public void updatePasswordAndCredentialsVersion(UUID userId, String newPasswordHash, long newCredentialsVersion) {
             users.stream()
                 .filter(u -> u.id().equals(userId))

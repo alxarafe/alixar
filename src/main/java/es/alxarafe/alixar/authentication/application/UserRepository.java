@@ -16,5 +16,7 @@ public interface UserRepository {
 
     void create(User user);
 
+    void updateUsername(UUID userId, String newUsername);
+
     void updatePasswordAndCredentialsVersion(UUID userId, String newPasswordHash, long newCredentialsVersion);
 }
