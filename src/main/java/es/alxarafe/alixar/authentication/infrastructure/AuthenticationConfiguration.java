@@ -10,8 +10,11 @@ import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
 import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
 import es.alxarafe.alixar.authentication.application.CreateApiTokenUseCase;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
+import es.alxarafe.alixar.authentication.application.GetAdminUserUseCase;
 import es.alxarafe.alixar.authentication.application.GetEffectivePermissionsUseCase;
+import es.alxarafe.alixar.authentication.application.ListAdminUsersUseCase;
 import es.alxarafe.alixar.authentication.application.ListApiTokensUseCase;
+import es.alxarafe.alixar.authentication.application.ListRolesUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
 import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
@@ -67,6 +70,27 @@ public class AuthenticationConfiguration {
     @Bean
     GetEffectivePermissionsUseCase getEffectivePermissionsUseCase(AuthorizationRepository authorizationRepository) {
         return new GetEffectivePermissionsUseCase(authorizationRepository);
+    }
+
+    @Bean
+    ListAdminUsersUseCase listAdminUsersUseCase(
+        UserRepository userRepository,
+        AuthorizationRepository authorizationRepository
+    ) {
+        return new ListAdminUsersUseCase(userRepository, authorizationRepository);
+    }
+
+    @Bean
+    GetAdminUserUseCase getAdminUserUseCase(
+        UserRepository userRepository,
+        AuthorizationRepository authorizationRepository
+    ) {
+        return new GetAdminUserUseCase(userRepository, authorizationRepository);
+    }
+
+    @Bean
+    ListRolesUseCase listRolesUseCase(AuthorizationRepository authorizationRepository) {
+        return new ListRolesUseCase(authorizationRepository);
     }
 
     @Bean

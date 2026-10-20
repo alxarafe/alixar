@@ -1,8 +1,12 @@
 package es.alxarafe.alixar.authentication.infrastructure.persistence;
 
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
+import es.alxarafe.alixar.authentication.application.RoleDefinition;
 import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import org.jooq.DSLContext;
@@ -22,6 +26,7 @@ public class JooqAuthorizationRepository implements AuthorizationRepository {
 
     private static final Field<UUID> ROLE_ID = field(name("authentication_role", "id"), UUID.class);
     private static final Field<String> ROLE_CODE = field(name("authentication_role", "code"), String.class);
+    private static final Field<String> ROLE_NAME = field(name("authentication_role", "name"), String.class);
     private static final Field<UUID> ROLE_PERMISSION_ROLE_ID =
         field(name("authentication_role_permission", "role_id"), UUID.class);
     private static final Field<String> ROLE_PERMISSION_PERMISSION_CODE =
@@ -57,6 +62,51 @@ public class JooqAuthorizationRepository implements AuthorizationRepository {
             .where(ROLE_PERMISSION_ROLE_ID.eq(resolveRoleId(roleCode)))
             .orderBy(ROLE_PERMISSION_PERMISSION_CODE)
             .fetch(ROLE_PERMISSION_PERMISSION_CODE));
+    }
+
+    @Override
+    public List<String> findRoleCodesForUser(UUID userId) {
+        return dsl.select(ROLE_CODE)
+            .from(USER_ROLE_TABLE)
+            .join(ROLE_TABLE)
+            .on(ROLE_ID.eq(USER_ROLE_ROLE_ID))
+            .where(USER_ROLE_USER_ID.eq(userId))
+            .orderBy(ROLE_CODE)
+            .fetch(ROLE_CODE);
+    }
+
+    @Override
+    public List<RoleDefinition> findAllRoles() {
+        var records = dsl.select(ROLE_CODE, ROLE_NAME, ROLE_PERMISSION_PERMISSION_CODE)
+            .from(ROLE_TABLE)
+            .leftJoin(ROLE_PERMISSION_TABLE)
+            .on(ROLE_PERMISSION_ROLE_ID.eq(ROLE_ID))
+            .orderBy(ROLE_CODE, ROLE_PERMISSION_PERMISSION_CODE)
+            .fetch();
+
+        Map<String, String> names = new LinkedHashMap<>();
+        Map<String, LinkedHashSet<String>> permissionCodes = new LinkedHashMap<>();
+
+        for (Record record : records) {
+            String roleCode = record.get(ROLE_CODE);
+            names.putIfAbsent(roleCode, record.get(ROLE_NAME));
+            LinkedHashSet<String> permissions = permissionCodes.computeIfAbsent(
+                roleCode,
+                key -> new LinkedHashSet<>()
+            );
+            String permissionCode = record.get(ROLE_PERMISSION_PERMISSION_CODE);
+            if (permissionCode != null) {
+                permissions.add(permissionCode);
+            }
+        }
+
+        return names.entrySet().stream()
+            .map(entry -> new RoleDefinition(
+                entry.getKey(),
+                entry.getValue(),
+                List.copyOf(permissionCodes.get(entry.getKey()))
+            ))
+            .toList();
     }
 
     @Override

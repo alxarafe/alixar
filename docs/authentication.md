@@ -30,8 +30,14 @@ administrative groupings of permissions, permissions belong exclusively to
 roles, and effective permissions are the union of the permissions of the user's
 current roles. There are no per-user permission overrides and no explicit
 `DENY`. An enabled user can authenticate with zero roles. `users.manage` is the
-first permission and `system-admin` is the first built-in role. Administrative
-user routes are reserved for ALIXAR-DEV-003F.
+first permission and `system-admin` is the first built-in role.
+
+ALIXAR-DEV-003F adds administrative user management over that RBAC foundation.
+The first slice provides read-only administrative endpoints for listing,
+searching and inspecting users and for reading the role catalogue. Every
+`/api/admin/**` endpoint requires `users.manage`, independently of the
+authentication mechanism. Administrative write operations are implemented in
+later slices of the same iteration.
 
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
@@ -311,7 +317,8 @@ It returns `204` and does not delete the row: `revoked_at` is set for
 traceability. A token that is already revoked returns `204` as well
 (idempotent). A token that does not exist or belongs to another user is reported
 as `404` with code `AUTH_API_TOKEN_NOT_FOUND`; no user can list, create or
-revoke a token for another user, and no administrative endpoint exists.
+revoke a token for another user, and no administrative API token endpoint
+exists.
 
 ### Bearer authentication
 
@@ -405,7 +412,7 @@ The initial catalogue contains:
 
 | Permission | Meaning |
 |------------|---------|
-| `users.manage` | Future administrative capability over users (ALIXAR-DEV-003F) |
+| `users.manage` | Administrative capability over users (ALIXAR-DEV-003F) |
 
 The built-in role `system-admin` contains `users.manage`. The role name and code
 are stable identifiers, but application code authorizes by permission, not by
@@ -444,8 +451,9 @@ privileged endpoint  → concrete permission
 anything else        → denyAll
 ```
 
-The reserved administrative namespace `/api/admin/users/**` requires
-`users.manage`; no administrative controller exists yet. Results:
+The administrative namespace `/api/admin/**` requires `users.manage`. The
+read-only endpoints currently exposed are described under
+[Administrative user management](#administrative-user-management). Results:
 
 | Caller | Result |
 |--------|--------|
@@ -468,9 +476,38 @@ role is granted only when explicitly requested with
 `ALIXAR_BOOTSTRAP_SYSTEM_ADMIN=true`. The flag defaults to `false`, only assigns
 `system-admin` to the bootstrap user, never creates a user by itself, is
 idempotent, and has no effect when the bootstrap identity is not configured.
-There is no HTTP endpoint to assign roles in this iteration, so a normally
-created user cannot acquire `system-admin` through the API. See
+The read-only administrative slice does not assign roles; HTTP role assignment
+is implemented in a later ALIXAR-DEV-003F slice. Until then, a normally created
+user cannot acquire `system-admin` through the API. See
 [Bootstrap user](#bootstrap-user).
+
+### Administrative user management
+
+The first ALIXAR-DEV-003F slice exposes read-only endpoints:
+
+| Method and path | Result |
+|-----------------|--------|
+| `GET /api/admin/users` | Paginated user summaries |
+| `GET /api/admin/users/{id}` | One user's safe fields and role codes |
+| `GET /api/admin/roles` | Role catalogue with permission codes |
+
+`GET /api/admin/users` accepts:
+
+- `page`: zero-based page, default `0`, must not be negative;
+- `size`: page size, default `20`, between `1` and `100`;
+- `q`: case-insensitive substring of username or email;
+- `enabled`: `true` or `false` to filter by enablement.
+
+Results are ordered by username and then id for stable pagination. The page
+response contains `items`, `page`, `size` and `total`. Invalid pagination
+returns `400` with code `ADMIN_INVALID_PAGINATION` and a `field` property.
+Unknown users return `404` with `ADMIN_USER_NOT_FOUND`. Responses contain no
+password hash, reset token, API token or other secret.
+
+These endpoints are read-only: they never change credentials, enablement,
+roles, assignments, reset tokens or PATs. Bearer authentication still updates
+the presented PAT's `last_used_at`, as before. All three endpoints require
+`users.manage` for both session and Bearer authentication.
 
 ### Role groups (future decision)
 
@@ -485,8 +522,9 @@ RoleGroup
 A group only groups roles. It has no permissions of its own, cannot modify the
 permissions of its roles, and a user may receive roles directly or indirectly
 through groups. Effective permissions would still come exclusively from roles.
-Administrative user management (creation, listing, edition, enable/disable,
-administrative reset and HTTP role assignment) remains for ALIXAR-DEV-003F.
+Administrative writes (creation, username edition, enable/disable,
+administrative reset and HTTP role assignment) remain for later ALIXAR-DEV-003F
+slices.
 
 ## Session revocation
 
@@ -549,9 +587,8 @@ endpoints, and the existing Contact endpoints remain anonymous. The
 `GET /api/auth/me`, `PATCH /api/users/me`, `POST /api/users/me/password` and
 the `/api/users/me/api-tokens` endpoints require an authenticated identity:
 either a valid session or a valid Bearer token. `/api/auth/me` works with both
-mechanisms. The reserved `/api/admin/users/**` namespace requires the
-`users.manage` permission; it has no controller until ALIXAR-DEV-003F. Contact
-remains public solely to preserve its established contract
+mechanisms. The `/api/admin/**` namespace requires the `users.manage`
+permission. Contact remains public solely to preserve its established contract
 and the real Dolibarr compatibility check during this authentication foundation.
 Its existing POST is temporarily excluded from CSRF protection. Protecting
 migrated business capabilities is an authorization decision for a later
@@ -601,10 +638,10 @@ Two capabilities are intentionally deferred to later iterations:
 - **Email change.** The email is currently the password-recovery channel.
   Changing it without verifying the new address would weaken account recovery,
   so it is pending a dedicated email-verification iteration.
-- **Administration of other users.** Creating, listing, editing,
-  enabling/disabling, administratively resetting another user or assigning roles
-  over HTTP is reserved for ALIXAR-DEV-003F. The permission `users.manage` and
-  the reserved `/api/admin/users/**` authorization boundary already exist, but
-  no administrative controller is implemented here.
+- **Administration of other users.** Read-only listing, search and detail are
+  implemented in the first ALIXAR-DEV-003F slice. Creating, editing,
+  enabling/disabling, administratively resetting another user and assigning
+  roles over HTTP remain for later slices. The permission `users.manage` and
+  the `/api/admin/**` authorization boundary are already in force.
 - **Role groups.** Grouping roles is a possible future evolution; no group
   model or tables exist in ALIXAR-DEV-003E.

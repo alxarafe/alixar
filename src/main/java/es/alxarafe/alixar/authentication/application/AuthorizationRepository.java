@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.authentication.application;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,6 +17,10 @@ public interface AuthorizationRepository {
     Set<String> findEffectivePermissionCodes(UUID userId);
 
     Set<String> findPermissionCodesByRole(String roleCode);
+
+    List<String> findRoleCodesForUser(UUID userId);
+
+    List<RoleDefinition> findAllRoles();
 
     void assignRoleToUser(UUID userId, String roleCode);
 

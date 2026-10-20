@@ -5,6 +5,7 @@ import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.PermissionCodes;
 import es.alxarafe.alixar.authentication.application.RoleCodes;
+import es.alxarafe.alixar.authentication.application.RoleDefinition;
 import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.domain.ApiToken;
@@ -12,6 +13,7 @@ import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -61,6 +63,10 @@ public class AuthenticationTestConfig {
             users.addAll(List.of(replacementUsers));
         }
 
+        public List<User> all() {
+            return List.copyOf(users);
+        }
+
         @Override
         public Optional<User> findByIdentifier(String identifier) {
             String normalized = normalize(identifier);
@@ -85,6 +91,25 @@ public class AuthenticationTestConfig {
         @Override
         public Optional<User> findById(UUID id) {
             return users.stream().filter(u -> u.id().equals(id)).findFirst();
+        }
+
+        @Override
+        public List<User> search(String query, Boolean enabled, long offset, int limit) {
+            return users.stream()
+                .filter(user -> enabled == null || user.enabled() == enabled)
+                .filter(user -> matchesQuery(user, query))
+                .sorted(Comparator.comparing(User::username).thenComparing(User::id))
+                .skip(offset)
+                .limit(limit)
+                .toList();
+        }
+
+        @Override
+        public long count(String query, Boolean enabled) {
+            return users.stream()
+                .filter(user -> enabled == null || user.enabled() == enabled)
+                .filter(user -> matchesQuery(user, query))
+                .count();
         }
 
         @Override
@@ -136,6 +161,12 @@ public class AuthenticationTestConfig {
             return users.stream().filter(predicate).findFirst();
         }
 
+        private boolean matchesQuery(User user, String query) {
+            return query == null
+                || normalize(user.username()).contains(query)
+                || normalize(user.email()).contains(query);
+        }
+
         private String normalize(String value) {
             return value.strip().toLowerCase(Locale.ROOT);
         }
@@ -148,6 +179,10 @@ public class AuthenticationTestConfig {
         public void replaceWith(PasswordResetToken... replacementTokens) {
             tokens.clear();
             tokens.addAll(List.of(replacementTokens));
+        }
+
+        public List<PasswordResetToken> all() {
+            return List.copyOf(tokens);
         }
 
         @Override
@@ -200,6 +235,7 @@ public class AuthenticationTestConfig {
 
     public static class TestAuthorizationRepository implements AuthorizationRepository {
 
+        private final Map<String, String> roleNames = new HashMap<>();
         private final Map<String, Set<String>> rolePermissions = new HashMap<>();
         private final Map<UUID, Set<String>> userRoles = new HashMap<>();
 
@@ -208,8 +244,10 @@ public class AuthenticationTestConfig {
         }
 
         public void reset() {
+            roleNames.clear();
             rolePermissions.clear();
             userRoles.clear();
+            roleNames.put(RoleCodes.SYSTEM_ADMIN, "System administrator");
             rolePermissions.put(
                 RoleCodes.SYSTEM_ADMIN,
                 new LinkedHashSet<>(Set.of(PermissionCodes.USERS_MANAGE))
@@ -230,6 +268,27 @@ public class AuthenticationTestConfig {
         @Override
         public Set<String> findPermissionCodesByRole(String roleCode) {
             return Set.copyOf(rolePermissions.getOrDefault(roleCode, Set.of()));
+        }
+
+        @Override
+        public List<String> findRoleCodesForUser(UUID userId) {
+            return userRoles.getOrDefault(userId, Set.of()).stream()
+                .sorted()
+                .toList();
+        }
+
+        @Override
+        public List<RoleDefinition> findAllRoles() {
+            return roleNames.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .map(entry -> new RoleDefinition(
+                    entry.getKey(),
+                    entry.getValue(),
+                    rolePermissions.getOrDefault(entry.getKey(), Set.of()).stream()
+                        .sorted()
+                        .toList()
+                ))
+                .toList();
         }
 
         @Override
@@ -271,6 +330,12 @@ public class AuthenticationTestConfig {
 
         public void replaceWith() {
             tokens.clear();
+        }
+
+        public List<ApiToken> all() {
+            return tokens.stream()
+                .map(StoredToken::token)
+                .toList();
         }
 
         @Override

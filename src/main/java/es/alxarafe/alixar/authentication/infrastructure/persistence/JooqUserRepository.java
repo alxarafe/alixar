@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record;
@@ -18,6 +19,7 @@ import org.springframework.dao.DuplicateKeyException;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.lower;
 import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.noCondition;
 import static org.jooq.impl.DSL.table;
 
 public class JooqUserRepository implements UserRepository {
@@ -57,6 +59,25 @@ public class JooqUserRepository implements UserRepository {
     @Override
     public Optional<User> findByEmail(String email) {
         return findOne(EMAIL, email);
+    }
+
+    @Override
+    public List<User> search(String query, Boolean enabled, long offset, int limit) {
+        return dsl.select(ID, USERNAME, EMAIL, PASSWORD_HASH, ENABLED, CREDENTIALS_VERSION, CREATED_AT, UPDATED_AT)
+            .from(USER_TABLE)
+            .where(searchCondition(query, enabled))
+            .orderBy(USERNAME, ID)
+            .limit(limit)
+            .offset(offset)
+            .fetch(this::toUser);
+    }
+
+    @Override
+    public long count(String query, Boolean enabled) {
+        return dsl.selectCount()
+            .from(USER_TABLE)
+            .where(searchCondition(query, enabled))
+            .fetchOne(0, long.class);
     }
 
     @Override
@@ -105,6 +126,19 @@ public class JooqUserRepository implements UserRepository {
         } catch (DuplicateKeyException exception) {
             throw new UsernameAlreadyExistsException();
         }
+    }
+
+    private Condition searchCondition(String query, Boolean enabled) {
+        Condition condition = noCondition();
+        if (enabled != null) {
+            condition = condition.and(ENABLED.eq(enabled));
+        }
+        if (query != null) {
+            condition = condition.and(
+                lower(USERNAME).contains(query).or(lower(EMAIL).contains(query))
+            );
+        }
+        return condition;
     }
 
     private Optional<User> findOne(Field<String> identifierField, String identifier) {

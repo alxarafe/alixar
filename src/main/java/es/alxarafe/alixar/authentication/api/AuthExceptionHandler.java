@@ -1,12 +1,15 @@
 package es.alxarafe.alixar.authentication.api;
 
+import es.alxarafe.alixar.authentication.application.AdministrationErrorCode;
 import es.alxarafe.alixar.authentication.application.ApiTokenNotFoundException;
 import es.alxarafe.alixar.authentication.application.AuthenticationErrorCode;
 import es.alxarafe.alixar.authentication.application.InvalidApiTokenExpirationException;
 import es.alxarafe.alixar.authentication.application.InvalidCredentialsException;
 import es.alxarafe.alixar.authentication.application.InvalidCurrentPasswordException;
+import es.alxarafe.alixar.authentication.application.InvalidPaginationException;
 import es.alxarafe.alixar.authentication.application.InvalidPasswordException;
 import es.alxarafe.alixar.authentication.application.InvalidResetTokenException;
+import es.alxarafe.alixar.authentication.application.UserNotFoundException;
 import es.alxarafe.alixar.authentication.application.UsernameAlreadyExistsException;
 import es.alxarafe.alixar.core.application.ErrorCode;
 import java.net.URI;
@@ -20,7 +23,13 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice(assignableTypes = {AuthController.class, UserController.class, ApiTokenController.class})
+@RestControllerAdvice(assignableTypes = {
+    AuthController.class,
+    UserController.class,
+    ApiTokenController.class,
+    AdminUserController.class,
+    AdminRoleController.class
+})
 class AuthExceptionHandler {
 
     private static final URI INVALID_CREDENTIALS_TYPE =
@@ -37,6 +46,10 @@ class AuthExceptionHandler {
         URI.create("urn:alixar:error:authentication-invalid-current-password");
     private static final URI USERNAME_ALREADY_EXISTS_TYPE =
         URI.create("urn:alixar:error:authentication-username-already-exists");
+    private static final URI ADMIN_USER_NOT_FOUND_TYPE =
+        URI.create("urn:alixar:error:administration-user-not-found");
+    private static final URI ADMIN_INVALID_PAGINATION_TYPE =
+        URI.create("urn:alixar:error:administration-invalid-pagination");
 
     private final MessageSource messageSource;
 
@@ -137,6 +150,36 @@ class AuthExceptionHandler {
         problem.setType(API_TOKEN_NOT_FOUND_TYPE);
         problem.setTitle(messageSource.getMessage("authentication.apiTokenNotFound.title", null, locale));
         problem.setProperty("code", AuthenticationErrorCode.AUTH_API_TOKEN_NOT_FOUND.name());
+        return problem;
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    ProblemDetail handleUserNotFound(Locale locale) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.NOT_FOUND,
+            messageSource.getMessage("administration.userNotFound", null, locale)
+        );
+        problem.setType(ADMIN_USER_NOT_FOUND_TYPE);
+        problem.setTitle(messageSource.getMessage("administration.userNotFound.title", null, locale));
+        problem.setProperty("code", AdministrationErrorCode.ADMIN_USER_NOT_FOUND.name());
+        return problem;
+    }
+
+    @ExceptionHandler(InvalidPaginationException.class)
+    ProblemDetail handleInvalidPagination(InvalidPaginationException exception, Locale locale) {
+        String field = exception.field();
+        String fieldLabel = messageSource.getMessage("field.administration." + field, null, locale);
+        String detail = messageSource.getMessage(
+            "administration.invalidPagination",
+            new Object[]{fieldLabel},
+            locale
+        );
+
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail);
+        problem.setType(ADMIN_INVALID_PAGINATION_TYPE);
+        problem.setTitle(messageSource.getMessage("administration.invalidPagination.title", null, locale));
+        problem.setProperty("code", AdministrationErrorCode.ADMIN_INVALID_PAGINATION.name());
+        problem.setProperty("field", field);
         return problem;
     }
 

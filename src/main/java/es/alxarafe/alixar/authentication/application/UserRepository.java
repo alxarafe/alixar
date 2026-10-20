@@ -1,6 +1,7 @@
 package es.alxarafe.alixar.authentication.application;
 
 import es.alxarafe.alixar.authentication.domain.User;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,6 +14,10 @@ public interface UserRepository {
     Optional<User> findByEmail(String email);
 
     Optional<User> findById(UUID id);
+
+    List<User> search(String query, Boolean enabled, long offset, int limit);
+
+    long count(String query, Boolean enabled);
 
     void create(User user);
 

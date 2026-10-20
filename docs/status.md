@@ -26,7 +26,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 141 deterministic tests and 24 PostgreSQL integration tests remain
+  the 156 deterministic tests and 24 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -51,8 +51,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   username (`PATCH /api/users/me`) and password (`POST /api/users/me/password`).
   A password change bumps `credentials_version`, invalidates pending password
   reset tokens and revokes other sessions while keeping the current session
-  authenticated. Changing the email, or administering other users, is not
-  implemented
+  authenticated. Changing the email is not implemented
 - **Safe bootstrap**: Optional environment-provided initial user with immediate
   adaptive hashing and no fixed credential in source or migration data. The
   bootstrap user is not an administrator unless
@@ -63,8 +62,13 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   session and Bearer authentication, without changing `credentials_version`,
   invalidating sessions or revoking PATs. Built-in `system-admin` role contains
   `users.manage`; there are no per-user overrides, explicit `DENY`, role
-  hierarchy or role groups. Administrative user routes are reserved for
-  ALIXAR-DEV-003F
+  hierarchy or role groups
+- **Administrative user reads**: `GET /api/admin/users` (pagination, enablement
+  filter and case-insensitive username/email search), `GET /api/admin/users/{id}`
+  and `GET /api/admin/roles`, all protected by `users.manage` for session and
+  Bearer authentication. Responses exclude secrets and these endpoints do not
+  mutate managed state. Administrative writes remain for later ALIXAR-DEV-003F
+  slices
 - **API bearer authentication**: Self-service opaque Personal Access Tokens
   (`alx_pat_` prefix, 256-bit random value) presented as
   `Authorization: Bearer <token>`. Only `SHA-256(token)` is stored; the clear
@@ -105,5 +109,5 @@ See [Development](development.md) for full validation workflow details.
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - Administration of other users' API tokens
 - Email change (requires new-address verification)
-- Administration of other users (creation, listing, edition, enable/disable, administrative reset)
+- Administration of other users (creation, username edition, enable/disable, administrative reset and HTTP role assignment)
 - Broad ERP functionality beyond the currently implemented slices
