@@ -33,11 +33,12 @@ current roles. There are no per-user permission overrides and no explicit
 first permission and `system-admin` is the first built-in role.
 
 ALIXAR-DEV-003F adds administrative user management over that RBAC foundation.
-The first slice provides read-only administrative endpoints for listing,
-searching and inspecting users and for reading the role catalogue. Every
-`/api/admin/**` endpoint requires `users.manage`, independently of the
-authentication mechanism. Administrative write operations are implemented in
-later slices of the same iteration.
+The current slice provides read-only endpoints for listing, searching and
+inspecting users and for reading the role catalogue, plus creation of disabled
+users and administrative username changes. Every `/api/admin/**` endpoint
+requires `users.manage`, independently of the authentication mechanism.
+Enablement, administrative password reset and role replacement are implemented
+in later slices of the same iteration.
 
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
@@ -452,7 +453,7 @@ anything else        → denyAll
 ```
 
 The administrative namespace `/api/admin/**` requires `users.manage`. The
-read-only endpoints currently exposed are described under
+endpoints currently exposed are described under
 [Administrative user management](#administrative-user-management). Results:
 
 | Caller | Result |
@@ -476,20 +477,21 @@ role is granted only when explicitly requested with
 `ALIXAR_BOOTSTRAP_SYSTEM_ADMIN=true`. The flag defaults to `false`, only assigns
 `system-admin` to the bootstrap user, never creates a user by itself, is
 idempotent, and has no effect when the bootstrap identity is not configured.
-The read-only administrative slice does not assign roles; HTTP role assignment
-is implemented in a later ALIXAR-DEV-003F slice. Until then, a normally created
-user cannot acquire `system-admin` through the API. See
-[Bootstrap user](#bootstrap-user).
+The create endpoint assigns only roles explicitly supplied in `roleCodes`; it
+never adds `system-admin` automatically. Full role replacement remains for a
+later ALIXAR-DEV-003F slice. See [Bootstrap user](#bootstrap-user).
 
 ### Administrative user management
 
-The first ALIXAR-DEV-003F slice exposes read-only endpoints:
+The current ALIXAR-DEV-003F slice exposes:
 
 | Method and path | Result |
 |-----------------|--------|
 | `GET /api/admin/users` | Paginated user summaries |
 | `GET /api/admin/users/{id}` | One user's safe fields and role codes |
 | `GET /api/admin/roles` | Role catalogue with permission codes |
+| `POST /api/admin/users` | Creates a disabled user |
+| `PATCH /api/admin/users/{id}` | Changes the username only |
 
 `GET /api/admin/users` accepts:
 
@@ -501,13 +503,33 @@ The first ALIXAR-DEV-003F slice exposes read-only endpoints:
 Results are ordered by username and then id for stable pagination. The page
 response contains `items`, `page`, `size` and `total`. Invalid pagination
 returns `400` with code `ADMIN_INVALID_PAGINATION` and a `field` property.
-Unknown users return `404` with `ADMIN_USER_NOT_FOUND`. Responses contain no
-password hash, reset token, API token or other secret.
+Unknown users return `404` with `ADMIN_USER_NOT_FOUND`.
 
-These endpoints are read-only: they never change credentials, enablement,
-roles, assignments, reset tokens or PATs. Bearer authentication still updates
-the presented PAT's `last_used_at`, as before. All three endpoints require
-`users.manage` for both session and Bearer authentication.
+`POST /api/admin/users` accepts `username`, `email`, `password` and optional
+`roleCodes`. Username and email are normalized to lower case and compared
+case-insensitively. The password must satisfy `PasswordPolicy`. Absent or empty
+`roleCodes` creates a user without roles. Every supplied role code is validated
+before insertion; an unknown role aborts the whole operation. The user and its
+role assignments are written in one transaction, and a failure in any assignment
+rolls the user back. PostgreSQL remains the final authority for uniqueness: a
+concurrent duplicate is translated to `409 Conflict`. A new user is always
+created with `enabled=false`; `enabled` is not part of the create contract.
+`system-admin` is assigned only when explicitly present in `roleCodes`, never
+automatically. Invalid passwords or malformed email return `400`, duplicate
+username or email returns `409`, and an unknown role returns `404` with
+`ADMIN_ROLE_NOT_FOUND`.
+
+`PATCH /api/admin/users/{id}` changes only the username, with the same
+normalization and case-insensitive uniqueness rules. It does not change the
+email, enablement, roles, password, reset tokens, sessions or PATs, and it does
+not increment `credentials_version`, because a username change is not a
+credential change. It returns the updated safe representation, `404` for an
+unknown user, `409` for a duplicate username and `400` for invalid input.
+
+All administrative responses exclude password hashes, reset tokens, API tokens
+and other secrets. Bearer authentication still updates the presented PAT's
+`last_used_at`, as before. Every endpoint requires `users.manage` for both
+session and Bearer authentication.
 
 ### Role groups (future decision)
 
@@ -522,9 +544,8 @@ RoleGroup
 A group only groups roles. It has no permissions of its own, cannot modify the
 permissions of its roles, and a user may receive roles directly or indirectly
 through groups. Effective permissions would still come exclusively from roles.
-Administrative writes (creation, username edition, enable/disable,
-administrative reset and HTTP role assignment) remain for later ALIXAR-DEV-003F
-slices.
+Enablement, administrative password reset and HTTP role replacement remain for
+later ALIXAR-DEV-003F slices.
 
 ## Session revocation
 
@@ -638,10 +659,11 @@ Two capabilities are intentionally deferred to later iterations:
 - **Email change.** The email is currently the password-recovery channel.
   Changing it without verifying the new address would weaken account recovery,
   so it is pending a dedicated email-verification iteration.
-- **Administration of other users.** Read-only listing, search and detail are
-  implemented in the first ALIXAR-DEV-003F slice. Creating, editing,
-  enabling/disabling, administratively resetting another user and assigning
-  roles over HTTP remain for later slices. The permission `users.manage` and
-  the `/api/admin/**` authorization boundary are already in force.
+- **Administration of other users.** Listing, search, detail, creation of
+  disabled users and administrative username changes are implemented in the
+  current ALIXAR-DEV-003F slice. Enabling/disabling, administratively resetting
+  another user and replacing roles over HTTP remain for later slices. The
+  permission `users.manage` and the `/api/admin/**` authorization boundary are
+  already in force.
 - **Role groups.** Grouping roles is a possible future evolution; no group
   model or tables exist in ALIXAR-DEV-003E.

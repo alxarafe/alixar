@@ -26,7 +26,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 156 deterministic tests and 24 PostgreSQL integration tests remain
+  the 168 deterministic tests and 27 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -63,12 +63,16 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   invalidating sessions or revoking PATs. Built-in `system-admin` role contains
   `users.manage`; there are no per-user overrides, explicit `DENY`, role
   hierarchy or role groups
-- **Administrative user reads**: `GET /api/admin/users` (pagination, enablement
-  filter and case-insensitive username/email search), `GET /api/admin/users/{id}`
-  and `GET /api/admin/roles`, all protected by `users.manage` for session and
-  Bearer authentication. Responses exclude secrets and these endpoints do not
-  mutate managed state. Administrative writes remain for later ALIXAR-DEV-003F
-  slices
+- **Administrative user management**: `GET /api/admin/users` (pagination,
+  enablement filter and case-insensitive username/email search),
+  `GET /api/admin/users/{id}`, `GET /api/admin/roles`,
+  `POST /api/admin/users` and `PATCH /api/admin/users/{id}`. New users are
+  created disabled, with only explicitly supplied roles and no automatic
+  `system-admin`; user creation and role assignment are atomic. Username changes
+  do not alter credentials, enablement, roles, sessions or PATs. All endpoints
+  require `users.manage` for session and Bearer authentication and responses
+  exclude secrets. Enable/disable, administrative reset and role replacement
+  remain for later ALIXAR-DEV-003F slices
 - **API bearer authentication**: Self-service opaque Personal Access Tokens
   (`alx_pat_` prefix, 256-bit random value) presented as
   `Authorization: Bearer <token>`. Only `SHA-256(token)` is stored; the clear
@@ -109,5 +113,5 @@ See [Development](development.md) for full validation workflow details.
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - Administration of other users' API tokens
 - Email change (requires new-address verification)
-- Administration of other users (creation, username edition, enable/disable, administrative reset and HTTP role assignment)
+- Administration of other users (enable/disable, administrative reset and HTTP role replacement)
 - Broad ERP functionality beyond the currently implemented slices

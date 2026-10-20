@@ -8,6 +8,7 @@ import es.alxarafe.alixar.authentication.application.AuthenticateApiTokenUseCase
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
 import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
 import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
+import es.alxarafe.alixar.authentication.application.CreateAdminUserUseCase;
 import es.alxarafe.alixar.authentication.application.CreateApiTokenUseCase;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.GetAdminUserUseCase;
@@ -22,6 +23,7 @@ import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.RemoveRoleFromUserUseCase;
 import es.alxarafe.alixar.authentication.application.RevokeApiTokenUseCase;
 import es.alxarafe.alixar.authentication.application.TokenHasher;
+import es.alxarafe.alixar.authentication.application.UpdateAdminUsernameUseCase;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqApiTokenRepository;
 import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqAuthorizationRepository;
@@ -91,6 +93,31 @@ public class AuthenticationConfiguration {
     @Bean
     ListRolesUseCase listRolesUseCase(AuthorizationRepository authorizationRepository) {
         return new ListRolesUseCase(authorizationRepository);
+    }
+
+    @Bean
+    CreateAdminUserUseCase createAdminUserUseCase(
+        UserRepository userRepository,
+        AuthorizationRepository authorizationRepository,
+        PasswordHasher passwordHasher
+    ) {
+        return new CreateAdminUserUseCase(userRepository, authorizationRepository, passwordHasher);
+    }
+
+    @Bean
+    UpdateAdminUsernameUseCase updateAdminUsernameUseCase(
+        UserRepository userRepository,
+        AuthorizationRepository authorizationRepository
+    ) {
+        return new UpdateAdminUsernameUseCase(userRepository, authorizationRepository);
+    }
+
+    @Bean
+    TransactionalAdminUserService transactionalAdminUserService(
+        CreateAdminUserUseCase createAdminUserUseCase,
+        UpdateAdminUsernameUseCase updateAdminUsernameUseCase
+    ) {
+        return new TransactionalAdminUserService(createAdminUserUseCase, updateAdminUsernameUseCase);
     }
 
     @Bean

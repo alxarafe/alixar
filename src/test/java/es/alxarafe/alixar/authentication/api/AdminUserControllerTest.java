@@ -38,6 +38,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -356,6 +357,315 @@ class AdminUserControllerTest {
             .andExpect(status().isOk());
 
         assertThat(managedState()).isEqualTo(before);
+    }
+
+    @Test
+    void anonymous_writeEndpoints_returnUnauthorized() throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        mockMvc.perform(post(AdminUserEndpoints.BASE_PATH)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(createUserJson("new-user", "new-user@example.test", "new-user-password-123", null)))
+            .andExpect(status().isUnauthorized());
+        mockMvc.perform(patch(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\":\"renamed\"}"))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void sessionWithoutPermission_returnsForbiddenOnWriteEndpoints() throws Exception {
+        MockHttpSession session = authenticatedSession("bob", PASSWORD);
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        mockMvc.perform(post(AdminUserEndpoints.BASE_PATH)
+                .session(session)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(createUserJson("new-user", "new-user@example.test", "new-user-password-123", null)))
+            .andExpect(status().isForbidden());
+        mockMvc.perform(patch(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID)
+                .session(session)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\":\"renamed\"}"))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void bearerWithoutPermission_returnsForbiddenOnWriteEndpoints() throws Exception {
+        String rawToken = personalAccessToken(BOB_ID);
+
+        mockMvc.perform(post(AdminUserEndpoints.BASE_PATH)
+                .header("Authorization", "Bearer " + rawToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(createUserJson("new-user", "new-user@example.test", "new-user-password-123", null)))
+            .andExpect(status().isForbidden());
+        mockMvc.perform(patch(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID)
+                .header("Authorization", "Bearer " + rawToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\":\"renamed\"}"))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void create_withPermission_createsDisabledUserWithRoles() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminPost(session, createUserJson(
+            "NEW.USER",
+            "NEW.USER@EXAMPLE.TEST",
+            "new-user-password-123",
+            "[\"" + RoleCodes.SYSTEM_ADMIN + "\"]"
+        ))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.username").value("new.user"))
+            .andExpect(jsonPath("$.email").value("new.user@example.test"))
+            .andExpect(jsonPath("$.enabled").value(false))
+            .andExpect(jsonPath("$.roles.length()").value(1))
+            .andExpect(jsonPath("$.roles[0]").value(RoleCodes.SYSTEM_ADMIN))
+            .andExpect(jsonPath("$.passwordHash").doesNotExist())
+            .andExpect(jsonPath("$.credentialsVersion").doesNotExist())
+            .andExpect(jsonPath("$.password").doesNotExist())
+            .andExpect(jsonPath("$.resetToken").doesNotExist())
+            .andExpect(jsonPath("$.token").doesNotExist());
+
+        User created = userRepository.findByUsername("new.user").orElseThrow();
+        assertThat(created.enabled()).isFalse();
+        assertThat(created.credentialsVersion()).isZero();
+        assertThat(authorizationRepository.findRoleCodesForUser(created.id()))
+            .containsExactly(RoleCodes.SYSTEM_ADMIN);
+    }
+
+    @Test
+    void create_withoutRoleCodes_createsUserWithoutRoles() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminPost(session, createUserJson(
+            "new-user",
+            "new-user@example.test",
+            "new-user-password-123",
+            null
+        ))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.roles.length()").value(0));
+
+        adminPost(session, createUserJson(
+            "new-user-empty-roles",
+            "new-user-empty-roles@example.test",
+            "new-user-password-123",
+            "[]"
+        ))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.roles.length()").value(0));
+
+        User created = userRepository.findByUsername("new-user").orElseThrow();
+        assertThat(authorizationRepository.findRoleCodesForUser(created.id())).isEmpty();
+        User createdWithEmptyRoles = userRepository.findByUsername("new-user-empty-roles").orElseThrow();
+        assertThat(authorizationRepository.findRoleCodesForUser(createdWithEmptyRoles.id())).isEmpty();
+    }
+
+    @Test
+    void bearerWithPermission_canCreateAndRenameUser() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        String rawToken = personalAccessToken(ALICE_ID);
+
+        mockMvc.perform(post(AdminUserEndpoints.BASE_PATH)
+                .header("Authorization", "Bearer " + rawToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(createUserJson("new-user", "new-user@example.test", "new-user-password-123", null)))
+            .andExpect(status().isCreated());
+
+        UUID createdId = userRepository.findByUsername("new-user").orElseThrow().id();
+        mockMvc.perform(patch(AdminUserEndpoints.BASE_PATH + "/" + createdId)
+                .header("Authorization", "Bearer " + rawToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\":\"renamed-user\"}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.username").value("renamed-user"));
+    }
+
+    @Test
+    void create_unknownRole_returnsNotFoundAndDoesNotCreateUser() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        long usersBefore = userRepository.count(null, null);
+
+        adminPost(session, createUserJson(
+            "new-user",
+            "new-user@example.test",
+            "new-user-password-123",
+            "[\"missing-role\"]"
+        ))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_ROLE_NOT_FOUND.name()));
+
+        assertThat(userRepository.count(null, null)).isEqualTo(usersBefore);
+        assertThat(userRepository.findByUsername("new-user")).isEmpty();
+    }
+
+    @Test
+    void create_duplicateUsernameOrEmail_returnsConflict() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminPost(session, createUserJson(
+            "ALICE",
+            "different@example.test",
+            "new-user-password-123",
+            null
+        ))
+            .andExpect(status().isConflict())
+            .andExpect(jsonPath("$.code").value("AUTH_USERNAME_ALREADY_EXISTS"));
+
+        adminPost(session, createUserJson(
+            "different-user",
+            "ALICE@EXAMPLE.TEST",
+            "new-user-password-123",
+            null
+        ))
+            .andExpect(status().isConflict())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_EMAIL_ALREADY_EXISTS.name()));
+
+        assertThat(userRepository.findByUsername("different-user")).isEmpty();
+    }
+
+    @Test
+    void create_invalidPasswordOrEmail_returnsBadRequest() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminPost(session, createUserJson(
+            "new-user",
+            "new-user@example.test",
+            "short",
+            null
+        ))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("AUTH_INVALID_PASSWORD"));
+
+        adminPost(session, createUserJson(
+            "new-user",
+            "not-an-email",
+            "new-user-password-123",
+            null
+        ))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("VALIDATION_REQUIRED"))
+            .andExpect(jsonPath("$.field").value("email"));
+
+        assertThat(userRepository.findByUsername("new-user")).isEmpty();
+    }
+
+    @Test
+    void createdUserIsDisabledAndCannotLogIn() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminPost(session, createUserJson(
+            "new-user",
+            "new-user@example.test",
+            "new-user-password-123",
+            "[\"" + RoleCodes.SYSTEM_ADMIN + "\"]"
+        ))
+            .andExpect(status().isCreated());
+
+        login("new-user", "new-user-password-123")
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void updateUsername_changesOnlyUsernameAndKeepsCredentialsSessionsAndTokens() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession adminSession = authenticatedSession("alice", PASSWORD);
+        MockHttpSession bobSession = authenticatedSession("bob", PASSWORD);
+        String rawBobToken = personalAccessToken(BOB_ID);
+
+        User before = userRepository.findById(BOB_ID).orElseThrow();
+        List<String> rolesBefore = authorizationRepository.findRoleCodesForUser(BOB_ID);
+        List<PasswordResetToken> resetTokensBefore =
+            ((AuthenticationTestConfig.TestPasswordResetTokenRepository) passwordResetTokenRepository).all();
+        List<ApiToken> tokensBefore = apiTokenRepository.findAllByUserId(BOB_ID);
+
+        adminPatch(adminSession, BOB_ID, "{\"username\":\"bob-renamed\"}")
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.username").value("bob-renamed"))
+            .andExpect(jsonPath("$.email").value("bob@example.test"))
+            .andExpect(jsonPath("$.enabled").value(true));
+
+        User after = userRepository.findById(BOB_ID).orElseThrow();
+        assertThat(after.username()).isEqualTo("bob-renamed");
+        assertThat(after.email()).isEqualTo(before.email());
+        assertThat(after.enabled()).isEqualTo(before.enabled());
+        assertThat(after.credentialsVersion()).isEqualTo(before.credentialsVersion());
+        assertThat(after.passwordHash()).isEqualTo(before.passwordHash());
+        assertThat(authorizationRepository.findRoleCodesForUser(BOB_ID)).isEqualTo(rolesBefore);
+        assertThat(((AuthenticationTestConfig.TestPasswordResetTokenRepository) passwordResetTokenRepository).all())
+            .isEqualTo(resetTokensBefore);
+        assertThat(apiTokenRepository.findAllByUserId(BOB_ID)).isEqualTo(tokensBefore);
+
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH).session(bobSession))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(BOB_ID.toString()));
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH)
+                .header("Authorization", "Bearer " + rawBobToken))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(BOB_ID.toString()));
+    }
+
+    @Test
+    void updateUsername_duplicateBlankOrUnknown_returnsExpectedErrors() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminPatch(session, BOB_ID, "{\"username\":\"ALICE\"}")
+            .andExpect(status().isConflict())
+            .andExpect(jsonPath("$.code").value("AUTH_USERNAME_ALREADY_EXISTS"));
+        adminPatch(session, BOB_ID, "{\"username\":\"   \"}")
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("VALIDATION_REQUIRED"))
+            .andExpect(jsonPath("$.field").value("username"));
+        adminPatch(session, UUID.randomUUID(), "{\"username\":\"renamed\"}")
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_USER_NOT_FOUND.name()));
+
+        assertThat(userRepository.findById(BOB_ID).orElseThrow().username()).isEqualTo("bob");
+    }
+
+    private ResultActions adminPost(MockHttpSession session, String body) throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        return mockMvc.perform(post(AdminUserEndpoints.BASE_PATH)
+            .session(session)
+            .cookie(csrfCookie)
+            .header(CSRF_HEADER, csrfCookie.getValue())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body));
+    }
+
+    private ResultActions adminPatch(MockHttpSession session, UUID userId, String body) throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        return mockMvc.perform(patch(AdminUserEndpoints.BASE_PATH + "/" + userId)
+            .session(session)
+            .cookie(csrfCookie)
+            .header(CSRF_HEADER, csrfCookie.getValue())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body));
+    }
+
+    private String createUserJson(String username, String email, String password, String roleCodesJson) {
+        String roleCodes = roleCodesJson != null ? ",\"roleCodes\":" + roleCodesJson : "";
+        return "{\"username\":\"" + username
+            + "\",\"email\":\"" + email
+            + "\",\"password\":\"" + password + "\""
+            + roleCodes + "}";
     }
 
     private ManagedState managedState() {

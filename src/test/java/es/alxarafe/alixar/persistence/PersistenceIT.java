@@ -5,6 +5,7 @@ import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
 import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
 import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
+import es.alxarafe.alixar.authentication.application.EmailAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
 import es.alxarafe.alixar.authentication.application.PermissionCodes;
@@ -13,6 +14,7 @@ import es.alxarafe.alixar.authentication.application.PasswordResetTokenGenerator
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.RoleCodes;
+import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
 import es.alxarafe.alixar.authentication.application.TokenHasher;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.application.UsernameAlreadyExistsException;
@@ -353,6 +355,94 @@ class PersistenceIT {
         assertThat(isTransactional(controller, "changePassword")).isFalse();
         assertThat(isTransactional(facade, "changeUsername")).isTrue();
         assertThat(isTransactional(facade, "changePassword")).isTrue();
+    }
+
+    @Test
+    void administrativeUserTransactionBoundary_livesInInfrastructureFacade() throws Exception {
+        Class<?> controller = Class.forName("es.alxarafe.alixar.authentication.api.AdminUserController");
+        Class<?> facade = Class.forName(
+            "es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminUserService"
+        );
+
+        assertThat(isTransactional(controller, "create")).isFalse();
+        assertThat(isTransactional(controller, "updateUsername")).isFalse();
+        assertThat(isTransactional(facade, "create")).isTrue();
+        assertThat(isTransactional(facade, "updateUsername")).isTrue();
+    }
+
+    @Test
+    void administrativeUserCreation_translatesUniqueViolations() {
+        var firstId = UUID.fromString("11111111-2222-3333-4444-555555555555");
+        var secondId = UUID.fromString("66666666-7777-8888-9999-000000000000");
+        var thirdId = UUID.fromString("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee");
+        var now = Instant.now();
+
+        try {
+            userRepository.create(new User(
+                firstId,
+                "AdminUser",
+                "admin-user@example.test",
+                passwordHasher.hash("original-password-123"),
+                false,
+                0,
+                now,
+                now
+            ));
+
+            assertThatThrownBy(() -> userRepository.create(new User(
+                secondId,
+                "adminuser",
+                "different-admin@example.test",
+                passwordHasher.hash("original-password-123"),
+                false,
+                0,
+                now,
+                now
+            ))).isInstanceOf(UsernameAlreadyExistsException.class);
+
+            assertThatThrownBy(() -> userRepository.create(new User(
+                thirdId,
+                "different-admin",
+                "ADMIN-USER@example.test",
+                passwordHasher.hash("original-password-123"),
+                false,
+                0,
+                now,
+                now
+            ))).isInstanceOf(EmailAlreadyExistsException.class);
+        } finally {
+            deleteUser(firstId);
+            deleteUser(secondId);
+            deleteUser(thirdId);
+        }
+    }
+
+    @Test
+    void administrativeUserCreation_rollsBackUserWhenRoleAssignmentFails() {
+        var userId = UUID.fromString("12345678-1234-5678-1234-567812345678");
+        var now = Instant.now();
+        var transactionTemplate = new TransactionTemplate(transactionManager);
+
+        try {
+            assertThatThrownBy(() -> transactionTemplate.execute(status -> {
+                userRepository.create(new User(
+                    userId,
+                    "rollback-admin",
+                    "rollback-admin@example.test",
+                    passwordHasher.hash("original-password-123"),
+                    false,
+                    0,
+                    now,
+                    now
+                ));
+                authorizationRepository.assignRoleToUser(userId, "missing-role");
+                return null;
+            })).isInstanceOf(RoleNotFoundException.class);
+
+            assertThat(userRepository.findById(userId)).isEmpty();
+        } finally {
+            deleteUser(userId);
+        }
     }
 
     @Test
