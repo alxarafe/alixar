@@ -1,6 +1,8 @@
 package es.alxarafe.alixar.authentication.infrastructure.security;
 
 import es.alxarafe.alixar.authentication.api.UserEndpoints;
+import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
+import es.alxarafe.alixar.authentication.application.AuthenticateApiTokenUseCase;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,8 +37,11 @@ public class SecurityConfiguration {
     private static final String SESSION_COOKIE_NAME = "JSESSIONID";
 
     @Bean
-    SecurityContextRepository securityContextRepository() {
-        return new HttpSessionSecurityContextRepository();
+    SecurityContextRepository securityContextRepository(BearerTokenRequestMatcher bearerTokenRequestMatcher) {
+        return new BearerAwareSecurityContextRepository(
+            new HttpSessionSecurityContextRepository(),
+            bearerTokenRequestMatcher
+        );
     }
 
     @Bean
@@ -45,11 +50,17 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    SessionAuthenticationStrategy sessionAuthenticationStrategy(CsrfTokenRepository csrfTokenRepository) {
-        return new CompositeSessionAuthenticationStrategy(java.util.List.of(
-            new ChangeSessionIdAuthenticationStrategy(),
-            new CsrfAuthenticationStrategy(csrfTokenRepository)
-        ));
+    SessionAuthenticationStrategy sessionAuthenticationStrategy(
+        CsrfTokenRepository csrfTokenRepository,
+        BearerTokenRequestMatcher bearerTokenRequestMatcher
+    ) {
+        return new BearerAwareSessionAuthenticationStrategy(
+            new CompositeSessionAuthenticationStrategy(java.util.List.of(
+                new ChangeSessionIdAuthenticationStrategy(),
+                new CsrfAuthenticationStrategy(csrfTokenRepository)
+            )),
+            bearerTokenRequestMatcher
+        );
     }
 
     @Bean
@@ -68,6 +79,19 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    BearerTokenRequestMatcher bearerTokenRequestMatcher() {
+        return new BearerTokenRequestMatcher();
+    }
+
+    @Bean
+    ApiTokenAuthenticationFilter apiTokenAuthenticationFilter(
+        AuthenticateApiTokenUseCase authenticateApiToken,
+        ApiTokenRepository apiTokenRepository
+    ) {
+        return new ApiTokenAuthenticationFilter(authenticateApiToken, apiTokenRepository);
+    }
+
+    @Bean
     SecurityFilterChain securityFilterChain(
         HttpSecurity http,
         AuthenticationManager authenticationManager,
@@ -75,7 +99,9 @@ public class SecurityConfiguration {
         CsrfTokenRepository csrfTokenRepository,
         AuthenticationEntryPoint authenticationEntryPoint,
         AccessDeniedHandler accessDeniedHandler,
-        CredentialsVersionCheckFilter credentialsVersionCheckFilter
+        CredentialsVersionCheckFilter credentialsVersionCheckFilter,
+        ApiTokenAuthenticationFilter apiTokenAuthenticationFilter,
+        BearerTokenRequestMatcher bearerTokenRequestMatcher
     ) throws Exception {
         http
             .authenticationManager(authenticationManager)
@@ -91,11 +117,19 @@ public class SecurityConfiguration {
                 // mutating Contact methods (PUT/PATCH/DELETE). Removing it changes the Contact
                 // contract and requires a dedicated iteration. See docs/authentication.md.
                 csrf.ignoringRequestMatchers(CONTACTS_PATH_PATTERN);
+                csrf.ignoringRequestMatchers(bearerTokenRequestMatcher);
             })
+            .addFilterBefore(apiTokenAuthenticationFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
             .addFilterAfter(credentialsVersionCheckFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(HEALTH_PATH, CONTACTS_PATH_PATTERN, LOGIN_PATH, BASE_PATH + "/password/forgot", BASE_PATH + "/password/reset").permitAll()
-                .requestMatchers(ME_PATH, UserEndpoints.ME_PATH, UserEndpoints.PASSWORD_PATH).authenticated()
+                .requestMatchers(
+                    ME_PATH,
+                    UserEndpoints.ME_PATH,
+                    UserEndpoints.PASSWORD_PATH,
+                    UserEndpoints.API_TOKENS_PATH,
+                    UserEndpoints.API_TOKENS_PATH + "/**"
+                ).authenticated()
                 .anyRequest().denyAll())
             .exceptionHandling(exceptions -> exceptions
                 .authenticationEntryPoint(authenticationEntryPoint)

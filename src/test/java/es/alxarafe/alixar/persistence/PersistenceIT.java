@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.persistence;
 
+import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
 import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
 import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
@@ -12,6 +13,7 @@ import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.TokenHasher;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.application.UsernameAlreadyExistsException;
+import es.alxarafe.alixar.authentication.domain.ApiToken;
 import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
 import java.time.Instant;
@@ -40,6 +42,7 @@ class PersistenceIT {
     private static final String HISTORY_TABLE = "flyway_schema_history";
     private static final String USER_TABLE = "authentication_user";
     private static final String RESET_TOKEN_TABLE = "authentication_password_reset";
+    private static final String API_TOKEN_TABLE = "authentication_api_token";
 
     @Autowired
     private DataSource dataSource;
@@ -63,6 +66,9 @@ class PersistenceIT {
     private PasswordResetTokenRepository passwordResetTokenRepository;
 
     @Autowired
+    private ApiTokenRepository apiTokenRepository;
+
+    @Autowired
     private TokenHasher tokenHasher;
 
     @Autowired
@@ -75,13 +81,15 @@ class PersistenceIT {
                 .startsWith(POSTGRESQL_VERSION);
         }
         assertThat(flyway.getConfiguration().getDataSource()).isSameAs(dataSource);
-        assertThat(flyway.info().all()).hasSize(2);
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("2");
+        assertThat(flyway.info().all()).hasSize(3);
+        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("3");
         assertThat(dsl.selectOne().fetchSingle().value1()).isEqualTo(1);
         assertThat(dsl.fetch("select tablename from pg_catalog.pg_tables where schemaname = current_schema()")
-            .getValues(0, String.class)).containsExactlyInAnyOrder(HISTORY_TABLE, USER_TABLE, "authentication_password_reset");
+            .getValues(0, String.class)).containsExactlyInAnyOrder(
+                HISTORY_TABLE, USER_TABLE, RESET_TOKEN_TABLE, API_TOKEN_TABLE
+            );
         assertThat(dsl.fetchCount(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(HISTORY_TABLE))))
-            .isEqualTo(2);
+            .isEqualTo(3);
     }
 
     @Test
@@ -472,6 +480,145 @@ class PersistenceIT {
         } finally {
             deleteUser(userId);
         }
+    }
+
+    @Test
+    void apiToken_persistsMetadataAndSupportsLookupLastUseAndRevocation() {
+        var userId = UUID.fromString("a1a1a1a1-b2b2-c3c3-d4d4-e5e5e5e5e5e5");
+        var tokenId = UUID.fromString("f1f1f1f1-e2e2-d3d3-c4c4-b5b5b5b5b5b5");
+        var otherUserId = UUID.fromString("12121212-3434-5656-7878-909090909090");
+        var now = Instant.parse("2026-10-17T10:00:00Z");
+        var expiresAt = now.plusSeconds(3600);
+        var rawToken = "alx_pat_persistence-test-token";
+        var tokenHash = tokenHasher.hash(rawToken);
+        var token = new ApiToken(tokenId, userId, "persistence-test", 4, now, expiresAt, null, null);
+
+        try {
+            userRepository.create(new User(
+                userId,
+                "api-token-owner",
+                "api-token-owner@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                4,
+                now,
+                now
+            ));
+            apiTokenRepository.create(token, tokenHash);
+
+            var persisted = apiTokenRepository.findByTokenHash(tokenHash).orElseThrow();
+            assertThat(persisted.id()).isEqualTo(tokenId);
+            assertThat(persisted.userId()).isEqualTo(userId);
+            assertThat(persisted.name()).isEqualTo("persistence-test");
+            assertThat(persisted.credentialsVersion()).isEqualTo(4);
+            assertThat(persisted.expiresAt()).isEqualTo(expiresAt);
+            assertThat(persisted.lastUsedAt()).isNull();
+            assertThat(persisted.revokedAt()).isNull();
+            assertThat(apiTokenRepository.findAllByUserId(userId)).hasSize(1);
+            assertThat(apiTokenRepository.findByIdAndUserId(tokenId, userId)).isPresent();
+            assertThat(apiTokenRepository.findByIdAndUserId(tokenId, otherUserId)).isEmpty();
+
+            var lastUsedAt = now.plusSeconds(60);
+            apiTokenRepository.updateLastUsedAt(tokenId, lastUsedAt);
+            assertThat(apiTokenRepository.findByIdAndUserId(tokenId, userId).orElseThrow().lastUsedAt())
+                .isEqualTo(lastUsedAt);
+
+            var revokedAt = now.plusSeconds(120);
+            apiTokenRepository.revoke(tokenId, userId, revokedAt);
+            assertThat(apiTokenRepository.findByTokenHash(tokenHash).orElseThrow().revokedAt())
+                .isEqualTo(revokedAt);
+        } finally {
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void apiToken_enforcesTokenHashUniqueness() {
+        var userId = UUID.fromString("22222222-3333-4444-5555-666666666666");
+        var now = Instant.now();
+
+        try {
+            userRepository.create(new User(
+                userId,
+                "unique-token-owner",
+                "unique-token-owner@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                0,
+                now,
+                now
+            ));
+            apiTokenRepository.create(
+                new ApiToken(UUID.randomUUID(), userId, "first", 0, now, now.plusSeconds(3600), null, null),
+                "DUPLICATED-TOKEN-HASH"
+            );
+
+            assertThatThrownBy(() -> apiTokenRepository.create(
+                new ApiToken(UUID.randomUUID(), userId, "second", 0, now, now.plusSeconds(3600), null, null),
+                "DUPLICATED-TOKEN-HASH"
+            )).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+        } finally {
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void apiToken_enforcesForeignKeyToUser() {
+        var now = Instant.now();
+        var nonExistentUserId = UUID.fromString("77777777-8888-9999-0000-aaaaaaaaaaaa");
+
+        assertThatThrownBy(() -> apiTokenRepository.create(
+            new ApiToken(
+                UUID.randomUUID(),
+                nonExistentUserId,
+                "orphan",
+                0,
+                now,
+                now.plusSeconds(3600),
+                null,
+                null
+            ),
+            "ORPHAN-TOKEN-HASH"
+        )).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void apiToken_rejectsEmptyNameAtTheDatabaseBoundary() {
+        var userId = UUID.fromString("bbbbbbbb-cccc-dddd-eeee-ffffffffffff");
+        var now = Instant.now();
+
+        try {
+            userRepository.create(new User(
+                userId,
+                "blank-name-owner",
+                "blank-name-owner@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                0,
+                now,
+                now
+            ));
+
+            assertThatThrownBy(() -> apiTokenRepository.create(
+                new ApiToken(UUID.randomUUID(), userId, "   ", 0, now, now.plusSeconds(3600), null, null),
+                "BLANK-NAME-TOKEN-HASH"
+            )).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+        } finally {
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void apiTokenTransactionBoundary_livesInInfrastructureFacade() throws Exception {
+        Class<?> controller = Class.forName("es.alxarafe.alixar.authentication.api.ApiTokenController");
+        Class<?> facade = Class.forName(
+            "es.alxarafe.alixar.authentication.infrastructure.TransactionalApiTokenService"
+        );
+
+        assertThat(isTransactional(controller, "create")).isFalse();
+        assertThat(isTransactional(controller, "revoke")).isFalse();
+        assertThat(isTransactional(facade, "create")).isTrue();
+        assertThat(isTransactional(facade, "revoke")).isTrue();
     }
 
     private boolean isTransactional(Class<?> controller, String methodName) {

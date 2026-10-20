@@ -1,7 +1,9 @@
 package es.alxarafe.alixar.authentication;
 
+import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.UserRepository;
+import es.alxarafe.alixar.authentication.domain.ApiToken;
 import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
 import java.time.Instant;
@@ -27,6 +29,12 @@ public class AuthenticationTestConfig {
     @Primary
     public PasswordResetTokenRepository testPasswordResetTokenRepository() {
         return new TestPasswordResetTokenRepository();
+    }
+
+    @Bean
+    @Primary
+    public ApiTokenRepository testApiTokenRepository() {
+        return new TestApiTokenRepository();
     }
 
     public static class TestUserRepository implements UserRepository {
@@ -172,6 +180,86 @@ public class AuthenticationTestConfig {
                         t.createdAt()
                     ));
                 });
+        }
+    }
+
+    public static class TestApiTokenRepository implements ApiTokenRepository {
+
+        private record StoredToken(ApiToken token, String tokenHash) {
+        }
+
+        private final List<StoredToken> tokens = new ArrayList<>();
+
+        public void replaceWith() {
+            tokens.clear();
+        }
+
+        @Override
+        public void create(ApiToken token, String tokenHash) {
+            tokens.add(new StoredToken(token, tokenHash));
+        }
+
+        @Override
+        public Optional<ApiToken> findByTokenHash(String tokenHash) {
+            return tokens.stream()
+                .filter(stored -> stored.tokenHash().equals(tokenHash))
+                .map(StoredToken::token)
+                .findFirst();
+        }
+
+        @Override
+        public List<ApiToken> findAllByUserId(UUID userId) {
+            return tokens.stream()
+                .map(StoredToken::token)
+                .filter(token -> token.userId().equals(userId))
+                .toList();
+        }
+
+        @Override
+        public Optional<ApiToken> findByIdAndUserId(UUID id, UUID userId) {
+            return tokens.stream()
+                .map(StoredToken::token)
+                .filter(token -> token.id().equals(id) && token.userId().equals(userId))
+                .findFirst();
+        }
+
+        @Override
+        public void revoke(UUID id, UUID userId, Instant revokedAt) {
+            tokens.stream()
+                .filter(stored -> stored.token().id().equals(id) && stored.token().userId().equals(userId))
+                .findFirst()
+                .ifPresent(stored -> replace(stored, new ApiToken(
+                    stored.token().id(),
+                    stored.token().userId(),
+                    stored.token().name(),
+                    stored.token().credentialsVersion(),
+                    stored.token().createdAt(),
+                    stored.token().expiresAt(),
+                    stored.token().lastUsedAt(),
+                    revokedAt
+                )));
+        }
+
+        @Override
+        public void updateLastUsedAt(UUID id, Instant lastUsedAt) {
+            tokens.stream()
+                .filter(stored -> stored.token().id().equals(id))
+                .findFirst()
+                .ifPresent(stored -> replace(stored, new ApiToken(
+                    stored.token().id(),
+                    stored.token().userId(),
+                    stored.token().name(),
+                    stored.token().credentialsVersion(),
+                    stored.token().createdAt(),
+                    stored.token().expiresAt(),
+                    lastUsedAt,
+                    stored.token().revokedAt()
+                )));
+        }
+
+        private void replace(StoredToken stored, ApiToken replacement) {
+            int index = tokens.indexOf(stored);
+            tokens.set(index, new StoredToken(replacement, stored.tokenHash()));
         }
     }
 }

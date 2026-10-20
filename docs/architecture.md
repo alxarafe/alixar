@@ -25,6 +25,7 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 | Flyway for database migrations | Approved |
 | jOOQ for type-safe SQL | Approved |
 | Spring Security 7.1.1 for the initial web-session authentication foundation | Approved |
+| Opaque Personal Access Tokens presented as Bearer tokens for independent API consumers | Approved |
 
 ## Implemented
 
@@ -40,6 +41,9 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - Initial Spring Security HTTP-session authentication for web clients
 - Self-service management of the authenticated identity (own username and own
   password; password change invalidates pending reset tokens and other sessions)
+- Opaque Bearer Personal Access Tokens for independent API consumers, with
+  SHA-256-hash-only persistence, mandatory expiry, explicit revocation,
+  `credentials_version` binding and coexistence with session+CSRF
 
 ## Planned (Not Implemented)
 
@@ -47,7 +51,9 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - Authorization and protected business capabilities
 - Email change with new-address verification
 - Administration of other users (creation, listing, edition, enable/disable, administrative reset)
-- Definitive authentication contract for independent API consumers
+- Granular authorization (roles, permissions, scopes)
+- OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
+- JWT, refresh tokens, client credentials, machine-to-machine authentication
 - OpenAPI specification
 - ERP modules (thirdparties, catalog, sales, billing, inventory, accounting)
 - Module system
@@ -88,10 +94,15 @@ password hashing. It does not depend on HTTP sessions or Spring Security.
 Spring Security adapts a validated Alixar user into an authenticated principal
 and persists that principal in the servlet session.
 
-The current process-local session mechanism is intentionally a web-client
-foundation, not a definitive authentication contract for independent API
-consumers. See [Authentication](authentication.md) for the contract and pending
-decisions.
+Independent API consumers authenticate with opaque Personal Access Tokens. The
+application layer resolves a token hash, validates expiry, revocation, the
+user's enabled state and `credentials_version`, and returns the same user
+identity; the Spring Security adapter turns it into the same
+`AuthenticatedUserPrincipal` without creating an HTTP session. PAT management
+is self-service and limited to the authenticated user's own tokens. JWT, OAuth
+Authorization Server/grant flows, OpenID Connect, scopes, roles and
+machine-to-machine credentials are not implemented. See
+[Authentication](authentication.md) for the contract and pending decisions.
 
 ## Internationalization (i18n) Architecture
 

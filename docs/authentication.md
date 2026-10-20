@@ -16,6 +16,14 @@ ALIXAR-DEV-003C adds self-service management of the authenticated identity: the
 user can change its own username and its own password. Administration of other
 users, roles, permissions, and email change are explicitly out of scope.
 
+ALIXAR-DEV-003D adds authentication for independent API consumers through
+opaque Personal Access Tokens (PATs) presented as
+`Authorization: Bearer <token>`. The existing browser session mechanism is
+unchanged: Solucar keeps using `JSESSIONID` plus CSRF, while API clients use a
+Bearer token. Both mechanisms represent the same `User`. JWT, OAuth 2.x,
+OpenID Connect, refresh tokens, scopes, roles and machine-to-machine grants are
+not implemented.
+
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
 Username and email comparisons and uniqueness checks are case-insensitive.
@@ -54,8 +62,10 @@ cross-identifier matches all return the same `401` error with code
 
 ### `GET /api/auth/me`
 
-Returns the same explicit identity DTO for the current authenticated session.
-It returns `401` without an authenticated session. Password hashes, enabled
+Returns the same explicit identity DTO for the current authenticated identity.
+It accepts either a valid browser session or a valid
+`Authorization: Bearer <token>` header, and returns `401` when neither is valid.
+The response does not reveal which mechanism was used. Password hashes, enabled
 state, timestamps, and security internals are never returned.
 
 ### `POST /api/auth/logout`
@@ -218,6 +228,137 @@ their next request, exactly like a password reset. This reuses the existing
 Changing the username does not revoke sessions and does not increment
 `credentials_version`.
 
+## Personal access tokens for API consumers
+
+ALIXAR-DEV-003D introduces self-service Personal Access Tokens. A PAT is an
+opaque secret that an authenticated user creates for an independent API client
+(for example, a local CI job). A PAT represents the user that created it and
+has exactly the same capabilities that user would have through an authenticated
+session, subject to whatever authorization exists. Scopes, roles, permissions
+and machine-to-machine identities are **not** implemented.
+
+### `POST /api/users/me/api-tokens`
+
+Requires an authenticated identity (session with a valid CSRF cookie/header
+pair, or a valid Bearer token) and accepts:
+
+```json
+{
+  "name": "ci-local",
+  "expiresAt": "2026-11-20T10:00:00Z"
+}
+```
+
+`name` is mandatory and cannot be blank. `expiresAt` is an absolute ISO-8601
+instant, is mandatory, must be in the future and cannot exceed 365 days from
+creation. A successful creation returns `201`:
+
+```json
+{
+  "id": "0f4c1a7e-0d1f-4a8b-9c1d-2e3f4a5b6c7d",
+  "name": "ci-local",
+  "createdAt": "2026-10-20T10:00:00Z",
+  "expiresAt": "2026-11-20T10:00:00Z",
+  "token": "alx_pat_<opaque-secret>"
+}
+```
+
+The `token` field is the only place where the clear-text secret is ever
+returned. It is never stored and never appears again. The token is generated
+from 256 bits obtained through `SecureRandom`, Base64 URL-safe encoded without
+padding and prefixed with `alx_pat_`. Only `SHA-256(token)` is persisted; PATs
+do not use `PasswordEncoder`.
+
+The user identifier always comes from the authenticated principal, never from
+the request body. Creation is atomic through the infrastructure facade
+`TransactionalApiTokenService`: the hash and metadata are persisted before the
+clear token is returned.
+
+### `GET /api/users/me/api-tokens`
+
+Requires an authenticated identity and lists only the caller's tokens. It
+returns metadata only:
+
+```json
+[
+  {
+    "id": "0f4c1a7e-0d1f-4a8b-9c1d-2e3f4a5b6c7d",
+    "name": "ci-local",
+    "createdAt": "2026-10-20T10:00:00Z",
+    "expiresAt": "2026-11-20T10:00:00Z",
+    "lastUsedAt": null,
+    "revokedAt": null
+  }
+]
+```
+
+Clear tokens, token hashes and `credentials_version` are never exposed.
+
+### `DELETE /api/users/me/api-tokens/{id}`
+
+Requires an authenticated identity and revokes one of the caller's own tokens.
+It returns `204` and does not delete the row: `revoked_at` is set for
+traceability. A token that is already revoked returns `204` as well
+(idempotent). A token that does not exist or belongs to another user is reported
+as `404` with code `AUTH_API_TOKEN_NOT_FOUND`; no user can list, create or
+revoke a token for another user, and no administrative endpoint exists.
+
+### Bearer authentication
+
+API clients present the clear token in:
+
+```text
+Authorization: Bearer alx_pat_<opaque-secret>
+```
+
+Authentication succeeds only when all of the following hold:
+
+```text
+token hash exists
+AND revoked_at IS NULL
+AND expires_at > now
+AND user exists
+AND user.enabled = true
+AND token.credentials_version == user.credentials_version
+```
+
+Any failure produces the same external result: `401 Unauthorized`. The response
+does not distinguish a non-existent, malformed, expired, revoked, orphaned,
+disabled-user or stale-version token.
+
+A valid Bearer request does not depend on `JSESSIONID`, does not create an HTTP
+session, and does not require CSRF, because the credential is explicitly
+presented in the `Authorization` header. When a request contains an explicit
+Bearer credential, it takes precedence over any session authentication. Invalid
+Bearer credentials are not silently downgraded to a session identity.
+
+The Bearer adapter is encapsulated in infrastructure security. Domain and
+application layers do not depend on Spring Security. The authenticated principal
+is the existing `AuthenticatedUserPrincipal` (`id`, `username`, `email`,
+`credentialsVersion`); no parallel identity model is introduced.
+
+On each successful Bearer authentication, `last_used_at` is updated. This is an
+auxiliary write: a failure while updating it is logged without tokens or
+hashes, and it does not turn a valid authentication into a `401`. The update
+only happens after the token and user have been validated.
+
+### CSRF coexistence
+
+CSRF protection is not disabled globally. Requests authenticated by the session
+cookie continue to require the `XSRF-TOKEN` cookie and `X-XSRF-TOKEN` header.
+Requests that present an `Authorization: Bearer ...` header are exempt from CSRF
+because browsers do not attach that header automatically; this exemption does
+not apply to session-only requests. The existing Contact CSRF debt is unchanged.
+
+### `credentials_version` and PAT revocation
+
+The current `credentials_version` is captured when a PAT is created and stored
+in `authentication_api_token.credentials_version`. A password reset or a
+voluntary password change increments the user's `credentials_version`, so all
+PATs created before that change stop authenticating on their next use. No bulk
+token update or token traversal is required. Explicit `revoked_at` revocation
+invalidates a token immediately as well.
+
 ## Session revocation
 
 `credentials_version` is stored per user and embedded in the authenticated
@@ -268,13 +409,14 @@ the database uniqueness constraint.
 
 `/health`, the login endpoint, the `password/forgot` and `password/reset`
 endpoints, and the existing Contact endpoints remain anonymous. The
-`GET /api/auth/me`, `PATCH /api/users/me` and `POST /api/users/me/password`
-endpoints require an authenticated session. Contact remains
-public solely to preserve its established contract and the real Dolibarr
-compatibility check during this authentication foundation. Its existing POST is
-temporarily excluded from CSRF protection.
-Protecting migrated business capabilities is an authorization decision for a
-later iteration.
+`GET /api/auth/me`, `PATCH /api/users/me`, `POST /api/users/me/password` and
+the `/api/users/me/api-tokens` endpoints require an authenticated identity:
+either a valid session or a valid Bearer token. `/api/auth/me` works with both
+mechanisms. Contact remains public solely to preserve its established contract
+and the real Dolibarr compatibility check during this authentication foundation.
+Its existing POST is temporarily excluded from CSRF protection. Protecting
+migrated business capabilities is an authorization decision for a later
+iteration.
 
 ### Tracked debt: CSRF exclusion for Contact
 
@@ -287,23 +429,31 @@ token/header pair, which is a change to the Contact contract and must be
 decided explicitly in a dedicated iteration. ALIXAR-DEV-003A intentionally
 leaves the Contact contract unchanged.
 
-## Mandatory pending decision
+## Future API authentication evolution
 
-The session-based authentication implemented in ALIXAR-DEV-003A provides the
-initial mechanism for web clients such as Solucar, but it is not the definitive
-authentication contract for the Alixar API. Authentication for independent API
-consumers remains pending definition and implementation.
+ALIXAR-DEV-003D chooses opaque Bearer Personal Access Tokens for independent
+API consumers. The following are explicitly **not** implemented in this
+iteration:
 
-The future iteration must evaluate the appropriate independent-API mechanism
-without assuming JWT. Its evaluation may include opaque bearer tokens, JWT,
-OAuth 2.x, OpenID Connect, machine-to-machine authentication, and credential
-revocation and renewal.
+- JWT;
+- OAuth 2.x Authorization Server or grants;
+- OAuth Authorization Code + PKCE;
+- OpenID Connect;
+- refresh tokens, client registration or client credentials;
+- machine-to-machine identities;
+- scopes, roles or permissions;
+- administration of other users' tokens.
 
-Roles, permissions and functional authorization are also not implemented.
+PATs currently grant the same capabilities as the owning user's session. Granular
+authorization is deferred to ALIXAR-DEV-003E. OAuth Authorization Code + PKCE is
+a possible future evolution when delegated or third-party clients exist;
+machine-to-machine authentication also remains pending. This iteration does not
+commit to JWT: the future strategy is still an open decision.
+
 Rate limiting and password-attempt policy remain pending security decisions.
-Disabling a user or deleting it now invalidates its existing session on the next
-request through `CredentialsVersionCheckFilter`, but that check requires a
-database read per authenticated request and executes on public endpoints too.
+Disabling a user or deleting it invalidates existing sessions on the next
+request through `CredentialsVersionCheckFilter` and invalidates PATs through the
+`enabled` check and the user foreign key.
 
 Two capabilities are intentionally deferred to later iterations:
 

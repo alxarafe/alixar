@@ -1,6 +1,8 @@
 package es.alxarafe.alixar.authentication.api;
 
+import es.alxarafe.alixar.authentication.application.ApiTokenNotFoundException;
 import es.alxarafe.alixar.authentication.application.AuthenticationErrorCode;
+import es.alxarafe.alixar.authentication.application.InvalidApiTokenExpirationException;
 import es.alxarafe.alixar.authentication.application.InvalidCredentialsException;
 import es.alxarafe.alixar.authentication.application.InvalidCurrentPasswordException;
 import es.alxarafe.alixar.authentication.application.InvalidPasswordException;
@@ -18,11 +20,15 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@RestControllerAdvice(assignableTypes = {AuthController.class, UserController.class})
+@RestControllerAdvice(assignableTypes = {AuthController.class, UserController.class, ApiTokenController.class})
 class AuthExceptionHandler {
 
     private static final URI INVALID_CREDENTIALS_TYPE =
         URI.create("urn:alixar:error:authentication-invalid-credentials");
+    private static final URI INVALID_API_TOKEN_EXPIRATION_TYPE =
+        URI.create("urn:alixar:error:authentication-invalid-api-token-expiration");
+    private static final URI API_TOKEN_NOT_FOUND_TYPE =
+        URI.create("urn:alixar:error:authentication-api-token-not-found");
     private static final URI INVALID_RESET_TOKEN_TYPE =
         URI.create("urn:alixar:error:authentication-invalid-reset-token");
     private static final URI INVALID_PASSWORD_TYPE =
@@ -107,6 +113,30 @@ class AuthExceptionHandler {
         problem.setType(USERNAME_ALREADY_EXISTS_TYPE);
         problem.setTitle(messageSource.getMessage("authentication.usernameAlreadyExists.title", null, locale));
         problem.setProperty("code", AuthenticationErrorCode.AUTH_USERNAME_ALREADY_EXISTS.name());
+        return problem;
+    }
+
+    @ExceptionHandler(InvalidApiTokenExpirationException.class)
+    ProblemDetail handleInvalidApiTokenExpiration(Locale locale) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST,
+            messageSource.getMessage("authentication.invalidApiTokenExpiration", null, locale)
+        );
+        problem.setType(INVALID_API_TOKEN_EXPIRATION_TYPE);
+        problem.setTitle(messageSource.getMessage("authentication.invalidApiTokenExpiration.title", null, locale));
+        problem.setProperty("code", AuthenticationErrorCode.AUTH_INVALID_API_TOKEN_EXPIRATION.name());
+        return problem;
+    }
+
+    @ExceptionHandler(ApiTokenNotFoundException.class)
+    ProblemDetail handleApiTokenNotFound(Locale locale) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.NOT_FOUND,
+            messageSource.getMessage("authentication.apiTokenNotFound", null, locale)
+        );
+        problem.setType(API_TOKEN_NOT_FOUND_TYPE);
+        problem.setTitle(messageSource.getMessage("authentication.apiTokenNotFound.title", null, locale));
+        problem.setProperty("code", AuthenticationErrorCode.AUTH_API_TOKEN_NOT_FOUND.name());
         return problem;
     }
 
