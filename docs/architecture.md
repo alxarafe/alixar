@@ -48,9 +48,11 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - Role-based authorization with permissions assigned exclusively to roles,
   effective permissions resolved from persistence on every authenticated
   request, deny-by-default policy, and identical authorization for session and
-  Bearer authentication. Built-in `system-admin` role and `users.manage`
-  permission; administrative reads, creation of disabled users, username
-  changes, enablement changes, password resets and full role replacement
+  Bearer authentication. Built-in `system-admin` role with `users.manage` and
+  `roles.manage`; read-only permission catalogue; role detail, creation, rename,
+  permission replacement and deletion of unassigned custom roles; administrative
+  reads, creation of disabled users, username changes, enablement changes,
+  password resets and full role replacement
 
 ## Planned (Not Implemented)
 
@@ -58,6 +60,7 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - Email change with new-address verification
 - Role groups
 - PAT scopes and authorization for business capabilities beyond `users.manage`
+  and `roles.manage`
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - OpenAPI specification
@@ -126,13 +129,20 @@ values. It works identically for session and Bearer authentication. Role changes
 therefore take effect on the next request without changing
 `credentials_version`, invalidating the session or revoking PATs.
 
-Business code authorizes by permission (`hasAuthority("users.manage")`), not by
-role name. `system-admin` is an administrative grouping of permissions and has
-no special treatment in code. Administrative reads resolve user summaries, user
-detail and the role catalogue through application use cases behind dedicated
-ports. User creation and username changes also run through application use
-cases; the infrastructure facade owns the transaction that keeps a new user and
-its role assignments atomic. See
+Business code authorizes by permission (`hasAuthority("users.manage")` or
+`hasAuthority("roles.manage")`), not by role name. `system-admin` is an
+administrative grouping of permissions and has no authorization special case.
+Administrative reads resolve user summaries, user detail, the role catalogue,
+role detail and the permission catalogue through application use cases behind
+dedicated ports. Role creation validates the complete permission set before
+writing and uses an infrastructure-owned transaction for the role and its
+permissions. Role rename, permission replacement and deletion reuse the same
+transactional facade; built-in role protection and assignment checks run in the
+application use cases, while a restrictive foreign key remains the final guard
+against deleting an assigned role. User creation and username changes also run
+through application use cases; the infrastructure facade owns the transaction
+that keeps a new user and its role assignments atomic. A restrictive foreign key
+protects assigned roles from deletion independently of application checks. See
 [Authentication](authentication.md) for the RBAC model and the administrative
 namespace.
 

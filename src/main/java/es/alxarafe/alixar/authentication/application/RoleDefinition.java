@@ -5,10 +5,11 @@ import java.util.List;
 public record RoleDefinition(
     String code,
     String name,
+    boolean builtIn,
     List<String> permissionCodes
 ) {
 
     public RoleDefinition {
-        permissionCodes = List.copyOf(permissionCodes);
+        permissionCodes = permissionCodes.stream().sorted().toList();
     }
 }

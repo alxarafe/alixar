@@ -9,6 +9,7 @@ import es.alxarafe.alixar.authentication.application.PermissionCodes;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -136,7 +137,13 @@ public class SecurityConfiguration {
             .addFilterBefore(effectivePermissionsFilter, AuthorizationFilter.class)
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(HEALTH_PATH, CONTACTS_PATH_PATTERN, LOGIN_PATH, BASE_PATH + "/password/forgot", BASE_PATH + "/password/reset").permitAll()
-                .requestMatchers(AdminUserEndpoints.BASE_PATH, AdminUserEndpoints.PATH_PATTERN)
+                .requestMatchers(HttpMethod.GET, AdminUserEndpoints.ROLES_BASE_PATH)
+                    .hasAnyAuthority(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE)
+                .requestMatchers(AdminUserEndpoints.ROLES_BASE_PATH, AdminUserEndpoints.ROLES_PATH_PATTERN)
+                    .hasAuthority(PermissionCodes.ROLES_MANAGE)
+                .requestMatchers(AdminUserEndpoints.PERMISSIONS_BASE_PATH)
+                    .hasAuthority(PermissionCodes.ROLES_MANAGE)
+                .requestMatchers(AdminUserEndpoints.BASE_PATH, AdminUserEndpoints.USERS_PATH_PATTERN)
                     .hasAuthority(PermissionCodes.USERS_MANAGE)
                 .requestMatchers(
                     ME_PATH,

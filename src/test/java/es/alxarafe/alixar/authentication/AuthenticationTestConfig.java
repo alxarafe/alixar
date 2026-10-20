@@ -4,8 +4,11 @@ import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.PermissionCodes;
+import es.alxarafe.alixar.authentication.application.PermissionDefinition;
+import es.alxarafe.alixar.authentication.application.RoleAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.RoleCodes;
 import es.alxarafe.alixar.authentication.application.RoleDefinition;
+import es.alxarafe.alixar.authentication.application.RoleInUseException;
 import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.domain.ApiToken;
@@ -256,6 +259,7 @@ public class AuthenticationTestConfig {
     public static class TestAuthorizationRepository implements AuthorizationRepository {
 
         private final Map<String, String> roleNames = new HashMap<>();
+        private final Map<String, Boolean> roleBuiltIn = new HashMap<>();
         private final Map<String, Set<String>> rolePermissions = new HashMap<>();
         private final Map<UUID, Set<String>> userRoles = new HashMap<>();
 
@@ -265,13 +269,22 @@ public class AuthenticationTestConfig {
 
         public void reset() {
             roleNames.clear();
+            roleBuiltIn.clear();
             rolePermissions.clear();
             userRoles.clear();
             roleNames.put(RoleCodes.SYSTEM_ADMIN, "System administrator");
+            roleBuiltIn.put(RoleCodes.SYSTEM_ADMIN, true);
             rolePermissions.put(
                 RoleCodes.SYSTEM_ADMIN,
-                new LinkedHashSet<>(Set.of(PermissionCodes.USERS_MANAGE))
+                new LinkedHashSet<>(Set.of(
+                    PermissionCodes.USERS_MANAGE,
+                    PermissionCodes.ROLES_MANAGE
+                ))
             );
+        }
+
+        public int userRoleCount() {
+            return userRoles.values().stream().mapToInt(Set::size).sum();
         }
 
         public Set<String> findRoleCodesByUser(UUID userId) {
@@ -304,11 +317,79 @@ public class AuthenticationTestConfig {
                 .map(entry -> new RoleDefinition(
                     entry.getKey(),
                     entry.getValue(),
+                    roleBuiltIn.getOrDefault(entry.getKey(), false),
                     rolePermissions.getOrDefault(entry.getKey(), Set.of()).stream()
                         .sorted()
                         .toList()
                 ))
                 .toList();
+        }
+
+        @Override
+        public Optional<RoleDefinition> findRoleByCode(String roleCode) {
+            if (!roleNames.containsKey(roleCode)) {
+                return Optional.empty();
+            }
+            return Optional.of(new RoleDefinition(
+                roleCode,
+                roleNames.get(roleCode),
+                roleBuiltIn.getOrDefault(roleCode, false),
+                rolePermissions.getOrDefault(roleCode, Set.of()).stream()
+                    .sorted()
+                    .toList()
+            ));
+        }
+
+        @Override
+        public List<PermissionDefinition> findAllPermissions() {
+            return List.of(
+                new PermissionDefinition(
+                    PermissionCodes.ROLES_MANAGE,
+                    "Manage roles and their permission assignments"
+                ),
+                new PermissionDefinition(PermissionCodes.USERS_MANAGE, "Manage users")
+            );
+        }
+
+        @Override
+        public void createRole(RoleDefinition role) {
+            if (roleNames.containsKey(role.code())) {
+                throw new RoleAlreadyExistsException();
+            }
+            roleNames.put(role.code(), role.name());
+            roleBuiltIn.put(role.code(), role.builtIn());
+            rolePermissions.put(role.code(), new LinkedHashSet<>(role.permissionCodes()));
+        }
+
+        @Override
+        public void updateRoleName(String roleCode, String name) {
+            if (!roleNames.containsKey(roleCode)) {
+                throw new RoleNotFoundException(roleCode);
+            }
+            roleNames.put(roleCode, name);
+        }
+
+        @Override
+        public void replaceRolePermissions(String roleCode, List<String> permissionCodes) {
+            if (!roleNames.containsKey(roleCode)) {
+                throw new RoleNotFoundException(roleCode);
+            }
+            rolePermissions.put(roleCode, new LinkedHashSet<>(permissionCodes));
+        }
+
+        @Override
+        public void deleteRole(String roleCode) {
+            if (!roleNames.containsKey(roleCode)) {
+                throw new RoleNotFoundException(roleCode);
+            }
+            boolean assigned = userRoles.values().stream()
+                .anyMatch(roles -> roles.contains(roleCode));
+            if (assigned) {
+                throw new RoleInUseException(roleCode);
+            }
+            roleNames.remove(roleCode);
+            roleBuiltIn.remove(roleCode);
+            rolePermissions.remove(roleCode);
         }
 
         @Override

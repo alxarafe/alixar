@@ -10,11 +10,15 @@ import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
 import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
 import es.alxarafe.alixar.authentication.application.CreateAdminUserUseCase;
 import es.alxarafe.alixar.authentication.application.CreateApiTokenUseCase;
+import es.alxarafe.alixar.authentication.application.CreateRoleUseCase;
+import es.alxarafe.alixar.authentication.application.DeleteRoleUseCase;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.GetAdminUserUseCase;
 import es.alxarafe.alixar.authentication.application.GetEffectivePermissionsUseCase;
+import es.alxarafe.alixar.authentication.application.GetRoleUseCase;
 import es.alxarafe.alixar.authentication.application.ListAdminUsersUseCase;
 import es.alxarafe.alixar.authentication.application.ListApiTokensUseCase;
+import es.alxarafe.alixar.authentication.application.ListPermissionsUseCase;
 import es.alxarafe.alixar.authentication.application.ListRolesUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
 import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
@@ -22,11 +26,13 @@ import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepositor
 import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.RemoveRoleFromUserUseCase;
 import es.alxarafe.alixar.authentication.application.ReplaceAdminUserRolesUseCase;
+import es.alxarafe.alixar.authentication.application.ReplaceRolePermissionsUseCase;
 import es.alxarafe.alixar.authentication.application.ResetAdminUserPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.RevokeApiTokenUseCase;
 import es.alxarafe.alixar.authentication.application.SetAdminUserEnabledUseCase;
 import es.alxarafe.alixar.authentication.application.TokenHasher;
 import es.alxarafe.alixar.authentication.application.UpdateAdminUsernameUseCase;
+import es.alxarafe.alixar.authentication.application.UpdateRoleNameUseCase;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqApiTokenRepository;
 import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqAuthorizationRepository;
@@ -96,6 +102,53 @@ public class AuthenticationConfiguration {
     @Bean
     ListRolesUseCase listRolesUseCase(AuthorizationRepository authorizationRepository) {
         return new ListRolesUseCase(authorizationRepository);
+    }
+
+    @Bean
+    GetRoleUseCase getRoleUseCase(AuthorizationRepository authorizationRepository) {
+        return new GetRoleUseCase(authorizationRepository);
+    }
+
+    @Bean
+    CreateRoleUseCase createRoleUseCase(AuthorizationRepository authorizationRepository) {
+        return new CreateRoleUseCase(authorizationRepository);
+    }
+
+    @Bean
+    UpdateRoleNameUseCase updateRoleNameUseCase(AuthorizationRepository authorizationRepository) {
+        return new UpdateRoleNameUseCase(authorizationRepository);
+    }
+
+    @Bean
+    ReplaceRolePermissionsUseCase replaceRolePermissionsUseCase(
+        AuthorizationRepository authorizationRepository
+    ) {
+        return new ReplaceRolePermissionsUseCase(authorizationRepository);
+    }
+
+    @Bean
+    DeleteRoleUseCase deleteRoleUseCase(AuthorizationRepository authorizationRepository) {
+        return new DeleteRoleUseCase(authorizationRepository);
+    }
+
+    @Bean
+    TransactionalAdminRoleService transactionalAdminRoleService(
+        CreateRoleUseCase createRoleUseCase,
+        UpdateRoleNameUseCase updateRoleNameUseCase,
+        ReplaceRolePermissionsUseCase replaceRolePermissionsUseCase,
+        DeleteRoleUseCase deleteRoleUseCase
+    ) {
+        return new TransactionalAdminRoleService(
+            createRoleUseCase,
+            updateRoleNameUseCase,
+            replaceRolePermissionsUseCase,
+            deleteRoleUseCase
+        );
+    }
+
+    @Bean
+    ListPermissionsUseCase listPermissionsUseCase(AuthorizationRepository authorizationRepository) {
+        return new ListPermissionsUseCase(authorizationRepository);
     }
 
     @Bean

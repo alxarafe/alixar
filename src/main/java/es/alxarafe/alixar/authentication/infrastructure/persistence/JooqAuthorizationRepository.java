@@ -1,18 +1,24 @@
 package es.alxarafe.alixar.authentication.infrastructure.persistence;
 
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
+import es.alxarafe.alixar.authentication.application.PermissionDefinition;
+import es.alxarafe.alixar.authentication.application.RoleAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.RoleDefinition;
+import es.alxarafe.alixar.authentication.application.RoleInUseException;
 import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.Table;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
@@ -21,12 +27,19 @@ import static org.jooq.impl.DSL.table;
 public class JooqAuthorizationRepository implements AuthorizationRepository {
 
     private static final Table<Record> ROLE_TABLE = table(name("authentication_role"));
+    private static final Table<Record> PERMISSION_TABLE = table(name("authentication_permission"));
     private static final Table<Record> ROLE_PERMISSION_TABLE = table(name("authentication_role_permission"));
     private static final Table<Record> USER_ROLE_TABLE = table(name("authentication_user_role"));
 
     private static final Field<UUID> ROLE_ID = field(name("authentication_role", "id"), UUID.class);
     private static final Field<String> ROLE_CODE = field(name("authentication_role", "code"), String.class);
     private static final Field<String> ROLE_NAME = field(name("authentication_role", "name"), String.class);
+    private static final Field<Boolean> ROLE_BUILT_IN =
+        field(name("authentication_role", "built_in"), Boolean.class);
+    private static final Field<String> PERMISSION_CODE =
+        field(name("authentication_permission", "code"), String.class);
+    private static final Field<String> PERMISSION_DESCRIPTION =
+        field(name("authentication_permission", "description"), String.class);
     private static final Field<UUID> ROLE_PERMISSION_ROLE_ID =
         field(name("authentication_role_permission", "role_id"), UUID.class);
     private static final Field<String> ROLE_PERMISSION_PERMISSION_CODE =
@@ -77,36 +90,93 @@ public class JooqAuthorizationRepository implements AuthorizationRepository {
 
     @Override
     public List<RoleDefinition> findAllRoles() {
-        var records = dsl.select(ROLE_CODE, ROLE_NAME, ROLE_PERMISSION_PERMISSION_CODE)
+        var records = dsl.select(ROLE_CODE, ROLE_NAME, ROLE_BUILT_IN, ROLE_PERMISSION_PERMISSION_CODE)
             .from(ROLE_TABLE)
             .leftJoin(ROLE_PERMISSION_TABLE)
             .on(ROLE_PERMISSION_ROLE_ID.eq(ROLE_ID))
             .orderBy(ROLE_CODE, ROLE_PERMISSION_PERMISSION_CODE)
             .fetch();
+        return toRoleDefinitions(records);
+    }
 
-        Map<String, String> names = new LinkedHashMap<>();
-        Map<String, LinkedHashSet<String>> permissionCodes = new LinkedHashMap<>();
+    @Override
+    public Optional<RoleDefinition> findRoleByCode(String roleCode) {
+        var records = dsl.select(ROLE_CODE, ROLE_NAME, ROLE_BUILT_IN, ROLE_PERMISSION_PERMISSION_CODE)
+            .from(ROLE_TABLE)
+            .leftJoin(ROLE_PERMISSION_TABLE)
+            .on(ROLE_PERMISSION_ROLE_ID.eq(ROLE_ID))
+            .where(ROLE_CODE.eq(roleCode))
+            .orderBy(ROLE_PERMISSION_PERMISSION_CODE)
+            .fetch();
+        return toRoleDefinitions(records).stream().findFirst();
+    }
 
-        for (Record record : records) {
-            String roleCode = record.get(ROLE_CODE);
-            names.putIfAbsent(roleCode, record.get(ROLE_NAME));
-            LinkedHashSet<String> permissions = permissionCodes.computeIfAbsent(
-                roleCode,
-                key -> new LinkedHashSet<>()
-            );
-            String permissionCode = record.get(ROLE_PERMISSION_PERMISSION_CODE);
-            if (permissionCode != null) {
-                permissions.add(permissionCode);
-            }
+    @Override
+    public List<PermissionDefinition> findAllPermissions() {
+        return dsl.select(PERMISSION_CODE, PERMISSION_DESCRIPTION)
+            .from(PERMISSION_TABLE)
+            .orderBy(PERMISSION_CODE)
+            .fetch(record -> new PermissionDefinition(
+                record.get(PERMISSION_CODE),
+                record.get(PERMISSION_DESCRIPTION)
+            ));
+    }
+
+    @Override
+    public void createRole(RoleDefinition role) {
+        UUID roleId = UUID.randomUUID();
+        try {
+            dsl.insertInto(ROLE_TABLE)
+                .columns(ROLE_ID, ROLE_CODE, ROLE_NAME, ROLE_BUILT_IN)
+                .values(roleId, role.code(), role.name(), role.builtIn())
+                .execute();
+        } catch (DuplicateKeyException exception) {
+            throw new RoleAlreadyExistsException();
         }
 
-        return names.entrySet().stream()
-            .map(entry -> new RoleDefinition(
-                entry.getKey(),
-                entry.getValue(),
-                List.copyOf(permissionCodes.get(entry.getKey()))
-            ))
-            .toList();
+        for (String permissionCode : role.permissionCodes()) {
+            dsl.insertInto(ROLE_PERMISSION_TABLE)
+                .columns(ROLE_PERMISSION_ROLE_ID, ROLE_PERMISSION_PERMISSION_CODE)
+                .values(roleId, permissionCode)
+                .execute();
+        }
+    }
+
+    @Override
+    public void updateRoleName(String roleCode, String name) {
+        int updatedRows = dsl.update(ROLE_TABLE)
+            .set(ROLE_NAME, name)
+            .where(ROLE_CODE.eq(roleCode))
+            .execute();
+        if (updatedRows == 0) {
+            throw new RoleNotFoundException(roleCode);
+        }
+    }
+
+    @Override
+    public void replaceRolePermissions(String roleCode, List<String> permissionCodes) {
+        UUID roleId = resolveRoleId(roleCode);
+        dsl.deleteFrom(ROLE_PERMISSION_TABLE)
+            .where(ROLE_PERMISSION_ROLE_ID.eq(roleId))
+            .execute();
+        for (String permissionCode : permissionCodes) {
+            dsl.insertInto(ROLE_PERMISSION_TABLE)
+                .columns(ROLE_PERMISSION_ROLE_ID, ROLE_PERMISSION_PERMISSION_CODE)
+                .values(roleId, permissionCode)
+                .execute();
+        }
+    }
+
+    @Override
+    public void deleteRole(String roleCode) {
+        UUID roleId = resolveRoleId(roleCode);
+        try {
+            dsl.deleteFrom(ROLE_TABLE)
+                .where(ROLE_ID.eq(roleId))
+                .execute();
+        } catch (DataIntegrityViolationException exception) {
+            throw new RoleInUseException(roleCode);
+        }
     }
 
     @Override
@@ -141,6 +211,35 @@ public class JooqAuthorizationRepository implements AuthorizationRepository {
             .where(ROLE_PERMISSION_ROLE_ID.eq(resolveRoleId(roleCode)))
             .and(ROLE_PERMISSION_PERMISSION_CODE.eq(permissionCode))
             .execute();
+    }
+
+    private List<RoleDefinition> toRoleDefinitions(List<? extends Record> records) {
+        Map<String, String> names = new LinkedHashMap<>();
+        Map<String, Boolean> builtIn = new LinkedHashMap<>();
+        Map<String, LinkedHashSet<String>> permissionCodes = new LinkedHashMap<>();
+
+        for (Record record : records) {
+            String roleCode = record.get(ROLE_CODE);
+            names.putIfAbsent(roleCode, record.get(ROLE_NAME));
+            builtIn.putIfAbsent(roleCode, Boolean.TRUE.equals(record.get(ROLE_BUILT_IN)));
+            LinkedHashSet<String> permissions = permissionCodes.computeIfAbsent(
+                roleCode,
+                key -> new LinkedHashSet<>()
+            );
+            String permissionCode = record.get(ROLE_PERMISSION_PERMISSION_CODE);
+            if (permissionCode != null) {
+                permissions.add(permissionCode);
+            }
+        }
+
+        return names.entrySet().stream()
+            .map(entry -> new RoleDefinition(
+                entry.getKey(),
+                entry.getValue(),
+                builtIn.get(entry.getKey()),
+                List.copyOf(permissionCodes.get(entry.getKey()))
+            ))
+            .toList();
     }
 
     private UUID resolveRoleId(String roleCode) {

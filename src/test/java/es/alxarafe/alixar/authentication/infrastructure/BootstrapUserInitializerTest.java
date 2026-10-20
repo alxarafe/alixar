@@ -48,9 +48,9 @@ class BootstrapUserInitializerTest {
         assertThat(authorizationRepository.findRoleCodesByUser(user.id()))
             .containsExactly(RoleCodes.SYSTEM_ADMIN);
         assertThat(authorizationRepository.findEffectivePermissionCodes(user.id()))
-            .containsExactly(PermissionCodes.USERS_MANAGE);
+            .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
         assertThat(authorizationRepository.findPermissionCodesByRole(RoleCodes.SYSTEM_ADMIN))
-            .contains(PermissionCodes.USERS_MANAGE);
+            .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
     }
 
     @Test
@@ -64,7 +64,7 @@ class BootstrapUserInitializerTest {
         assertThat(authorizationRepository.findRoleCodesByUser(user.id()))
             .containsExactly(RoleCodes.SYSTEM_ADMIN);
         assertThat(authorizationRepository.findEffectivePermissionCodes(user.id()))
-            .containsExactly(PermissionCodes.USERS_MANAGE);
+            .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
     }
 
     @Test

@@ -13,8 +13,9 @@ session revocation, and email delivery of the reset link through a replaceable
 application port.
 
 ALIXAR-DEV-003C adds self-service management of the authenticated identity: the
-user can change its own username and its own password. Administration of other
-users, roles, permissions, and email change are explicitly out of scope.
+user can change its own username and its own password. At that stage,
+administration of other users, roles, permissions, and email change were
+explicitly out of scope.
 
 ALIXAR-DEV-003D adds authentication for independent API consumers through
 opaque Personal Access Tokens (PATs) presented as
@@ -36,8 +37,14 @@ ALIXAR-DEV-003F adds administrative user management over that RBAC foundation.
 The iteration provides endpoints for listing, searching and inspecting users
 and for reading the role catalogue, plus creation of disabled users,
 administrative username changes, enablement changes, password resets and full
-role replacement. Every `/api/admin/**` endpoint requires `users.manage`,
+role replacement. The user-management endpoints require `users.manage`,
 independently of the authentication mechanism.
+
+ALIXAR-DEV-003G begins role administration. Its first delivered slice adds the
+`roles.manage` permission, built-in role metadata, a restrictive foreign key for
+assigned roles and a read-only permission catalogue. T2 adds role detail and
+creation, and T3 adds role rename, permission replacement and deletion of
+unassigned custom roles.
 
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
@@ -393,9 +400,13 @@ User
         └── Permissions
 ```
 
-- `authentication_user_role` stores user-to-role assignments.
+- `authentication_user_role` stores user-to-role assignments. Its role foreign
+  key uses `ON DELETE RESTRICT`, so PostgreSQL prevents deleting a role that is
+  still assigned to any user.
 - `authentication_role_permission` stores role-to-permission assignments.
 - `authentication_permission` is the stable permission catalogue.
+- `authentication_role.built_in` distinguishes roles with a controlled lifecycle
+  from custom roles. It defaults to `false` and is `true` for `system-admin`.
 - Permissions are assigned exclusively to roles. There is no
   `authentication_user_permission` table, no user-level grant or deny, and no
   override for a particular user.
@@ -413,11 +424,14 @@ The initial catalogue contains:
 | Permission | Meaning |
 |------------|---------|
 | `users.manage` | Administrative capability over users (ALIXAR-DEV-003F) |
+| `roles.manage` | Manage roles and their permission assignments (ALIXAR-DEV-003G) |
 
-The built-in role `system-admin` contains `users.manage`. The role name and code
-are stable identifiers, but application code authorizes by permission, not by
-role name. No role is special in code: `system-admin` is simply a role that
-contains permissions. There is no mandatory basic role.
+The built-in role `system-admin` contains both permissions. The role name and
+code are stable identifiers, but application code authorizes by permission, not
+by role name. No role is special in authorization: `system-admin` is simply a
+role whose permissions are maintained by migrations. The `built_in` flag marks
+roles whose lifecycle is reserved for controlled provisioning; it is not an
+authorization bypass. There is no mandatory basic role.
 
 ### Effective permissions per request
 
@@ -431,8 +445,11 @@ Consequences:
 
 - assigning a role affects the next request;
 - removing a role affects the next request;
-- no logout, session invalidation, PAT revocation or `credentials_version`
-  increment is required;
+- changing a role's name or permissions affects the next request of every user
+  of that role, with no logout, session invalidation, PAT revocation or
+  `credentials_version` increment;
+- a caller can revoke its own effective `roles.manage`; the current operation
+  still completes and the next administrative request is denied;
 - session and Bearer authentication produce exactly the same permissions;
 - PATs do not contain scopes; a PAT represents the user and authorization uses
   the user's current roles.
@@ -451,23 +468,33 @@ privileged endpoint  → concrete permission
 anything else        → denyAll
 ```
 
-The administrative namespace `/api/admin/**` requires `users.manage`. The
-endpoints currently exposed are described under
-[Administrative user management](#administrative-user-management). Results:
+The administrative namespace is split by capability:
+
+| Path | Required authority |
+|------|--------------------|
+| `/api/admin/users/**` | `users.manage` |
+| `GET /api/admin/roles` | `users.manage` or `roles.manage` |
+| Any other `/api/admin/roles/**` method | `roles.manage` |
+| `/api/admin/permissions` | `roles.manage` |
+
+The GET rule for the role catalogue is method-specific and is evaluated before
+the general role namespace rule. Results:
 
 | Caller | Result |
 |--------|--------|
 | Not authenticated | `401 Unauthorized` |
-| Authenticated without `users.manage` | `403 Forbidden` |
-| Authenticated with `users.manage` | The request reaches the operation |
+| Authenticated without a required permission | `403 Forbidden` |
+| Authenticated with the required permission | The request reaches the operation |
 
 This applies identically to session and Bearer authentication. An invalid
 Bearer credential clears the session context and does not fall back to the
 session identity, so it cannot bypass authorization.
 
 Method security is enabled. Operations can be protected with
-`@PreAuthorize("hasAuthority('users.manage')")`; the stable permission constant
-is `PermissionCodes.USERS_MANAGE`.
+`@PreAuthorize("hasAuthority('users.manage')")` or
+`@PreAuthorize("hasAuthority('roles.manage')")`; the stable permission
+constants are `PermissionCodes.USERS_MANAGE` and
+`PermissionCodes.ROLES_MANAGE`.
 
 ### Bootstrap and the first administrator
 
@@ -479,20 +506,97 @@ idempotent, and has no effect when the bootstrap identity is not configured.
 The create endpoint assigns only roles explicitly supplied in `roleCodes`; it
 never adds `system-admin` automatically. See [Bootstrap user](#bootstrap-user).
 
-### Administrative user management
+### Administrative management
 
-ALIXAR-DEV-003F exposes:
+ALIXAR-DEV-003F exposes the user operations and the role catalogue.
+ALIXAR-DEV-003G T1 adds the read-only permission catalogue, T2 adds role detail
+and creation, and T3 adds role rename, permission replacement and deletion.
 
 | Method and path | Result |
 |-----------------|--------|
 | `GET /api/admin/users` | Paginated user summaries |
 | `GET /api/admin/users/{id}` | One user's safe fields and role codes |
 | `GET /api/admin/roles` | Role catalogue with permission codes |
+| `GET /api/admin/roles/{code}` | One role with permission codes |
+| `POST /api/admin/roles` | Creates a custom role |
+| `PATCH /api/admin/roles/{code}` | Renames a custom role |
+| `PUT /api/admin/roles/{code}/permissions` | Replaces a role's permissions |
+| `DELETE /api/admin/roles/{code}` | Deletes an unassigned custom role |
+| `GET /api/admin/permissions` | Read-only permission catalogue |
 | `POST /api/admin/users` | Creates a disabled user |
 | `PATCH /api/admin/users/{id}` | Changes the username only |
 | `PATCH /api/admin/users/{id}/enabled` | Enables or disables a user |
 | `POST /api/admin/users/{id}/password-reset` | Replaces a user's password |
 | `PUT /api/admin/users/{id}/roles` | Replaces all roles for a user |
+
+`GET /api/admin/permissions` returns the read-only permission catalogue ordered
+by `code`. Each item contains only `code` and `description`; database identifiers
+and internal metadata are not exposed. It requires `roles.manage` for both
+session and Bearer authentication. Permission creation, modification and
+deletion are not exposed by the API.
+
+Role responses contain only `code`, `name`, `builtIn` and `permissionCodes`.
+`GET /api/admin/roles` returns roles ordered by `code`, with permission codes
+ordered deterministically. `GET /api/admin/roles/{code}` returns the same shape
+and `404` with `ADMIN_ROLE_NOT_FOUND` when the code does not exist.
+
+`POST /api/admin/roles` accepts:
+
+```json
+{
+  "code": "operations-team",
+  "name": "Operations team",
+  "permissionCodes": ["users.manage"]
+}
+```
+
+`code` is stripped and lower-cased, must be at most 100 characters, and must use
+lowercase letters, digits and single hyphens between segments. `name` is stripped
+and must not be blank. `permissionCodes` is optional; absent or `null` means no
+permissions. Each permission code is stripped, lower-cased, de-duplicated and
+sorted. All permission codes are validated against the catalogue before any
+write, so an unknown permission aborts the whole operation without creating the
+role. The role and its permissions are inserted in one transaction, and the
+response is `201` with `Location: /api/admin/roles/{code}`.
+
+Created roles are always custom (`builtIn=false`) and are never assigned to any
+user automatically. A code that already exists, including a concurrent creation
+that reaches PostgreSQL first, returns `409` with
+`ADMIN_ROLE_ALREADY_EXISTS`. An unknown permission returns `404` with
+`ADMIN_PERMISSION_NOT_FOUND`; invalid code syntax returns `400` with
+`ADMIN_INVALID_ROLE_CODE`, and a blank name returns `400` with
+`ADMIN_INVALID_ROLE_NAME`.
+
+`PATCH /api/admin/roles/{code}` accepts only `name`:
+
+```json
+{ "name": "Renamed team" }
+```
+
+`name` is stripped and must not be blank; `code`, `builtIn`, permissions and
+user assignments remain unchanged. `404` with `ADMIN_ROLE_NOT_FOUND` is returned
+for an unknown role, and a built-in role returns `409` with
+`ADMIN_BUILT_IN_ROLE_IMMUTABLE`.
+
+`PUT /api/admin/roles/{code}/permissions` replaces the complete permission set:
+
+```json
+{ "permissionCodes": ["users.manage", "roles.manage"] }
+```
+
+`permissionCodes` is required and may be `[]` to leave the custom role without
+permissions. Codes are stripped, lower-cased, de-duplicated and sorted, and all
+of them are validated against the catalogue before any write, so an unknown
+permission rolls the operation back and keeps the previous permissions. A
+built-in role returns `409` with `ADMIN_BUILT_IN_ROLE_IMMUTABLE`. Replacing
+permissions never assigns the role to users and never changes `credentials_version`,
+sessions, PATs, passwords, enablement or reset tokens.
+
+`DELETE /api/admin/roles/{code}` deletes an unassigned custom role and returns
+`204`. A built-in role returns `409` with `ADMIN_BUILT_IN_ROLE_IMMUTABLE`. A role
+still assigned to any user returns `409` with `ADMIN_ROLE_IN_USE`; assignments
+are never deleted as a side effect. Role permission rows are removed by cascade
+when the role is deleted.
 
 `GET /api/admin/users` accepts:
 
@@ -568,8 +672,10 @@ last-administrator protection and the resulting lockout is accepted.
 
 All administrative responses exclude password hashes, reset tokens, API tokens
 and other secrets. Bearer authentication still updates the presented PAT's
-`last_used_at`, as before. Every endpoint requires `users.manage` for both
-session and Bearer authentication.
+`last_used_at`, as before. Every `/api/admin/users/**` endpoint requires
+`users.manage`; `GET /api/admin/roles` accepts `users.manage` or `roles.manage`;
+and `GET /api/admin/permissions` requires `roles.manage`, for both session and
+Bearer authentication.
 
 ### Role groups (future decision)
 
@@ -646,8 +752,10 @@ endpoints, and the existing Contact endpoints remain anonymous. The
 `GET /api/auth/me`, `PATCH /api/users/me`, `POST /api/users/me/password` and
 the `/api/users/me/api-tokens` endpoints require an authenticated identity:
 either a valid session or a valid Bearer token. `/api/auth/me` works with both
-mechanisms. The `/api/admin/**` namespace requires the `users.manage`
-permission. Contact remains public solely to preserve its established contract
+mechanisms. The `/api/admin/users/**` namespace requires `users.manage`;
+`GET /api/admin/roles` accepts `users.manage` or `roles.manage`; role detail,
+role creation and the permission catalogue require `roles.manage`. Contact
+remains public solely to preserve its established contract
 and the real Dolibarr compatibility check during this authentication foundation.
 Its existing POST is temporarily excluded from CSRF protection. Protecting
 migrated business capabilities is an authorization decision for a later

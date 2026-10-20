@@ -1,6 +1,7 @@
 package es.alxarafe.alixar.authentication.application;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -21,6 +22,18 @@ public interface AuthorizationRepository {
     List<String> findRoleCodesForUser(UUID userId);
 
     List<RoleDefinition> findAllRoles();
+
+    Optional<RoleDefinition> findRoleByCode(String roleCode);
+
+    List<PermissionDefinition> findAllPermissions();
+
+    void createRole(RoleDefinition role);
+
+    void updateRoleName(String roleCode, String name);
+
+    void replaceRolePermissions(String roleCode, List<String> permissionCodes);
+
+    void deleteRole(String roleCode);
 
     void assignRoleToUser(UUID userId, String roleCode);
 
