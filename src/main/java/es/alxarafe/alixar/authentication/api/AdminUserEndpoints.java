@@ -9,6 +9,7 @@ public final class AdminUserEndpoints {
     public static final String USER_RELATIVE_PATH = "/{id}";
     public static final String ENABLED_RELATIVE_PATH = USER_RELATIVE_PATH + "/enabled";
     public static final String PASSWORD_RESET_RELATIVE_PATH = USER_RELATIVE_PATH + "/password-reset";
+    public static final String ROLES_RELATIVE_PATH = USER_RELATIVE_PATH + "/roles";
     public static final String ID_PATH_VARIABLE = "id";
     public static final String PAGE_PARAM = "page";
     public static final String SIZE_PARAM = "size";

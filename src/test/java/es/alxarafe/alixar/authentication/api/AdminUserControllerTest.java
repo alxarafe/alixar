@@ -40,6 +40,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -387,6 +388,12 @@ class AdminUserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"newPassword\":\"new-password-123\"}"))
             .andExpect(status().isUnauthorized());
+        mockMvc.perform(put(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID + "/roles")
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"roleCodes\":[]}"))
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -422,6 +429,13 @@ class AdminUserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"newPassword\":\"new-password-123\"}"))
             .andExpect(status().isForbidden());
+        mockMvc.perform(put(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID + "/roles")
+                .session(session)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"roleCodes\":[]}"))
+            .andExpect(status().isForbidden());
     }
 
     @Test
@@ -447,6 +461,11 @@ class AdminUserControllerTest {
                 .header("Authorization", "Bearer " + rawToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"newPassword\":\"new-password-123\"}"))
+            .andExpect(status().isForbidden());
+        mockMvc.perform(put(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID + "/roles")
+                .header("Authorization", "Bearer " + rawToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"roleCodes\":[]}"))
             .andExpect(status().isForbidden());
     }
 
@@ -869,6 +888,144 @@ class AdminUserControllerTest {
             .andExpect(jsonPath("$.field").value("newPassword"));
     }
 
+    @Test
+    void replaceRoles_keepsCredentialsVersionUnchanged() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        User before = userRepository.findById(BOB_ID).orElseThrow();
+
+        adminPutRoles(session, BOB_ID, "[\"" + RoleCodes.SYSTEM_ADMIN + "\"]")
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.roles[0]").value(RoleCodes.SYSTEM_ADMIN));
+
+        User after = userRepository.findById(BOB_ID).orElseThrow();
+        assertThat(after.credentialsVersion()).isEqualTo(before.credentialsVersion());
+        assertThat(after.passwordHash()).isEqualTo(before.passwordHash());
+        assertThat(after.username()).isEqualTo(before.username());
+        assertThat(after.email()).isEqualTo(before.email());
+        assertThat(after.enabled()).isEqualTo(before.enabled());
+        assertThat(authorizationRepository.findRoleCodesForUser(BOB_ID))
+            .containsExactly(RoleCodes.SYSTEM_ADMIN);
+    }
+
+    @Test
+    void replaceRoles_keepsSameSessionAuthenticated() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        authorizationRepository.assignRoleToUser(BOB_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession adminSession = authenticatedSession("alice", PASSWORD);
+        MockHttpSession bobSession = authenticatedSession("bob", PASSWORD);
+
+        adminPutRoles(adminSession, BOB_ID, "[]")
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.roles").isEmpty());
+
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH).session(bobSession))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(BOB_ID.toString()));
+        assertThat(userRepository.findById(BOB_ID).orElseThrow().credentialsVersion()).isZero();
+    }
+
+    @Test
+    void replaceRoles_keepsSamePatAuthenticated() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        authorizationRepository.assignRoleToUser(BOB_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession adminSession = authenticatedSession("alice", PASSWORD);
+        String bobToken = personalAccessToken(BOB_ID);
+
+        adminPutRoles(adminSession, BOB_ID, "[]")
+            .andExpect(status().isOk());
+
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH)
+                .header("Authorization", "Bearer " + bobToken))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(BOB_ID.toString()));
+        assertThat(userRepository.findById(BOB_ID).orElseThrow().credentialsVersion()).isZero();
+    }
+
+    @Test
+    void removeUsersManage_nextAdminRequestForbiddenButGeneralAuthAndSelfServiceWork() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminPutRoles(session, ALICE_ID, "[]")
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.roles").isEmpty());
+
+        mockMvc.perform(get(AdminUserEndpoints.BASE_PATH).session(session))
+            .andExpect(status().isForbidden());
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH).session(session))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(ALICE_ID.toString()));
+
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        mockMvc.perform(patch(UserEndpoints.ME_PATH)
+                .session(session)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\":\"alice-after-role-removal\"}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.username").value("alice-after-role-removal"));
+    }
+
+    @Test
+    void replaceRoles_emptyListClearsAndDuplicatesAreNormalized() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        authorizationRepository.assignRoleToUser(BOB_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        long credentialsVersion = userRepository.findById(BOB_ID).orElseThrow().credentialsVersion();
+
+        adminPutRoles(session, BOB_ID, "[\"" + RoleCodes.SYSTEM_ADMIN + "\",\" "
+                + RoleCodes.SYSTEM_ADMIN + " \"]")
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.roles.length()").value(1))
+            .andExpect(jsonPath("$.roles[0]").value(RoleCodes.SYSTEM_ADMIN));
+        adminPutRoles(session, BOB_ID, "[]")
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.roles").isEmpty());
+
+        assertThat(authorizationRepository.findRoleCodesForUser(BOB_ID)).isEmpty();
+        assertThat(userRepository.findById(BOB_ID).orElseThrow().credentialsVersion())
+            .isEqualTo(credentialsVersion);
+    }
+
+    @Test
+    void replaceRoles_unknownRoleOrUser_leavesRolesUnchanged() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        authorizationRepository.assignRoleToUser(BOB_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminPutRoles(session, BOB_ID, "[\"missing-role\"]")
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_ROLE_NOT_FOUND.name()));
+        assertThat(authorizationRepository.findRoleCodesForUser(BOB_ID))
+            .containsExactly(RoleCodes.SYSTEM_ADMIN);
+
+        adminPutRoles(session, UUID.randomUUID(), "[]")
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_USER_NOT_FOUND.name()));
+
+        adminPutRolesRaw(session, BOB_ID, "{}")
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("VALIDATION_REQUIRED"))
+            .andExpect(jsonPath("$.field").value("roleCodes"));
+    }
+
+    @Test
+    void bearerWithPermission_canReplaceRoles() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        String rawToken = personalAccessToken(ALICE_ID);
+
+        mockMvc.perform(put(AdminUserEndpoints.BASE_PATH + "/" + BOB_ID + "/roles")
+                .header("Authorization", "Bearer " + rawToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"roleCodes\":[\"" + RoleCodes.SYSTEM_ADMIN + "\"]}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.roles[0]").value(RoleCodes.SYSTEM_ADMIN));
+        assertThat(authorizationRepository.findRoleCodesForUser(BOB_ID))
+            .containsExactly(RoleCodes.SYSTEM_ADMIN);
+    }
+
     private ResultActions adminPost(MockHttpSession session, String body) throws Exception {
         Cookie csrfCookie = csrfCookieFromSafeRequest();
         return mockMvc.perform(post(AdminUserEndpoints.BASE_PATH)
@@ -908,6 +1065,22 @@ class AdminUserControllerTest {
             .header(CSRF_HEADER, csrfCookie.getValue())
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"newPassword\":\"" + newPassword + "\"}"));
+    }
+
+    private ResultActions adminPutRoles(MockHttpSession session, UUID userId, String roleCodesJson)
+        throws Exception {
+        return adminPutRolesRaw(session, userId, "{\"roleCodes\":" + roleCodesJson + "}");
+    }
+
+    private ResultActions adminPutRolesRaw(MockHttpSession session, UUID userId, String body)
+        throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        return mockMvc.perform(put(AdminUserEndpoints.BASE_PATH + "/" + userId + "/roles")
+            .session(session)
+            .cookie(csrfCookie)
+            .header(CSRF_HEADER, csrfCookie.getValue())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body));
     }
 
     private String createUserJson(String username, String email, String password, String roleCodesJson) {

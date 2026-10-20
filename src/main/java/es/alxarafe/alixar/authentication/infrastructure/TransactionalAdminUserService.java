@@ -2,6 +2,7 @@ package es.alxarafe.alixar.authentication.infrastructure;
 
 import es.alxarafe.alixar.authentication.application.AdminUser;
 import es.alxarafe.alixar.authentication.application.CreateAdminUserUseCase;
+import es.alxarafe.alixar.authentication.application.ReplaceAdminUserRolesUseCase;
 import es.alxarafe.alixar.authentication.application.ResetAdminUserPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.SetAdminUserEnabledUseCase;
 import es.alxarafe.alixar.authentication.application.UpdateAdminUsernameUseCase;
@@ -15,17 +16,20 @@ public class TransactionalAdminUserService {
     private final UpdateAdminUsernameUseCase updateAdminUsernameUseCase;
     private final SetAdminUserEnabledUseCase setAdminUserEnabledUseCase;
     private final ResetAdminUserPasswordUseCase resetAdminUserPasswordUseCase;
+    private final ReplaceAdminUserRolesUseCase replaceAdminUserRolesUseCase;
 
     public TransactionalAdminUserService(
         CreateAdminUserUseCase createAdminUserUseCase,
         UpdateAdminUsernameUseCase updateAdminUsernameUseCase,
         SetAdminUserEnabledUseCase setAdminUserEnabledUseCase,
-        ResetAdminUserPasswordUseCase resetAdminUserPasswordUseCase
+        ResetAdminUserPasswordUseCase resetAdminUserPasswordUseCase,
+        ReplaceAdminUserRolesUseCase replaceAdminUserRolesUseCase
     ) {
         this.createAdminUserUseCase = createAdminUserUseCase;
         this.updateAdminUsernameUseCase = updateAdminUsernameUseCase;
         this.setAdminUserEnabledUseCase = setAdminUserEnabledUseCase;
         this.resetAdminUserPasswordUseCase = resetAdminUserPasswordUseCase;
+        this.replaceAdminUserRolesUseCase = replaceAdminUserRolesUseCase;
     }
 
     @Transactional
@@ -46,5 +50,10 @@ public class TransactionalAdminUserService {
     @Transactional
     public void resetPassword(UUID userId, String newPassword) {
         resetAdminUserPasswordUseCase.execute(userId, newPassword);
+    }
+
+    @Transactional
+    public AdminUser replaceRoles(UUID userId, List<String> roleCodes) {
+        return replaceAdminUserRolesUseCase.execute(userId, roleCodes);
     }
 }

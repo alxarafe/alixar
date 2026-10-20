@@ -24,6 +24,7 @@ import es.alxarafe.alixar.authentication.domain.User;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminUserService;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import javax.sql.DataSource;
@@ -372,10 +373,12 @@ class PersistenceIT {
         assertThat(isTransactional(controller, "updateUsername")).isFalse();
         assertThat(isTransactional(controller, "updateEnabled")).isFalse();
         assertThat(isTransactional(controller, "resetPassword")).isFalse();
+        assertThat(isTransactional(controller, "replaceRoles")).isFalse();
         assertThat(isTransactional(facade, "create")).isTrue();
         assertThat(isTransactional(facade, "updateUsername")).isTrue();
         assertThat(isTransactional(facade, "setEnabled")).isTrue();
         assertThat(isTransactional(facade, "resetPassword")).isTrue();
+        assertThat(isTransactional(facade, "replaceRoles")).isTrue();
     }
 
     @Test
@@ -499,6 +502,50 @@ class PersistenceIT {
             assertThat(afterReset.credentialsVersion()).isEqualTo(4);
             assertThat(passwordHasher.matches("new-admin-password-123", afterReset.passwordHash())).isTrue();
             assertThat(passwordHasher.matches("original-password-123", afterReset.passwordHash())).isFalse();
+        } finally {
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void administrativeRoleReplacement_replacesAllRolesWithoutChangingCredentials() {
+        var userId = UUID.fromString("0a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d");
+        var now = Instant.now();
+
+        try {
+            userRepository.create(new User(
+                userId,
+                "admin-role-replacement",
+                "admin-role-replacement@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                2,
+                now,
+                now
+            ));
+            authorizationRepository.assignRoleToUser(userId, RoleCodes.SYSTEM_ADMIN);
+
+            var replaced = transactionalAdminUserService.replaceRoles(
+                userId,
+                List.of(RoleCodes.SYSTEM_ADMIN, " " + RoleCodes.SYSTEM_ADMIN + " ")
+            );
+
+            assertThat(replaced.roleCodes()).containsExactly(RoleCodes.SYSTEM_ADMIN);
+            assertThat(authorizationRepository.findRoleCodesForUser(userId))
+                .containsExactly(RoleCodes.SYSTEM_ADMIN);
+            var afterReplacement = userRepository.findById(userId).orElseThrow();
+            assertThat(afterReplacement.credentialsVersion()).isEqualTo(2);
+            assertThat(passwordHasher.matches("original-password-123", afterReplacement.passwordHash())).isTrue();
+            assertThat(afterReplacement.username()).isEqualTo("admin-role-replacement");
+            assertThat(afterReplacement.email()).isEqualTo("admin-role-replacement@example.test");
+            assertThat(afterReplacement.enabled()).isTrue();
+
+            var cleared = transactionalAdminUserService.replaceRoles(userId, List.of());
+
+            assertThat(cleared.roleCodes()).isEmpty();
+            assertThat(authorizationRepository.findRoleCodesForUser(userId)).isEmpty();
+            assertThat(authorizationRepository.findEffectivePermissionCodes(userId)).isEmpty();
+            assertThat(userRepository.findById(userId).orElseThrow().credentialsVersion()).isEqualTo(2);
         } finally {
             deleteUser(userId);
         }

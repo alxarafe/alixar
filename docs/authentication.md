@@ -33,12 +33,11 @@ current roles. There are no per-user permission overrides and no explicit
 first permission and `system-admin` is the first built-in role.
 
 ALIXAR-DEV-003F adds administrative user management over that RBAC foundation.
-The current slice provides endpoints for listing, searching and inspecting
-users and for reading the role catalogue, plus creation of disabled users,
-administrative username changes, enablement changes and password resets.
-Every `/api/admin/**` endpoint requires `users.manage`, independently of the
-authentication mechanism. Role replacement is implemented in a later slice of
-the same iteration.
+The iteration provides endpoints for listing, searching and inspecting users
+and for reading the role catalogue, plus creation of disabled users,
+administrative username changes, enablement changes, password resets and full
+role replacement. Every `/api/admin/**` endpoint requires `users.manage`,
+independently of the authentication mechanism.
 
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
@@ -478,12 +477,11 @@ role is granted only when explicitly requested with
 `system-admin` to the bootstrap user, never creates a user by itself, is
 idempotent, and has no effect when the bootstrap identity is not configured.
 The create endpoint assigns only roles explicitly supplied in `roleCodes`; it
-never adds `system-admin` automatically. Full role replacement remains for a
-later ALIXAR-DEV-003F slice. See [Bootstrap user](#bootstrap-user).
+never adds `system-admin` automatically. See [Bootstrap user](#bootstrap-user).
 
 ### Administrative user management
 
-The current ALIXAR-DEV-003F slice exposes:
+ALIXAR-DEV-003F exposes:
 
 | Method and path | Result |
 |-----------------|--------|
@@ -494,6 +492,7 @@ The current ALIXAR-DEV-003F slice exposes:
 | `PATCH /api/admin/users/{id}` | Changes the username only |
 | `PATCH /api/admin/users/{id}/enabled` | Enables or disables a user |
 | `POST /api/admin/users/{id}/password-reset` | Replaces a user's password |
+| `PUT /api/admin/users/{id}/roles` | Replaces all roles for a user |
 
 `GET /api/admin/users` accepts:
 
@@ -551,6 +550,22 @@ sessions and PATs are rejected on their next request. It does not change the
 username, email, enablement, roles, permissions or PAT records. It returns `204`
 on success, `404` for an unknown user and `400` for invalid input.
 
+`PUT /api/admin/users/{id}/roles` accepts `roleCodes` and performs a full
+replacement, not an incremental assignment. An empty list removes every role.
+Role codes are stripped and duplicate codes are normalized before assignment.
+All codes are validated before any change; an unknown role aborts the operation
+without modifying the current roles, and the whole replacement runs in one
+transaction. It returns the updated safe representation, `404` for an unknown
+user or role and `400` for invalid input. It does not change
+`credentials_version`, password, email, username or enablement, and it does not
+invalidate sessions or revoke PATs. It never adds `system-admin` automatically.
+Effective permissions change on the next authenticated request for both session
+and Bearer authentication. Administrators may replace their own roles,
+including removing their own `users.manage`; the request succeeds, the next
+administrative request returns `403`, while general authentication,
+`GET /api/auth/me` and self-service remain available. There is no
+last-administrator protection and the resulting lockout is accepted.
+
 All administrative responses exclude password hashes, reset tokens, API tokens
 and other secrets. Bearer authentication still updates the presented PAT's
 `last_used_at`, as before. Every endpoint requires `users.manage` for both
@@ -569,7 +584,6 @@ RoleGroup
 A group only groups roles. It has no permissions of its own, cannot modify the
 permissions of its roles, and a user may receive roles directly or indirectly
 through groups. Effective permissions would still come exclusively from roles.
-HTTP role replacement remains for a later ALIXAR-DEV-003F slice.
 
 ## Session revocation
 
@@ -683,11 +697,5 @@ Two capabilities are intentionally deferred to later iterations:
 - **Email change.** The email is currently the password-recovery channel.
   Changing it without verifying the new address would weaken account recovery,
   so it is pending a dedicated email-verification iteration.
-- **Administration of other users.** Listing, search, detail, creation of
-  disabled users, administrative username changes, enablement changes and
-  administrative password resets are implemented in the current ALIXAR-DEV-003F
-  slice. Replacing roles over HTTP remains for a later slice. The permission
-  `users.manage` and the `/api/admin/**` authorization boundary are already in
-  force.
 - **Role groups.** Grouping roles is a possible future evolution; no group
   model or tables exist in ALIXAR-DEV-003E.

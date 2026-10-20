@@ -21,6 +21,7 @@ import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.RemoveRoleFromUserUseCase;
+import es.alxarafe.alixar.authentication.application.ReplaceAdminUserRolesUseCase;
 import es.alxarafe.alixar.authentication.application.ResetAdminUserPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.RevokeApiTokenUseCase;
 import es.alxarafe.alixar.authentication.application.SetAdminUserEnabledUseCase;
@@ -115,6 +116,14 @@ public class AuthenticationConfiguration {
     }
 
     @Bean
+    ReplaceAdminUserRolesUseCase replaceAdminUserRolesUseCase(
+        UserRepository userRepository,
+        AuthorizationRepository authorizationRepository
+    ) {
+        return new ReplaceAdminUserRolesUseCase(userRepository, authorizationRepository);
+    }
+
+    @Bean
     SetAdminUserEnabledUseCase setAdminUserEnabledUseCase(
         UserRepository userRepository,
         AuthorizationRepository authorizationRepository,
@@ -145,13 +154,15 @@ public class AuthenticationConfiguration {
         CreateAdminUserUseCase createAdminUserUseCase,
         UpdateAdminUsernameUseCase updateAdminUsernameUseCase,
         SetAdminUserEnabledUseCase setAdminUserEnabledUseCase,
-        ResetAdminUserPasswordUseCase resetAdminUserPasswordUseCase
+        ResetAdminUserPasswordUseCase resetAdminUserPasswordUseCase,
+        ReplaceAdminUserRolesUseCase replaceAdminUserRolesUseCase
     ) {
         return new TransactionalAdminUserService(
             createAdminUserUseCase,
             updateAdminUsernameUseCase,
             setAdminUserEnabledUseCase,
-            resetAdminUserPasswordUseCase
+            resetAdminUserPasswordUseCase,
+            replaceAdminUserRolesUseCase
         );
     }
 

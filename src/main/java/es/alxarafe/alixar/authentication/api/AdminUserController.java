@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -113,6 +114,18 @@ class AdminUserController {
         adminUserService.resetPassword(id, request.newPassword());
     }
 
+    @PutMapping(
+        value = AdminUserEndpoints.ROLES_RELATIVE_PATH,
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    AdminUserResponse replaceRoles(
+        @PathVariable(AdminUserEndpoints.ID_PATH_VARIABLE) UUID id,
+        @Valid @RequestBody ReplaceRolesRequest request
+    ) {
+        return toResponse(adminUserService.replaceRoles(id, request.roleCodes()));
+    }
+
     private AdminUserResponse toResponse(AdminUser user) {
         return new AdminUserResponse(
             user.id(),
@@ -145,6 +158,11 @@ class AdminUserController {
 
     record ResetPasswordRequest(
         @NotBlank(message = "{validation.required}") String newPassword
+    ) {
+    }
+
+    record ReplaceRolesRequest(
+        @NotNull(message = "{validation.required}") List<String> roleCodes
     ) {
     }
 }
