@@ -1,15 +1,22 @@
 package es.alxarafe.alixar.authentication.infrastructure;
 
+import es.alxarafe.alixar.authentication.application.ApiTokenGenerator;
+import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
+import es.alxarafe.alixar.authentication.application.AuthenticateApiTokenUseCase;
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
 import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
 import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
+import es.alxarafe.alixar.authentication.application.CreateApiTokenUseCase;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
+import es.alxarafe.alixar.authentication.application.ListApiTokensUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
 import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
+import es.alxarafe.alixar.authentication.application.RevokeApiTokenUseCase;
 import es.alxarafe.alixar.authentication.application.TokenHasher;
 import es.alxarafe.alixar.authentication.application.UserRepository;
+import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqApiTokenRepository;
 import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqPasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqUserRepository;
 import es.alxarafe.alixar.authentication.infrastructure.security.Sha256TokenHasher;
@@ -41,6 +48,17 @@ public class AuthenticationConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(ApiTokenRepository.class)
+    ApiTokenRepository apiTokenRepository(DSLContext dsl) {
+        return new JooqApiTokenRepository(dsl);
+    }
+
+    @Bean
+    ApiTokenGenerator apiTokenGenerator() {
+        return new ApiTokenGenerator();
+    }
+
+    @Bean
     PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
@@ -53,6 +71,43 @@ public class AuthenticationConfiguration {
     @Bean
     TokenHasher tokenHasher() {
         return new Sha256TokenHasher();
+    }
+
+    @Bean
+    CreateApiTokenUseCase createApiTokenUseCase(
+        UserRepository userRepository,
+        ApiTokenRepository apiTokenRepository,
+        ApiTokenGenerator apiTokenGenerator,
+        TokenHasher tokenHasher
+    ) {
+        return new CreateApiTokenUseCase(userRepository, apiTokenRepository, apiTokenGenerator, tokenHasher);
+    }
+
+    @Bean
+    ListApiTokensUseCase listApiTokensUseCase(ApiTokenRepository apiTokenRepository) {
+        return new ListApiTokensUseCase(apiTokenRepository);
+    }
+
+    @Bean
+    RevokeApiTokenUseCase revokeApiTokenUseCase(ApiTokenRepository apiTokenRepository) {
+        return new RevokeApiTokenUseCase(apiTokenRepository);
+    }
+
+    @Bean
+    AuthenticateApiTokenUseCase authenticateApiTokenUseCase(
+        ApiTokenRepository apiTokenRepository,
+        UserRepository userRepository,
+        TokenHasher tokenHasher
+    ) {
+        return new AuthenticateApiTokenUseCase(apiTokenRepository, userRepository, tokenHasher);
+    }
+
+    @Bean
+    TransactionalApiTokenService transactionalApiTokenService(
+        CreateApiTokenUseCase createApiTokenUseCase,
+        RevokeApiTokenUseCase revokeApiTokenUseCase
+    ) {
+        return new TransactionalApiTokenService(createApiTokenUseCase, revokeApiTokenUseCase);
     }
 
     @Bean

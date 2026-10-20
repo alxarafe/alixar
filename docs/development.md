@@ -68,11 +68,12 @@ development data is a separate, explicit operation; no reset command is provided
 Spring Boot 4.1.1 manages Flyway 12.4.0, jOOQ 3.21.7, PostgreSQL JDBC
 42.7.13, and Spring Security 7.1.1. There is no Flyway override or jOOQ code
 generation. `V1__create_authentication_user.sql` creates the authentication
-user table and `V2__add_credentials_version_and_password_reset.sql` adds
-`credentials_version` and the password reset token table. Boot calls Flyway on
-startup using its default `classpath:db/migration` location. `PersistenceIT`
-verifies both migrations, their constraints, and password reset transaction
-rollback against PostgreSQL.
+user table, `V2__add_credentials_version_and_password_reset.sql` adds
+`credentials_version` and the password reset token table, and
+`V3__create_authentication_api_token.sql` adds the Personal Access Token table.
+Boot calls Flyway on startup using its default `classpath:db/migration` location.
+`PersistenceIT` verifies the migrations, their constraints, and authentication
+transaction behaviour against PostgreSQL.
 
 ## Authentication Configuration
 
@@ -139,13 +140,13 @@ This override is used **only** by `./bin/check-reference`.
 
 `./bin/check` is the complete validation authority for Alixar itself. It runs entirely in Docker and performs:
 
-1. Build and run the 96 deterministic tests (`mvnw clean verify`)
+1. Build and run the 124 deterministic tests (`mvnw clean verify`)
 2. Runtime image build
 3. Container startup with health check wait (database + app)
 4. PostgreSQL health verification (`pg_isready`)
 5. Run `PersistenceIT` against the real isolated PostgreSQL service: verify the
-   Boot datasource, Flyway `V1`/`V2`, a jOOQ `DSLContext` executing `SELECT 1`,
-   PostgreSQL 18.6, the authentication tables and constraints, and password
+   Boot datasource, Flyway `V1`/`V2`/`V3`, a jOOQ `DSLContext` executing `SELECT 1`,
+   PostgreSQL 18.6, the authentication and API token tables and constraints, and password
    reset transaction rollback
 6. HTTP `GET /health` verification (exact `{"status":"ok"}` response)
 7. Cleanup of this invocation's containers, network, and volume; verify none remain
@@ -162,7 +163,7 @@ the invocation's project. Cleanup errors are reported and fail an otherwise
 successful check; an earlier failure retains its exit code. Images/build cache
 are retained. No fixed development or previous check project is cleaned.
 
-`./bin/test` runs the 96 component/unit tests without PostgreSQL.
+`./bin/test` runs the 124 component/unit tests without PostgreSQL.
 Their persistence exclusions are centralized in `src/test/resources/application.properties`.
 The additional `PersistenceIT` uses Surefire's separate `*IT` naming convention
 and is explicitly selected by `bin/check` through `compose.check.yaml`, with

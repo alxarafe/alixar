@@ -25,7 +25,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 96 deterministic tests remain enabled
+  the 124 deterministic tests remain enabled
 
 ### Authentication
 
@@ -53,8 +53,16 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   implemented
 - **Safe bootstrap**: Optional environment-provided initial user with immediate
   adaptive hashing and no fixed credential in source or migration data
-- **Scope boundary**: No roles, permissions, Contact relationship, Dolibarr
-  authentication integration, registration, or bearer-token mechanism
+- **API bearer authentication**: Self-service opaque Personal Access Tokens
+  (`alx_pat_` prefix, 256-bit random value) presented as
+  `Authorization: Bearer <token>`. Only `SHA-256(token)` is stored; the clear
+  token is returned once at creation. PATs have mandatory expiry, explicit
+  `revoked_at` revocation and `last_used_at` traceability. They are bound to the
+  user's `credentials_version`, so password reset/change invalidates them, and
+  they coexist with session+CSRF authentication without disabling CSRF globally
+- **Scope boundary**: No roles, permissions, scopes, Contact relationship,
+  Dolibarr authentication integration, registration, JWT, OAuth server,
+  refresh tokens, or machine-to-machine credentials
 
 ## Transitional integrations
 
@@ -79,8 +87,10 @@ See [Development](development.md) for full validation workflow details.
 ## Not yet implemented
 
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
-- Authorization
-- Definitive authentication for independent API consumers
+- Granular authorization (roles, permissions, scopes)
+- OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
+- JWT, refresh tokens, client credentials, machine-to-machine authentication
+- Administration of other users' API tokens
 - Email change (requires new-address verification)
 - Administration of other users (creation, listing, edition, enable/disable, administrative reset)
 - Broad ERP functionality beyond the currently implemented slices
