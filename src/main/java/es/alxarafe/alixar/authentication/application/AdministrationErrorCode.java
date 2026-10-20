@@ -3,6 +3,10 @@ package es.alxarafe.alixar.authentication.application;
 public enum AdministrationErrorCode {
     ADMIN_USER_NOT_FOUND,
     ADMIN_ROLE_NOT_FOUND,
+    ADMIN_ROLE_ALREADY_EXISTS,
+    ADMIN_PERMISSION_NOT_FOUND,
+    ADMIN_INVALID_ROLE_CODE,
+    ADMIN_INVALID_ROLE_NAME,
     ADMIN_EMAIL_ALREADY_EXISTS,
     ADMIN_INVALID_PAGINATION
 }

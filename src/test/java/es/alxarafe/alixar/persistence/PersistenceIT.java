@@ -13,8 +13,11 @@ import es.alxarafe.alixar.authentication.application.PermissionDefinition;
 import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenGenerator;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
+import es.alxarafe.alixar.authentication.application.PermissionNotFoundException;
 import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
+import es.alxarafe.alixar.authentication.application.RoleAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.RoleCodes;
+import es.alxarafe.alixar.authentication.application.RoleDefinition;
 import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
 import es.alxarafe.alixar.authentication.application.TokenHasher;
 import es.alxarafe.alixar.authentication.application.UserRepository;
@@ -23,6 +26,7 @@ import es.alxarafe.alixar.authentication.domain.ApiToken;
 import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminUserService;
+import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminRoleService;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
@@ -91,6 +95,9 @@ class PersistenceIT {
 
     @Autowired
     private TransactionalAdminUserService transactionalAdminUserService;
+
+    @Autowired
+    private TransactionalAdminRoleService transactionalAdminRoleService;
 
     @Test
     void bootIntegratesPostgresqlFlywayJooqAndAuthenticationMigration() throws Exception {
@@ -846,6 +853,50 @@ class PersistenceIT {
                 ),
                 new PermissionDefinition(PermissionCodes.USERS_MANAGE, "Manage users")
             );
+    }
+
+    @Test
+    void rbac_adminRoleCreationPersistsPermissionsWithoutUserAssignmentsAndRejectsConflicts() {
+        String roleCode = "db-created-role";
+
+        try {
+            RoleDefinition created = transactionalAdminRoleService.create(
+                roleCode,
+                "DB created role",
+                List.of(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE)
+            );
+
+            assertThat(created.builtIn()).isFalse();
+            assertThat(authorizationRepository.findRoleByCode(roleCode))
+                .contains(new RoleDefinition(
+                    roleCode,
+                    "DB created role",
+                    false,
+                    List.of(PermissionCodes.ROLES_MANAGE, PermissionCodes.USERS_MANAGE)
+                ));
+            assertThat(dsl.fetch(
+                "select count(*) from authentication_user_role ur "
+                    + "join authentication_role r on r.id = ur.role_id where r.code = ?",
+                roleCode
+            ).getValues(0, Long.class)).containsExactly(0L);
+
+            assertThatThrownBy(() -> authorizationRepository.createRole(new RoleDefinition(
+                roleCode,
+                "Concurrent duplicate",
+                false,
+                List.of()
+            ))).isInstanceOf(RoleAlreadyExistsException.class);
+
+            assertThatThrownBy(() -> transactionalAdminRoleService.create(
+                "unknown-permission-role",
+                "Unknown permission role",
+                List.of("missing.permission")
+            )).isInstanceOf(PermissionNotFoundException.class);
+            assertThat(authorizationRepository.findRoleByCode("unknown-permission-role")).isEmpty();
+        } finally {
+            dsl.query("delete from authentication_role where code = ?", roleCode).execute();
+            dsl.query("delete from authentication_role where code = ?", "unknown-permission-role").execute();
+        }
     }
 
     @Test

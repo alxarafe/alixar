@@ -5,6 +5,7 @@ import java.util.List;
 record AdminRoleResponse(
     String code,
     String name,
-    List<String> permissions
+    boolean builtIn,
+    List<String> permissionCodes
 ) {
 }

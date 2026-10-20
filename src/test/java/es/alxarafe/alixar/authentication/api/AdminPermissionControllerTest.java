@@ -130,7 +130,7 @@ class AdminPermissionControllerTest {
     void roleSubpaths_areReservedForRolesManage() throws Exception {
         grantOnly(PermissionCodes.USERS_MANAGE);
         MockHttpSession session = authenticatedSession();
-        String roleDetailPath = AdminUserEndpoints.ROLES_BASE_PATH + "/" + RoleCodes.SYSTEM_ADMIN;
+        String roleDetailPath = AdminUserEndpoints.ROLES_BASE_PATH + "/missing-role";
 
         mockMvc.perform(get(roleDetailPath).session(session))
             .andExpect(status().isForbidden());

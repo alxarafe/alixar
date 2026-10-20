@@ -10,9 +10,11 @@ import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
 import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
 import es.alxarafe.alixar.authentication.application.CreateAdminUserUseCase;
 import es.alxarafe.alixar.authentication.application.CreateApiTokenUseCase;
+import es.alxarafe.alixar.authentication.application.CreateRoleUseCase;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.GetAdminUserUseCase;
 import es.alxarafe.alixar.authentication.application.GetEffectivePermissionsUseCase;
+import es.alxarafe.alixar.authentication.application.GetRoleUseCase;
 import es.alxarafe.alixar.authentication.application.ListAdminUsersUseCase;
 import es.alxarafe.alixar.authentication.application.ListApiTokensUseCase;
 import es.alxarafe.alixar.authentication.application.ListPermissionsUseCase;
@@ -97,6 +99,21 @@ public class AuthenticationConfiguration {
     @Bean
     ListRolesUseCase listRolesUseCase(AuthorizationRepository authorizationRepository) {
         return new ListRolesUseCase(authorizationRepository);
+    }
+
+    @Bean
+    GetRoleUseCase getRoleUseCase(AuthorizationRepository authorizationRepository) {
+        return new GetRoleUseCase(authorizationRepository);
+    }
+
+    @Bean
+    CreateRoleUseCase createRoleUseCase(AuthorizationRepository authorizationRepository) {
+        return new CreateRoleUseCase(authorizationRepository);
+    }
+
+    @Bean
+    TransactionalAdminRoleService transactionalAdminRoleService(CreateRoleUseCase createRoleUseCase) {
+        return new TransactionalAdminRoleService(createRoleUseCase);
     }
 
     @Bean

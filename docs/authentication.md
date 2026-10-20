@@ -42,8 +42,8 @@ independently of the authentication mechanism.
 
 ALIXAR-DEV-003G begins role administration. Its first delivered slice adds the
 `roles.manage` permission, built-in role metadata, a restrictive foreign key for
-assigned roles and a read-only permission catalogue. Role mutation APIs are not
-yet exposed.
+assigned roles and a read-only permission catalogue. T2 adds role detail and
+creation. Role rename, permission replacement and deletion are not yet exposed.
 
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
@@ -470,7 +470,9 @@ The administrative namespace is split by capability:
 |------|--------------------|
 | `/api/admin/users/**` | `users.manage` |
 | `GET /api/admin/roles` | `users.manage` or `roles.manage` |
-| Other `/api/admin/roles/**` | `roles.manage` (reserved for role mutations) |
+| `GET /api/admin/roles/{code}` | `roles.manage` |
+| `POST /api/admin/roles` | `roles.manage` |
+| Other `/api/admin/roles/**` | `roles.manage` (reserved for future role mutations) |
 | `/api/admin/permissions` | `roles.manage` |
 
 The GET rule for the role catalogue is method-specific and is evaluated before
@@ -505,13 +507,16 @@ never adds `system-admin` automatically. See [Bootstrap user](#bootstrap-user).
 ### Administrative management
 
 ALIXAR-DEV-003F exposes the user operations and the role catalogue.
-ALIXAR-DEV-003G T1 adds the read-only permission catalogue.
+ALIXAR-DEV-003G T1 adds the read-only permission catalogue, and T2 adds role
+detail and creation.
 
 | Method and path | Result |
 |-----------------|--------|
 | `GET /api/admin/users` | Paginated user summaries |
 | `GET /api/admin/users/{id}` | One user's safe fields and role codes |
 | `GET /api/admin/roles` | Role catalogue with permission codes |
+| `GET /api/admin/roles/{code}` | One role with permission codes |
+| `POST /api/admin/roles` | Creates a custom role |
 | `GET /api/admin/permissions` | Read-only permission catalogue |
 | `POST /api/admin/users` | Creates a disabled user |
 | `PATCH /api/admin/users/{id}` | Changes the username only |
@@ -524,6 +529,39 @@ by `code`. Each item contains only `code` and `description`; database identifier
 and internal metadata are not exposed. It requires `roles.manage` for both
 session and Bearer authentication. Permission creation, modification and
 deletion are not exposed by the API.
+
+Role responses contain only `code`, `name`, `builtIn` and `permissionCodes`.
+`GET /api/admin/roles` returns roles ordered by `code`, with permission codes
+ordered deterministically. `GET /api/admin/roles/{code}` returns the same shape
+and `404` with `ADMIN_ROLE_NOT_FOUND` when the code does not exist.
+
+`POST /api/admin/roles` accepts:
+
+```json
+{
+  "code": "operations-team",
+  "name": "Operations team",
+  "permissionCodes": ["users.manage"]
+}
+```
+
+`code` is stripped and lower-cased, must be at most 100 characters, and must use
+lowercase letters, digits and single hyphens between segments. `name` is stripped
+and must not be blank. `permissionCodes` is optional; absent or `null` means no
+permissions. Each permission code is stripped, lower-cased, de-duplicated and
+sorted. All permission codes are validated against the catalogue before any
+write, so an unknown permission aborts the whole operation without creating the
+role. The role and its permissions are inserted in one transaction, and the
+response is `201` with `Location: /api/admin/roles/{code}`.
+
+Created roles are always custom (`builtIn=false`) and are never assigned to any
+user automatically. A code that already exists, including a concurrent creation
+that reaches PostgreSQL first, returns `409` with
+`ADMIN_ROLE_ALREADY_EXISTS`. An unknown permission returns `404` with
+`ADMIN_PERMISSION_NOT_FOUND`; invalid code syntax returns `400` with
+`ADMIN_INVALID_ROLE_CODE`, and a blank name returns `400` with
+`ADMIN_INVALID_ROLE_NAME`. Role rename, permission replacement and deletion are
+not implemented yet.
 
 `GET /api/admin/users` accepts:
 
@@ -680,9 +718,9 @@ endpoints, and the existing Contact endpoints remain anonymous. The
 the `/api/users/me/api-tokens` endpoints require an authenticated identity:
 either a valid session or a valid Bearer token. `/api/auth/me` works with both
 mechanisms. The `/api/admin/users/**` namespace requires `users.manage`;
-`GET /api/admin/roles` accepts `users.manage` or `roles.manage`; and the
-permission catalogue requires `roles.manage`. Contact remains public solely to
-preserve its established contract
+`GET /api/admin/roles` accepts `users.manage` or `roles.manage`; role detail,
+role creation and the permission catalogue require `roles.manage`. Contact
+remains public solely to preserve its established contract
 and the real Dolibarr compatibility check during this authentication foundation.
 Its existing POST is temporarily excluded from CSRF protection. Protecting
 migrated business capabilities is an authorization decision for a later

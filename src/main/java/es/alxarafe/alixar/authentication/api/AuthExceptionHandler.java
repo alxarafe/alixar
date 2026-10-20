@@ -10,6 +10,10 @@ import es.alxarafe.alixar.authentication.application.InvalidCurrentPasswordExcep
 import es.alxarafe.alixar.authentication.application.InvalidPaginationException;
 import es.alxarafe.alixar.authentication.application.InvalidPasswordException;
 import es.alxarafe.alixar.authentication.application.InvalidResetTokenException;
+import es.alxarafe.alixar.authentication.application.InvalidRoleCodeException;
+import es.alxarafe.alixar.authentication.application.InvalidRoleNameException;
+import es.alxarafe.alixar.authentication.application.PermissionNotFoundException;
+import es.alxarafe.alixar.authentication.application.RoleAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
 import es.alxarafe.alixar.authentication.application.UserNotFoundException;
 import es.alxarafe.alixar.authentication.application.UsernameAlreadyExistsException;
@@ -35,6 +39,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 })
 class AuthExceptionHandler {
 
+    private static final String ROLE_CODE_FIELD = "code";
+    private static final String ROLE_NAME_FIELD = "name";
+
     private static final URI INVALID_CREDENTIALS_TYPE =
         URI.create("urn:alixar:error:authentication-invalid-credentials");
     private static final URI INVALID_API_TOKEN_EXPIRATION_TYPE =
@@ -53,6 +60,14 @@ class AuthExceptionHandler {
         URI.create("urn:alixar:error:administration-user-not-found");
     private static final URI ADMIN_ROLE_NOT_FOUND_TYPE =
         URI.create("urn:alixar:error:administration-role-not-found");
+    private static final URI ADMIN_ROLE_ALREADY_EXISTS_TYPE =
+        URI.create("urn:alixar:error:administration-role-already-exists");
+    private static final URI ADMIN_PERMISSION_NOT_FOUND_TYPE =
+        URI.create("urn:alixar:error:administration-permission-not-found");
+    private static final URI ADMIN_INVALID_ROLE_CODE_TYPE =
+        URI.create("urn:alixar:error:administration-invalid-role-code");
+    private static final URI ADMIN_INVALID_ROLE_NAME_TYPE =
+        URI.create("urn:alixar:error:administration-invalid-role-name");
     private static final URI ADMIN_EMAIL_ALREADY_EXISTS_TYPE =
         URI.create("urn:alixar:error:administration-email-already-exists");
     private static final URI ADMIN_INVALID_PAGINATION_TYPE =
@@ -193,6 +208,58 @@ class AuthExceptionHandler {
         problem.setType(ADMIN_ROLE_NOT_FOUND_TYPE);
         problem.setTitle(messageSource.getMessage("administration.roleNotFound.title", null, locale));
         problem.setProperty("code", AdministrationErrorCode.ADMIN_ROLE_NOT_FOUND.name());
+        return problem;
+    }
+
+    @ExceptionHandler(RoleAlreadyExistsException.class)
+    ProblemDetail handleRoleAlreadyExists(Locale locale) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.CONFLICT,
+            messageSource.getMessage("administration.roleAlreadyExists", null, locale)
+        );
+        problem.setType(ADMIN_ROLE_ALREADY_EXISTS_TYPE);
+        problem.setTitle(messageSource.getMessage("administration.roleAlreadyExists.title", null, locale));
+        problem.setProperty("code", AdministrationErrorCode.ADMIN_ROLE_ALREADY_EXISTS.name());
+        return problem;
+    }
+
+    @ExceptionHandler(PermissionNotFoundException.class)
+    ProblemDetail handlePermissionNotFound(Locale locale) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.NOT_FOUND,
+            messageSource.getMessage("administration.permissionNotFound", null, locale)
+        );
+        problem.setType(ADMIN_PERMISSION_NOT_FOUND_TYPE);
+        problem.setTitle(messageSource.getMessage("administration.permissionNotFound.title", null, locale));
+        problem.setProperty("code", AdministrationErrorCode.ADMIN_PERMISSION_NOT_FOUND.name());
+        return problem;
+    }
+
+    @ExceptionHandler(InvalidRoleCodeException.class)
+    ProblemDetail handleInvalidRoleCode(Locale locale) {
+        String fieldLabel = messageSource.getMessage("field.administration." + ROLE_CODE_FIELD, null, locale);
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST,
+            messageSource.getMessage("administration.invalidRoleCode", new Object[]{fieldLabel}, locale)
+        );
+        problem.setType(ADMIN_INVALID_ROLE_CODE_TYPE);
+        problem.setTitle(messageSource.getMessage("administration.invalidRoleCode.title", null, locale));
+        problem.setProperty("code", AdministrationErrorCode.ADMIN_INVALID_ROLE_CODE.name());
+        problem.setProperty("field", ROLE_CODE_FIELD);
+        return problem;
+    }
+
+    @ExceptionHandler(InvalidRoleNameException.class)
+    ProblemDetail handleInvalidRoleName(Locale locale) {
+        String fieldLabel = messageSource.getMessage("field.administration." + ROLE_NAME_FIELD, null, locale);
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST,
+            messageSource.getMessage("administration.invalidRoleName", new Object[]{fieldLabel}, locale)
+        );
+        problem.setType(ADMIN_INVALID_ROLE_NAME_TYPE);
+        problem.setTitle(messageSource.getMessage("administration.invalidRoleName.title", null, locale));
+        problem.setProperty("code", AdministrationErrorCode.ADMIN_INVALID_ROLE_NAME.name());
+        problem.setProperty("field", ROLE_NAME_FIELD);
         return problem;
     }
 
