@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.authentication.infrastructure.persistence;
 
+import es.alxarafe.alixar.authentication.application.EmailAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.application.UsernameAlreadyExistsException;
 import es.alxarafe.alixar.authentication.domain.User;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record;
@@ -18,9 +20,13 @@ import org.springframework.dao.DuplicateKeyException;
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.lower;
 import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.noCondition;
 import static org.jooq.impl.DSL.table;
 
 public class JooqUserRepository implements UserRepository {
+
+    private static final String USERNAME_UNIQUE_INDEX = "authentication_user_username_unique";
+    private static final String EMAIL_UNIQUE_INDEX = "authentication_user_email_unique";
 
     private static final Table<Record> USER_TABLE = table(name("authentication_user"));
     private static final Field<UUID> ID = field(name("id"), UUID.class);
@@ -60,20 +66,43 @@ public class JooqUserRepository implements UserRepository {
     }
 
     @Override
+    public List<User> search(String query, Boolean enabled, long offset, int limit) {
+        return dsl.select(ID, USERNAME, EMAIL, PASSWORD_HASH, ENABLED, CREDENTIALS_VERSION, CREATED_AT, UPDATED_AT)
+            .from(USER_TABLE)
+            .where(searchCondition(query, enabled))
+            .orderBy(USERNAME, ID)
+            .limit(limit)
+            .offset(offset)
+            .fetch(this::toUser);
+    }
+
+    @Override
+    public long count(String query, Boolean enabled) {
+        return dsl.selectCount()
+            .from(USER_TABLE)
+            .where(searchCondition(query, enabled))
+            .fetchOne(0, long.class);
+    }
+
+    @Override
     public void create(User user) {
-        dsl.insertInto(USER_TABLE)
-            .columns(ID, USERNAME, EMAIL, PASSWORD_HASH, ENABLED, CREDENTIALS_VERSION, CREATED_AT, UPDATED_AT)
-            .values(
-                user.id(),
-                user.username(),
-                user.email(),
-                user.passwordHash(),
-                user.enabled(),
-                user.credentialsVersion(),
-                OffsetDateTime.ofInstant(user.createdAt(), ZoneOffset.UTC),
-                OffsetDateTime.ofInstant(user.updatedAt(), ZoneOffset.UTC)
-            )
-            .execute();
+        try {
+            dsl.insertInto(USER_TABLE)
+                .columns(ID, USERNAME, EMAIL, PASSWORD_HASH, ENABLED, CREDENTIALS_VERSION, CREATED_AT, UPDATED_AT)
+                .values(
+                    user.id(),
+                    user.username(),
+                    user.email(),
+                    user.passwordHash(),
+                    user.enabled(),
+                    user.credentialsVersion(),
+                    OffsetDateTime.ofInstant(user.createdAt(), ZoneOffset.UTC),
+                    OffsetDateTime.ofInstant(user.updatedAt(), ZoneOffset.UTC)
+                )
+                .execute();
+        } catch (DuplicateKeyException exception) {
+            throw translateCreateDuplicate(exception);
+        }
     }
 
     @Override
@@ -82,6 +111,16 @@ public class JooqUserRepository implements UserRepository {
             .from(USER_TABLE)
             .where(ID.eq(id))
             .fetchOptional(this::toUser);
+    }
+
+    @Override
+    public void updateEnabledAndCredentialsVersion(UUID userId, boolean enabled, long newCredentialsVersion) {
+        dsl.update(USER_TABLE)
+            .set(ENABLED, enabled)
+            .set(CREDENTIALS_VERSION, newCredentialsVersion)
+            .set(UPDATED_AT, OffsetDateTime.now(ZoneOffset.UTC))
+            .where(ID.eq(userId))
+            .execute();
     }
 
     @Override
@@ -105,6 +144,30 @@ public class JooqUserRepository implements UserRepository {
         } catch (DuplicateKeyException exception) {
             throw new UsernameAlreadyExistsException();
         }
+    }
+
+    private RuntimeException translateCreateDuplicate(DuplicateKeyException exception) {
+        String message = exception.getMostSpecificCause().getMessage();
+        if (message != null && message.contains(USERNAME_UNIQUE_INDEX)) {
+            return new UsernameAlreadyExistsException();
+        }
+        if (message != null && message.contains(EMAIL_UNIQUE_INDEX)) {
+            return new EmailAlreadyExistsException();
+        }
+        return exception;
+    }
+
+    private Condition searchCondition(String query, Boolean enabled) {
+        Condition condition = noCondition();
+        if (enabled != null) {
+            condition = condition.and(ENABLED.eq(enabled));
+        }
+        if (query != null) {
+            condition = condition.and(
+                lower(USERNAME).contains(query).or(lower(EMAIL).contains(query))
+            );
+        }
+        return condition;
     }
 
     private Optional<User> findOne(Field<String> identifierField, String identifier) {

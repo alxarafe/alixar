@@ -8,17 +8,25 @@ import es.alxarafe.alixar.authentication.application.AuthenticateApiTokenUseCase
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
 import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
 import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
+import es.alxarafe.alixar.authentication.application.CreateAdminUserUseCase;
 import es.alxarafe.alixar.authentication.application.CreateApiTokenUseCase;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
+import es.alxarafe.alixar.authentication.application.GetAdminUserUseCase;
 import es.alxarafe.alixar.authentication.application.GetEffectivePermissionsUseCase;
+import es.alxarafe.alixar.authentication.application.ListAdminUsersUseCase;
 import es.alxarafe.alixar.authentication.application.ListApiTokensUseCase;
+import es.alxarafe.alixar.authentication.application.ListRolesUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
 import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.RemoveRoleFromUserUseCase;
+import es.alxarafe.alixar.authentication.application.ReplaceAdminUserRolesUseCase;
+import es.alxarafe.alixar.authentication.application.ResetAdminUserPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.RevokeApiTokenUseCase;
+import es.alxarafe.alixar.authentication.application.SetAdminUserEnabledUseCase;
 import es.alxarafe.alixar.authentication.application.TokenHasher;
+import es.alxarafe.alixar.authentication.application.UpdateAdminUsernameUseCase;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqApiTokenRepository;
 import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqAuthorizationRepository;
@@ -67,6 +75,95 @@ public class AuthenticationConfiguration {
     @Bean
     GetEffectivePermissionsUseCase getEffectivePermissionsUseCase(AuthorizationRepository authorizationRepository) {
         return new GetEffectivePermissionsUseCase(authorizationRepository);
+    }
+
+    @Bean
+    ListAdminUsersUseCase listAdminUsersUseCase(
+        UserRepository userRepository,
+        AuthorizationRepository authorizationRepository
+    ) {
+        return new ListAdminUsersUseCase(userRepository, authorizationRepository);
+    }
+
+    @Bean
+    GetAdminUserUseCase getAdminUserUseCase(
+        UserRepository userRepository,
+        AuthorizationRepository authorizationRepository
+    ) {
+        return new GetAdminUserUseCase(userRepository, authorizationRepository);
+    }
+
+    @Bean
+    ListRolesUseCase listRolesUseCase(AuthorizationRepository authorizationRepository) {
+        return new ListRolesUseCase(authorizationRepository);
+    }
+
+    @Bean
+    CreateAdminUserUseCase createAdminUserUseCase(
+        UserRepository userRepository,
+        AuthorizationRepository authorizationRepository,
+        PasswordHasher passwordHasher
+    ) {
+        return new CreateAdminUserUseCase(userRepository, authorizationRepository, passwordHasher);
+    }
+
+    @Bean
+    UpdateAdminUsernameUseCase updateAdminUsernameUseCase(
+        UserRepository userRepository,
+        AuthorizationRepository authorizationRepository
+    ) {
+        return new UpdateAdminUsernameUseCase(userRepository, authorizationRepository);
+    }
+
+    @Bean
+    ReplaceAdminUserRolesUseCase replaceAdminUserRolesUseCase(
+        UserRepository userRepository,
+        AuthorizationRepository authorizationRepository
+    ) {
+        return new ReplaceAdminUserRolesUseCase(userRepository, authorizationRepository);
+    }
+
+    @Bean
+    SetAdminUserEnabledUseCase setAdminUserEnabledUseCase(
+        UserRepository userRepository,
+        AuthorizationRepository authorizationRepository,
+        PasswordResetTokenRepository passwordResetTokenRepository
+    ) {
+        return new SetAdminUserEnabledUseCase(
+            userRepository,
+            authorizationRepository,
+            passwordResetTokenRepository
+        );
+    }
+
+    @Bean
+    ResetAdminUserPasswordUseCase resetAdminUserPasswordUseCase(
+        UserRepository userRepository,
+        PasswordResetTokenRepository passwordResetTokenRepository,
+        PasswordHasher passwordHasher
+    ) {
+        return new ResetAdminUserPasswordUseCase(
+            userRepository,
+            passwordResetTokenRepository,
+            passwordHasher
+        );
+    }
+
+    @Bean
+    TransactionalAdminUserService transactionalAdminUserService(
+        CreateAdminUserUseCase createAdminUserUseCase,
+        UpdateAdminUsernameUseCase updateAdminUsernameUseCase,
+        SetAdminUserEnabledUseCase setAdminUserEnabledUseCase,
+        ResetAdminUserPasswordUseCase resetAdminUserPasswordUseCase,
+        ReplaceAdminUserRolesUseCase replaceAdminUserRolesUseCase
+    ) {
+        return new TransactionalAdminUserService(
+            createAdminUserUseCase,
+            updateAdminUsernameUseCase,
+            setAdminUserEnabledUseCase,
+            resetAdminUserPasswordUseCase,
+            replaceAdminUserRolesUseCase
+        );
     }
 
     @Bean

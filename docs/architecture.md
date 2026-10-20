@@ -49,13 +49,13 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   effective permissions resolved from persistence on every authenticated
   request, deny-by-default policy, and identical authorization for session and
   Bearer authentication. Built-in `system-admin` role and `users.manage`
-  permission; administrative user routes remain for ALIXAR-DEV-003F
+  permission; administrative reads, creation of disabled users, username
+  changes, enablement changes, password resets and full role replacement
 
 ## Planned (Not Implemented)
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Email change with new-address verification
-- Administration of other users and HTTP role assignment (ALIXAR-DEV-003F)
 - Role groups
 - PAT scopes and authorization for business capabilities beyond `users.manage`
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
@@ -128,8 +128,13 @@ therefore take effect on the next request without changing
 
 Business code authorizes by permission (`hasAuthority("users.manage")`), not by
 role name. `system-admin` is an administrative grouping of permissions and has
-no special treatment in code. See [Authentication](authentication.md) for the
-RBAC model and the reserved administrative namespace.
+no special treatment in code. Administrative reads resolve user summaries, user
+detail and the role catalogue through application use cases behind dedicated
+ports. User creation and username changes also run through application use
+cases; the infrastructure facade owns the transaction that keeps a new user and
+its role assignments atomic. See
+[Authentication](authentication.md) for the RBAC model and the administrative
+namespace.
 
 ## Internationalization (i18n) Architecture
 

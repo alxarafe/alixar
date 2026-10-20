@@ -5,6 +5,7 @@ import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
 import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
 import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
+import es.alxarafe.alixar.authentication.application.EmailAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
 import es.alxarafe.alixar.authentication.application.PermissionCodes;
@@ -13,14 +14,17 @@ import es.alxarafe.alixar.authentication.application.PasswordResetTokenGenerator
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.RoleCodes;
+import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
 import es.alxarafe.alixar.authentication.application.TokenHasher;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.application.UsernameAlreadyExistsException;
 import es.alxarafe.alixar.authentication.domain.ApiToken;
 import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
+import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminUserService;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import javax.sql.DataSource;
@@ -83,6 +87,9 @@ class PersistenceIT {
 
     @Autowired
     private PlatformTransactionManager transactionManager;
+
+    @Autowired
+    private TransactionalAdminUserService transactionalAdminUserService;
 
     @Test
     void bootIntegratesPostgresqlFlywayJooqAndAuthenticationMigration() throws Exception {
@@ -353,6 +360,195 @@ class PersistenceIT {
         assertThat(isTransactional(controller, "changePassword")).isFalse();
         assertThat(isTransactional(facade, "changeUsername")).isTrue();
         assertThat(isTransactional(facade, "changePassword")).isTrue();
+    }
+
+    @Test
+    void administrativeUserTransactionBoundary_livesInInfrastructureFacade() throws Exception {
+        Class<?> controller = Class.forName("es.alxarafe.alixar.authentication.api.AdminUserController");
+        Class<?> facade = Class.forName(
+            "es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminUserService"
+        );
+
+        assertThat(isTransactional(controller, "create")).isFalse();
+        assertThat(isTransactional(controller, "updateUsername")).isFalse();
+        assertThat(isTransactional(controller, "updateEnabled")).isFalse();
+        assertThat(isTransactional(controller, "resetPassword")).isFalse();
+        assertThat(isTransactional(controller, "replaceRoles")).isFalse();
+        assertThat(isTransactional(facade, "create")).isTrue();
+        assertThat(isTransactional(facade, "updateUsername")).isTrue();
+        assertThat(isTransactional(facade, "setEnabled")).isTrue();
+        assertThat(isTransactional(facade, "resetPassword")).isTrue();
+        assertThat(isTransactional(facade, "replaceRoles")).isTrue();
+    }
+
+    @Test
+    void administrativeUserCreation_translatesUniqueViolations() {
+        var firstId = UUID.fromString("11111111-2222-3333-4444-555555555555");
+        var secondId = UUID.fromString("66666666-7777-8888-9999-000000000000");
+        var thirdId = UUID.fromString("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee");
+        var now = Instant.now();
+
+        try {
+            userRepository.create(new User(
+                firstId,
+                "AdminUser",
+                "admin-user@example.test",
+                passwordHasher.hash("original-password-123"),
+                false,
+                0,
+                now,
+                now
+            ));
+
+            assertThatThrownBy(() -> userRepository.create(new User(
+                secondId,
+                "adminuser",
+                "different-admin@example.test",
+                passwordHasher.hash("original-password-123"),
+                false,
+                0,
+                now,
+                now
+            ))).isInstanceOf(UsernameAlreadyExistsException.class);
+
+            assertThatThrownBy(() -> userRepository.create(new User(
+                thirdId,
+                "different-admin",
+                "ADMIN-USER@example.test",
+                passwordHasher.hash("original-password-123"),
+                false,
+                0,
+                now,
+                now
+            ))).isInstanceOf(EmailAlreadyExistsException.class);
+        } finally {
+            deleteUser(firstId);
+            deleteUser(secondId);
+            deleteUser(thirdId);
+        }
+    }
+
+    @Test
+    void administrativeUserCreation_rollsBackUserWhenRoleAssignmentFails() {
+        var userId = UUID.fromString("12345678-1234-5678-1234-567812345678");
+        var now = Instant.now();
+        var transactionTemplate = new TransactionTemplate(transactionManager);
+
+        try {
+            assertThatThrownBy(() -> transactionTemplate.execute(status -> {
+                userRepository.create(new User(
+                    userId,
+                    "rollback-admin",
+                    "rollback-admin@example.test",
+                    passwordHasher.hash("original-password-123"),
+                    false,
+                    0,
+                    now,
+                    now
+                ));
+                authorizationRepository.assignRoleToUser(userId, "missing-role");
+                return null;
+            })).isInstanceOf(RoleNotFoundException.class);
+
+            assertThat(userRepository.findById(userId)).isEmpty();
+        } finally {
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void administrativeEnablementAndPasswordReset_updateCredentialsAndInvalidateResetTokens() {
+        var userId = UUID.fromString("9a8b7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4d");
+        var now = Instant.now();
+        var resetTokenHash = tokenHasher.hash(PasswordResetTokenGenerator.generate());
+
+        try {
+            userRepository.create(new User(
+                userId,
+                "admin-credential-actions",
+                "admin-credential-actions@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                2,
+                now,
+                now
+            ));
+            passwordResetTokenRepository.create(new PasswordResetToken(
+                UUID.randomUUID(),
+                userId,
+                resetTokenHash,
+                now.plusSeconds(1800),
+                null,
+                now
+            ));
+
+            var disabled = transactionalAdminUserService.setEnabled(userId, false);
+            assertThat(disabled.enabled()).isFalse();
+            var afterDisable = userRepository.findById(userId).orElseThrow();
+            assertThat(afterDisable.enabled()).isFalse();
+            assertThat(afterDisable.credentialsVersion()).isEqualTo(3);
+            assertThat(afterDisable.username()).isEqualTo("admin-credential-actions");
+            assertThat(afterDisable.email()).isEqualTo("admin-credential-actions@example.test");
+            assertThat(passwordResetTokenRepository.findByTokenHash(resetTokenHash).orElseThrow().isUsed())
+                .isTrue();
+
+            var enabled = transactionalAdminUserService.setEnabled(userId, true);
+            assertThat(enabled.enabled()).isTrue();
+            assertThat(userRepository.findById(userId).orElseThrow().credentialsVersion()).isEqualTo(3);
+
+            transactionalAdminUserService.resetPassword(userId, "new-admin-password-123");
+            var afterReset = userRepository.findById(userId).orElseThrow();
+            assertThat(afterReset.enabled()).isTrue();
+            assertThat(afterReset.credentialsVersion()).isEqualTo(4);
+            assertThat(passwordHasher.matches("new-admin-password-123", afterReset.passwordHash())).isTrue();
+            assertThat(passwordHasher.matches("original-password-123", afterReset.passwordHash())).isFalse();
+        } finally {
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void administrativeRoleReplacement_replacesAllRolesWithoutChangingCredentials() {
+        var userId = UUID.fromString("0a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d");
+        var now = Instant.now();
+
+        try {
+            userRepository.create(new User(
+                userId,
+                "admin-role-replacement",
+                "admin-role-replacement@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                2,
+                now,
+                now
+            ));
+            authorizationRepository.assignRoleToUser(userId, RoleCodes.SYSTEM_ADMIN);
+
+            var replaced = transactionalAdminUserService.replaceRoles(
+                userId,
+                List.of(RoleCodes.SYSTEM_ADMIN, " " + RoleCodes.SYSTEM_ADMIN + " ")
+            );
+
+            assertThat(replaced.roleCodes()).containsExactly(RoleCodes.SYSTEM_ADMIN);
+            assertThat(authorizationRepository.findRoleCodesForUser(userId))
+                .containsExactly(RoleCodes.SYSTEM_ADMIN);
+            var afterReplacement = userRepository.findById(userId).orElseThrow();
+            assertThat(afterReplacement.credentialsVersion()).isEqualTo(2);
+            assertThat(passwordHasher.matches("original-password-123", afterReplacement.passwordHash())).isTrue();
+            assertThat(afterReplacement.username()).isEqualTo("admin-role-replacement");
+            assertThat(afterReplacement.email()).isEqualTo("admin-role-replacement@example.test");
+            assertThat(afterReplacement.enabled()).isTrue();
+
+            var cleared = transactionalAdminUserService.replaceRoles(userId, List.of());
+
+            assertThat(cleared.roleCodes()).isEmpty();
+            assertThat(authorizationRepository.findRoleCodesForUser(userId)).isEmpty();
+            assertThat(authorizationRepository.findEffectivePermissionCodes(userId)).isEmpty();
+            assertThat(userRepository.findById(userId).orElseThrow().credentialsVersion()).isEqualTo(2);
+        } finally {
+            deleteUser(userId);
+        }
     }
 
     @Test

@@ -26,7 +26,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 141 deterministic tests and 24 PostgreSQL integration tests remain
+  the 183 deterministic tests and 29 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -51,8 +51,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   username (`PATCH /api/users/me`) and password (`POST /api/users/me/password`).
   A password change bumps `credentials_version`, invalidates pending password
   reset tokens and revokes other sessions while keeping the current session
-  authenticated. Changing the email, or administering other users, is not
-  implemented
+  authenticated. Changing the email is not implemented
 - **Safe bootstrap**: Optional environment-provided initial user with immediate
   adaptive hashing and no fixed credential in source or migration data. The
   bootstrap user is not an administrator unless
@@ -63,8 +62,25 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   session and Bearer authentication, without changing `credentials_version`,
   invalidating sessions or revoking PATs. Built-in `system-admin` role contains
   `users.manage`; there are no per-user overrides, explicit `DENY`, role
-  hierarchy or role groups. Administrative user routes are reserved for
-  ALIXAR-DEV-003F
+  hierarchy or role groups
+- **Administrative user management**: `GET /api/admin/users` (pagination,
+  enablement filter and case-insensitive username/email search),
+  `GET /api/admin/users/{id}`, `GET /api/admin/roles`,
+  `POST /api/admin/users`,   `PATCH /api/admin/users/{id}`,
+  `PATCH /api/admin/users/{id}/enabled`,
+  `POST /api/admin/users/{id}/password-reset` and
+  `PUT /api/admin/users/{id}/roles`. New users are created disabled, with only
+  explicitly supplied roles and no automatic `system-admin`; user creation and
+  role assignment are atomic. Username changes do not alter credentials,
+  enablement, roles, sessions or PATs. Disable and administrative reset bump
+  `credentials_version` and invalidate pending reset tokens; disable is
+  idempotent, enable does not bump the version, and credentials invalidated by
+  a disable remain invalid after re-enabling. Role replacement is atomic, full
+  replacement, normalizes duplicates, does not change credentials or revoke
+  sessions/PATs, and takes effect on the next request. Self-disable and
+  self-role replacement are allowed without bypasses or last-administrator
+  protection. All endpoints require `users.manage` for session and Bearer
+  authentication and responses exclude secrets
 - **API bearer authentication**: Self-service opaque Personal Access Tokens
   (`alx_pat_` prefix, 256-bit random value) presented as
   `Authorization: Bearer <token>`. Only `SHA-256(token)` is stored; the clear
@@ -105,5 +121,4 @@ See [Development](development.md) for full validation workflow details.
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - Administration of other users' API tokens
 - Email change (requires new-address verification)
-- Administration of other users (creation, listing, edition, enable/disable, administrative reset)
 - Broad ERP functionality beyond the currently implemented slices
