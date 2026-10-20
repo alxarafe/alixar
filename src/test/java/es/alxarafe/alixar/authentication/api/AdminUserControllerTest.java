@@ -299,8 +299,9 @@ class AdminUserControllerTest {
             .andExpect(jsonPath("$.length()").value(1))
             .andExpect(jsonPath("$[0].code").value(RoleCodes.SYSTEM_ADMIN))
             .andExpect(jsonPath("$[0].name").value("System administrator"))
-            .andExpect(jsonPath("$[0].permissions.length()").value(1))
-            .andExpect(jsonPath("$[0].permissions[0]").value(PermissionCodes.USERS_MANAGE))
+            .andExpect(jsonPath("$[0].permissions.length()").value(2))
+            .andExpect(jsonPath("$[0].permissions[0]").value(PermissionCodes.ROLES_MANAGE))
+            .andExpect(jsonPath("$[0].permissions[1]").value(PermissionCodes.USERS_MANAGE))
             .andExpect(jsonPath("$[0].id").doesNotExist());
     }
 

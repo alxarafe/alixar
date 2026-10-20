@@ -22,6 +22,8 @@ public interface AuthorizationRepository {
 
     List<RoleDefinition> findAllRoles();
 
+    List<PermissionDefinition> findAllPermissions();
+
     void assignRoleToUser(UUID userId, String roleCode);
 
     void removeRoleFromUser(UUID userId, String roleCode);

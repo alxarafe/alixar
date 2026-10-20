@@ -30,7 +30,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
     UserController.class,
     ApiTokenController.class,
     AdminUserController.class,
-    AdminRoleController.class
+    AdminRoleController.class,
+    AdminPermissionController.class
 })
 class AuthExceptionHandler {
 

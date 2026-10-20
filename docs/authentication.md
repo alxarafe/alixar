@@ -13,8 +13,9 @@ session revocation, and email delivery of the reset link through a replaceable
 application port.
 
 ALIXAR-DEV-003C adds self-service management of the authenticated identity: the
-user can change its own username and its own password. Administration of other
-users, roles, permissions, and email change are explicitly out of scope.
+user can change its own username and its own password. At that stage,
+administration of other users, roles, permissions, and email change were
+explicitly out of scope.
 
 ALIXAR-DEV-003D adds authentication for independent API consumers through
 opaque Personal Access Tokens (PATs) presented as
@@ -36,8 +37,13 @@ ALIXAR-DEV-003F adds administrative user management over that RBAC foundation.
 The iteration provides endpoints for listing, searching and inspecting users
 and for reading the role catalogue, plus creation of disabled users,
 administrative username changes, enablement changes, password resets and full
-role replacement. Every `/api/admin/**` endpoint requires `users.manage`,
+role replacement. The user-management endpoints require `users.manage`,
 independently of the authentication mechanism.
+
+ALIXAR-DEV-003G begins role administration. Its first delivered slice adds the
+`roles.manage` permission, built-in role metadata, a restrictive foreign key for
+assigned roles and a read-only permission catalogue. Role mutation APIs are not
+yet exposed.
 
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
@@ -393,9 +399,13 @@ User
         └── Permissions
 ```
 
-- `authentication_user_role` stores user-to-role assignments.
+- `authentication_user_role` stores user-to-role assignments. Its role foreign
+  key uses `ON DELETE RESTRICT`, so PostgreSQL prevents deleting a role that is
+  still assigned to any user.
 - `authentication_role_permission` stores role-to-permission assignments.
 - `authentication_permission` is the stable permission catalogue.
+- `authentication_role.built_in` distinguishes roles with a controlled lifecycle
+  from custom roles. It defaults to `false` and is `true` for `system-admin`.
 - Permissions are assigned exclusively to roles. There is no
   `authentication_user_permission` table, no user-level grant or deny, and no
   override for a particular user.
@@ -413,11 +423,14 @@ The initial catalogue contains:
 | Permission | Meaning |
 |------------|---------|
 | `users.manage` | Administrative capability over users (ALIXAR-DEV-003F) |
+| `roles.manage` | Manage roles and their permission assignments (ALIXAR-DEV-003G) |
 
-The built-in role `system-admin` contains `users.manage`. The role name and code
-are stable identifiers, but application code authorizes by permission, not by
-role name. No role is special in code: `system-admin` is simply a role that
-contains permissions. There is no mandatory basic role.
+The built-in role `system-admin` contains both permissions. The role name and
+code are stable identifiers, but application code authorizes by permission, not
+by role name. No role is special in authorization: `system-admin` is simply a
+role whose permissions are maintained by migrations. The `built_in` flag marks
+roles whose lifecycle is reserved for controlled provisioning; it is not an
+authorization bypass. There is no mandatory basic role.
 
 ### Effective permissions per request
 
@@ -451,23 +464,33 @@ privileged endpoint  → concrete permission
 anything else        → denyAll
 ```
 
-The administrative namespace `/api/admin/**` requires `users.manage`. The
-endpoints currently exposed are described under
-[Administrative user management](#administrative-user-management). Results:
+The administrative namespace is split by capability:
+
+| Path | Required authority |
+|------|--------------------|
+| `/api/admin/users/**` | `users.manage` |
+| `GET /api/admin/roles` | `users.manage` or `roles.manage` |
+| Other `/api/admin/roles/**` | `roles.manage` (reserved for role mutations) |
+| `/api/admin/permissions` | `roles.manage` |
+
+The GET rule for the role catalogue is method-specific and is evaluated before
+the general role namespace rule. Results:
 
 | Caller | Result |
 |--------|--------|
 | Not authenticated | `401 Unauthorized` |
-| Authenticated without `users.manage` | `403 Forbidden` |
-| Authenticated with `users.manage` | The request reaches the operation |
+| Authenticated without a required permission | `403 Forbidden` |
+| Authenticated with the required permission | The request reaches the operation |
 
 This applies identically to session and Bearer authentication. An invalid
 Bearer credential clears the session context and does not fall back to the
 session identity, so it cannot bypass authorization.
 
 Method security is enabled. Operations can be protected with
-`@PreAuthorize("hasAuthority('users.manage')")`; the stable permission constant
-is `PermissionCodes.USERS_MANAGE`.
+`@PreAuthorize("hasAuthority('users.manage')")` or
+`@PreAuthorize("hasAuthority('roles.manage')")`; the stable permission
+constants are `PermissionCodes.USERS_MANAGE` and
+`PermissionCodes.ROLES_MANAGE`.
 
 ### Bootstrap and the first administrator
 
@@ -479,20 +502,28 @@ idempotent, and has no effect when the bootstrap identity is not configured.
 The create endpoint assigns only roles explicitly supplied in `roleCodes`; it
 never adds `system-admin` automatically. See [Bootstrap user](#bootstrap-user).
 
-### Administrative user management
+### Administrative management
 
-ALIXAR-DEV-003F exposes:
+ALIXAR-DEV-003F exposes the user operations and the role catalogue.
+ALIXAR-DEV-003G T1 adds the read-only permission catalogue.
 
 | Method and path | Result |
 |-----------------|--------|
 | `GET /api/admin/users` | Paginated user summaries |
 | `GET /api/admin/users/{id}` | One user's safe fields and role codes |
 | `GET /api/admin/roles` | Role catalogue with permission codes |
+| `GET /api/admin/permissions` | Read-only permission catalogue |
 | `POST /api/admin/users` | Creates a disabled user |
 | `PATCH /api/admin/users/{id}` | Changes the username only |
 | `PATCH /api/admin/users/{id}/enabled` | Enables or disables a user |
 | `POST /api/admin/users/{id}/password-reset` | Replaces a user's password |
 | `PUT /api/admin/users/{id}/roles` | Replaces all roles for a user |
+
+`GET /api/admin/permissions` returns the read-only permission catalogue ordered
+by `code`. Each item contains only `code` and `description`; database identifiers
+and internal metadata are not exposed. It requires `roles.manage` for both
+session and Bearer authentication. Permission creation, modification and
+deletion are not exposed by the API.
 
 `GET /api/admin/users` accepts:
 
@@ -568,8 +599,10 @@ last-administrator protection and the resulting lockout is accepted.
 
 All administrative responses exclude password hashes, reset tokens, API tokens
 and other secrets. Bearer authentication still updates the presented PAT's
-`last_used_at`, as before. Every endpoint requires `users.manage` for both
-session and Bearer authentication.
+`last_used_at`, as before. Every `/api/admin/users/**` endpoint requires
+`users.manage`; `GET /api/admin/roles` accepts `users.manage` or `roles.manage`;
+and `GET /api/admin/permissions` requires `roles.manage`, for both session and
+Bearer authentication.
 
 ### Role groups (future decision)
 
@@ -646,8 +679,10 @@ endpoints, and the existing Contact endpoints remain anonymous. The
 `GET /api/auth/me`, `PATCH /api/users/me`, `POST /api/users/me/password` and
 the `/api/users/me/api-tokens` endpoints require an authenticated identity:
 either a valid session or a valid Bearer token. `/api/auth/me` works with both
-mechanisms. The `/api/admin/**` namespace requires the `users.manage`
-permission. Contact remains public solely to preserve its established contract
+mechanisms. The `/api/admin/users/**` namespace requires `users.manage`;
+`GET /api/admin/roles` accepts `users.manage` or `roles.manage`; and the
+permission catalogue requires `roles.manage`. Contact remains public solely to
+preserve its established contract
 and the real Dolibarr compatibility check during this authentication foundation.
 Its existing POST is temporarily excluded from CSRF protection. Protecting
 migrated business capabilities is an authorization decision for a later

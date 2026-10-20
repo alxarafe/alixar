@@ -4,6 +4,7 @@ import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.PermissionCodes;
+import es.alxarafe.alixar.authentication.application.PermissionDefinition;
 import es.alxarafe.alixar.authentication.application.RoleCodes;
 import es.alxarafe.alixar.authentication.application.RoleDefinition;
 import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
@@ -270,7 +271,10 @@ public class AuthenticationTestConfig {
             roleNames.put(RoleCodes.SYSTEM_ADMIN, "System administrator");
             rolePermissions.put(
                 RoleCodes.SYSTEM_ADMIN,
-                new LinkedHashSet<>(Set.of(PermissionCodes.USERS_MANAGE))
+                new LinkedHashSet<>(Set.of(
+                    PermissionCodes.USERS_MANAGE,
+                    PermissionCodes.ROLES_MANAGE
+                ))
             );
         }
 
@@ -309,6 +313,17 @@ public class AuthenticationTestConfig {
                         .toList()
                 ))
                 .toList();
+        }
+
+        @Override
+        public List<PermissionDefinition> findAllPermissions() {
+            return List.of(
+                new PermissionDefinition(
+                    PermissionCodes.ROLES_MANAGE,
+                    "Manage roles and their permission assignments"
+                ),
+                new PermissionDefinition(PermissionCodes.USERS_MANAGE, "Manage users")
+            );
         }
 
         @Override

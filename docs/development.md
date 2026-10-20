@@ -71,12 +71,14 @@ generation. `V1__create_authentication_user.sql` creates the authentication
 user table, `V2__add_credentials_version_and_password_reset.sql` adds
 `credentials_version` and the password reset token table, and
 `V3__create_authentication_api_token.sql` adds the Personal Access Token table,
-and `V4__create_role_based_authorization.sql` adds roles, permissions,
+`V4__create_role_based_authorization.sql` adds roles, permissions,
 role-permission assignments, user-role assignments and the initial
-`users.manage`/`system-admin` seed. Boot calls Flyway on startup using its
-default `classpath:db/migration` location. `PersistenceIT` verifies the
-migrations, their constraints, RBAC resolution and authentication transaction
-behaviour against PostgreSQL.
+`users.manage`/`system-admin` seed, and
+`V5__add_role_administration_authorization.sql` adds the `roles.manage`
+permission, built-in role metadata and the restrictive role-assignment foreign
+key. Boot calls Flyway on startup using its default `classpath:db/migration`
+location. `PersistenceIT` verifies the migrations, their constraints, RBAC
+resolution and authentication transaction behaviour against PostgreSQL.
 
 ## Authentication Configuration
 
@@ -148,16 +150,18 @@ This override is used **only** by `./bin/check-reference`.
 
 `./bin/check` is the complete validation authority for Alixar itself. It runs entirely in Docker and performs:
 
-1. Build and run the 183 deterministic tests (`mvnw clean verify`)
+1. Build and run the 191 deterministic tests (`mvnw clean verify`)
 2. Runtime image build
 3. Container startup with health check wait (database + app)
 4. PostgreSQL health verification (`pg_isready`)
 5. Run `PersistenceIT` against the real isolated PostgreSQL service: verify the
-   Boot datasource, Flyway `V1`/`V2`/`V3`/`V4`, a jOOQ `DSLContext` executing `SELECT 1`,
-   PostgreSQL 18.6, the authentication, API token and RBAC tables and constraints,
-   effective-permission resolution, administrative user uniqueness/rollback,
-   administrative credential changes, password reset transaction rollback and
-   administrative role replacement without credential changes
+   Boot datasource, Flyway `V1`/`V2`/`V3`/`V4`/`V5`, a jOOQ `DSLContext`
+   executing `SELECT 1`, PostgreSQL 18.6, the authentication, API token and RBAC
+   tables and constraints, permission-catalogue ordering, effective-permission
+   resolution, restrictive role deletion, administrative user
+   uniqueness/rollback, administrative credential changes, password reset
+   transaction rollback and administrative role replacement without credential
+   changes
 6. HTTP `GET /health` verification (exact `{"status":"ok"}` response)
 7. Cleanup of this invocation's containers, network, and volume; verify none remain
 
@@ -173,7 +177,7 @@ the invocation's project. Cleanup errors are reported and fail an otherwise
 successful check; an earlier failure retains its exit code. Images/build cache
 are retained. No fixed development or previous check project is cleaned.
 
-`./bin/test` runs the 183 component/unit tests without PostgreSQL.
+`./bin/test` runs the 191 component/unit tests without PostgreSQL.
 Their persistence exclusions are centralized in `src/test/resources/application.properties`.
 The additional `PersistenceIT` uses Surefire's separate `*IT` naming convention
 and is explicitly selected by `bin/check` through `compose.check.yaml`, with

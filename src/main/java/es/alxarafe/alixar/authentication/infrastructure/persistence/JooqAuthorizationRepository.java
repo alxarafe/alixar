@@ -1,6 +1,7 @@
 package es.alxarafe.alixar.authentication.infrastructure.persistence;
 
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
+import es.alxarafe.alixar.authentication.application.PermissionDefinition;
 import es.alxarafe.alixar.authentication.application.RoleDefinition;
 import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
 import java.util.LinkedHashMap;
@@ -21,12 +22,17 @@ import static org.jooq.impl.DSL.table;
 public class JooqAuthorizationRepository implements AuthorizationRepository {
 
     private static final Table<Record> ROLE_TABLE = table(name("authentication_role"));
+    private static final Table<Record> PERMISSION_TABLE = table(name("authentication_permission"));
     private static final Table<Record> ROLE_PERMISSION_TABLE = table(name("authentication_role_permission"));
     private static final Table<Record> USER_ROLE_TABLE = table(name("authentication_user_role"));
 
     private static final Field<UUID> ROLE_ID = field(name("authentication_role", "id"), UUID.class);
     private static final Field<String> ROLE_CODE = field(name("authentication_role", "code"), String.class);
     private static final Field<String> ROLE_NAME = field(name("authentication_role", "name"), String.class);
+    private static final Field<String> PERMISSION_CODE =
+        field(name("authentication_permission", "code"), String.class);
+    private static final Field<String> PERMISSION_DESCRIPTION =
+        field(name("authentication_permission", "description"), String.class);
     private static final Field<UUID> ROLE_PERMISSION_ROLE_ID =
         field(name("authentication_role_permission", "role_id"), UUID.class);
     private static final Field<String> ROLE_PERMISSION_PERMISSION_CODE =
@@ -107,6 +113,17 @@ public class JooqAuthorizationRepository implements AuthorizationRepository {
                 List.copyOf(permissionCodes.get(entry.getKey()))
             ))
             .toList();
+    }
+
+    @Override
+    public List<PermissionDefinition> findAllPermissions() {
+        return dsl.select(PERMISSION_CODE, PERMISSION_DESCRIPTION)
+            .from(PERMISSION_TABLE)
+            .orderBy(PERMISSION_CODE)
+            .fetch(record -> new PermissionDefinition(
+                record.get(PERMISSION_CODE),
+                record.get(PERMISSION_DESCRIPTION)
+            ));
     }
 
     @Override

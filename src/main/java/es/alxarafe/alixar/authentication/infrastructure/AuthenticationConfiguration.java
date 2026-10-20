@@ -15,6 +15,7 @@ import es.alxarafe.alixar.authentication.application.GetAdminUserUseCase;
 import es.alxarafe.alixar.authentication.application.GetEffectivePermissionsUseCase;
 import es.alxarafe.alixar.authentication.application.ListAdminUsersUseCase;
 import es.alxarafe.alixar.authentication.application.ListApiTokensUseCase;
+import es.alxarafe.alixar.authentication.application.ListPermissionsUseCase;
 import es.alxarafe.alixar.authentication.application.ListRolesUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
 import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
@@ -96,6 +97,11 @@ public class AuthenticationConfiguration {
     @Bean
     ListRolesUseCase listRolesUseCase(AuthorizationRepository authorizationRepository) {
         return new ListRolesUseCase(authorizationRepository);
+    }
+
+    @Bean
+    ListPermissionsUseCase listPermissionsUseCase(AuthorizationRepository authorizationRepository) {
+        return new ListPermissionsUseCase(authorizationRepository);
     }
 
     @Bean
