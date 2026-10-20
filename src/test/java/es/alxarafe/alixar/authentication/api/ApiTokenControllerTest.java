@@ -399,6 +399,20 @@ class ApiTokenControllerTest {
     }
 
     @Test
+    void invalidBearer_withValidSession_withoutCsrf_returnsUnauthorizedAndSkipsEndpoint() throws Exception {
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        mockMvc.perform(patch(UserEndpoints.ME_PATH)
+                .session(session)
+                .header("Authorization", "Bearer alx_pat_invalid")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"username\":\"should-not-change\"}"))
+            .andExpect(status().isUnauthorized());
+
+        assertThat(userRepository.findById(ALICE_ID).orElseThrow().username()).isEqualTo("alice");
+    }
+
+    @Test
     void bearerRequest_doesNotRequireCsrf() throws Exception {
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
         String rawToken = createRawToken(session, "csrf-bootstrap", Instant.now().plusSeconds(3600));
