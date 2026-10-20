@@ -49,15 +49,15 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   effective permissions resolved from persistence on every authenticated
   request, deny-by-default policy, and identical authorization for session and
   Bearer authentication. Built-in `system-admin` role with `users.manage` and
-  `roles.manage`; read-only permission catalogue; role detail and creation;
-  administrative reads, creation of disabled users, username changes,
-  enablement changes, password resets and full role replacement
+  `roles.manage`; read-only permission catalogue; role detail, creation, rename,
+  permission replacement and deletion of unassigned custom roles; administrative
+  reads, creation of disabled users, username changes, enablement changes,
+  password resets and full role replacement
 
 ## Planned (Not Implemented)
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Email change with new-address verification
-- Role rename, permission replacement and deletion APIs
 - Role groups
 - PAT scopes and authorization for business capabilities beyond `users.manage`
   and `roles.manage`
@@ -136,10 +136,13 @@ Administrative reads resolve user summaries, user detail, the role catalogue,
 role detail and the permission catalogue through application use cases behind
 dedicated ports. Role creation validates the complete permission set before
 writing and uses an infrastructure-owned transaction for the role and its
-permissions. User creation and username changes also run through application use
-cases; the infrastructure facade owns the transaction that keeps a new user and
-its role assignments atomic. A restrictive foreign key protects assigned roles
-from deletion independently of application checks. See
+permissions. Role rename, permission replacement and deletion reuse the same
+transactional facade; built-in role protection and assignment checks run in the
+application use cases, while a restrictive foreign key remains the final guard
+against deleting an assigned role. User creation and username changes also run
+through application use cases; the infrastructure facade owns the transaction
+that keeps a new user and its role assignments atomic. A restrictive foreign key
+protects assigned roles from deletion independently of application checks. See
 [Authentication](authentication.md) for the RBAC model and the administrative
 namespace.
 

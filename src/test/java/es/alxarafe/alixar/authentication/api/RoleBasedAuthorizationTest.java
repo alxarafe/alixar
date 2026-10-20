@@ -9,6 +9,7 @@ import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
 import es.alxarafe.alixar.authentication.application.PermissionCodes;
 import es.alxarafe.alixar.authentication.application.RoleCodes;
+import es.alxarafe.alixar.authentication.application.RoleDefinition;
 import es.alxarafe.alixar.authentication.application.TokenHasher;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.domain.ApiToken;
@@ -42,6 +43,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -138,6 +140,70 @@ class RoleBasedAuthorizationTest {
     }
 
     // Immediate role changes
+
+    @Test
+    void rolePermissionChanges_affectNextRequestWithSameSessionAndToken() throws Exception {
+        authorizationRepository.createRole(new RoleDefinition("probe-role", "Probe role", false, List.of()));
+        authorizationRepository.assignRoleToUser(BOB_ID, "probe-role");
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+
+        MockHttpSession bobSession = authenticatedSession("bob", PASSWORD);
+        String bobToken = personalAccessToken(BOB_ID);
+        assertProbe(bobSession, false);
+        assertBearerProbe(bobToken, false);
+
+        MockHttpSession aliceSession = authenticatedSession("alice", PASSWORD);
+        String probePermissionsPath = AdminUserEndpoints.ROLES_BASE_PATH + "/probe-role/permissions";
+
+        adminPut(aliceSession, probePermissionsPath, "{\"permissionCodes\":[\"users.manage\"]}")
+            .andExpect(status().isOk());
+
+        assertProbe(bobSession, true);
+        assertBearerProbe(bobToken, true);
+
+        adminPut(aliceSession, probePermissionsPath, "{\"permissionCodes\":[]}")
+            .andExpect(status().isOk());
+
+        assertProbe(bobSession, false);
+        assertBearerProbe(bobToken, false);
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH).session(bobSession))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(BOB_ID.toString()));
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH)
+                .header("Authorization", "Bearer " + bobToken))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(BOB_ID.toString()));
+        assertThat(userRepository.findById(BOB_ID).orElseThrow().credentialsVersion()).isZero();
+    }
+
+    @Test
+    void selfRevocation_appliesAfterCurrentRequestWithoutLogout() throws Exception {
+        authorizationRepository.createRole(new RoleDefinition(
+            "role-admin",
+            "Role administrator",
+            false,
+            List.of(PermissionCodes.ROLES_MANAGE)
+        ));
+        authorizationRepository.assignRoleToUser(ALICE_ID, "role-admin");
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        mockMvc.perform(get(AdminUserEndpoints.ROLES_BASE_PATH).session(session))
+            .andExpect(status().isOk());
+
+        adminPut(
+            session,
+            AdminUserEndpoints.ROLES_BASE_PATH + "/role-admin/permissions",
+            "{\"permissionCodes\":[]}"
+        ).andExpect(status().isOk());
+
+        mockMvc.perform(get(AdminUserEndpoints.ROLES_BASE_PATH).session(session))
+            .andExpect(status().isForbidden());
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH).session(session))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(ALICE_ID.toString()));
+        assertThat(authorizationRepository.findEffectivePermissionCodes(ALICE_ID)).isEmpty();
+        assertThat(userRepository.findById(ALICE_ID).orElseThrow().credentialsVersion()).isZero();
+    }
 
     @Test
     void grantingRole_affectsNextRequestWithTheSameSession() throws Exception {
@@ -301,6 +367,16 @@ class RoleBasedAuthorizationTest {
             .andExpect(status().isCreated())
             .andReturn();
         return JsonPath.read(result.getResponse().getContentAsString(), "$.token");
+    }
+
+    private ResultActions adminPut(MockHttpSession session, String path, String body) throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        return mockMvc.perform(put(path)
+            .session(session)
+            .cookie(csrfCookie)
+            .header(CSRF_HEADER, csrfCookie.getValue())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body));
     }
 
     private ResultActions patchUsername(MockHttpSession session, String username) throws Exception {

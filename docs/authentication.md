@@ -43,7 +43,8 @@ independently of the authentication mechanism.
 ALIXAR-DEV-003G begins role administration. Its first delivered slice adds the
 `roles.manage` permission, built-in role metadata, a restrictive foreign key for
 assigned roles and a read-only permission catalogue. T2 adds role detail and
-creation. Role rename, permission replacement and deletion are not yet exposed.
+creation, and T3 adds role rename, permission replacement and deletion of
+unassigned custom roles.
 
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
@@ -444,8 +445,11 @@ Consequences:
 
 - assigning a role affects the next request;
 - removing a role affects the next request;
-- no logout, session invalidation, PAT revocation or `credentials_version`
-  increment is required;
+- changing a role's name or permissions affects the next request of every user
+  of that role, with no logout, session invalidation, PAT revocation or
+  `credentials_version` increment;
+- a caller can revoke its own effective `roles.manage`; the current operation
+  still completes and the next administrative request is denied;
 - session and Bearer authentication produce exactly the same permissions;
 - PATs do not contain scopes; a PAT represents the user and authorization uses
   the user's current roles.
@@ -470,9 +474,7 @@ The administrative namespace is split by capability:
 |------|--------------------|
 | `/api/admin/users/**` | `users.manage` |
 | `GET /api/admin/roles` | `users.manage` or `roles.manage` |
-| `GET /api/admin/roles/{code}` | `roles.manage` |
-| `POST /api/admin/roles` | `roles.manage` |
-| Other `/api/admin/roles/**` | `roles.manage` (reserved for future role mutations) |
+| Any other `/api/admin/roles/**` method | `roles.manage` |
 | `/api/admin/permissions` | `roles.manage` |
 
 The GET rule for the role catalogue is method-specific and is evaluated before
@@ -507,8 +509,8 @@ never adds `system-admin` automatically. See [Bootstrap user](#bootstrap-user).
 ### Administrative management
 
 ALIXAR-DEV-003F exposes the user operations and the role catalogue.
-ALIXAR-DEV-003G T1 adds the read-only permission catalogue, and T2 adds role
-detail and creation.
+ALIXAR-DEV-003G T1 adds the read-only permission catalogue, T2 adds role detail
+and creation, and T3 adds role rename, permission replacement and deletion.
 
 | Method and path | Result |
 |-----------------|--------|
@@ -517,6 +519,9 @@ detail and creation.
 | `GET /api/admin/roles` | Role catalogue with permission codes |
 | `GET /api/admin/roles/{code}` | One role with permission codes |
 | `POST /api/admin/roles` | Creates a custom role |
+| `PATCH /api/admin/roles/{code}` | Renames a custom role |
+| `PUT /api/admin/roles/{code}/permissions` | Replaces a role's permissions |
+| `DELETE /api/admin/roles/{code}` | Deletes an unassigned custom role |
 | `GET /api/admin/permissions` | Read-only permission catalogue |
 | `POST /api/admin/users` | Creates a disabled user |
 | `PATCH /api/admin/users/{id}` | Changes the username only |
@@ -560,8 +565,38 @@ that reaches PostgreSQL first, returns `409` with
 `ADMIN_ROLE_ALREADY_EXISTS`. An unknown permission returns `404` with
 `ADMIN_PERMISSION_NOT_FOUND`; invalid code syntax returns `400` with
 `ADMIN_INVALID_ROLE_CODE`, and a blank name returns `400` with
-`ADMIN_INVALID_ROLE_NAME`. Role rename, permission replacement and deletion are
-not implemented yet.
+`ADMIN_INVALID_ROLE_NAME`.
+
+`PATCH /api/admin/roles/{code}` accepts only `name`:
+
+```json
+{ "name": "Renamed team" }
+```
+
+`name` is stripped and must not be blank; `code`, `builtIn`, permissions and
+user assignments remain unchanged. `404` with `ADMIN_ROLE_NOT_FOUND` is returned
+for an unknown role, and a built-in role returns `409` with
+`ADMIN_BUILT_IN_ROLE_IMMUTABLE`.
+
+`PUT /api/admin/roles/{code}/permissions` replaces the complete permission set:
+
+```json
+{ "permissionCodes": ["users.manage", "roles.manage"] }
+```
+
+`permissionCodes` is required and may be `[]` to leave the custom role without
+permissions. Codes are stripped, lower-cased, de-duplicated and sorted, and all
+of them are validated against the catalogue before any write, so an unknown
+permission rolls the operation back and keeps the previous permissions. A
+built-in role returns `409` with `ADMIN_BUILT_IN_ROLE_IMMUTABLE`. Replacing
+permissions never assigns the role to users and never changes `credentials_version`,
+sessions, PATs, passwords, enablement or reset tokens.
+
+`DELETE /api/admin/roles/{code}` deletes an unassigned custom role and returns
+`204`. A built-in role returns `409` with `ADMIN_BUILT_IN_ROLE_IMMUTABLE`. A role
+still assigned to any user returns `409` with `ADMIN_ROLE_IN_USE`; assignments
+are never deleted as a side effect. Role permission rows are removed by cascade
+when the role is deleted.
 
 `GET /api/admin/users` accepts:
 

@@ -8,6 +8,7 @@ import es.alxarafe.alixar.authentication.application.PermissionDefinition;
 import es.alxarafe.alixar.authentication.application.RoleAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.RoleCodes;
 import es.alxarafe.alixar.authentication.application.RoleDefinition;
+import es.alxarafe.alixar.authentication.application.RoleInUseException;
 import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.domain.ApiToken;
@@ -358,6 +359,37 @@ public class AuthenticationTestConfig {
             roleNames.put(role.code(), role.name());
             roleBuiltIn.put(role.code(), role.builtIn());
             rolePermissions.put(role.code(), new LinkedHashSet<>(role.permissionCodes()));
+        }
+
+        @Override
+        public void updateRoleName(String roleCode, String name) {
+            if (!roleNames.containsKey(roleCode)) {
+                throw new RoleNotFoundException(roleCode);
+            }
+            roleNames.put(roleCode, name);
+        }
+
+        @Override
+        public void replaceRolePermissions(String roleCode, List<String> permissionCodes) {
+            if (!roleNames.containsKey(roleCode)) {
+                throw new RoleNotFoundException(roleCode);
+            }
+            rolePermissions.put(roleCode, new LinkedHashSet<>(permissionCodes));
+        }
+
+        @Override
+        public void deleteRole(String roleCode) {
+            if (!roleNames.containsKey(roleCode)) {
+                throw new RoleNotFoundException(roleCode);
+            }
+            boolean assigned = userRoles.values().stream()
+                .anyMatch(roles -> roles.contains(roleCode));
+            if (assigned) {
+                throw new RoleInUseException(roleCode);
+            }
+            roleNames.remove(roleCode);
+            roleBuiltIn.remove(roleCode);
+            rolePermissions.remove(roleCode);
         }
 
         @Override

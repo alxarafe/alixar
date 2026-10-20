@@ -28,8 +28,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -91,12 +94,34 @@ class AdminRoleControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{}"))
             .andExpect(status().isUnauthorized());
+        mockMvc.perform(patch(SYSTEM_ADMIN_PATH)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"Renamed\"}"))
+            .andExpect(status().isUnauthorized());
+        mockMvc.perform(put(SYSTEM_ADMIN_PATH + "/permissions")
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"permissionCodes\":[]}"))
+            .andExpect(status().isUnauthorized());
+        mockMvc.perform(delete(SYSTEM_ADMIN_PATH)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue()))
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
     void usersManageOnly_canListRolesButCannotReadDetailOrCreate() throws Exception {
         grantSystemAdmin();
         authorizationRepository.revokePermissionFromRole(RoleCodes.SYSTEM_ADMIN, PermissionCodes.ROLES_MANAGE);
+        authorizationRepository.createRole(new RoleDefinition(
+            "mutation-target",
+            "Mutation target",
+            false,
+            List.of()
+        ));
         MockHttpSession session = authenticatedSession();
 
         mockMvc.perform(get(AdminUserEndpoints.ROLES_BASE_PATH).session(session))
@@ -104,6 +129,15 @@ class AdminRoleControllerTest {
         mockMvc.perform(get(SYSTEM_ADMIN_PATH).session(session))
             .andExpect(status().isForbidden());
         adminPost(session, createRoleJson("new-role", "New role", "[]"))
+            .andExpect(status().isForbidden());
+        adminPatch(session, AdminUserEndpoints.ROLES_BASE_PATH + "/mutation-target", "{\"name\":\"Renamed\"}")
+            .andExpect(status().isForbidden());
+        adminPut(
+            session,
+            AdminUserEndpoints.ROLES_BASE_PATH + "/mutation-target/permissions",
+            "{\"permissionCodes\":[]}"
+        ).andExpect(status().isForbidden());
+        adminDelete(session, AdminUserEndpoints.ROLES_BASE_PATH + "/mutation-target")
             .andExpect(status().isForbidden());
     }
 
@@ -247,6 +281,206 @@ class AdminRoleControllerTest {
             .andExpect(jsonPath("$.length()").value(1));
     }
 
+    @Test
+    void updateName_customRole_preservesCodePermissionsAndAssignments() throws Exception {
+        grantRolesManage();
+        authorizationRepository.createRole(new RoleDefinition(
+            "editable-role",
+            "Editable role",
+            false,
+            List.of(PermissionCodes.USERS_MANAGE)
+        ));
+        authorizationRepository.assignRoleToUser(ALICE_ID, "editable-role");
+        MockHttpSession session = authenticatedSession();
+
+        adminPatch(session, AdminUserEndpoints.ROLES_BASE_PATH + "/editable-role", "{\"name\":\" Renamed role \"}")
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.code").value("editable-role"))
+            .andExpect(jsonPath("$.name").value("Renamed role"))
+            .andExpect(jsonPath("$.builtIn").value(false))
+            .andExpect(jsonPath("$.permissionCodes[0]").value(PermissionCodes.USERS_MANAGE));
+
+        RoleDefinition stored = authorizationRepository.findRoleByCode("editable-role").orElseThrow();
+        assertThat(stored.permissionCodes()).containsExactly(PermissionCodes.USERS_MANAGE);
+        assertThat(((AuthenticationTestConfig.TestAuthorizationRepository) authorizationRepository)
+            .findRoleCodesByUser(ALICE_ID)).contains("editable-role");
+    }
+
+    @Test
+    void updateName_builtInRole_returnsConflict() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+
+        adminPatch(session, SYSTEM_ADMIN_PATH, "{\"name\":\"Renamed\"}")
+            .andExpect(status().isConflict())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_BUILT_IN_ROLE_IMMUTABLE.name()));
+    }
+
+    @Test
+    void updateName_unknownRole_returnsNotFound() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+
+        adminPatch(session, AdminUserEndpoints.ROLES_BASE_PATH + "/missing-role", "{\"name\":\"Renamed\"}")
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_ROLE_NOT_FOUND.name()));
+    }
+
+    @Test
+    void updateName_blankName_returnsBadRequest() throws Exception {
+        grantRolesManage();
+        authorizationRepository.createRole(new RoleDefinition("editable-role", "Editable role", false, List.of()));
+        MockHttpSession session = authenticatedSession();
+
+        adminPatch(session, AdminUserEndpoints.ROLES_BASE_PATH + "/editable-role", "{\"name\":\"   \"}")
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.field").value("name"));
+    }
+
+    @Test
+    void replacePermissions_normalizesAndReplacesAtomically() throws Exception {
+        grantRolesManage();
+        authorizationRepository.createRole(new RoleDefinition(
+            "editable-role",
+            "Editable role",
+            false,
+            List.of(PermissionCodes.USERS_MANAGE)
+        ));
+        MockHttpSession session = authenticatedSession();
+        String path = AdminUserEndpoints.ROLES_BASE_PATH + "/editable-role/permissions";
+
+        adminPut(session, path, "{\"permissionCodes\":[\" ROLES.MANAGE \",\"roles.manage\",\"users.manage\"]}")
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.permissionCodes.length()").value(2))
+            .andExpect(jsonPath("$.permissionCodes[0]").value(PermissionCodes.ROLES_MANAGE))
+            .andExpect(jsonPath("$.permissionCodes[1]").value(PermissionCodes.USERS_MANAGE));
+
+        adminPut(session, path, "{\"permissionCodes\":[]}")
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.permissionCodes.length()").value(0));
+
+        assertThat(authorizationRepository.findPermissionCodesByRole("editable-role")).isEmpty();
+    }
+
+    @Test
+    void replacePermissions_unknownPermission_keepsPreviousPermissions() throws Exception {
+        grantRolesManage();
+        authorizationRepository.createRole(new RoleDefinition(
+            "editable-role",
+            "Editable role",
+            false,
+            List.of(PermissionCodes.USERS_MANAGE)
+        ));
+        MockHttpSession session = authenticatedSession();
+
+        adminPut(
+            session,
+            AdminUserEndpoints.ROLES_BASE_PATH + "/editable-role/permissions",
+            "{\"permissionCodes\":[\"roles.manage\",\"missing.permission\"]}"
+        )
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_PERMISSION_NOT_FOUND.name()));
+
+        assertThat(authorizationRepository.findPermissionCodesByRole("editable-role"))
+            .containsExactly(PermissionCodes.USERS_MANAGE);
+    }
+
+    @Test
+    void replacePermissions_builtInRole_returnsConflict() throws Exception {
+        grantSystemAdmin();
+        MockHttpSession session = authenticatedSession();
+
+        adminPut(
+            session,
+            SYSTEM_ADMIN_PATH + "/permissions",
+            "{\"permissionCodes\":[]}"
+        )
+            .andExpect(status().isConflict())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_BUILT_IN_ROLE_IMMUTABLE.name()));
+
+        assertThat(authorizationRepository.findPermissionCodesByRole(RoleCodes.SYSTEM_ADMIN))
+            .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
+    }
+
+    @Test
+    void replacePermissions_unknownRole_returnsNotFound() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+
+        adminPut(
+            session,
+            AdminUserEndpoints.ROLES_BASE_PATH + "/missing-role/permissions",
+            "{\"permissionCodes\":[]}"
+        )
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_ROLE_NOT_FOUND.name()));
+    }
+
+    @Test
+    void replacePermissions_withoutPermissionCodes_returnsBadRequest() throws Exception {
+        grantRolesManage();
+        authorizationRepository.createRole(new RoleDefinition("editable-role", "Editable role", false, List.of()));
+        MockHttpSession session = authenticatedSession();
+
+        adminPut(session, AdminUserEndpoints.ROLES_BASE_PATH + "/editable-role/permissions", "{}")
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.field").value("permissionCodes"));
+    }
+
+    @Test
+    void delete_customUnassignedRole_returnsNoContentAndRemovesIt() throws Exception {
+        grantRolesManage();
+        authorizationRepository.createRole(new RoleDefinition("free-role", "Free role", false, List.of()));
+        MockHttpSession session = authenticatedSession();
+
+        adminDelete(session, AdminUserEndpoints.ROLES_BASE_PATH + "/free-role")
+            .andExpect(status().isNoContent());
+
+        mockMvc.perform(get(AdminUserEndpoints.ROLES_BASE_PATH + "/free-role").session(session))
+            .andExpect(status().isNotFound());
+        assertThat(authorizationRepository.findRoleByCode("free-role")).isEmpty();
+    }
+
+    @Test
+    void delete_assignedRole_returnsConflictAndKeepsAssignment() throws Exception {
+        grantRolesManage();
+        authorizationRepository.createRole(new RoleDefinition("in-use-role", "In use role", false, List.of()));
+        authorizationRepository.assignRoleToUser(ALICE_ID, "in-use-role");
+        MockHttpSession session = authenticatedSession();
+        int assignmentsBefore = ((AuthenticationTestConfig.TestAuthorizationRepository) authorizationRepository)
+            .userRoleCount();
+
+        adminDelete(session, AdminUserEndpoints.ROLES_BASE_PATH + "/in-use-role")
+            .andExpect(status().isConflict())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_ROLE_IN_USE.name()));
+
+        assertThat(authorizationRepository.findRoleByCode("in-use-role")).isPresent();
+        assertThat(((AuthenticationTestConfig.TestAuthorizationRepository) authorizationRepository).userRoleCount())
+            .isEqualTo(assignmentsBefore);
+    }
+
+    @Test
+    void delete_builtInRole_returnsConflict() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+
+        adminDelete(session, SYSTEM_ADMIN_PATH)
+            .andExpect(status().isConflict())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_BUILT_IN_ROLE_IMMUTABLE.name()));
+
+        assertThat(authorizationRepository.findRoleByCode(RoleCodes.SYSTEM_ADMIN)).isPresent();
+    }
+
+    @Test
+    void delete_unknownRole_returnsNotFound() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+
+        adminDelete(session, AdminUserEndpoints.ROLES_BASE_PATH + "/missing-role")
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_ROLE_NOT_FOUND.name()));
+    }
+
     private void grantRolesManage() {
         grantSystemAdmin();
         authorizationRepository.revokePermissionFromRole(RoleCodes.SYSTEM_ADMIN, PermissionCodes.USERS_MANAGE);
@@ -264,6 +498,34 @@ class AdminRoleControllerTest {
             .header(CSRF_HEADER, csrfCookie.getValue())
             .contentType(MediaType.APPLICATION_JSON)
             .content(body));
+    }
+
+    private ResultActions adminPatch(MockHttpSession session, String path, String body) throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        return mockMvc.perform(patch(path)
+            .session(session)
+            .cookie(csrfCookie)
+            .header(CSRF_HEADER, csrfCookie.getValue())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body));
+    }
+
+    private ResultActions adminPut(MockHttpSession session, String path, String body) throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        return mockMvc.perform(put(path)
+            .session(session)
+            .cookie(csrfCookie)
+            .header(CSRF_HEADER, csrfCookie.getValue())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(body));
+    }
+
+    private ResultActions adminDelete(MockHttpSession session, String path) throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        return mockMvc.perform(delete(path)
+            .session(session)
+            .cookie(csrfCookie)
+            .header(CSRF_HEADER, csrfCookie.getValue()));
     }
 
     private String createRoleJson(String code, String name, String permissionCodesJson) {

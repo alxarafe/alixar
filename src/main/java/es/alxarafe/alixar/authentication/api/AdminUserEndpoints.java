@@ -8,6 +8,7 @@ public final class AdminUserEndpoints {
     public static final String ROLES_BASE_PATH = ADMIN_BASE_PATH + "/roles";
     public static final String ROLES_PATH_PATTERN = ROLES_BASE_PATH + "/**";
     public static final String ROLE_RELATIVE_PATH = "/{code}";
+    public static final String ROLE_PERMISSIONS_RELATIVE_PATH = ROLE_RELATIVE_PATH + "/permissions";
     public static final String ROLE_CODE_PATH_VARIABLE = "code";
     public static final String PERMISSIONS_BASE_PATH = ADMIN_BASE_PATH + "/permissions";
     public static final String USER_RELATIVE_PATH = "/{id}";

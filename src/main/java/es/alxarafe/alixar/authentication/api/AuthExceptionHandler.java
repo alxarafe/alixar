@@ -3,6 +3,7 @@ package es.alxarafe.alixar.authentication.api;
 import es.alxarafe.alixar.authentication.application.AdministrationErrorCode;
 import es.alxarafe.alixar.authentication.application.ApiTokenNotFoundException;
 import es.alxarafe.alixar.authentication.application.AuthenticationErrorCode;
+import es.alxarafe.alixar.authentication.application.BuiltInRoleImmutableException;
 import es.alxarafe.alixar.authentication.application.EmailAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.InvalidApiTokenExpirationException;
 import es.alxarafe.alixar.authentication.application.InvalidCredentialsException;
@@ -14,6 +15,7 @@ import es.alxarafe.alixar.authentication.application.InvalidRoleCodeException;
 import es.alxarafe.alixar.authentication.application.InvalidRoleNameException;
 import es.alxarafe.alixar.authentication.application.PermissionNotFoundException;
 import es.alxarafe.alixar.authentication.application.RoleAlreadyExistsException;
+import es.alxarafe.alixar.authentication.application.RoleInUseException;
 import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
 import es.alxarafe.alixar.authentication.application.UserNotFoundException;
 import es.alxarafe.alixar.authentication.application.UsernameAlreadyExistsException;
@@ -68,6 +70,10 @@ class AuthExceptionHandler {
         URI.create("urn:alixar:error:administration-invalid-role-code");
     private static final URI ADMIN_INVALID_ROLE_NAME_TYPE =
         URI.create("urn:alixar:error:administration-invalid-role-name");
+    private static final URI ADMIN_BUILT_IN_ROLE_IMMUTABLE_TYPE =
+        URI.create("urn:alixar:error:administration-built-in-role-immutable");
+    private static final URI ADMIN_ROLE_IN_USE_TYPE =
+        URI.create("urn:alixar:error:administration-role-in-use");
     private static final URI ADMIN_EMAIL_ALREADY_EXISTS_TYPE =
         URI.create("urn:alixar:error:administration-email-already-exists");
     private static final URI ADMIN_INVALID_PAGINATION_TYPE =
@@ -260,6 +266,34 @@ class AuthExceptionHandler {
         problem.setTitle(messageSource.getMessage("administration.invalidRoleName.title", null, locale));
         problem.setProperty("code", AdministrationErrorCode.ADMIN_INVALID_ROLE_NAME.name());
         problem.setProperty("field", ROLE_NAME_FIELD);
+        return problem;
+    }
+
+    @ExceptionHandler(BuiltInRoleImmutableException.class)
+    ProblemDetail handleBuiltInRoleImmutable(Locale locale) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.CONFLICT,
+            messageSource.getMessage("administration.builtInRoleImmutable", null, locale)
+        );
+        problem.setType(ADMIN_BUILT_IN_ROLE_IMMUTABLE_TYPE);
+        problem.setTitle(messageSource.getMessage(
+            "administration.builtInRoleImmutable.title",
+            null,
+            locale
+        ));
+        problem.setProperty("code", AdministrationErrorCode.ADMIN_BUILT_IN_ROLE_IMMUTABLE.name());
+        return problem;
+    }
+
+    @ExceptionHandler(RoleInUseException.class)
+    ProblemDetail handleRoleInUse(Locale locale) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.CONFLICT,
+            messageSource.getMessage("administration.roleInUse", null, locale)
+        );
+        problem.setType(ADMIN_ROLE_IN_USE_TYPE);
+        problem.setTitle(messageSource.getMessage("administration.roleInUse.title", null, locale));
+        problem.setProperty("code", AdministrationErrorCode.ADMIN_ROLE_IN_USE.name());
         return problem;
     }
 

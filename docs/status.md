@@ -26,7 +26,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 202 deterministic tests and 32 PostgreSQL integration tests remain
+  the 217 deterministic tests and 35 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -64,13 +64,17 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   `users.manage` and `roles.manage`; there are no per-user overrides, explicit
   `DENY`, role hierarchy or role groups
 - **Administrative authorization management**: `GET /api/admin/roles` is
-  available with `users.manage` or `roles.manage`; role detail and creation,
-  together with the read-only `GET /api/admin/permissions` catalogue, require
-  `roles.manage`. The `roles.manage` permission and `built_in` role metadata are
-  seeded by Flyway, and a restrictive foreign key prevents deleting assigned
-  roles. Role creation validates every permission before writing, persists the
-  role and its permissions transactionally and never assigns it to users. Role
-  rename, permission replacement and deletion APIs are not implemented yet
+  available with `users.manage` or `roles.manage`; role detail, creation, rename,
+  permission replacement and deletion, together with the read-only
+  `GET /api/admin/permissions` catalogue, require `roles.manage`. The
+  `roles.manage` permission and `built_in` role metadata are seeded by Flyway,
+  and a restrictive foreign key prevents deleting assigned roles. Role creation
+  validates every permission before writing, persists the role and its permissions
+  transactionally and never assigns it to users. Renaming changes only the name;
+  permission replacement is a validated full replacement that leaves users,
+  credentials and sessions untouched; deletion is limited to unassigned custom
+  roles and returns `ADMIN_ROLE_IN_USE` otherwise. Built-in roles are immutable
+  and return `ADMIN_BUILT_IN_ROLE_IMMUTABLE`
 - **Administrative user management**: `GET /api/admin/users` (pagination,
   enablement filter and case-insensitive username/email search),
   `GET /api/admin/users/{id}`, `POST /api/admin/users`,
@@ -95,8 +99,8 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   `revoked_at` revocation and `last_used_at` traceability. They are bound to the
   user's `credentials_version`, so password reset/change invalidates them, and
   they coexist with session+CSRF authentication without disabling CSRF globally
-- **Scope boundary**: No PAT scopes, per-user permissions, role rename or
-  permission replacement/deletion APIs, role groups, role hierarchy, Contact
+- **Scope boundary**: No PAT scopes, per-user permissions, role groups, role
+  hierarchy, Contact
   relationship, Dolibarr authentication integration, registration, JWT, OAuth
   server, refresh tokens or machine-to-machine credentials
 
@@ -123,7 +127,6 @@ See [Development](development.md) for full validation workflow details.
 ## Not yet implemented
 
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
-- Role rename, permission replacement and deletion APIs
 - Role groups, PAT scopes and authorization for business capabilities beyond `users.manage` and `roles.manage`
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication

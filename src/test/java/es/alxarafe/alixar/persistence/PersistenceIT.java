@@ -3,6 +3,7 @@ package es.alxarafe.alixar.persistence;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
+import es.alxarafe.alixar.authentication.application.BuiltInRoleImmutableException;
 import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
 import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
 import es.alxarafe.alixar.authentication.application.EmailAlreadyExistsException;
@@ -18,6 +19,7 @@ import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.RoleAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.RoleCodes;
 import es.alxarafe.alixar.authentication.application.RoleDefinition;
+import es.alxarafe.alixar.authentication.application.RoleInUseException;
 import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
 import es.alxarafe.alixar.authentication.application.TokenHasher;
 import es.alxarafe.alixar.authentication.application.UserRepository;
@@ -896,6 +898,134 @@ class PersistenceIT {
         } finally {
             dsl.query("delete from authentication_role where code = ?", roleCode).execute();
             dsl.query("delete from authentication_role where code = ?", "unknown-permission-role").execute();
+        }
+    }
+
+    @Test
+    void rbac_adminRoleRenamePreservesAssignmentsPermissionsAndCredentialsVersion() {
+        var userId = UUID.fromString("d1e1f1a1-b1c1-4d1e-8f1a-1b1c1d1e1f1a");
+        String roleCode = "db-renamed-role";
+
+        try {
+            insertUser(userId, "rbac-renamed", "rbac-renamed@example.test");
+            transactionalAdminRoleService.create(roleCode, "Original name", List.of(PermissionCodes.USERS_MANAGE));
+            authorizationRepository.assignRoleToUser(userId, roleCode);
+            long credentialsVersionBefore = userRepository.findById(userId).orElseThrow().credentialsVersion();
+
+            RoleDefinition renamed = transactionalAdminRoleService.updateName(roleCode, " Renamed role ");
+
+            assertThat(renamed.code()).isEqualTo(roleCode);
+            assertThat(renamed.name()).isEqualTo("Renamed role");
+            assertThat(renamed.builtIn()).isFalse();
+            assertThat(renamed.permissionCodes()).containsExactly(PermissionCodes.USERS_MANAGE);
+            assertThat(authorizationRepository.findRoleByCode(roleCode))
+                .contains(new RoleDefinition(roleCode, "Renamed role", false, List.of(PermissionCodes.USERS_MANAGE)));
+            assertThat(authorizationRepository.findRoleCodesForUser(userId)).containsExactly(roleCode);
+            assertThat(userRepository.findById(userId).orElseThrow().credentialsVersion())
+                .isEqualTo(credentialsVersionBefore);
+        } finally {
+            deleteUser(userId);
+            dsl.query("delete from authentication_role where code = ?", roleCode).execute();
+        }
+    }
+
+    @Test
+    void rbac_adminRolePermissionReplacementIsAtomicAndBuiltInRolesAreImmutable() {
+        String roleCode = "db-permissions-role";
+
+        try {
+            transactionalAdminRoleService.create(roleCode, "Permissions role", List.of(PermissionCodes.USERS_MANAGE));
+
+            RoleDefinition replaced = transactionalAdminRoleService.replacePermissions(
+                roleCode,
+                List.of(" ROLES.MANAGE ", "roles.manage", "users.manage")
+            );
+
+            assertThat(replaced.name()).isEqualTo("Permissions role");
+            assertThat(replaced.builtIn()).isFalse();
+            assertThat(replaced.permissionCodes()).containsExactly(
+                PermissionCodes.ROLES_MANAGE,
+                PermissionCodes.USERS_MANAGE
+            );
+
+            assertThatThrownBy(() -> transactionalAdminRoleService.replacePermissions(
+                roleCode,
+                List.of(PermissionCodes.ROLES_MANAGE, "missing.permission")
+            )).isInstanceOf(PermissionNotFoundException.class);
+
+            assertThat(authorizationRepository.findPermissionCodesByRole(roleCode))
+                .containsExactlyInAnyOrder(PermissionCodes.ROLES_MANAGE, PermissionCodes.USERS_MANAGE);
+
+            assertThat(transactionalAdminRoleService.replacePermissions(roleCode, List.of()).permissionCodes())
+                .isEmpty();
+            assertThat(dsl.fetch(
+                "select count(*) from authentication_role_permission rp "
+                    + "join authentication_role r on r.id = rp.role_id where r.code = ?",
+                roleCode
+            ).getValues(0, Long.class)).containsExactly(0L);
+
+            assertThatThrownBy(() -> transactionalAdminRoleService.updateName(
+                RoleCodes.SYSTEM_ADMIN,
+                "Renamed built-in"
+            )).isInstanceOf(BuiltInRoleImmutableException.class);
+            assertThatThrownBy(() -> transactionalAdminRoleService.replacePermissions(
+                RoleCodes.SYSTEM_ADMIN,
+                List.of()
+            )).isInstanceOf(BuiltInRoleImmutableException.class);
+            assertThatThrownBy(() -> transactionalAdminRoleService.delete(RoleCodes.SYSTEM_ADMIN))
+                .isInstanceOf(BuiltInRoleImmutableException.class);
+            assertThat(authorizationRepository.findRoleByCode(RoleCodes.SYSTEM_ADMIN))
+                .contains(new RoleDefinition(
+                    RoleCodes.SYSTEM_ADMIN,
+                    "System administrator",
+                    true,
+                    List.of(PermissionCodes.ROLES_MANAGE, PermissionCodes.USERS_MANAGE)
+                ));
+        } finally {
+            dsl.query("delete from authentication_role where code = ?", roleCode).execute();
+        }
+    }
+
+    @Test
+    void rbac_adminRoleDeletionIsRestrictedWhileAssignedAndCascadesPermissionsWhenFree() {
+        var userId = UUID.fromString("e2f2a2b2-c2d2-4e2f-8a2b-2c2d2e2f2a2b");
+        String inUseRoleCode = "db-in-use-role";
+        String freeRoleCode = "db-free-role";
+
+        try {
+            insertUser(userId, "rbac-delete-role", "rbac-delete-role@example.test");
+            transactionalAdminRoleService.create(inUseRoleCode, "In use role", List.of(PermissionCodes.USERS_MANAGE));
+            authorizationRepository.assignRoleToUser(userId, inUseRoleCode);
+
+            assertThatThrownBy(() -> transactionalAdminRoleService.delete(inUseRoleCode))
+                .isInstanceOf(RoleInUseException.class);
+
+            assertThat(authorizationRepository.findRoleByCode(inUseRoleCode)).isPresent();
+            assertThat(dsl.fetch(
+                "select count(*) from authentication_user_role ur "
+                    + "join authentication_role r on r.id = ur.role_id where r.code = ?",
+                inUseRoleCode
+            ).getValues(0, Long.class)).containsExactly(1L);
+
+            transactionalAdminRoleService.create(freeRoleCode, "Free role", List.of(PermissionCodes.USERS_MANAGE));
+            assertThat(dsl.fetch(
+                "select count(*) from authentication_role_permission rp "
+                    + "join authentication_role r on r.id = rp.role_id where r.code = ?",
+                freeRoleCode
+            ).getValues(0, Long.class)).containsExactly(1L);
+
+            transactionalAdminRoleService.delete(freeRoleCode);
+
+            assertThat(authorizationRepository.findRoleByCode(freeRoleCode)).isEmpty();
+            assertThat(dsl.fetch(
+                "select count(*) from authentication_role_permission rp "
+                    + "join authentication_role r on r.id = rp.role_id where r.code = ?",
+                freeRoleCode
+            ).getValues(0, Long.class)).containsExactly(0L);
+        } finally {
+            deleteUser(userId);
+            dsl.query("delete from authentication_role where code = ?", inUseRoleCode).execute();
+            dsl.query("delete from authentication_role where code = ?", freeRoleCode).execute();
         }
     }
 

@@ -29,6 +29,12 @@ public interface AuthorizationRepository {
 
     void createRole(RoleDefinition role);
 
+    void updateRoleName(String roleCode, String name);
+
+    void replaceRolePermissions(String roleCode, List<String> permissionCodes);
+
+    void deleteRole(String roleCode);
+
     void assignRoleToUser(UUID userId, String roleCode);
 
     void removeRoleFromUser(UUID userId, String roleCode);

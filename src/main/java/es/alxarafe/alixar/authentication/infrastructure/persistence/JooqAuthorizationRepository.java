@@ -4,6 +4,7 @@ import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.PermissionDefinition;
 import es.alxarafe.alixar.authentication.application.RoleAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.RoleDefinition;
+import es.alxarafe.alixar.authentication.application.RoleInUseException;
 import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -16,6 +17,7 @@ import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.Table;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 
 import static org.jooq.impl.DSL.field;
@@ -137,6 +139,43 @@ public class JooqAuthorizationRepository implements AuthorizationRepository {
                 .columns(ROLE_PERMISSION_ROLE_ID, ROLE_PERMISSION_PERMISSION_CODE)
                 .values(roleId, permissionCode)
                 .execute();
+        }
+    }
+
+    @Override
+    public void updateRoleName(String roleCode, String name) {
+        int updatedRows = dsl.update(ROLE_TABLE)
+            .set(ROLE_NAME, name)
+            .where(ROLE_CODE.eq(roleCode))
+            .execute();
+        if (updatedRows == 0) {
+            throw new RoleNotFoundException(roleCode);
+        }
+    }
+
+    @Override
+    public void replaceRolePermissions(String roleCode, List<String> permissionCodes) {
+        UUID roleId = resolveRoleId(roleCode);
+        dsl.deleteFrom(ROLE_PERMISSION_TABLE)
+            .where(ROLE_PERMISSION_ROLE_ID.eq(roleId))
+            .execute();
+        for (String permissionCode : permissionCodes) {
+            dsl.insertInto(ROLE_PERMISSION_TABLE)
+                .columns(ROLE_PERMISSION_ROLE_ID, ROLE_PERMISSION_PERMISSION_CODE)
+                .values(roleId, permissionCode)
+                .execute();
+        }
+    }
+
+    @Override
+    public void deleteRole(String roleCode) {
+        UUID roleId = resolveRoleId(roleCode);
+        try {
+            dsl.deleteFrom(ROLE_TABLE)
+                .where(ROLE_ID.eq(roleId))
+                .execute();
+        } catch (DataIntegrityViolationException exception) {
+            throw new RoleInUseException(roleCode);
         }
     }
 
