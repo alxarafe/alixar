@@ -19,13 +19,15 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
 
 - **PostgreSQL 18.6**: Docker Compose service with a pinned image digest, internal
   connectivity, healthcheck, and a persistent development volume retained by `bin/down`
-- **Flyway 12.4.0**: Managed by Spring Boot 4.1.1; applies the first real
-  migration for Alixar-owned authentication users
+- **Flyway 12.4.0**: Managed by Spring Boot 4.1.1; applies the authentication
+  user, password recovery, Personal Access Token and role-based authorization
+  migrations
 - **jOOQ runtime**: PostgreSQL dialect and Spring-provided `DSLContext` verified
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 124 deterministic tests remain enabled
+  the 141 deterministic tests and 24 PostgreSQL integration tests remain
+  enabled
 
 ### Authentication
 
@@ -52,7 +54,17 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   authenticated. Changing the email, or administering other users, is not
   implemented
 - **Safe bootstrap**: Optional environment-provided initial user with immediate
-  adaptive hashing and no fixed credential in source or migration data
+  adaptive hashing and no fixed credential in source or migration data. The
+  bootstrap user is not an administrator unless
+  `ALIXAR_BOOTSTRAP_SYSTEM_ADMIN=true` is set explicitly
+- **Role-based authorization**: Permissions belong exclusively to roles and
+  effective permissions are the union of the permissions of the user's current
+  roles. Role changes take effect on the next authenticated request for both
+  session and Bearer authentication, without changing `credentials_version`,
+  invalidating sessions or revoking PATs. Built-in `system-admin` role contains
+  `users.manage`; there are no per-user overrides, explicit `DENY`, role
+  hierarchy or role groups. Administrative user routes are reserved for
+  ALIXAR-DEV-003F
 - **API bearer authentication**: Self-service opaque Personal Access Tokens
   (`alx_pat_` prefix, 256-bit random value) presented as
   `Authorization: Bearer <token>`. Only `SHA-256(token)` is stored; the clear
@@ -60,9 +72,10 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   `revoked_at` revocation and `last_used_at` traceability. They are bound to the
   user's `credentials_version`, so password reset/change invalidates them, and
   they coexist with session+CSRF authentication without disabling CSRF globally
-- **Scope boundary**: No roles, permissions, scopes, Contact relationship,
-  Dolibarr authentication integration, registration, JWT, OAuth server,
-  refresh tokens, or machine-to-machine credentials
+- **Scope boundary**: No PAT scopes, per-user permissions, role groups, role
+  hierarchy, Contact relationship, Dolibarr authentication integration,
+  registration, JWT, OAuth server, refresh tokens or machine-to-machine
+  credentials
 
 ## Transitional integrations
 
@@ -87,7 +100,7 @@ See [Development](development.md) for full validation workflow details.
 ## Not yet implemented
 
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
-- Granular authorization (roles, permissions, scopes)
+- Role groups, PAT scopes and authorization for business capabilities beyond `users.manage`
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - Administration of other users' API tokens

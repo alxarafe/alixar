@@ -21,8 +21,17 @@ opaque Personal Access Tokens (PATs) presented as
 `Authorization: Bearer <token>`. The existing browser session mechanism is
 unchanged: Solucar keeps using `JSESSIONID` plus CSRF, while API clients use a
 Bearer token. Both mechanisms represent the same `User`. JWT, OAuth 2.x,
-OpenID Connect, refresh tokens, scopes, roles and machine-to-machine grants are
+OpenID Connect, refresh tokens, PAT scopes and machine-to-machine grants are
 not implemented.
+
+ALIXAR-DEV-003E adds role-based authorization. Authentication answers who the
+caller is; authorization answers what the caller may do. Roles are
+administrative groupings of permissions, permissions belong exclusively to
+roles, and effective permissions are the union of the permissions of the user's
+current roles. There are no per-user permission overrides and no explicit
+`DENY`. An enabled user can authenticate with zero roles. `users.manage` is the
+first permission and `system-admin` is the first built-in role. Administrative
+user routes are reserved for ALIXAR-DEV-003F.
 
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
@@ -234,8 +243,9 @@ ALIXAR-DEV-003D introduces self-service Personal Access Tokens. A PAT is an
 opaque secret that an authenticated user creates for an independent API client
 (for example, a local CI job). A PAT represents the user that created it and
 has exactly the same capabilities that user would have through an authenticated
-session, subject to whatever authorization exists. Scopes, roles, permissions
-and machine-to-machine identities are **not** implemented.
+session. With ALIXAR-DEV-003E, those capabilities are the user's current
+effective permissions through its roles. PAT scopes and machine-to-machine
+identities are **not** implemented.
 
 ### `POST /api/users/me/api-tokens`
 
@@ -359,6 +369,125 @@ PATs created before that change stop authenticating on their next use. No bulk
 token update or token traversal is required. Explicit `revoked_at` revocation
 invalidates a token immediately as well.
 
+## Authorization (RBAC)
+
+ALIXAR-DEV-003E adds role-based authorization. Authentication and authorization
+are independent. An enabled user can authenticate with zero roles and can use
+all existing self-service operations: login, `GET /api/auth/me`, changing its
+own username and password, and creating, listing or revoking its own PATs.
+Roles are not required to identify a user and there is no synthetic
+"authenticated" role.
+
+### Model
+
+```text
+User
+  └── Roles
+        └── Permissions
+```
+
+- `authentication_user_role` stores user-to-role assignments.
+- `authentication_role_permission` stores role-to-permission assignments.
+- `authentication_permission` is the stable permission catalogue.
+- Permissions are assigned exclusively to roles. There is no
+  `authentication_user_permission` table, no user-level grant or deny, and no
+  override for a particular user.
+- Effective permissions are exactly the union of the permissions of all the
+  user's roles. Absence means denied; there is no explicit `DENY` and no
+  precedence between effects.
+- Changing a role's permissions affects every user of that role.
+- A user cannot add or remove a permission for itself or another user outside
+  its roles.
+
+### Permissions and roles
+
+The initial catalogue contains:
+
+| Permission | Meaning |
+|------------|---------|
+| `users.manage` | Future administrative capability over users (ALIXAR-DEV-003F) |
+
+The built-in role `system-admin` contains `users.manage`. The role name and code
+are stable identifiers, but application code authorizes by permission, not by
+role name. No role is special in code: `system-admin` is simply a role that
+contains permissions. There is no mandatory basic role.
+
+### Effective permissions per request
+
+Effective permissions are resolved from persistence on every authenticated
+request, after the identity and `credentials_version` checks and before Spring
+Security authorizes the request. `EffectivePermissionsFilter` loads the current
+permission codes and replaces the authenticated principal's authorities with
+the corresponding `GrantedAuthority` values.
+
+Consequences:
+
+- assigning a role affects the next request;
+- removing a role affects the next request;
+- no logout, session invalidation, PAT revocation or `credentials_version`
+  increment is required;
+- session and Bearer authentication produce exactly the same permissions;
+- PATs do not contain scopes; a PAT represents the user and authorization uses
+  the user's current roles.
+
+`credentials_version` remains a credential-change mechanism only. Role and
+permission changes never modify it.
+
+### Deny by default and HTTP results
+
+The security policy remains explicit:
+
+```text
+public endpoint      → permitAll
+self-service         → authenticated
+privileged endpoint  → concrete permission
+anything else        → denyAll
+```
+
+The reserved administrative namespace `/api/admin/users/**` requires
+`users.manage`; no administrative controller exists yet. Results:
+
+| Caller | Result |
+|--------|--------|
+| Not authenticated | `401 Unauthorized` |
+| Authenticated without `users.manage` | `403 Forbidden` |
+| Authenticated with `users.manage` | The request reaches the operation |
+
+This applies identically to session and Bearer authentication. An invalid
+Bearer credential clears the session context and does not fall back to the
+session identity, so it cannot bypass authorization.
+
+Method security is enabled. Operations can be protected with
+`@PreAuthorize("hasAuthority('users.manage')")`; the stable permission constant
+is `PermissionCodes.USERS_MANAGE`.
+
+### Bootstrap and the first administrator
+
+Creating the bootstrap user does not make it an administrator. The built-in
+role is granted only when explicitly requested with
+`ALIXAR_BOOTSTRAP_SYSTEM_ADMIN=true`. The flag defaults to `false`, only assigns
+`system-admin` to the bootstrap user, never creates a user by itself, is
+idempotent, and has no effect when the bootstrap identity is not configured.
+There is no HTTP endpoint to assign roles in this iteration, so a normally
+created user cannot acquire `system-admin` through the API. See
+[Bootstrap user](#bootstrap-user).
+
+### Role groups (future decision)
+
+Role groups are **not** implemented and no group tables exist. If introduced
+later:
+
+```text
+RoleGroup
+  └── Roles
+```
+
+A group only groups roles. It has no permissions of its own, cannot modify the
+permissions of its roles, and a user may receive roles directly or indirectly
+through groups. Effective permissions would still come exclusively from roles.
+Administrative user management (creation, listing, edition, enable/disable,
+administrative reset and HTTP role assignment) remains for ALIXAR-DEV-003F.
+
 ## Session revocation
 
 `credentials_version` is stored per user and embedded in the authenticated
@@ -373,15 +502,21 @@ sessions created before the reset stop being valid.
 
 ## Bootstrap user
 
-Development and testing can create one initial user by setting all three
-variables before the first startup:
+Development and testing can create one initial user by setting the three
+identity variables before the first startup:
 
 ```bash
 export ALIXAR_BOOTSTRAP_USERNAME='alice'
 export ALIXAR_BOOTSTRAP_EMAIL='alice@example.test'
 export ALIXAR_BOOTSTRAP_PASSWORD='choose-a-temporary-secret'
+export ALIXAR_BOOTSTRAP_SYSTEM_ADMIN='false'   # true grants system-admin explicitly
 ./bin/up
 ```
+
+The bootstrap user is **not** an administrator by default. Setting
+`ALIXAR_BOOTSTRAP_SYSTEM_ADMIN=true` assigns the built-in `system-admin` role to
+that user, idempotently. The flag does not create a user by itself and has no
+effect when the three identity variables are absent.
 
 The password is hashed immediately with Spring Security's delegating adaptive
 password encoder, which writes bcrypt hashes in this version. No plaintext or
@@ -397,13 +532,15 @@ fixed bootstrap password is stored in a migration or source file.
 > separate, explicit decision that is outside the scope of ALIXAR-DEV-003A; no
 > Docker Secrets, Vault, or other secret manager is implemented here.
 
-All three variables must be supplied together. The initializer creates the
-user only when neither identifier exists. Restarting with the same username
+The three identity variables must be supplied together. The initializer creates
+the user only when neither identifier exists. Restarting with the same username
 and email does not reset its password; conflicting identifiers fail startup.
-Remove the variables after the initial user has been created. This mechanism
-is not registration or user administration. Bootstrap must run with a single
-application instance; concurrent initial startup can make one instance fail on
-the database uniqueness constraint.
+Repeating the run with `ALIXAR_BOOTSTRAP_SYSTEM_ADMIN=true` ensures the
+`system-admin` assignment without duplicating it. Remove the variables after the
+initial user has been created. This mechanism is not registration or user
+administration. Bootstrap must run with a single application instance;
+concurrent initial startup can make one instance fail on the database
+uniqueness constraint.
 
 ## Current public access
 
@@ -412,7 +549,9 @@ endpoints, and the existing Contact endpoints remain anonymous. The
 `GET /api/auth/me`, `PATCH /api/users/me`, `POST /api/users/me/password` and
 the `/api/users/me/api-tokens` endpoints require an authenticated identity:
 either a valid session or a valid Bearer token. `/api/auth/me` works with both
-mechanisms. Contact remains public solely to preserve its established contract
+mechanisms. The reserved `/api/admin/users/**` namespace requires the
+`users.manage` permission; it has no controller until ALIXAR-DEV-003F. Contact
+remains public solely to preserve its established contract
 and the real Dolibarr compatibility check during this authentication foundation.
 Its existing POST is temporarily excluded from CSRF protection. Protecting
 migrated business capabilities is an authorization decision for a later
@@ -441,14 +580,16 @@ iteration:
 - OpenID Connect;
 - refresh tokens, client registration or client credentials;
 - machine-to-machine identities;
-- scopes, roles or permissions;
+- PAT scopes;
 - administration of other users' tokens.
 
-PATs currently grant the same capabilities as the owning user's session. Granular
-authorization is deferred to ALIXAR-DEV-003E. OAuth Authorization Code + PKCE is
-a possible future evolution when delegated or third-party clients exist;
-machine-to-machine authentication also remains pending. This iteration does not
-commit to JWT: the future strategy is still an open decision.
+With ALIXAR-DEV-003E, a PAT grants the current effective permissions of the
+owning user through its roles. It does not contain scopes or a permission
+snapshot, so role changes affect the next request made with the same PAT. OAuth
+Authorization Code + PKCE is a possible future evolution when delegated or
+third-party clients exist; machine-to-machine authentication also remains
+pending. This iteration does not commit to JWT: the future strategy is still an
+open decision.
 
 Rate limiting and password-attempt policy remain pending security decisions.
 Disabling a user or deleting it invalidates existing sessions on the next
@@ -461,5 +602,9 @@ Two capabilities are intentionally deferred to later iterations:
   Changing it without verifying the new address would weaken account recovery,
   so it is pending a dedicated email-verification iteration.
 - **Administration of other users.** Creating, listing, editing,
-  enabling/disabling or administratively resetting another user requires an
-  explicit future authorization decision and is not implemented here.
+  enabling/disabling, administratively resetting another user or assigning roles
+  over HTTP is reserved for ALIXAR-DEV-003F. The permission `users.manage` and
+  the reserved `/api/admin/users/**` authorization boundary already exist, but
+  no administrative controller is implemented here.
+- **Role groups.** Grouping roles is a possible future evolution; no group
+  model or tables exist in ALIXAR-DEV-003E.

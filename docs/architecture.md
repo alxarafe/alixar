@@ -26,6 +26,7 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 | jOOQ for type-safe SQL | Approved |
 | Spring Security 7.1.1 for the initial web-session authentication foundation | Approved |
 | Opaque Personal Access Tokens presented as Bearer tokens for independent API consumers | Approved |
+| RBAC with permissions assigned exclusively to roles and no per-user overrides | Approved |
 
 ## Implemented
 
@@ -44,14 +45,19 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - Opaque Bearer Personal Access Tokens for independent API consumers, with
   SHA-256-hash-only persistence, mandatory expiry, explicit revocation,
   `credentials_version` binding and coexistence with session+CSRF
+- Role-based authorization with permissions assigned exclusively to roles,
+  effective permissions resolved from persistence on every authenticated
+  request, deny-by-default policy, and identical authorization for session and
+  Bearer authentication. Built-in `system-admin` role and `users.manage`
+  permission; administrative user routes remain for ALIXAR-DEV-003F
 
 ## Planned (Not Implemented)
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
-- Authorization and protected business capabilities
 - Email change with new-address verification
-- Administration of other users (creation, listing, edition, enable/disable, administrative reset)
-- Granular authorization (roles, permissions, scopes)
+- Administration of other users and HTTP role assignment (ALIXAR-DEV-003F)
+- Role groups
+- PAT scopes and authorization for business capabilities beyond `users.manage`
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - OpenAPI specification
@@ -100,9 +106,30 @@ user's enabled state and `credentials_version`, and returns the same user
 identity; the Spring Security adapter turns it into the same
 `AuthenticatedUserPrincipal` without creating an HTTP session. PAT management
 is self-service and limited to the authenticated user's own tokens. JWT, OAuth
-Authorization Server/grant flows, OpenID Connect, scopes, roles and
+Authorization Server/grant flows, OpenID Connect, PAT scopes and
 machine-to-machine credentials are not implemented. See
 [Authentication](authentication.md) for the contract and pending decisions.
+
+## Authorization Boundary
+
+Authentication and authorization are independent. An enabled user can
+authenticate with zero roles. Permissions belong exclusively to roles and
+effective permissions are the union of the permissions of the user's current
+roles; there are no per-user permission overrides, no explicit `DENY` and no
+hierarchy of roles.
+
+The application layer exposes role assignment and effective-permission
+resolution through ports and use cases. The Spring Security adapter resolves
+the current permissions on every authenticated request, after credential
+validation and before authorization, and converts them into `GrantedAuthority`
+values. It works identically for session and Bearer authentication. Role changes
+therefore take effect on the next request without changing
+`credentials_version`, invalidating the session or revoking PATs.
+
+Business code authorizes by permission (`hasAuthority("users.manage")`), not by
+role name. `system-admin` is an administrative grouping of permissions and has
+no special treatment in code. See [Authentication](authentication.md) for the
+RBAC model and the reserved administrative namespace.
 
 ## Internationalization (i18n) Architecture
 

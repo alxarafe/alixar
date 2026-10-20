@@ -32,6 +32,7 @@ services:
       ALIXAR_BOOTSTRAP_USERNAME: ${ALIXAR_BOOTSTRAP_USERNAME:-}
       ALIXAR_BOOTSTRAP_EMAIL: ${ALIXAR_BOOTSTRAP_EMAIL:-}
       ALIXAR_BOOTSTRAP_PASSWORD: ${ALIXAR_BOOTSTRAP_PASSWORD:-}
+      ALIXAR_BOOTSTRAP_SYSTEM_ADMIN: ${ALIXAR_BOOTSTRAP_SYSTEM_ADMIN:-false}
       # Password reset: frontend URL and optional SMTP delivery. Mail settings
       # are passed through from the host environment only when defined, so no
       # mail sender is configured unless an operator opts in. Never commit real

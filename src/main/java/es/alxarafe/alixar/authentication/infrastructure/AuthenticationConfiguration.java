@@ -2,21 +2,26 @@ package es.alxarafe.alixar.authentication.infrastructure;
 
 import es.alxarafe.alixar.authentication.application.ApiTokenGenerator;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
+import es.alxarafe.alixar.authentication.application.AssignRoleToUserUseCase;
+import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.AuthenticateApiTokenUseCase;
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
 import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
 import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
 import es.alxarafe.alixar.authentication.application.CreateApiTokenUseCase;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
+import es.alxarafe.alixar.authentication.application.GetEffectivePermissionsUseCase;
 import es.alxarafe.alixar.authentication.application.ListApiTokensUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
 import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
+import es.alxarafe.alixar.authentication.application.RemoveRoleFromUserUseCase;
 import es.alxarafe.alixar.authentication.application.RevokeApiTokenUseCase;
 import es.alxarafe.alixar.authentication.application.TokenHasher;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqApiTokenRepository;
+import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqAuthorizationRepository;
 import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqPasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.infrastructure.persistence.JooqUserRepository;
 import es.alxarafe.alixar.authentication.infrastructure.security.Sha256TokenHasher;
@@ -51,6 +56,27 @@ public class AuthenticationConfiguration {
     @ConditionalOnMissingBean(ApiTokenRepository.class)
     ApiTokenRepository apiTokenRepository(DSLContext dsl) {
         return new JooqApiTokenRepository(dsl);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(AuthorizationRepository.class)
+    AuthorizationRepository authorizationRepository(DSLContext dsl) {
+        return new JooqAuthorizationRepository(dsl);
+    }
+
+    @Bean
+    GetEffectivePermissionsUseCase getEffectivePermissionsUseCase(AuthorizationRepository authorizationRepository) {
+        return new GetEffectivePermissionsUseCase(authorizationRepository);
+    }
+
+    @Bean
+    AssignRoleToUserUseCase assignRoleToUserUseCase(AuthorizationRepository authorizationRepository) {
+        return new AssignRoleToUserUseCase(authorizationRepository);
+    }
+
+    @Bean
+    RemoveRoleFromUserUseCase removeRoleFromUserUseCase(AuthorizationRepository authorizationRepository) {
+        return new RemoveRoleFromUserUseCase(authorizationRepository);
     }
 
     @Bean
