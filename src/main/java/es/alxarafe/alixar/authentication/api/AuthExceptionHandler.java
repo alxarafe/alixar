@@ -23,6 +23,7 @@ import es.alxarafe.alixar.core.application.ErrorCode;
 import java.net.URI;
 import java.util.Locale;
 import org.springframework.context.MessageSource;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -43,6 +44,9 @@ class AuthExceptionHandler {
 
     private static final String ROLE_CODE_FIELD = "code";
     private static final String ROLE_NAME_FIELD = "name";
+
+    private static final String AUTHENTICATION_FIELD_NAMESPACE = "field.authentication.";
+    private static final String ROLE_FIELD_NAMESPACE = "field.administration.";
 
     private static final URI INVALID_CREDENTIALS_TYPE =
         URI.create("urn:alixar:error:authentication-invalid-credentials");
@@ -319,7 +323,12 @@ class AuthExceptionHandler {
     ProblemDetail handleInvalidRequest(MethodArgumentNotValidException exception, Locale locale) {
         FieldError fieldError = exception.getBindingResult().getFieldError();
         String field = fieldError != null ? fieldError.getField() : "unknown";
-        String fieldLabel = messageSource.getMessage("field.authentication." + field, null, locale);
+        MethodParameter parameter = exception.getParameter();
+        String fieldNamespace = parameter != null
+            && AdminRoleController.class.equals(parameter.getContainingClass())
+            ? ROLE_FIELD_NAMESPACE
+            : AUTHENTICATION_FIELD_NAMESPACE;
+        String fieldLabel = messageSource.getMessage(fieldNamespace + field, null, locale);
         String messageKey = fieldError != null && "Email".equals(fieldError.getCode())
             ? "validation.email"
             : "validation.required";

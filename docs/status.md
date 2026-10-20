@@ -26,7 +26,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 217 deterministic tests and 35 PostgreSQL integration tests remain
+  the 218 deterministic tests and 35 PostgreSQL integration tests remain
   enabled
 
 ### Authentication

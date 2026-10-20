@@ -267,6 +267,17 @@ class AdminRoleControllerTest {
     }
 
     @Test
+    void create_blankCode_returnsBadRequestWithRoleLabel() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+
+        adminPost(session, createRoleJson("   ", "Blank code", "[]"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.field").value("code"))
+            .andExpect(jsonPath("$.detail").value("The field Role code is required."));
+    }
+
+    @Test
     void create_invalidCodeSyntax_returnsBadRequest() throws Exception {
         grantRolesManage();
         MockHttpSession session = authenticatedSession();
@@ -334,7 +345,8 @@ class AdminRoleControllerTest {
 
         adminPatch(session, AdminUserEndpoints.ROLES_BASE_PATH + "/editable-role", "{\"name\":\"   \"}")
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.field").value("name"));
+            .andExpect(jsonPath("$.field").value("name"))
+            .andExpect(jsonPath("$.detail").value("The field Role name is required."));
     }
 
     @Test
@@ -424,7 +436,8 @@ class AdminRoleControllerTest {
 
         adminPut(session, AdminUserEndpoints.ROLES_BASE_PATH + "/editable-role/permissions", "{}")
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.field").value("permissionCodes"));
+            .andExpect(jsonPath("$.field").value("permissionCodes"))
+            .andExpect(jsonPath("$.detail").value("The field Permission codes is required."));
     }
 
     @Test
