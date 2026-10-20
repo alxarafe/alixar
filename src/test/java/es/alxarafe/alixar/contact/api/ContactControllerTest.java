@@ -2,6 +2,7 @@ package es.alxarafe.alixar.contact.api;
 
 import es.alxarafe.alixar.authentication.AuthenticationTestConfig;
 import es.alxarafe.alixar.contact.application.ContactNotFoundException;
+import es.alxarafe.alixar.contact.application.ContactRepository;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
 import es.alxarafe.alixar.contact.application.GetContactUseCase;
 import es.alxarafe.alixar.contact.application.InvalidContactDataException;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -39,10 +41,14 @@ class ContactControllerTest {
     @Autowired
     private CreateContactUseCase createContactUseCase;
 
+    @Autowired
+    private ContactRepository contactRepository;
+
     private MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
+        reset(createContactUseCase, contactRepository);
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
     }
 
