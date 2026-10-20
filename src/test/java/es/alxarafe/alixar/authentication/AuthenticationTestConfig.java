@@ -1,17 +1,26 @@
 package es.alxarafe.alixar.authentication;
 
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
+import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
+import es.alxarafe.alixar.authentication.application.PermissionCodes;
+import es.alxarafe.alixar.authentication.application.RoleCodes;
+import es.alxarafe.alixar.authentication.application.RoleNotFoundException;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.domain.ApiToken;
 import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -35,6 +44,12 @@ public class AuthenticationTestConfig {
     @Primary
     public ApiTokenRepository testApiTokenRepository() {
         return new TestApiTokenRepository();
+    }
+
+    @Bean
+    @Primary
+    public AuthorizationRepository testAuthorizationRepository() {
+        return new TestAuthorizationRepository();
     }
 
     public static class TestUserRepository implements UserRepository {
@@ -180,6 +195,70 @@ public class AuthenticationTestConfig {
                         t.createdAt()
                     ));
                 });
+        }
+    }
+
+    public static class TestAuthorizationRepository implements AuthorizationRepository {
+
+        private final Map<String, Set<String>> rolePermissions = new HashMap<>();
+        private final Map<UUID, Set<String>> userRoles = new HashMap<>();
+
+        public TestAuthorizationRepository() {
+            reset();
+        }
+
+        public void reset() {
+            rolePermissions.clear();
+            userRoles.clear();
+            rolePermissions.put(
+                RoleCodes.SYSTEM_ADMIN,
+                new LinkedHashSet<>(Set.of(PermissionCodes.USERS_MANAGE))
+            );
+        }
+
+        public Set<String> findRoleCodesByUser(UUID userId) {
+            return Set.copyOf(userRoles.getOrDefault(userId, Set.of()));
+        }
+
+        @Override
+        public Set<String> findEffectivePermissionCodes(UUID userId) {
+            return userRoles.getOrDefault(userId, Set.of()).stream()
+                .flatMap(role -> rolePermissions.getOrDefault(role, Set.of()).stream())
+                .collect(Collectors.toCollection(LinkedHashSet::new));
+        }
+
+        @Override
+        public Set<String> findPermissionCodesByRole(String roleCode) {
+            return Set.copyOf(rolePermissions.getOrDefault(roleCode, Set.of()));
+        }
+
+        @Override
+        public void assignRoleToUser(UUID userId, String roleCode) {
+            if (!rolePermissions.containsKey(roleCode)) {
+                throw new RoleNotFoundException(roleCode);
+            }
+            userRoles.computeIfAbsent(userId, key -> new LinkedHashSet<>()).add(roleCode);
+        }
+
+        @Override
+        public void removeRoleFromUser(UUID userId, String roleCode) {
+            Set<String> roles = userRoles.get(userId);
+            if (roles != null) {
+                roles.remove(roleCode);
+            }
+        }
+
+        @Override
+        public void grantPermissionToRole(String roleCode, String permissionCode) {
+            rolePermissions.computeIfAbsent(roleCode, key -> new LinkedHashSet<>()).add(permissionCode);
+        }
+
+        @Override
+        public void revokePermissionFromRole(String roleCode, String permissionCode) {
+            Set<String> permissions = rolePermissions.get(roleCode);
+            if (permissions != null) {
+                permissions.remove(permissionCode);
+            }
         }
     }
 

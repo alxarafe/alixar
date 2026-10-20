@@ -1,15 +1,18 @@
 package es.alxarafe.alixar.persistence;
 
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
+import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
 import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
 import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
+import es.alxarafe.alixar.authentication.application.PermissionCodes;
 import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenGenerator;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
+import es.alxarafe.alixar.authentication.application.RoleCodes;
 import es.alxarafe.alixar.authentication.application.TokenHasher;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.application.UsernameAlreadyExistsException;
@@ -43,6 +46,10 @@ class PersistenceIT {
     private static final String USER_TABLE = "authentication_user";
     private static final String RESET_TOKEN_TABLE = "authentication_password_reset";
     private static final String API_TOKEN_TABLE = "authentication_api_token";
+    private static final String ROLE_TABLE = "authentication_role";
+    private static final String PERMISSION_TABLE = "authentication_permission";
+    private static final String ROLE_PERMISSION_TABLE = "authentication_role_permission";
+    private static final String USER_ROLE_TABLE = "authentication_user_role";
 
     @Autowired
     private DataSource dataSource;
@@ -69,6 +76,9 @@ class PersistenceIT {
     private ApiTokenRepository apiTokenRepository;
 
     @Autowired
+    private AuthorizationRepository authorizationRepository;
+
+    @Autowired
     private TokenHasher tokenHasher;
 
     @Autowired
@@ -81,15 +91,22 @@ class PersistenceIT {
                 .startsWith(POSTGRESQL_VERSION);
         }
         assertThat(flyway.getConfiguration().getDataSource()).isSameAs(dataSource);
-        assertThat(flyway.info().all()).hasSize(3);
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("3");
+        assertThat(flyway.info().all()).hasSize(4);
+        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("4");
         assertThat(dsl.selectOne().fetchSingle().value1()).isEqualTo(1);
         assertThat(dsl.fetch("select tablename from pg_catalog.pg_tables where schemaname = current_schema()")
             .getValues(0, String.class)).containsExactlyInAnyOrder(
-                HISTORY_TABLE, USER_TABLE, RESET_TOKEN_TABLE, API_TOKEN_TABLE
+                HISTORY_TABLE,
+                USER_TABLE,
+                RESET_TOKEN_TABLE,
+                API_TOKEN_TABLE,
+                ROLE_TABLE,
+                PERMISSION_TABLE,
+                ROLE_PERMISSION_TABLE,
+                USER_ROLE_TABLE
             );
         assertThat(dsl.fetchCount(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(HISTORY_TABLE))))
-            .isEqualTo(3);
+            .isEqualTo(4);
     }
 
     @Test
@@ -606,6 +623,251 @@ class PersistenceIT {
         } finally {
             deleteUser(userId);
         }
+    }
+
+    @Test
+    void rbacMigration_seedsUsersManagePermissionAndSystemAdminRole() {
+        assertThat(dsl.fetch("select code from authentication_permission").getValues(0, String.class))
+            .contains(PermissionCodes.USERS_MANAGE);
+        assertThat(dsl.fetch("select code from authentication_role").getValues(0, String.class))
+            .contains(RoleCodes.SYSTEM_ADMIN);
+        assertThat(authorizationRepository.findPermissionCodesByRole(RoleCodes.SYSTEM_ADMIN))
+            .containsExactly(PermissionCodes.USERS_MANAGE);
+    }
+
+    @Test
+    void rbac_effectivePermissionsAreTheUnionOfAllRolePermissions() {
+        var userId = UUID.fromString("a2b2c2d2-e2f2-4a2b-8c2d-2e2f2a2b2c2d");
+        var secondRoleId = UUID.fromString("b3c3d3e3-f3a3-4b3c-9d3e-3f3a3b3c3d3e");
+        var permissionCode = "test.alpha";
+
+        try {
+            insertUser(userId, "rbac-union", "rbac-union@example.test");
+            dsl.query(
+                "insert into authentication_permission (code, description) values (?, ?)",
+                permissionCode,
+                "Test alpha"
+            ).execute();
+            dsl.query(
+                "insert into authentication_role (id, code, name) values (?, ?, ?)",
+                secondRoleId,
+                "test-alpha",
+                "Test alpha"
+            ).execute();
+            dsl.query(
+                "insert into authentication_role_permission (role_id, permission_code) values (?, ?)",
+                secondRoleId,
+                permissionCode
+            ).execute();
+
+            authorizationRepository.assignRoleToUser(userId, RoleCodes.SYSTEM_ADMIN);
+            authorizationRepository.assignRoleToUser(userId, "test-alpha");
+
+            assertThat(authorizationRepository.findEffectivePermissionCodes(userId))
+                .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, permissionCode);
+        } finally {
+            deleteUser(userId);
+            dsl.query("delete from authentication_role where id = ?", secondRoleId).execute();
+            dsl.query("delete from authentication_permission where code = ?", permissionCode).execute();
+        }
+    }
+
+    @Test
+    void rbac_roleAssignmentIsIdempotentAndRemovalChangesEffectivePermissions() {
+        var userId = UUID.fromString("c4d4e4f4-a4b4-4c4d-8e4f-4a4b4c4d4e4f");
+
+        try {
+            insertUser(userId, "rbac-idempotent", "rbac-idempotent@example.test");
+
+            authorizationRepository.assignRoleToUser(userId, RoleCodes.SYSTEM_ADMIN);
+            authorizationRepository.assignRoleToUser(userId, RoleCodes.SYSTEM_ADMIN);
+
+            assertThat(authorizationRepository.findEffectivePermissionCodes(userId))
+                .containsExactly(PermissionCodes.USERS_MANAGE);
+            assertThat(dsl.selectCount()
+                .from(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(USER_ROLE_TABLE)))
+                .where(org.jooq.impl.DSL.field(
+                    org.jooq.impl.DSL.name("user_id"),
+                    java.util.UUID.class
+                ).eq(userId))
+                .fetchOne(0, int.class)).isEqualTo(1);
+
+            authorizationRepository.removeRoleFromUser(userId, RoleCodes.SYSTEM_ADMIN);
+            assertThat(authorizationRepository.findEffectivePermissionCodes(userId)).isEmpty();
+
+            authorizationRepository.removeRoleFromUser(userId, RoleCodes.SYSTEM_ADMIN);
+            assertThat(authorizationRepository.findEffectivePermissionCodes(userId)).isEmpty();
+        } finally {
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void rbac_changingRolePermissionsAffectsEveryUserOfThatRole() {
+        var firstUserId = UUID.fromString("d5e5f5a5-b5c5-4d5e-8f5a-5b5c5d5e5f5a");
+        var secondUserId = UUID.fromString("e6f6a6b6-c6d6-4e6f-8a6b-6c6d6e6f6a6b");
+
+        try {
+            insertUser(firstUserId, "rbac-shared-first", "rbac-shared-first@example.test");
+            insertUser(secondUserId, "rbac-shared-second", "rbac-shared-second@example.test");
+            authorizationRepository.assignRoleToUser(firstUserId, RoleCodes.SYSTEM_ADMIN);
+            authorizationRepository.assignRoleToUser(secondUserId, RoleCodes.SYSTEM_ADMIN);
+
+            assertThat(authorizationRepository.findEffectivePermissionCodes(firstUserId))
+                .contains(PermissionCodes.USERS_MANAGE);
+            assertThat(authorizationRepository.findEffectivePermissionCodes(secondUserId))
+                .contains(PermissionCodes.USERS_MANAGE);
+
+            authorizationRepository.revokePermissionFromRole(
+                RoleCodes.SYSTEM_ADMIN,
+                PermissionCodes.USERS_MANAGE
+            );
+
+            assertThat(authorizationRepository.findEffectivePermissionCodes(firstUserId))
+                .doesNotContain(PermissionCodes.USERS_MANAGE);
+            assertThat(authorizationRepository.findEffectivePermissionCodes(secondUserId))
+                .doesNotContain(PermissionCodes.USERS_MANAGE);
+        } finally {
+            authorizationRepository.grantPermissionToRole(
+                RoleCodes.SYSTEM_ADMIN,
+                PermissionCodes.USERS_MANAGE
+            );
+            deleteUser(firstUserId);
+            deleteUser(secondUserId);
+        }
+    }
+
+    @Test
+    void rbac_enforcesUniquenessForeignKeysAndNonBlankCodes() {
+        var userId = UUID.fromString("f7a7b7c7-d7e7-4f7a-8b7c-7d7e7f7a7b7c");
+
+        try {
+            insertUser(userId, "rbac-constraints", "rbac-constraints@example.test");
+
+            assertThatThrownBy(() -> dsl.query(
+                "insert into authentication_role (id, code, name) values (?, ?, ?)",
+                UUID.randomUUID(),
+                RoleCodes.SYSTEM_ADMIN,
+                "Duplicate role"
+            ).execute()).isInstanceOf(DuplicateKeyException.class);
+
+            assertThatThrownBy(() -> dsl.query(
+                "insert into authentication_permission (code, description) values (?, ?)",
+                PermissionCodes.USERS_MANAGE,
+                "Duplicate permission"
+            ).execute()).isInstanceOf(DuplicateKeyException.class);
+
+            dsl.query(
+                "insert into authentication_user_role (user_id, role_id) "
+                    + "select ?, id from authentication_role where code = ?",
+                userId,
+                RoleCodes.SYSTEM_ADMIN
+            ).execute();
+            assertThatThrownBy(() -> dsl.query(
+                "insert into authentication_user_role (user_id, role_id) "
+                    + "select ?, id from authentication_role where code = ?",
+                userId,
+                RoleCodes.SYSTEM_ADMIN
+            ).execute()).isInstanceOf(DuplicateKeyException.class);
+
+            assertThatThrownBy(() -> dsl.query(
+                "insert into authentication_user_role (user_id, role_id) "
+                    + "select ?, id from authentication_role where code = ?",
+                UUID.randomUUID(),
+                RoleCodes.SYSTEM_ADMIN
+            ).execute()).isInstanceOf(
+                org.springframework.dao.DataIntegrityViolationException.class
+            );
+
+            assertThatThrownBy(() -> dsl.query(
+                "insert into authentication_user_role (user_id, role_id) values (?, ?)",
+                userId,
+                UUID.randomUUID()
+            ).execute()).isInstanceOf(
+                org.springframework.dao.DataIntegrityViolationException.class
+            );
+
+            assertThatThrownBy(() -> dsl.query(
+                "insert into authentication_role_permission (role_id, permission_code) "
+                    + "select id, ? from authentication_role where code = ?",
+                PermissionCodes.USERS_MANAGE,
+                RoleCodes.SYSTEM_ADMIN
+            ).execute()).isInstanceOf(DuplicateKeyException.class);
+
+            assertThatThrownBy(() -> dsl.query(
+                "insert into authentication_role_permission (role_id, permission_code) values (?, ?)",
+                UUID.randomUUID(),
+                PermissionCodes.USERS_MANAGE
+            ).execute()).isInstanceOf(
+                org.springframework.dao.DataIntegrityViolationException.class
+            );
+
+            assertThatThrownBy(() -> dsl.query(
+                "insert into authentication_role_permission (role_id, permission_code) "
+                    + "select id, ? from authentication_role where code = ?",
+                "missing.permission",
+                RoleCodes.SYSTEM_ADMIN
+            ).execute()).isInstanceOf(
+                org.springframework.dao.DataIntegrityViolationException.class
+            );
+
+            assertThatThrownBy(() -> dsl.query(
+                "insert into authentication_role (id, code, name) values (?, ?, ?)",
+                UUID.randomUUID(),
+                "   ",
+                "Blank role"
+            ).execute()).isInstanceOf(
+                org.springframework.dao.DataIntegrityViolationException.class
+            );
+
+            assertThatThrownBy(() -> dsl.query(
+                "insert into authentication_role (id, code, name) values (?, ?, ?)",
+                UUID.randomUUID(),
+                "blank-name-role",
+                "   "
+            ).execute()).isInstanceOf(
+                org.springframework.dao.DataIntegrityViolationException.class
+            );
+
+            assertThatThrownBy(() -> dsl.query(
+                "insert into authentication_permission (code, description) values (?, ?)",
+                "   ",
+                "Blank permission"
+            ).execute()).isInstanceOf(
+                org.springframework.dao.DataIntegrityViolationException.class
+            );
+
+            assertThatThrownBy(() -> dsl.query(
+                "insert into authentication_permission (code, description) values (?, ?)",
+                "blank.description",
+                "   "
+            ).execute()).isInstanceOf(
+                org.springframework.dao.DataIntegrityViolationException.class
+            );
+        } finally {
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void rbac_hasNoIndividualUserPermissionModel() {
+        assertThat(dsl.fetch("select tablename from pg_catalog.pg_tables where schemaname = current_schema()")
+            .getValues(0, String.class))
+            .allMatch(tableName ->
+                !tableName.contains("user_permission")
+                    && !tableName.contains("user_denied")
+                    && !tableName.contains("user_override")
+            );
+
+        assertThat(Arrays.stream(AuthorizationRepository.class.getDeclaredMethods())
+            .map(method -> method.getName())
+            .toList())
+            .doesNotContain(
+                "assignPermissionToUser",
+                "grantPermissionToUser",
+                "revokePermissionFromUser",
+                "denyPermissionToUser"
+            );
     }
 
     @Test

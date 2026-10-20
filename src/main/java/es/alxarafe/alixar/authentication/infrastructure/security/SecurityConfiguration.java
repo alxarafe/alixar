@@ -1,18 +1,23 @@
 package es.alxarafe.alixar.authentication.infrastructure.security;
 
+import es.alxarafe.alixar.authentication.api.AdminUserEndpoints;
 import es.alxarafe.alixar.authentication.api.UserEndpoints;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthenticateApiTokenUseCase;
+import es.alxarafe.alixar.authentication.application.GetEffectivePermissionsUseCase;
+import es.alxarafe.alixar.authentication.application.PermissionCodes;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.authentication.session.ChangeSessionIdAuthenticationStrategy;
@@ -30,6 +35,7 @@ import static es.alxarafe.alixar.authentication.api.AuthenticationEndpoints.ME_P
 import static es.alxarafe.alixar.authentication.api.AuthenticationEndpoints.BASE_PATH;
 
 @Configuration
+@EnableMethodSecurity
 public class SecurityConfiguration {
 
     private static final String HEALTH_PATH = "/health";
@@ -92,6 +98,11 @@ public class SecurityConfiguration {
     }
 
     @Bean
+    EffectivePermissionsFilter effectivePermissionsFilter(GetEffectivePermissionsUseCase getEffectivePermissions) {
+        return new EffectivePermissionsFilter(getEffectivePermissions);
+    }
+
+    @Bean
     SecurityFilterChain securityFilterChain(
         HttpSecurity http,
         AuthenticationManager authenticationManager,
@@ -101,6 +112,7 @@ public class SecurityConfiguration {
         AccessDeniedHandler accessDeniedHandler,
         CredentialsVersionCheckFilter credentialsVersionCheckFilter,
         ApiTokenAuthenticationFilter apiTokenAuthenticationFilter,
+        EffectivePermissionsFilter effectivePermissionsFilter,
         BearerTokenRequestMatcher bearerTokenRequestMatcher
     ) throws Exception {
         http
@@ -121,8 +133,11 @@ public class SecurityConfiguration {
             })
             .addFilterBefore(apiTokenAuthenticationFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
             .addFilterAfter(credentialsVersionCheckFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(effectivePermissionsFilter, AuthorizationFilter.class)
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers(HEALTH_PATH, CONTACTS_PATH_PATTERN, LOGIN_PATH, BASE_PATH + "/password/forgot", BASE_PATH + "/password/reset").permitAll()
+                .requestMatchers(AdminUserEndpoints.BASE_PATH, AdminUserEndpoints.PATH_PATTERN)
+                    .hasAuthority(PermissionCodes.USERS_MANAGE)
                 .requestMatchers(
                     ME_PATH,
                     UserEndpoints.ME_PATH,

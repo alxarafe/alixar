@@ -70,10 +70,13 @@ Spring Boot 4.1.1 manages Flyway 12.4.0, jOOQ 3.21.7, PostgreSQL JDBC
 generation. `V1__create_authentication_user.sql` creates the authentication
 user table, `V2__add_credentials_version_and_password_reset.sql` adds
 `credentials_version` and the password reset token table, and
-`V3__create_authentication_api_token.sql` adds the Personal Access Token table.
-Boot calls Flyway on startup using its default `classpath:db/migration` location.
-`PersistenceIT` verifies the migrations, their constraints, and authentication
-transaction behaviour against PostgreSQL.
+`V3__create_authentication_api_token.sql` adds the Personal Access Token table,
+and `V4__create_role_based_authorization.sql` adds roles, permissions,
+role-permission assignments, user-role assignments and the initial
+`users.manage`/`system-admin` seed. Boot calls Flyway on startup using its
+default `classpath:db/migration` location. `PersistenceIT` verifies the
+migrations, their constraints, RBAC resolution and authentication transaction
+behaviour against PostgreSQL.
 
 ## Authentication Configuration
 
@@ -81,7 +84,12 @@ The optional initial development user is configured with
 `ALIXAR_BOOTSTRAP_USERNAME`, `ALIXAR_BOOTSTRAP_EMAIL`, and
 `ALIXAR_BOOTSTRAP_PASSWORD`. Set all three before the first `./bin/up`; do not
 commit or reuse real credentials. The initializer hashes the password and never
-resets an existing matching user's password. See [Authentication](authentication.md).
+resets an existing matching user's password.
+
+Creating the bootstrap user does **not** make it an administrator. Set
+`ALIXAR_BOOTSTRAP_SYSTEM_ADMIN=true` to grant the built-in `system-admin` role
+to that user. The flag defaults to `false`, is idempotent, and does not create a
+user by itself. See [Authentication](authentication.md).
 
 These environment variables are a **development/testing convenience only**.
 Passing `ALIXAR_BOOTSTRAP_PASSWORD` through the environment exposes the
@@ -140,14 +148,14 @@ This override is used **only** by `./bin/check-reference`.
 
 `./bin/check` is the complete validation authority for Alixar itself. It runs entirely in Docker and performs:
 
-1. Build and run the 124 deterministic tests (`mvnw clean verify`)
+1. Build and run the 141 deterministic tests (`mvnw clean verify`)
 2. Runtime image build
 3. Container startup with health check wait (database + app)
 4. PostgreSQL health verification (`pg_isready`)
 5. Run `PersistenceIT` against the real isolated PostgreSQL service: verify the
-   Boot datasource, Flyway `V1`/`V2`/`V3`, a jOOQ `DSLContext` executing `SELECT 1`,
-   PostgreSQL 18.6, the authentication and API token tables and constraints, and password
-   reset transaction rollback
+   Boot datasource, Flyway `V1`/`V2`/`V3`/`V4`, a jOOQ `DSLContext` executing `SELECT 1`,
+   PostgreSQL 18.6, the authentication, API token and RBAC tables and constraints,
+   effective-permission resolution, and password reset transaction rollback
 6. HTTP `GET /health` verification (exact `{"status":"ok"}` response)
 7. Cleanup of this invocation's containers, network, and volume; verify none remain
 
@@ -163,7 +171,7 @@ the invocation's project. Cleanup errors are reported and fail an otherwise
 successful check; an earlier failure retains its exit code. Images/build cache
 are retained. No fixed development or previous check project is cleaned.
 
-`./bin/test` runs the 124 component/unit tests without PostgreSQL.
+`./bin/test` runs the 141 component/unit tests without PostgreSQL.
 Their persistence exclusions are centralized in `src/test/resources/application.properties`.
 The additional `PersistenceIT` uses Surefire's separate `*IT` naming convention
 and is explicitly selected by `bin/check` through `compose.check.yaml`, with
