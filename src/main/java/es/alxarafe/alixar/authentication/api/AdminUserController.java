@@ -9,6 +9,7 @@ import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminUserSe
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
@@ -88,6 +89,30 @@ class AdminUserController {
         return toResponse(adminUserService.updateUsername(id, request.username()));
     }
 
+    @PatchMapping(
+        value = AdminUserEndpoints.ENABLED_RELATIVE_PATH,
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    AdminUserResponse updateEnabled(
+        @PathVariable(AdminUserEndpoints.ID_PATH_VARIABLE) UUID id,
+        @Valid @RequestBody UpdateEnabledRequest request
+    ) {
+        return toResponse(adminUserService.setEnabled(id, request.enabled()));
+    }
+
+    @PostMapping(
+        value = AdminUserEndpoints.PASSWORD_RESET_RELATIVE_PATH,
+        consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void resetPassword(
+        @PathVariable(AdminUserEndpoints.ID_PATH_VARIABLE) UUID id,
+        @Valid @RequestBody ResetPasswordRequest request
+    ) {
+        adminUserService.resetPassword(id, request.newPassword());
+    }
+
     private AdminUserResponse toResponse(AdminUser user) {
         return new AdminUserResponse(
             user.id(),
@@ -110,6 +135,16 @@ class AdminUserController {
 
     record UpdateAdminUsernameRequest(
         @NotBlank(message = "{validation.required}") String username
+    ) {
+    }
+
+    record UpdateEnabledRequest(
+        @NotNull(message = "{validation.required}") Boolean enabled
+    ) {
+    }
+
+    record ResetPasswordRequest(
+        @NotBlank(message = "{validation.required}") String newPassword
     ) {
     }
 }

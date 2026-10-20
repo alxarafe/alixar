@@ -49,15 +49,14 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   effective permissions resolved from persistence on every authenticated
   request, deny-by-default policy, and identical authorization for session and
   Bearer authentication. Built-in `system-admin` role and `users.manage`
-  permission; administrative reads plus creation of disabled users and
-  username changes
+  permission; administrative reads, creation of disabled users, username
+  changes, enablement changes and password resets
 
 ## Planned (Not Implemented)
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Email change with new-address verification
-- Administrative user enable/disable, password reset and HTTP role replacement
-  (ALIXAR-DEV-003F)
+- Administrative HTTP role replacement (ALIXAR-DEV-003F)
 - Role groups
 - PAT scopes and authorization for business capabilities beyond `users.manage`
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect

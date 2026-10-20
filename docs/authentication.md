@@ -33,12 +33,12 @@ current roles. There are no per-user permission overrides and no explicit
 first permission and `system-admin` is the first built-in role.
 
 ALIXAR-DEV-003F adds administrative user management over that RBAC foundation.
-The current slice provides read-only endpoints for listing, searching and
-inspecting users and for reading the role catalogue, plus creation of disabled
-users and administrative username changes. Every `/api/admin/**` endpoint
-requires `users.manage`, independently of the authentication mechanism.
-Enablement, administrative password reset and role replacement are implemented
-in later slices of the same iteration.
+The current slice provides endpoints for listing, searching and inspecting
+users and for reading the role catalogue, plus creation of disabled users,
+administrative username changes, enablement changes and password resets.
+Every `/api/admin/**` endpoint requires `users.manage`, independently of the
+authentication mechanism. Role replacement is implemented in a later slice of
+the same iteration.
 
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
@@ -492,6 +492,8 @@ The current ALIXAR-DEV-003F slice exposes:
 | `GET /api/admin/roles` | Role catalogue with permission codes |
 | `POST /api/admin/users` | Creates a disabled user |
 | `PATCH /api/admin/users/{id}` | Changes the username only |
+| `PATCH /api/admin/users/{id}/enabled` | Enables or disables a user |
+| `POST /api/admin/users/{id}/password-reset` | Replaces a user's password |
 
 `GET /api/admin/users` accepts:
 
@@ -526,6 +528,29 @@ not increment `credentials_version`, because a username change is not a
 credential change. It returns the updated safe representation, `404` for an
 unknown user, `409` for a duplicate username and `400` for invalid input.
 
+`PATCH /api/admin/users/{id}/enabled` accepts `enabled` as a boolean. Disabling
+an enabled user sets `enabled=false`, increments `credentials_version` and
+invalidates pending password-reset tokens in one transaction. Disabling an
+already disabled user is idempotent and does not increment the version again.
+Enabling a user sets `enabled=true` without incrementing `credentials_version`;
+enabling an already enabled user is idempotent. Sessions and PATs issued before
+a disable remain invalid after a later enable. The endpoint returns the updated
+safe representation, `404` for an unknown user and `400` for invalid input.
+
+Administrators may disable their own account. The disabling request succeeds,
+but the session or PAT used for it is rejected on the next request. There is no
+self-preservation bypass, no last-administrator rule and no special
+`system-admin` protection. A possible administrator lockout is an accepted
+operational consequence.
+
+`POST /api/admin/users/{id}/password-reset` accepts `newPassword` and requires
+no current password. It enforces `PasswordPolicy`, stores the new hash,
+increments `credentials_version` and invalidates all pending password-reset
+tokens in one transaction. It can target the administrator's own account. Prior
+sessions and PATs are rejected on their next request. It does not change the
+username, email, enablement, roles, permissions or PAT records. It returns `204`
+on success, `404` for an unknown user and `400` for invalid input.
+
 All administrative responses exclude password hashes, reset tokens, API tokens
 and other secrets. Bearer authentication still updates the presented PAT's
 `last_used_at`, as before. Every endpoint requires `users.manage` for both
@@ -544,8 +569,7 @@ RoleGroup
 A group only groups roles. It has no permissions of its own, cannot modify the
 permissions of its roles, and a user may receive roles directly or indirectly
 through groups. Effective permissions would still come exclusively from roles.
-Enablement, administrative password reset and HTTP role replacement remain for
-later ALIXAR-DEV-003F slices.
+HTTP role replacement remains for a later ALIXAR-DEV-003F slice.
 
 ## Session revocation
 
@@ -660,10 +684,10 @@ Two capabilities are intentionally deferred to later iterations:
   Changing it without verifying the new address would weaken account recovery,
   so it is pending a dedicated email-verification iteration.
 - **Administration of other users.** Listing, search, detail, creation of
-  disabled users and administrative username changes are implemented in the
-  current ALIXAR-DEV-003F slice. Enabling/disabling, administratively resetting
-  another user and replacing roles over HTTP remain for later slices. The
-  permission `users.manage` and the `/api/admin/**` authorization boundary are
-  already in force.
+  disabled users, administrative username changes, enablement changes and
+  administrative password resets are implemented in the current ALIXAR-DEV-003F
+  slice. Replacing roles over HTTP remains for a later slice. The permission
+  `users.manage` and the `/api/admin/**` authorization boundary are already in
+  force.
 - **Role groups.** Grouping roles is a possible future evolution; no group
   model or tables exist in ALIXAR-DEV-003E.

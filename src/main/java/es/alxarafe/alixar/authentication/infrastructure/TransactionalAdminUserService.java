@@ -2,6 +2,8 @@ package es.alxarafe.alixar.authentication.infrastructure;
 
 import es.alxarafe.alixar.authentication.application.AdminUser;
 import es.alxarafe.alixar.authentication.application.CreateAdminUserUseCase;
+import es.alxarafe.alixar.authentication.application.ResetAdminUserPasswordUseCase;
+import es.alxarafe.alixar.authentication.application.SetAdminUserEnabledUseCase;
 import es.alxarafe.alixar.authentication.application.UpdateAdminUsernameUseCase;
 import java.util.List;
 import java.util.UUID;
@@ -11,13 +13,19 @@ public class TransactionalAdminUserService {
 
     private final CreateAdminUserUseCase createAdminUserUseCase;
     private final UpdateAdminUsernameUseCase updateAdminUsernameUseCase;
+    private final SetAdminUserEnabledUseCase setAdminUserEnabledUseCase;
+    private final ResetAdminUserPasswordUseCase resetAdminUserPasswordUseCase;
 
     public TransactionalAdminUserService(
         CreateAdminUserUseCase createAdminUserUseCase,
-        UpdateAdminUsernameUseCase updateAdminUsernameUseCase
+        UpdateAdminUsernameUseCase updateAdminUsernameUseCase,
+        SetAdminUserEnabledUseCase setAdminUserEnabledUseCase,
+        ResetAdminUserPasswordUseCase resetAdminUserPasswordUseCase
     ) {
         this.createAdminUserUseCase = createAdminUserUseCase;
         this.updateAdminUsernameUseCase = updateAdminUsernameUseCase;
+        this.setAdminUserEnabledUseCase = setAdminUserEnabledUseCase;
+        this.resetAdminUserPasswordUseCase = resetAdminUserPasswordUseCase;
     }
 
     @Transactional
@@ -28,5 +36,15 @@ public class TransactionalAdminUserService {
     @Transactional
     public AdminUser updateUsername(UUID userId, String newUsername) {
         return updateAdminUsernameUseCase.execute(userId, newUsername);
+    }
+
+    @Transactional
+    public AdminUser setEnabled(UUID userId, boolean enabled) {
+        return setAdminUserEnabledUseCase.execute(userId, enabled);
+    }
+
+    @Transactional
+    public void resetPassword(UUID userId, String newPassword) {
+        resetAdminUserPasswordUseCase.execute(userId, newPassword);
     }
 }

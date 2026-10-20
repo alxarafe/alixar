@@ -114,6 +114,16 @@ public class JooqUserRepository implements UserRepository {
     }
 
     @Override
+    public void updateEnabledAndCredentialsVersion(UUID userId, boolean enabled, long newCredentialsVersion) {
+        dsl.update(USER_TABLE)
+            .set(ENABLED, enabled)
+            .set(CREDENTIALS_VERSION, newCredentialsVersion)
+            .set(UPDATED_AT, OffsetDateTime.now(ZoneOffset.UTC))
+            .where(ID.eq(userId))
+            .execute();
+    }
+
+    @Override
     public void updatePasswordAndCredentialsVersion(UUID userId, String newPasswordHash, long newCredentialsVersion) {
         dsl.update(USER_TABLE)
             .set(PASSWORD_HASH, newPasswordHash)

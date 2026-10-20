@@ -138,6 +138,26 @@ public class AuthenticationTestConfig {
         }
 
         @Override
+        public void updateEnabledAndCredentialsVersion(UUID userId, boolean enabled, long newCredentialsVersion) {
+            users.stream()
+                .filter(u -> u.id().equals(userId))
+                .findFirst()
+                .ifPresent(u -> {
+                    int index = users.indexOf(u);
+                    users.set(index, new User(
+                        u.id(),
+                        u.username(),
+                        u.email(),
+                        u.passwordHash(),
+                        enabled,
+                        newCredentialsVersion,
+                        u.createdAt(),
+                        Instant.now()
+                    ));
+                });
+        }
+
+        @Override
         public void updatePasswordAndCredentialsVersion(UUID userId, String newPasswordHash, long newCredentialsVersion) {
             users.stream()
                 .filter(u -> u.id().equals(userId))

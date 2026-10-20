@@ -375,6 +375,18 @@ class AdminUserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"username\":\"renamed\"}"))
             .andExpect(status().isUnauthorized());
+        mockMvc.perform(patch(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID + "/enabled")
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"enabled\":false}"))
+            .andExpect(status().isUnauthorized());
+        mockMvc.perform(post(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID + "/password-reset")
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"newPassword\":\"new-password-123\"}"))
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -396,6 +408,20 @@ class AdminUserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"username\":\"renamed\"}"))
             .andExpect(status().isForbidden());
+        mockMvc.perform(patch(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID + "/enabled")
+                .session(session)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"enabled\":false}"))
+            .andExpect(status().isForbidden());
+        mockMvc.perform(post(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID + "/password-reset")
+                .session(session)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"newPassword\":\"new-password-123\"}"))
+            .andExpect(status().isForbidden());
     }
 
     @Test
@@ -411,6 +437,16 @@ class AdminUserControllerTest {
                 .header("Authorization", "Bearer " + rawToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"username\":\"renamed\"}"))
+            .andExpect(status().isForbidden());
+        mockMvc.perform(patch(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID + "/enabled")
+                .header("Authorization", "Bearer " + rawToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"enabled\":false}"))
+            .andExpect(status().isForbidden());
+        mockMvc.perform(post(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID + "/password-reset")
+                .header("Authorization", "Bearer " + rawToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"newPassword\":\"new-password-123\"}"))
             .andExpect(status().isForbidden());
     }
 
@@ -640,6 +676,199 @@ class AdminUserControllerTest {
         assertThat(userRepository.findById(BOB_ID).orElseThrow().username()).isEqualTo("bob");
     }
 
+    @Test
+    void disableAndEnable_areIdempotentAndPreserveCredentialsVersionRules() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminPatchEnabled(session, BOB_ID, false)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.enabled").value(false));
+        assertThat(userRepository.findById(BOB_ID).orElseThrow().credentialsVersion()).isEqualTo(1);
+
+        adminPatchEnabled(session, BOB_ID, false)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.enabled").value(false));
+        assertThat(userRepository.findById(BOB_ID).orElseThrow().credentialsVersion()).isEqualTo(1);
+
+        adminPatchEnabled(session, BOB_ID, true)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.enabled").value(true));
+        assertThat(userRepository.findById(BOB_ID).orElseThrow().credentialsVersion()).isEqualTo(1);
+
+        adminPatchEnabled(session, BOB_ID, true)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.enabled").value(true));
+        assertThat(userRepository.findById(BOB_ID).orElseThrow().credentialsVersion()).isEqualTo(1);
+
+        login("bob", PASSWORD).andExpect(status().isOk());
+    }
+
+    @Test
+    void disable_invalidatesPendingPasswordResetTokens() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        Instant now = Instant.now();
+        passwordResetTokenRepository.create(new PasswordResetToken(
+            UUID.randomUUID(),
+            BOB_ID,
+            tokenHasher.hash(PasswordResetTokenGenerator.generate()),
+            now.plusSeconds(1800),
+            null,
+            now
+        ));
+
+        adminPatchEnabled(session, BOB_ID, false)
+            .andExpect(status().isOk());
+
+        PasswordResetToken token =
+            ((AuthenticationTestConfig.TestPasswordResetTokenRepository) passwordResetTokenRepository)
+                .all()
+                .getFirst();
+        assertThat(token.usedAt()).isNotNull();
+    }
+
+    @Test
+    void disableThenEnable_keepsPreviousSessionsAndTokensInvalid() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession adminSession = authenticatedSession("alice", PASSWORD);
+        MockHttpSession bobSession = authenticatedSession("bob", PASSWORD);
+        String bobToken = personalAccessToken(BOB_ID);
+        List<ApiToken> tokensBefore = apiTokenRepository.findAllByUserId(BOB_ID);
+
+        adminPatchEnabled(adminSession, BOB_ID, false)
+            .andExpect(status().isOk());
+        adminPatchEnabled(adminSession, BOB_ID, true)
+            .andExpect(status().isOk());
+
+        assertThat(apiTokenRepository.findAllByUserId(BOB_ID)).isEqualTo(tokensBefore);
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH).session(bobSession))
+            .andExpect(status().isUnauthorized());
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH)
+                .header("Authorization", "Bearer " + bobToken))
+            .andExpect(status().isUnauthorized());
+        login("bob", PASSWORD).andExpect(status().isOk());
+    }
+
+    @Test
+    void selfDisable_withSession_endsAccessOnTheNextRequest() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminPatchEnabled(session, ALICE_ID, false)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.enabled").value(false));
+
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH).session(session))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void selfDisable_withBearerToken_endsAccessOnTheNextRequest() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        String rawToken = personalAccessToken(ALICE_ID);
+
+        mockMvc.perform(patch(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID + "/enabled")
+                .header("Authorization", "Bearer " + rawToken)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"enabled\":false}"))
+            .andExpect(status().isOk());
+
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH)
+                .header("Authorization", "Bearer " + rawToken))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void adminPasswordReset_changesPasswordAndInvalidatesPreviousCredentialsAndResetTokens() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession adminSession = authenticatedSession("alice", PASSWORD);
+        MockHttpSession bobSession = authenticatedSession("bob", PASSWORD);
+        String bobToken = personalAccessToken(BOB_ID);
+        Instant now = Instant.now();
+        passwordResetTokenRepository.create(new PasswordResetToken(
+            UUID.randomUUID(),
+            BOB_ID,
+            tokenHasher.hash(PasswordResetTokenGenerator.generate()),
+            now.plusSeconds(1800),
+            null,
+            now
+        ));
+        User before = userRepository.findById(BOB_ID).orElseThrow();
+        List<String> rolesBefore = authorizationRepository.findRoleCodesForUser(BOB_ID);
+        List<ApiToken> tokensBefore = apiTokenRepository.findAllByUserId(BOB_ID);
+
+        adminResetPassword(adminSession, BOB_ID, "new-bob-password-123")
+            .andExpect(status().isNoContent());
+
+        User after = userRepository.findById(BOB_ID).orElseThrow();
+        assertThat(after.passwordHash()).isNotEqualTo(before.passwordHash());
+        assertThat(after.credentialsVersion()).isEqualTo(before.credentialsVersion() + 1);
+        assertThat(after.username()).isEqualTo(before.username());
+        assertThat(after.email()).isEqualTo(before.email());
+        assertThat(after.enabled()).isEqualTo(before.enabled());
+        assertThat(authorizationRepository.findRoleCodesForUser(BOB_ID)).isEqualTo(rolesBefore);
+        assertThat(apiTokenRepository.findAllByUserId(BOB_ID)).isEqualTo(tokensBefore);
+        assertThat(((AuthenticationTestConfig.TestPasswordResetTokenRepository) passwordResetTokenRepository)
+            .all()
+            .getFirst()
+            .usedAt()).isNotNull();
+
+        login("bob", PASSWORD).andExpect(status().isUnauthorized());
+        login("bob", "new-bob-password-123").andExpect(status().isOk());
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH).session(bobSession))
+            .andExpect(status().isUnauthorized());
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH)
+                .header("Authorization", "Bearer " + bobToken))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void selfPasswordReset_invalidatesCurrentSessionAndAllowsNewLogin() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminResetPassword(session, ALICE_ID, "new-alice-password-123")
+            .andExpect(status().isNoContent());
+
+        mockMvc.perform(get(AuthenticationEndpoints.ME_PATH).session(session))
+            .andExpect(status().isUnauthorized());
+        login("alice", PASSWORD).andExpect(status().isUnauthorized());
+        login("alice", "new-alice-password-123").andExpect(status().isOk());
+    }
+
+    @Test
+    void enableAndReset_returnExpectedErrorsForUnknownOrInvalidInput() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        UUID unknownId = UUID.randomUUID();
+
+        adminPatchEnabled(session, unknownId, false)
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_USER_NOT_FOUND.name()));
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        mockMvc.perform(patch(AdminUserEndpoints.BASE_PATH + "/" + BOB_ID + "/enabled")
+                .session(session)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"enabled\":null}"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("VALIDATION_REQUIRED"))
+            .andExpect(jsonPath("$.field").value("enabled"));
+
+        adminResetPassword(session, unknownId, "new-password-123")
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_USER_NOT_FOUND.name()));
+        adminResetPassword(session, BOB_ID, "short")
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("AUTH_INVALID_PASSWORD"));
+        adminResetPassword(session, BOB_ID, "   ")
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("VALIDATION_REQUIRED"))
+            .andExpect(jsonPath("$.field").value("newPassword"));
+    }
+
     private ResultActions adminPost(MockHttpSession session, String body) throws Exception {
         Cookie csrfCookie = csrfCookieFromSafeRequest();
         return mockMvc.perform(post(AdminUserEndpoints.BASE_PATH)
@@ -658,6 +887,27 @@ class AdminUserControllerTest {
             .header(CSRF_HEADER, csrfCookie.getValue())
             .contentType(MediaType.APPLICATION_JSON)
             .content(body));
+    }
+
+    private ResultActions adminPatchEnabled(MockHttpSession session, UUID userId, boolean enabled) throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        return mockMvc.perform(patch(AdminUserEndpoints.BASE_PATH + "/" + userId + "/enabled")
+            .session(session)
+            .cookie(csrfCookie)
+            .header(CSRF_HEADER, csrfCookie.getValue())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"enabled\":" + enabled + "}"));
+    }
+
+    private ResultActions adminResetPassword(MockHttpSession session, UUID userId, String newPassword)
+        throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        return mockMvc.perform(post(AdminUserEndpoints.BASE_PATH + "/" + userId + "/password-reset")
+            .session(session)
+            .cookie(csrfCookie)
+            .header(CSRF_HEADER, csrfCookie.getValue())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{\"newPassword\":\"" + newPassword + "\"}"));
     }
 
     private String createUserJson(String username, String email, String password, String roleCodesJson) {

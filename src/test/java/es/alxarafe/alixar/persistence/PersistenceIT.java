@@ -21,6 +21,7 @@ import es.alxarafe.alixar.authentication.application.UsernameAlreadyExistsExcept
 import es.alxarafe.alixar.authentication.domain.ApiToken;
 import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
+import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminUserService;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Optional;
@@ -85,6 +86,9 @@ class PersistenceIT {
 
     @Autowired
     private PlatformTransactionManager transactionManager;
+
+    @Autowired
+    private TransactionalAdminUserService transactionalAdminUserService;
 
     @Test
     void bootIntegratesPostgresqlFlywayJooqAndAuthenticationMigration() throws Exception {
@@ -366,8 +370,12 @@ class PersistenceIT {
 
         assertThat(isTransactional(controller, "create")).isFalse();
         assertThat(isTransactional(controller, "updateUsername")).isFalse();
+        assertThat(isTransactional(controller, "updateEnabled")).isFalse();
+        assertThat(isTransactional(controller, "resetPassword")).isFalse();
         assertThat(isTransactional(facade, "create")).isTrue();
         assertThat(isTransactional(facade, "updateUsername")).isTrue();
+        assertThat(isTransactional(facade, "setEnabled")).isTrue();
+        assertThat(isTransactional(facade, "resetPassword")).isTrue();
     }
 
     @Test
@@ -440,6 +448,57 @@ class PersistenceIT {
             })).isInstanceOf(RoleNotFoundException.class);
 
             assertThat(userRepository.findById(userId)).isEmpty();
+        } finally {
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void administrativeEnablementAndPasswordReset_updateCredentialsAndInvalidateResetTokens() {
+        var userId = UUID.fromString("9a8b7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4d");
+        var now = Instant.now();
+        var resetTokenHash = tokenHasher.hash(PasswordResetTokenGenerator.generate());
+
+        try {
+            userRepository.create(new User(
+                userId,
+                "admin-credential-actions",
+                "admin-credential-actions@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                2,
+                now,
+                now
+            ));
+            passwordResetTokenRepository.create(new PasswordResetToken(
+                UUID.randomUUID(),
+                userId,
+                resetTokenHash,
+                now.plusSeconds(1800),
+                null,
+                now
+            ));
+
+            var disabled = transactionalAdminUserService.setEnabled(userId, false);
+            assertThat(disabled.enabled()).isFalse();
+            var afterDisable = userRepository.findById(userId).orElseThrow();
+            assertThat(afterDisable.enabled()).isFalse();
+            assertThat(afterDisable.credentialsVersion()).isEqualTo(3);
+            assertThat(afterDisable.username()).isEqualTo("admin-credential-actions");
+            assertThat(afterDisable.email()).isEqualTo("admin-credential-actions@example.test");
+            assertThat(passwordResetTokenRepository.findByTokenHash(resetTokenHash).orElseThrow().isUsed())
+                .isTrue();
+
+            var enabled = transactionalAdminUserService.setEnabled(userId, true);
+            assertThat(enabled.enabled()).isTrue();
+            assertThat(userRepository.findById(userId).orElseThrow().credentialsVersion()).isEqualTo(3);
+
+            transactionalAdminUserService.resetPassword(userId, "new-admin-password-123");
+            var afterReset = userRepository.findById(userId).orElseThrow();
+            assertThat(afterReset.enabled()).isTrue();
+            assertThat(afterReset.credentialsVersion()).isEqualTo(4);
+            assertThat(passwordHasher.matches("new-admin-password-123", afterReset.passwordHash())).isTrue();
+            assertThat(passwordHasher.matches("original-password-123", afterReset.passwordHash())).isFalse();
         } finally {
             deleteUser(userId);
         }

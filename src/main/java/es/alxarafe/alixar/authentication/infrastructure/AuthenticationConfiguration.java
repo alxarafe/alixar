@@ -21,7 +21,9 @@ import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.RemoveRoleFromUserUseCase;
+import es.alxarafe.alixar.authentication.application.ResetAdminUserPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.RevokeApiTokenUseCase;
+import es.alxarafe.alixar.authentication.application.SetAdminUserEnabledUseCase;
 import es.alxarafe.alixar.authentication.application.TokenHasher;
 import es.alxarafe.alixar.authentication.application.UpdateAdminUsernameUseCase;
 import es.alxarafe.alixar.authentication.application.UserRepository;
@@ -113,11 +115,44 @@ public class AuthenticationConfiguration {
     }
 
     @Bean
+    SetAdminUserEnabledUseCase setAdminUserEnabledUseCase(
+        UserRepository userRepository,
+        AuthorizationRepository authorizationRepository,
+        PasswordResetTokenRepository passwordResetTokenRepository
+    ) {
+        return new SetAdminUserEnabledUseCase(
+            userRepository,
+            authorizationRepository,
+            passwordResetTokenRepository
+        );
+    }
+
+    @Bean
+    ResetAdminUserPasswordUseCase resetAdminUserPasswordUseCase(
+        UserRepository userRepository,
+        PasswordResetTokenRepository passwordResetTokenRepository,
+        PasswordHasher passwordHasher
+    ) {
+        return new ResetAdminUserPasswordUseCase(
+            userRepository,
+            passwordResetTokenRepository,
+            passwordHasher
+        );
+    }
+
+    @Bean
     TransactionalAdminUserService transactionalAdminUserService(
         CreateAdminUserUseCase createAdminUserUseCase,
-        UpdateAdminUsernameUseCase updateAdminUsernameUseCase
+        UpdateAdminUsernameUseCase updateAdminUsernameUseCase,
+        SetAdminUserEnabledUseCase setAdminUserEnabledUseCase,
+        ResetAdminUserPasswordUseCase resetAdminUserPasswordUseCase
     ) {
-        return new TransactionalAdminUserService(createAdminUserUseCase, updateAdminUsernameUseCase);
+        return new TransactionalAdminUserService(
+            createAdminUserUseCase,
+            updateAdminUsernameUseCase,
+            setAdminUserEnabledUseCase,
+            resetAdminUserPasswordUseCase
+        );
     }
 
     @Bean
