@@ -27,6 +27,7 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 | Spring Security 7.1.1 for the initial web-session authentication foundation | Approved |
 | Opaque Personal Access Tokens presented as Bearer tokens for independent API consumers | Approved |
 | RBAC with permissions assigned exclusively to roles and no per-user overrides | Approved |
+| Append-only audit trail with a versioned canonical SHA-256 hash chain | Approved |
 
 ## Implemented
 
@@ -53,8 +54,15 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   permission replacement and deletion of unassigned custom roles; administrative
   reads, creation of disabled users, username changes, enablement changes,
   password resets and full role replacement
+- Append-only audit event persistence with per-chain sequence, chain-head
+  locking, canonical format v1, SHA-256 hash chain and an independent verifier.
+  No audit mode, RBAC permission, instrumentation, API, retention or archive is
+  implemented yet; see [Audit](audit.md)
 
 ## Planned (Not Implemented)
+
+- Audit modes (`OFF`, `BASIC`, later `SELECTIVE` / `FULL`), RBAC permissions,
+  instrumentation, query API, retention, purge, archive and signed checkpoints
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Email change with new-address verification
@@ -145,6 +153,20 @@ that keeps a new user and its role assignments atomic. A restrictive foreign key
 protects assigned roles from deletion independently of application checks. See
 [Authentication](authentication.md) for the RBAC model and the administrative
 namespace.
+
+## Audit Boundary
+
+The audit trail is separate from technical application logs. The current
+implementation owns an append-only `audit_event` history and a per-chain head.
+Events are linked by a SHA-256 hash over an explicit, versioned canonical
+representation; integrity does not depend on an arbitrary JSON serialization.
+
+Application code has no operation to update or delete an individual event. The
+verifier depends on a read-only `AuditChainSource` port rather than PostgreSQL or
+jOOQ, so the same verification core can later consume exported archives.
+Database-level append-only privileges, audit modes, RBAC permissions,
+instrumentation, retention and signing are not implemented yet. See
+[Audit](audit.md) for the canonical format and deferred capabilities.
 
 ## Internationalization (i18n) Architecture
 

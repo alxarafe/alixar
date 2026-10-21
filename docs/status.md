@@ -20,13 +20,13 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
 - **PostgreSQL 18.6**: Docker Compose service with a pinned image digest, internal
   connectivity, healthcheck, and a persistent development volume retained by `bin/down`
 - **Flyway 12.4.0**: Managed by Spring Boot 4.1.1; applies the authentication
-  user, password recovery, Personal Access Token, role-based authorization and
-  role-administration authorization migrations
+  user, password recovery, Personal Access Token, role-based authorization,
+  role-administration authorization and audit integrity-core migrations
 - **jOOQ runtime**: PostgreSQL dialect and Spring-provided `DSLContext` verified
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 218 deterministic tests and 35 PostgreSQL integration tests remain
+  the 233 deterministic tests and 40 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -104,6 +104,16 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   relationship, Dolibarr authentication integration, registration, JWT, OAuth
   server, refresh tokens or machine-to-machine credentials
 
+### Audit
+
+- **Integrity core (T1.1)**: Append-only `audit_event` history with one initial
+  `chain_id`, monotonic per-chain sequence, SHA-256 hash chain, canonical format
+  v1, transactional `SELECT ... FOR UPDATE` chain-head locking, and an
+  independent verifier. PostgreSQL tests append concurrently and tamper directly
+  with rows to prove that verification fails. No audit mode, RBAC permission,
+  instrumentation, query API, retention, archive or checkpoint is implemented
+  yet. See [Audit](audit.md)
+
 ## Transitional integrations
 
 Dolibarr is a **temporary compatibility/reference backend** for capabilities still being migrated. It is:
@@ -128,6 +138,9 @@ See [Development](development.md) for full validation workflow details.
 
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
 - Role groups, PAT scopes and authorization for business capabilities beyond `users.manage` and `roles.manage`
+- Audit modes (`OFF`, `BASIC`, later `SELECTIVE` / `FULL`), audit RBAC
+  permissions, instrumentation, query API, retention, purging, archive and
+  signed checkpoints
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - Administration of other users' API tokens

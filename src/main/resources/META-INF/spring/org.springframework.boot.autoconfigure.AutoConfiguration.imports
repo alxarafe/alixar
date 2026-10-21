@@ -1,3 +1,4 @@
 es.alxarafe.alixar.authentication.infrastructure.AuthenticationConfiguration
 es.alxarafe.alixar.authentication.infrastructure.mail.SmtpPasswordResetNotifierConfiguration
 es.alxarafe.alixar.authentication.infrastructure.NoOpPasswordResetNotifierConfiguration
+es.alxarafe.alixar.audit.infrastructure.AuditConfiguration

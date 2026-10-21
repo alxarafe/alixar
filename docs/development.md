@@ -76,7 +76,9 @@ role-permission assignments, user-role assignments and the initial
 `users.manage`/`system-admin` seed, and
 `V5__add_role_administration_authorization.sql` adds the `roles.manage`
 permission, built-in role metadata and the restrictive role-assignment foreign
-key. Boot calls Flyway on startup using its default `classpath:db/migration`
+key, and `V6__create_audit_event_chain.sql` adds the audit chain head and
+append-only audit event tables with the genesis chain. Boot calls Flyway on
+startup using its default `classpath:db/migration`
 location. `PersistenceIT` verifies the migrations, their constraints, RBAC
 resolution and authentication transaction behaviour against PostgreSQL.
 
@@ -150,12 +152,12 @@ This override is used **only** by `./bin/check-reference`.
 
 `./bin/check` is the complete validation authority for Alixar itself. It runs entirely in Docker and performs:
 
-1. Build and run the 218 deterministic tests (`mvnw clean verify`)
+1. Build and run the 233 deterministic tests (`mvnw clean verify`)
 2. Runtime image build
 3. Container startup with health check wait (database + app)
 4. PostgreSQL health verification (`pg_isready`)
 5. Run `PersistenceIT` against the real isolated PostgreSQL service: verify the
-   Boot datasource, Flyway `V1`/`V2`/`V3`/`V4`/`V5`, a jOOQ `DSLContext`
+   Boot datasource, Flyway `V1`/`V2`/`V3`/`V4`/`V5`/`V6`, a jOOQ `DSLContext`
    executing `SELECT 1`, PostgreSQL 18.6, the authentication, API token and RBAC
    tables and constraints, permission-catalogue ordering, effective-permission
    resolution, restrictive role deletion, administrative user
@@ -163,8 +165,10 @@ This override is used **only** by `./bin/check-reference`.
    transaction rollback, administrative role creation with conflict handling,
    administrative role rename/permission replacement preserving assignments and
    `credentials_version`, atomic permission replacement, built-in role
-   immutability, and deletion restricted for assigned roles with permission
-   cascade for free roles
+   immutability, deletion restricted for assigned roles with permission
+   cascade for free roles, and audit append-only integrity including concurrent
+   appends, hash-chain verification, direct tampering detection and restrictive
+   chain-head deletion
 6. HTTP `GET /health` verification (exact `{"status":"ok"}` response)
 7. Cleanup of this invocation's containers, network, and volume; verify none remain
 

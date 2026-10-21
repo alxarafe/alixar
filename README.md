@@ -47,6 +47,7 @@ Requires Docker and Docker Compose. No host Java or Maven installation needed.
 
 - [Current implementation status](docs/status.md)
 - [Architecture](docs/architecture.md)
+- [Audit](docs/audit.md)
 - [Development](docs/development.md)
 - [Agent working agreement](AGENTS.md)
 

@@ -1,5 +1,14 @@
 package es.alxarafe.alixar.persistence;
 
+import es.alxarafe.alixar.audit.application.AuditChainVerifier;
+import es.alxarafe.alixar.audit.application.AuditEventDraft;
+import es.alxarafe.alixar.audit.application.AuditVerificationFailure;
+import es.alxarafe.alixar.audit.application.AuditVerificationResult;
+import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
+import es.alxarafe.alixar.audit.domain.AuditChain;
+import es.alxarafe.alixar.audit.domain.AuditEvent;
+import es.alxarafe.alixar.audit.domain.AuditResult;
+import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditService;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
@@ -30,10 +39,16 @@ import es.alxarafe.alixar.authentication.domain.User;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminUserService;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminRoleService;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.jooq.DSLContext;
@@ -61,6 +76,9 @@ class PersistenceIT {
     private static final String PERMISSION_TABLE = "authentication_permission";
     private static final String ROLE_PERMISSION_TABLE = "authentication_role_permission";
     private static final String USER_ROLE_TABLE = "authentication_user_role";
+    private static final String AUDIT_HEAD_TABLE = "audit_chain_head";
+    private static final String AUDIT_EVENT_TABLE = "audit_event";
+    private static final UUID AUDIT_CHAIN_ID = AuditChain.DEFAULT_CHAIN_ID;
 
     @Autowired
     private DataSource dataSource;
@@ -101,6 +119,12 @@ class PersistenceIT {
     @Autowired
     private TransactionalAdminRoleService transactionalAdminRoleService;
 
+    @Autowired
+    private TransactionalAuditService transactionalAuditService;
+
+    @Autowired
+    private AuditChainVerifier auditChainVerifier;
+
     @Test
     void bootIntegratesPostgresqlFlywayJooqAndAuthenticationMigration() throws Exception {
         try (var connection = dataSource.getConnection()) {
@@ -108,8 +132,8 @@ class PersistenceIT {
                 .startsWith(POSTGRESQL_VERSION);
         }
         assertThat(flyway.getConfiguration().getDataSource()).isSameAs(dataSource);
-        assertThat(flyway.info().all()).hasSize(5);
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("5");
+        assertThat(flyway.info().all()).hasSize(6);
+        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("6");
         assertThat(dsl.selectOne().fetchSingle().value1()).isEqualTo(1);
         assertThat(dsl.fetch("select tablename from pg_catalog.pg_tables where schemaname = current_schema()")
             .getValues(0, String.class)).containsExactlyInAnyOrder(
@@ -120,10 +144,12 @@ class PersistenceIT {
                 ROLE_TABLE,
                 PERMISSION_TABLE,
                 ROLE_PERMISSION_TABLE,
-                USER_ROLE_TABLE
+                USER_ROLE_TABLE,
+                AUDIT_HEAD_TABLE,
+                AUDIT_EVENT_TABLE
             );
         assertThat(dsl.fetchCount(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(HISTORY_TABLE))))
-            .isEqualTo(5);
+            .isEqualTo(6);
     }
 
     @Test
@@ -1323,6 +1349,172 @@ class PersistenceIT {
         assertThat(isTransactional(controller, "revoke")).isFalse();
         assertThat(isTransactional(facade, "create")).isTrue();
         assertThat(isTransactional(facade, "revoke")).isTrue();
+    }
+
+    @Test
+    void auditTransactionBoundary_livesInInfrastructureFacade() throws Exception {
+        Class<?> facade = Class.forName(
+            "es.alxarafe.alixar.audit.infrastructure.TransactionalAuditService"
+        );
+
+        assertThat(isTransactional(facade, "append")).isTrue();
+    }
+
+    @Test
+    void auditConcurrentAppends_produceSingleUnforkedChain() throws Exception {
+        resetAuditChain();
+        int writers = 8;
+        ExecutorService executor = Executors.newFixedThreadPool(writers);
+        CountDownLatch ready = new CountDownLatch(writers);
+        CountDownLatch start = new CountDownLatch(1);
+
+        try {
+            List<Future<AuditEvent>> futures = new ArrayList<>();
+            for (int index = 0; index < writers; index++) {
+                int writer = index;
+                futures.add(executor.submit(() -> {
+                    ready.countDown();
+                    start.await();
+                    return transactionalAuditService.append(auditDraft("CONCURRENT_" + writer));
+                }));
+            }
+
+            assertThat(ready.await(10, TimeUnit.SECONDS)).isTrue();
+            start.countDown();
+
+            List<AuditEvent> events = new ArrayList<>();
+            for (Future<AuditEvent> future : futures) {
+                events.add(future.get(30, TimeUnit.SECONDS));
+            }
+
+            assertThat(events).hasSize(writers);
+            assertThat(events.stream().map(AuditEvent::sequence).sorted().toList())
+                .containsExactlyElementsOf(
+                    java.util.stream.LongStream.rangeClosed(1, writers).boxed().toList()
+                );
+            assertThat(events.stream().map(AuditEvent::sequence).distinct().count())
+                .isEqualTo(writers);
+
+            AuditVerificationResult result = auditChainVerifier.verify(AUDIT_CHAIN_ID);
+            assertThat(result.valid()).isTrue();
+            assertThat(result.checkedEvents()).isEqualTo(writers);
+        } finally {
+            executor.shutdownNow();
+            executor.awaitTermination(10, TimeUnit.SECONDS);
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditVerifier_rejectsDirectDatabaseTampering() {
+        resetAuditChain();
+        try {
+            appendAuditEvents(3);
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+
+            dsl.query(
+                "update audit_event set action = 'TAMPERED' where chain_id = ? and sequence = 2",
+                AUDIT_CHAIN_ID
+            ).execute();
+            assertAuditVerificationFails(AuditVerificationFailure.EVENT_HASH_MISMATCH, 2);
+
+            resetAuditChain();
+            appendAuditEvents(3);
+            dsl.query(
+                "delete from audit_event where chain_id = ? and sequence = 2",
+                AUDIT_CHAIN_ID
+            ).execute();
+            assertAuditVerificationFails(AuditVerificationFailure.SEQUENCE_MISMATCH, 2);
+
+            resetAuditChain();
+            appendAuditEvents(3);
+            dsl.query(
+                "update audit_event set previous_hash = ? where chain_id = ? and sequence = 2",
+                "f".repeat(64),
+                AUDIT_CHAIN_ID
+            ).execute();
+            assertAuditVerificationFails(AuditVerificationFailure.PREVIOUS_HASH_MISMATCH, 2);
+
+            resetAuditChain();
+            appendAuditEvents(3);
+            dsl.query(
+                "update audit_event set event_hash = ? where chain_id = ? and sequence = 2",
+                "e".repeat(64),
+                AUDIT_CHAIN_ID
+            ).execute();
+            assertAuditVerificationFails(AuditVerificationFailure.EVENT_HASH_MISMATCH, 2);
+
+            resetAuditChain();
+            appendAuditEvents(3);
+            dsl.query(
+                "update audit_event set sequence = 99 where chain_id = ? and sequence = 2",
+                AUDIT_CHAIN_ID
+            ).execute();
+            assertAuditVerificationFails(AuditVerificationFailure.SEQUENCE_MISMATCH, 2);
+        } finally {
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditChainHead_cannotBeDeletedWhileEventsExist() {
+        resetAuditChain();
+        try {
+            appendAuditEvents(1);
+
+            assertThatThrownBy(() -> dsl.query(
+                "delete from audit_chain_head where chain_id = ?",
+                AUDIT_CHAIN_ID
+            ).execute()).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+        } finally {
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditEvent_doesNotPersistRetentionMetadataYet() {
+        assertThat(dsl.fetch(
+            "select column_name from information_schema.columns where table_name = ?",
+            AUDIT_EVENT_TABLE
+        ).getValues(0, String.class))
+            .doesNotContain("expires_at", "legal_hold");
+    }
+
+    private void assertAuditVerificationFails(AuditVerificationFailure failure, long sequence) {
+        AuditVerificationResult result = auditChainVerifier.verify(AUDIT_CHAIN_ID);
+        assertThat(result.valid()).isFalse();
+        assertThat(result.failure()).isEqualTo(failure);
+        assertThat(result.failedSequence()).isEqualTo(sequence);
+    }
+
+    private void appendAuditEvents(int count) {
+        for (int index = 1; index <= count; index++) {
+            transactionalAuditService.append(auditDraft("AUDIT_TEST_" + index));
+        }
+    }
+
+    private AuditEventDraft auditDraft(String action) {
+        return new AuditEventDraft(
+            AUDIT_CHAIN_ID,
+            null,
+            "system",
+            AuditAuthenticationType.SYSTEM,
+            action,
+            "TEST",
+            null,
+            AuditResult.SUCCESS,
+            null
+        );
+    }
+
+    private void resetAuditChain() {
+        dsl.query("delete from audit_event").execute();
+        dsl.query(
+            "update audit_chain_head set last_sequence = 0, last_hash = ?, updated_at = current_timestamp "
+                + "where chain_id = ?",
+            AuditChain.GENESIS_HASH,
+            AUDIT_CHAIN_ID
+        ).execute();
     }
 
     private boolean isTransactional(Class<?> controller, String methodName) {

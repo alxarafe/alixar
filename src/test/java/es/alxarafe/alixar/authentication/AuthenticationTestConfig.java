@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.authentication;
 
+import es.alxarafe.alixar.audit.AuditTestConfig;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
@@ -28,9 +29,11 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 
 @TestConfiguration
+@Import(AuditTestConfig.class)
 public class AuthenticationTestConfig {
 
     @Bean
