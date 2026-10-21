@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.authentication.infrastructure.security;
 
+import es.alxarafe.alixar.audit.api.AuditEndpoints;
 import es.alxarafe.alixar.audit.application.AuditActorResolver;
 import es.alxarafe.alixar.authentication.api.AdminUserEndpoints;
 import es.alxarafe.alixar.authentication.api.UserEndpoints;
@@ -149,6 +150,8 @@ public class SecurityConfiguration {
                     .hasAuthority(PermissionCodes.ROLES_MANAGE)
                 .requestMatchers(AdminUserEndpoints.PERMISSIONS_BASE_PATH)
                     .hasAuthority(PermissionCodes.ROLES_MANAGE)
+                .requestMatchers(HttpMethod.GET, AuditEndpoints.BASE_PATH)
+                    .hasAuthority(PermissionCodes.AUDIT_READ)
                 .requestMatchers(AdminUserEndpoints.BASE_PATH, AdminUserEndpoints.USERS_PATH_PATTERN)
                     .hasAuthority(PermissionCodes.USERS_MANAGE)
                 .requestMatchers(

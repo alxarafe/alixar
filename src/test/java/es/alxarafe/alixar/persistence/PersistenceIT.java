@@ -5,10 +5,12 @@ import es.alxarafe.alixar.audit.application.AuditActor;
 import es.alxarafe.alixar.audit.application.AuditActorResolver;
 import es.alxarafe.alixar.audit.application.AuditChainVerifier;
 import es.alxarafe.alixar.audit.application.AuditEventDraft;
+import es.alxarafe.alixar.audit.application.AuditEventQuery;
 import es.alxarafe.alixar.audit.application.AuditMode;
 import es.alxarafe.alixar.audit.application.AuditResourceType;
 import es.alxarafe.alixar.audit.application.AuditVerificationFailure;
 import es.alxarafe.alixar.audit.application.AuditVerificationResult;
+import es.alxarafe.alixar.audit.application.ListAuditEventsUseCase;
 import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import es.alxarafe.alixar.audit.domain.AuditChain;
 import es.alxarafe.alixar.audit.domain.AuditEvent;
@@ -58,6 +60,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.jooq.DSLContext;
@@ -152,6 +155,9 @@ class PersistenceIT {
     private AuditChainVerifier auditChainVerifier;
 
     @Autowired
+    private ListAuditEventsUseCase listAuditEvents;
+
+    @Autowired
     private AuditProperties auditProperties;
 
     @Test
@@ -161,8 +167,8 @@ class PersistenceIT {
                 .startsWith(POSTGRESQL_VERSION);
         }
         assertThat(flyway.getConfiguration().getDataSource()).isSameAs(dataSource);
-        assertThat(flyway.info().all()).hasSize(7);
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("7");
+        assertThat(flyway.info().all()).hasSize(8);
+        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("8");
         assertThat(dsl.selectOne().fetchSingle().value1()).isEqualTo(1);
         assertThat(dsl.fetch("select tablename from pg_catalog.pg_tables where schemaname = current_schema()")
             .getValues(0, String.class)).containsExactlyInAnyOrder(
@@ -178,7 +184,7 @@ class PersistenceIT {
                 AUDIT_EVENT_TABLE
             );
         assertThat(dsl.fetchCount(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(HISTORY_TABLE))))
-            .isEqualTo(7);
+            .isEqualTo(8);
     }
 
     @Test
@@ -889,11 +895,19 @@ class PersistenceIT {
     @Test
     void rbacMigration_seedsRoleAdministrationPermissionsAndBuiltInRole() {
         assertThat(dsl.fetch("select code from authentication_permission").getValues(0, String.class))
-            .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
+            .containsExactlyInAnyOrder(
+                PermissionCodes.USERS_MANAGE,
+                PermissionCodes.ROLES_MANAGE,
+                PermissionCodes.AUDIT_READ
+            );
         assertThat(dsl.fetch("select code from authentication_role").getValues(0, String.class))
             .contains(RoleCodes.SYSTEM_ADMIN);
         assertThat(authorizationRepository.findPermissionCodesByRole(RoleCodes.SYSTEM_ADMIN))
-            .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
+            .containsExactlyInAnyOrder(
+                PermissionCodes.USERS_MANAGE,
+                PermissionCodes.ROLES_MANAGE,
+                PermissionCodes.AUDIT_READ
+            );
         assertThat(dsl.fetch(
             "select built_in from authentication_role where code = ?",
             RoleCodes.SYSTEM_ADMIN
@@ -904,6 +918,7 @@ class PersistenceIT {
     void rbacPermissionCatalogue_isSortedAndIncludesRoleAdministration() {
         assertThat(authorizationRepository.findAllPermissions())
             .containsExactly(
+                new PermissionDefinition(PermissionCodes.AUDIT_READ, "Read audit events"),
                 new PermissionDefinition(
                     PermissionCodes.ROLES_MANAGE,
                     "Manage roles and their permission assignments"
@@ -1052,6 +1067,7 @@ class PersistenceIT {
             assertThat(builtIn.name()).isEqualTo("System administrator");
             assertThat(builtIn.builtIn()).isTrue();
             assertThat(builtIn.permissionCodes()).containsExactly(
+                PermissionCodes.AUDIT_READ,
                 PermissionCodes.ROLES_MANAGE,
                 PermissionCodes.USERS_MANAGE
             );
@@ -1135,6 +1151,7 @@ class PersistenceIT {
                 .containsExactlyInAnyOrder(
                     PermissionCodes.USERS_MANAGE,
                     PermissionCodes.ROLES_MANAGE,
+                    PermissionCodes.AUDIT_READ,
                     permissionCode
                 );
         } finally {
@@ -1155,7 +1172,11 @@ class PersistenceIT {
             authorizationRepository.assignRoleToUser(userId, RoleCodes.SYSTEM_ADMIN);
 
             assertThat(authorizationRepository.findEffectivePermissionCodes(userId))
-                .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
+                .containsExactlyInAnyOrder(
+                    PermissionCodes.USERS_MANAGE,
+                    PermissionCodes.ROLES_MANAGE,
+                    PermissionCodes.AUDIT_READ
+                );
             assertThat(dsl.selectCount()
                 .from(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(USER_ROLE_TABLE)))
                 .where(org.jooq.impl.DSL.field(
@@ -1526,6 +1547,132 @@ class PersistenceIT {
             AUDIT_EVENT_TABLE
         ).getValues(0, String.class))
             .doesNotContain("expires_at", "legal_hold");
+    }
+
+    @Test
+    void auditQuery_paginatesAndFiltersWithoutDuplicatesOrOmissions() {
+        UUID aliceId = UUID.fromString("1a2b3c4d-5e6f-4a70-8b91-c2d3e4f50617");
+        UUID bobId = UUID.fromString("2b3c4d5e-6f70-4b81-9ca2-d3e4f5061728");
+
+        resetAuditChain();
+        try {
+            appendQueryEvent(
+                AuditAction.ADMIN_USER_CREATED,
+                AuditResourceType.USER,
+                "user-1",
+                aliceId,
+                "alice",
+                AuditResult.SUCCESS
+            );
+            appendQueryEvent(
+                AuditAction.API_TOKEN_CREATED,
+                AuditResourceType.API_TOKEN,
+                "token-1",
+                bobId,
+                "bob",
+                AuditResult.SUCCESS
+            );
+            appendQueryEvent(
+                AuditAction.ROLE_CREATED,
+                AuditResourceType.ROLE,
+                "role-1",
+                aliceId,
+                "alice",
+                AuditResult.FAILURE
+            );
+            appendQueryEvent(
+                AuditAction.ADMIN_USER_CREATED,
+                AuditResourceType.USER,
+                "user-2",
+                bobId,
+                "bob",
+                AuditResult.SUCCESS
+            );
+            appendQueryEvent(
+                AuditAction.API_TOKEN_REVOKED,
+                AuditResourceType.API_TOKEN,
+                "token-1",
+                aliceId,
+                "alice",
+                AuditResult.SUCCESS
+            );
+            appendQueryEvent(
+                AuditAction.ROLE_DELETED,
+                AuditResourceType.ROLE,
+                "role-1",
+                bobId,
+                "bob",
+                AuditResult.DENIED
+            );
+            appendQueryEvent(
+                AuditAction.ADMIN_USER_CREATED,
+                AuditResourceType.USER,
+                "user-3",
+                aliceId,
+                "alice",
+                AuditResult.SUCCESS
+            );
+
+            List<AuditEvent> page1 = listAuditEvents.execute(query(0, 3, null, null, null, null, null));
+            List<AuditEvent> page2 = listAuditEvents.execute(query(3, 3, null, null, null, null, null));
+            List<AuditEvent> page3 = listAuditEvents.execute(query(6, 3, null, null, null, null, null));
+
+            assertThat(sequences(page1)).containsExactly(1L, 2L, 3L);
+            assertThat(sequences(page2)).containsExactly(4L, 5L, 6L);
+            assertThat(sequences(page3)).containsExactly(7L);
+            assertThat(Stream.of(page1, page2, page3)
+                .flatMap(List::stream)
+                .map(AuditEvent::sequence)
+                .toList()).containsExactly(1L, 2L, 3L, 4L, 5L, 6L, 7L);
+
+            assertThat(sequences(listAuditEvents.execute(query(
+                0,
+                10,
+                AuditAction.ADMIN_USER_CREATED,
+                AuditResourceType.USER,
+                null,
+                null,
+                AuditResult.SUCCESS
+            )))).containsExactly(1L, 4L, 7L);
+            assertThat(sequences(listAuditEvents.execute(query(
+                0,
+                10,
+                null,
+                null,
+                null,
+                bobId,
+                null
+            )))).containsExactly(2L, 4L, 6L);
+            assertThat(sequences(listAuditEvents.execute(query(
+                0,
+                10,
+                null,
+                null,
+                null,
+                null,
+                AuditResult.DENIED
+            )))).containsExactly(6L);
+            assertThat(sequences(listAuditEvents.execute(query(
+                0,
+                10,
+                null,
+                null,
+                "token-1",
+                null,
+                null
+            )))).containsExactly(2L, 5L);
+            assertThat(sequences(listAuditEvents.execute(query(
+                4,
+                10,
+                null,
+                null,
+                null,
+                null,
+                null
+            )))).containsExactly(5L, 6L, 7L);
+        } finally {
+            resetAuditChain();
+        }
     }
 
     @Test
@@ -2079,6 +2226,52 @@ class PersistenceIT {
         for (int index = 1; index <= count; index++) {
             transactionalAuditService.append(auditDraft("AUDIT_TEST_" + index));
         }
+    }
+
+    private AuditEventQuery query(
+        long afterSequence,
+        int limit,
+        AuditAction action,
+        AuditResourceType resourceType,
+        String resourceId,
+        UUID actorUserId,
+        AuditResult result
+    ) {
+        return new AuditEventQuery(
+            AUDIT_CHAIN_ID,
+            afterSequence,
+            limit,
+            action,
+            resourceType,
+            resourceId,
+            actorUserId,
+            result
+        );
+    }
+
+    private void appendQueryEvent(
+        AuditAction action,
+        AuditResourceType resourceType,
+        String resourceId,
+        UUID actorUserId,
+        String actorUsername,
+        AuditResult result
+    ) {
+        transactionalAuditService.append(new AuditEventDraft(
+            AUDIT_CHAIN_ID,
+            actorUserId,
+            actorUsername,
+            AuditAuthenticationType.SESSION,
+            action.name(),
+            resourceType.name(),
+            resourceId,
+            result,
+            null
+        ));
+    }
+
+    private List<Long> sequences(List<AuditEvent> events) {
+        return events.stream().map(AuditEvent::sequence).toList();
     }
 
     private AuditEventDraft auditDraft(String action) {

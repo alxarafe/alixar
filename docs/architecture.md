@@ -49,11 +49,11 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - Role-based authorization with permissions assigned exclusively to roles,
   effective permissions resolved from persistence on every authenticated
   request, deny-by-default policy, and identical authorization for session and
-  Bearer authentication. Built-in `system-admin` role with `users.manage` and
-  `roles.manage`; read-only permission catalogue; role detail, creation, rename,
-  permission replacement and deletion of unassigned custom roles; administrative
-  reads, creation of disabled users, username changes, enablement changes,
-  password resets and full role replacement
+  Bearer authentication. Built-in `system-admin` role with `users.manage`,
+  `roles.manage` and `audit.read`; read-only permission catalogue; role detail,
+  creation, rename, permission replacement and deletion of unassigned custom
+  roles; administrative reads, creation of disabled users, username changes,
+  enablement changes, password resets and full role replacement
 - Append-only audit event persistence with per-chain sequence, chain-head
   locking, canonical format v1, SHA-256 hash chain and an independent verifier.
   `OFF` / `BASIC` policy and atomic events for administrative user enablement,
@@ -61,20 +61,24 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   username/password changes, completed password recovery, Personal Access Token
   creation/revocation, and role creation/rename/permission-replacement/deletion
   are implemented. Recovery-token events use `RECOVERY_TOKEN` and explicitly
-  identify the recovered user as actor. RBAC permissions, the PAT identifier as
-  actor, query API, retention, archive and checkpoints are not implemented yet.
-  See [Audit](audit.md)
+  identify the recovered user as actor. T1.4a adds the `audit.read` permission
+  and a read-only `GET /api/admin/audit-events` API with chain-scoped keyset
+  pagination and combinable filters. Event detail, formal HTTP chain
+  verification, `audit.configure`, read auditing, the PAT identifier as actor,
+  retention, archive and checkpoints are not implemented yet. See
+  [Audit](audit.md)
 
 ## Planned (Not Implemented)
 
-- `SELECTIVE` / `FULL` audit modes, audit RBAC permissions, the PAT identifier
-  as actor, query API, retention, purge, archive and signed checkpoints
+- `SELECTIVE` / `FULL` audit modes, `audit.configure`, the PAT identifier as
+  actor, audit event detail and formal verification, read auditing, retention,
+  purge, archive and signed checkpoints
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Email change with new-address verification
 - Role groups
-- PAT scopes and authorization for business capabilities beyond `users.manage`
-  and `roles.manage`
+- PAT scopes and authorization for business capabilities beyond `users.manage`,
+  `roles.manage` and `audit.read`
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - OpenAPI specification
@@ -143,14 +147,15 @@ values. It works identically for session and Bearer authentication. Role changes
 therefore take effect on the next request without changing
 `credentials_version`, invalidating the session or revoking PATs.
 
-Business code authorizes by permission (`hasAuthority("users.manage")` or
-`hasAuthority("roles.manage")`), not by role name. `system-admin` is an
-administrative grouping of permissions and has no authorization special case.
+Business code authorizes by permission (`hasAuthority("users.manage")`,
+`hasAuthority("roles.manage")` or `hasAuthority("audit.read")`), not by role
+name. `system-admin` is an administrative grouping of permissions and has no
+authorization special case.
 Administrative reads resolve user summaries, user detail, the role catalogue,
-role detail and the permission catalogue through application use cases behind
-dedicated ports. Role creation validates the complete permission set before
-writing and uses an infrastructure-owned transaction for the role and its
-permissions. Role rename, permission replacement and deletion reuse the same
+role detail, the permission catalogue and the chain-scoped audit event list
+through application use cases behind dedicated ports. Role creation validates
+the complete permission set before writing and uses an infrastructure-owned
+transaction for the role and its permissions. Role rename, permission replacement and deletion reuse the same
 transactional facade; built-in role protection and assignment checks run in the
 application use cases, while a restrictive foreign key remains the final guard
 against deleting an assigned role. User creation and username changes also run
@@ -180,10 +185,11 @@ and revocation, and role creation, rename, permission replacement and deletion.
 The application layer depends on an `AuditTrail` port, not on environment
 variables or Spring Security. Authenticated operations resolve their actor
 implicitly; password recovery supplies an explicit `RECOVERY_TOKEN` actor. Every
-mandatory event is fail-closed. Database-level append-only privileges, audit RBAC
-permissions, the PAT identifier as actor, retention and signing are not
-implemented yet. See [Audit](audit.md) for the canonical format and deferred
-capabilities.
+mandatory event is fail-closed. The `audit.read` permission and the read-only
+event query API are implemented. Database-level append-only privileges, event
+detail and formal HTTP verification, `audit.configure`, read auditing, the PAT
+identifier as actor, retention and signing are not implemented yet. See
+[Audit](audit.md) for the canonical format and deferred capabilities.
 
 ## Internationalization (i18n) Architecture
 
@@ -194,6 +200,7 @@ Each functional module owns translations for its own concepts:
 - **Core module** (`i18n/core/messages*.properties`): Genuinely cross-module messages and templates (e.g., `validation.required`, `validation.required.title`)
 - **Contact module** (`i18n/contact/messages*.properties`): Contact-specific messages (e.g., `contact.notFound`, `contact.invalidThirdPartyReference`, `field.contact.lastName`)
 - **Authentication module** (`i18n/authentication/messages*.properties`): Authentication errors and authentication field labels
+- **Audit module** (`i18n/audit/messages*.properties`): Audit query errors and audit field labels
 
 ### Localization boundary
 

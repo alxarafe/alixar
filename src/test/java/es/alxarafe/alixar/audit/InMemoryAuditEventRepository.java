@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.audit;
 
+import es.alxarafe.alixar.audit.application.AuditEventQuery;
 import es.alxarafe.alixar.audit.application.AuditEventRepository;
 import es.alxarafe.alixar.audit.domain.AuditChain;
 import es.alxarafe.alixar.audit.domain.AuditChainHead;
@@ -67,6 +68,21 @@ public class InMemoryAuditEventRepository implements AuditEventRepository {
             .filter(event -> event.sequence() > afterSequence)
             .sorted(Comparator.comparingLong(AuditEvent::sequence))
             .limit(limit)
+            .toList();
+    }
+
+    @Override
+    public synchronized List<AuditEvent> findEvents(AuditEventQuery query) {
+        return events.getOrDefault(query.chainId(), List.of()).stream()
+            .filter(event -> event.sequence() > query.afterSequence())
+            .filter(event -> query.action() == null || query.action().name().equals(event.action()))
+            .filter(event -> query.resourceType() == null
+                || query.resourceType().name().equals(event.resourceType()))
+            .filter(event -> query.resourceId() == null || query.resourceId().equals(event.resourceId()))
+            .filter(event -> query.actorUserId() == null || query.actorUserId().equals(event.actorUserId()))
+            .filter(event -> query.result() == null || query.result() == event.result())
+            .sorted(Comparator.comparingLong(AuditEvent::sequence))
+            .limit(query.limit())
             .toList();
     }
 }

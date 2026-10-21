@@ -322,9 +322,10 @@ class AdminUserControllerTest {
             .andExpect(jsonPath("$[0].code").value(RoleCodes.SYSTEM_ADMIN))
             .andExpect(jsonPath("$[0].name").value("System administrator"))
             .andExpect(jsonPath("$[0].builtIn").value(true))
-            .andExpect(jsonPath("$[0].permissionCodes.length()").value(2))
-            .andExpect(jsonPath("$[0].permissionCodes[0]").value(PermissionCodes.ROLES_MANAGE))
-            .andExpect(jsonPath("$[0].permissionCodes[1]").value(PermissionCodes.USERS_MANAGE))
+            .andExpect(jsonPath("$[0].permissionCodes.length()").value(3))
+            .andExpect(jsonPath("$[0].permissionCodes[0]").value(PermissionCodes.AUDIT_READ))
+            .andExpect(jsonPath("$[0].permissionCodes[1]").value(PermissionCodes.ROLES_MANAGE))
+            .andExpect(jsonPath("$[0].permissionCodes[2]").value(PermissionCodes.USERS_MANAGE))
             .andExpect(jsonPath("$[0].permissions").doesNotExist())
             .andExpect(jsonPath("$[0].id").doesNotExist());
     }

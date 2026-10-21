@@ -198,8 +198,10 @@ class AdminRoleControllerTest {
             .andExpect(jsonPath("$.code").value(RoleCodes.SYSTEM_ADMIN))
             .andExpect(jsonPath("$.name").value("System administrator"))
             .andExpect(jsonPath("$.builtIn").value(true))
-            .andExpect(jsonPath("$.permissionCodes[0]").value(PermissionCodes.ROLES_MANAGE))
-            .andExpect(jsonPath("$.permissionCodes[1]").value(PermissionCodes.USERS_MANAGE))
+            .andExpect(jsonPath("$.permissionCodes.length()").value(3))
+            .andExpect(jsonPath("$.permissionCodes[0]").value(PermissionCodes.AUDIT_READ))
+            .andExpect(jsonPath("$.permissionCodes[1]").value(PermissionCodes.ROLES_MANAGE))
+            .andExpect(jsonPath("$.permissionCodes[2]").value(PermissionCodes.USERS_MANAGE))
             .andExpect(jsonPath("$.permissions").doesNotExist());
     }
 
@@ -437,7 +439,11 @@ class AdminRoleControllerTest {
             .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_BUILT_IN_ROLE_IMMUTABLE.name()));
 
         assertThat(authorizationRepository.findPermissionCodesByRole(RoleCodes.SYSTEM_ADMIN))
-            .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
+            .containsExactlyInAnyOrder(
+                PermissionCodes.USERS_MANAGE,
+                PermissionCodes.ROLES_MANAGE,
+                PermissionCodes.AUDIT_READ
+            );
     }
 
     @Test

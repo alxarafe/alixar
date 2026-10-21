@@ -287,7 +287,8 @@ public class AuthenticationTestConfig {
                 RoleCodes.SYSTEM_ADMIN,
                 new LinkedHashSet<>(Set.of(
                     PermissionCodes.USERS_MANAGE,
-                    PermissionCodes.ROLES_MANAGE
+                    PermissionCodes.ROLES_MANAGE,
+                    PermissionCodes.AUDIT_READ
                 ))
             );
         }
@@ -354,6 +355,7 @@ public class AuthenticationTestConfig {
         @Override
         public List<PermissionDefinition> findAllPermissions() {
             return List.of(
+                new PermissionDefinition(PermissionCodes.AUDIT_READ, "Read audit events"),
                 new PermissionDefinition(
                     PermissionCodes.ROLES_MANAGE,
                     "Manage roles and their permission assignments"

@@ -7,6 +7,7 @@ import es.alxarafe.alixar.audit.application.AuditEventAppender;
 import es.alxarafe.alixar.audit.application.AuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditHashCalculator;
 import es.alxarafe.alixar.audit.application.AuditTrail;
+import es.alxarafe.alixar.audit.application.ListAuditEventsUseCase;
 import java.time.Clock;
 import org.jooq.DSLContext;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -87,5 +88,10 @@ public class AuditConfiguration {
             auditCanonicalEncoder,
             auditHashCalculator
         );
+    }
+
+    @Bean
+    ListAuditEventsUseCase listAuditEventsUseCase(AuditEventRepository auditEventRepository) {
+        return new ListAuditEventsUseCase(auditEventRepository);
     }
 }

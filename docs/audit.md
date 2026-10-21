@@ -13,10 +13,11 @@ persistent integrity core. T1.2 added the configurable `OFF` / `BASIC` policy
 and the first instrumented administrative operation. T1.3a extends `BASIC` to
 administrative user lifecycle operations, self-service credential changes,
 completed password recovery, Personal Access Token lifecycle and role
-administration. Query APIs, retention, archive and checkpoints remain out of
-scope.
+administration. T1.4a adds a read-only query API protected by `audit.read`.
+Event detail, formal chain verification through HTTP, retention, archive and
+checkpoints remain out of scope.
 
-## Current scope (T1.1, T1.2, T1.3a and T1.3b)
+## Current scope (T1.1, T1.2, T1.3a, T1.3b and T1.4a)
 
 Implemented:
 
@@ -38,16 +39,19 @@ Implemented:
   revocation transitions;
 - atomic `SUCCESS` events for role creation, rename, permission replacement and
   deletion;
-- `RECOVERY_TOKEN` as an audit authentication type.
+- `RECOVERY_TOKEN` as an audit authentication type;
+- `audit.read` permission and a read-only, chain-scoped event query API with
+  keyset pagination and combinable filters.
 
 Not implemented yet:
 
 - `SELECTIVE` / `FULL` audit modes;
-- `audit.read` and `audit.configure` permissions;
+- `audit.configure` permission;
 - the PAT identifier as part of the actor;
 - bootstrap, login, logout and password-reset request events;
 - `FAILURE` and `DENIED` event strategy;
-- administrative query API;
+- event detail and formal chain verification through HTTP;
+- auditing read operations;
 - retention, purge and archive;
 - signed checkpoints or external anchoring;
 - payloads with explicit `before` / `after` changes.
@@ -195,6 +199,67 @@ EACH_RETURNED_OBJECT
 
 A search returning many objects must not generate one event per object unless an
 explicit policy requires it.
+
+## Read API (T1.4a)
+
+`GET /api/admin/audit-events` returns audit events from the current default
+chain. It requires the `audit.read` permission for both session and Bearer
+authentication.
+
+Accepted query parameters:
+
+```text
+afterSequence
+limit
+action
+resourceType
+resourceId
+actorUserId
+result
+```
+
+`afterSequence` defaults to `0` and must not be negative. `limit` defaults to
+`50` and must be between `1` and `200`. Every filter is optional and filters are
+combinable. `action`, `resourceType` and `result` use their canonical enum
+identifiers; `actorUserId` must be a UUID.
+
+Results are ordered by ascending `sequence`. Pagination is keyset-based: the
+client sends the last sequence it received as the next `afterSequence`. The
+sequence is scoped to the event chain, so the response includes `chainId` and
+the query model is already chain-scoped. This slice reads the current default
+chain; a future multi-chain API can add an explicit chain selector without
+changing event identity.
+
+Each returned event contains:
+
+```text
+id
+chainId
+sequence
+occurredAt
+actorUserId
+actorUsername
+authenticationType
+action
+resourceType
+resourceId
+result
+requestId
+integrityFormatVersion
+previousHash
+eventHash
+```
+
+`requestId` is currently `null` because request correlation identifiers are not
+implemented yet. Negative values, limits outside the accepted range, malformed
+UUIDs and unknown enum values return `400` with code `AUDIT_INVALID_QUERY` and a
+`field` property. An anonymous request returns `401`; an authenticated caller
+without `audit.read` returns `403`.
+
+Reads work independently of `OFF` / `BASIC`, and a read does not append an audit
+event. Auditing the read operation itself is deferred to `SELECTIVE` / `FULL`
+read-depth policy. T1.4a adds no speculative database index and no total-count
+metadata.
 
 ## Event model
 
@@ -464,8 +529,8 @@ The following capabilities are intentionally deferred and must not be blocked by
 the current design:
 
 - `SELECTIVE` and `FULL` modes by resource type, action and read depth;
-- `audit.read` and `audit.configure` permissions supplied by migration when a
-  real read or configuration capability exists;
+- `audit.configure` permission supplied by migration when a real configuration
+  capability exists;
 - instrumentation of bootstrap, login, logout and password-reset requests;
 - atomic `SUCCESS` events for further business operations as they are
   instrumented;
@@ -473,7 +538,8 @@ the current design:
   business transaction;
 - the PAT identifier in audit events;
 - request/correlation identifiers;
-- `GET /api/admin/audit-events` and `GET /api/admin/audit-events/{id}`;
+- `GET /api/admin/audit-events/{id}` and formal chain verification through HTTP;
+- auditing read operations under `SELECTIVE` / `FULL`;
 - retention state, `purge_after`, `legal_hold`, batched internal purge and purge
   summary events;
 - archive before purge, with a verifiable JSON Lines package:

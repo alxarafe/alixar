@@ -21,13 +21,13 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   connectivity, healthcheck, and a persistent development volume retained by `bin/down`
 - **Flyway 12.4.0**: Managed by Spring Boot 4.1.1; applies the authentication
   user, password recovery, Personal Access Token, role-based authorization,
-  role-administration authorization, audit integrity-core and recovery-token
-  audit-authentication migrations
+  role-administration authorization, audit integrity-core, recovery-token
+  audit-authentication and audit-read authorization migrations
 - **jOOQ runtime**: PostgreSQL dialect and Spring-provided `DSLContext` verified
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 269 deterministic tests and 51 PostgreSQL integration tests remain
+  the 276 deterministic tests and 52 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -62,8 +62,8 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   roles. Role changes take effect on the next authenticated request for both
   session and Bearer authentication, without changing `credentials_version`,
   invalidating sessions or revoking PATs. Built-in `system-admin` role contains
-  `users.manage` and `roles.manage`; there are no per-user overrides, explicit
-  `DENY`, role hierarchy or role groups
+  `users.manage`, `roles.manage` and `audit.read`; there are no per-user
+  overrides, explicit `DENY`, role hierarchy or role groups
 - **Administrative authorization management**: `GET /api/admin/roles` is
   available with `users.manage` or `roles.manage`; role detail, creation, rename,
   permission replacement and deletion, together with the read-only
@@ -129,9 +129,16 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   audited during the current request with `PAT` as the actor authentication type.
   The `SUCCESS` event is atomic with the business transaction and fail-closed;
   `SESSION` and `PAT` actors are distinguished for authenticated operations.
-  `BASIC` still covers only explicitly instrumented operations. No audit RBAC
-  permission, query API, retention, archive or checkpoint is implemented yet.
-  See [Audit](audit.md)
+  `BASIC` still covers only explicitly instrumented operations.
+- **Audit read API (T1.4a)**: `GET /api/admin/audit-events` requires
+  `audit.read` and returns chain-scoped events with ascending keyset pagination
+  and combinable `action`, `resourceType`, `resourceId`, `actorUserId` and
+  `result` filters. `afterSequence` defaults to `0`; `limit` defaults to `50`
+  with a maximum of `200`. Responses include event identity, actor, action,
+  resource, result, `chainId` and hash-chain fields. Reads work when the audit
+  mode is `OFF` and do not append events. Event detail, formal HTTP chain
+  verification, read auditing, retention, archive and checkpoints are not
+  implemented yet. See [Audit](audit.md)
 
 ## Transitional integrations
 
@@ -156,10 +163,11 @@ See [Development](development.md) for full validation workflow details.
 ## Not yet implemented
 
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
-- Role groups, PAT scopes and authorization for business capabilities beyond `users.manage` and `roles.manage`
-- `SELECTIVE` / `FULL` audit modes, audit RBAC permissions, bootstrap/login/logout
-  and failed-action events, query API, retention, purging, archive and signed
-  checkpoints
+- Role groups, PAT scopes and authorization for business capabilities beyond
+  `users.manage`, `roles.manage` and `audit.read`
+- `SELECTIVE` / `FULL` audit modes, `audit.configure`, bootstrap/login/logout
+  and failed-action events, audit event detail and formal verification, read
+  auditing, retention, purging, archive and signed checkpoints
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - Administration of other users' API tokens

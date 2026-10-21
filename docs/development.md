@@ -77,9 +77,11 @@ role-permission assignments, user-role assignments and the initial
 `V5__add_role_administration_authorization.sql` adds the `roles.manage`
 permission, built-in role metadata and the restrictive role-assignment foreign
 key, `V6__create_audit_event_chain.sql` adds the audit chain head and
-append-only audit event tables with the genesis chain, and
+append-only audit event tables with the genesis chain,
 `V7__add_recovery_token_audit_authentication_type.sql` extends the allowed audit
-authentication types with `RECOVERY_TOKEN`. Boot calls Flyway on
+authentication types with `RECOVERY_TOKEN`, and
+`V8__add_audit_read_authorization.sql` seeds the `audit.read` permission and
+grants it to `system-admin`. Boot calls Flyway on
 startup using its default `classpath:db/migration`
 location. `PersistenceIT` verifies the migrations, their constraints, RBAC
 resolution and authentication transaction behaviour against PostgreSQL.
@@ -165,12 +167,12 @@ This override is used **only** by `./bin/check-reference`.
 
 `./bin/check` is the complete validation authority for Alixar itself. It runs entirely in Docker and performs:
 
-1. Build and run the 269 deterministic tests (`mvnw clean verify`)
+1. Build and run the 276 deterministic tests (`mvnw clean verify`)
 2. Runtime image build
 3. Container startup with health check wait (database + app)
 4. PostgreSQL health verification (`pg_isready`)
 5. Run `PersistenceIT` against the real isolated PostgreSQL service: verify the
-   Boot datasource, Flyway `V1`/`V2`/`V3`/`V4`/`V5`/`V6`/`V7`, a jOOQ `DSLContext`
+   Boot datasource, Flyway `V1`/`V2`/`V3`/`V4`/`V5`/`V6`/`V7`/`V8`, a jOOQ `DSLContext`
    executing `SELECT 1`, PostgreSQL 18.6, the authentication, API token and RBAC
    tables and constraints, permission-catalogue ordering, effective-permission
    resolution, restrictive role deletion, administrative user
@@ -186,7 +188,9 @@ This override is used **only** by `./bin/check-reference`.
    password recovery, Personal Access Token creation, role permission
    replacement and role deletion when a mandatory audit append fails, plus one
    mixed administrative/self-service/recovery audit chain and one mixed
-   API-token/role audit chain with exact event counts and no duplicates
+   API-token/role audit chain with exact event counts and no duplicates, plus
+   chain-scoped audit pagination and sparse-filter queries without duplicates
+   or omissions
 6. HTTP `GET /health` verification (exact `{"status":"ok"}` response)
 7. Cleanup of this invocation's containers, network, and volume; verify none remain
 
@@ -202,7 +206,7 @@ the invocation's project. Cleanup errors are reported and fail an otherwise
 successful check; an earlier failure retains its exit code. Images/build cache
 are retained. No fixed development or previous check project is cleaned.
 
-`./bin/test` runs the 269 component/unit tests without PostgreSQL.
+`./bin/test` runs the 276 component/unit tests without PostgreSQL.
 Their persistence exclusions are centralized in `src/test/resources/application.properties`.
 The additional `PersistenceIT` uses Surefire's separate `*IT` naming convention
 and is explicitly selected by `bin/check` through `compose.check.yaml`, with

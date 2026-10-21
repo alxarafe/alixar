@@ -46,6 +46,11 @@ assigned roles and a read-only permission catalogue. T2 adds role detail and
 creation, and T3 adds role rename, permission replacement and deletion of
 unassigned custom roles.
 
+ALIXAR-DEV-003H T1.4a adds the `audit.read` permission for querying audit
+events. The read endpoint accepts session or Bearer authentication and applies
+the same deny-by-default authorization model as the other administrative
+endpoints. Reading audit events does not append audit events in this slice.
+
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
 Username and email comparisons and uniqueness checks are case-insensitive.
@@ -425,11 +430,12 @@ The initial catalogue contains:
 |------------|---------|
 | `users.manage` | Administrative capability over users (ALIXAR-DEV-003F) |
 | `roles.manage` | Manage roles and their permission assignments (ALIXAR-DEV-003G) |
+| `audit.read` | Read audit events (ALIXAR-DEV-003H T1.4a) |
 
-The built-in role `system-admin` contains both permissions. The role name and
-code are stable identifiers, but application code authorizes by permission, not
-by role name. No role is special in authorization: `system-admin` is simply a
-role whose permissions are maintained by migrations. The `built_in` flag marks
+The built-in role `system-admin` contains all three permissions. The role name
+and code are stable identifiers, but application code authorizes by permission,
+not by role name. No role is special in authorization: `system-admin` is simply
+a role whose permissions are maintained by migrations. The `built_in` flag marks
 roles whose lifecycle is reserved for controlled provisioning; it is not an
 authorization bypass. There is no mandatory basic role.
 
@@ -476,6 +482,7 @@ The administrative namespace is split by capability:
 | `GET /api/admin/roles` | `users.manage` or `roles.manage` |
 | Any other `/api/admin/roles/**` method | `roles.manage` |
 | `/api/admin/permissions` | `roles.manage` |
+| `GET /api/admin/audit-events` | `audit.read` |
 
 The GET rule for the role catalogue is method-specific and is evaluated before
 the general role namespace rule. Results:
@@ -493,8 +500,8 @@ session identity, so it cannot bypass authorization.
 Method security is enabled. Operations can be protected with
 `@PreAuthorize("hasAuthority('users.manage')")` or
 `@PreAuthorize("hasAuthority('roles.manage')")`; the stable permission
-constants are `PermissionCodes.USERS_MANAGE` and
-`PermissionCodes.ROLES_MANAGE`.
+constants are `PermissionCodes.USERS_MANAGE`, `PermissionCodes.ROLES_MANAGE` and
+`PermissionCodes.AUDIT_READ`.
 
 ### Bootstrap and the first administrator
 
@@ -523,6 +530,7 @@ and creation, and T3 adds role rename, permission replacement and deletion.
 | `PUT /api/admin/roles/{code}/permissions` | Replaces a role's permissions |
 | `DELETE /api/admin/roles/{code}` | Deletes an unassigned custom role |
 | `GET /api/admin/permissions` | Read-only permission catalogue |
+| `GET /api/admin/audit-events` | Chain-scoped audit event list |
 | `POST /api/admin/users` | Creates a disabled user |
 | `PATCH /api/admin/users/{id}` | Changes the username only |
 | `PATCH /api/admin/users/{id}/enabled` | Enables or disables a user |
@@ -534,6 +542,9 @@ by `code`. Each item contains only `code` and `description`; database identifier
 and internal metadata are not exposed. It requires `roles.manage` for both
 session and Bearer authentication. Permission creation, modification and
 deletion are not exposed by the API.
+
+`GET /api/admin/audit-events` requires `audit.read`. Its pagination, filters,
+response fields and error contract are documented in [Audit](audit.md).
 
 Role responses contain only `code`, `name`, `builtIn` and `permissionCodes`.
 `GET /api/admin/roles` returns roles ordered by `code`, with permission codes

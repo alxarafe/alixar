@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.audit.infrastructure;
 
+import es.alxarafe.alixar.audit.application.AuditEventQuery;
 import es.alxarafe.alixar.audit.application.AuditEventRepository;
 import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import es.alxarafe.alixar.audit.domain.AuditChainHead;
@@ -10,6 +11,7 @@ import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record;
@@ -62,6 +64,24 @@ public class JooqAuditEventRepository implements AuditEventRepository {
         field(name("audit_event", "previous_hash"), String.class);
     private static final Field<String> EVENT_HASH =
         field(name("audit_event", "event_hash"), String.class);
+
+    private static final Field<?>[] EVENT_FIELDS = {
+        EVENT_ID,
+        EVENT_CHAIN_ID,
+        EVENT_SEQUENCE,
+        OCCURRED_AT,
+        ACTOR_USER_ID,
+        ACTOR_USERNAME,
+        AUTHENTICATION_TYPE,
+        ACTION,
+        RESOURCE_TYPE,
+        RESOURCE_ID,
+        RESULT,
+        REQUEST_ID,
+        INTEGRITY_FORMAT_VERSION,
+        PREVIOUS_HASH,
+        EVENT_HASH
+    };
 
     private final DSLContext dsl;
 
@@ -125,28 +145,40 @@ public class JooqAuditEventRepository implements AuditEventRepository {
 
     @Override
     public List<AuditEvent> readEvents(UUID chainId, long afterSequence, int limit) {
-        return dsl.select(
-                EVENT_ID,
-                EVENT_CHAIN_ID,
-                EVENT_SEQUENCE,
-                OCCURRED_AT,
-                ACTOR_USER_ID,
-                ACTOR_USERNAME,
-                AUTHENTICATION_TYPE,
-                ACTION,
-                RESOURCE_TYPE,
-                RESOURCE_ID,
-                RESULT,
-                REQUEST_ID,
-                INTEGRITY_FORMAT_VERSION,
-                PREVIOUS_HASH,
-                EVENT_HASH
-            )
+        return dsl.select(EVENT_FIELDS)
             .from(EVENT_TABLE)
             .where(EVENT_CHAIN_ID.eq(chainId))
             .and(EVENT_SEQUENCE.gt(afterSequence))
             .orderBy(EVENT_SEQUENCE)
             .limit(limit)
+            .fetch(this::toAuditEvent);
+    }
+
+    @Override
+    public List<AuditEvent> findEvents(AuditEventQuery query) {
+        Condition condition = EVENT_CHAIN_ID.eq(query.chainId())
+            .and(EVENT_SEQUENCE.gt(query.afterSequence()));
+        if (query.action() != null) {
+            condition = condition.and(ACTION.eq(query.action().name()));
+        }
+        if (query.resourceType() != null) {
+            condition = condition.and(RESOURCE_TYPE.eq(query.resourceType().name()));
+        }
+        if (query.resourceId() != null) {
+            condition = condition.and(RESOURCE_ID.eq(query.resourceId()));
+        }
+        if (query.actorUserId() != null) {
+            condition = condition.and(ACTOR_USER_ID.eq(query.actorUserId()));
+        }
+        if (query.result() != null) {
+            condition = condition.and(RESULT.eq(query.result().name()));
+        }
+
+        return dsl.select(EVENT_FIELDS)
+            .from(EVENT_TABLE)
+            .where(condition)
+            .orderBy(EVENT_SEQUENCE)
+            .limit(query.limit())
             .fetch(this::toAuditEvent);
     }
 
