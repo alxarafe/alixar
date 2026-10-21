@@ -3,6 +3,7 @@ package es.alxarafe.alixar.authentication.application;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,7 @@ public class CreateRoleUseCase {
         }
 
         RoleDefinition role = new RoleDefinition(
+            UUID.randomUUID(),
             normalizedCode,
             normalizedName,
             false,

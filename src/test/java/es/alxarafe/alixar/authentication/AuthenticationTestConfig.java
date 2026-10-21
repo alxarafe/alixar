@@ -261,6 +261,10 @@ public class AuthenticationTestConfig {
 
     public static class TestAuthorizationRepository implements AuthorizationRepository {
 
+        private static final UUID SYSTEM_ADMIN_ROLE_ID =
+            UUID.fromString("6a9b29df-5e4e-4f64-9f5d-3f4a2c1b8e70");
+
+        private final Map<String, UUID> roleIds = new HashMap<>();
         private final Map<String, String> roleNames = new HashMap<>();
         private final Map<String, Boolean> roleBuiltIn = new HashMap<>();
         private final Map<String, Set<String>> rolePermissions = new HashMap<>();
@@ -271,10 +275,12 @@ public class AuthenticationTestConfig {
         }
 
         public void reset() {
+            roleIds.clear();
             roleNames.clear();
             roleBuiltIn.clear();
             rolePermissions.clear();
             userRoles.clear();
+            roleIds.put(RoleCodes.SYSTEM_ADMIN, SYSTEM_ADMIN_ROLE_ID);
             roleNames.put(RoleCodes.SYSTEM_ADMIN, "System administrator");
             roleBuiltIn.put(RoleCodes.SYSTEM_ADMIN, true);
             rolePermissions.put(
@@ -318,6 +324,7 @@ public class AuthenticationTestConfig {
             return roleNames.entrySet().stream()
                 .sorted(Map.Entry.comparingByKey())
                 .map(entry -> new RoleDefinition(
+                    roleIds.get(entry.getKey()),
                     entry.getKey(),
                     entry.getValue(),
                     roleBuiltIn.getOrDefault(entry.getKey(), false),
@@ -334,6 +341,7 @@ public class AuthenticationTestConfig {
                 return Optional.empty();
             }
             return Optional.of(new RoleDefinition(
+                roleIds.get(roleCode),
                 roleCode,
                 roleNames.get(roleCode),
                 roleBuiltIn.getOrDefault(roleCode, false),
@@ -359,6 +367,7 @@ public class AuthenticationTestConfig {
             if (roleNames.containsKey(role.code())) {
                 throw new RoleAlreadyExistsException();
             }
+            roleIds.put(role.code(), role.id());
             roleNames.put(role.code(), role.name());
             roleBuiltIn.put(role.code(), role.builtIn());
             rolePermissions.put(role.code(), new LinkedHashSet<>(role.permissionCodes()));
@@ -390,6 +399,7 @@ public class AuthenticationTestConfig {
             if (assigned) {
                 throw new RoleInUseException(roleCode);
             }
+            roleIds.remove(roleCode);
             roleNames.remove(roleCode);
             roleBuiltIn.remove(roleCode);
             rolePermissions.remove(roleCode);

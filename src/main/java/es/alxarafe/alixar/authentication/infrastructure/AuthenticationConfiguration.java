@@ -137,13 +137,15 @@ public class AuthenticationConfiguration {
         CreateRoleUseCase createRoleUseCase,
         UpdateRoleNameUseCase updateRoleNameUseCase,
         ReplaceRolePermissionsUseCase replaceRolePermissionsUseCase,
-        DeleteRoleUseCase deleteRoleUseCase
+        DeleteRoleUseCase deleteRoleUseCase,
+        AuditTrail auditTrail
     ) {
         return new TransactionalAdminRoleService(
             createRoleUseCase,
             updateRoleNameUseCase,
             replaceRolePermissionsUseCase,
-            deleteRoleUseCase
+            deleteRoleUseCase,
+            auditTrail
         );
     }
 
@@ -284,9 +286,10 @@ public class AuthenticationConfiguration {
     @Bean
     TransactionalApiTokenService transactionalApiTokenService(
         CreateApiTokenUseCase createApiTokenUseCase,
-        RevokeApiTokenUseCase revokeApiTokenUseCase
+        RevokeApiTokenUseCase revokeApiTokenUseCase,
+        AuditTrail auditTrail
     ) {
-        return new TransactionalApiTokenService(createApiTokenUseCase, revokeApiTokenUseCase);
+        return new TransactionalApiTokenService(createApiTokenUseCase, revokeApiTokenUseCase, auditTrail);
     }
 
     @Bean

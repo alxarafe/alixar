@@ -44,6 +44,7 @@ import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminUserService;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminRoleService;
+import es.alxarafe.alixar.authentication.infrastructure.TransactionalApiTokenService;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalPasswordRecovery;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalUserSelfService;
 import java.time.Instant;
@@ -134,6 +135,9 @@ class PersistenceIT {
 
     @Autowired
     private TransactionalAdminRoleService transactionalAdminRoleService;
+
+    @Autowired
+    private TransactionalApiTokenService transactionalApiTokenService;
 
     @Autowired
     private TransactionalUserSelfService transactionalUserSelfService;
@@ -922,6 +926,7 @@ class PersistenceIT {
             assertThat(created.builtIn()).isFalse();
             assertThat(authorizationRepository.findRoleByCode(roleCode))
                 .contains(new RoleDefinition(
+                    created.id(),
                     roleCode,
                     "DB created role",
                     false,
@@ -934,6 +939,7 @@ class PersistenceIT {
             ).getValues(0, Long.class)).containsExactly(0L);
 
             assertThatThrownBy(() -> authorizationRepository.createRole(new RoleDefinition(
+                UUID.randomUUID(),
                 roleCode,
                 "Concurrent duplicate",
                 false,
@@ -959,7 +965,11 @@ class PersistenceIT {
 
         try {
             insertUser(userId, "rbac-renamed", "rbac-renamed@example.test");
-            transactionalAdminRoleService.create(roleCode, "Original name", List.of(PermissionCodes.USERS_MANAGE));
+            RoleDefinition created = transactionalAdminRoleService.create(
+                roleCode,
+                "Original name",
+                List.of(PermissionCodes.USERS_MANAGE)
+            );
             authorizationRepository.assignRoleToUser(userId, roleCode);
             long credentialsVersionBefore = userRepository.findById(userId).orElseThrow().credentialsVersion();
 
@@ -970,7 +980,13 @@ class PersistenceIT {
             assertThat(renamed.builtIn()).isFalse();
             assertThat(renamed.permissionCodes()).containsExactly(PermissionCodes.USERS_MANAGE);
             assertThat(authorizationRepository.findRoleByCode(roleCode))
-                .contains(new RoleDefinition(roleCode, "Renamed role", false, List.of(PermissionCodes.USERS_MANAGE)));
+                .contains(new RoleDefinition(
+                    created.id(),
+                    roleCode,
+                    "Renamed role",
+                    false,
+                    List.of(PermissionCodes.USERS_MANAGE)
+                ));
             assertThat(authorizationRepository.findRoleCodesForUser(userId)).containsExactly(roleCode);
             assertThat(userRepository.findById(userId).orElseThrow().credentialsVersion())
                 .isEqualTo(credentialsVersionBefore);
@@ -985,13 +1001,18 @@ class PersistenceIT {
         String roleCode = "db-permissions-role";
 
         try {
-            transactionalAdminRoleService.create(roleCode, "Permissions role", List.of(PermissionCodes.USERS_MANAGE));
+            RoleDefinition created = transactionalAdminRoleService.create(
+                roleCode,
+                "Permissions role",
+                List.of(PermissionCodes.USERS_MANAGE)
+            );
 
             RoleDefinition replaced = transactionalAdminRoleService.replacePermissions(
                 roleCode,
                 List.of(" ROLES.MANAGE ", "roles.manage", "users.manage")
             );
 
+            assertThat(replaced.id()).isEqualTo(created.id());
             assertThat(replaced.name()).isEqualTo("Permissions role");
             assertThat(replaced.builtIn()).isFalse();
             assertThat(replaced.permissionCodes()).containsExactly(
@@ -1025,13 +1046,15 @@ class PersistenceIT {
             )).isInstanceOf(BuiltInRoleImmutableException.class);
             assertThatThrownBy(() -> transactionalAdminRoleService.delete(RoleCodes.SYSTEM_ADMIN))
                 .isInstanceOf(BuiltInRoleImmutableException.class);
-            assertThat(authorizationRepository.findRoleByCode(RoleCodes.SYSTEM_ADMIN))
-                .contains(new RoleDefinition(
-                    RoleCodes.SYSTEM_ADMIN,
-                    "System administrator",
-                    true,
-                    List.of(PermissionCodes.ROLES_MANAGE, PermissionCodes.USERS_MANAGE)
-                ));
+            RoleDefinition builtIn = authorizationRepository.findRoleByCode(RoleCodes.SYSTEM_ADMIN)
+                .orElseThrow();
+            assertThat(builtIn.code()).isEqualTo(RoleCodes.SYSTEM_ADMIN);
+            assertThat(builtIn.name()).isEqualTo("System administrator");
+            assertThat(builtIn.builtIn()).isTrue();
+            assertThat(builtIn.permissionCodes()).containsExactly(
+                PermissionCodes.ROLES_MANAGE,
+                PermissionCodes.USERS_MANAGE
+            );
         } finally {
             dsl.query("delete from authentication_role where code = ?", roleCode).execute();
         }
@@ -1756,6 +1779,178 @@ class PersistenceIT {
         } finally {
             auditProperties.setMode(AuditMode.OFF);
             resetAuditChain();
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackApiTokenCreation() {
+        UUID userId = UUID.randomUUID();
+        Instant now = Instant.now();
+
+        resetAuditChain();
+        auditProperties.setMode(AuditMode.BASIC);
+        try {
+            userRepository.create(new User(
+                userId,
+                "audit-token-create-" + userId,
+                "audit-token-create-" + userId + "@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                0,
+                now,
+                now
+            ));
+            deleteAuditChainHead();
+
+            assertThatThrownBy(() -> transactionalApiTokenService.create(
+                userId,
+                "audited-token",
+                now.plusSeconds(3600)
+            )).isInstanceOf(IllegalStateException.class);
+
+            assertThat(apiTokenRepository.findAllByUserId(userId)).isEmpty();
+            assertThat(dsl.fetchCount(
+                org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_EVENT_TABLE))
+            )).isZero();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackRolePermissionReplacement() {
+        String roleCode = "audit-permissions-role";
+
+        resetAuditChain();
+        auditProperties.setMode(AuditMode.OFF);
+        try {
+            transactionalAdminRoleService.create(
+                roleCode,
+                "Audited permissions role",
+                List.of(PermissionCodes.USERS_MANAGE)
+            );
+            auditProperties.setMode(AuditMode.BASIC);
+            deleteAuditChainHead();
+
+            assertThatThrownBy(() -> transactionalAdminRoleService.replacePermissions(
+                roleCode,
+                List.of(PermissionCodes.ROLES_MANAGE)
+            )).isInstanceOf(IllegalStateException.class);
+
+            assertThat(authorizationRepository.findPermissionCodesByRole(roleCode))
+                .containsExactly(PermissionCodes.USERS_MANAGE);
+            assertThat(dsl.fetchCount(
+                org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_EVENT_TABLE))
+            )).isZero();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+            resetAuditChain();
+            dsl.query("delete from authentication_role where code = ?", roleCode).execute();
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackRoleDeletion() {
+        String roleCode = "audit-deleted-role";
+
+        resetAuditChain();
+        auditProperties.setMode(AuditMode.OFF);
+        try {
+            transactionalAdminRoleService.create(roleCode, "Audited deleted role", List.of());
+            auditProperties.setMode(AuditMode.BASIC);
+            deleteAuditChainHead();
+
+            assertThatThrownBy(() -> transactionalAdminRoleService.delete(roleCode))
+                .isInstanceOf(IllegalStateException.class);
+
+            assertThat(authorizationRepository.findRoleByCode(roleCode)).isPresent();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+            resetAuditChain();
+            dsl.query("delete from authentication_role where code = ?", roleCode).execute();
+        }
+    }
+
+    @Test
+    void basicAuditMode_recordsApiTokenAndRoleEventsInOneChain() {
+        String suffix = UUID.randomUUID().toString();
+        UUID userId = UUID.randomUUID();
+        Instant now = Instant.now();
+        String roleCode = "audit-token-role";
+
+        resetAuditChain();
+        auditProperties.setMode(AuditMode.OFF);
+        try {
+            userRepository.create(new User(
+                userId,
+                "audit-token-chain-" + suffix,
+                "audit-token-chain-" + suffix + "@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                0,
+                now,
+                now
+            ));
+
+            auditProperties.setMode(AuditMode.BASIC);
+            var createdToken = transactionalApiTokenService.create(
+                userId,
+                "audited-token",
+                now.plusSeconds(3600)
+            );
+            RoleDefinition createdRole = transactionalAdminRoleService.create(
+                roleCode,
+                "Audited role",
+                List.of(PermissionCodes.USERS_MANAGE)
+            );
+            transactionalAdminRoleService.updateName(roleCode, "Renamed audited role");
+            transactionalAdminRoleService.replacePermissions(roleCode, List.of(PermissionCodes.ROLES_MANAGE));
+            transactionalAdminRoleService.updateName(roleCode, " Renamed audited role ");
+            transactionalAdminRoleService.replacePermissions(roleCode, List.of(" ROLES.MANAGE "));
+            transactionalApiTokenService.revoke(userId, createdToken.token().id());
+            transactionalApiTokenService.revoke(userId, createdToken.token().id());
+            transactionalAdminRoleService.delete(roleCode);
+
+            var events = dsl.fetch(
+                "select action, authentication_type, actor_user_id, resource_type, "
+                    + "resource_id from audit_event order by sequence"
+            );
+            assertThat(events.getValues("action", String.class)).containsExactly(
+                AuditAction.API_TOKEN_CREATED.name(),
+                AuditAction.ROLE_CREATED.name(),
+                AuditAction.ROLE_RENAMED.name(),
+                AuditAction.ROLE_PERMISSIONS_REPLACED.name(),
+                AuditAction.API_TOKEN_REVOKED.name(),
+                AuditAction.ROLE_DELETED.name()
+            );
+            assertThat(events.getValues("authentication_type", String.class))
+                .containsOnly(AuditAuthenticationType.SESSION.name());
+            assertThat(events.getValues("actor_user_id", UUID.class))
+                .containsOnly(AUDIT_TEST_ACTOR_ID);
+            assertThat(events.getValues("resource_type", String.class)).containsExactly(
+                AuditResourceType.API_TOKEN.name(),
+                AuditResourceType.ROLE.name(),
+                AuditResourceType.ROLE.name(),
+                AuditResourceType.ROLE.name(),
+                AuditResourceType.API_TOKEN.name(),
+                AuditResourceType.ROLE.name()
+            );
+            assertThat(events.getValues("resource_id", String.class)).containsExactly(
+                createdToken.token().id().toString(),
+                createdRole.id().toString(),
+                createdRole.id().toString(),
+                createdRole.id().toString(),
+                createdToken.token().id().toString(),
+                createdRole.id().toString()
+            );
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+            resetAuditChain();
+            dsl.query("delete from authentication_role where code = ?", roleCode).execute();
             deleteUser(userId);
         }
     }

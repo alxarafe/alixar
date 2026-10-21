@@ -27,7 +27,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 263 deterministic tests and 47 PostgreSQL integration tests remain
+  the 269 deterministic tests and 51 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -112,20 +112,26 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   v1, transactional `SELECT ... FOR UPDATE` chain-head locking, and an
   independent verifier. PostgreSQL tests append concurrently and tamper directly
   with rows to prove that verification fails.
-- **Audit policy and instrumentation (T1.2 and T1.3a)**: `OFF` (default) and
-  `BASIC` modes configured through `alixar.audit.mode` / `ALIXAR_AUDIT_MODE`.
-  Administrative enable/disable records `USER_DISABLED` / `USER_ENABLED` only on
-  real transitions. T1.3a adds atomic `SUCCESS` events for administrative user
-  creation, username changes, password resets and role replacement, self-service
-  username/password changes, and completed password recovery. The password
-  recovery event uses the new `RECOVERY_TOKEN` authentication type; its actor is
-  the user identified by the valid recovery capability, not an authenticated
-  session. No-op username and role changes do not record events. The `SUCCESS`
-  event is atomic with the business transaction and fail-closed; `SESSION` and
-  `PAT` actors are distinguished for authenticated operations. `BASIC` still
-  covers only explicitly instrumented operations; PAT and role-administration
-  events remain for T1.3b. No audit RBAC permission, query API, retention,
-  archive or checkpoint is implemented yet. See [Audit](audit.md)
+- **Audit policy and instrumentation (T1.2, T1.3a and T1.3b)**: `OFF` (default)
+  and `BASIC` modes configured through `alixar.audit.mode` /
+  `ALIXAR_AUDIT_MODE`. Administrative enable/disable records `USER_DISABLED` /
+  `USER_ENABLED` only on real transitions. T1.3a adds atomic `SUCCESS` events for
+  administrative user creation, username changes, password resets and role
+  replacement, self-service username/password changes, and completed password
+  recovery. The password recovery event uses the `RECOVERY_TOKEN` authentication
+  type; its actor is the user identified by the valid recovery capability, not
+  an authenticated session. T1.3b adds `API_TOKEN_CREATED` /
+  `API_TOKEN_REVOKED` and `ROLE_CREATED` / `ROLE_RENAMED` /
+  `ROLE_PERMISSIONS_REPLACED` / `ROLE_DELETED`. PAT events use the token UUID as
+  resource id and never record the clear token or hash. Role events use the
+  internal role UUID, not the role code. Revoking an already revoked PAT and
+  no-op role rename/permission replacement record no event. Self-revocation is
+  audited during the current request with `PAT` as the actor authentication type.
+  The `SUCCESS` event is atomic with the business transaction and fail-closed;
+  `SESSION` and `PAT` actors are distinguished for authenticated operations.
+  `BASIC` still covers only explicitly instrumented operations. No audit RBAC
+  permission, query API, retention, archive or checkpoint is implemented yet.
+  See [Audit](audit.md)
 
 ## Transitional integrations
 
@@ -151,9 +157,9 @@ See [Development](development.md) for full validation workflow details.
 
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
 - Role groups, PAT scopes and authorization for business capabilities beyond `users.manage` and `roles.manage`
-- `SELECTIVE` / `FULL` audit modes, audit RBAC permissions, PAT and
-  role-administration instrumentation, bootstrap/login/logout and failed-action
-  events, query API, retention, purging, archive and signed checkpoints
+- `SELECTIVE` / `FULL` audit modes, audit RBAC permissions, bootstrap/login/logout
+  and failed-action events, query API, retention, purging, archive and signed
+  checkpoints
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - Administration of other users' API tokens

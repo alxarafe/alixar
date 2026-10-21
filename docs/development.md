@@ -165,7 +165,7 @@ This override is used **only** by `./bin/check-reference`.
 
 `./bin/check` is the complete validation authority for Alixar itself. It runs entirely in Docker and performs:
 
-1. Build and run the 263 deterministic tests (`mvnw clean verify`)
+1. Build and run the 269 deterministic tests (`mvnw clean verify`)
 2. Runtime image build
 3. Container startup with health check wait (database + app)
 4. PostgreSQL health verification (`pg_isready`)
@@ -182,9 +182,11 @@ This override is used **only** by `./bin/check-reference`.
    cascade for free roles, and audit append-only integrity including concurrent
    appends, hash-chain verification, direct tampering detection, restrictive
    chain-head deletion, fail-closed rollback of administrative user creation,
-   password reset and role replacement, self-service password change and
-   completed password recovery when a mandatory audit append fails, plus one
-   mixed administrative/self-service/recovery audit chain
+   password reset and role replacement, self-service password change, completed
+   password recovery, Personal Access Token creation, role permission
+   replacement and role deletion when a mandatory audit append fails, plus one
+   mixed administrative/self-service/recovery audit chain and one mixed
+   API-token/role audit chain with exact event counts and no duplicates
 6. HTTP `GET /health` verification (exact `{"status":"ok"}` response)
 7. Cleanup of this invocation's containers, network, and volume; verify none remain
 
@@ -200,7 +202,7 @@ the invocation's project. Cleanup errors are reported and fail an otherwise
 successful check; an earlier failure retains its exit code. Images/build cache
 are retained. No fixed development or previous check project is cleaned.
 
-`./bin/test` runs the 218 component/unit tests without PostgreSQL.
+`./bin/test` runs the 269 component/unit tests without PostgreSQL.
 Their persistence exclusions are centralized in `src/test/resources/application.properties`.
 The additional `PersistenceIT` uses Surefire's separate `*IT` naming convention
 and is explicitly selected by `bin/check` through `compose.check.yaml`, with

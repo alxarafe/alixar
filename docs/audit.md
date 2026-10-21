@@ -11,12 +11,12 @@ relevant actions.
 ALIXAR-DEV-003H is being implemented in vertical slices. T1.1 provided the
 persistent integrity core. T1.2 added the configurable `OFF` / `BASIC` policy
 and the first instrumented administrative operation. T1.3a extends `BASIC` to
-administrative user lifecycle operations, self-service credential changes and
-completed password recovery. T1.3b will cover Personal Access Token and role
-administration, but is not implemented yet. Query APIs, retention, archive and
-checkpoints remain out of scope.
+administrative user lifecycle operations, self-service credential changes,
+completed password recovery, Personal Access Token lifecycle and role
+administration. Query APIs, retention, archive and checkpoints remain out of
+scope.
 
-## Current scope (T1.1, T1.2 and T1.3a)
+## Current scope (T1.1, T1.2, T1.3a and T1.3b)
 
 Implemented:
 
@@ -34,13 +34,17 @@ Implemented:
   password resets and role replacement;
 - atomic `SUCCESS` events for self-service username and password changes;
 - atomic `SUCCESS` event for a password reset completed with a recovery token;
+- atomic `SUCCESS` events for Personal Access Token creation and real
+  revocation transitions;
+- atomic `SUCCESS` events for role creation, rename, permission replacement and
+  deletion;
 - `RECOVERY_TOKEN` as an audit authentication type.
 
 Not implemented yet:
 
 - `SELECTIVE` / `FULL` audit modes;
 - `audit.read` and `audit.configure` permissions;
-- Personal Access Token and role-administration events (T1.3b);
+- the PAT identifier as part of the actor;
 - bootstrap, login, logout and password-reset request events;
 - `FAILURE` and `DENIED` event strategy;
 - administrative query API;
@@ -76,7 +80,7 @@ until the mode is enabled. Values other than `OFF` and `BASIC` prevent startup.
 In `OFF`, the operation does not resolve an actor, build an `AuditEvent`, encode
 the canonical representation or enter the appender.
 
-## Instrumented events (T1.3a)
+## Instrumented events (T1.3a and T1.3b)
 
 The following operations are instrumented atomically under `BASIC`:
 
@@ -90,9 +94,28 @@ The following operations are instrumented atomically under `BASIC`:
 | Self-service username change | `USER_USERNAME_CHANGED` | authenticated user id | `SUCCESS` |
 | Self-service password change | `USER_PASSWORD_CHANGED` | authenticated user id | `SUCCESS` |
 | Password reset completed with a recovery token | `PASSWORD_RESET_COMPLETED` | recovered user id | `SUCCESS` |
+| Personal Access Token creation | `API_TOKEN_CREATED` | `API_TOKEN` / created token id | `SUCCESS` |
+| Personal Access Token revocation | `API_TOKEN_REVOKED` | `API_TOKEN` / revoked token id | `SUCCESS` |
+| Role creation | `ROLE_CREATED` | `ROLE` / internal role id | `SUCCESS` |
+| Role rename | `ROLE_RENAMED` | `ROLE` / internal role id | `SUCCESS` |
+| Role permission replacement | `ROLE_PERMISSIONS_REPLACED` | `ROLE` / internal role id | `SUCCESS` |
+| Role deletion | `ROLE_DELETED` | `ROLE` / internal role id | `SUCCESS` |
 
 Successful administrative user creation records exactly one event, including
 empty role assignments. Role assignment is not recorded as separate events.
+Personal Access Token creation and revocation each record at most one event.
+Revocation records an event only when the token actually transitions from
+active to revoked; revoking an already revoked token is a no-op without an
+event. Deleting the token used by the current request is audited during the
+request before that token loses validity, with `PAT` as the authentication type.
+
+Role events use the internal `authentication_role.id` UUID, never the role
+`code`, as `resource_id`. The role name, permission codes and role code are not
+stored as audit payloads. A role rename or permission replacement whose
+normalized value does not change records no event. The existing write may still
+be executed; only the audit append is suppressed. The use case computes the
+change while it already has the normalized current state, and the transactional
+facade remains the single owner of the audit append.
 
 Username and role replacement are no-ops when the normalized value or role set
 does not change. A no-op does not record an event. The use case computes the
@@ -104,8 +127,10 @@ The event uses:
 ```text
 action       action from the table above
 resource     USER / target or authenticated user id
+             API_TOKEN / token id
+             ROLE / internal role id
 result       SUCCESS
-actor        authenticated administrator or self-service user
+actor        authenticated administrator, self-service user or token owner
 auth type    SESSION | PAT
 request id   null (deferred)
 ```
@@ -142,8 +167,9 @@ operation fails; it does not write a null actor or fall back to `SYSTEM`.
 Password recovery supplies its actor explicitly through the `AuditTrail` port;
 `SYSTEM` remains reserved for future internal processes.
 
-The PAT identifier and token value are not recorded yet. T1.3b owns PAT and role
-administration events.
+The clear PAT is never recorded. The PAT UUID is recorded as the resource id for
+`API_TOKEN_CREATED` and `API_TOKEN_REVOKED`, but the actor still does not include
+the specific PAT used to authenticate; that actor detail remains deferred.
 
 ## Conceptual evolution
 
@@ -441,7 +467,6 @@ the current design:
 - `audit.read` and `audit.configure` permissions supplied by migration when a
   real read or configuration capability exists;
 - instrumentation of bootstrap, login, logout and password-reset requests;
-- PAT creation/revocation and role-administration events (T1.3b);
 - atomic `SUCCESS` events for further business operations as they are
   instrumented;
 - an explicit strategy for `FAILURE` and `DENIED` events, separate from the

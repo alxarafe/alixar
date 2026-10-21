@@ -58,17 +58,17 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   locking, canonical format v1, SHA-256 hash chain and an independent verifier.
   `OFF` / `BASIC` policy and atomic events for administrative user enablement,
   creation, username changes, password resets and role replacement, self-service
-  username/password changes, and completed password recovery are implemented.
-  Recovery-token events use `RECOVERY_TOKEN` and explicitly identify the
-  recovered user as actor. PAT and role-administration instrumentation, RBAC
-  permissions, query API, retention, archive and checkpoints are not implemented
-  yet. See [Audit](audit.md)
+  username/password changes, completed password recovery, Personal Access Token
+  creation/revocation, and role creation/rename/permission-replacement/deletion
+  are implemented. Recovery-token events use `RECOVERY_TOKEN` and explicitly
+  identify the recovered user as actor. RBAC permissions, the PAT identifier as
+  actor, query API, retention, archive and checkpoints are not implemented yet.
+  See [Audit](audit.md)
 
 ## Planned (Not Implemented)
 
-- `SELECTIVE` / `FULL` audit modes, audit RBAC permissions, PAT and
-  role-administration instrumentation, query API, retention, purge, archive and
-  signed checkpoints
+- `SELECTIVE` / `FULL` audit modes, audit RBAC permissions, the PAT identifier
+  as actor, query API, retention, purge, archive and signed checkpoints
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Email change with new-address verification
@@ -175,12 +175,13 @@ The audit mode is infrastructure configuration (`alixar.audit.mode`, default
 `OFF`). In `BASIC`, explicitly instrumented successful operations record their
 event in the same transaction as the business change. The instrumented set
 includes administrative user lifecycle operations, self-service username and
-password changes, and completed password recovery. The application layer depends
-on an `AuditTrail` port, not on environment variables or Spring Security.
-Authenticated operations resolve their actor implicitly; password recovery
-supplies an explicit `RECOVERY_TOKEN` actor. Every mandatory event is
-fail-closed. Database-level append-only privileges, audit RBAC permissions, PAT
-and role-administration instrumentation, retention and signing are not
+password changes, completed password recovery, Personal Access Token creation
+and revocation, and role creation, rename, permission replacement and deletion.
+The application layer depends on an `AuditTrail` port, not on environment
+variables or Spring Security. Authenticated operations resolve their actor
+implicitly; password recovery supplies an explicit `RECOVERY_TOKEN` actor. Every
+mandatory event is fail-closed. Database-level append-only privileges, audit RBAC
+permissions, the PAT identifier as actor, retention and signing are not
 implemented yet. See [Audit](audit.md) for the canonical format and deferred
 capabilities.
 

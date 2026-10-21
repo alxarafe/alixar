@@ -90,7 +90,7 @@ public class JooqAuthorizationRepository implements AuthorizationRepository {
 
     @Override
     public List<RoleDefinition> findAllRoles() {
-        var records = dsl.select(ROLE_CODE, ROLE_NAME, ROLE_BUILT_IN, ROLE_PERMISSION_PERMISSION_CODE)
+        var records = dsl.select(ROLE_ID, ROLE_CODE, ROLE_NAME, ROLE_BUILT_IN, ROLE_PERMISSION_PERMISSION_CODE)
             .from(ROLE_TABLE)
             .leftJoin(ROLE_PERMISSION_TABLE)
             .on(ROLE_PERMISSION_ROLE_ID.eq(ROLE_ID))
@@ -101,7 +101,7 @@ public class JooqAuthorizationRepository implements AuthorizationRepository {
 
     @Override
     public Optional<RoleDefinition> findRoleByCode(String roleCode) {
-        var records = dsl.select(ROLE_CODE, ROLE_NAME, ROLE_BUILT_IN, ROLE_PERMISSION_PERMISSION_CODE)
+        var records = dsl.select(ROLE_ID, ROLE_CODE, ROLE_NAME, ROLE_BUILT_IN, ROLE_PERMISSION_PERMISSION_CODE)
             .from(ROLE_TABLE)
             .leftJoin(ROLE_PERMISSION_TABLE)
             .on(ROLE_PERMISSION_ROLE_ID.eq(ROLE_ID))
@@ -124,7 +124,7 @@ public class JooqAuthorizationRepository implements AuthorizationRepository {
 
     @Override
     public void createRole(RoleDefinition role) {
-        UUID roleId = UUID.randomUUID();
+        UUID roleId = role.id();
         try {
             dsl.insertInto(ROLE_TABLE)
                 .columns(ROLE_ID, ROLE_CODE, ROLE_NAME, ROLE_BUILT_IN)
@@ -214,12 +214,14 @@ public class JooqAuthorizationRepository implements AuthorizationRepository {
     }
 
     private List<RoleDefinition> toRoleDefinitions(List<? extends Record> records) {
+        Map<String, UUID> ids = new LinkedHashMap<>();
         Map<String, String> names = new LinkedHashMap<>();
         Map<String, Boolean> builtIn = new LinkedHashMap<>();
         Map<String, LinkedHashSet<String>> permissionCodes = new LinkedHashMap<>();
 
         for (Record record : records) {
             String roleCode = record.get(ROLE_CODE);
+            ids.putIfAbsent(roleCode, record.get(ROLE_ID));
             names.putIfAbsent(roleCode, record.get(ROLE_NAME));
             builtIn.putIfAbsent(roleCode, Boolean.TRUE.equals(record.get(ROLE_BUILT_IN)));
             LinkedHashSet<String> permissions = permissionCodes.computeIfAbsent(
@@ -234,6 +236,7 @@ public class JooqAuthorizationRepository implements AuthorizationRepository {
 
         return names.entrySet().stream()
             .map(entry -> new RoleDefinition(
+                ids.get(entry.getKey()),
                 entry.getKey(),
                 entry.getValue(),
                 builtIn.get(entry.getKey()),

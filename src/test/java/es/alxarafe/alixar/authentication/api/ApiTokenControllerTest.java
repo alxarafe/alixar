@@ -1,6 +1,16 @@
 package es.alxarafe.alixar.authentication.api;
 
 import com.jayway.jsonpath.JsonPath;
+import es.alxarafe.alixar.audit.InMemoryAuditEventRepository;
+import es.alxarafe.alixar.audit.application.AuditAction;
+import es.alxarafe.alixar.audit.application.AuditChainVerifier;
+import es.alxarafe.alixar.audit.application.AuditMode;
+import es.alxarafe.alixar.audit.application.AuditResourceType;
+import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
+import es.alxarafe.alixar.audit.domain.AuditChain;
+import es.alxarafe.alixar.audit.domain.AuditEvent;
+import es.alxarafe.alixar.audit.domain.AuditResult;
+import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
 import es.alxarafe.alixar.authentication.AuthenticationTestConfig;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthenticationErrorCode;
@@ -11,6 +21,7 @@ import es.alxarafe.alixar.authentication.domain.ApiToken;
 import es.alxarafe.alixar.authentication.domain.User;
 import jakarta.servlet.http.Cookie;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,11 +72,22 @@ class ApiTokenControllerTest {
     @Autowired
     private TokenHasher tokenHasher;
 
+    @Autowired
+    private AuditProperties auditProperties;
+
+    @Autowired
+    private InMemoryAuditEventRepository auditEventRepository;
+
+    @Autowired
+    private AuditChainVerifier auditChainVerifier;
+
     private MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+        auditProperties.setMode(AuditMode.OFF);
+        auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
         Instant now = Instant.parse("2026-10-17T10:00:00Z");
         ((AuthenticationTestConfig.TestUserRepository) userRepository).replaceWith(
             user(ALICE_ID, "alice", "alice@example.test", true, 0, now),
@@ -275,6 +297,88 @@ class ApiTokenControllerTest {
         bearerGetMe(aliceRawToken).andExpect(status().isOk());
     }
 
+    @Test
+    void basicAuditMode_creationAndRevocationRecordCanonicalEventsWithoutSecret() throws Exception {
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditProperties.setMode(AuditMode.BASIC);
+
+        try {
+            MvcResult created = createToken(session, "ci-local", Instant.now().plusSeconds(3600))
+                .andExpect(status().isCreated())
+                .andReturn();
+            String tokenId = JsonPath.read(created.getResponse().getContentAsString(), "$.id");
+            String rawToken = JsonPath.read(created.getResponse().getContentAsString(), "$.token");
+
+            revoke(session, tokenId).andExpect(status().isNoContent());
+            revoke(session, tokenId).andExpect(status().isNoContent());
+
+            var events = auditEvents();
+            assertThat(events).extracting(AuditEvent::action).containsExactly(
+                AuditAction.API_TOKEN_CREATED.name(),
+                AuditAction.API_TOKEN_REVOKED.name()
+            );
+            assertThat(events).extracting(AuditEvent::authenticationType)
+                .containsOnly(AuditAuthenticationType.SESSION);
+            assertThat(events).extracting(AuditEvent::actorUserId).containsOnly(ALICE_ID);
+            assertThat(events).extracting(AuditEvent::actorUsername).containsOnly("alice");
+            assertThat(events).extracting(AuditEvent::resourceType)
+                .containsOnly(AuditResourceType.API_TOKEN.name());
+            assertThat(events).extracting(AuditEvent::resourceId).containsOnly(tokenId);
+            assertThat(events).allSatisfy(event -> {
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.requestId()).isNull();
+                assertThat(event.toString()).doesNotContain(rawToken);
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void basicAuditMode_selfRevocationRecordsPatActorBeforeTokenLosesValidity() throws Exception {
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        String rawToken = createRawToken(session, "ci-local", Instant.now().plusSeconds(3600));
+        String tokenId = apiTokenRepository.findByTokenHash(tokenHasher.hash(rawToken)).orElseThrow().id().toString();
+        auditProperties.setMode(AuditMode.BASIC);
+
+        try {
+            mockMvc.perform(delete(UserEndpoints.API_TOKENS_PATH + "/" + tokenId)
+                    .header("Authorization", "Bearer " + rawToken))
+                .andExpect(status().isNoContent());
+
+            bearerGetMe(rawToken).andExpect(status().isUnauthorized());
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.API_TOKEN_REVOKED.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.PAT);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo("alice");
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.API_TOKEN.name());
+                assertThat(event.resourceId()).isEqualTo(tokenId);
+                assertThat(event.toString()).doesNotContain(rawToken);
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void offAuditMode_creationAndRevocationDoNotRecordEvents() throws Exception {
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        String tokenId = JsonPath.read(
+            createToken(session, "ci-local", Instant.now().plusSeconds(3600))
+                .andReturn().getResponse().getContentAsString(),
+            "$.id"
+        );
+
+        revoke(session, tokenId).andExpect(status().isNoContent());
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
     // Bearer authentication
 
     @Test
@@ -463,6 +567,10 @@ class ApiTokenControllerTest {
     }
 
     // Helpers
+
+    private List<AuditEvent> auditEvents() {
+        return auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID);
+    }
 
     private ResultActions createToken(MockHttpSession session, String name, Instant expiresAt) throws Exception {
         Cookie csrfCookie = csrfCookieFromSafeRequest();
