@@ -1,13 +1,17 @@
 package es.alxarafe.alixar.persistence;
 
+import es.alxarafe.alixar.audit.application.AuditActor;
+import es.alxarafe.alixar.audit.application.AuditActorResolver;
 import es.alxarafe.alixar.audit.application.AuditChainVerifier;
 import es.alxarafe.alixar.audit.application.AuditEventDraft;
+import es.alxarafe.alixar.audit.application.AuditMode;
 import es.alxarafe.alixar.audit.application.AuditVerificationFailure;
 import es.alxarafe.alixar.audit.application.AuditVerificationResult;
 import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import es.alxarafe.alixar.audit.domain.AuditChain;
 import es.alxarafe.alixar.audit.domain.AuditEvent;
 import es.alxarafe.alixar.audit.domain.AuditResult;
+import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
 import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditService;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
@@ -52,10 +56,15 @@ import java.util.concurrent.TimeUnit;
 import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.jooq.DSLContext;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -65,8 +74,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 // Runs explicitly in bin/check against its isolated Compose database.
 @SpringBootTest(properties = "spring.autoconfigure.exclude=")
+@Import(PersistenceIT.FixedAuditActorConfiguration.class)
 class PersistenceIT {
 
+    private static final UUID AUDIT_TEST_ACTOR_ID =
+        UUID.fromString("6e337a8b-7e9b-4f2d-8a0f-1b4c5d6e7f80");
     private static final String POSTGRESQL_VERSION = "18.6";
     private static final String HISTORY_TABLE = "flyway_schema_history";
     private static final String USER_TABLE = "authentication_user";
@@ -124,6 +136,9 @@ class PersistenceIT {
 
     @Autowired
     private AuditChainVerifier auditChainVerifier;
+
+    @Autowired
+    private AuditProperties auditProperties;
 
     @Test
     void bootIntegratesPostgresqlFlywayJooqAndAuthenticationMigration() throws Exception {
@@ -1480,6 +1495,62 @@ class PersistenceIT {
             .doesNotContain("expires_at", "legal_hold");
     }
 
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackAdministrativeEnablement() {
+        UUID userId = UUID.randomUUID();
+        Instant now = Instant.now();
+        String resetTokenHash = tokenHasher.hash(PasswordResetTokenGenerator.generate());
+
+        resetAuditChain();
+        auditProperties.setMode(AuditMode.BASIC);
+        try {
+            userRepository.create(new User(
+                userId,
+                "audit-rollback-" + userId,
+                "audit-rollback-" + userId + "@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                2,
+                now,
+                now
+            ));
+            passwordResetTokenRepository.create(new PasswordResetToken(
+                UUID.randomUUID(),
+                userId,
+                resetTokenHash,
+                now.plusSeconds(1800),
+                null,
+                now
+            ));
+
+            dsl.query(
+                "delete from audit_chain_head where chain_id = ?",
+                AUDIT_CHAIN_ID
+            ).execute();
+
+            assertThatThrownBy(() -> transactionalAdminUserService.setEnabled(userId, false))
+                .isInstanceOf(IllegalStateException.class);
+
+            User afterFailure = userRepository.findById(userId).orElseThrow();
+            assertThat(afterFailure.enabled()).isTrue();
+            assertThat(afterFailure.credentialsVersion()).isEqualTo(2);
+            assertThat(passwordResetTokenRepository.findByTokenHash(resetTokenHash).orElseThrow().isUsed())
+                .isFalse();
+            assertThat(dsl.fetchCount(
+                org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_EVENT_TABLE))
+            )).isZero();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteUser(userId);
+        }
+    }
+
+    @AfterEach
+    void resetAuditMode() {
+        auditProperties.setMode(AuditMode.OFF);
+    }
+
     private void assertAuditVerificationFails(AuditVerificationFailure failure, long sequence) {
         AuditVerificationResult result = auditChainVerifier.verify(AUDIT_CHAIN_ID);
         assertThat(result.valid()).isFalse();
@@ -1508,6 +1579,12 @@ class PersistenceIT {
     }
 
     private void resetAuditChain() {
+        dsl.query(
+            "insert into audit_chain_head (chain_id, last_sequence, last_hash) "
+                + "values (?, 0, ?) on conflict (chain_id) do nothing",
+            AUDIT_CHAIN_ID,
+            AuditChain.GENESIS_HASH
+        ).execute();
         dsl.query("delete from audit_event").execute();
         dsl.query(
             "update audit_chain_head set last_sequence = 0, last_hash = ?, updated_at = current_timestamp "
@@ -1515,6 +1592,20 @@ class PersistenceIT {
             AuditChain.GENESIS_HASH,
             AUDIT_CHAIN_ID
         ).execute();
+    }
+
+    @TestConfiguration
+    static class FixedAuditActorConfiguration {
+
+        @Bean
+        @Primary
+        AuditActorResolver fixedAuditActorResolver() {
+            return () -> Optional.of(new AuditActor(
+                AUDIT_TEST_ACTOR_ID,
+                "audit-persistence-test",
+                AuditAuthenticationType.SESSION
+            ));
+        }
     }
 
     private boolean isTransactional(Class<?> controller, String methodName) {

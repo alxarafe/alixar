@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.authentication.infrastructure;
 
+import es.alxarafe.alixar.audit.application.AuditTrail;
 import es.alxarafe.alixar.authentication.application.ApiTokenGenerator;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AssignRoleToUserUseCase;
@@ -208,14 +209,16 @@ public class AuthenticationConfiguration {
         UpdateAdminUsernameUseCase updateAdminUsernameUseCase,
         SetAdminUserEnabledUseCase setAdminUserEnabledUseCase,
         ResetAdminUserPasswordUseCase resetAdminUserPasswordUseCase,
-        ReplaceAdminUserRolesUseCase replaceAdminUserRolesUseCase
+        ReplaceAdminUserRolesUseCase replaceAdminUserRolesUseCase,
+        AuditTrail auditTrail
     ) {
         return new TransactionalAdminUserService(
             createAdminUserUseCase,
             updateAdminUsernameUseCase,
             setAdminUserEnabledUseCase,
             resetAdminUserPasswordUseCase,
-            replaceAdminUserRolesUseCase
+            replaceAdminUserRolesUseCase,
+            auditTrail
         );
     }
 

@@ -130,6 +130,16 @@ notifier logs a warning. `compose.yaml` passes the mail variables through from
 the host environment only when they are defined, so no mail sender is created by
 default.
 
+Audit configuration:
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `ALIXAR_AUDIT_MODE` | `OFF` | Audit policy: `OFF` disables the persistent audit trail; `BASIC` records explicitly instrumented events |
+
+`BASIC` currently records only administrative user enable/disable transitions.
+It is not full audit coverage. See [Audit](audit.md) for semantics and the
+fail-closed transaction guarantee.
+
 ## Docker Compose
 
 The `compose.yaml` defines:
@@ -152,7 +162,7 @@ This override is used **only** by `./bin/check-reference`.
 
 `./bin/check` is the complete validation authority for Alixar itself. It runs entirely in Docker and performs:
 
-1. Build and run the 233 deterministic tests (`mvnw clean verify`)
+1. Build and run the 246 deterministic tests (`mvnw clean verify`)
 2. Runtime image build
 3. Container startup with health check wait (database + app)
 4. PostgreSQL health verification (`pg_isready`)
@@ -167,8 +177,9 @@ This override is used **only** by `./bin/check-reference`.
    `credentials_version`, atomic permission replacement, built-in role
    immutability, deletion restricted for assigned roles with permission
    cascade for free roles, and audit append-only integrity including concurrent
-   appends, hash-chain verification, direct tampering detection and restrictive
-   chain-head deletion
+   appends, hash-chain verification, direct tampering detection, restrictive
+   chain-head deletion, and fail-closed rollback of an administrative enablement
+   when its required audit append fails
 6. HTTP `GET /health` verification (exact `{"status":"ok"}` response)
 7. Cleanup of this invocation's containers, network, and volume; verify none remain
 

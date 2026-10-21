@@ -8,12 +8,13 @@ resource. It is not a replacement for technical application logs: logs support
 diagnosis, while the audit trail is a persistent, append-only history of
 relevant actions.
 
-ALIXAR-DEV-003H is being implemented in vertical slices. The current slice,
-T1.1, provides the persistent integrity core only. Audit modes, RBAC
-permissions, instrumentation, query APIs, retention, archive and checkpoints
-are not implemented yet.
+ALIXAR-DEV-003H is being implemented in vertical slices. T1.1 provided the
+persistent integrity core. T1.2 adds the configurable `OFF` / `BASIC` policy and
+the first instrumented administrative operation. RBAC permissions, broader
+instrumentation, query APIs, retention, archive and checkpoints are not
+implemented yet.
 
-## Current scope (T1.1)
+## Current scope (T1.1 and T1.2)
 
 Implemented:
 
@@ -24,18 +25,87 @@ Implemented:
 - canonical, versioned event representation;
 - transactional chain-head locking with `SELECT ... FOR UPDATE`;
 - independent chain verifier;
-- PostgreSQL integration and tamper tests.
+- PostgreSQL integration and tamper tests;
+- `OFF` / `BASIC` audit policy configured through `alixar.audit.mode`;
+- atomic `SUCCESS` events for administrative user enable/disable.
 
 Not implemented yet:
 
-- `OFF` / `BASIC` / `SELECTIVE` / `FULL` audit modes;
+- `SELECTIVE` / `FULL` audit modes;
 - `audit.read` and `audit.configure` permissions;
-- instrumentation of authentication, PAT, user or role operations;
-- `SUCCESS`, `FAILURE` and `DENIED` transaction strategy;
+- instrumentation beyond administrative user enable/disable;
+- `FAILURE` and `DENIED` event strategy;
 - administrative query API;
 - retention, purge and archive;
 - signed checkpoints or external anchoring;
 - payloads with explicit `before` / `after` changes.
+
+## Audit modes
+
+T1.2 defines two modes:
+
+```text
+OFF
+→ no persistent audit trail
+
+BASIC
+→ only events explicitly instrumented as BASIC events
+```
+
+`BASIC` does **not** mean full coverage of all administrative or system events.
+It currently covers only the events listed below. Additional capabilities must
+be instrumented explicitly in later slices.
+
+The mode is infrastructure configuration:
+
+```text
+alixar.audit.mode
+ALIXAR_AUDIT_MODE
+```
+
+The default is `OFF`, so existing deployments do not start writing audit events
+until the mode is enabled. Values other than `OFF` and `BASIC` prevent startup.
+In `OFF`, the operation does not resolve an actor, build an `AuditEvent`, encode
+the canonical representation or enter the appender.
+
+## Instrumented events (T1.2)
+
+Administrative user enablement is instrumented atomically:
+
+```text
+true  → false  = USER_DISABLED
+false → true   = USER_ENABLED
+
+true  → true   = no event
+false → false  = no event
+```
+
+The event uses:
+
+```text
+action       USER_ENABLED | USER_DISABLED
+resource     USER / target user id
+result       SUCCESS
+actor        authenticated administrator
+auth type    SESSION | PAT
+request id   null (deferred)
+```
+
+The event is recorded in the same transaction as the business change. When
+`BASIC` requires the event, a failure while inserting the event, calculating the
+hash chain or updating the chain head rolls back the `enabled` change,
+`credentials_version` increment and reset-token invalidation. A successful
+`BASIC` administrative operation must never leave the user changed without its
+audit event.
+
+The actor is resolved from the Spring Security context by infrastructure code.
+The PAT filter marks the request so the resolver can distinguish `PAT` from
+`SESSION` without changing the serialized principal. If an authenticated
+administrative operation under `BASIC` cannot resolve its actor, the operation
+fails; it does not write a null actor or fall back to `SYSTEM`. `SYSTEM` will be
+resolved explicitly when internal processes are instrumented.
+
+The PAT identifier and token value are not recorded in T1.2.
 
 ## Conceptual evolution
 
@@ -48,9 +118,9 @@ SELECTIVE
 FULL
 ```
 
-Only the integrity core exists today. `OFF` and `BASIC` will be implemented in a
-later slice. `SELECTIVE` and `FULL` will eventually allow policy by resource
-type, action and read depth. Deep read auditing is expected to support:
+`OFF` and `BASIC` exist today. `SELECTIVE` and `FULL` will eventually allow
+policy by resource type, action and read depth. Deep read auditing is expected
+to support:
 
 ```text
 NONE
@@ -328,14 +398,18 @@ heads without gaining `UPDATE` or `DELETE` on `audit_event`.
 The following capabilities are intentionally deferred and must not be blocked by
 the current design:
 
-- `OFF` and `BASIC` modes, decided before building expensive payloads;
 - `SELECTIVE` and `FULL` modes by resource type, action and read depth;
-- `audit.read` and `audit.configure` permissions supplied by migration;
+- `audit.read` and `audit.configure` permissions supplied by migration when a
+  real read or configuration capability exists;
 - instrumentation of login, logout, password changes, password resets, PAT
-  creation/revocation, user administration and role administration;
-- atomic `SUCCESS` events in the same transaction as the business change;
+  creation/revocation, user creation/rename/password reset/role replacement and
+  role administration;
+- atomic `SUCCESS` events for further business operations as they are
+  instrumented;
 - an explicit strategy for `FAILURE` and `DENIED` events, separate from the
   business transaction;
+- the PAT identifier in audit events;
+- request/correlation identifiers;
 - `GET /api/admin/audit-events` and `GET /api/admin/audit-events/{id}`;
 - retention state, `purge_after`, `legal_hold`, batched internal purge and purge
   summary events;

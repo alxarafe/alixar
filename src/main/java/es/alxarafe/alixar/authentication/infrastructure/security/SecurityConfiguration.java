@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.authentication.infrastructure.security;
 
+import es.alxarafe.alixar.audit.application.AuditActorResolver;
 import es.alxarafe.alixar.authentication.api.AdminUserEndpoints;
 import es.alxarafe.alixar.authentication.api.UserEndpoints;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
@@ -88,6 +89,11 @@ public class SecurityConfiguration {
     @Bean
     BearerTokenRequestMatcher bearerTokenRequestMatcher() {
         return new BearerTokenRequestMatcher();
+    }
+
+    @Bean
+    AuditActorResolver auditActorResolver() {
+        return new SecurityContextAuditActorResolver();
     }
 
     @Bean

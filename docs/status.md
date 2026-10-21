@@ -26,7 +26,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 233 deterministic tests and 40 PostgreSQL integration tests remain
+  the 246 deterministic tests and 41 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -110,9 +110,14 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   `chain_id`, monotonic per-chain sequence, SHA-256 hash chain, canonical format
   v1, transactional `SELECT ... FOR UPDATE` chain-head locking, and an
   independent verifier. PostgreSQL tests append concurrently and tamper directly
-  with rows to prove that verification fails. No audit mode, RBAC permission,
-  instrumentation, query API, retention, archive or checkpoint is implemented
-  yet. See [Audit](audit.md)
+  with rows to prove that verification fails.
+- **Audit policy and first instrumentation (T1.2)**: `OFF` (default) and `BASIC`
+  modes configured through `alixar.audit.mode` / `ALIXAR_AUDIT_MODE`.
+  Administrative user enable/disable records `USER_DISABLED` / `USER_ENABLED`
+  only on real transitions. The `SUCCESS` event is atomic with the business
+  transaction and fail-closed; `SESSION` and `PAT` actors are distinguished.
+  `BASIC` currently covers only this operation. No audit RBAC permission, query
+  API, retention, archive or checkpoint is implemented yet. See [Audit](audit.md)
 
 ## Transitional integrations
 
@@ -138,9 +143,9 @@ See [Development](development.md) for full validation workflow details.
 
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
 - Role groups, PAT scopes and authorization for business capabilities beyond `users.manage` and `roles.manage`
-- Audit modes (`OFF`, `BASIC`, later `SELECTIVE` / `FULL`), audit RBAC
-  permissions, instrumentation, query API, retention, purging, archive and
-  signed checkpoints
+- `SELECTIVE` / `FULL` audit modes, audit RBAC permissions, instrumentation
+  beyond administrative user enable/disable, query API, retention, purging,
+  archive and signed checkpoints
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - Administration of other users' API tokens

@@ -1,17 +1,21 @@
 package es.alxarafe.alixar.audit.infrastructure;
 
+import es.alxarafe.alixar.audit.application.AuditActorResolver;
 import es.alxarafe.alixar.audit.application.AuditCanonicalEncoder;
 import es.alxarafe.alixar.audit.application.AuditChainVerifier;
 import es.alxarafe.alixar.audit.application.AuditEventAppender;
 import es.alxarafe.alixar.audit.application.AuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditHashCalculator;
+import es.alxarafe.alixar.audit.application.AuditTrail;
 import java.time.Clock;
 import org.jooq.DSLContext;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
 @AutoConfiguration
+@EnableConfigurationProperties(AuditProperties.class)
 public class AuditConfiguration {
 
     @Bean
@@ -56,6 +60,20 @@ public class AuditConfiguration {
     @Bean
     TransactionalAuditService transactionalAuditService(AuditEventAppender auditEventAppender) {
         return new TransactionalAuditService(auditEventAppender);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(AuditTrail.class)
+    AuditTrail auditTrail(
+        AuditProperties auditProperties,
+        AuditActorResolver auditActorResolver,
+        TransactionalAuditService transactionalAuditService
+    ) {
+        return new ConfiguredAuditTrail(
+            auditProperties,
+            auditActorResolver,
+            transactionalAuditService
+        );
     }
 
     @Bean

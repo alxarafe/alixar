@@ -1,5 +1,15 @@
 package es.alxarafe.alixar.authentication.api;
 
+import es.alxarafe.alixar.audit.InMemoryAuditEventRepository;
+import es.alxarafe.alixar.audit.application.AuditAction;
+import es.alxarafe.alixar.audit.application.AuditChainVerifier;
+import es.alxarafe.alixar.audit.application.AuditMode;
+import es.alxarafe.alixar.audit.application.AuditResourceType;
+import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
+import es.alxarafe.alixar.audit.domain.AuditChain;
+import es.alxarafe.alixar.audit.domain.AuditEvent;
+import es.alxarafe.alixar.audit.domain.AuditResult;
+import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
 import es.alxarafe.alixar.authentication.AuthenticationTestConfig;
 import es.alxarafe.alixar.authentication.application.AdministrationErrorCode;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
@@ -76,12 +86,23 @@ class AdminUserControllerTest {
     @Autowired
     private TokenHasher tokenHasher;
 
+    @Autowired
+    private AuditProperties auditProperties;
+
+    @Autowired
+    private InMemoryAuditEventRepository auditEventRepository;
+
+    @Autowired
+    private AuditChainVerifier auditChainVerifier;
+
     private MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         SecurityContextHolder.clearContext();
+        auditProperties.setMode(AuditMode.OFF);
+        auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
         Instant now = Instant.parse("2026-10-17T10:00:00Z");
         ((AuthenticationTestConfig.TestUserRepository) userRepository).replaceWith(
             user(ALICE_ID, "alice", "alice@example.test", true, 0, now),
@@ -727,6 +748,91 @@ class AdminUserControllerTest {
     }
 
     @Test
+    void offAuditMode_doesNotRecordEnablementEvents() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminPatchEnabled(session, BOB_ID, false)
+            .andExpect(status().isOk());
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
+    void basicAuditMode_sessionEnable_recordsUserEnabledWithSessionActor() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditProperties.setMode(AuditMode.BASIC);
+
+        try {
+            adminPatchEnabled(session, CAROL_ID, true)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.enabled").value(true));
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.USER_ENABLED.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo("alice");
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(CAROL_ID.toString());
+                assertThat(event.requestId()).isNull();
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void basicAuditMode_patDisable_recordsUserDisabledWithPatActor() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        String rawToken = personalAccessToken(ALICE_ID);
+        auditProperties.setMode(AuditMode.BASIC);
+
+        try {
+            mockMvc.perform(patch(AdminUserEndpoints.BASE_PATH + "/" + BOB_ID + "/enabled")
+                    .header("Authorization", "Bearer " + rawToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"enabled\":false}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.enabled").value(false));
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.USER_DISABLED.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.PAT);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo("alice");
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(BOB_ID.toString());
+                assertThat(event.toString()).doesNotContain(rawToken);
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void basicAuditMode_noOpEnablement_doesNotRecordEvent() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditProperties.setMode(AuditMode.BASIC);
+
+        try {
+            adminPatchEnabled(session, ALICE_ID, true)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.enabled").value(true));
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
     void disable_invalidatesPendingPasswordResetTokens() throws Exception {
         grantSystemAdmin(ALICE_ID);
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
@@ -1092,6 +1198,10 @@ class AdminUserControllerTest {
             + "\",\"email\":\"" + email
             + "\",\"password\":\"" + password + "\""
             + roleCodes + "}";
+    }
+
+    private List<AuditEvent> auditEvents() {
+        return auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID);
     }
 
     private ManagedState managedState() {

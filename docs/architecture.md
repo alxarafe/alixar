@@ -56,12 +56,14 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   password resets and full role replacement
 - Append-only audit event persistence with per-chain sequence, chain-head
   locking, canonical format v1, SHA-256 hash chain and an independent verifier.
-  No audit mode, RBAC permission, instrumentation, API, retention or archive is
-  implemented yet; see [Audit](audit.md)
+  `OFF` / `BASIC` policy and atomic `USER_ENABLED` / `USER_DISABLED` events for
+  administrative user enablement are implemented. `BASIC` currently covers only
+  that operation; RBAC permissions, broader instrumentation, API, retention,
+  archive and checkpoints are not implemented yet. See [Audit](audit.md)
 
 ## Planned (Not Implemented)
 
-- Audit modes (`OFF`, `BASIC`, later `SELECTIVE` / `FULL`), RBAC permissions,
+- `SELECTIVE` / `FULL` audit modes, audit RBAC permissions, broader
   instrumentation, query API, retention, purge, archive and signed checkpoints
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
@@ -164,9 +166,15 @@ representation; integrity does not depend on an arbitrary JSON serialization.
 Application code has no operation to update or delete an individual event. The
 verifier depends on a read-only `AuditChainSource` port rather than PostgreSQL or
 jOOQ, so the same verification core can later consume exported archives.
-Database-level append-only privileges, audit modes, RBAC permissions,
-instrumentation, retention and signing are not implemented yet. See
-[Audit](audit.md) for the canonical format and deferred capabilities.
+
+The audit mode is infrastructure configuration (`alixar.audit.mode`, default
+`OFF`). In `BASIC`, explicitly instrumented successful operations record their
+event in the same transaction as the business change. Administrative user
+enable/disable is the first instrumented operation and is fail-closed. The
+application layer depends on an `AuditTrail` port, not on environment variables
+or Spring Security. Database-level append-only privileges, audit RBAC
+permissions, broader instrumentation, retention and signing are not implemented
+yet. See [Audit](audit.md) for the canonical format and deferred capabilities.
 
 ## Internationalization (i18n) Architecture
 

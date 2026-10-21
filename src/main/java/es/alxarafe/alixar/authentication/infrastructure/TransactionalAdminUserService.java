@@ -1,9 +1,13 @@
 package es.alxarafe.alixar.authentication.infrastructure;
 
+import es.alxarafe.alixar.audit.application.AuditAction;
+import es.alxarafe.alixar.audit.application.AuditResourceType;
+import es.alxarafe.alixar.audit.application.AuditTrail;
 import es.alxarafe.alixar.authentication.application.AdminUser;
 import es.alxarafe.alixar.authentication.application.CreateAdminUserUseCase;
 import es.alxarafe.alixar.authentication.application.ReplaceAdminUserRolesUseCase;
 import es.alxarafe.alixar.authentication.application.ResetAdminUserPasswordUseCase;
+import es.alxarafe.alixar.authentication.application.SetAdminUserEnabledResult;
 import es.alxarafe.alixar.authentication.application.SetAdminUserEnabledUseCase;
 import es.alxarafe.alixar.authentication.application.UpdateAdminUsernameUseCase;
 import java.util.List;
@@ -17,19 +21,22 @@ public class TransactionalAdminUserService {
     private final SetAdminUserEnabledUseCase setAdminUserEnabledUseCase;
     private final ResetAdminUserPasswordUseCase resetAdminUserPasswordUseCase;
     private final ReplaceAdminUserRolesUseCase replaceAdminUserRolesUseCase;
+    private final AuditTrail auditTrail;
 
     public TransactionalAdminUserService(
         CreateAdminUserUseCase createAdminUserUseCase,
         UpdateAdminUsernameUseCase updateAdminUsernameUseCase,
         SetAdminUserEnabledUseCase setAdminUserEnabledUseCase,
         ResetAdminUserPasswordUseCase resetAdminUserPasswordUseCase,
-        ReplaceAdminUserRolesUseCase replaceAdminUserRolesUseCase
+        ReplaceAdminUserRolesUseCase replaceAdminUserRolesUseCase,
+        AuditTrail auditTrail
     ) {
         this.createAdminUserUseCase = createAdminUserUseCase;
         this.updateAdminUsernameUseCase = updateAdminUsernameUseCase;
         this.setAdminUserEnabledUseCase = setAdminUserEnabledUseCase;
         this.resetAdminUserPasswordUseCase = resetAdminUserPasswordUseCase;
         this.replaceAdminUserRolesUseCase = replaceAdminUserRolesUseCase;
+        this.auditTrail = auditTrail;
     }
 
     @Transactional
@@ -44,7 +51,15 @@ public class TransactionalAdminUserService {
 
     @Transactional
     public AdminUser setEnabled(UUID userId, boolean enabled) {
-        return setAdminUserEnabledUseCase.execute(userId, enabled);
+        SetAdminUserEnabledResult result = setAdminUserEnabledUseCase.execute(userId, enabled);
+        if (result.changed()) {
+            auditTrail.recordSuccess(
+                result.user().enabled() ? AuditAction.USER_ENABLED : AuditAction.USER_DISABLED,
+                AuditResourceType.USER,
+                userId.toString()
+            );
+        }
+        return result.user();
     }
 
     @Transactional
