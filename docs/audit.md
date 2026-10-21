@@ -14,10 +14,10 @@ and the first instrumented administrative operation. T1.3a extends `BASIC` to
 administrative user lifecycle operations, self-service credential changes,
 completed password recovery, Personal Access Token lifecycle and role
 administration. T1.4a adds a read-only query API protected by `audit.read`.
-Event detail, formal chain verification through HTTP, retention, archive and
-checkpoints remain out of scope.
+T1.4b adds formal chain verification through HTTP. Event detail, retention,
+archive and checkpoints remain out of scope.
 
-## Current scope (T1.1, T1.2, T1.3a, T1.3b and T1.4a)
+## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a and T1.4b)
 
 Implemented:
 
@@ -41,7 +41,9 @@ Implemented:
   deletion;
 - `RECOVERY_TOKEN` as an audit authentication type;
 - `audit.read` permission and a read-only, chain-scoped event query API with
-  keyset pagination and combinable filters.
+  keyset pagination and combinable filters;
+- formal chain verification through `GET /api/admin/audit-events/verification`,
+  using one repeatable-read snapshot and a chain-consistent response.
 
 Not implemented yet:
 
@@ -50,7 +52,7 @@ Not implemented yet:
 - the PAT identifier as part of the actor;
 - bootstrap, login, logout and password-reset request events;
 - `FAILURE` and `DENIED` event strategy;
-- event detail and formal chain verification through HTTP;
+- audit event detail through HTTP;
 - auditing read operations;
 - retention, purge and archive;
 - signed checkpoints or external anchoring;
@@ -260,6 +262,45 @@ Reads work independently of `OFF` / `BASIC`, and a read does not append an audit
 event. Auditing the read operation itself is deferred to `SELECTIVE` / `FULL`
 read-depth policy. T1.4a adds no speculative database index and no total-count
 metadata.
+
+## Verification API (T1.4b)
+
+`GET /api/admin/audit-events/verification` verifies the current default chain
+and requires the same `audit.read` permission as the event query API. It returns
+`200 OK` for both valid and invalid chains; an invalid chain is a verification
+result, not a request error.
+
+The response contains only:
+
+```text
+chainId
+valid
+checkedEvents
+failure
+failedSequence
+```
+
+`failure` is a stable `AuditVerificationFailure` identifier, such as
+`EVENT_HASH_MISMATCH`, `EVENT_MISSING` or `HEAD_HASH_MISMATCH`. It is `null`
+when `valid` is `true`. `failedSequence` is the sequence associated with the
+first failure, or `null` when the failure is not attributable to a specific
+event, such as a missing chain head or a final head-hash mismatch.
+
+For a valid chain, `checkedEvents` is the number of events verified. For an
+invalid chain, it is the number of events verified correctly before the first
+failure. The response intentionally does not expose expected hashes, actual
+hashes, stack traces, SQL or persistence details.
+
+Verification runs in a read-only `REPEATABLE READ` transaction. The chain head,
+every event batch and the final consistency checks therefore use one PostgreSQL
+snapshot. A concurrent append may be visible before or after that snapshot, but
+it cannot produce a mixed result or a false failure.
+
+Verification never repairs, updates or deletes audit data. A tampered chain
+continues to fail on subsequent requests. It works independently of `OFF` /
+`BASIC`, does not append an audit event, and adds no migration, index or read
+auditing. Event detail through HTTP remains deferred until a real consumer needs
+it.
 
 ## Event model
 
@@ -491,7 +532,9 @@ not used for `sequence`, because a rolled-back insert would create a gap.
 
 The verifier depends on the `AuditChainSource` port, not on PostgreSQL or jOOQ.
 It can later read from the database, an exported JSONL archive or a standalone
-CLI without changing verification rules.
+CLI without changing verification rules. The HTTP verification API wraps the
+entire verifier execution in a read-only `REPEATABLE READ` transaction so a
+concurrent append cannot mix chain-head and event snapshots.
 
 Verification checks:
 
@@ -508,7 +551,10 @@ Verification checks:
 Tests manipulate PostgreSQL directly, bypassing the application, to prove that
 modifying a historical field, deleting an intermediate event, changing
 `previous_hash`, changing `event_hash` or changing the sequence/order makes
-verification fail.
+verification fail. Additional tests prove that HTTP verification returns
+`200` with `valid=false` without repairing the chain, that a repeated request
+fails the same way, and that a concurrent append during verification either
+falls entirely before or entirely after the snapshot.
 
 A valid chain does not prove that a database administrator with complete control
 could not rewrite both the events and the chain head. Signed checkpoints and
@@ -538,7 +584,7 @@ the current design:
   business transaction;
 - the PAT identifier in audit events;
 - request/correlation identifiers;
-- `GET /api/admin/audit-events/{id}` and formal chain verification through HTTP;
+- `GET /api/admin/audit-events/{id}`;
 - auditing read operations under `SELECTIVE` / `FULL`;
 - retention state, `purge_after`, `legal_hold`, batched internal purge and purge
   summary events;

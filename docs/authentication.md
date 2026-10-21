@@ -483,6 +483,7 @@ The administrative namespace is split by capability:
 | Any other `/api/admin/roles/**` method | `roles.manage` |
 | `/api/admin/permissions` | `roles.manage` |
 | `GET /api/admin/audit-events` | `audit.read` |
+| `GET /api/admin/audit-events/verification` | `audit.read` |
 
 The GET rule for the role catalogue is method-specific and is evaluated before
 the general role namespace rule. Results:
@@ -531,6 +532,7 @@ and creation, and T3 adds role rename, permission replacement and deletion.
 | `DELETE /api/admin/roles/{code}` | Deletes an unassigned custom role |
 | `GET /api/admin/permissions` | Read-only permission catalogue |
 | `GET /api/admin/audit-events` | Chain-scoped audit event list |
+| `GET /api/admin/audit-events/verification` | Audit chain verification report |
 | `POST /api/admin/users` | Creates a disabled user |
 | `PATCH /api/admin/users/{id}` | Changes the username only |
 | `PATCH /api/admin/users/{id}/enabled` | Enables or disables a user |
@@ -543,8 +545,9 @@ and internal metadata are not exposed. It requires `roles.manage` for both
 session and Bearer authentication. Permission creation, modification and
 deletion are not exposed by the API.
 
-`GET /api/admin/audit-events` requires `audit.read`. Its pagination, filters,
-response fields and error contract are documented in [Audit](audit.md).
+`GET /api/admin/audit-events` and `GET /api/admin/audit-events/verification`
+require `audit.read`. Their pagination, filters, verification response and
+contracts are documented in [Audit](audit.md).
 
 Role responses contain only `code`, `name`, `builtIn` and `permissionCodes`.
 `GET /api/admin/roles` returns roles ordered by `code`, with permission codes

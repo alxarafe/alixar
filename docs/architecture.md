@@ -63,16 +63,17 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   are implemented. Recovery-token events use `RECOVERY_TOKEN` and explicitly
   identify the recovered user as actor. T1.4a adds the `audit.read` permission
   and a read-only `GET /api/admin/audit-events` API with chain-scoped keyset
-  pagination and combinable filters. Event detail, formal HTTP chain
-  verification, `audit.configure`, read auditing, the PAT identifier as actor,
-  retention, archive and checkpoints are not implemented yet. See
-  [Audit](audit.md)
+  pagination and combinable filters. T1.4b adds chain verification at
+  `/api/admin/audit-events/verification`, which verifies the chain under one
+  read-only repeatable-read snapshot. Event detail, `audit.configure`, read
+  auditing, the PAT identifier as actor, retention, archive and checkpoints are
+  not implemented yet. See [Audit](audit.md)
 
 ## Planned (Not Implemented)
 
 - `SELECTIVE` / `FULL` audit modes, `audit.configure`, the PAT identifier as
-  actor, audit event detail and formal verification, read auditing, retention,
-  purge, archive and signed checkpoints
+  actor, audit event detail, read auditing, retention, purge, archive and signed
+  checkpoints
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Email change with new-address verification
@@ -185,11 +186,13 @@ and revocation, and role creation, rename, permission replacement and deletion.
 The application layer depends on an `AuditTrail` port, not on environment
 variables or Spring Security. Authenticated operations resolve their actor
 implicitly; password recovery supplies an explicit `RECOVERY_TOKEN` actor. Every
-mandatory event is fail-closed. The `audit.read` permission and the read-only
-event query API are implemented. Database-level append-only privileges, event
-detail and formal HTTP verification, `audit.configure`, read auditing, the PAT
-identifier as actor, retention and signing are not implemented yet. See
-[Audit](audit.md) for the canonical format and deferred capabilities.
+mandatory event is fail-closed. The `audit.read` permission, the read-only event
+query API and HTTP chain verification are implemented. Verification runs inside
+one read-only `REPEATABLE READ` transaction so its head and event reads share a
+consistent snapshot. Database-level append-only privileges, event detail,
+`audit.configure`, read auditing, the PAT identifier as actor, retention and
+signing are not implemented yet. See [Audit](audit.md) for the canonical format
+and deferred capabilities.
 
 ## Internationalization (i18n) Architecture
 

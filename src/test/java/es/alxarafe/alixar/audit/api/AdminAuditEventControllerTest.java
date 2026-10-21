@@ -7,6 +7,7 @@ import es.alxarafe.alixar.audit.application.AuditEventDraft;
 import es.alxarafe.alixar.audit.application.AuditEventQuery;
 import es.alxarafe.alixar.audit.application.AuditMode;
 import es.alxarafe.alixar.audit.application.AuditResourceType;
+import es.alxarafe.alixar.audit.application.AuditVerificationFailure;
 import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import es.alxarafe.alixar.audit.domain.AuditChain;
 import es.alxarafe.alixar.audit.domain.AuditResult;
@@ -39,6 +40,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -105,6 +107,70 @@ class AdminAuditEventControllerTest {
 
         mockMvc.perform(get(AuditEndpoints.BASE_PATH).session(session))
             .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void anonymousVerification_returnsUnauthorized() throws Exception {
+        mockMvc.perform(get(AuditEndpoints.VERIFICATION_PATH))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void authenticatedWithoutAuditRead_verificationReturnsForbidden() throws Exception {
+        MockHttpSession session = authenticatedSession("bob", PASSWORD);
+
+        mockMvc.perform(get(AuditEndpoints.VERIFICATION_PATH).session(session))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void auditRead_verifiesValidChain() throws Exception {
+        seedEvents();
+        grantAuditRead(BOB_ID);
+        MockHttpSession session = authenticatedSession("bob", PASSWORD);
+
+        mockMvc.perform(get(AuditEndpoints.VERIFICATION_PATH).session(session))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.chainId").value(AuditChain.DEFAULT_CHAIN_ID.toString()))
+            .andExpect(jsonPath("$.valid").value(true))
+            .andExpect(jsonPath("$.checkedEvents").value(5))
+            .andExpect(jsonPath("$.failure").value(nullValue()))
+            .andExpect(jsonPath("$.failedSequence").value(nullValue()));
+
+        assertThat(auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID)).hasSize(5);
+    }
+
+    @Test
+    void auditRead_reportsTamperingWithoutRepairingTheChain() throws Exception {
+        seedEvents();
+        var original = auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID).get(2);
+        auditEventRepository.replaceEvent(
+            AuditChain.DEFAULT_CHAIN_ID,
+            original.sequence(),
+            original.withEventHash("f".repeat(64))
+        );
+        var tamperedEvents = auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID);
+        grantAuditRead(BOB_ID);
+        MockHttpSession session = authenticatedSession("bob", PASSWORD);
+
+        mockMvc.perform(get(AuditEndpoints.VERIFICATION_PATH).session(session))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.valid").value(false))
+            .andExpect(jsonPath("$.checkedEvents").value(2))
+            .andExpect(jsonPath("$.failure").value(AuditVerificationFailure.EVENT_HASH_MISMATCH.name()))
+            .andExpect(jsonPath("$.failedSequence").value(original.sequence()));
+
+        assertThat(auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID))
+            .isEqualTo(tamperedEvents);
+
+        mockMvc.perform(get(AuditEndpoints.VERIFICATION_PATH).session(session))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.valid").value(false))
+            .andExpect(jsonPath("$.failure").value(AuditVerificationFailure.EVENT_HASH_MISMATCH.name()))
+            .andExpect(jsonPath("$.failedSequence").value(original.sequence()));
+
+        assertThat(auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID))
+            .isEqualTo(tamperedEvents);
     }
 
     @Test

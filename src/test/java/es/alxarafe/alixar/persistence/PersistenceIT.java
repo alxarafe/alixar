@@ -3,9 +3,13 @@ package es.alxarafe.alixar.persistence;
 import es.alxarafe.alixar.audit.application.AuditAction;
 import es.alxarafe.alixar.audit.application.AuditActor;
 import es.alxarafe.alixar.audit.application.AuditActorResolver;
+import es.alxarafe.alixar.audit.application.AuditCanonicalEncoder;
+import es.alxarafe.alixar.audit.application.AuditChainSource;
 import es.alxarafe.alixar.audit.application.AuditChainVerifier;
 import es.alxarafe.alixar.audit.application.AuditEventDraft;
 import es.alxarafe.alixar.audit.application.AuditEventQuery;
+import es.alxarafe.alixar.audit.application.AuditEventRepository;
+import es.alxarafe.alixar.audit.application.AuditHashCalculator;
 import es.alxarafe.alixar.audit.application.AuditMode;
 import es.alxarafe.alixar.audit.application.AuditResourceType;
 import es.alxarafe.alixar.audit.application.AuditVerificationFailure;
@@ -13,6 +17,7 @@ import es.alxarafe.alixar.audit.application.AuditVerificationResult;
 import es.alxarafe.alixar.audit.application.ListAuditEventsUseCase;
 import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import es.alxarafe.alixar.audit.domain.AuditChain;
+import es.alxarafe.alixar.audit.domain.AuditChainHead;
 import es.alxarafe.alixar.audit.domain.AuditEvent;
 import es.alxarafe.alixar.audit.domain.AuditResult;
 import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
@@ -74,6 +79,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -153,6 +159,9 @@ class PersistenceIT {
 
     @Autowired
     private AuditChainVerifier auditChainVerifier;
+
+    @Autowired
+    private BlockingAuditChainSource blockingAuditChainSource;
 
     @Autowired
     private ListAuditEventsUseCase listAuditEvents;
@@ -1427,6 +1436,43 @@ class PersistenceIT {
         );
 
         assertThat(isTransactional(facade, "append")).isTrue();
+        var verification = facade.getDeclaredMethod("verify", UUID.class)
+            .getAnnotation(Transactional.class);
+        assertThat(verification).isNotNull();
+        assertThat(verification.readOnly()).isTrue();
+        assertThat(verification.isolation()).isEqualTo(Isolation.REPEATABLE_READ);
+    }
+
+    @Test
+    void auditVerification_usesSingleSnapshotDuringConcurrentAppend() throws Exception {
+        resetAuditChain();
+        appendAuditEvents(3);
+        var gate = blockingAuditChainSource.blockNextEventRead();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        try {
+            Future<AuditVerificationResult> verification = executor.submit(
+                () -> transactionalAuditService.verify(AUDIT_CHAIN_ID)
+            );
+            assertThat(gate.awaitStarted()).isTrue();
+
+            transactionalAuditService.append(auditDraft("CONCURRENT_VERIFICATION"));
+            gate.release();
+
+            AuditVerificationResult result = verification.get(30, TimeUnit.SECONDS);
+            assertThat(result.valid()).isTrue();
+            assertThat(result.checkedEvents()).isEqualTo(3);
+
+            AuditVerificationResult afterAppend =
+                transactionalAuditService.verify(AUDIT_CHAIN_ID);
+            assertThat(afterAppend.valid()).isTrue();
+            assertThat(afterAppend.checkedEvents()).isEqualTo(4);
+        } finally {
+            gate.release();
+            executor.shutdownNow();
+            executor.awaitTermination(10, TimeUnit.SECONDS);
+            resetAuditChain();
+        }
     }
 
     @Test
@@ -2315,6 +2361,92 @@ class PersistenceIT {
                 "audit-persistence-test",
                 AuditAuthenticationType.SESSION
             ));
+        }
+
+        @Bean
+        @Primary
+        BlockingAuditChainSource blockingAuditChainSource(
+            AuditEventRepository auditEventRepository
+        ) {
+            return new BlockingAuditChainSource(auditEventRepository);
+        }
+
+        @Bean
+        @Primary
+        AuditChainVerifier blockingAuditChainVerifier(
+            BlockingAuditChainSource blockingAuditChainSource,
+            AuditCanonicalEncoder auditCanonicalEncoder,
+            AuditHashCalculator auditHashCalculator
+        ) {
+            return new AuditChainVerifier(
+                blockingAuditChainSource,
+                auditCanonicalEncoder,
+                auditHashCalculator
+            );
+        }
+    }
+
+    static final class BlockingAuditChainSource implements AuditChainSource {
+
+        private final AuditEventRepository delegate;
+        private ReadGate nextReadGate;
+
+        BlockingAuditChainSource(AuditEventRepository delegate) {
+            this.delegate = delegate;
+        }
+
+        synchronized ReadGate blockNextEventRead() {
+            nextReadGate = new ReadGate();
+            return nextReadGate;
+        }
+
+        @Override
+        public Optional<AuditChainHead> findChainHead(UUID chainId) {
+            return delegate.findChainHead(chainId);
+        }
+
+        @Override
+        public List<AuditEvent> readEvents(UUID chainId, long afterSequence, int limit) {
+            ReadGate gate;
+            synchronized (this) {
+                gate = nextReadGate;
+                nextReadGate = null;
+            }
+            if (gate != null) {
+                gate.signalStarted();
+                gate.awaitRelease();
+            }
+            return delegate.readEvents(chainId, afterSequence, limit);
+        }
+    }
+
+    static final class ReadGate {
+
+        private static final long TIMEOUT_SECONDS = 10;
+        private final CountDownLatch started = new CountDownLatch(1);
+        private final CountDownLatch released = new CountDownLatch(1);
+
+        boolean awaitStarted() throws InterruptedException {
+            return started.await(TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        }
+
+        void signalStarted() {
+            started.countDown();
+        }
+
+        void release() {
+            released.countDown();
+        }
+
+        void awaitRelease() {
+            try {
+                if (!released.await(TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
+                    throw new IllegalStateException("Timed out waiting for audit verification release");
+                }
+            } catch (InterruptedException exception) {
+                Thread.currentThread().interrupt();
+                throw new IllegalStateException(exception);
+            }
         }
     }
 

@@ -150,6 +150,8 @@ public class SecurityConfiguration {
                     .hasAuthority(PermissionCodes.ROLES_MANAGE)
                 .requestMatchers(AdminUserEndpoints.PERMISSIONS_BASE_PATH)
                     .hasAuthority(PermissionCodes.ROLES_MANAGE)
+                .requestMatchers(HttpMethod.GET, AuditEndpoints.VERIFICATION_PATH)
+                    .hasAuthority(PermissionCodes.AUDIT_READ)
                 .requestMatchers(HttpMethod.GET, AuditEndpoints.BASE_PATH)
                     .hasAuthority(PermissionCodes.AUDIT_READ)
                 .requestMatchers(AdminUserEndpoints.BASE_PATH, AdminUserEndpoints.USERS_PATH_PATTERN)

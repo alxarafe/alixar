@@ -27,7 +27,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 276 deterministic tests and 52 PostgreSQL integration tests remain
+  the 280 deterministic tests and 53 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -130,15 +130,20 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   The `SUCCESS` event is atomic with the business transaction and fail-closed;
   `SESSION` and `PAT` actors are distinguished for authenticated operations.
   `BASIC` still covers only explicitly instrumented operations.
-- **Audit read API (T1.4a)**: `GET /api/admin/audit-events` requires
-  `audit.read` and returns chain-scoped events with ascending keyset pagination
-  and combinable `action`, `resourceType`, `resourceId`, `actorUserId` and
-  `result` filters. `afterSequence` defaults to `0`; `limit` defaults to `50`
-  with a maximum of `200`. Responses include event identity, actor, action,
-  resource, result, `chainId` and hash-chain fields. Reads work when the audit
-  mode is `OFF` and do not append events. Event detail, formal HTTP chain
-  verification, read auditing, retention, archive and checkpoints are not
-  implemented yet. See [Audit](audit.md)
+- **Audit read and verification API (T1.4a and T1.4b)**: The event query at
+  `/api/admin/audit-events` requires `audit.read` and returns chain-scoped
+  events with ascending keyset pagination and combinable `action`,
+  `resourceType`, `resourceId`, `actorUserId` and `result` filters.
+  `afterSequence` defaults to `0`; `limit` defaults to `50` with a maximum of
+  `200`. Responses include event identity, actor, action, resource, result,
+  `chainId` and hash-chain fields. The verification request at
+  `/api/admin/audit-events/verification` also requires `audit.read` and
+  verifies the current chain under one read-only `REPEATABLE READ` snapshot.
+  Invalid chains return `200` with a stable `failure` identifier, verified-event
+  count and optional failed sequence; verification never repairs the chain.
+  Reads and verification work when the audit mode is `OFF` and do not append
+  events. Event detail, read auditing, retention, archive and checkpoints are
+  not implemented yet. See [Audit](audit.md)
 
 ## Transitional integrations
 
@@ -166,8 +171,8 @@ See [Development](development.md) for full validation workflow details.
 - Role groups, PAT scopes and authorization for business capabilities beyond
   `users.manage`, `roles.manage` and `audit.read`
 - `SELECTIVE` / `FULL` audit modes, `audit.configure`, bootstrap/login/logout
-  and failed-action events, audit event detail and formal verification, read
-  auditing, retention, purging, archive and signed checkpoints
+  and failed-action events, audit event detail, read auditing, retention,
+  purging, archive and signed checkpoints
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - Administration of other users' API tokens

@@ -3,9 +3,12 @@ package es.alxarafe.alixar.audit.api;
 import es.alxarafe.alixar.audit.application.AuditAction;
 import es.alxarafe.alixar.audit.application.AuditEventQuery;
 import es.alxarafe.alixar.audit.application.AuditResourceType;
+import es.alxarafe.alixar.audit.application.AuditVerificationResult;
 import es.alxarafe.alixar.audit.application.ListAuditEventsUseCase;
+import es.alxarafe.alixar.audit.domain.AuditChain;
 import es.alxarafe.alixar.audit.domain.AuditEvent;
 import es.alxarafe.alixar.audit.domain.AuditResult;
+import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditService;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.MediaType;
@@ -19,9 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 class AdminAuditEventController {
 
     private final ListAuditEventsUseCase listAuditEvents;
+    private final TransactionalAuditService transactionalAuditService;
 
-    AdminAuditEventController(ListAuditEventsUseCase listAuditEvents) {
+    AdminAuditEventController(
+        ListAuditEventsUseCase listAuditEvents,
+        TransactionalAuditService transactionalAuditService
+    ) {
         this.listAuditEvents = listAuditEvents;
+        this.transactionalAuditService = transactionalAuditService;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,6 +61,22 @@ class AdminAuditEventController {
         return listAuditEvents.execute(query).stream()
             .map(this::toResponse)
             .toList();
+    }
+
+    @GetMapping(
+        value = AuditEndpoints.VERIFICATION_RELATIVE_PATH,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    AuditVerificationResponse verify() {
+        AuditVerificationResult result =
+            transactionalAuditService.verify(AuditChain.DEFAULT_CHAIN_ID);
+        return new AuditVerificationResponse(
+            AuditChain.DEFAULT_CHAIN_ID,
+            result.valid(),
+            result.checkedEvents(),
+            result.failure() == null ? null : result.failure().name(),
+            result.failedSequence()
+        );
     }
 
     private AuditEventResponse toResponse(AuditEvent event) {

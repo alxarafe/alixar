@@ -59,8 +59,11 @@ public class AuditConfiguration {
     }
 
     @Bean
-    TransactionalAuditService transactionalAuditService(AuditEventAppender auditEventAppender) {
-        return new TransactionalAuditService(auditEventAppender);
+    TransactionalAuditService transactionalAuditService(
+        AuditEventAppender auditEventAppender,
+        AuditChainVerifier auditChainVerifier
+    ) {
+        return new TransactionalAuditService(auditEventAppender, auditChainVerifier);
     }
 
     @Bean
