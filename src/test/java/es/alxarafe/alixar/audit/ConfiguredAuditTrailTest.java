@@ -78,4 +78,45 @@ class ConfiguredAuditTrailTest {
         )).isInstanceOf(AuditActorUnavailableException.class);
         verifyNoInteractions(auditService);
     }
+    @Test
+    void offMode_withExplicitActorDoesNotAppendAnEvent() {
+        properties.setMode(AuditMode.OFF);
+        AuditActor actor = new AuditActor(ACTOR_ID, "alice", AuditAuthenticationType.RECOVERY_TOKEN);
+
+        auditTrail.recordSuccess(
+            actor,
+            AuditAction.PASSWORD_RESET_COMPLETED,
+            AuditResourceType.USER,
+            RESOURCE_ID.toString()
+        );
+
+        verifyNoInteractions(actorResolver, auditService);
+    }
+
+    @Test
+    void basicMode_withExplicitActorAppendsThatActorWithoutResolvingIt() {
+        properties.setMode(AuditMode.BASIC);
+        AuditActor actor = new AuditActor(ACTOR_ID, "alice", AuditAuthenticationType.RECOVERY_TOKEN);
+
+        auditTrail.recordSuccess(
+            actor,
+            AuditAction.PASSWORD_RESET_COMPLETED,
+            AuditResourceType.USER,
+            RESOURCE_ID.toString()
+        );
+
+        var captor = org.mockito.ArgumentCaptor.forClass(AuditEventDraft.class);
+        verify(auditService).append(captor.capture());
+        AuditEventDraft draft = captor.getValue();
+        assertThat(draft.actorUserId()).isEqualTo(ACTOR_ID);
+        assertThat(draft.actorUsername()).isEqualTo("alice");
+        assertThat(draft.authenticationType()).isEqualTo(AuditAuthenticationType.RECOVERY_TOKEN);
+        assertThat(draft.action()).isEqualTo(AuditAction.PASSWORD_RESET_COMPLETED.name());
+        assertThat(draft.resourceType()).isEqualTo(AuditResourceType.USER.name());
+        assertThat(draft.resourceId()).isEqualTo(RESOURCE_ID.toString());
+        assertThat(draft.result()).isEqualTo(AuditResult.SUCCESS);
+        assertThat(draft.requestId()).isNull();
+        verifyNoInteractions(actorResolver);
+    }
+
 }

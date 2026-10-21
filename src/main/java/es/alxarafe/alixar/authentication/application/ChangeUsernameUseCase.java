@@ -13,9 +13,10 @@ public class ChangeUsernameUseCase {
         this.userRepository = userRepository;
     }
 
-    public User execute(UUID userId, String newUsername) {
+    public ChangeUsernameResult execute(UUID userId, String newUsername) {
         String normalizedUsername = normalize(newUsername);
         User user = userRepository.findById(userId).orElseThrow(InvalidCredentialsException::new);
+        boolean changed = !user.username().equals(normalizedUsername);
 
         userRepository.findByUsername(normalizedUsername)
             .filter(existing -> !existing.id().equals(userId))
@@ -25,15 +26,18 @@ public class ChangeUsernameUseCase {
 
         userRepository.updateUsername(userId, normalizedUsername);
 
-        return new User(
-            user.id(),
-            normalizedUsername,
-            user.email(),
-            user.passwordHash(),
-            user.enabled(),
-            user.credentialsVersion(),
-            user.createdAt(),
-            Instant.now()
+        return new ChangeUsernameResult(
+            new User(
+                user.id(),
+                normalizedUsername,
+                user.email(),
+                user.passwordHash(),
+                user.enabled(),
+                user.credentialsVersion(),
+                user.createdAt(),
+                Instant.now()
+            ),
+            changed
         );
     }
 

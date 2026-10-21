@@ -76,8 +76,10 @@ role-permission assignments, user-role assignments and the initial
 `users.manage`/`system-admin` seed, and
 `V5__add_role_administration_authorization.sql` adds the `roles.manage`
 permission, built-in role metadata and the restrictive role-assignment foreign
-key, and `V6__create_audit_event_chain.sql` adds the audit chain head and
-append-only audit event tables with the genesis chain. Boot calls Flyway on
+key, `V6__create_audit_event_chain.sql` adds the audit chain head and
+append-only audit event tables with the genesis chain, and
+`V7__add_recovery_token_audit_authentication_type.sql` extends the allowed audit
+authentication types with `RECOVERY_TOKEN`. Boot calls Flyway on
 startup using its default `classpath:db/migration`
 location. `PersistenceIT` verifies the migrations, their constraints, RBAC
 resolution and authentication transaction behaviour against PostgreSQL.
@@ -136,9 +138,10 @@ Audit configuration:
 |----------|---------|-------------|
 | `ALIXAR_AUDIT_MODE` | `OFF` | Audit policy: `OFF` disables the persistent audit trail; `BASIC` records explicitly instrumented events |
 
-`BASIC` currently records only administrative user enable/disable transitions.
-It is not full audit coverage. See [Audit](audit.md) for semantics and the
-fail-closed transaction guarantee.
+`BASIC` records the explicitly instrumented administrative user lifecycle,
+self-service credential changes and completed password-recovery operations. It is
+not full audit coverage. See [Audit](audit.md) for the exact coverage, actor
+semantics and fail-closed transaction guarantee.
 
 ## Docker Compose
 
@@ -162,12 +165,12 @@ This override is used **only** by `./bin/check-reference`.
 
 `./bin/check` is the complete validation authority for Alixar itself. It runs entirely in Docker and performs:
 
-1. Build and run the 246 deterministic tests (`mvnw clean verify`)
+1. Build and run the 263 deterministic tests (`mvnw clean verify`)
 2. Runtime image build
 3. Container startup with health check wait (database + app)
 4. PostgreSQL health verification (`pg_isready`)
 5. Run `PersistenceIT` against the real isolated PostgreSQL service: verify the
-   Boot datasource, Flyway `V1`/`V2`/`V3`/`V4`/`V5`/`V6`, a jOOQ `DSLContext`
+   Boot datasource, Flyway `V1`/`V2`/`V3`/`V4`/`V5`/`V6`/`V7`, a jOOQ `DSLContext`
    executing `SELECT 1`, PostgreSQL 18.6, the authentication, API token and RBAC
    tables and constraints, permission-catalogue ordering, effective-permission
    resolution, restrictive role deletion, administrative user
@@ -178,8 +181,10 @@ This override is used **only** by `./bin/check-reference`.
    immutability, deletion restricted for assigned roles with permission
    cascade for free roles, and audit append-only integrity including concurrent
    appends, hash-chain verification, direct tampering detection, restrictive
-   chain-head deletion, and fail-closed rollback of an administrative enablement
-   when its required audit append fails
+   chain-head deletion, fail-closed rollback of administrative user creation,
+   password reset and role replacement, self-service password change and
+   completed password recovery when a mandatory audit append fails, plus one
+   mixed administrative/self-service/recovery audit chain
 6. HTTP `GET /health` verification (exact `{"status":"ok"}` response)
 7. Cleanup of this invocation's containers, network, and volume; verify none remain
 

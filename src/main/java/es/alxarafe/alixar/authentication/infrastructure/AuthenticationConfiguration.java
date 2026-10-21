@@ -321,9 +321,10 @@ public class AuthenticationConfiguration {
     @Bean
     TransactionalPasswordRecovery transactionalPasswordRecovery(
         ForgotPasswordUseCase forgotPasswordUseCase,
-        ResetPasswordUseCase resetPasswordUseCase
+        ResetPasswordUseCase resetPasswordUseCase,
+        AuditTrail auditTrail
     ) {
-        return new TransactionalPasswordRecovery(forgotPasswordUseCase, resetPasswordUseCase);
+        return new TransactionalPasswordRecovery(forgotPasswordUseCase, resetPasswordUseCase, auditTrail);
     }
 
     @Bean
@@ -343,9 +344,10 @@ public class AuthenticationConfiguration {
     @Bean
     TransactionalUserSelfService transactionalUserSelfService(
         ChangeUsernameUseCase changeUsernameUseCase,
-        ChangePasswordUseCase changePasswordUseCase
+        ChangePasswordUseCase changePasswordUseCase,
+        AuditTrail auditTrail
     ) {
-        return new TransactionalUserSelfService(changeUsernameUseCase, changePasswordUseCase);
+        return new TransactionalUserSelfService(changeUsernameUseCase, changePasswordUseCase, auditTrail);
     }
 
     @Bean

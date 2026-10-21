@@ -1,5 +1,15 @@
 package es.alxarafe.alixar.authentication.api;
 
+import es.alxarafe.alixar.audit.InMemoryAuditEventRepository;
+import es.alxarafe.alixar.audit.application.AuditAction;
+import es.alxarafe.alixar.audit.application.AuditChainVerifier;
+import es.alxarafe.alixar.audit.application.AuditMode;
+import es.alxarafe.alixar.audit.application.AuditResourceType;
+import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
+import es.alxarafe.alixar.audit.domain.AuditChain;
+import es.alxarafe.alixar.audit.domain.AuditEvent;
+import es.alxarafe.alixar.audit.domain.AuditResult;
+import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
 import es.alxarafe.alixar.authentication.AuthenticationTestConfig;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.UserRepository;
@@ -13,6 +23,7 @@ import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
 import jakarta.servlet.http.Cookie;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,6 +67,15 @@ class AuthControllerTest {
     @Autowired
     private TokenHasher tokenHasher;
 
+    @Autowired
+    private AuditProperties auditProperties;
+
+    @Autowired
+    private InMemoryAuditEventRepository auditEventRepository;
+
+    @Autowired
+    private AuditChainVerifier auditChainVerifier;
+
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -85,6 +105,8 @@ class AuthControllerTest {
             )
         );
         ((AuthenticationTestConfig.TestPasswordResetTokenRepository) tokenRepository).replaceWith();
+        auditProperties.setMode(AuditMode.OFF);
+        auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
     }
 
     @Test
@@ -289,6 +311,57 @@ class AuthControllerTest {
             .andExpect(status().isAccepted());
 
         assertThat(tokenRepository.findByTokenHash(tokenHash).orElseThrow().isUsed()).isTrue();
+    }
+
+
+    @Test
+    void offAuditMode_resetPasswordDoesNotRecordEvent() throws Exception {
+        resetPasswordForEnabledUser("new-secure-password-123");
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
+    void basicAuditMode_resetPasswordRecordsRecoveryActorWithoutSecrets() throws Exception {
+        String newPassword = "new-secure-password-123";
+        auditProperties.setMode(AuditMode.BASIC);
+
+        try {
+            resetPasswordForEnabledUser(newPassword);
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.PASSWORD_RESET_COMPLETED.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.RECOVERY_TOKEN);
+                assertThat(event.actorUserId()).isEqualTo(ENABLED_USER_ID);
+                assertThat(event.actorUsername()).isEqualTo("alice");
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(ENABLED_USER_ID.toString());
+                assertThat(event.toString()).doesNotContain(newPassword);
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void basicAuditMode_forgotPasswordDoesNotRecordEvent() throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        auditProperties.setMode(AuditMode.BASIC);
+
+        try {
+            mockMvc.perform(post("/api/auth/password/forgot")
+                    .cookie(csrfCookie)
+                    .header("X-XSRF-TOKEN", csrfCookie.getValue())
+                    .contentType("application/json")
+                    .content("{\"email\":\"alice@example.test\"}"))
+                .andExpect(status().isAccepted());
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+        }
     }
 
     // Reset Password Tests
@@ -664,6 +737,10 @@ class AuthControllerTest {
             .andExpect(status().isUnauthorized());
 
         assertThat(staleSession.isInvalid()).isTrue();
+    }
+
+    private List<AuditEvent> auditEvents() {
+        return auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID);
     }
 
     private void resetPasswordForEnabledUser(String newPassword) throws Exception {

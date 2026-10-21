@@ -9,12 +9,14 @@ diagnosis, while the audit trail is a persistent, append-only history of
 relevant actions.
 
 ALIXAR-DEV-003H is being implemented in vertical slices. T1.1 provided the
-persistent integrity core. T1.2 adds the configurable `OFF` / `BASIC` policy and
-the first instrumented administrative operation. RBAC permissions, broader
-instrumentation, query APIs, retention, archive and checkpoints are not
-implemented yet.
+persistent integrity core. T1.2 added the configurable `OFF` / `BASIC` policy
+and the first instrumented administrative operation. T1.3a extends `BASIC` to
+administrative user lifecycle operations, self-service credential changes and
+completed password recovery. T1.3b will cover Personal Access Token and role
+administration, but is not implemented yet. Query APIs, retention, archive and
+checkpoints remain out of scope.
 
-## Current scope (T1.1 and T1.2)
+## Current scope (T1.1, T1.2 and T1.3a)
 
 Implemented:
 
@@ -27,13 +29,19 @@ Implemented:
 - independent chain verifier;
 - PostgreSQL integration and tamper tests;
 - `OFF` / `BASIC` audit policy configured through `alixar.audit.mode`;
-- atomic `SUCCESS` events for administrative user enable/disable.
+- atomic `SUCCESS` events for administrative user enable/disable;
+- atomic `SUCCESS` events for administrative user creation, username changes,
+  password resets and role replacement;
+- atomic `SUCCESS` events for self-service username and password changes;
+- atomic `SUCCESS` event for a password reset completed with a recovery token;
+- `RECOVERY_TOKEN` as an audit authentication type.
 
 Not implemented yet:
 
 - `SELECTIVE` / `FULL` audit modes;
 - `audit.read` and `audit.configure` permissions;
-- instrumentation beyond administrative user enable/disable;
+- Personal Access Token and role-administration events (T1.3b);
+- bootstrap, login, logout and password-reset request events;
 - `FAILURE` and `DENIED` event strategy;
 - administrative query API;
 - retention, purge and archive;
@@ -68,44 +76,74 @@ until the mode is enabled. Values other than `OFF` and `BASIC` prevent startup.
 In `OFF`, the operation does not resolve an actor, build an `AuditEvent`, encode
 the canonical representation or enter the appender.
 
-## Instrumented events (T1.2)
+## Instrumented events (T1.3a)
 
-Administrative user enablement is instrumented atomically:
+The following operations are instrumented atomically under `BASIC`:
 
-```text
-true  → false  = USER_DISABLED
-false → true   = USER_ENABLED
+| Operation | Action | Resource | Result |
+|---|---|---|---|
+| Administrative enable/disable transition | `USER_ENABLED` / `USER_DISABLED` | target user id | `SUCCESS` |
+| Administrative user creation | `ADMIN_USER_CREATED` | created user id | `SUCCESS` |
+| Administrative username change | `ADMIN_USER_USERNAME_CHANGED` | target user id | `SUCCESS` |
+| Administrative password reset | `ADMIN_USER_PASSWORD_RESET` | target user id | `SUCCESS` |
+| Administrative role replacement | `ADMIN_USER_ROLES_REPLACED` | target user id | `SUCCESS` |
+| Self-service username change | `USER_USERNAME_CHANGED` | authenticated user id | `SUCCESS` |
+| Self-service password change | `USER_PASSWORD_CHANGED` | authenticated user id | `SUCCESS` |
+| Password reset completed with a recovery token | `PASSWORD_RESET_COMPLETED` | recovered user id | `SUCCESS` |
 
-true  → true   = no event
-false → false  = no event
-```
+Successful administrative user creation records exactly one event, including
+empty role assignments. Role assignment is not recorded as separate events.
+
+Username and role replacement are no-ops when the normalized value or role set
+does not change. A no-op does not record an event. The use case computes the
+change while it already has the normalized current state; the transactional
+facade remains the single owner of the audit append.
 
 The event uses:
 
 ```text
-action       USER_ENABLED | USER_DISABLED
-resource     USER / target user id
+action       action from the table above
+resource     USER / target or authenticated user id
 result       SUCCESS
-actor        authenticated administrator
+actor        authenticated administrator or self-service user
 auth type    SESSION | PAT
 request id   null (deferred)
 ```
 
+A completed password reset uses:
+
+```text
+actor user id     user identified by the valid recovery capability
+actor username    username of that user at reset time
+auth type         RECOVERY_TOKEN
+resource          USER / same user id
+```
+
+`RECOVERY_TOKEN` does not mean that an HTTP session authenticated the actor. The
+actor is the user who proved control of a valid, single-use recovery token. The
+token value, token hash and new password are never stored in the event.
+
+For a self-service username change, `actor_username` is the previous username
+snapshot. It intentionally differs from the new username stored on the user
+record.
+
 The event is recorded in the same transaction as the business change. When
 `BASIC` requires the event, a failure while inserting the event, calculating the
-hash chain or updating the chain head rolls back the `enabled` change,
-`credentials_version` increment and reset-token invalidation. A successful
-`BASIC` administrative operation must never leave the user changed without its
-audit event.
+hash chain or updating the chain head rolls back the business change. A
+successful `BASIC` operation must never leave the user changed without its audit
+event. This includes user creation, password reset token consumption, credential
+version increments, role replacement and pending-token invalidation.
 
-The actor is resolved from the Spring Security context by infrastructure code.
-The PAT filter marks the request so the resolver can distinguish `PAT` from
-`SESSION` without changing the serialized principal. If an authenticated
-administrative operation under `BASIC` cannot resolve its actor, the operation
-fails; it does not write a null actor or fall back to `SYSTEM`. `SYSTEM` will be
-resolved explicitly when internal processes are instrumented.
+The actor is resolved from the Spring Security context by infrastructure code
+for session and PAT operations. The PAT filter marks the request so the resolver
+can distinguish `PAT` from `SESSION` without changing the serialized principal.
+If an authenticated operation under `BASIC` cannot resolve its actor, the
+operation fails; it does not write a null actor or fall back to `SYSTEM`.
+Password recovery supplies its actor explicitly through the `AuditTrail` port;
+`SYSTEM` remains reserved for future internal processes.
 
-The PAT identifier and token value are not recorded in T1.2.
+The PAT identifier and token value are not recorded yet. T1.3b owns PAT and role
+administration events.
 
 ## Conceptual evolution
 
@@ -160,6 +198,7 @@ Actor authentication types are currently:
 SESSION
 PAT
 SYSTEM
+RECOVERY_TOKEN
 ```
 
 Results are currently:
@@ -401,9 +440,8 @@ the current design:
 - `SELECTIVE` and `FULL` modes by resource type, action and read depth;
 - `audit.read` and `audit.configure` permissions supplied by migration when a
   real read or configuration capability exists;
-- instrumentation of login, logout, password changes, password resets, PAT
-  creation/revocation, user creation/rename/password reset/role replacement and
-  role administration;
+- instrumentation of bootstrap, login, logout and password-reset requests;
+- PAT creation/revocation and role-administration events (T1.3b);
 - atomic `SUCCESS` events for further business operations as they are
   instrumented;
 - an explicit strategy for `FAILURE` and `DENIED` events, separate from the

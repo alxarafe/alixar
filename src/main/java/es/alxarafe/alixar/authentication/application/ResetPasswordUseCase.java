@@ -24,7 +24,7 @@ public class ResetPasswordUseCase {
         this.passwordHasher = passwordHasher;
     }
 
-    public void execute(String rawToken, String newPassword) {
+    public ResetPasswordResult execute(String rawToken, String newPassword) {
         PasswordPolicy.ensureValid(newPassword);
 
         String tokenHash = tokenHasher.hash(rawToken);
@@ -49,5 +49,6 @@ public class ResetPasswordUseCase {
         userRepository.updatePasswordAndCredentialsVersion(user.id(), newPasswordHash, newCredentialsVersion);
         tokenRepository.markAsUsed(token.id(), Instant.now());
         tokenRepository.invalidatePendingTokensForUser(user.id());
+        return new ResetPasswordResult(user.id(), user.username());
     }
 }

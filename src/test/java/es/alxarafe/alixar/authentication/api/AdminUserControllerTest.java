@@ -25,6 +25,7 @@ import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.domain.ApiToken;
 import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
+import com.jayway.jsonpath.JsonPath;
 import jakarta.servlet.http.Cookie;
 import java.time.Instant;
 import java.util.List;
@@ -825,6 +826,160 @@ class AdminUserControllerTest {
             adminPatchEnabled(session, ALICE_ID, true)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.enabled").value(true));
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+        }
+    }
+
+
+    @Test
+    void offAuditMode_createDoesNotRecordAnEvent() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminPost(session, createUserJson(
+            "off-audit-user",
+            "off-audit-user@example.test",
+            "off-audit-password-123",
+            null
+        )).andExpect(status().isCreated());
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
+    void basicAuditMode_createRecordsAdminUserCreated() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditProperties.setMode(AuditMode.BASIC);
+
+        try {
+            MvcResult result = adminPost(session, createUserJson(
+                "audited-user",
+                "audited-user@example.test",
+                "audited-password-123",
+                null
+            )).andExpect(status().isCreated()).andReturn();
+            String createdId = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.ADMIN_USER_CREATED.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo("alice");
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(createdId);
+                assertThat(event.requestId()).isNull();
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void basicAuditMode_usernameChangeRecordsPreviousTarget() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditProperties.setMode(AuditMode.BASIC);
+
+        try {
+            adminPatch(session, BOB_ID, "{\"username\":\"bob-renamed\"}")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("bob-renamed"));
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.ADMIN_USER_USERNAME_CHANGED.name());
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(BOB_ID.toString());
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void basicAuditMode_noOpUsernameChangeDoesNotRecordEvent() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditProperties.setMode(AuditMode.BASIC);
+
+        try {
+            adminPatch(session, BOB_ID, "{\"username\":\"BOB\"}")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("bob"));
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void basicAuditMode_passwordResetRecordsAdminUserPasswordReset() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditProperties.setMode(AuditMode.BASIC);
+
+        try {
+            adminResetPassword(session, BOB_ID, "new-bob-password-123")
+                .andExpect(status().isNoContent());
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.ADMIN_USER_PASSWORD_RESET.name());
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(BOB_ID.toString());
+                assertThat(event.toString()).doesNotContain("new-bob-password-123");
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void basicAuditMode_rolesReplacementRecordsAdminUserRolesReplaced() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditProperties.setMode(AuditMode.BASIC);
+
+        try {
+            adminPutRoles(session, BOB_ID, "[\"" + RoleCodes.SYSTEM_ADMIN + "\"]")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.roles[0]").value(RoleCodes.SYSTEM_ADMIN));
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.ADMIN_USER_ROLES_REPLACED.name());
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(BOB_ID.toString());
+                assertThat(event.toString()).doesNotContain(RoleCodes.SYSTEM_ADMIN);
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void basicAuditMode_noOpRolesReplacementDoesNotRecordEvent() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditProperties.setMode(AuditMode.BASIC);
+
+        try {
+            adminPutRoles(session, BOB_ID, "[]")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.roles").isEmpty());
 
             assertThat(auditEvents()).isEmpty();
         } finally {

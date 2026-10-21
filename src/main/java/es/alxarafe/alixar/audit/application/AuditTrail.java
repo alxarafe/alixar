@@ -10,4 +10,11 @@ package es.alxarafe.alixar.audit.application;
 public interface AuditTrail {
 
     void recordSuccess(AuditAction action, AuditResourceType resourceType, String resourceId);
+
+    void recordSuccess(
+        AuditActor actor,
+        AuditAction action,
+        AuditResourceType resourceType,
+        String resourceId
+    );
 }

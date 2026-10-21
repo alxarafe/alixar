@@ -56,15 +56,19 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   password resets and full role replacement
 - Append-only audit event persistence with per-chain sequence, chain-head
   locking, canonical format v1, SHA-256 hash chain and an independent verifier.
-  `OFF` / `BASIC` policy and atomic `USER_ENABLED` / `USER_DISABLED` events for
-  administrative user enablement are implemented. `BASIC` currently covers only
-  that operation; RBAC permissions, broader instrumentation, API, retention,
-  archive and checkpoints are not implemented yet. See [Audit](audit.md)
+  `OFF` / `BASIC` policy and atomic events for administrative user enablement,
+  creation, username changes, password resets and role replacement, self-service
+  username/password changes, and completed password recovery are implemented.
+  Recovery-token events use `RECOVERY_TOKEN` and explicitly identify the
+  recovered user as actor. PAT and role-administration instrumentation, RBAC
+  permissions, query API, retention, archive and checkpoints are not implemented
+  yet. See [Audit](audit.md)
 
 ## Planned (Not Implemented)
 
-- `SELECTIVE` / `FULL` audit modes, audit RBAC permissions, broader
-  instrumentation, query API, retention, purge, archive and signed checkpoints
+- `SELECTIVE` / `FULL` audit modes, audit RBAC permissions, PAT and
+  role-administration instrumentation, query API, retention, purge, archive and
+  signed checkpoints
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Email change with new-address verification
@@ -169,12 +173,16 @@ jOOQ, so the same verification core can later consume exported archives.
 
 The audit mode is infrastructure configuration (`alixar.audit.mode`, default
 `OFF`). In `BASIC`, explicitly instrumented successful operations record their
-event in the same transaction as the business change. Administrative user
-enable/disable is the first instrumented operation and is fail-closed. The
-application layer depends on an `AuditTrail` port, not on environment variables
-or Spring Security. Database-level append-only privileges, audit RBAC
-permissions, broader instrumentation, retention and signing are not implemented
-yet. See [Audit](audit.md) for the canonical format and deferred capabilities.
+event in the same transaction as the business change. The instrumented set
+includes administrative user lifecycle operations, self-service username and
+password changes, and completed password recovery. The application layer depends
+on an `AuditTrail` port, not on environment variables or Spring Security.
+Authenticated operations resolve their actor implicitly; password recovery
+supplies an explicit `RECOVERY_TOKEN` actor. Every mandatory event is
+fail-closed. Database-level append-only privileges, audit RBAC permissions, PAT
+and role-administration instrumentation, retention and signing are not
+implemented yet. See [Audit](audit.md) for the canonical format and deferred
+capabilities.
 
 ## Internationalization (i18n) Architecture
 

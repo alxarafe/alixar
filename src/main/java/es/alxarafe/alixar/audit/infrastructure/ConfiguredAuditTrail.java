@@ -30,16 +30,38 @@ public class ConfiguredAuditTrail implements AuditTrail {
 
     @Override
     public void recordSuccess(AuditAction action, AuditResourceType resourceType, String resourceId) {
-        Objects.requireNonNull(action, "action");
-        Objects.requireNonNull(resourceType, "resourceType");
-        Objects.requireNonNull(resourceId, "resourceId");
-
+        requireArguments(action, resourceType, resourceId);
         if (properties.getMode() == AuditMode.OFF) {
             return;
         }
 
         AuditActor actor = actorResolver.resolveCurrentActor()
             .orElseThrow(AuditActorUnavailableException::new);
+        append(actor, action, resourceType, resourceId);
+    }
+
+    @Override
+    public void recordSuccess(
+        AuditActor actor,
+        AuditAction action,
+        AuditResourceType resourceType,
+        String resourceId
+    ) {
+        requireArguments(action, resourceType, resourceId);
+        Objects.requireNonNull(actor, "actor");
+        if (properties.getMode() == AuditMode.OFF) {
+            return;
+        }
+
+        append(actor, action, resourceType, resourceId);
+    }
+
+    private void append(
+        AuditActor actor,
+        AuditAction action,
+        AuditResourceType resourceType,
+        String resourceId
+    ) {
         auditService.append(new AuditEventDraft(
             AuditChain.DEFAULT_CHAIN_ID,
             actor.userId(),
@@ -51,5 +73,15 @@ public class ConfiguredAuditTrail implements AuditTrail {
             AuditResult.SUCCESS,
             null
         ));
+    }
+
+    private void requireArguments(
+        AuditAction action,
+        AuditResourceType resourceType,
+        String resourceId
+    ) {
+        Objects.requireNonNull(action, "action");
+        Objects.requireNonNull(resourceType, "resourceType");
+        Objects.requireNonNull(resourceId, "resourceId");
     }
 }
