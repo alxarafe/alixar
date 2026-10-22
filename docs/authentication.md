@@ -52,9 +52,10 @@ the same deny-by-default authorization model as the other administrative
 endpoints. Reading audit events does not append audit events in this slice.
 
 T1.5a seeds the separate `audit.configure` permission and assigns it to
-`system-admin`. No audit-configuration endpoint is exposed yet; the permission
-prepares the later configuration API without changing the existing `audit.read`
-authorization.
+`system-admin`. T1.5b exposes the persisted audit configuration at
+`GET` / `PUT /api/admin/audit-configuration`. Reading requires `audit.read` or
+`audit.configure`; changing the mode requires `audit.configure`. The existing
+`audit.read` authorization and the read-only event APIs are unchanged.
 
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
@@ -436,7 +437,7 @@ The initial catalogue contains:
 | `users.manage` | Administrative capability over users (ALIXAR-DEV-003F) |
 | `roles.manage` | Manage roles and their permission assignments (ALIXAR-DEV-003G) |
 | `audit.read` | Read audit events (ALIXAR-DEV-003H T1.4a) |
-| `audit.configure` | Configure the audit policy (ALIXAR-DEV-003H T1.5a; no endpoint yet) |
+| `audit.configure` | Configure the audit policy (ALIXAR-DEV-003H T1.5b) |
 
 The built-in role `system-admin` contains all four permissions. The role name
 and code are stable identifiers, but application code authorizes by permission,
@@ -490,6 +491,8 @@ The administrative namespace is split by capability:
 | `/api/admin/permissions` | `roles.manage` |
 | `GET /api/admin/audit-events` | `audit.read` |
 | `GET /api/admin/audit-events/verification` | `audit.read` |
+| `GET /api/admin/audit-configuration` | `audit.read` or `audit.configure` |
+| `PUT /api/admin/audit-configuration` | `audit.configure` |
 
 The GET rule for the role catalogue is method-specific and is evaluated before
 the general role namespace rule. Results:
@@ -554,6 +557,13 @@ deletion are not exposed by the API.
 `GET /api/admin/audit-events` and `GET /api/admin/audit-events/verification`
 require `audit.read`. Their pagination, filters, verification response and
 contracts are documented in [Audit](audit.md).
+
+`GET /api/admin/audit-configuration` returns the singleton `id`, `mode` and
+`updatedAt`. `PUT /api/admin/audit-configuration` accepts only `OFF` or `BASIC`
+and records a mandatory policy-change event when the mode actually changes.
+Invalid modes return `400 AUDIT_INVALID_MODE`; a missing, null or blank mode
+returns `400 VALIDATION_REQUIRED`. Both endpoints are documented in
+[Audit](audit.md).
 
 Role responses contain only `code`, `name`, `builtIn` and `permissionCodes`.
 `GET /api/admin/roles` returns roles ordered by `code`, with permission codes

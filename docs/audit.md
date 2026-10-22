@@ -15,11 +15,11 @@ administrative user lifecycle operations, self-service credential changes,
 completed password recovery, Personal Access Token lifecycle and role
 administration. T1.4a adds a read-only query API protected by `audit.read`.
 T1.4b adds formal chain verification through HTTP. T1.5a adds the persisted
-audit configuration foundation and the `audit.configure` permission. Event
-detail, the configuration API, policy-change events, retention, archive and
-checkpoints remain out of scope.
+audit configuration foundation and the `audit.configure` permission. T1.5b adds
+the administrative configuration API and mandatory policy-change events. Event
+detail, retention, archive and checkpoints remain out of scope.
 
-## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b and T1.5a)
+## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b, T1.5a and T1.5b)
 
 Implemented:
 
@@ -48,12 +48,16 @@ Implemented:
 - `audit.read` permission and a read-only, chain-scoped event query API with
   keyset pagination and combinable filters;
 - formal chain verification through `GET /api/admin/audit-events/verification`,
-  using one repeatable-read snapshot and a chain-consistent response.
+  using one repeatable-read snapshot and a chain-consistent response;
+- the administrative audit configuration API at
+  `/api/admin/audit-configuration`, with `GET` for reading and `PUT` for
+  changing the persisted mode;
+- mandatory, mode-independent `SUCCESS` events when the audit mode transitions
+  between `OFF` and `BASIC`.
 
 Not implemented yet:
 
 - `SELECTIVE` / `FULL` audit modes;
-- the audit configuration API and mandatory policy-change events;
 - the PAT identifier as part of the actor;
 - bootstrap, login, logout and password-reset request events;
 - `FAILURE` and `DENIED` event strategy;
@@ -108,12 +112,50 @@ cache or a definitive consistency mechanism. If a scheduled refresh fails, the
 provider keeps the last successfully loaded mode and logs a warning rather than
 guessing a different policy.
 
-The T1.5a foundation does not expose a configuration API or write policy-change
-audit events. The `audit.configure` permission is seeded and assigned to
-`system-admin` so the later configuration API can use it without a migration
-change. The existing `audit.read` permission remains separate, and reads,
-verification and the future configuration capability work independently of
-`OFF`.
+### Configuration API (T1.5b)
+
+The persisted mode is exposed through:
+
+```text
+GET /api/admin/audit-configuration
+PUT /api/admin/audit-configuration
+```
+
+`GET` requires `audit.read` or `audit.configure`. `PUT` requires
+`audit.configure`. Both require an authenticated session or Bearer token and
+use the same deny-by-default authorization as the rest of the administrative
+namespace. `GET` returns:
+
+```json
+{
+  "id": "2f0f2f6e-6c47-4e6d-8f2a-4b7c1d5e9a01",
+  "mode": "BASIC",
+  "updatedAt": "2026-10-22T10:00:00Z"
+}
+```
+
+`PUT` accepts only `OFF` or `BASIC`:
+
+```json
+{
+  "mode": "BASIC"
+}
+```
+
+`FULL`, unknown values, lowercase values and other strings return `400` with
+code `AUDIT_INVALID_MODE`. A missing, null or blank `mode` returns `400` with
+code `VALIDATION_REQUIRED` and `field = "mode"`. The response has the same
+`id`, `mode` and `updatedAt` shape as `GET`.
+
+A mode change locks the singleton configuration row, updates it, appends the
+mandatory policy-change event and commits atomically. The local cache is
+reloaded best-effort after commit; if that reload fails, the operation remains
+committed and the 15-second TTL eventually observes the new mode. Changing to
+the current mode is a no-op: `updated_at` does not change and no event is
+recorded.
+
+The existing `audit.read` permission remains separate from `audit.configure`.
+Reads, verification and configuration work independently of `OFF`.
 
 ## Instrumented events (T1.3a and T1.3b)
 
@@ -135,6 +177,24 @@ The following operations are instrumented atomically under `BASIC`:
 | Role rename | `ROLE_RENAMED` | `ROLE` / internal role id | `SUCCESS` |
 | Role permission replacement | `ROLE_PERMISSIONS_REPLACED` | `ROLE` / internal role id | `SUCCESS` |
 | Role deletion | `ROLE_DELETED` | `ROLE` / internal role id | `SUCCESS` |
+
+### Mandatory policy-change events (T1.5b)
+
+Audit configuration transitions are recorded even when the previous mode was
+`OFF`, because they change the audit policy itself. The event is mandatory and
+does not depend on the effective mode:
+
+| Transition | Action | Resource | Result |
+|---|---|---|---|
+| `OFF` → `BASIC` | `AUDIT_MODE_CHANGED_TO_BASIC` | `AUDIT_CONFIGURATION` / configuration id | `SUCCESS` |
+| `BASIC` → `OFF` | `AUDIT_MODE_CHANGED_TO_OFF` | `AUDIT_CONFIGURATION` / configuration id | `SUCCESS` |
+
+The actor is the authenticated administrator performing the change, with
+`SESSION` or `PAT` authentication. An operation that cannot resolve its actor
+fails; it never falls back to `SYSTEM`. The configuration update and the audit
+append share one transaction, so an append failure rolls back the mode change.
+A no-op update records no event. The cache reload is best-effort after commit
+and never changes the already committed outcome.
 
 Successful administrative user creation records exactly one event, including
 empty role assignments. Role assignment is not recorded as separate events.
@@ -160,10 +220,11 @@ facade remains the single owner of the audit append.
 The event uses:
 
 ```text
-action       action from the table above
+action       action from the applicable table above
 resource     USER / target or authenticated user id
              API_TOKEN / token id
              ROLE / internal role id
+             AUDIT_CONFIGURATION / configuration id
 result       SUCCESS
 actor        authenticated administrator, self-service user or token owner
 auth type    SESSION | PAT
@@ -604,7 +665,6 @@ The following capabilities are intentionally deferred and must not be blocked by
 the current design:
 
 - `SELECTIVE` and `FULL` modes by resource type, action and read depth;
-- the audit configuration API and mandatory policy-change events (T1.5b);
 - instrumentation of bootstrap, login, logout and password-reset requests;
 - atomic `SUCCESS` events for further business operations as they are
   instrumented;

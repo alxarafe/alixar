@@ -119,4 +119,42 @@ class ConfiguredAuditTrailTest {
         verifyNoInteractions(actorResolver);
     }
 
+    @Test
+    void mandatorySuccess_inOffModeAppendsAnEvent() {
+        when(policyProvider.currentMode()).thenReturn(AuditMode.OFF);
+        AuditActor actor = new AuditActor(ACTOR_ID, "alice", AuditAuthenticationType.SESSION);
+        when(actorResolver.resolveCurrentActor()).thenReturn(Optional.of(actor));
+
+        auditTrail.recordMandatorySuccess(
+            AuditAction.AUDIT_MODE_CHANGED_TO_OFF,
+            AuditResourceType.AUDIT_CONFIGURATION,
+            RESOURCE_ID.toString()
+        );
+
+        var captor = org.mockito.ArgumentCaptor.forClass(AuditEventDraft.class);
+        verify(auditService).append(captor.capture());
+        AuditEventDraft draft = captor.getValue();
+        assertThat(draft.actorUserId()).isEqualTo(ACTOR_ID);
+        assertThat(draft.actorUsername()).isEqualTo("alice");
+        assertThat(draft.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+        assertThat(draft.action()).isEqualTo(AuditAction.AUDIT_MODE_CHANGED_TO_OFF.name());
+        assertThat(draft.resourceType()).isEqualTo(AuditResourceType.AUDIT_CONFIGURATION.name());
+        assertThat(draft.resourceId()).isEqualTo(RESOURCE_ID.toString());
+        assertThat(draft.result()).isEqualTo(AuditResult.SUCCESS);
+        assertThat(draft.requestId()).isNull();
+        verifyNoInteractions(policyProvider);
+    }
+
+    @Test
+    void mandatorySuccess_withoutResolvedActorFailsWithoutAppending() {
+        when(actorResolver.resolveCurrentActor()).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> auditTrail.recordMandatorySuccess(
+            AuditAction.AUDIT_MODE_CHANGED_TO_BASIC,
+            AuditResourceType.AUDIT_CONFIGURATION,
+            RESOURCE_ID.toString()
+        )).isInstanceOf(AuditActorUnavailableException.class);
+        verifyNoInteractions(policyProvider, auditService);
+    }
+
 }

@@ -28,7 +28,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 291 deterministic tests and 59 PostgreSQL integration tests remain
+  the 310 deterministic tests and 62 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -113,7 +113,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   v1, transactional `SELECT ... FOR UPDATE` chain-head locking, and an
   independent verifier. PostgreSQL tests append concurrently and tamper directly
   with rows to prove that verification fails.
-- **Audit policy and instrumentation (T1.2, T1.3a, T1.3b and T1.5a)**: `OFF`
+- **Audit policy and instrumentation (T1.2, T1.3a, T1.3b, T1.5a and T1.5b)**: `OFF`
   (default) and `BASIC` modes persisted in the singleton `audit_configuration`
   table. `alixar.audit.mode` / `ALIXAR_AUDIT_MODE` is a first-start bootstrap
   value only; once the row exists the database is authoritative and an invalid
@@ -134,7 +134,14 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   audited during the current request with `PAT` as the actor authentication type.
   The `SUCCESS` event is atomic with the business transaction and fail-closed;
   `SESSION` and `PAT` actors are distinguished for authenticated operations.
-  `BASIC` still covers only explicitly instrumented operations.
+  `BASIC` still covers only explicitly instrumented operations. T1.5b exposes
+  `GET` / `PUT /api/admin/audit-configuration`. Reads require `audit.read` or
+  `audit.configure`; writes require `audit.configure`. A mode transition locks
+  the configuration row, updates it, appends `AUDIT_MODE_CHANGED_TO_BASIC` or
+  `AUDIT_MODE_CHANGED_TO_OFF` with `AUDIT_CONFIGURATION` as resource type and
+  commits atomically, including `OFF` → `BASIC`. No-op updates record no event.
+  The local cache is reloaded best-effort after commit, with the 15-second TTL
+  as the fallback.
 - **Audit read and verification API (T1.4a and T1.4b)**: The event query at
   `/api/admin/audit-events` requires `audit.read` and returns chain-scoped
   events with ascending keyset pagination and combinable `action`,
@@ -147,10 +154,9 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   Invalid chains return `200` with a stable `failure` identifier, verified-event
   count and optional failed sequence; verification never repairs the chain.
   Reads and verification work when the audit mode is `OFF` and do not append
-  events. T1.5a seeds the `audit.configure` permission for `system-admin` but
-  does not expose the configuration API or policy-change events yet. Event
-  detail, read auditing, retention, archive and checkpoints are not implemented
-  yet. See [Audit](audit.md)
+  events. T1.5a seeds the `audit.configure` permission for `system-admin`.
+  Event detail, read auditing, retention, archive and checkpoints are not
+  implemented yet. See [Audit](audit.md)
 
 ## Transitional integrations
 
@@ -177,10 +183,9 @@ See [Development](development.md) for full validation workflow details.
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
 - Role groups, PAT scopes and authorization for business capabilities beyond
   `users.manage`, `roles.manage`, `audit.read` and `audit.configure`
-- `SELECTIVE` / `FULL` audit modes, the audit configuration API and mandatory
-  policy-change events, bootstrap/login/logout and failed-action events, audit
-  event detail, read auditing, retention, purging, archive and signed
-  checkpoints
+- `SELECTIVE` / `FULL` audit modes, bootstrap/login/logout and failed-action
+  events, audit event detail, read auditing, retention, purging, archive and
+  signed checkpoints
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - Administration of other users' API tokens

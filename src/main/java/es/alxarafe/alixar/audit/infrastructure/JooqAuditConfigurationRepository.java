@@ -3,6 +3,7 @@ package es.alxarafe.alixar.audit.infrastructure;
 import es.alxarafe.alixar.audit.application.AuditConfigurationRepository;
 import es.alxarafe.alixar.audit.application.AuditMode;
 import es.alxarafe.alixar.audit.application.AuditPolicyConfiguration;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
@@ -37,11 +38,15 @@ public class JooqAuditConfigurationRepository implements AuditConfigurationRepos
     public Optional<AuditPolicyConfiguration> find() {
         return dsl.select(ID, MODE, UPDATED_AT)
             .from(TABLE)
-            .fetchOptional(record -> new AuditPolicyConfiguration(
-                record.get(ID),
-                AuditMode.valueOf(record.get(MODE)),
-                record.get(UPDATED_AT).toInstant()
-            ));
+            .fetchOptional(this::toConfiguration);
+    }
+
+    @Override
+    public Optional<AuditPolicyConfiguration> findForUpdate() {
+        return dsl.select(ID, MODE, UPDATED_AT)
+            .from(TABLE)
+            .forUpdate()
+            .fetchOptional(this::toConfiguration);
     }
 
     @Override
@@ -53,5 +58,25 @@ public class JooqAuditConfigurationRepository implements AuditConfigurationRepos
             .set(UPDATED_AT, OffsetDateTime.ofInstant(configuration.updatedAt(), ZoneOffset.UTC))
             .onConflictDoNothing()
             .execute();
+    }
+
+    @Override
+    public void updateMode(UUID id, AuditMode mode, Instant updatedAt) {
+        int updated = dsl.update(TABLE)
+            .set(MODE, mode.name())
+            .set(UPDATED_AT, OffsetDateTime.ofInstant(updatedAt, ZoneOffset.UTC))
+            .where(ID.eq(id))
+            .execute();
+        if (updated != 1) {
+            throw new IllegalStateException("Persisted audit configuration was not updated");
+        }
+    }
+
+    private AuditPolicyConfiguration toConfiguration(Record record) {
+        return new AuditPolicyConfiguration(
+            record.get(ID),
+            AuditMode.valueOf(record.get(MODE)),
+            record.get(UPDATED_AT).toInstant()
+        );
     }
 }

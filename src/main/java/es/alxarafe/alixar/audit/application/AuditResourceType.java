@@ -6,5 +6,6 @@ package es.alxarafe.alixar.audit.application;
 public enum AuditResourceType {
     USER,
     API_TOKEN,
-    ROLE
+    ROLE,
+    AUDIT_CONFIGURATION
 }

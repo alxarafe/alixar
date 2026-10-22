@@ -148,6 +148,12 @@ empty. Once the persisted configuration exists, the database is authoritative
 and the environment value is ignored, including an invalid value. An invalid
 bootstrap value fails startup only when no persisted row exists.
 
+The persisted mode can be read and changed at
+`GET` / `PUT /api/admin/audit-configuration`. `GET` requires `audit.read` or
+`audit.configure`; `PUT` requires `audit.configure` and accepts only `OFF` or
+`BASIC`. A real transition appends a mandatory policy-change event and reloads
+the local cache after commit.
+
 `BASIC` records the explicitly instrumented administrative user lifecycle,
 self-service credential changes and completed password-recovery operations. It is
 not full audit coverage. See [Audit](audit.md) for the exact coverage, actor
@@ -176,7 +182,7 @@ This override is used **only** by `./bin/check-reference`.
 
 `./bin/check` is the complete validation authority for Alixar itself. It runs entirely in Docker and performs:
 
-1. Build and run the 291 deterministic tests (`mvnw clean verify`)
+1. Build and run the 310 deterministic tests (`mvnw clean verify`)
 2. Runtime image build
 3. Container startup with health check wait (database + app)
 4. PostgreSQL health verification (`pg_isready`)
@@ -200,8 +206,10 @@ This override is used **only** by `./bin/check-reference`.
    API-token/role audit chain with exact event counts and no duplicates, plus
    chain-scoped audit pagination and sparse-filter queries without duplicates
    or omissions, repeatable-read verification consistency while an append
-   commits concurrently, and persisted audit-configuration bootstrap,
-   precedence, invalid-value handling and singleton enforcement
+   commits concurrently, persisted audit-configuration bootstrap, precedence,
+   invalid-value handling and singleton enforcement, and configuration mode
+   transitions including mandatory events, no-op updates and rollback on
+   mandatory-event failure
 6. HTTP `GET /health` verification (exact `{"status":"ok"}` response)
 7. Cleanup of this invocation's containers, network, and volume; verify none remain
 
@@ -217,7 +225,7 @@ the invocation's project. Cleanup errors are reported and fail an otherwise
 successful check; an earlier failure retains its exit code. Images/build cache
 are retained. No fixed development or previous check project is cleaned.
 
-`./bin/test` runs the 291 component/unit tests without PostgreSQL.
+`./bin/test` runs the 310 component/unit tests without PostgreSQL.
 Their persistence exclusions are centralized in `src/test/resources/application.properties`.
 The additional `PersistenceIT` uses Surefire's separate `*IT` naming convention
 and is explicitly selected by `bin/check` through `compose.check.yaml`, with

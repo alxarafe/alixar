@@ -23,6 +23,7 @@ import es.alxarafe.alixar.audit.domain.AuditResult;
 import es.alxarafe.alixar.audit.infrastructure.AuditConfigurationBootstrap;
 import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
 import es.alxarafe.alixar.audit.infrastructure.CachedAuditPolicyProvider;
+import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditConfigurationService;
 import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditService;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
@@ -177,6 +178,9 @@ class PersistenceIT {
 
     @Autowired
     private AuditConfigurationBootstrap auditConfigurationBootstrap;
+
+    @Autowired
+    private TransactionalAuditConfigurationService transactionalAuditConfigurationService;
 
     @Test
     void bootIntegratesPostgresqlFlywayJooqAndAuthenticationMigration() throws Exception {
@@ -2340,6 +2344,113 @@ class PersistenceIT {
             "insert into audit_configuration (id, singleton, mode) values (?, true, 'BASIC')",
             UUID.randomUUID()
         ).execute()).isInstanceOf(DuplicateKeyException.class);
+    }
+
+    @Test
+    void auditConfigurationUpdate_transitionsAppendExactlyOneMandatoryEvent() {
+        resetAuditChain();
+        setAuditMode(AuditMode.OFF);
+        UUID configurationId = persistedAuditConfigurationId();
+        try {
+            transactionalAuditConfigurationService.updateMode(AuditMode.BASIC);
+
+            assertThat(persistedAuditMode()).isEqualTo(AuditMode.BASIC);
+            assertThat(auditPolicyProvider.currentMode()).isEqualTo(AuditMode.BASIC);
+            assertSingleAuditConfigurationEvent(
+                1,
+                AuditAction.AUDIT_MODE_CHANGED_TO_BASIC,
+                configurationId
+            );
+
+            transactionalAuditConfigurationService.updateMode(AuditMode.BASIC);
+
+            assertThat(auditEventCount()).isEqualTo(1);
+
+            transactionalAuditConfigurationService.updateMode(AuditMode.OFF);
+
+            assertThat(persistedAuditMode()).isEqualTo(AuditMode.OFF);
+            assertThat(auditPolicyProvider.currentMode()).isEqualTo(AuditMode.OFF);
+            assertSingleAuditConfigurationEvent(
+                2,
+                AuditAction.AUDIT_MODE_CHANGED_TO_OFF,
+                configurationId
+            );
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditConfigurationUpdate_sameModeDoesNotChangeTimestampOrAppendEvent() {
+        resetAuditChain();
+        setAuditMode(AuditMode.OFF);
+        java.time.OffsetDateTime before = persistedAuditUpdatedAt();
+        try {
+            transactionalAuditConfigurationService.updateMode(AuditMode.OFF);
+
+            assertThat(persistedAuditUpdatedAt()).isEqualTo(before);
+            assertThat(auditEventCount()).isZero();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditConfigurationUpdate_rollsBackWhenMandatoryAppendFails() {
+        resetAuditChain();
+        setAuditMode(AuditMode.OFF);
+        try {
+            deleteAuditChainHead();
+
+            assertThatThrownBy(
+                () -> transactionalAuditConfigurationService.updateMode(AuditMode.BASIC)
+            ).isInstanceOf(IllegalStateException.class);
+
+            assertThat(persistedAuditMode()).isEqualTo(AuditMode.OFF);
+            assertThat(auditPolicyProvider.currentMode()).isEqualTo(AuditMode.OFF);
+            assertThat(auditEventCount()).isZero();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+        }
+    }
+
+    private void assertSingleAuditConfigurationEvent(
+        long expectedSequence,
+        AuditAction expectedAction,
+        UUID configurationId
+    ) {
+        var events = dsl.fetch(
+            "select sequence, action, resource_type, resource_id, result, actor_user_id, "
+                + "authentication_type from audit_event order by sequence"
+        );
+        assertThat(events).hasSize((int) expectedSequence);
+        var event = events.get((int) expectedSequence - 1);
+        assertThat(event.get("sequence", Long.class)).isEqualTo(expectedSequence);
+        assertThat(event.get("action", String.class)).isEqualTo(expectedAction.name());
+        assertThat(event.get("resource_type", String.class))
+            .isEqualTo(AuditResourceType.AUDIT_CONFIGURATION.name());
+        assertThat(event.get("resource_id", String.class))
+            .isEqualTo(configurationId.toString());
+        assertThat(event.get("result", String.class)).isEqualTo(AuditResult.SUCCESS.name());
+        assertThat(event.get("actor_user_id", UUID.class)).isEqualTo(AUDIT_TEST_ACTOR_ID);
+        assertThat(event.get("authentication_type", String.class))
+            .isEqualTo(AuditAuthenticationType.SESSION.name());
+    }
+
+    private int auditEventCount() {
+        return dsl.fetchCount(
+            org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_EVENT_TABLE))
+        );
+    }
+
+    private UUID persistedAuditConfigurationId() {
+        return dsl.fetch("select id from audit_configuration")
+            .getValues(0, UUID.class)
+            .get(0);
     }
 
     private AuditMode persistedAuditMode() {

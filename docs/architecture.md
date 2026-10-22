@@ -68,16 +68,16 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   `/api/admin/audit-events/verification`, which verifies the chain under one
   read-only repeatable-read snapshot. T1.5a adds the singleton persisted
   `audit_configuration` table, with `alixar.audit.mode` used only to bootstrap
-  the first row, and seeds the `audit.configure` permission. Event detail, the
-  configuration API, policy-change events, read auditing, the PAT identifier as
-  actor, retention, archive and checkpoints are not implemented yet. See
+  the first row, and seeds the `audit.configure` permission. T1.5b exposes
+  `GET` / `PUT /api/admin/audit-configuration` and records mandatory policy
+  transition events. Event detail, read auditing, the PAT identifier as actor,
+  retention, archive and checkpoints are not implemented yet. See
   [Audit](audit.md)
 
 ## Planned (Not Implemented)
 
-- `SELECTIVE` / `FULL` audit modes, the audit configuration API and mandatory
-  policy-change events, the PAT identifier as actor, audit event detail, read
-  auditing, retention, purge, archive and signed checkpoints
+- `SELECTIVE` / `FULL` audit modes, the PAT identifier as actor, audit event
+  detail, read auditing, retention, purge, archive and signed checkpoints
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Email change with new-address verification
@@ -198,11 +198,15 @@ implicitly; password recovery supplies an explicit `RECOVERY_TOKEN` actor. Every
 mandatory event is fail-closed. The `audit.read` permission, the read-only event
 query API and HTTP chain verification are implemented. Verification runs inside
 one read-only `REPEATABLE READ` transaction so its head and event reads share a
-consistent snapshot. The `audit.configure` permission is seeded, but the
-configuration API and mandatory policy-change events are not implemented yet.
-Database-level append-only privileges, event detail, read auditing, the PAT
-identifier as actor, retention and signing are also not implemented. See
-[Audit](audit.md) for the canonical format and deferred capabilities.
+consistent snapshot. T1.5b exposes the persisted configuration through
+`GET` / `PUT /api/admin/audit-configuration`; reads require `audit.read` or
+`audit.configure`, and writes require `audit.configure`. A mode transition locks
+the configuration row, updates the mode, appends a mandatory
+`AUDIT_CONFIGURATION` event and commits atomically. The local policy cache is
+reloaded best-effort after commit. Database-level append-only privileges, event
+detail, read auditing, the PAT identifier as actor, retention and signing are
+not implemented. See [Audit](audit.md) for the canonical format and deferred
+capabilities.
 
 ## Internationalization (i18n) Architecture
 

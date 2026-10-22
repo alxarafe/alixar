@@ -57,6 +57,18 @@ public class ConfiguredAuditTrail implements AuditTrail {
         append(actor, action, resourceType, resourceId);
     }
 
+    @Override
+    public void recordMandatorySuccess(
+        AuditAction action,
+        AuditResourceType resourceType,
+        String resourceId
+    ) {
+        requireArguments(action, resourceType, resourceId);
+        AuditActor actor = actorResolver.resolveCurrentActor()
+            .orElseThrow(AuditActorUnavailableException::new);
+        append(actor, action, resourceType, resourceId);
+    }
+
     private void append(
         AuditActor actor,
         AuditAction action,

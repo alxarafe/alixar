@@ -4,6 +4,7 @@ import es.alxarafe.alixar.audit.application.AuditConfigurationRepository;
 import es.alxarafe.alixar.audit.application.AuditMode;
 import es.alxarafe.alixar.audit.application.AuditPolicyConfiguration;
 import java.time.Clock;
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,10 +23,23 @@ public class InMemoryAuditConfigurationRepository implements AuditConfigurationR
     }
 
     @Override
+    public synchronized Optional<AuditPolicyConfiguration> findForUpdate() {
+        return find();
+    }
+
+    @Override
     public synchronized void insertIfAbsent(AuditPolicyConfiguration candidate) {
         if (configuration == null) {
             configuration = candidate;
         }
+    }
+
+    @Override
+    public synchronized void updateMode(UUID id, AuditMode mode, Instant updatedAt) {
+        if (configuration == null || !configuration.id().equals(id)) {
+            throw new IllegalStateException("Persisted audit configuration was not updated");
+        }
+        configuration = new AuditPolicyConfiguration(id, mode, updatedAt);
     }
 
     public synchronized void setMode(AuditMode mode) {

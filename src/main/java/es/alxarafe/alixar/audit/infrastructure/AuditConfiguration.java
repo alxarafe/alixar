@@ -102,6 +102,22 @@ public class AuditConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(TransactionalAuditConfigurationService.class)
+    TransactionalAuditConfigurationService transactionalAuditConfigurationService(
+        AuditConfigurationRepository auditConfigurationRepository,
+        AuditTrail auditTrail,
+        CachedAuditPolicyProvider auditPolicyProvider,
+        Clock clock
+    ) {
+        return new TransactionalAuditConfigurationService(
+            auditConfigurationRepository,
+            auditTrail,
+            auditPolicyProvider,
+            clock
+        );
+    }
+
+    @Bean
     AuditChainVerifier auditChainVerifier(
         AuditEventRepository auditEventRepository,
         AuditCanonicalEncoder auditCanonicalEncoder,
