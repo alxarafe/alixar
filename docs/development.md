@@ -83,8 +83,9 @@ authentication types with `RECOVERY_TOKEN`, and
 `V8__add_audit_read_authorization.sql` seeds the `audit.read` permission and
 grants it to `system-admin`, and
 `V9__persist_audit_configuration.sql` adds the singleton
-`audit_configuration` table and seeds `audit.configure` for `system-admin`.
-Boot calls Flyway on
+`audit_configuration` table and seeds `audit.configure` for `system-admin`, and
+`V10__add_selective_audit_read_policy.sql` adds `SELECTIVE` to the persisted
+mode constraint and creates `audit_read_policy`. Boot calls Flyway on
 startup using its default `classpath:db/migration`
 location. `PersistenceIT` verifies the migrations, their constraints, RBAC
 resolution and authentication transaction behaviour against PostgreSQL.
@@ -141,7 +142,7 @@ Audit configuration:
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `ALIXAR_AUDIT_MODE` | `OFF` | First-start audit bootstrap: `OFF` disables the persistent audit trail; `BASIC` records explicitly instrumented events |
+| `ALIXAR_AUDIT_MODE` | `OFF` | First-start audit bootstrap: `OFF` disables the persistent audit trail; `BASIC` records explicitly instrumented events; `SELECTIVE` includes the `BASIC` baseline and stores read rules |
 
 `ALIXAR_AUDIT_MODE` is used only while the `audit_configuration` table is
 empty. Once the persisted configuration exists, the database is authoritative
@@ -150,15 +151,22 @@ bootstrap value fails startup only when no persisted row exists.
 
 The persisted mode can be read and changed at
 `GET` / `PUT /api/admin/audit-configuration`. `GET` requires `audit.read` or
-`audit.configure`; `PUT` requires `audit.configure` and accepts only `OFF` or
-`BASIC`. A real transition appends a mandatory policy-change event and reloads
-the local cache after commit.
+`audit.configure`; `PUT` requires `audit.configure` and accepts `OFF`, `BASIC`
+or `SELECTIVE`. A real transition appends a mandatory policy-change event and
+reloads the local cache after commit.
 
-`BASIC` records the explicitly instrumented administrative user lifecycle,
-self-service credential changes and completed password-recovery operations. It is
-not full audit coverage. See [Audit](audit.md) for the exact coverage, actor
-semantics, persisted configuration, cache delay and fail-closed transaction
-guarantee.
+`GET` / `PUT /api/admin/audit-configuration/read-policy` reads or atomically
+replaces the persisted read rules for `USER` and `ROLE`. `GET` requires
+`audit.read` or `audit.configure`; `PUT` requires `audit.configure`, accepts
+`QUERY_ONLY`, `QUERY_AND_OBJECT` and `NONE`, and records one mandatory event per
+changed rule. T1.7a stores and administers these rules but does not yet append
+read events.
+
+`BASIC` and `SELECTIVE` record the explicitly instrumented administrative user
+lifecycle, self-service credential changes and completed password-recovery
+operations. They are not full audit coverage. See [Audit](audit.md) for the exact
+coverage, actor semantics, persisted configuration, cache delay and fail-closed
+transaction guarantee.
 
 ## Docker Compose
 
@@ -182,12 +190,12 @@ This override is used **only** by `./bin/check-reference`.
 
 `./bin/check` is the complete validation authority for Alixar itself. It runs entirely in Docker and performs:
 
-1. Build and run the 357 deterministic tests (`mvnw clean verify`)
+1. Build and run the 383 deterministic tests (`mvnw clean verify`)
 2. Runtime image build
 3. Container startup with health check wait (database + app)
 4. PostgreSQL health verification (`pg_isready`)
 5. Run `PersistenceIT` against the real isolated PostgreSQL service: verify the
-   Boot datasource, Flyway `V1`/`V2`/`V3`/`V4`/`V5`/`V6`/`V7`/`V8`/`V9`, a jOOQ `DSLContext`
+   Boot datasource, Flyway `V1`/`V2`/`V3`/`V4`/`V5`/`V6`/`V7`/`V8`/`V9`/`V10`, a jOOQ `DSLContext`
    executing `SELECT 1`, PostgreSQL 18.6, the authentication, API token and RBAC
    tables and constraints, permission-catalogue ordering, effective-permission
    resolution, restrictive role deletion, administrative user
@@ -207,9 +215,10 @@ This override is used **only** by `./bin/check-reference`.
    chain-scoped audit pagination and sparse-filter queries without duplicates
    or omissions, repeatable-read verification consistency while an append
    commits concurrently, persisted audit-configuration bootstrap, precedence,
-   invalid-value handling and singleton enforcement, and configuration mode
+   invalid-value handling and singleton enforcement, configuration mode
    transitions including mandatory events, no-op updates and rollback on
-   mandatory-event failure
+   mandatory-event failure, and read-policy replacement, ordering, constraints,
+   no-op handling and rollback on mandatory-event failure
 6. HTTP `GET /health` verification (exact `{"status":"ok"}` response)
 7. Cleanup of this invocation's containers, network, and volume; verify none remain
 
@@ -225,7 +234,7 @@ the invocation's project. Cleanup errors are reported and fail an otherwise
 successful check; an earlier failure retains its exit code. Images/build cache
 are retained. No fixed development or previous check project is cleaned.
 
-`./bin/test` runs the 357 component/unit tests without PostgreSQL.
+`./bin/test` runs the 383 component/unit tests without PostgreSQL.
 Their persistence exclusions are centralized in `src/test/resources/application.properties`.
 The additional `PersistenceIT` uses Surefire's separate `*IT` naming convention
 and is explicitly selected by `bin/check` through `compose.check.yaml`, with

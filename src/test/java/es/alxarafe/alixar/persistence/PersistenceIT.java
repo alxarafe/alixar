@@ -11,6 +11,7 @@ import es.alxarafe.alixar.audit.application.AuditEventQuery;
 import es.alxarafe.alixar.audit.application.AuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditHashCalculator;
 import es.alxarafe.alixar.audit.application.AuditMode;
+import es.alxarafe.alixar.audit.application.AuditReadLevel;
 import es.alxarafe.alixar.audit.application.AuditResourceType;
 import es.alxarafe.alixar.audit.application.AuditVerificationFailure;
 import es.alxarafe.alixar.audit.application.AuditVerificationResult;
@@ -24,6 +25,7 @@ import es.alxarafe.alixar.audit.infrastructure.AuditConfigurationBootstrap;
 import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
 import es.alxarafe.alixar.audit.infrastructure.CachedAuditPolicyProvider;
 import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditConfigurationService;
+import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditReadPolicyService;
 import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditService;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
@@ -61,6 +63,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
@@ -109,6 +112,7 @@ class PersistenceIT {
     private static final String AUDIT_HEAD_TABLE = "audit_chain_head";
     private static final String AUDIT_EVENT_TABLE = "audit_event";
     private static final String AUDIT_CONFIGURATION_TABLE = "audit_configuration";
+    private static final String AUDIT_READ_POLICY_TABLE = "audit_read_policy";
     private static final UUID AUDIT_CHAIN_ID = AuditChain.DEFAULT_CHAIN_ID;
 
     @Autowired
@@ -183,6 +187,9 @@ class PersistenceIT {
     @Autowired
     private TransactionalAuditConfigurationService transactionalAuditConfigurationService;
 
+    @Autowired
+    private TransactionalAuditReadPolicyService transactionalAuditReadPolicyService;
+
     @Test
     void bootIntegratesPostgresqlFlywayJooqAndAuthenticationMigration() throws Exception {
         try (var connection = dataSource.getConnection()) {
@@ -190,8 +197,8 @@ class PersistenceIT {
                 .startsWith(POSTGRESQL_VERSION);
         }
         assertThat(flyway.getConfiguration().getDataSource()).isSameAs(dataSource);
-        assertThat(flyway.info().all()).hasSize(9);
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("9");
+        assertThat(flyway.info().all()).hasSize(10);
+        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("10");
         assertThat(dsl.selectOne().fetchSingle().value1()).isEqualTo(1);
         assertThat(dsl.fetch("select tablename from pg_catalog.pg_tables where schemaname = current_schema()")
             .getValues(0, String.class)).containsExactlyInAnyOrder(
@@ -205,10 +212,11 @@ class PersistenceIT {
                 USER_ROLE_TABLE,
                 AUDIT_HEAD_TABLE,
                 AUDIT_EVENT_TABLE,
-                AUDIT_CONFIGURATION_TABLE
+                AUDIT_CONFIGURATION_TABLE,
+                AUDIT_READ_POLICY_TABLE
             );
         assertThat(dsl.fetchCount(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(HISTORY_TABLE))))
-            .isEqualTo(9);
+            .isEqualTo(10);
     }
 
     @Test
@@ -2442,6 +2450,160 @@ class PersistenceIT {
         }
     }
 
+    @Test
+    void auditReadPolicy_replacesRulesAndAppendsMandatoryEvents() {
+        resetAuditChain();
+        deleteAuditReadPolicy();
+        setAuditMode(AuditMode.SELECTIVE);
+        UUID configurationId = persistedAuditConfigurationId();
+        try {
+            var policy = transactionalAuditReadPolicyService.replaceRules(Map.of(
+                AuditResourceType.USER,
+                AuditReadLevel.QUERY_ONLY,
+                AuditResourceType.ROLE,
+                AuditReadLevel.QUERY_AND_OBJECT
+            ));
+
+            assertThat(persistedReadRules()).containsExactlyInAnyOrderEntriesOf(Map.of(
+                AuditResourceType.USER,
+                AuditReadLevel.QUERY_ONLY,
+                AuditResourceType.ROLE,
+                AuditReadLevel.QUERY_AND_OBJECT
+            ));
+            assertThat(policy.configurationId()).isEqualTo(configurationId);
+            assertThat(auditPolicyProvider.currentPolicy().readLevelFor(AuditResourceType.USER))
+                .isEqualTo(AuditReadLevel.QUERY_ONLY);
+            assertReadPolicyEvent(
+                1,
+                AuditAction.AUDIT_READ_POLICY_RULE_CHANGED_TO_QUERY_AND_OBJECT,
+                AuditResourceType.ROLE
+            );
+            assertReadPolicyEvent(
+                2,
+                AuditAction.AUDIT_READ_POLICY_RULE_CHANGED_TO_QUERY_ONLY,
+                AuditResourceType.USER
+            );
+
+            transactionalAuditReadPolicyService.replaceRules(Map.of(
+                AuditResourceType.USER,
+                AuditReadLevel.NONE,
+                AuditResourceType.ROLE,
+                AuditReadLevel.QUERY_ONLY
+            ));
+
+            assertThat(persistedReadRules()).containsExactlyEntriesOf(Map.of(
+                AuditResourceType.ROLE,
+                AuditReadLevel.QUERY_ONLY
+            ));
+            assertThat(auditPolicyProvider.currentPolicy().readLevelFor(AuditResourceType.ROLE))
+                .isEqualTo(AuditReadLevel.QUERY_ONLY);
+            assertThat(auditPolicyProvider.currentPolicy().readLevelFor(AuditResourceType.USER))
+                .isEqualTo(AuditReadLevel.NONE);
+            assertReadPolicyEvent(
+                3,
+                AuditAction.AUDIT_READ_POLICY_RULE_CHANGED_TO_QUERY_ONLY,
+                AuditResourceType.ROLE
+            );
+            assertReadPolicyEvent(
+                4,
+                AuditAction.AUDIT_READ_POLICY_RULE_CHANGED_TO_NONE,
+                AuditResourceType.USER
+            );
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            deleteAuditReadPolicy();
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditReadPolicy_rollsBackWhenMandatoryAppendFails() {
+        resetAuditChain();
+        deleteAuditReadPolicy();
+        setAuditMode(AuditMode.OFF);
+        try {
+            deleteAuditChainHead();
+
+            assertThatThrownBy(() -> transactionalAuditReadPolicyService.replaceRules(Map.of(
+                AuditResourceType.USER,
+                AuditReadLevel.QUERY_ONLY
+            ))).isInstanceOf(IllegalStateException.class);
+
+            assertThat(persistedReadRules()).isEmpty();
+            assertThat(auditPolicyProvider.currentPolicy().readLevelFor(AuditResourceType.USER))
+                .isEqualTo(AuditReadLevel.NONE);
+            assertThat(auditEventCount()).isZero();
+        } finally {
+            deleteAuditReadPolicy();
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditReadPolicy_tableRejectsUnsupportedRules() {
+        deleteAuditReadPolicy();
+        UUID configurationId = persistedAuditConfigurationId();
+        try {
+            assertThatThrownBy(() -> dsl.query(
+                "insert into audit_read_policy "
+                    + "(audit_configuration_id, resource_type, read_level, updated_at) "
+                    + "values (?, 'API_TOKEN', 'QUERY_ONLY', now())",
+                configurationId
+            ).execute()).isInstanceOf(
+                org.springframework.dao.DataIntegrityViolationException.class
+            );
+
+            assertThatThrownBy(() -> dsl.query(
+                "insert into audit_read_policy "
+                    + "(audit_configuration_id, resource_type, read_level, updated_at) "
+                    + "values (?, 'USER', 'EACH_RETURNED_OBJECT', now())",
+                configurationId
+            ).execute()).isInstanceOf(
+                org.springframework.dao.DataIntegrityViolationException.class
+            );
+        } finally {
+            deleteAuditReadPolicy();
+        }
+    }
+
+    private void assertReadPolicyEvent(
+        long expectedSequence,
+        AuditAction expectedAction,
+        AuditResourceType expectedResource
+    ) {
+        var events = dsl.fetch(
+            "select sequence, action, resource_type, resource_id, result "
+                + "from audit_event where sequence = ?",
+            expectedSequence
+        );
+        assertThat(events).hasSize(1);
+        var event = events.get(0);
+        assertThat(event.get("action", String.class)).isEqualTo(expectedAction.name());
+        assertThat(event.get("resource_type", String.class))
+            .isEqualTo(AuditResourceType.AUDIT_READ_POLICY.name());
+        assertThat(event.get("resource_id", String.class))
+            .isEqualTo(expectedResource.name());
+        assertThat(event.get("result", String.class)).isEqualTo(AuditResult.SUCCESS.name());
+    }
+
+    private Map<AuditResourceType, AuditReadLevel> persistedReadRules() {
+        Map<AuditResourceType, AuditReadLevel> rules = new java.util.EnumMap<>(
+            AuditResourceType.class
+        );
+        dsl.fetch("select resource_type, read_level from audit_read_policy")
+            .forEach(record -> rules.put(
+                AuditResourceType.valueOf(record.get("resource_type", String.class)),
+                AuditReadLevel.valueOf(record.get("read_level", String.class))
+            ));
+        return rules;
+    }
+
+    private void deleteAuditReadPolicy() {
+        dsl.query("delete from audit_read_policy").execute();
+    }
+
     private void assertSingleAuditConfigurationEvent(
         long expectedSequence,
         AuditAction expectedAction,
@@ -2496,6 +2658,7 @@ class PersistenceIT {
     }
 
     private void deleteAuditConfiguration() {
+        deleteAuditReadPolicy();
         dsl.query("delete from audit_configuration").execute();
     }
 
@@ -2508,6 +2671,7 @@ class PersistenceIT {
 
     @AfterEach
     void resetAuditMode() {
+        deleteAuditReadPolicy();
         setAuditMode(AuditMode.OFF);
     }
 

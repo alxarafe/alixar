@@ -6,4 +6,6 @@ package es.alxarafe.alixar.audit.application;
 public interface AuditPolicyProvider {
 
     AuditMode currentMode();
+
+    AuditPolicy currentPolicy();
 }

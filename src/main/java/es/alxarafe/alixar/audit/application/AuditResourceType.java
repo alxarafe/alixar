@@ -8,6 +8,7 @@ public enum AuditResourceType {
     API_TOKEN,
     ROLE,
     AUDIT_CONFIGURATION,
+    AUDIT_READ_POLICY,
     AUTHENTICATION,
     HTTP_REQUEST
 }

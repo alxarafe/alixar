@@ -8,6 +8,7 @@ import es.alxarafe.alixar.audit.application.AuditEventAppender;
 import es.alxarafe.alixar.audit.application.AuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditHashCalculator;
 import es.alxarafe.alixar.audit.application.AuditPolicyProvider;
+import es.alxarafe.alixar.audit.application.AuditReadPolicyRepository;
 import es.alxarafe.alixar.audit.application.AuditTrail;
 import es.alxarafe.alixar.audit.application.ListAuditEventsUseCase;
 import es.alxarafe.alixar.audit.application.SecurityAuditTrail;
@@ -76,13 +77,21 @@ public class AuditConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(AuditReadPolicyRepository.class)
+    AuditReadPolicyRepository auditReadPolicyRepository(DSLContext dsl) {
+        return new JooqAuditReadPolicyRepository(dsl);
+    }
+
+    @Bean
     @ConditionalOnMissingBean(CachedAuditPolicyProvider.class)
     CachedAuditPolicyProvider auditPolicyProvider(
         AuditConfigurationRepository auditConfigurationRepository,
+        AuditReadPolicyRepository auditReadPolicyRepository,
         Clock clock
     ) {
         return new CachedAuditPolicyProvider(
             auditConfigurationRepository,
+            auditReadPolicyRepository,
             clock,
             CachedAuditPolicyProvider.DEFAULT_REFRESH_INTERVAL
         );
@@ -124,6 +133,24 @@ public class AuditConfiguration {
     ) {
         return new TransactionalAuditConfigurationService(
             auditConfigurationRepository,
+            auditTrail,
+            auditPolicyProvider,
+            clock
+        );
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(TransactionalAuditReadPolicyService.class)
+    TransactionalAuditReadPolicyService transactionalAuditReadPolicyService(
+        AuditConfigurationRepository auditConfigurationRepository,
+        AuditReadPolicyRepository auditReadPolicyRepository,
+        AuditTrail auditTrail,
+        CachedAuditPolicyProvider auditPolicyProvider,
+        Clock clock
+    ) {
+        return new TransactionalAuditReadPolicyService(
+            auditConfigurationRepository,
+            auditReadPolicyRepository,
             auditTrail,
             auditPolicyProvider,
             clock

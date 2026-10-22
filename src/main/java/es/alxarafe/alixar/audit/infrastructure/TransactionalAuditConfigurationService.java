@@ -60,6 +60,7 @@ public class TransactionalAuditConfigurationService {
         return switch (mode) {
             case BASIC -> AuditAction.AUDIT_MODE_CHANGED_TO_BASIC;
             case OFF -> AuditAction.AUDIT_MODE_CHANGED_TO_OFF;
+            case SELECTIVE -> AuditAction.AUDIT_MODE_CHANGED_TO_SELECTIVE;
         };
     }
 

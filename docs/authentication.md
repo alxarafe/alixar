@@ -57,10 +57,16 @@ T1.5a seeds the separate `audit.configure` permission and assigns it to
 `audit.configure`; changing the mode requires `audit.configure`. The existing
 `audit.read` authorization and the read-only event APIs are unchanged.
 
-T1.6a adds authentication security events under `BASIC`. Successful login
-records `LOGIN_SUCCEEDED` mandatorily; failed login records `LOGIN_FAILED`
-best-effort without any attempted identifier; logout records `LOGOUT`
-best-effort for the original authenticated user. T1.6b adds best-effort
+T1.7a adds the `SELECTIVE` mode and the persisted read-policy API at
+`GET` / `PUT /api/admin/audit-configuration/read-policy`. Reading requires
+`audit.read` or `audit.configure`; replacing the rules requires
+`audit.configure`. `SELECTIVE` includes the `BASIC` baseline. T1.7a stores and
+administers read rules but does not yet append read events.
+
+T1.6a adds authentication security events under `BASIC` and `SELECTIVE`.
+Successful login records `LOGIN_SUCCEEDED` mandatorily; failed login records
+`LOGIN_FAILED` best-effort without any attempted identifier; logout records
+`LOGOUT` best-effort for the original authenticated user. T1.6b adds best-effort
 `ACCESS_DENIED` events for authenticated callers rejected by an authorization
 rule, using a static HTTP resource family rather than the raw path. CSRF
 rejections and anonymous denials are not audited. These events require no new
@@ -104,8 +110,8 @@ cross-identifier matches all return the same `401` error with code
 `AUTH_INVALID_CREDENTIALS`. A failed `LOGIN_FAILED` audit append never changes
 that result.
 
-Under `BASIC`, successful login is fail-closed with respect to its audit event.
-If `LOGIN_SUCCEEDED` cannot be persisted after the session has been created,
+Under `BASIC` and `SELECTIVE`, successful login is fail-closed with respect to
+its audit event. If `LOGIN_SUCCEEDED` cannot be persisted after the session has been created,
 the security context is cleared, any created session is invalidated and the
 response is `503` with code `AUDIT_UNAVAILABLE`. This prevents a usable session
 from existing without its mandatory audit event.
@@ -123,9 +129,9 @@ state, timestamps, and security internals are never returned.
 Requires a valid CSRF cookie/header pair. It invalidates the HTTP session when
 present, clears the security context and CSRF token, expires the session cookie,
 and returns `204`. The operation is intentionally idempotent for an anonymous
-client with a valid CSRF token. Under `BASIC`, a successful logout appends
-`LOGOUT` best-effort; an audit failure never prevents session destruction or
-changes the `204` response.
+client with a valid CSRF token. Under `BASIC` and `SELECTIVE`, a successful
+logout appends `LOGOUT` best-effort; an audit failure never prevents session
+destruction or changes the `204` response.
 
 ### `POST /api/auth/password/forgot`
 
@@ -512,6 +518,8 @@ The administrative namespace is split by capability:
 | `GET /api/admin/audit-events/verification` | `audit.read` |
 | `GET /api/admin/audit-configuration` | `audit.read` or `audit.configure` |
 | `PUT /api/admin/audit-configuration` | `audit.configure` |
+| `GET /api/admin/audit-configuration/read-policy` | `audit.read` or `audit.configure` |
+| `PUT /api/admin/audit-configuration/read-policy` | `audit.configure` |
 
 The GET rule for the role catalogue is method-specific and is evaluated before
 the general role namespace rule. Results:
@@ -526,9 +534,9 @@ This applies identically to session and Bearer authentication. An invalid
 Bearer credential clears the session context and does not fall back to the
 session identity, so it cannot bypass authorization.
 
-Under `BASIC`, an authenticated request rejected by an authorization rule also
-records an isolated best-effort `ACCESS_DENIED` event. The event actor is the
-rejected `SESSION` or `PAT` principal. The resource is `HTTP_REQUEST` with a
+Under `BASIC` and `SELECTIVE`, an authenticated request rejected by an
+authorization rule also records an isolated best-effort `ACCESS_DENIED` event.
+The event actor is the rejected `SESSION` or `PAT` principal. The resource is `HTTP_REQUEST` with a
 static family such as `PATCH /api/admin/users`, never the raw path or query.
 Unknown routes, anonymous requests and CSRF rejections are not audited. An
 audit failure never changes the `403` result. See
@@ -586,10 +594,16 @@ require `audit.read`. Their pagination, filters, verification response and
 contracts are documented in [Audit](audit.md).
 
 `GET /api/admin/audit-configuration` returns the singleton `id`, `mode` and
-`updatedAt`. `PUT /api/admin/audit-configuration` accepts only `OFF` or `BASIC`
-and records a mandatory policy-change event when the mode actually changes.
-Invalid modes return `400 AUDIT_INVALID_MODE`; a missing, null or blank mode
-returns `400 VALIDATION_REQUIRED`. Both endpoints are documented in
+`updatedAt`. `PUT /api/admin/audit-configuration` accepts `OFF`, `BASIC` or
+`SELECTIVE` and records a mandatory policy-change event when the mode actually
+changes. Invalid modes return `400 AUDIT_INVALID_MODE`; a missing, null or blank
+mode returns `400 VALIDATION_REQUIRED`.
+
+`GET /api/admin/audit-configuration/read-policy` returns the configuration id
+and the active rules for `USER` and `ROLE`. `PUT` atomically replaces the full
+rule set, accepts `QUERY_ONLY`, `QUERY_AND_OBJECT` and `NONE`, and records one
+mandatory event per changed rule. Invalid resources or levels return
+`400 AUDIT_INVALID_READ_POLICY`. These endpoints are documented in
 [Audit](audit.md).
 
 Role responses contain only `code`, `name`, `builtIn` and `permissionCodes`.

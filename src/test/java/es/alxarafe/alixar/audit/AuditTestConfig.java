@@ -22,10 +22,21 @@ public class AuditTestConfig {
     }
 
     @Bean
+    @Primary
+    public InMemoryAuditReadPolicyRepository testAuditReadPolicyRepository() {
+        return new InMemoryAuditReadPolicyRepository();
+    }
+
+    @Bean
     public AuditModeTestSupport auditModeTestSupport(
         InMemoryAuditConfigurationRepository testAuditConfigurationRepository,
+        InMemoryAuditReadPolicyRepository testAuditReadPolicyRepository,
         CachedAuditPolicyProvider auditPolicyProvider
     ) {
-        return new AuditModeTestSupport(testAuditConfigurationRepository, auditPolicyProvider);
+        return new AuditModeTestSupport(
+            testAuditConfigurationRepository,
+            testAuditReadPolicyRepository,
+            auditPolicyProvider
+        );
     }
 }

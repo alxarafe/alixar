@@ -4,12 +4,16 @@ import es.alxarafe.alixar.audit.application.AuditConfigurationMissingException;
 import es.alxarafe.alixar.audit.application.AuditConfigurationRepository;
 import es.alxarafe.alixar.audit.application.AuditMode;
 import es.alxarafe.alixar.audit.application.AuditPolicyConfiguration;
+import es.alxarafe.alixar.audit.application.AuditReadLevel;
+import es.alxarafe.alixar.audit.application.AuditReadPolicyRepository;
+import es.alxarafe.alixar.audit.application.AuditResourceType;
 import es.alxarafe.alixar.audit.infrastructure.CachedAuditPolicyProvider;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -28,9 +32,16 @@ class CachedAuditPolicyProviderTest {
 
     private final AuditConfigurationRepository repository =
         mock(AuditConfigurationRepository.class);
+    private final AuditReadPolicyRepository readPolicyRepository =
+        mock(AuditReadPolicyRepository.class);
     private final MutableClock clock = new MutableClock(START);
     private final CachedAuditPolicyProvider provider =
-        new CachedAuditPolicyProvider(repository, clock, REFRESH_INTERVAL);
+        new CachedAuditPolicyProvider(
+            repository,
+            readPolicyRepository,
+            clock,
+            REFRESH_INTERVAL
+        );
 
     @Test
     void cachesModeUntilRefreshIntervalExpires() {
@@ -45,6 +56,24 @@ class CachedAuditPolicyProviderTest {
         clock.advance(Duration.ofSeconds(1));
         assertThat(provider.currentMode()).isEqualTo(AuditMode.OFF);
         verify(repository, times(2)).find();
+    }
+
+    @Test
+    void currentPolicyIncludesPersistedReadRules() {
+        AuditPolicyConfiguration configuration = configuration(AuditMode.SELECTIVE);
+        when(repository.find()).thenReturn(Optional.of(configuration));
+        when(readPolicyRepository.findRules(configuration.id())).thenReturn(Map.of(
+            AuditResourceType.USER,
+            AuditReadLevel.QUERY_AND_OBJECT
+        ));
+
+        var policy = provider.currentPolicy();
+
+        assertThat(policy.mode()).isEqualTo(AuditMode.SELECTIVE);
+        assertThat(policy.readLevelFor(AuditResourceType.USER))
+            .isEqualTo(AuditReadLevel.QUERY_AND_OBJECT);
+        assertThat(policy.readLevelFor(AuditResourceType.ROLE))
+            .isEqualTo(AuditReadLevel.NONE);
     }
 
     @Test

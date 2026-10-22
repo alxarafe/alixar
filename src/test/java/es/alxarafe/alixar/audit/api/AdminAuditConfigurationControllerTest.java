@@ -180,6 +180,28 @@ class AdminAuditConfigurationControllerTest {
     }
 
     @Test
+    void offToSelectiveUpdatesConfigurationAndAppendsOneMandatoryEvent() throws Exception {
+        grant(BOB_ID, PermissionCodes.AUDIT_CONFIGURE);
+        AuthenticatedSession auth = authenticatedSession("bob", PASSWORD);
+
+        mockMvc.perform(put(AuditEndpoints.CONFIGURATION_PATH)
+                .session(auth.session())
+                .cookie(auth.csrfCookie())
+                .header(CSRF_HEADER, auth.csrfCookie().getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"mode\":\"SELECTIVE\"}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.mode").value(AuditMode.SELECTIVE.name()));
+
+        assertThat(configurationRepository.find().orElseThrow().mode())
+            .isEqualTo(AuditMode.SELECTIVE);
+        List<AuditEvent> events = auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID);
+        assertThat(events).hasSize(1);
+        assertThat(events.getFirst().action())
+            .isEqualTo(AuditAction.AUDIT_MODE_CHANGED_TO_SELECTIVE.name());
+    }
+
+    @Test
     void sameModeIsNoOpAndDoesNotChangeUpdatedAt() throws Exception {
         grant(BOB_ID, PermissionCodes.AUDIT_CONFIGURE);
         AuthenticatedSession auth = authenticatedSession("bob", PASSWORD);

@@ -77,6 +77,20 @@ class TransactionalAuditConfigurationServiceTest {
     }
 
     @Test
+    void basicToSelectiveUpdatesAndAppendsMandatoryEvent() {
+        when(repository.findForUpdate()).thenReturn(Optional.of(configuration(AuditMode.BASIC)));
+
+        service.updateMode(AuditMode.SELECTIVE);
+
+        verify(repository).updateMode(CONFIGURATION_ID, AuditMode.SELECTIVE, NOW);
+        verify(auditTrail).recordMandatorySuccess(
+            AuditAction.AUDIT_MODE_CHANGED_TO_SELECTIVE,
+            AuditResourceType.AUDIT_CONFIGURATION,
+            CONFIGURATION_ID.toString()
+        );
+    }
+
+    @Test
     void basicToOffUpdatesAndAppendsMandatoryEvent() {
         when(repository.findForUpdate()).thenReturn(Optional.of(configuration(AuditMode.BASIC)));
 

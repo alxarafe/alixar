@@ -24,6 +24,7 @@ class AuditConfigurationBootstrapTest {
     private final AuditProperties properties = new AuditProperties();
     private final CachedAuditPolicyProvider policyProvider = new CachedAuditPolicyProvider(
         repository,
+        new InMemoryAuditReadPolicyRepository(),
         Clock.fixed(NOW, ZoneOffset.UTC),
         Duration.ZERO
     );

@@ -19,10 +19,12 @@ audit configuration foundation and the `audit.configure` permission. T1.5b adds
 the administrative configuration API and mandatory policy-change events. T1.6a
 adds authentication security events for successful login, failed login and
 logout. T1.6b adds `ACCESS_DENIED` authorization events for authenticated
-callers rejected by an authorization rule. Event detail, retention, archive and
-checkpoints remain out of scope.
+callers rejected by an authorization rule. T1.7a adds the `SELECTIVE` mode, the
+persisted read-policy table and the administrative read-policy API, including
+mandatory rule-change events. Read event capture remains deferred to T1.7b.
+Event detail, retention, archive and checkpoints remain out of scope.
 
-## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b, T1.5a, T1.5b, T1.6a and T1.6b)
+## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b, T1.5a, T1.5b, T1.6a, T1.6b and T1.7a)
 
 Implemented:
 
@@ -34,9 +36,11 @@ Implemented:
 - transactional chain-head locking with `SELECT ... FOR UPDATE`;
 - independent chain verifier;
 - PostgreSQL integration and tamper tests;
-- `OFF` / `BASIC` audit policy persisted in the singleton
+- `OFF` / `BASIC` / `SELECTIVE` audit policy persisted in the singleton
   `audit_configuration` table, with `alixar.audit.mode` used only as the
   first-start bootstrap value;
+- persisted read rules in `audit_read_policy` for `USER` and `ROLE`, with
+  `QUERY_ONLY` and `QUERY_AND_OBJECT` levels;
 - `audit.configure` permission seeded and assigned to `system-admin`;
 - atomic `SUCCESS` events for administrative user enable/disable;
 - atomic `SUCCESS` events for administrative user creation, username changes,
@@ -55,30 +59,35 @@ Implemented:
 - the administrative audit configuration API at
   `/api/admin/audit-configuration`, with `GET` for reading and `PUT` for
   changing the persisted mode;
-- mandatory, mode-independent `SUCCESS` events when the audit mode transitions
-  between `OFF` and `BASIC`;
+- the administrative read-policy API at
+  `/api/admin/audit-configuration/read-policy`, with `GET` for reading and
+  `PUT` for atomic replacement of the active rules;
+- mandatory, mode-independent `SUCCESS` events for mode transitions and for
+  every changed read-policy rule;
 - `LOGIN_SUCCEEDED`, `LOGIN_FAILED` and `LOGOUT` authentication events under
   `BASIC`, with mandatory fail-closed success and isolated best-effort failure
   and logout events;
-- `ACCESS_DENIED` authorization events under `BASIC` for authenticated callers
+- `ACCESS_DENIED` authorization events under `BASIC` and `SELECTIVE` for authenticated callers
   rejected by an authorization rule, using a static resource family instead of
   the raw request path.
 
 Not implemented yet:
 
-- `SELECTIVE` / `FULL` audit modes;
+- the `FULL` audit mode;
+- read event capture under `SELECTIVE` / `FULL`, including
+  `EACH_RETURNED_OBJECT` and read rules for resource types other than `USER`
+  and `ROLE`;
 - the PAT identifier as part of the actor;
 - bootstrap and password-reset request events;
 - CSRF-specific audit events, such as a future `CSRF_REJECTED`;
 - audit event detail through HTTP;
-- auditing read operations;
 - retention, purge and archive;
 - signed checkpoints or external anchoring;
 - payloads with explicit `before` / `after` changes.
 
 ## Audit modes
 
-T1.2 defines two modes:
+T1.7a defines three modes:
 
 ```text
 OFF
@@ -86,11 +95,19 @@ OFF
 
 BASIC
 → only events explicitly instrumented as BASIC events
+
+SELECTIVE
+→ the BASIC baseline plus persisted read-policy rules
 ```
 
-`BASIC` does **not** mean full coverage of all administrative or system events.
-It currently covers only the events listed below. Additional capabilities must
-be instrumented explicitly in later slices.
+`SELECTIVE` never removes or weakens the `BASIC` baseline; it adds read rules on
+top of it. `BASIC` does **not** mean full coverage of all administrative or
+system events. It currently covers only the events listed below. Additional
+capabilities must be instrumented explicitly in later slices.
+
+T1.7a stores and administers read rules, but does not yet append read events.
+The rules are intended to take effect only when the effective mode is
+`SELECTIVE`. Read event capture is the subject of T1.7b. `FULL` is deferred.
 
 The effective mode is stored in the singleton `audit_configuration` table. On
 the first start, before that row exists, the bootstrap value is read from:
@@ -107,19 +124,26 @@ value. An invalid bootstrap value fails startup only when no persisted row
 exists. In `OFF`, the operation does not resolve an actor, build an
 `AuditEvent`, encode the canonical representation or enter the appender.
 
-### Persisted configuration (T1.5a)
+### Persisted configuration (T1.5a and T1.7a)
 
 `audit_configuration` holds at most one row. It stores the mode and an
 `updated_at` timestamp. The row is created by the application bootstrap using a
 race-safe insert that never overwrites an existing row.
 
-Runtime readers use a local in-memory cache refreshed every 15 seconds, so the
-normal `OFF` path performs no SQL per audited operation. The cache is local to
-each process: another node can take up to 15 seconds to observe a persisted
-change. This is a documented temporary multi-node limitation, not a distributed
-cache or a definitive consistency mechanism. If a scheduled refresh fails, the
-provider keeps the last successfully loaded mode and logs a warning rather than
-guessing a different policy.
+`audit_read_policy` stores the active rules keyed by the configuration row and
+resource type. It allows one row per `USER` or `ROLE`. A missing row means
+`NONE`; the table does not persist an explicit `NONE` row. The table-level
+constraints reject unknown resource types, unsupported read levels and deletion
+of the referenced configuration row.
+
+Runtime readers use a local in-memory cache of the mode and active rules,
+refreshed every 15 seconds, so the normal `OFF` path performs no SQL per audited
+operation. The cache is local to each process: another node can take up to 15
+seconds to observe a persisted change. This is a documented temporary
+multi-node limitation, not a distributed cache or a definitive consistency
+mechanism. If a scheduled refresh fails, the provider keeps the last
+successfully loaded policy and logs a warning rather than guessing a different
+policy.
 
 ### Configuration API (T1.5b)
 
@@ -143,7 +167,7 @@ namespace. `GET` returns:
 }
 ```
 
-`PUT` accepts only `OFF` or `BASIC`:
+`PUT` accepts only `OFF`, `BASIC` or `SELECTIVE`:
 
 ```json
 {
@@ -166,9 +190,67 @@ recorded.
 The existing `audit.read` permission remains separate from `audit.configure`.
 Reads, verification and configuration work independently of `OFF`.
 
+### Read-policy API (T1.7a)
+
+The persisted read rules are exposed through:
+
+```text
+GET /api/admin/audit-configuration/read-policy
+PUT /api/admin/audit-configuration/read-policy
+```
+
+`GET` requires `audit.read` or `audit.configure`. `PUT` requires
+`audit.configure`. `GET` returns the configuration id and the active rules in
+alphabetical resource-type order:
+
+```json
+{
+  "configurationId": "2f0f2f6e-6c47-4e6d-8f2a-4b7c1d5e9a01",
+  "rules": [
+    {
+      "resourceType": "ROLE",
+      "readLevel": "QUERY_ONLY"
+    },
+    {
+      "resourceType": "USER",
+      "readLevel": "QUERY_AND_OBJECT"
+    }
+  ]
+}
+```
+
+`PUT` replaces the complete rule set atomically:
+
+```json
+{
+  "rules": [
+    {
+      "resourceType": "USER",
+      "readLevel": "QUERY_ONLY"
+    }
+  ]
+}
+```
+
+An empty `rules` array clears all rules. `NONE` is accepted as an explicit
+removal and is normalized away; a missing rule also means `NONE`. Only `USER`
+and `ROLE` are configurable resource types, and only `QUERY_ONLY` and
+`QUERY_AND_OBJECT` are valid persisted levels. `EACH_RETURNED_OBJECT`, unknown
+or lowercase values, duplicate resource types, null entries and blank values
+return `400` with code `AUDIT_INVALID_READ_POLICY` and a `field` property.
+
+A replacement locks the configuration row, applies the complete rule set,
+appends one mandatory event per actually changed rule and commits atomically.
+An append failure rolls back the replacement. A no-op replacement records no
+event. The local cache is reloaded after commit; if that reload fails, the
+15-second TTL eventually observes the new rules. Read rules are stored
+regardless of the current mode, but they are intended to apply only under
+`SELECTIVE`.
+
 ## Instrumented events (T1.3a and T1.3b)
 
-The following operations are instrumented atomically under `BASIC`:
+The following operations are instrumented atomically under `BASIC` and
+`SELECTIVE`:
 
 | Operation | Action | Resource | Result |
 |---|---|---|---|
@@ -187,7 +269,7 @@ The following operations are instrumented atomically under `BASIC`:
 | Role permission replacement | `ROLE_PERMISSIONS_REPLACED` | `ROLE` / internal role id | `SUCCESS` |
 | Role deletion | `ROLE_DELETED` | `ROLE` / internal role id | `SUCCESS` |
 
-### Mandatory policy-change events (T1.5b)
+### Mandatory policy-change events (T1.5b and T1.7a)
 
 Audit configuration transitions are recorded even when the previous mode was
 `OFF`, because they change the audit policy itself. The event is mandatory and
@@ -195,20 +277,24 @@ does not depend on the effective mode:
 
 | Transition | Action | Resource | Result |
 |---|---|---|---|
-| `OFF` → `BASIC` | `AUDIT_MODE_CHANGED_TO_BASIC` | `AUDIT_CONFIGURATION` / configuration id | `SUCCESS` |
-| `BASIC` → `OFF` | `AUDIT_MODE_CHANGED_TO_OFF` | `AUDIT_CONFIGURATION` / configuration id | `SUCCESS` |
+| Any → `BASIC` | `AUDIT_MODE_CHANGED_TO_BASIC` | `AUDIT_CONFIGURATION` / configuration id | `SUCCESS` |
+| Any → `SELECTIVE` | `AUDIT_MODE_CHANGED_TO_SELECTIVE` | `AUDIT_CONFIGURATION` / configuration id | `SUCCESS` |
+| Any → `OFF` | `AUDIT_MODE_CHANGED_TO_OFF` | `AUDIT_CONFIGURATION` / configuration id | `SUCCESS` |
+| Rule changed to `QUERY_ONLY` | `AUDIT_READ_POLICY_RULE_CHANGED_TO_QUERY_ONLY` | `AUDIT_READ_POLICY` / `USER` or `ROLE` | `SUCCESS` |
+| Rule changed to `QUERY_AND_OBJECT` | `AUDIT_READ_POLICY_RULE_CHANGED_TO_QUERY_AND_OBJECT` | `AUDIT_READ_POLICY` / `USER` or `ROLE` | `SUCCESS` |
+| Rule removed | `AUDIT_READ_POLICY_RULE_CHANGED_TO_NONE` | `AUDIT_READ_POLICY` / `USER` or `ROLE` | `SUCCESS` |
 
 The actor is the authenticated administrator performing the change, with
 `SESSION` or `PAT` authentication. An operation that cannot resolve its actor
-fails; it never falls back to `SYSTEM`. The configuration update and the audit
-append share one transaction, so an append failure rolls back the mode change.
-A no-op update records no event. The cache reload is best-effort after commit
-and never changes the already committed outcome.
+fails; it never falls back to `SYSTEM`. The configuration update, read-policy
+replacement and their audit appends share one transaction, so an append failure
+rolls back the policy change. A no-op update records no event. The cache reload
+is best-effort after commit and never changes the already committed outcome.
 
 ### Authentication events (T1.6a)
 
-Authentication security outcomes are recorded only when the effective mode is
-`BASIC`. Under `OFF`, none of these events is appended.
+Authentication security outcomes are recorded when the effective mode is
+`BASIC` or `SELECTIVE`. Under `OFF`, none of these events is appended.
 
 | Operation | Action | Resource | Result | Guarantee |
 |---|---|---|---|---|
@@ -239,7 +325,7 @@ retained.
 ### Authorization denial events (T1.6b)
 
 An authenticated caller that is rejected by an authorization rule produces one
-`ACCESS_DENIED` event under `BASIC`:
+`ACCESS_DENIED` event under `BASIC` / `SELECTIVE`:
 
 | Operation | Action | Resource | Result | Guarantee |
 |---|---|---|---|---|
@@ -326,17 +412,18 @@ For a self-service username change, `actor_username` is the previous username
 snapshot. It intentionally differs from the new username stored on the user
 record.
 
-The event is recorded in the same transaction as the business change. When
-`BASIC` requires the event, a failure while inserting the event, calculating the
-hash chain or updating the chain head rolls back the business change. A
-successful `BASIC` operation must never leave the user changed without its audit
-event. This includes user creation, password reset token consumption, credential
-version increments, role replacement and pending-token invalidation.
+The event is recorded in the same transaction as the business change. When the
+effective mode requires the event, a failure while inserting the event,
+calculating the hash chain or updating the chain head rolls back the business
+change. A successful `BASIC` or `SELECTIVE` operation must never leave the user
+changed without its audit event. This includes user creation, password reset
+token consumption, credential version increments, role replacement and
+pending-token invalidation.
 
 The actor is resolved from the Spring Security context by infrastructure code
 for session and PAT operations. The PAT filter marks the request so the resolver
 can distinguish `PAT` from `SESSION` without changing the serialized principal.
-If an authenticated operation under `BASIC` cannot resolve its actor, the
+If an authenticated operation under a mode that requires the event cannot resolve its actor, the
 operation fails; it does not write a null actor or fall back to `SYSTEM`.
 Password recovery supplies its actor explicitly through the `AuditTrail` port;
 `SYSTEM` remains reserved for future internal processes.
@@ -356,19 +443,19 @@ SELECTIVE
 FULL
 ```
 
-`OFF` and `BASIC` exist today. `SELECTIVE` and `FULL` will eventually allow
-policy by resource type, action and read depth. Deep read auditing is expected
-to support:
+`OFF`, `BASIC` and `SELECTIVE` exist today. `SELECTIVE` adds read policy by
+resource type and read depth; `FULL` is deferred. The persisted levels are:
 
 ```text
 NONE
 QUERY_ONLY
-OBJECT
-EACH_RETURNED_OBJECT
+QUERY_AND_OBJECT
 ```
 
-A search returning many objects must not generate one event per object unless an
-explicit policy requires it.
+`NONE` means no row. `EACH_RETURNED_OBJECT` is a deferred level for future deep
+read auditing. A search returning many objects must not generate one event per
+object unless an explicit policy requires it. T1.7a stores the rules but does
+not yet emit read events.
 
 ## Read API (T1.4a)
 
@@ -426,10 +513,10 @@ UUIDs and unknown enum values return `400` with code `AUDIT_INVALID_QUERY` and a
 `field` property. An anonymous request returns `401`; an authenticated caller
 without `audit.read` returns `403`.
 
-Reads work independently of `OFF` / `BASIC`, and a read does not append an audit
-event. Auditing the read operation itself is deferred to `SELECTIVE` / `FULL`
-read-depth policy. T1.4a adds no speculative database index and no total-count
-metadata.
+Reads work independently of the effective audit mode, and a read does not
+append an audit event in T1.7a. Read event capture under `SELECTIVE` / `FULL`
+read-depth policy remains deferred. T1.4a adds no speculative database index and
+no total-count metadata.
 
 ## Verification API (T1.4b)
 
@@ -742,8 +829,10 @@ heads without gaining `UPDATE` or `DELETE` on `audit_event`.
 The following capabilities are intentionally deferred and must not be blocked by
 the current design:
 
-- `SELECTIVE` and `FULL` modes by resource type, action and read depth;
-- instrumentation of bootstrap, login, logout and password-reset requests;
+- the `FULL` mode;
+- read event capture under `SELECTIVE` / `FULL`, including
+  `EACH_RETURNED_OBJECT` and broader resource types;
+- instrumentation of bootstrap and password-reset request events;
 - atomic `SUCCESS` events for further business operations as they are
   instrumented;
 - an explicit strategy for `FAILURE` and `DENIED` events, separate from the
@@ -751,7 +840,6 @@ the current design:
 - the PAT identifier in audit events;
 - request/correlation identifiers;
 - `GET /api/admin/audit-events/{id}`;
-- auditing read operations under `SELECTIVE` / `FULL`;
 - retention state, `purge_after`, `legal_hold`, batched internal purge and purge
   summary events;
 - archive before purge, with a verifiable JSON Lines package:
