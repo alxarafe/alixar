@@ -23,5 +23,6 @@ public enum AuditAction {
     AUDIT_MODE_CHANGED_TO_OFF,
     LOGIN_SUCCEEDED,
     LOGIN_FAILED,
-    LOGOUT
+    LOGOUT,
+    ACCESS_DENIED
 }

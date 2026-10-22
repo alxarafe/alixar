@@ -1,11 +1,13 @@
 package es.alxarafe.alixar.audit.application;
 
 /**
- * Records authentication security outcomes with their specific guarantees.
+ * Records authentication and authorization security outcomes with their
+ * specific guarantees.
  *
- * <p>Successful login audit is mandatory and fail-closed. Login failures and
- * logout are recorded best-effort and isolated, so a failed append must never
- * change the authentication outcome or prevent session destruction.</p>
+ * <p>Successful login audit is mandatory and fail-closed. Login failures,
+ * logout and authorization denials are recorded best-effort and isolated, so a
+ * failed append must never change the original security outcome or prevent
+ * session destruction.</p>
  */
 public interface SecurityAuditTrail {
 
@@ -14,4 +16,6 @@ public interface SecurityAuditTrail {
     void loginFailed();
 
     void logout(AuditActor actor);
+
+    void accessDenied(AuditActor actor, String resourceId);
 }

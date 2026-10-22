@@ -79,8 +79,22 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    AccessDeniedHandler accessDeniedHandler() {
-        return (request, response, exception) -> response.sendError(HttpStatus.FORBIDDEN.value());
+    HttpAuditResourceFamilyClassifier httpAuditResourceFamilyClassifier() {
+        return new HttpAuditResourceFamilyClassifier();
+    }
+
+    @Bean
+    AccessDeniedHandler accessDeniedHandler(
+        SecurityAuditTrail securityAuditTrail,
+        SecurityContextAuditActorResolver auditActorResolver,
+        HttpAuditResourceFamilyClassifier httpAuditResourceFamilyClassifier
+    ) {
+        return new AuditedAccessDeniedHandler(
+            (request, response, exception) -> response.sendError(HttpStatus.FORBIDDEN.value()),
+            securityAuditTrail,
+            auditActorResolver,
+            httpAuditResourceFamilyClassifier
+        );
     }
 
     @Bean

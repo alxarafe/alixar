@@ -112,6 +112,10 @@ class AuthControllerAuditFailureTest {
                 @Override
                 public void logout(AuditActor actor) {
                 }
+
+                @Override
+                public void accessDenied(AuditActor actor, String resourceId) {
+                }
             };
         }
     }

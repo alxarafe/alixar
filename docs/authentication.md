@@ -60,8 +60,12 @@ T1.5a seeds the separate `audit.configure` permission and assigns it to
 T1.6a adds authentication security events under `BASIC`. Successful login
 records `LOGIN_SUCCEEDED` mandatorily; failed login records `LOGIN_FAILED`
 best-effort without any attempted identifier; logout records `LOGOUT`
-best-effort for the original authenticated user. These events require no new
-permission and do not change the authentication contract. See [Audit](audit.md).
+best-effort for the original authenticated user. T1.6b adds best-effort
+`ACCESS_DENIED` events for authenticated callers rejected by an authorization
+rule, using a static HTTP resource family rather than the raw path. CSRF
+rejections and anonymous denials are not audited. These events require no new
+permission and do not change the authentication or authorization contract. See
+[Audit](audit.md).
 
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
@@ -521,6 +525,14 @@ the general role namespace rule. Results:
 This applies identically to session and Bearer authentication. An invalid
 Bearer credential clears the session context and does not fall back to the
 session identity, so it cannot bypass authorization.
+
+Under `BASIC`, an authenticated request rejected by an authorization rule also
+records an isolated best-effort `ACCESS_DENIED` event. The event actor is the
+rejected `SESSION` or `PAT` principal. The resource is `HTTP_REQUEST` with a
+static family such as `PATCH /api/admin/users`, never the raw path or query.
+Unknown routes, anonymous requests and CSRF rejections are not audited. An
+audit failure never changes the `403` result. See
+[Audit](audit.md#authorization-denial-events-t16b).
 
 Method security is enabled. Operations can be protected with
 `@PreAuthorize("hasAuthority('users.manage')")` or

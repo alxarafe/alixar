@@ -18,9 +18,11 @@ T1.4b adds formal chain verification through HTTP. T1.5a adds the persisted
 audit configuration foundation and the `audit.configure` permission. T1.5b adds
 the administrative configuration API and mandatory policy-change events. T1.6a
 adds authentication security events for successful login, failed login and
-logout. Event detail, retention, archive and checkpoints remain out of scope.
+logout. T1.6b adds `ACCESS_DENIED` authorization events for authenticated
+callers rejected by an authorization rule. Event detail, retention, archive and
+checkpoints remain out of scope.
 
-## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b, T1.5a, T1.5b and T1.6a)
+## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b, T1.5a, T1.5b, T1.6a and T1.6b)
 
 Implemented:
 
@@ -57,15 +59,17 @@ Implemented:
   between `OFF` and `BASIC`;
 - `LOGIN_SUCCEEDED`, `LOGIN_FAILED` and `LOGOUT` authentication events under
   `BASIC`, with mandatory fail-closed success and isolated best-effort failure
-  and logout events.
+  and logout events;
+- `ACCESS_DENIED` authorization events under `BASIC` for authenticated callers
+  rejected by an authorization rule, using a static resource family instead of
+  the raw request path.
 
 Not implemented yet:
 
 - `SELECTIVE` / `FULL` audit modes;
 - the PAT identifier as part of the actor;
 - bootstrap and password-reset request events;
-- a general `FAILURE` / `DENIED` strategy beyond login failures, including
-  `ACCESS_DENIED` for permission denials;
+- CSRF-specific audit events, such as a future `CSRF_REJECTED`;
 - audit event detail through HTTP;
 - auditing read operations;
 - retention, purge and archive;
@@ -232,11 +236,43 @@ success and logout use the authenticated user id as both actor and resource id.
 `LOGIN_FAILED` has no actor because the attempted identity is deliberately not
 retained.
 
-Authorization failures are not part of T1.6a. A later slice will instrument
-`ACCESS_DENIED` only when an authenticated caller has a valid session or Bearer
-credential but is denied by an authorization rule. A CSRF rejection is not an
-`ACCESS_DENIED` event. The handling of anonymous generic `403` responses remains
-undecided.
+### Authorization denial events (T1.6b)
+
+An authenticated caller that is rejected by an authorization rule produces one
+`ACCESS_DENIED` event under `BASIC`:
+
+| Operation | Action | Resource | Result | Guarantee |
+|---|---|---|---|---|
+| Authenticated request denied by authorization | `ACCESS_DENIED` | `HTTP_REQUEST` / static resource family | `DENIED` | Isolated, best-effort |
+
+Only an Alixar `AuthenticatedUserPrincipal` with `SESSION` or `PAT`
+authentication produces the event. Anonymous requests, invalid or expired
+credentials and principals not owned by Alixar are not audited; they keep their
+existing `401` or generic `403` response.
+
+The resource id is `METHOD` plus a static resource family, for example:
+
+```text
+PATCH /api/admin/users
+PUT   /api/admin/roles
+GET   /api/admin/audit-events
+POST  /api/users/me/api-tokens
+```
+
+The raw path is never stored. Query strings, request bodies, headers, UUIDs,
+role codes and other path variables are excluded by construction. The
+classifier matches a known family only on an exact path or on a `/` boundary,
+and an unknown route is not audited. `/api/admin/usersXYZ` therefore does not
+match `/api/admin/users`.
+
+A CSRF rejection is not an `ACCESS_DENIED` event and records nothing in this
+slice. If CSRF auditing is required later, it must use a distinct action such
+as `CSRF_REJECTED` rather than overloading `ACCESS_DENIED`.
+
+The denial append is best-effort and isolated with `REQUIRES_NEW`. An actor
+resolution, classification, policy or append failure is logged and absorbed;
+the original `403` is always preserved, never replaced by `500` and never
+turned into access. Under `OFF`, no denial event is appended.
 
 Successful administrative user creation records exactly one event, including
 empty role assignments. Role assignment is not recorded as separate events.

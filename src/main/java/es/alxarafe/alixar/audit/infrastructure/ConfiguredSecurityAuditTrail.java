@@ -81,6 +81,21 @@ public class ConfiguredSecurityAuditTrail implements SecurityAuditTrail {
         );
     }
 
+    @Override
+    public void accessDenied(AuditActor actor, String resourceId) {
+        Objects.requireNonNull(actor, "actor");
+        Objects.requireNonNull(resourceId, "resourceId");
+        bestEffort(
+            actor.userId(),
+            actor.username(),
+            actor.authenticationType(),
+            AuditAction.ACCESS_DENIED,
+            AuditResourceType.HTTP_REQUEST,
+            resourceId,
+            AuditResult.DENIED
+        );
+    }
+
     private void bestEffort(
         UUID actorUserId,
         String actorUsername,
@@ -105,7 +120,7 @@ public class ConfiguredSecurityAuditTrail implements SecurityAuditTrail {
             ));
         } catch (RuntimeException exception) {
             LOGGER.warn(
-                "Could not append {} audit event; preserving authentication outcome",
+                "Could not append {} audit event; preserving original outcome",
                 action,
                 exception
             );

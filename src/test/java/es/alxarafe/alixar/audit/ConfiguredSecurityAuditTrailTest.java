@@ -47,6 +47,7 @@ class ConfiguredSecurityAuditTrailTest {
         auditTrail.loginSucceeded(ACTOR);
         auditTrail.loginFailed();
         auditTrail.logout(ACTOR);
+        auditTrail.accessDenied(ACTOR, "GET /api/admin/users");
 
         verifyNoInteractions(auditService);
     }
@@ -132,6 +133,40 @@ class ConfiguredSecurityAuditTrailTest {
         when(auditService.appendIsolated(any())).thenThrow(new IllegalStateException("database down"));
 
         assertThatCode(() -> auditTrail.logout(ACTOR)).doesNotThrowAnyException();
+    }
+
+    @Test
+    void basicMode_accessDeniedAppendsIsolatedHttpRequestEvent() {
+        when(policyProvider.currentMode()).thenReturn(AuditMode.BASIC);
+
+        auditTrail.accessDenied(ACTOR, "PATCH /api/admin/users");
+
+        AuditEventDraft draft = capturedIsolatedAppend();
+        assertThat(draft.actorUserId()).isEqualTo(ACTOR_ID);
+        assertThat(draft.actorUsername()).isEqualTo("alice");
+        assertThat(draft.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+        assertThat(draft.action()).isEqualTo(AuditAction.ACCESS_DENIED.name());
+        assertThat(draft.resourceType()).isEqualTo(AuditResourceType.HTTP_REQUEST.name());
+        assertThat(draft.resourceId()).isEqualTo("PATCH /api/admin/users");
+        assertThat(draft.result()).isEqualTo(AuditResult.DENIED);
+        verify(auditService, never()).append(any());
+    }
+
+    @Test
+    void basicMode_accessDeniedAppendFailureIsSwallowed() {
+        when(policyProvider.currentMode()).thenReturn(AuditMode.BASIC);
+        when(auditService.appendIsolated(any())).thenThrow(new IllegalStateException("database down"));
+
+        assertThatCode(() -> auditTrail.accessDenied(ACTOR, "GET /api/admin/users"))
+            .doesNotThrowAnyException();
+    }
+
+    @Test
+    void basicMode_accessDeniedPolicyFailureIsSwallowed() {
+        when(policyProvider.currentMode()).thenThrow(new IllegalStateException("policy unavailable"));
+
+        assertThatCode(() -> auditTrail.accessDenied(ACTOR, "GET /api/admin/users"))
+            .doesNotThrowAnyException();
     }
 
     private AuditEventDraft capturedAppend() {
