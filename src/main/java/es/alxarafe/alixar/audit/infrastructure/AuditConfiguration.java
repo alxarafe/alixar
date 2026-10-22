@@ -3,9 +3,11 @@ package es.alxarafe.alixar.audit.infrastructure;
 import es.alxarafe.alixar.audit.application.AuditActorResolver;
 import es.alxarafe.alixar.audit.application.AuditCanonicalEncoder;
 import es.alxarafe.alixar.audit.application.AuditChainVerifier;
+import es.alxarafe.alixar.audit.application.AuditConfigurationRepository;
 import es.alxarafe.alixar.audit.application.AuditEventAppender;
 import es.alxarafe.alixar.audit.application.AuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditHashCalculator;
+import es.alxarafe.alixar.audit.application.AuditPolicyProvider;
 import es.alxarafe.alixar.audit.application.AuditTrail;
 import es.alxarafe.alixar.audit.application.ListAuditEventsUseCase;
 import java.time.Clock;
@@ -67,14 +69,33 @@ public class AuditConfiguration {
     }
 
     @Bean
+    @ConditionalOnMissingBean(AuditConfigurationRepository.class)
+    AuditConfigurationRepository auditConfigurationRepository(DSLContext dsl) {
+        return new JooqAuditConfigurationRepository(dsl);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(CachedAuditPolicyProvider.class)
+    CachedAuditPolicyProvider auditPolicyProvider(
+        AuditConfigurationRepository auditConfigurationRepository,
+        Clock clock
+    ) {
+        return new CachedAuditPolicyProvider(
+            auditConfigurationRepository,
+            clock,
+            CachedAuditPolicyProvider.DEFAULT_REFRESH_INTERVAL
+        );
+    }
+
+    @Bean
     @ConditionalOnMissingBean(AuditTrail.class)
     AuditTrail auditTrail(
-        AuditProperties auditProperties,
+        AuditPolicyProvider auditPolicyProvider,
         AuditActorResolver auditActorResolver,
         TransactionalAuditService transactionalAuditService
     ) {
         return new ConfiguredAuditTrail(
-            auditProperties,
+            auditPolicyProvider,
             auditActorResolver,
             transactionalAuditService
         );

@@ -6,11 +6,11 @@ import es.alxarafe.alixar.audit.application.AuditActorResolver;
 import es.alxarafe.alixar.audit.application.AuditActorUnavailableException;
 import es.alxarafe.alixar.audit.application.AuditEventDraft;
 import es.alxarafe.alixar.audit.application.AuditMode;
+import es.alxarafe.alixar.audit.application.AuditPolicyProvider;
 import es.alxarafe.alixar.audit.application.AuditResourceType;
 import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import es.alxarafe.alixar.audit.domain.AuditChain;
 import es.alxarafe.alixar.audit.domain.AuditResult;
-import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
 import es.alxarafe.alixar.audit.infrastructure.ConfiguredAuditTrail;
 import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditService;
 import java.util.Optional;
@@ -29,15 +29,15 @@ class ConfiguredAuditTrailTest {
     private static final UUID ACTOR_ID = UUID.fromString("8f796219-e501-44e8-a4ab-4c014821ba58");
     private static final UUID RESOURCE_ID = UUID.fromString("3c15acbf-6e74-4af1-8cfe-1452a2935870");
 
-    private final AuditProperties properties = new AuditProperties();
+    private final AuditPolicyProvider policyProvider = mock(AuditPolicyProvider.class);
     private final AuditActorResolver actorResolver = mock(AuditActorResolver.class);
     private final TransactionalAuditService auditService = mock(TransactionalAuditService.class);
     private final ConfiguredAuditTrail auditTrail =
-        new ConfiguredAuditTrail(properties, actorResolver, auditService);
+        new ConfiguredAuditTrail(policyProvider, actorResolver, auditService);
 
     @Test
     void offMode_doesNotResolveActorOrBuildAnEvent() {
-        properties.setMode(AuditMode.OFF);
+        when(policyProvider.currentMode()).thenReturn(AuditMode.OFF);
 
         auditTrail.recordSuccess(AuditAction.USER_DISABLED, AuditResourceType.USER, RESOURCE_ID.toString());
 
@@ -46,7 +46,7 @@ class ConfiguredAuditTrailTest {
 
     @Test
     void basicMode_appendsSuccessfulEventForResolvedActor() {
-        properties.setMode(AuditMode.BASIC);
+        when(policyProvider.currentMode()).thenReturn(AuditMode.BASIC);
         AuditActor actor = new AuditActor(ACTOR_ID, "alice", AuditAuthenticationType.SESSION);
         when(actorResolver.resolveCurrentActor()).thenReturn(Optional.of(actor));
 
@@ -68,7 +68,7 @@ class ConfiguredAuditTrailTest {
 
     @Test
     void basicMode_withoutResolvedActor_failsWithoutAppending() {
-        properties.setMode(AuditMode.BASIC);
+        when(policyProvider.currentMode()).thenReturn(AuditMode.BASIC);
         when(actorResolver.resolveCurrentActor()).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> auditTrail.recordSuccess(
@@ -80,7 +80,7 @@ class ConfiguredAuditTrailTest {
     }
     @Test
     void offMode_withExplicitActorDoesNotAppendAnEvent() {
-        properties.setMode(AuditMode.OFF);
+        when(policyProvider.currentMode()).thenReturn(AuditMode.OFF);
         AuditActor actor = new AuditActor(ACTOR_ID, "alice", AuditAuthenticationType.RECOVERY_TOKEN);
 
         auditTrail.recordSuccess(
@@ -95,7 +95,7 @@ class ConfiguredAuditTrailTest {
 
     @Test
     void basicMode_withExplicitActorAppendsThatActorWithoutResolvingIt() {
-        properties.setMode(AuditMode.BASIC);
+        when(policyProvider.currentMode()).thenReturn(AuditMode.BASIC);
         AuditActor actor = new AuditActor(ACTOR_ID, "alice", AuditAuthenticationType.RECOVERY_TOKEN);
 
         auditTrail.recordSuccess(

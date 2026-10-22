@@ -1,6 +1,7 @@
 package es.alxarafe.alixar.authentication.api;
 
 import com.jayway.jsonpath.JsonPath;
+import es.alxarafe.alixar.audit.AuditModeTestSupport;
 import es.alxarafe.alixar.audit.InMemoryAuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditAction;
 import es.alxarafe.alixar.audit.application.AuditChainVerifier;
@@ -10,7 +11,6 @@ import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import es.alxarafe.alixar.audit.domain.AuditChain;
 import es.alxarafe.alixar.audit.domain.AuditEvent;
 import es.alxarafe.alixar.audit.domain.AuditResult;
-import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
 import es.alxarafe.alixar.authentication.AuthenticationTestConfig;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthenticationErrorCode;
@@ -73,7 +73,7 @@ class ApiTokenControllerTest {
     private TokenHasher tokenHasher;
 
     @Autowired
-    private AuditProperties auditProperties;
+    private AuditModeTestSupport auditMode;
 
     @Autowired
     private InMemoryAuditEventRepository auditEventRepository;
@@ -86,7 +86,7 @@ class ApiTokenControllerTest {
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
-        auditProperties.setMode(AuditMode.OFF);
+        auditMode.reset();
         auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
         Instant now = Instant.parse("2026-10-17T10:00:00Z");
         ((AuthenticationTestConfig.TestUserRepository) userRepository).replaceWith(
@@ -300,7 +300,7 @@ class ApiTokenControllerTest {
     @Test
     void basicAuditMode_creationAndRevocationRecordCanonicalEventsWithoutSecret() throws Exception {
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             MvcResult created = createToken(session, "ci-local", Instant.now().plusSeconds(3600))
@@ -331,7 +331,7 @@ class ApiTokenControllerTest {
             });
             assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 
@@ -340,7 +340,7 @@ class ApiTokenControllerTest {
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
         String rawToken = createRawToken(session, "ci-local", Instant.now().plusSeconds(3600));
         String tokenId = apiTokenRepository.findByTokenHash(tokenHasher.hash(rawToken)).orElseThrow().id().toString();
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             mockMvc.perform(delete(UserEndpoints.API_TOKENS_PATH + "/" + tokenId)
@@ -361,7 +361,7 @@ class ApiTokenControllerTest {
             });
             assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 

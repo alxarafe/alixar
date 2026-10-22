@@ -6,6 +6,7 @@ import es.alxarafe.alixar.audit.application.AuditActorResolver;
 import es.alxarafe.alixar.audit.application.AuditActorUnavailableException;
 import es.alxarafe.alixar.audit.application.AuditEventDraft;
 import es.alxarafe.alixar.audit.application.AuditMode;
+import es.alxarafe.alixar.audit.application.AuditPolicyProvider;
 import es.alxarafe.alixar.audit.application.AuditResourceType;
 import es.alxarafe.alixar.audit.application.AuditTrail;
 import es.alxarafe.alixar.audit.domain.AuditChain;
@@ -14,16 +15,16 @@ import java.util.Objects;
 
 public class ConfiguredAuditTrail implements AuditTrail {
 
-    private final AuditProperties properties;
+    private final AuditPolicyProvider policyProvider;
     private final AuditActorResolver actorResolver;
     private final TransactionalAuditService auditService;
 
     public ConfiguredAuditTrail(
-        AuditProperties properties,
+        AuditPolicyProvider policyProvider,
         AuditActorResolver actorResolver,
         TransactionalAuditService auditService
     ) {
-        this.properties = properties;
+        this.policyProvider = policyProvider;
         this.actorResolver = actorResolver;
         this.auditService = auditService;
     }
@@ -31,7 +32,7 @@ public class ConfiguredAuditTrail implements AuditTrail {
     @Override
     public void recordSuccess(AuditAction action, AuditResourceType resourceType, String resourceId) {
         requireArguments(action, resourceType, resourceId);
-        if (properties.getMode() == AuditMode.OFF) {
+        if (policyProvider.currentMode() == AuditMode.OFF) {
             return;
         }
 
@@ -49,7 +50,7 @@ public class ConfiguredAuditTrail implements AuditTrail {
     ) {
         requireArguments(action, resourceType, resourceId);
         Objects.requireNonNull(actor, "actor");
-        if (properties.getMode() == AuditMode.OFF) {
+        if (policyProvider.currentMode() == AuditMode.OFF) {
             return;
         }
 

@@ -50,7 +50,8 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   effective permissions resolved from persistence on every authenticated
   request, deny-by-default policy, and identical authorization for session and
   Bearer authentication. Built-in `system-admin` role with `users.manage`,
-  `roles.manage` and `audit.read`; read-only permission catalogue; role detail,
+  `roles.manage`, `audit.read` and `audit.configure`; read-only permission
+  catalogue; role detail,
   creation, rename, permission replacement and deletion of unassigned custom
   roles; administrative reads, creation of disabled users, username changes,
   enablement changes, password resets and full role replacement
@@ -65,21 +66,24 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   and a read-only `GET /api/admin/audit-events` API with chain-scoped keyset
   pagination and combinable filters. T1.4b adds chain verification at
   `/api/admin/audit-events/verification`, which verifies the chain under one
-  read-only repeatable-read snapshot. Event detail, `audit.configure`, read
-  auditing, the PAT identifier as actor, retention, archive and checkpoints are
-  not implemented yet. See [Audit](audit.md)
+  read-only repeatable-read snapshot. T1.5a adds the singleton persisted
+  `audit_configuration` table, with `alixar.audit.mode` used only to bootstrap
+  the first row, and seeds the `audit.configure` permission. Event detail, the
+  configuration API, policy-change events, read auditing, the PAT identifier as
+  actor, retention, archive and checkpoints are not implemented yet. See
+  [Audit](audit.md)
 
 ## Planned (Not Implemented)
 
-- `SELECTIVE` / `FULL` audit modes, `audit.configure`, the PAT identifier as
-  actor, audit event detail, read auditing, retention, purge, archive and signed
-  checkpoints
+- `SELECTIVE` / `FULL` audit modes, the audit configuration API and mandatory
+  policy-change events, the PAT identifier as actor, audit event detail, read
+  auditing, retention, purge, archive and signed checkpoints
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Email change with new-address verification
 - Role groups
 - PAT scopes and authorization for business capabilities beyond `users.manage`,
-  `roles.manage` and `audit.read`
+  `roles.manage`, `audit.read` and `audit.configure`
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - OpenAPI specification
@@ -177,22 +181,28 @@ Application code has no operation to update or delete an individual event. The
 verifier depends on a read-only `AuditChainSource` port rather than PostgreSQL or
 jOOQ, so the same verification core can later consume exported archives.
 
-The audit mode is infrastructure configuration (`alixar.audit.mode`, default
-`OFF`). In `BASIC`, explicitly instrumented successful operations record their
-event in the same transaction as the business change. The instrumented set
-includes administrative user lifecycle operations, self-service username and
-password changes, completed password recovery, Personal Access Token creation
-and revocation, and role creation, rename, permission replacement and deletion.
-The application layer depends on an `AuditTrail` port, not on environment
-variables or Spring Security. Authenticated operations resolve their actor
+The effective audit mode is persisted in the singleton `audit_configuration`
+table. `alixar.audit.mode` is a bootstrap-only value used when the table is
+empty; once a row exists the database is authoritative and an invalid bootstrap
+value is ignored rather than preventing startup. A local cache refreshed every
+15 seconds keeps the `OFF` path free of SQL per audited operation and introduces
+a temporary multi-node visibility delay. In `BASIC`, explicitly instrumented
+successful operations record their event in the same transaction as the business
+change. The instrumented set includes administrative user lifecycle operations,
+self-service username and password changes, completed password recovery,
+Personal Access Token creation and revocation, and role creation, rename,
+permission replacement and deletion. The application layer depends on an
+`AuditTrail` port and an `AuditPolicyProvider` port, not on environment variables,
+Spring Security or jOOQ. Authenticated operations resolve their actor
 implicitly; password recovery supplies an explicit `RECOVERY_TOKEN` actor. Every
 mandatory event is fail-closed. The `audit.read` permission, the read-only event
 query API and HTTP chain verification are implemented. Verification runs inside
 one read-only `REPEATABLE READ` transaction so its head and event reads share a
-consistent snapshot. Database-level append-only privileges, event detail,
-`audit.configure`, read auditing, the PAT identifier as actor, retention and
-signing are not implemented yet. See [Audit](audit.md) for the canonical format
-and deferred capabilities.
+consistent snapshot. The `audit.configure` permission is seeded, but the
+configuration API and mandatory policy-change events are not implemented yet.
+Database-level append-only privileges, event detail, read auditing, the PAT
+identifier as actor, retention and signing are also not implemented. See
+[Audit](audit.md) for the canonical format and deferred capabilities.
 
 ## Internationalization (i18n) Architecture
 

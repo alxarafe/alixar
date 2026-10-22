@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.authentication.api;
 
+import es.alxarafe.alixar.audit.AuditModeTestSupport;
 import es.alxarafe.alixar.audit.InMemoryAuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditAction;
 import es.alxarafe.alixar.audit.application.AuditChainVerifier;
@@ -9,7 +10,6 @@ import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import es.alxarafe.alixar.audit.domain.AuditChain;
 import es.alxarafe.alixar.audit.domain.AuditEvent;
 import es.alxarafe.alixar.audit.domain.AuditResult;
-import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
 import es.alxarafe.alixar.authentication.AuthenticationTestConfig;
 import es.alxarafe.alixar.authentication.application.AuthenticationErrorCode;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
@@ -72,7 +72,7 @@ class SelfServiceUserControllerTest {
     private TokenHasher tokenHasher;
 
     @Autowired
-    private AuditProperties auditProperties;
+    private AuditModeTestSupport auditMode;
 
     @Autowired
     private InMemoryAuditEventRepository auditEventRepository;
@@ -109,7 +109,7 @@ class SelfServiceUserControllerTest {
             )
         );
         ((AuthenticationTestConfig.TestPasswordResetTokenRepository) tokenRepository).replaceWith();
-        auditProperties.setMode(AuditMode.OFF);
+        auditMode.reset();
         auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
     }
 
@@ -207,7 +207,7 @@ class SelfServiceUserControllerTest {
     @Test
     void basicAuditMode_usernameChangeRecordsOldActorSnapshot() throws Exception {
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             patchUsername(session, "{\"username\":\"alice-renamed\"}")
@@ -224,14 +224,14 @@ class SelfServiceUserControllerTest {
             });
             assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 
     @Test
     void basicAuditMode_noOpUsernameChangeDoesNotRecordEvent() throws Exception {
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             patchUsername(session, "{\"username\":\"ALICE\"}")
@@ -240,7 +240,7 @@ class SelfServiceUserControllerTest {
 
             assertThat(auditEvents()).isEmpty();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 
@@ -274,7 +274,7 @@ class SelfServiceUserControllerTest {
     @Test
     void basicAuditMode_passwordChangeRecordsUserPasswordChangedWithoutSecrets() throws Exception {
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             changePassword(session, PASSWORD, NEW_PASSWORD)
@@ -292,7 +292,7 @@ class SelfServiceUserControllerTest {
             });
             assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 

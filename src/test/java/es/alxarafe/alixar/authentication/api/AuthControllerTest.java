@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.authentication.api;
 
+import es.alxarafe.alixar.audit.AuditModeTestSupport;
 import es.alxarafe.alixar.audit.InMemoryAuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditAction;
 import es.alxarafe.alixar.audit.application.AuditChainVerifier;
@@ -9,7 +10,6 @@ import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import es.alxarafe.alixar.audit.domain.AuditChain;
 import es.alxarafe.alixar.audit.domain.AuditEvent;
 import es.alxarafe.alixar.audit.domain.AuditResult;
-import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
 import es.alxarafe.alixar.authentication.AuthenticationTestConfig;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.UserRepository;
@@ -68,7 +68,7 @@ class AuthControllerTest {
     private TokenHasher tokenHasher;
 
     @Autowired
-    private AuditProperties auditProperties;
+    private AuditModeTestSupport auditMode;
 
     @Autowired
     private InMemoryAuditEventRepository auditEventRepository;
@@ -105,7 +105,7 @@ class AuthControllerTest {
             )
         );
         ((AuthenticationTestConfig.TestPasswordResetTokenRepository) tokenRepository).replaceWith();
-        auditProperties.setMode(AuditMode.OFF);
+        auditMode.reset();
         auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
     }
 
@@ -324,7 +324,7 @@ class AuthControllerTest {
     @Test
     void basicAuditMode_resetPasswordRecordsRecoveryActorWithoutSecrets() throws Exception {
         String newPassword = "new-secure-password-123";
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             resetPasswordForEnabledUser(newPassword);
@@ -341,14 +341,14 @@ class AuthControllerTest {
             });
             assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 
     @Test
     void basicAuditMode_forgotPasswordDoesNotRecordEvent() throws Exception {
         Cookie csrfCookie = csrfCookieFromSafeRequest();
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             mockMvc.perform(post("/api/auth/password/forgot")
@@ -360,7 +360,7 @@ class AuthControllerTest {
 
             assertThat(auditEvents()).isEmpty();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 

@@ -22,12 +22,13 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
 - **Flyway 12.4.0**: Managed by Spring Boot 4.1.1; applies the authentication
   user, password recovery, Personal Access Token, role-based authorization,
   role-administration authorization, audit integrity-core, recovery-token
-  audit-authentication and audit-read authorization migrations
+  audit-authentication, audit-read authorization and persisted
+  audit-configuration migrations
 - **jOOQ runtime**: PostgreSQL dialect and Spring-provided `DSLContext` verified
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 280 deterministic tests and 53 PostgreSQL integration tests remain
+  the 291 deterministic tests and 59 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -62,8 +63,8 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   roles. Role changes take effect on the next authenticated request for both
   session and Bearer authentication, without changing `credentials_version`,
   invalidating sessions or revoking PATs. Built-in `system-admin` role contains
-  `users.manage`, `roles.manage` and `audit.read`; there are no per-user
-  overrides, explicit `DENY`, role hierarchy or role groups
+  `users.manage`, `roles.manage`, `audit.read` and `audit.configure`; there are
+  no per-user overrides, explicit `DENY`, role hierarchy or role groups
 - **Administrative authorization management**: `GET /api/admin/roles` is
   available with `users.manage` or `roles.manage`; role detail, creation, rename,
   permission replacement and deletion, together with the read-only
@@ -112,9 +113,13 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   v1, transactional `SELECT ... FOR UPDATE` chain-head locking, and an
   independent verifier. PostgreSQL tests append concurrently and tamper directly
   with rows to prove that verification fails.
-- **Audit policy and instrumentation (T1.2, T1.3a and T1.3b)**: `OFF` (default)
-  and `BASIC` modes configured through `alixar.audit.mode` /
-  `ALIXAR_AUDIT_MODE`. Administrative enable/disable records `USER_DISABLED` /
+- **Audit policy and instrumentation (T1.2, T1.3a, T1.3b and T1.5a)**: `OFF`
+  (default) and `BASIC` modes persisted in the singleton `audit_configuration`
+  table. `alixar.audit.mode` / `ALIXAR_AUDIT_MODE` is a first-start bootstrap
+  value only; once the row exists the database is authoritative and an invalid
+  bootstrap value is ignored. A local 15-second cache keeps `OFF` free of SQL
+  per audited operation, with a documented temporary multi-node visibility
+  delay. Administrative enable/disable records `USER_DISABLED` /
   `USER_ENABLED` only on real transitions. T1.3a adds atomic `SUCCESS` events for
   administrative user creation, username changes, password resets and role
   replacement, self-service username/password changes, and completed password
@@ -142,8 +147,10 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   Invalid chains return `200` with a stable `failure` identifier, verified-event
   count and optional failed sequence; verification never repairs the chain.
   Reads and verification work when the audit mode is `OFF` and do not append
-  events. Event detail, read auditing, retention, archive and checkpoints are
-  not implemented yet. See [Audit](audit.md)
+  events. T1.5a seeds the `audit.configure` permission for `system-admin` but
+  does not expose the configuration API or policy-change events yet. Event
+  detail, read auditing, retention, archive and checkpoints are not implemented
+  yet. See [Audit](audit.md)
 
 ## Transitional integrations
 
@@ -169,10 +176,11 @@ See [Development](development.md) for full validation workflow details.
 
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
 - Role groups, PAT scopes and authorization for business capabilities beyond
-  `users.manage`, `roles.manage` and `audit.read`
-- `SELECTIVE` / `FULL` audit modes, `audit.configure`, bootstrap/login/logout
-  and failed-action events, audit event detail, read auditing, retention,
-  purging, archive and signed checkpoints
+  `users.manage`, `roles.manage`, `audit.read` and `audit.configure`
+- `SELECTIVE` / `FULL` audit modes, the audit configuration API and mandatory
+  policy-change events, bootstrap/login/logout and failed-action events, audit
+  event detail, read auditing, retention, purging, archive and signed
+  checkpoints
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - Administration of other users' API tokens

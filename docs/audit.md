@@ -14,10 +14,12 @@ and the first instrumented administrative operation. T1.3a extends `BASIC` to
 administrative user lifecycle operations, self-service credential changes,
 completed password recovery, Personal Access Token lifecycle and role
 administration. T1.4a adds a read-only query API protected by `audit.read`.
-T1.4b adds formal chain verification through HTTP. Event detail, retention,
-archive and checkpoints remain out of scope.
+T1.4b adds formal chain verification through HTTP. T1.5a adds the persisted
+audit configuration foundation and the `audit.configure` permission. Event
+detail, the configuration API, policy-change events, retention, archive and
+checkpoints remain out of scope.
 
-## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a and T1.4b)
+## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b and T1.5a)
 
 Implemented:
 
@@ -29,7 +31,10 @@ Implemented:
 - transactional chain-head locking with `SELECT ... FOR UPDATE`;
 - independent chain verifier;
 - PostgreSQL integration and tamper tests;
-- `OFF` / `BASIC` audit policy configured through `alixar.audit.mode`;
+- `OFF` / `BASIC` audit policy persisted in the singleton
+  `audit_configuration` table, with `alixar.audit.mode` used only as the
+  first-start bootstrap value;
+- `audit.configure` permission seeded and assigned to `system-admin`;
 - atomic `SUCCESS` events for administrative user enable/disable;
 - atomic `SUCCESS` events for administrative user creation, username changes,
   password resets and role replacement;
@@ -48,7 +53,7 @@ Implemented:
 Not implemented yet:
 
 - `SELECTIVE` / `FULL` audit modes;
-- `audit.configure` permission;
+- the audit configuration API and mandatory policy-change events;
 - the PAT identifier as part of the actor;
 - bootstrap, login, logout and password-reset request events;
 - `FAILURE` and `DENIED` event strategy;
@@ -74,7 +79,8 @@ BASIC
 It currently covers only the events listed below. Additional capabilities must
 be instrumented explicitly in later slices.
 
-The mode is infrastructure configuration:
+The effective mode is stored in the singleton `audit_configuration` table. On
+the first start, before that row exists, the bootstrap value is read from:
 
 ```text
 alixar.audit.mode
@@ -82,9 +88,32 @@ ALIXAR_AUDIT_MODE
 ```
 
 The default is `OFF`, so existing deployments do not start writing audit events
-until the mode is enabled. Values other than `OFF` and `BASIC` prevent startup.
-In `OFF`, the operation does not resolve an actor, build an `AuditEvent`, encode
-the canonical representation or enter the appender.
+until the mode is enabled. Once `audit_configuration` contains a row, the
+database is authoritative: `alixar.audit.mode` is ignored, including an invalid
+value. An invalid bootstrap value fails startup only when no persisted row
+exists. In `OFF`, the operation does not resolve an actor, build an
+`AuditEvent`, encode the canonical representation or enter the appender.
+
+### Persisted configuration (T1.5a)
+
+`audit_configuration` holds at most one row. It stores the mode and an
+`updated_at` timestamp. The row is created by the application bootstrap using a
+race-safe insert that never overwrites an existing row.
+
+Runtime readers use a local in-memory cache refreshed every 15 seconds, so the
+normal `OFF` path performs no SQL per audited operation. The cache is local to
+each process: another node can take up to 15 seconds to observe a persisted
+change. This is a documented temporary multi-node limitation, not a distributed
+cache or a definitive consistency mechanism. If a scheduled refresh fails, the
+provider keeps the last successfully loaded mode and logs a warning rather than
+guessing a different policy.
+
+The T1.5a foundation does not expose a configuration API or write policy-change
+audit events. The `audit.configure` permission is seeded and assigned to
+`system-admin` so the later configuration API can use it without a migration
+change. The existing `audit.read` permission remains separate, and reads,
+verification and the future configuration capability work independently of
+`OFF`.
 
 ## Instrumented events (T1.3a and T1.3b)
 
@@ -575,8 +604,7 @@ The following capabilities are intentionally deferred and must not be blocked by
 the current design:
 
 - `SELECTIVE` and `FULL` modes by resource type, action and read depth;
-- `audit.configure` permission supplied by migration when a real configuration
-  capability exists;
+- the audit configuration API and mandatory policy-change events (T1.5b);
 - instrumentation of bootstrap, login, logout and password-reset requests;
 - atomic `SUCCESS` events for further business operations as they are
   instrumented;

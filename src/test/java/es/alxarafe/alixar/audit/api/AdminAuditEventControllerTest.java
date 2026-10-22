@@ -1,17 +1,16 @@
 package es.alxarafe.alixar.audit.api;
 
+import es.alxarafe.alixar.audit.AuditModeTestSupport;
 import es.alxarafe.alixar.audit.InMemoryAuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditAction;
 import es.alxarafe.alixar.audit.application.AuditEventAppender;
 import es.alxarafe.alixar.audit.application.AuditEventDraft;
 import es.alxarafe.alixar.audit.application.AuditEventQuery;
-import es.alxarafe.alixar.audit.application.AuditMode;
 import es.alxarafe.alixar.audit.application.AuditResourceType;
 import es.alxarafe.alixar.audit.application.AuditVerificationFailure;
 import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import es.alxarafe.alixar.audit.domain.AuditChain;
 import es.alxarafe.alixar.audit.domain.AuditResult;
-import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
 import es.alxarafe.alixar.authentication.AuthenticationTestConfig;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
@@ -77,7 +76,7 @@ class AdminAuditEventControllerTest {
     private AuditEventAppender auditEventAppender;
 
     @Autowired
-    private AuditProperties auditProperties;
+    private AuditModeTestSupport auditMode;
 
     private MockMvc mockMvc;
 
@@ -85,7 +84,7 @@ class AdminAuditEventControllerTest {
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         SecurityContextHolder.clearContext();
-        auditProperties.setMode(AuditMode.OFF);
+        auditMode.reset();
         auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
         Instant now = Instant.parse("2026-10-21T10:00:00Z");
         ((AuthenticationTestConfig.TestUserRepository) userRepository).replaceWith(
@@ -319,7 +318,7 @@ class AdminAuditEventControllerTest {
         grantAuditRead(BOB_ID);
         MockHttpSession session = authenticatedSession("bob", PASSWORD);
         int countBefore = auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID).size();
-        auditProperties.setMode(AuditMode.OFF);
+        auditMode.reset();
 
         try {
             mockMvc.perform(get(AuditEndpoints.BASE_PATH).session(session))
@@ -328,7 +327,7 @@ class AdminAuditEventControllerTest {
 
             assertThat(auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID)).hasSize(countBefore);
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 

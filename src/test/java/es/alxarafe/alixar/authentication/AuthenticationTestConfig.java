@@ -288,7 +288,8 @@ public class AuthenticationTestConfig {
                 new LinkedHashSet<>(Set.of(
                     PermissionCodes.USERS_MANAGE,
                     PermissionCodes.ROLES_MANAGE,
-                    PermissionCodes.AUDIT_READ
+                    PermissionCodes.AUDIT_READ,
+                    PermissionCodes.AUDIT_CONFIGURE
                 ))
             );
         }
@@ -355,6 +356,7 @@ public class AuthenticationTestConfig {
         @Override
         public List<PermissionDefinition> findAllPermissions() {
             return List.of(
+                new PermissionDefinition(PermissionCodes.AUDIT_CONFIGURE, "Configure audit policy"),
                 new PermissionDefinition(PermissionCodes.AUDIT_READ, "Read audit events"),
                 new PermissionDefinition(
                     PermissionCodes.ROLES_MANAGE,

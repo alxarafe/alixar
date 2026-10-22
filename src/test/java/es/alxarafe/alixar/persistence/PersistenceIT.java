@@ -20,7 +20,9 @@ import es.alxarafe.alixar.audit.domain.AuditChain;
 import es.alxarafe.alixar.audit.domain.AuditChainHead;
 import es.alxarafe.alixar.audit.domain.AuditEvent;
 import es.alxarafe.alixar.audit.domain.AuditResult;
+import es.alxarafe.alixar.audit.infrastructure.AuditConfigurationBootstrap;
 import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
+import es.alxarafe.alixar.audit.infrastructure.CachedAuditPolicyProvider;
 import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditService;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
@@ -104,6 +106,7 @@ class PersistenceIT {
     private static final String USER_ROLE_TABLE = "authentication_user_role";
     private static final String AUDIT_HEAD_TABLE = "audit_chain_head";
     private static final String AUDIT_EVENT_TABLE = "audit_event";
+    private static final String AUDIT_CONFIGURATION_TABLE = "audit_configuration";
     private static final UUID AUDIT_CHAIN_ID = AuditChain.DEFAULT_CHAIN_ID;
 
     @Autowired
@@ -169,6 +172,12 @@ class PersistenceIT {
     @Autowired
     private AuditProperties auditProperties;
 
+    @Autowired
+    private CachedAuditPolicyProvider auditPolicyProvider;
+
+    @Autowired
+    private AuditConfigurationBootstrap auditConfigurationBootstrap;
+
     @Test
     void bootIntegratesPostgresqlFlywayJooqAndAuthenticationMigration() throws Exception {
         try (var connection = dataSource.getConnection()) {
@@ -176,8 +185,8 @@ class PersistenceIT {
                 .startsWith(POSTGRESQL_VERSION);
         }
         assertThat(flyway.getConfiguration().getDataSource()).isSameAs(dataSource);
-        assertThat(flyway.info().all()).hasSize(8);
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("8");
+        assertThat(flyway.info().all()).hasSize(9);
+        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("9");
         assertThat(dsl.selectOne().fetchSingle().value1()).isEqualTo(1);
         assertThat(dsl.fetch("select tablename from pg_catalog.pg_tables where schemaname = current_schema()")
             .getValues(0, String.class)).containsExactlyInAnyOrder(
@@ -190,10 +199,11 @@ class PersistenceIT {
                 ROLE_PERMISSION_TABLE,
                 USER_ROLE_TABLE,
                 AUDIT_HEAD_TABLE,
-                AUDIT_EVENT_TABLE
+                AUDIT_EVENT_TABLE,
+                AUDIT_CONFIGURATION_TABLE
             );
         assertThat(dsl.fetchCount(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(HISTORY_TABLE))))
-            .isEqualTo(8);
+            .isEqualTo(9);
     }
 
     @Test
@@ -907,7 +917,8 @@ class PersistenceIT {
             .containsExactlyInAnyOrder(
                 PermissionCodes.USERS_MANAGE,
                 PermissionCodes.ROLES_MANAGE,
-                PermissionCodes.AUDIT_READ
+                PermissionCodes.AUDIT_READ,
+                PermissionCodes.AUDIT_CONFIGURE
             );
         assertThat(dsl.fetch("select code from authentication_role").getValues(0, String.class))
             .contains(RoleCodes.SYSTEM_ADMIN);
@@ -915,7 +926,8 @@ class PersistenceIT {
             .containsExactlyInAnyOrder(
                 PermissionCodes.USERS_MANAGE,
                 PermissionCodes.ROLES_MANAGE,
-                PermissionCodes.AUDIT_READ
+                PermissionCodes.AUDIT_READ,
+                PermissionCodes.AUDIT_CONFIGURE
             );
         assertThat(dsl.fetch(
             "select built_in from authentication_role where code = ?",
@@ -927,6 +939,7 @@ class PersistenceIT {
     void rbacPermissionCatalogue_isSortedAndIncludesRoleAdministration() {
         assertThat(authorizationRepository.findAllPermissions())
             .containsExactly(
+                new PermissionDefinition(PermissionCodes.AUDIT_CONFIGURE, "Configure audit policy"),
                 new PermissionDefinition(PermissionCodes.AUDIT_READ, "Read audit events"),
                 new PermissionDefinition(
                     PermissionCodes.ROLES_MANAGE,
@@ -1076,6 +1089,7 @@ class PersistenceIT {
             assertThat(builtIn.name()).isEqualTo("System administrator");
             assertThat(builtIn.builtIn()).isTrue();
             assertThat(builtIn.permissionCodes()).containsExactly(
+                PermissionCodes.AUDIT_CONFIGURE,
                 PermissionCodes.AUDIT_READ,
                 PermissionCodes.ROLES_MANAGE,
                 PermissionCodes.USERS_MANAGE
@@ -1161,6 +1175,7 @@ class PersistenceIT {
                     PermissionCodes.USERS_MANAGE,
                     PermissionCodes.ROLES_MANAGE,
                     PermissionCodes.AUDIT_READ,
+                    PermissionCodes.AUDIT_CONFIGURE,
                     permissionCode
                 );
         } finally {
@@ -1184,7 +1199,8 @@ class PersistenceIT {
                 .containsExactlyInAnyOrder(
                     PermissionCodes.USERS_MANAGE,
                     PermissionCodes.ROLES_MANAGE,
-                    PermissionCodes.AUDIT_READ
+                    PermissionCodes.AUDIT_READ,
+                    PermissionCodes.AUDIT_CONFIGURE
                 );
             assertThat(dsl.selectCount()
                 .from(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(USER_ROLE_TABLE)))
@@ -1728,7 +1744,7 @@ class PersistenceIT {
         String resetTokenHash = tokenHasher.hash(PasswordResetTokenGenerator.generate());
 
         resetAuditChain();
-        auditProperties.setMode(AuditMode.BASIC);
+        setAuditMode(AuditMode.BASIC);
         try {
             userRepository.create(new User(
                 userId,
@@ -1766,7 +1782,7 @@ class PersistenceIT {
                 org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_EVENT_TABLE))
             )).isZero();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            setAuditMode(AuditMode.OFF);
             resetAuditChain();
             deleteUser(userId);
         }
@@ -1778,7 +1794,7 @@ class PersistenceIT {
         String suffix = UUID.randomUUID().toString();
         String username = "audit-create-" + suffix;
         resetAuditChain();
-        auditProperties.setMode(AuditMode.BASIC);
+        setAuditMode(AuditMode.BASIC);
         try {
             deleteAuditChainHead();
 
@@ -1794,7 +1810,7 @@ class PersistenceIT {
                 org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_EVENT_TABLE))
             )).isZero();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            setAuditMode(AuditMode.OFF);
             resetAuditChain();
         }
     }
@@ -1807,7 +1823,7 @@ class PersistenceIT {
         String tokenHash = tokenHasher.hash(PasswordResetTokenGenerator.generate());
 
         resetAuditChain();
-        auditProperties.setMode(AuditMode.BASIC);
+        setAuditMode(AuditMode.BASIC);
         try {
             userRepository.create(new User(
                 userId,
@@ -1840,7 +1856,7 @@ class PersistenceIT {
             assertThat(passwordResetTokenRepository.findByTokenHash(tokenHash).orElseThrow().isUsed())
                 .isFalse();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            setAuditMode(AuditMode.OFF);
             resetAuditChain();
             deleteUser(userId);
         }
@@ -1853,7 +1869,7 @@ class PersistenceIT {
         String username = "audit-admin-roles-" + userId;
 
         resetAuditChain();
-        auditProperties.setMode(AuditMode.BASIC);
+        setAuditMode(AuditMode.BASIC);
         try {
             userRepository.create(new User(
                 userId,
@@ -1874,7 +1890,7 @@ class PersistenceIT {
             assertThat(authorizationRepository.findRoleCodesForUser(userId))
                 .containsExactly(RoleCodes.SYSTEM_ADMIN);
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            setAuditMode(AuditMode.OFF);
             resetAuditChain();
             deleteUser(userId);
         }
@@ -1888,7 +1904,7 @@ class PersistenceIT {
         String tokenHash = tokenHasher.hash(PasswordResetTokenGenerator.generate());
 
         resetAuditChain();
-        auditProperties.setMode(AuditMode.BASIC);
+        setAuditMode(AuditMode.BASIC);
         try {
             userRepository.create(new User(
                 userId,
@@ -1922,7 +1938,7 @@ class PersistenceIT {
             assertThat(passwordResetTokenRepository.findByTokenHash(tokenHash).orElseThrow().isUsed())
                 .isFalse();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            setAuditMode(AuditMode.OFF);
             resetAuditChain();
             deleteUser(userId);
         }
@@ -1937,7 +1953,7 @@ class PersistenceIT {
         String tokenHash = tokenHasher.hash(rawToken);
 
         resetAuditChain();
-        auditProperties.setMode(AuditMode.BASIC);
+        setAuditMode(AuditMode.BASIC);
         try {
             userRepository.create(new User(
                 userId,
@@ -1970,7 +1986,7 @@ class PersistenceIT {
             assertThat(passwordResetTokenRepository.findByTokenHash(tokenHash).orElseThrow().isUsed())
                 .isFalse();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            setAuditMode(AuditMode.OFF);
             resetAuditChain();
             deleteUser(userId);
         }
@@ -1982,7 +1998,7 @@ class PersistenceIT {
         Instant now = Instant.now();
 
         resetAuditChain();
-        auditProperties.setMode(AuditMode.BASIC);
+        setAuditMode(AuditMode.BASIC);
         try {
             userRepository.create(new User(
                 userId,
@@ -2007,7 +2023,7 @@ class PersistenceIT {
                 org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_EVENT_TABLE))
             )).isZero();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            setAuditMode(AuditMode.OFF);
             resetAuditChain();
             deleteUser(userId);
         }
@@ -2018,14 +2034,14 @@ class PersistenceIT {
         String roleCode = "audit-permissions-role";
 
         resetAuditChain();
-        auditProperties.setMode(AuditMode.OFF);
+        setAuditMode(AuditMode.OFF);
         try {
             transactionalAdminRoleService.create(
                 roleCode,
                 "Audited permissions role",
                 List.of(PermissionCodes.USERS_MANAGE)
             );
-            auditProperties.setMode(AuditMode.BASIC);
+            setAuditMode(AuditMode.BASIC);
             deleteAuditChainHead();
 
             assertThatThrownBy(() -> transactionalAdminRoleService.replacePermissions(
@@ -2039,7 +2055,7 @@ class PersistenceIT {
                 org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_EVENT_TABLE))
             )).isZero();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            setAuditMode(AuditMode.OFF);
             resetAuditChain();
             dsl.query("delete from authentication_role where code = ?", roleCode).execute();
         }
@@ -2050,10 +2066,10 @@ class PersistenceIT {
         String roleCode = "audit-deleted-role";
 
         resetAuditChain();
-        auditProperties.setMode(AuditMode.OFF);
+        setAuditMode(AuditMode.OFF);
         try {
             transactionalAdminRoleService.create(roleCode, "Audited deleted role", List.of());
-            auditProperties.setMode(AuditMode.BASIC);
+            setAuditMode(AuditMode.BASIC);
             deleteAuditChainHead();
 
             assertThatThrownBy(() -> transactionalAdminRoleService.delete(roleCode))
@@ -2061,7 +2077,7 @@ class PersistenceIT {
 
             assertThat(authorizationRepository.findRoleByCode(roleCode)).isPresent();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            setAuditMode(AuditMode.OFF);
             resetAuditChain();
             dsl.query("delete from authentication_role where code = ?", roleCode).execute();
         }
@@ -2075,7 +2091,7 @@ class PersistenceIT {
         String roleCode = "audit-token-role";
 
         resetAuditChain();
-        auditProperties.setMode(AuditMode.OFF);
+        setAuditMode(AuditMode.OFF);
         try {
             userRepository.create(new User(
                 userId,
@@ -2088,7 +2104,7 @@ class PersistenceIT {
                 now
             ));
 
-            auditProperties.setMode(AuditMode.BASIC);
+            setAuditMode(AuditMode.BASIC);
             var createdToken = transactionalApiTokenService.create(
                 userId,
                 "audited-token",
@@ -2141,7 +2157,7 @@ class PersistenceIT {
             );
             assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            setAuditMode(AuditMode.OFF);
             resetAuditChain();
             dsl.query("delete from authentication_role where code = ?", roleCode).execute();
             deleteUser(userId);
@@ -2154,7 +2170,7 @@ class PersistenceIT {
         UUID createdId = null;
 
         resetAuditChain();
-        auditProperties.setMode(AuditMode.BASIC);
+        setAuditMode(AuditMode.BASIC);
         try {
             var created = transactionalAdminUserService.create(
                 "audit-chain-" + suffix,
@@ -2241,12 +2257,111 @@ class PersistenceIT {
             assertThat(events.getValues("resource_id", String.class)).containsOnly(createdId.toString());
             assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            setAuditMode(AuditMode.OFF);
             resetAuditChain();
             if (createdId != null) {
                 deleteUser(createdId);
             }
         }
+    }
+
+    @Test
+    void auditConfiguration_isBootstrappedWithDefaultModeAndSingleRow() {
+        assertThat(persistedAuditConfigurationCount()).isEqualTo(1);
+        assertThat(persistedAuditMode()).isEqualTo(AuditMode.OFF);
+        assertThat(persistedAuditUpdatedAt()).isNotNull();
+        assertThat(auditPolicyProvider.currentMode()).isEqualTo(AuditMode.OFF);
+    }
+
+    @Test
+    void auditConfiguration_persistedModeIsAuthoritativeOverBootstrapProperty() {
+        setAuditMode(AuditMode.OFF);
+        java.time.OffsetDateTime before = persistedAuditUpdatedAt();
+        auditProperties.setMode(AuditMode.BASIC.name());
+        try {
+            auditConfigurationBootstrap.initialize();
+
+            assertThat(persistedAuditMode()).isEqualTo(AuditMode.OFF);
+            assertThat(persistedAuditUpdatedAt()).isEqualTo(before);
+            assertThat(auditPolicyProvider.currentMode()).isEqualTo(AuditMode.OFF);
+        } finally {
+            auditProperties.setMode(AuditMode.OFF.name());
+        }
+    }
+
+    @Test
+    void auditConfiguration_bootstrapCreatesMissingRowFromProperty() {
+        deleteAuditConfiguration();
+        auditProperties.setMode(AuditMode.BASIC.name());
+        try {
+            auditConfigurationBootstrap.initialize();
+
+            assertThat(persistedAuditConfigurationCount()).isEqualTo(1);
+            assertThat(persistedAuditMode()).isEqualTo(AuditMode.BASIC);
+            assertThat(auditPolicyProvider.currentMode()).isEqualTo(AuditMode.BASIC);
+        } finally {
+            auditProperties.setMode(AuditMode.OFF.name());
+            setAuditMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void auditConfiguration_bootstrapFailsWithInvalidPropertyOnlyWhenRowIsMissing() {
+        deleteAuditConfiguration();
+        auditProperties.setMode("INVALID");
+        try {
+            assertThatThrownBy(auditConfigurationBootstrap::initialize)
+                .isInstanceOf(IllegalArgumentException.class);
+            assertThat(persistedAuditConfigurationCount()).isZero();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF.name());
+            setAuditMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void auditConfiguration_bootstrapIgnoresInvalidPropertyWhenRowExists() {
+        setAuditMode(AuditMode.BASIC);
+        auditProperties.setMode("INVALID");
+        try {
+            auditConfigurationBootstrap.initialize();
+
+            assertThat(persistedAuditMode()).isEqualTo(AuditMode.BASIC);
+            assertThat(auditPolicyProvider.currentMode()).isEqualTo(AuditMode.BASIC);
+        } finally {
+            auditProperties.setMode(AuditMode.OFF.name());
+            setAuditMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void auditConfiguration_enforcesSingletonRow() {
+        assertThatThrownBy(() -> dsl.query(
+            "insert into audit_configuration (id, singleton, mode) values (?, true, 'BASIC')",
+            UUID.randomUUID()
+        ).execute()).isInstanceOf(DuplicateKeyException.class);
+    }
+
+    private AuditMode persistedAuditMode() {
+        return AuditMode.valueOf(
+            dsl.fetch("select mode from audit_configuration").getValues(0, String.class).get(0)
+        );
+    }
+
+    private java.time.OffsetDateTime persistedAuditUpdatedAt() {
+        return dsl.fetch("select updated_at from audit_configuration")
+            .getValues(0, java.time.OffsetDateTime.class)
+            .get(0);
+    }
+
+    private int persistedAuditConfigurationCount() {
+        return dsl.fetchCount(
+            org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_CONFIGURATION_TABLE))
+        );
+    }
+
+    private void deleteAuditConfiguration() {
+        dsl.query("delete from audit_configuration").execute();
     }
 
     private void deleteAuditChainHead() {
@@ -2258,7 +2373,47 @@ class PersistenceIT {
 
     @AfterEach
     void resetAuditMode() {
-        auditProperties.setMode(AuditMode.OFF);
+        setAuditMode(AuditMode.OFF);
+    }
+
+    private void setAuditMode(AuditMode mode) {
+        var configurationTable = org.jooq.impl.DSL.table(
+            org.jooq.impl.DSL.name(AUDIT_CONFIGURATION_TABLE)
+        );
+        var modeField = org.jooq.impl.DSL.field(
+            org.jooq.impl.DSL.name(AUDIT_CONFIGURATION_TABLE, "mode"),
+            String.class
+        );
+        var updatedAtField = org.jooq.impl.DSL.field(
+            org.jooq.impl.DSL.name(AUDIT_CONFIGURATION_TABLE, "updated_at"),
+            java.time.OffsetDateTime.class
+        );
+        java.time.OffsetDateTime now = java.time.OffsetDateTime.now();
+        int updated = dsl.update(configurationTable)
+            .set(modeField, mode.name())
+            .set(updatedAtField, now)
+            .execute();
+        if (updated == 0) {
+            dsl.insertInto(configurationTable)
+                .set(
+                    org.jooq.impl.DSL.field(
+                        org.jooq.impl.DSL.name(AUDIT_CONFIGURATION_TABLE, "id"),
+                        UUID.class
+                    ),
+                    UUID.randomUUID()
+                )
+                .set(
+                    org.jooq.impl.DSL.field(
+                        org.jooq.impl.DSL.name(AUDIT_CONFIGURATION_TABLE, "singleton"),
+                        Boolean.class
+                    ),
+                    true
+                )
+                .set(modeField, mode.name())
+                .set(updatedAtField, now)
+                .execute();
+        }
+        auditPolicyProvider.reload();
     }
 
     private void assertAuditVerificationFails(AuditVerificationFailure failure, long sequence) {

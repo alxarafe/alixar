@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AuditPropertiesTest {
 
@@ -16,18 +17,38 @@ class AuditPropertiesTest {
 
     @Test
     void defaultsToOff() {
-        contextRunner.run(context ->
-            assertThat(context.getBean(AuditProperties.class).getMode()).isEqualTo(AuditMode.OFF)
-        );
+        contextRunner.run(context -> {
+            AuditProperties properties = context.getBean(AuditProperties.class);
+
+            assertThat(properties.getMode()).isEqualTo(AuditProperties.DEFAULT_MODE);
+            assertThat(properties.bootstrapMode()).isEqualTo(AuditMode.OFF);
+        });
     }
 
     @Test
     void bindsBasicModeWithoutChangingApplicationCode() {
         contextRunner
             .withPropertyValues("alixar.audit.mode=BASIC")
-            .run(context ->
-                assertThat(context.getBean(AuditProperties.class).getMode()).isEqualTo(AuditMode.BASIC)
-            );
+            .run(context -> {
+                AuditProperties properties = context.getBean(AuditProperties.class);
+
+                assertThat(properties.getMode()).isEqualTo("BASIC");
+                assertThat(properties.bootstrapMode()).isEqualTo(AuditMode.BASIC);
+            });
+    }
+
+    @Test
+    void invalidValueBindsButFailsLazyBootstrapParsing() {
+        contextRunner
+            .withPropertyValues("alixar.audit.mode=UNSUPPORTED")
+            .run(context -> {
+                AuditProperties properties = context.getBean(AuditProperties.class);
+
+                assertThat(properties.getMode()).isEqualTo("UNSUPPORTED");
+                assertThat(properties.parsedMode()).isEmpty();
+                assertThatThrownBy(properties::bootstrapMode)
+                    .isInstanceOf(IllegalArgumentException.class);
+            });
     }
 
     @Configuration(proxyBeanMethods = false)

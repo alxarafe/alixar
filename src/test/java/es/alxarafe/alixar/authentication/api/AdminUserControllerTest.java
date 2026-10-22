@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.authentication.api;
 
+import es.alxarafe.alixar.audit.AuditModeTestSupport;
 import es.alxarafe.alixar.audit.InMemoryAuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditAction;
 import es.alxarafe.alixar.audit.application.AuditChainVerifier;
@@ -9,7 +10,6 @@ import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import es.alxarafe.alixar.audit.domain.AuditChain;
 import es.alxarafe.alixar.audit.domain.AuditEvent;
 import es.alxarafe.alixar.audit.domain.AuditResult;
-import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
 import es.alxarafe.alixar.authentication.AuthenticationTestConfig;
 import es.alxarafe.alixar.authentication.application.AdministrationErrorCode;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
@@ -88,7 +88,7 @@ class AdminUserControllerTest {
     private TokenHasher tokenHasher;
 
     @Autowired
-    private AuditProperties auditProperties;
+    private AuditModeTestSupport auditMode;
 
     @Autowired
     private InMemoryAuditEventRepository auditEventRepository;
@@ -102,7 +102,7 @@ class AdminUserControllerTest {
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         SecurityContextHolder.clearContext();
-        auditProperties.setMode(AuditMode.OFF);
+        auditMode.reset();
         auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
         Instant now = Instant.parse("2026-10-17T10:00:00Z");
         ((AuthenticationTestConfig.TestUserRepository) userRepository).replaceWith(
@@ -322,10 +322,11 @@ class AdminUserControllerTest {
             .andExpect(jsonPath("$[0].code").value(RoleCodes.SYSTEM_ADMIN))
             .andExpect(jsonPath("$[0].name").value("System administrator"))
             .andExpect(jsonPath("$[0].builtIn").value(true))
-            .andExpect(jsonPath("$[0].permissionCodes.length()").value(3))
-            .andExpect(jsonPath("$[0].permissionCodes[0]").value(PermissionCodes.AUDIT_READ))
-            .andExpect(jsonPath("$[0].permissionCodes[1]").value(PermissionCodes.ROLES_MANAGE))
-            .andExpect(jsonPath("$[0].permissionCodes[2]").value(PermissionCodes.USERS_MANAGE))
+            .andExpect(jsonPath("$[0].permissionCodes.length()").value(4))
+            .andExpect(jsonPath("$[0].permissionCodes[0]").value(PermissionCodes.AUDIT_CONFIGURE))
+            .andExpect(jsonPath("$[0].permissionCodes[1]").value(PermissionCodes.AUDIT_READ))
+            .andExpect(jsonPath("$[0].permissionCodes[2]").value(PermissionCodes.ROLES_MANAGE))
+            .andExpect(jsonPath("$[0].permissionCodes[3]").value(PermissionCodes.USERS_MANAGE))
             .andExpect(jsonPath("$[0].permissions").doesNotExist())
             .andExpect(jsonPath("$[0].id").doesNotExist());
     }
@@ -764,7 +765,7 @@ class AdminUserControllerTest {
     void basicAuditMode_sessionEnable_recordsUserEnabledWithSessionActor() throws Exception {
         grantSystemAdmin(ALICE_ID);
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             adminPatchEnabled(session, CAROL_ID, true)
@@ -783,7 +784,7 @@ class AdminUserControllerTest {
             });
             assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 
@@ -791,7 +792,7 @@ class AdminUserControllerTest {
     void basicAuditMode_patDisable_recordsUserDisabledWithPatActor() throws Exception {
         grantSystemAdmin(ALICE_ID);
         String rawToken = personalAccessToken(ALICE_ID);
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             mockMvc.perform(patch(AdminUserEndpoints.BASE_PATH + "/" + BOB_ID + "/enabled")
@@ -813,7 +814,7 @@ class AdminUserControllerTest {
             });
             assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 
@@ -821,7 +822,7 @@ class AdminUserControllerTest {
     void basicAuditMode_noOpEnablement_doesNotRecordEvent() throws Exception {
         grantSystemAdmin(ALICE_ID);
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             adminPatchEnabled(session, ALICE_ID, true)
@@ -830,7 +831,7 @@ class AdminUserControllerTest {
 
             assertThat(auditEvents()).isEmpty();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 
@@ -854,7 +855,7 @@ class AdminUserControllerTest {
     void basicAuditMode_createRecordsAdminUserCreated() throws Exception {
         grantSystemAdmin(ALICE_ID);
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             MvcResult result = adminPost(session, createUserJson(
@@ -877,7 +878,7 @@ class AdminUserControllerTest {
             });
             assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 
@@ -885,7 +886,7 @@ class AdminUserControllerTest {
     void basicAuditMode_usernameChangeRecordsPreviousTarget() throws Exception {
         grantSystemAdmin(ALICE_ID);
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             adminPatch(session, BOB_ID, "{\"username\":\"bob-renamed\"}")
@@ -901,7 +902,7 @@ class AdminUserControllerTest {
             });
             assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 
@@ -909,7 +910,7 @@ class AdminUserControllerTest {
     void basicAuditMode_noOpUsernameChangeDoesNotRecordEvent() throws Exception {
         grantSystemAdmin(ALICE_ID);
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             adminPatch(session, BOB_ID, "{\"username\":\"BOB\"}")
@@ -918,7 +919,7 @@ class AdminUserControllerTest {
 
             assertThat(auditEvents()).isEmpty();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 
@@ -926,7 +927,7 @@ class AdminUserControllerTest {
     void basicAuditMode_passwordResetRecordsAdminUserPasswordReset() throws Exception {
         grantSystemAdmin(ALICE_ID);
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             adminResetPassword(session, BOB_ID, "new-bob-password-123")
@@ -942,7 +943,7 @@ class AdminUserControllerTest {
             });
             assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 
@@ -950,7 +951,7 @@ class AdminUserControllerTest {
     void basicAuditMode_rolesReplacementRecordsAdminUserRolesReplaced() throws Exception {
         grantSystemAdmin(ALICE_ID);
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             adminPutRoles(session, BOB_ID, "[\"" + RoleCodes.SYSTEM_ADMIN + "\"]")
@@ -967,7 +968,7 @@ class AdminUserControllerTest {
             });
             assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 
@@ -975,7 +976,7 @@ class AdminUserControllerTest {
     void basicAuditMode_noOpRolesReplacementDoesNotRecordEvent() throws Exception {
         grantSystemAdmin(ALICE_ID);
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             adminPutRoles(session, BOB_ID, "[]")
@@ -984,7 +985,7 @@ class AdminUserControllerTest {
 
             assertThat(auditEvents()).isEmpty();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 

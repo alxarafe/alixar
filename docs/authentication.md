@@ -51,6 +51,11 @@ events. The read endpoint accepts session or Bearer authentication and applies
 the same deny-by-default authorization model as the other administrative
 endpoints. Reading audit events does not append audit events in this slice.
 
+T1.5a seeds the separate `audit.configure` permission and assigns it to
+`system-admin`. No audit-configuration endpoint is exposed yet; the permission
+prepares the later configuration API without changing the existing `audit.read`
+authorization.
+
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
 Username and email comparisons and uniqueness checks are case-insensitive.
@@ -431,8 +436,9 @@ The initial catalogue contains:
 | `users.manage` | Administrative capability over users (ALIXAR-DEV-003F) |
 | `roles.manage` | Manage roles and their permission assignments (ALIXAR-DEV-003G) |
 | `audit.read` | Read audit events (ALIXAR-DEV-003H T1.4a) |
+| `audit.configure` | Configure the audit policy (ALIXAR-DEV-003H T1.5a; no endpoint yet) |
 
-The built-in role `system-admin` contains all three permissions. The role name
+The built-in role `system-admin` contains all four permissions. The role name
 and code are stable identifiers, but application code authorizes by permission,
 not by role name. No role is special in authorization: `system-admin` is simply
 a role whose permissions are maintained by migrations. The `built_in` flag marks
@@ -501,8 +507,8 @@ session identity, so it cannot bypass authorization.
 Method security is enabled. Operations can be protected with
 `@PreAuthorize("hasAuthority('users.manage')")` or
 `@PreAuthorize("hasAuthority('roles.manage')")`; the stable permission
-constants are `PermissionCodes.USERS_MANAGE`, `PermissionCodes.ROLES_MANAGE` and
-`PermissionCodes.AUDIT_READ`.
+constants are `PermissionCodes.USERS_MANAGE`, `PermissionCodes.ROLES_MANAGE`,
+`PermissionCodes.AUDIT_READ` and `PermissionCodes.AUDIT_CONFIGURE`.
 
 ### Bootstrap and the first administrator
 

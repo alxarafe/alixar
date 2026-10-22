@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.authentication.api;
 
+import es.alxarafe.alixar.audit.AuditModeTestSupport;
 import es.alxarafe.alixar.audit.InMemoryAuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditAction;
 import es.alxarafe.alixar.audit.application.AuditChainVerifier;
@@ -9,7 +10,6 @@ import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import es.alxarafe.alixar.audit.domain.AuditChain;
 import es.alxarafe.alixar.audit.domain.AuditEvent;
 import es.alxarafe.alixar.audit.domain.AuditResult;
-import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
 import es.alxarafe.alixar.authentication.AuthenticationTestConfig;
 import es.alxarafe.alixar.authentication.application.AdministrationErrorCode;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
@@ -72,7 +72,7 @@ class AdminRoleControllerTest {
     private PasswordHasher passwordHasher;
 
     @Autowired
-    private AuditProperties auditProperties;
+    private AuditModeTestSupport auditMode;
 
     @Autowired
     private InMemoryAuditEventRepository auditEventRepository;
@@ -85,7 +85,7 @@ class AdminRoleControllerTest {
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
-        auditProperties.setMode(AuditMode.OFF);
+        auditMode.reset();
         auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
         Instant now = Instant.parse("2026-10-20T10:00:00Z");
         ((AuthenticationTestConfig.TestUserRepository) userRepository).replaceWith(new User(
@@ -198,10 +198,11 @@ class AdminRoleControllerTest {
             .andExpect(jsonPath("$.code").value(RoleCodes.SYSTEM_ADMIN))
             .andExpect(jsonPath("$.name").value("System administrator"))
             .andExpect(jsonPath("$.builtIn").value(true))
-            .andExpect(jsonPath("$.permissionCodes.length()").value(3))
-            .andExpect(jsonPath("$.permissionCodes[0]").value(PermissionCodes.AUDIT_READ))
-            .andExpect(jsonPath("$.permissionCodes[1]").value(PermissionCodes.ROLES_MANAGE))
-            .andExpect(jsonPath("$.permissionCodes[2]").value(PermissionCodes.USERS_MANAGE))
+            .andExpect(jsonPath("$.permissionCodes.length()").value(4))
+            .andExpect(jsonPath("$.permissionCodes[0]").value(PermissionCodes.AUDIT_CONFIGURE))
+            .andExpect(jsonPath("$.permissionCodes[1]").value(PermissionCodes.AUDIT_READ))
+            .andExpect(jsonPath("$.permissionCodes[2]").value(PermissionCodes.ROLES_MANAGE))
+            .andExpect(jsonPath("$.permissionCodes[3]").value(PermissionCodes.USERS_MANAGE))
             .andExpect(jsonPath("$.permissions").doesNotExist());
     }
 
@@ -442,7 +443,8 @@ class AdminRoleControllerTest {
             .containsExactlyInAnyOrder(
                 PermissionCodes.USERS_MANAGE,
                 PermissionCodes.ROLES_MANAGE,
-                PermissionCodes.AUDIT_READ
+                PermissionCodes.AUDIT_READ,
+                PermissionCodes.AUDIT_CONFIGURE
             );
     }
 
@@ -530,7 +532,7 @@ class AdminRoleControllerTest {
     void basicAuditMode_roleLifecycleRecordsCanonicalEventsWithInternalRoleId() throws Exception {
         grantRolesManage();
         MockHttpSession session = authenticatedSession();
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             adminPost(session, createRoleJson("audited-role", "Audited role", "[\"users.manage\"]"))
@@ -568,7 +570,7 @@ class AdminRoleControllerTest {
             });
             assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 
@@ -583,7 +585,7 @@ class AdminRoleControllerTest {
             List.of(PermissionCodes.USERS_MANAGE)
         ));
         MockHttpSession session = authenticatedSession();
-        auditProperties.setMode(AuditMode.BASIC);
+        auditMode.setMode(AuditMode.BASIC);
 
         try {
             adminPatch(session, AdminUserEndpoints.ROLES_BASE_PATH + "/editable-role", "{\"name\":\" Editable role \"}")
@@ -596,7 +598,7 @@ class AdminRoleControllerTest {
 
             assertThat(auditEvents()).isEmpty();
         } finally {
-            auditProperties.setMode(AuditMode.OFF);
+            auditMode.reset();
         }
     }
 
