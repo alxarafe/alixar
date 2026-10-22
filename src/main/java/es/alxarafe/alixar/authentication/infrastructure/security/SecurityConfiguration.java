@@ -1,7 +1,7 @@
 package es.alxarafe.alixar.authentication.infrastructure.security;
 
 import es.alxarafe.alixar.audit.api.AuditEndpoints;
-import es.alxarafe.alixar.audit.application.AuditActorResolver;
+import es.alxarafe.alixar.audit.application.SecurityAuditTrail;
 import es.alxarafe.alixar.authentication.api.AdminUserEndpoints;
 import es.alxarafe.alixar.authentication.api.UserEndpoints;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
@@ -23,6 +23,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.session.ChangeSessionIdAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
@@ -93,8 +94,20 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    AuditActorResolver auditActorResolver() {
+    SecurityContextAuditActorResolver auditActorResolver() {
         return new SecurityContextAuditActorResolver();
+    }
+
+    @Bean
+    LogoutSuccessHandler logoutSuccessHandler(
+        SecurityAuditTrail securityAuditTrail,
+        SecurityContextAuditActorResolver auditActorResolver
+    ) {
+        return new AuditedLogoutSuccessHandler(
+            new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT),
+            securityAuditTrail,
+            auditActorResolver
+        );
     }
 
     @Bean
@@ -121,7 +134,8 @@ public class SecurityConfiguration {
         CredentialsVersionCheckFilter credentialsVersionCheckFilter,
         ApiTokenAuthenticationFilter apiTokenAuthenticationFilter,
         EffectivePermissionsFilter effectivePermissionsFilter,
-        BearerTokenRequestMatcher bearerTokenRequestMatcher
+        BearerTokenRequestMatcher bearerTokenRequestMatcher,
+        LogoutSuccessHandler logoutSuccessHandler
     ) throws Exception {
         http
             .authenticationManager(authenticationManager)
@@ -179,7 +193,7 @@ public class SecurityConfiguration {
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies(SESSION_COOKIE_NAME)
-                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT)));
+                .logoutSuccessHandler(logoutSuccessHandler));
         return http.build();
     }
 }

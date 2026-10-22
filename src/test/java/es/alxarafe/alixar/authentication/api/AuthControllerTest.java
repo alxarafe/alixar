@@ -183,6 +183,107 @@ class AuthControllerTest {
     }
 
     @Test
+    void basicAuditMode_successfulLoginRecordsSecurityEvent() throws Exception {
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            login("alice", PASSWORD).andExpect(status().isOk());
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.LOGIN_SUCCEEDED.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.actorUserId()).isEqualTo(ENABLED_USER_ID);
+                assertThat(event.actorUsername()).isEqualTo("alice");
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(ENABLED_USER_ID.toString());
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicAuditMode_failedLoginRecordsNoActorOrIdentifier() throws Exception {
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            login("alice", "wrong-password").andExpect(status().isUnauthorized());
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.LOGIN_FAILED.name());
+                assertThat(event.result()).isEqualTo(AuditResult.FAILURE);
+                assertThat(event.actorUserId()).isNull();
+                assertThat(event.actorUsername()).isNull();
+                assertThat(event.authenticationType()).isNull();
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.AUTHENTICATION.name());
+                assertThat(event.resourceId()).isNull();
+                assertThat(event.toString()).doesNotContain("alice", "wrong-password");
+            });
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicAuditMode_logoutRecordsSecurityEvent() throws Exception {
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            MockHttpSession session = authenticatedSession();
+            auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
+            MvcResult meResult = mockMvc.perform(get(AuthenticationEndpoints.ME_PATH).session(session))
+                .andExpect(status().isOk())
+                .andReturn();
+            Cookie csrfCookie = meResult.getResponse().getCookie("XSRF-TOKEN");
+
+            mockMvc.perform(post(AuthenticationEndpoints.LOGOUT_PATH)
+                    .session(session)
+                    .cookie(csrfCookie)
+                    .header("X-XSRF-TOKEN", csrfCookie.getValue()))
+                .andExpect(status().isNoContent());
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.LOGOUT.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.actorUserId()).isEqualTo(ENABLED_USER_ID);
+                assertThat(event.actorUsername()).isEqualTo("alice");
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(ENABLED_USER_ID.toString());
+            });
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void offAuditMode_loginAndLogoutDoNotRecordEvents() throws Exception {
+        MockHttpSession session = authenticatedSession();
+        auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
+        MvcResult meResult = mockMvc.perform(get(AuthenticationEndpoints.ME_PATH).session(session))
+            .andExpect(status().isOk())
+            .andReturn();
+        Cookie csrfCookie = meResult.getResponse().getCookie("XSRF-TOKEN");
+
+        mockMvc.perform(post(AuthenticationEndpoints.LOGOUT_PATH)
+                .session(session)
+                .cookie(csrfCookie)
+                .header("X-XSRF-TOKEN", csrfCookie.getValue()))
+            .andExpect(status().isNoContent());
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
+    void offAuditMode_failedLoginDoesNotRecordEvent() throws Exception {
+        login("alice", "wrong-password").andExpect(status().isUnauthorized());
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
     void me_withAuthenticatedSession_returnsIdentity() throws Exception {
         MockHttpSession session = authenticatedSession();
 

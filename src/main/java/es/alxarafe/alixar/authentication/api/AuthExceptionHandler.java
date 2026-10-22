@@ -1,5 +1,7 @@
 package es.alxarafe.alixar.authentication.api;
 
+import es.alxarafe.alixar.audit.application.AuditErrorCode;
+import es.alxarafe.alixar.audit.application.AuditUnavailableException;
 import es.alxarafe.alixar.authentication.application.AdministrationErrorCode;
 import es.alxarafe.alixar.authentication.application.ApiTokenNotFoundException;
 import es.alxarafe.alixar.authentication.application.AuthenticationErrorCode;
@@ -82,6 +84,8 @@ class AuthExceptionHandler {
         URI.create("urn:alixar:error:administration-email-already-exists");
     private static final URI ADMIN_INVALID_PAGINATION_TYPE =
         URI.create("urn:alixar:error:administration-invalid-pagination");
+    private static final URI AUDIT_UNAVAILABLE_TYPE =
+        URI.create("urn:alixar:error:audit-unavailable");
 
     private final MessageSource messageSource;
 
@@ -98,6 +102,18 @@ class AuthExceptionHandler {
         problem.setType(INVALID_CREDENTIALS_TYPE);
         problem.setTitle(messageSource.getMessage("authentication.invalidCredentials.title", null, locale));
         problem.setProperty("code", AuthenticationErrorCode.AUTH_INVALID_CREDENTIALS.name());
+        return problem;
+    }
+
+    @ExceptionHandler(AuditUnavailableException.class)
+    ProblemDetail handleAuditUnavailable(Locale locale) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.SERVICE_UNAVAILABLE,
+            messageSource.getMessage("audit.unavailable", null, locale)
+        );
+        problem.setType(AUDIT_UNAVAILABLE_TYPE);
+        problem.setTitle(messageSource.getMessage("audit.unavailable.title", null, locale));
+        problem.setProperty("code", AuditErrorCode.AUDIT_UNAVAILABLE.name());
         return problem;
     }
 

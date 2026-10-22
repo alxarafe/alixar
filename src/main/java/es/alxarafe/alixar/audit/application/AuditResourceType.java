@@ -7,5 +7,6 @@ public enum AuditResourceType {
     USER,
     API_TOKEN,
     ROLE,
-    AUDIT_CONFIGURATION
+    AUDIT_CONFIGURATION,
+    AUTHENTICATION
 }

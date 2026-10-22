@@ -205,6 +205,7 @@ class AdminAuditConfigurationControllerTest {
         auditMode.setMode(AuditMode.BASIC);
         grant(BOB_ID, PermissionCodes.AUDIT_CONFIGURE);
         AuthenticatedSession auth = authenticatedSession("bob", PASSWORD);
+        auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
 
         mockMvc.perform(put(AuditEndpoints.CONFIGURATION_PATH)
                 .session(auth.session())

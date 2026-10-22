@@ -57,6 +57,12 @@ T1.5a seeds the separate `audit.configure` permission and assigns it to
 `audit.configure`; changing the mode requires `audit.configure`. The existing
 `audit.read` authorization and the read-only event APIs are unchanged.
 
+T1.6a adds authentication security events under `BASIC`. Successful login
+records `LOGIN_SUCCEEDED` mandatorily; failed login records `LOGIN_FAILED`
+best-effort without any attempted identifier; logout records `LOGOUT`
+best-effort for the original authenticated user. These events require no new
+permission and do not change the authentication contract. See [Audit](audit.md).
+
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
 Username and email comparisons and uniqueness checks are case-insensitive.
@@ -91,7 +97,14 @@ and creates the authenticated session:
 
 Unknown identifiers, incorrect passwords, disabled users, and ambiguous
 cross-identifier matches all return the same `401` error with code
-`AUTH_INVALID_CREDENTIALS`.
+`AUTH_INVALID_CREDENTIALS`. A failed `LOGIN_FAILED` audit append never changes
+that result.
+
+Under `BASIC`, successful login is fail-closed with respect to its audit event.
+If `LOGIN_SUCCEEDED` cannot be persisted after the session has been created,
+the security context is cleared, any created session is invalidated and the
+response is `503` with code `AUDIT_UNAVAILABLE`. This prevents a usable session
+from existing without its mandatory audit event.
 
 ### `GET /api/auth/me`
 
@@ -106,7 +119,9 @@ state, timestamps, and security internals are never returned.
 Requires a valid CSRF cookie/header pair. It invalidates the HTTP session when
 present, clears the security context and CSRF token, expires the session cookie,
 and returns `204`. The operation is intentionally idempotent for an anonymous
-client with a valid CSRF token.
+client with a valid CSRF token. Under `BASIC`, a successful logout appends
+`LOGOUT` best-effort; an audit failure never prevents session destruction or
+changes the `204` response.
 
 ### `POST /api/auth/password/forgot`
 

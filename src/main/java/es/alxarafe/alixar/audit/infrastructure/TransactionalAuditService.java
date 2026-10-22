@@ -7,6 +7,7 @@ import es.alxarafe.alixar.audit.application.AuditVerificationResult;
 import es.alxarafe.alixar.audit.domain.AuditEvent;
 import java.util.UUID;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 public class TransactionalAuditService {
@@ -21,6 +22,11 @@ public class TransactionalAuditService {
 
     @Transactional
     public AuditEvent append(AuditEventDraft draft) {
+        return appender.append(draft);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public AuditEvent appendIsolated(AuditEventDraft draft) {
         return appender.append(draft);
     }
 

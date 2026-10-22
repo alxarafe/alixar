@@ -10,6 +10,7 @@ import es.alxarafe.alixar.audit.application.AuditHashCalculator;
 import es.alxarafe.alixar.audit.application.AuditPolicyProvider;
 import es.alxarafe.alixar.audit.application.AuditTrail;
 import es.alxarafe.alixar.audit.application.ListAuditEventsUseCase;
+import es.alxarafe.alixar.audit.application.SecurityAuditTrail;
 import java.time.Clock;
 import org.jooq.DSLContext;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -97,6 +98,18 @@ public class AuditConfiguration {
         return new ConfiguredAuditTrail(
             auditPolicyProvider,
             auditActorResolver,
+            transactionalAuditService
+        );
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(SecurityAuditTrail.class)
+    SecurityAuditTrail securityAuditTrail(
+        AuditPolicyProvider auditPolicyProvider,
+        TransactionalAuditService transactionalAuditService
+    ) {
+        return new ConfiguredSecurityAuditTrail(
+            auditPolicyProvider,
             transactionalAuditService
         );
     }

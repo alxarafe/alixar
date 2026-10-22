@@ -83,6 +83,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -1456,11 +1457,34 @@ class PersistenceIT {
         );
 
         assertThat(isTransactional(facade, "append")).isTrue();
+        assertThat(isTransactional(facade, "appendIsolated")).isTrue();
+        var isolated = facade.getDeclaredMethod("appendIsolated", AuditEventDraft.class)
+            .getAnnotation(Transactional.class);
+        assertThat(isolated).isNotNull();
+        assertThat(isolated.propagation()).isEqualTo(Propagation.REQUIRES_NEW);
         var verification = facade.getDeclaredMethod("verify", UUID.class)
             .getAnnotation(Transactional.class);
         assertThat(verification).isNotNull();
         assertThat(verification.readOnly()).isTrue();
         assertThat(verification.isolation()).isEqualTo(Isolation.REPEATABLE_READ);
+    }
+
+    @Test
+    void auditIsolatedAppend_survivesOuterTransactionRollback() {
+        resetAuditChain();
+
+        try {
+            var transactionTemplate = new TransactionTemplate(transactionManager);
+            transactionTemplate.executeWithoutResult(status -> {
+                transactionalAuditService.appendIsolated(auditDraft("ISOLATED_SECURITY_EVENT"));
+                status.setRollbackOnly();
+            });
+
+            assertThat(auditEventCount()).isEqualTo(1);
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            resetAuditChain();
+        }
     }
 
     @Test

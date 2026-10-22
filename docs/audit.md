@@ -16,10 +16,11 @@ completed password recovery, Personal Access Token lifecycle and role
 administration. T1.4a adds a read-only query API protected by `audit.read`.
 T1.4b adds formal chain verification through HTTP. T1.5a adds the persisted
 audit configuration foundation and the `audit.configure` permission. T1.5b adds
-the administrative configuration API and mandatory policy-change events. Event
-detail, retention, archive and checkpoints remain out of scope.
+the administrative configuration API and mandatory policy-change events. T1.6a
+adds authentication security events for successful login, failed login and
+logout. Event detail, retention, archive and checkpoints remain out of scope.
 
-## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b, T1.5a and T1.5b)
+## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b, T1.5a, T1.5b and T1.6a)
 
 Implemented:
 
@@ -53,14 +54,18 @@ Implemented:
   `/api/admin/audit-configuration`, with `GET` for reading and `PUT` for
   changing the persisted mode;
 - mandatory, mode-independent `SUCCESS` events when the audit mode transitions
-  between `OFF` and `BASIC`.
+  between `OFF` and `BASIC`;
+- `LOGIN_SUCCEEDED`, `LOGIN_FAILED` and `LOGOUT` authentication events under
+  `BASIC`, with mandatory fail-closed success and isolated best-effort failure
+  and logout events.
 
 Not implemented yet:
 
 - `SELECTIVE` / `FULL` audit modes;
 - the PAT identifier as part of the actor;
-- bootstrap, login, logout and password-reset request events;
-- `FAILURE` and `DENIED` event strategy;
+- bootstrap and password-reset request events;
+- a general `FAILURE` / `DENIED` strategy beyond login failures, including
+  `ACCESS_DENIED` for permission denials;
 - audit event detail through HTTP;
 - auditing read operations;
 - retention, purge and archive;
@@ -195,6 +200,43 @@ fails; it never falls back to `SYSTEM`. The configuration update and the audit
 append share one transaction, so an append failure rolls back the mode change.
 A no-op update records no event. The cache reload is best-effort after commit
 and never changes the already committed outcome.
+
+### Authentication events (T1.6a)
+
+Authentication security outcomes are recorded only when the effective mode is
+`BASIC`. Under `OFF`, none of these events is appended.
+
+| Operation | Action | Resource | Result | Guarantee |
+|---|---|---|---|---|
+| Successful session login | `LOGIN_SUCCEEDED` | `USER` / authenticated user id | `SUCCESS` | Mandatory, fail-closed |
+| Failed login | `LOGIN_FAILED` | `AUTHENTICATION` / null | `FAILURE` | Isolated, best-effort |
+| Successful logout | `LOGOUT` | `USER` / authenticated user id | `SUCCESS` | Isolated, best-effort |
+
+A successful login is audited after the session authentication strategy and
+security-context persistence have completed. If the mandatory append fails, the
+application clears the security context, invalidates any session created for
+the request and returns `503` with code `AUDIT_UNAVAILABLE`. It never returns a
+successful login without its `LOGIN_SUCCEEDED` event.
+
+A failed login records no attempted identifier, email, password or other PII.
+`actor_user_id`, `actor_username`, `authentication_type` and `resource_id` are
+null. An audit failure cannot replace the existing `401` authentication result.
+
+A successful logout records the original authenticated user before the session
+is destroyed. The event append runs in an isolated `REQUIRES_NEW` transaction
+and its failure is caught outside that transaction. An audit failure cannot
+prevent session destruction or change the `204` logout result.
+
+Logout events use the original `SESSION` or `PAT` authentication type. Login
+success and logout use the authenticated user id as both actor and resource id.
+`LOGIN_FAILED` has no actor because the attempted identity is deliberately not
+retained.
+
+Authorization failures are not part of T1.6a. A later slice will instrument
+`ACCESS_DENIED` only when an authenticated caller has a valid session or Bearer
+credential but is denied by an authorization rule. A CSRF rejection is not an
+`ACCESS_DENIED` event. The handling of anonymous generic `403` responses remains
+undecided.
 
 Successful administrative user creation records exactly one event, including
 empty role assignments. Role assignment is not recorded as separate events.

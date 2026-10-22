@@ -70,14 +70,18 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   `audit_configuration` table, with `alixar.audit.mode` used only to bootstrap
   the first row, and seeds the `audit.configure` permission. T1.5b exposes
   `GET` / `PUT /api/admin/audit-configuration` and records mandatory policy
-  transition events. Event detail, read auditing, the PAT identifier as actor,
-  retention, archive and checkpoints are not implemented yet. See
-  [Audit](audit.md)
+  transition events. T1.6a records `LOGIN_SUCCEEDED`, `LOGIN_FAILED` and
+  `LOGOUT` under `BASIC`: successful login is mandatory and fail-closed, while
+  failed login and logout use isolated best-effort appends that cannot change
+  the authentication outcome. Event detail, read auditing, `ACCESS_DENIED`,
+  the PAT identifier as actor, retention, archive and checkpoints are not
+  implemented yet. See [Audit](audit.md)
 
 ## Planned (Not Implemented)
 
-- `SELECTIVE` / `FULL` audit modes, the PAT identifier as actor, audit event
-  detail, read auditing, retention, purge, archive and signed checkpoints
+- `SELECTIVE` / `FULL` audit modes, `ACCESS_DENIED`, the PAT identifier as
+  actor, audit event detail, read auditing, retention, purge, archive and
+  signed checkpoints
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Email change with new-address verification
@@ -202,10 +206,14 @@ consistent snapshot. T1.5b exposes the persisted configuration through
 `GET` / `PUT /api/admin/audit-configuration`; reads require `audit.read` or
 `audit.configure`, and writes require `audit.configure`. A mode transition locks
 the configuration row, updates the mode, appends a mandatory
-`AUDIT_CONFIGURATION` event and commits atomically. The local policy cache is
-reloaded best-effort after commit. Database-level append-only privileges, event
-detail, read auditing, the PAT identifier as actor, retention and signing are
-not implemented. See [Audit](audit.md) for the canonical format and deferred
+`AUDIT_CONFIGURATION` event and commits atomically. T1.6a adds a separate
+`SecurityAuditTrail` port for authentication events: successful login is
+mandatory and fail-closed, while failed login and logout use a
+`REQUIRES_NEW` isolated append whose failure is swallowed outside the
+transaction. The local policy cache is reloaded best-effort after commit.
+Database-level append-only privileges, event detail, read auditing,
+`ACCESS_DENIED`, the PAT identifier as actor, retention and signing are not
+implemented. See [Audit](audit.md) for the canonical format and deferred
 capabilities.
 
 ## Internationalization (i18n) Architecture

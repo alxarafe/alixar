@@ -4,6 +4,7 @@ import es.alxarafe.alixar.audit.application.AuditActor;
 import es.alxarafe.alixar.audit.application.AuditActorResolver;
 import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Objects;
 import java.util.Optional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,16 +23,23 @@ public class SecurityContextAuditActorResolver implements AuditActorResolver {
     @Override
     public Optional<AuditActor> resolveCurrentActor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(RequestContextHolder.getRequestAttributes() instanceof ServletRequestAttributes attributes)) {
+            return Optional.empty();
+        }
+        return resolve(authentication, attributes.getRequest());
+    }
+
+    public Optional<AuditActor> resolve(
+        Authentication authentication,
+        HttpServletRequest request
+    ) {
+        Objects.requireNonNull(request, "request");
         if (authentication == null
             || !authentication.isAuthenticated()
             || !(authentication.getPrincipal() instanceof AuthenticatedUserPrincipal principal)) {
             return Optional.empty();
         }
 
-        if (!(RequestContextHolder.getRequestAttributes() instanceof ServletRequestAttributes attributes)) {
-            return Optional.empty();
-        }
-        HttpServletRequest request = attributes.getRequest();
         boolean personalAccessToken = Boolean.TRUE.equals(
             request.getAttribute(ApiTokenAuthenticationFilter.PAT_REQUEST_ATTRIBUTE)
         );
