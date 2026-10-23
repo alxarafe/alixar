@@ -1,0 +1,13 @@
+package es.alxarafe.alixar.audit.application;
+
+public enum AuditVerificationFailure {
+    CHAIN_HEAD_MISSING,
+    EVENT_MISSING,
+    SEQUENCE_MISMATCH,
+    CHAIN_ID_MISMATCH,
+    UNSUPPORTED_FORMAT_VERSION,
+    PREVIOUS_HASH_MISMATCH,
+    EVENT_HASH_MISMATCH,
+    UNEXPECTED_EVENT,
+    HEAD_HASH_MISMATCH
+}

@@ -32,6 +32,7 @@ public class ApiTokenAuthenticationFilter extends OncePerRequestFilter {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
+    public static final String PAT_REQUEST_ATTRIBUTE = "es.alxarafe.alixar.authentication.pat";
 
     private static final Logger log = LoggerFactory.getLogger(ApiTokenAuthenticationFilter.class);
 
@@ -59,6 +60,7 @@ public class ApiTokenAuthenticationFilter extends OncePerRequestFilter {
             authentication.ifPresent(result -> {
                 context.setAuthentication(toAuthentication(result.user()));
                 SecurityContextHolder.setContext(context);
+                request.setAttribute(PAT_REQUEST_ATTRIBUTE, Boolean.TRUE);
                 updateLastUsedAt(result.tokenId());
             });
             if (authentication.isEmpty()) {

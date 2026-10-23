@@ -18,10 +18,11 @@ public class UpdateAdminUsernameUseCase {
         this.authorizationRepository = authorizationRepository;
     }
 
-    public AdminUser execute(UUID userId, String newUsername) {
+    public UpdateAdminUsernameResult execute(UUID userId, String newUsername) {
         String normalizedUsername = normalize(newUsername);
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new UserNotFoundException(userId));
+        boolean changed = !user.username().equals(normalizedUsername);
 
         userRepository.findByUsername(normalizedUsername)
             .filter(existing -> !existing.id().equals(userId))
@@ -31,14 +32,17 @@ public class UpdateAdminUsernameUseCase {
 
         userRepository.updateUsername(userId, normalizedUsername);
 
-        return new AdminUser(
-            user.id(),
-            normalizedUsername,
-            user.email(),
-            user.enabled(),
-            user.createdAt(),
-            Instant.now(),
-            authorizationRepository.findRoleCodesForUser(userId)
+        return new UpdateAdminUsernameResult(
+            new AdminUser(
+                user.id(),
+                normalizedUsername,
+                user.email(),
+                user.enabled(),
+                user.createdAt(),
+                Instant.now(),
+                authorizationRepository.findRoleCodesForUser(userId)
+            ),
+            changed
         );
     }
 

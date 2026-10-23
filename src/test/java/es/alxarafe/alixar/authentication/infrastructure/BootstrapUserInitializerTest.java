@@ -48,9 +48,19 @@ class BootstrapUserInitializerTest {
         assertThat(authorizationRepository.findRoleCodesByUser(user.id()))
             .containsExactly(RoleCodes.SYSTEM_ADMIN);
         assertThat(authorizationRepository.findEffectivePermissionCodes(user.id()))
-            .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
+            .containsExactlyInAnyOrder(
+                PermissionCodes.USERS_MANAGE,
+                PermissionCodes.ROLES_MANAGE,
+                PermissionCodes.AUDIT_READ,
+                PermissionCodes.AUDIT_CONFIGURE
+            );
         assertThat(authorizationRepository.findPermissionCodesByRole(RoleCodes.SYSTEM_ADMIN))
-            .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
+            .containsExactlyInAnyOrder(
+                PermissionCodes.USERS_MANAGE,
+                PermissionCodes.ROLES_MANAGE,
+                PermissionCodes.AUDIT_READ,
+                PermissionCodes.AUDIT_CONFIGURE
+            );
     }
 
     @Test
@@ -64,7 +74,12 @@ class BootstrapUserInitializerTest {
         assertThat(authorizationRepository.findRoleCodesByUser(user.id()))
             .containsExactly(RoleCodes.SYSTEM_ADMIN);
         assertThat(authorizationRepository.findEffectivePermissionCodes(user.id()))
-            .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
+            .containsExactlyInAnyOrder(
+                PermissionCodes.USERS_MANAGE,
+                PermissionCodes.ROLES_MANAGE,
+                PermissionCodes.AUDIT_READ,
+                PermissionCodes.AUDIT_CONFIGURE
+            );
     }
 
     @Test

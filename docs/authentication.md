@@ -46,6 +46,34 @@ assigned roles and a read-only permission catalogue. T2 adds role detail and
 creation, and T3 adds role rename, permission replacement and deletion of
 unassigned custom roles.
 
+ALIXAR-DEV-003H T1.4a adds the `audit.read` permission for querying audit
+events. The read endpoint accepts session or Bearer authentication and applies
+the same deny-by-default authorization model as the other administrative
+endpoints. Reading audit events does not append audit events in this slice.
+
+T1.5a seeds the separate `audit.configure` permission and assigns it to
+`system-admin`. T1.5b exposes the persisted audit configuration at
+`GET` / `PUT /api/admin/audit-configuration`. Reading requires `audit.read` or
+`audit.configure`; changing the mode requires `audit.configure`. The existing
+`audit.read` authorization and the read-only event APIs are unchanged.
+
+T1.7a adds the `SELECTIVE` mode and the persisted read-policy API at
+`GET` / `PUT /api/admin/audit-configuration/read-policy`. Reading requires
+`audit.read` or `audit.configure`; replacing the rules requires
+`audit.configure`. `SELECTIVE` includes the `BASIC` baseline. T1.7b appends
+`READ_QUERY` and `READ_OBJECT` events for the administrative user and role read
+endpoints according to those rules.
+
+T1.6a adds authentication security events under `BASIC` and `SELECTIVE`.
+Successful login records `LOGIN_SUCCEEDED` mandatorily; failed login records
+`LOGIN_FAILED` best-effort without any attempted identifier; logout records
+`LOGOUT` best-effort for the original authenticated user. T1.6b adds best-effort
+`ACCESS_DENIED` events for authenticated callers rejected by an authorization
+rule, using a static HTTP resource family rather than the raw path. CSRF
+rejections and anonymous denials are not audited. These events require no new
+permission and do not change the authentication or authorization contract. See
+[Audit](audit.md).
+
 A user has a stable UUID, a unique username, a unique email address, an
 adaptive password hash, an enabled flag, and creation/update timestamps.
 Username and email comparisons and uniqueness checks are case-insensitive.
@@ -80,7 +108,14 @@ and creates the authenticated session:
 
 Unknown identifiers, incorrect passwords, disabled users, and ambiguous
 cross-identifier matches all return the same `401` error with code
-`AUTH_INVALID_CREDENTIALS`.
+`AUTH_INVALID_CREDENTIALS`. A failed `LOGIN_FAILED` audit append never changes
+that result.
+
+Under `BASIC` and `SELECTIVE`, successful login is fail-closed with respect to
+its audit event. If `LOGIN_SUCCEEDED` cannot be persisted after the session has been created,
+the security context is cleared, any created session is invalidated and the
+response is `503` with code `AUDIT_UNAVAILABLE`. This prevents a usable session
+from existing without its mandatory audit event.
 
 ### `GET /api/auth/me`
 
@@ -95,7 +130,9 @@ state, timestamps, and security internals are never returned.
 Requires a valid CSRF cookie/header pair. It invalidates the HTTP session when
 present, clears the security context and CSRF token, expires the session cookie,
 and returns `204`. The operation is intentionally idempotent for an anonymous
-client with a valid CSRF token.
+client with a valid CSRF token. Under `BASIC` and `SELECTIVE`, a successful
+logout appends `LOGOUT` best-effort; an audit failure never prevents session
+destruction or changes the `204` response.
 
 ### `POST /api/auth/password/forgot`
 
@@ -425,11 +462,13 @@ The initial catalogue contains:
 |------------|---------|
 | `users.manage` | Administrative capability over users (ALIXAR-DEV-003F) |
 | `roles.manage` | Manage roles and their permission assignments (ALIXAR-DEV-003G) |
+| `audit.read` | Read audit events (ALIXAR-DEV-003H T1.4a) |
+| `audit.configure` | Configure the audit policy (ALIXAR-DEV-003H T1.5b) |
 
-The built-in role `system-admin` contains both permissions. The role name and
-code are stable identifiers, but application code authorizes by permission, not
-by role name. No role is special in authorization: `system-admin` is simply a
-role whose permissions are maintained by migrations. The `built_in` flag marks
+The built-in role `system-admin` contains all four permissions. The role name
+and code are stable identifiers, but application code authorizes by permission,
+not by role name. No role is special in authorization: `system-admin` is simply
+a role whose permissions are maintained by migrations. The `built_in` flag marks
 roles whose lifecycle is reserved for controlled provisioning; it is not an
 authorization bypass. There is no mandatory basic role.
 
@@ -476,6 +515,12 @@ The administrative namespace is split by capability:
 | `GET /api/admin/roles` | `users.manage` or `roles.manage` |
 | Any other `/api/admin/roles/**` method | `roles.manage` |
 | `/api/admin/permissions` | `roles.manage` |
+| `GET /api/admin/audit-events` | `audit.read` |
+| `GET /api/admin/audit-events/verification` | `audit.read` |
+| `GET /api/admin/audit-configuration` | `audit.read` or `audit.configure` |
+| `PUT /api/admin/audit-configuration` | `audit.configure` |
+| `GET /api/admin/audit-configuration/read-policy` | `audit.read` or `audit.configure` |
+| `PUT /api/admin/audit-configuration/read-policy` | `audit.configure` |
 
 The GET rule for the role catalogue is method-specific and is evaluated before
 the general role namespace rule. Results:
@@ -490,11 +535,19 @@ This applies identically to session and Bearer authentication. An invalid
 Bearer credential clears the session context and does not fall back to the
 session identity, so it cannot bypass authorization.
 
+Under `BASIC` and `SELECTIVE`, an authenticated request rejected by an
+authorization rule also records an isolated best-effort `ACCESS_DENIED` event.
+The event actor is the rejected `SESSION` or `PAT` principal. The resource is `HTTP_REQUEST` with a
+static family such as `PATCH /api/admin/users`, never the raw path or query.
+Unknown routes, anonymous requests and CSRF rejections are not audited. An
+audit failure never changes the `403` result. See
+[Audit](audit.md#authorization-denial-events-t16b).
+
 Method security is enabled. Operations can be protected with
 `@PreAuthorize("hasAuthority('users.manage')")` or
 `@PreAuthorize("hasAuthority('roles.manage')")`; the stable permission
-constants are `PermissionCodes.USERS_MANAGE` and
-`PermissionCodes.ROLES_MANAGE`.
+constants are `PermissionCodes.USERS_MANAGE`, `PermissionCodes.ROLES_MANAGE`,
+`PermissionCodes.AUDIT_READ` and `PermissionCodes.AUDIT_CONFIGURE`.
 
 ### Bootstrap and the first administrator
 
@@ -523,6 +576,8 @@ and creation, and T3 adds role rename, permission replacement and deletion.
 | `PUT /api/admin/roles/{code}/permissions` | Replaces a role's permissions |
 | `DELETE /api/admin/roles/{code}` | Deletes an unassigned custom role |
 | `GET /api/admin/permissions` | Read-only permission catalogue |
+| `GET /api/admin/audit-events` | Chain-scoped audit event list |
+| `GET /api/admin/audit-events/verification` | Audit chain verification report |
 | `POST /api/admin/users` | Creates a disabled user |
 | `PATCH /api/admin/users/{id}` | Changes the username only |
 | `PATCH /api/admin/users/{id}/enabled` | Enables or disables a user |
@@ -534,6 +589,33 @@ by `code`. Each item contains only `code` and `description`; database identifier
 and internal metadata are not exposed. It requires `roles.manage` for both
 session and Bearer authentication. Permission creation, modification and
 deletion are not exposed by the API.
+
+`GET /api/admin/audit-events` and `GET /api/admin/audit-events/verification`
+require `audit.read`. Their pagination, filters, verification response and
+contracts are documented in [Audit](audit.md).
+
+`GET /api/admin/audit-configuration` returns the singleton `id`, `mode` and
+`updatedAt`. `PUT /api/admin/audit-configuration` accepts `OFF`, `BASIC` or
+`SELECTIVE` and records a mandatory policy-change event when the mode actually
+changes. Invalid modes return `400 AUDIT_INVALID_MODE`; a missing, null or blank
+mode returns `400 VALIDATION_REQUIRED`.
+
+`GET /api/admin/audit-configuration/read-policy` returns the configuration id
+and the active rules for `USER` and `ROLE`. `PUT` atomically replaces the full
+rule set, accepts `QUERY_ONLY`, `QUERY_AND_OBJECT` and `NONE`, and records one
+mandatory event per changed rule. Invalid resources or levels return
+`400 AUDIT_INVALID_READ_POLICY`. These endpoints are documented in
+[Audit](audit.md).
+
+Under `SELECTIVE`, the administrative user and role read endpoints append
+mandatory read events according to the persisted rules. `GET /api/admin/users`
+and `GET /api/admin/roles` produce one `READ_QUERY` per request when the level
+is `QUERY_ONLY` or `QUERY_AND_OBJECT`; the corresponding detail endpoints
+produce `READ_OBJECT` only at `QUERY_AND_OBJECT`. `BASIC` never produces read
+events. A successful read that cannot append its required event returns `503`
+with `AUDIT_UNAVAILABLE` and no resource data; a `403`, `404` or invalid request
+does not produce a `READ_*` event. Reading the audit event API itself is not
+instrumented. See [Audit](audit.md#read-events-t17b).
 
 Role responses contain only `code`, `name`, `builtIn` and `permissionCodes`.
 `GET /api/admin/roles` returns roles ordered by `code`, with permission codes

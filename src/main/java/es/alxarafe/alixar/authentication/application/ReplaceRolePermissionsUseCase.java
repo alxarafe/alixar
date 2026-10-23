@@ -13,7 +13,7 @@ public class ReplaceRolePermissionsUseCase {
         this.authorizationRepository = authorizationRepository;
     }
 
-    public RoleDefinition execute(String roleCode, List<String> permissionCodes) {
+    public ReplaceRolePermissionsResult execute(String roleCode, List<String> permissionCodes) {
         RoleDefinition role = authorizationRepository.findRoleByCode(roleCode)
             .orElseThrow(() -> new RoleNotFoundException(roleCode));
         if (role.builtIn()) {
@@ -31,7 +31,10 @@ public class ReplaceRolePermissionsUseCase {
         }
 
         authorizationRepository.replaceRolePermissions(roleCode, normalizedPermissionCodes);
-        return new RoleDefinition(roleCode, role.name(), false, normalizedPermissionCodes);
+        return new ReplaceRolePermissionsResult(
+            new RoleDefinition(role.id(), roleCode, role.name(), false, normalizedPermissionCodes),
+            !role.permissionCodes().equals(normalizedPermissionCodes)
+        );
     }
 
     private List<String> normalizePermissionCodes(List<String> permissionCodes) {

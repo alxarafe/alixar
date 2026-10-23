@@ -1,5 +1,15 @@
 package es.alxarafe.alixar.authentication.api;
 
+import es.alxarafe.alixar.audit.AuditModeTestSupport;
+import es.alxarafe.alixar.audit.InMemoryAuditEventRepository;
+import es.alxarafe.alixar.audit.application.AuditAction;
+import es.alxarafe.alixar.audit.application.AuditChainVerifier;
+import es.alxarafe.alixar.audit.application.AuditMode;
+import es.alxarafe.alixar.audit.application.AuditResourceType;
+import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
+import es.alxarafe.alixar.audit.domain.AuditChain;
+import es.alxarafe.alixar.audit.domain.AuditEvent;
+import es.alxarafe.alixar.audit.domain.AuditResult;
 import es.alxarafe.alixar.authentication.AuthenticationTestConfig;
 import es.alxarafe.alixar.authentication.application.AuthenticationErrorCode;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
@@ -11,6 +21,7 @@ import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
 import jakarta.servlet.http.Cookie;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,6 +71,15 @@ class SelfServiceUserControllerTest {
     @Autowired
     private TokenHasher tokenHasher;
 
+    @Autowired
+    private AuditModeTestSupport auditMode;
+
+    @Autowired
+    private InMemoryAuditEventRepository auditEventRepository;
+
+    @Autowired
+    private AuditChainVerifier auditChainVerifier;
+
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -89,6 +109,8 @@ class SelfServiceUserControllerTest {
             )
         );
         ((AuthenticationTestConfig.TestPasswordResetTokenRepository) tokenRepository).replaceWith();
+        auditMode.reset();
+        auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
     }
 
     // Own username change
@@ -171,6 +193,57 @@ class SelfServiceUserControllerTest {
             .andExpect(jsonPath("$.updatedAt").doesNotExist());
     }
 
+
+    @Test
+    void offAuditMode_usernameChangeDoesNotRecordEvent() throws Exception {
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        patchUsername(session, "{\"username\":\"alice-renamed\"}")
+            .andExpect(status().isOk());
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
+    void basicAuditMode_usernameChangeRecordsOldActorSnapshot() throws Exception {
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            patchUsername(session, "{\"username\":\"alice-renamed\"}")
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.USER_USERNAME_CHANGED.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo("alice");
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(ALICE_ID.toString());
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicAuditMode_noOpUsernameChangeDoesNotRecordEvent() throws Exception {
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            patchUsername(session, "{\"username\":\"ALICE\"}")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("alice"));
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
     // Own password change
 
     @Test
@@ -185,6 +258,42 @@ class SelfServiceUserControllerTest {
         assertThat(persisted.credentialsVersion()).isEqualTo(1);
         assertThat(passwordHasher.matches(NEW_PASSWORD, persisted.passwordHash())).isTrue();
         assertThat(passwordHasher.matches(PASSWORD, persisted.passwordHash())).isFalse();
+    }
+
+
+    @Test
+    void offAuditMode_passwordChangeDoesNotRecordEvent() throws Exception {
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        changePassword(session, PASSWORD, NEW_PASSWORD)
+            .andExpect(status().isNoContent());
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
+    void basicAuditMode_passwordChangeRecordsUserPasswordChangedWithoutSecrets() throws Exception {
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            changePassword(session, PASSWORD, NEW_PASSWORD)
+                .andExpect(status().isNoContent());
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.USER_PASSWORD_CHANGED.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo("alice");
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(ALICE_ID.toString());
+                assertThat(event.toString()).doesNotContain(PASSWORD, NEW_PASSWORD);
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
     }
 
     @Test
@@ -321,6 +430,10 @@ class SelfServiceUserControllerTest {
             .andExpect(status().isOk())
             .andReturn();
         return result.getResponse().getCookie(CSRF_COOKIE);
+    }
+
+    private List<AuditEvent> auditEvents() {
+        return auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID);
     }
 
     private String passwordJson(String currentPassword, String newPassword) {

@@ -12,14 +12,15 @@ public class RevokeApiTokenUseCase {
         this.apiTokenRepository = apiTokenRepository;
     }
 
-    public void execute(UUID userId, UUID tokenId) {
+    public boolean execute(UUID userId, UUID tokenId) {
         ApiToken token = apiTokenRepository.findByIdAndUserId(tokenId, userId)
             .orElseThrow(ApiTokenNotFoundException::new);
 
         if (token.isRevoked()) {
-            return;
+            return false;
         }
 
         apiTokenRepository.revoke(tokenId, userId, Instant.now());
+        return true;
     }
 }

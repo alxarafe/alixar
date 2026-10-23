@@ -1,11 +1,14 @@
 package es.alxarafe.alixar.authentication.api;
 
+import es.alxarafe.alixar.audit.application.AuditUnavailableException;
+import es.alxarafe.alixar.audit.application.SecurityAuditTrail;
 import es.alxarafe.alixar.authentication.application.InvalidCredentialsException;
 import es.alxarafe.alixar.authentication.application.InvalidPasswordException;
 import es.alxarafe.alixar.authentication.application.InvalidResetTokenException;
 import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalPasswordRecovery;
 import es.alxarafe.alixar.authentication.infrastructure.security.AuthenticatedUserPrincipal;
+import es.alxarafe.alixar.authentication.infrastructure.security.SecurityContextAuditActorResolver;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -15,6 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,6 +39,8 @@ class AuthController {
     private final SecurityContextRepository securityContextRepository;
     private final SessionAuthenticationStrategy sessionAuthenticationStrategy;
     private final TransactionalPasswordRecovery passwordRecovery;
+    private final SecurityAuditTrail securityAuditTrail;
+    private final SecurityContextAuditActorResolver auditActorResolver;
     private final SecurityContextHolderStrategy securityContextHolderStrategy =
         SecurityContextHolder.getContextHolderStrategy();
 
@@ -42,12 +48,16 @@ class AuthController {
         AuthenticationManager authenticationManager,
         SecurityContextRepository securityContextRepository,
         SessionAuthenticationStrategy sessionAuthenticationStrategy,
-        TransactionalPasswordRecovery passwordRecovery
+        TransactionalPasswordRecovery passwordRecovery,
+        SecurityAuditTrail securityAuditTrail,
+        SecurityContextAuditActorResolver auditActorResolver
     ) {
         this.authenticationManager = authenticationManager;
         this.securityContextRepository = securityContextRepository;
         this.sessionAuthenticationStrategy = sessionAuthenticationStrategy;
         this.passwordRecovery = passwordRecovery;
+        this.securityAuditTrail = securityAuditTrail;
+        this.auditActorResolver = auditActorResolver;
     }
 
     @PostMapping(
@@ -60,18 +70,43 @@ class AuthController {
         HttpServletRequest request,
         HttpServletResponse response
     ) {
-        Authentication authentication = authenticationManager.authenticate(
-            UsernamePasswordAuthenticationToken.unauthenticated(
-                loginRequest.identifier(),
-                loginRequest.password()
-            )
-        );
+        Authentication authentication;
+        try {
+            authentication = authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken.unauthenticated(
+                    loginRequest.identifier(),
+                    loginRequest.password()
+                )
+            );
+        } catch (AuthenticationException exception) {
+            securityAuditTrail.loginFailed();
+            throw exception;
+        }
+
         sessionAuthenticationStrategy.onAuthentication(authentication, request, response);
 
         var securityContext = securityContextHolderStrategy.createEmptyContext();
         securityContext.setAuthentication(authentication);
         securityContextHolderStrategy.setContext(securityContext);
         securityContextRepository.saveContext(securityContext, request, response);
+
+        try {
+            securityAuditTrail.loginSucceeded(
+                auditActorResolver.resolve(authentication, request)
+                    .orElseThrow(AuditUnavailableException::new)
+            );
+        } catch (AuditUnavailableException exception) {
+            securityContextHolderStrategy.clearContext();
+            securityContextRepository.saveContext(
+                securityContextHolderStrategy.createEmptyContext(),
+                request,
+                response
+            );
+            if (request.getSession(false) != null) {
+                request.getSession(false).invalidate();
+            }
+            throw exception;
+        }
 
         return toResponse((AuthenticatedUserPrincipal) authentication.getPrincipal());
     }

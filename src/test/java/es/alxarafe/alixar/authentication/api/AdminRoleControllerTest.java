@@ -1,5 +1,16 @@
 package es.alxarafe.alixar.authentication.api;
 
+import es.alxarafe.alixar.audit.AuditModeTestSupport;
+import es.alxarafe.alixar.audit.InMemoryAuditEventRepository;
+import es.alxarafe.alixar.audit.application.AuditAction;
+import es.alxarafe.alixar.audit.application.AuditChainVerifier;
+import es.alxarafe.alixar.audit.application.AuditMode;
+import es.alxarafe.alixar.audit.application.AuditReadLevel;
+import es.alxarafe.alixar.audit.application.AuditResourceType;
+import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
+import es.alxarafe.alixar.audit.domain.AuditChain;
+import es.alxarafe.alixar.audit.domain.AuditEvent;
+import es.alxarafe.alixar.audit.domain.AuditResult;
 import es.alxarafe.alixar.authentication.AuthenticationTestConfig;
 import es.alxarafe.alixar.authentication.application.AdministrationErrorCode;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
@@ -12,6 +23,7 @@ import es.alxarafe.alixar.authentication.domain.User;
 import jakarta.servlet.http.Cookie;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,11 +73,22 @@ class AdminRoleControllerTest {
     @Autowired
     private PasswordHasher passwordHasher;
 
+    @Autowired
+    private AuditModeTestSupport auditMode;
+
+    @Autowired
+    private InMemoryAuditEventRepository auditEventRepository;
+
+    @Autowired
+    private AuditChainVerifier auditChainVerifier;
+
     private MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+        auditMode.reset();
+        auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
         Instant now = Instant.parse("2026-10-20T10:00:00Z");
         ((AuthenticationTestConfig.TestUserRepository) userRepository).replaceWith(new User(
             ALICE_ID,
@@ -117,6 +140,7 @@ class AdminRoleControllerTest {
         grantSystemAdmin();
         authorizationRepository.revokePermissionFromRole(RoleCodes.SYSTEM_ADMIN, PermissionCodes.ROLES_MANAGE);
         authorizationRepository.createRole(new RoleDefinition(
+            UUID.randomUUID(),
             "mutation-target",
             "Mutation target",
             false,
@@ -145,6 +169,7 @@ class AdminRoleControllerTest {
     void list_usesCanonicalContractAndDeterministicOrder() throws Exception {
         grantRolesManage();
         authorizationRepository.createRole(new RoleDefinition(
+            UUID.randomUUID(),
             "custom-role",
             "Custom role",
             false,
@@ -175,8 +200,11 @@ class AdminRoleControllerTest {
             .andExpect(jsonPath("$.code").value(RoleCodes.SYSTEM_ADMIN))
             .andExpect(jsonPath("$.name").value("System administrator"))
             .andExpect(jsonPath("$.builtIn").value(true))
-            .andExpect(jsonPath("$.permissionCodes[0]").value(PermissionCodes.ROLES_MANAGE))
-            .andExpect(jsonPath("$.permissionCodes[1]").value(PermissionCodes.USERS_MANAGE))
+            .andExpect(jsonPath("$.permissionCodes.length()").value(4))
+            .andExpect(jsonPath("$.permissionCodes[0]").value(PermissionCodes.AUDIT_CONFIGURE))
+            .andExpect(jsonPath("$.permissionCodes[1]").value(PermissionCodes.AUDIT_READ))
+            .andExpect(jsonPath("$.permissionCodes[2]").value(PermissionCodes.ROLES_MANAGE))
+            .andExpect(jsonPath("$.permissionCodes[3]").value(PermissionCodes.USERS_MANAGE))
             .andExpect(jsonPath("$.permissions").doesNotExist());
     }
 
@@ -296,6 +324,7 @@ class AdminRoleControllerTest {
     void updateName_customRole_preservesCodePermissionsAndAssignments() throws Exception {
         grantRolesManage();
         authorizationRepository.createRole(new RoleDefinition(
+            UUID.randomUUID(),
             "editable-role",
             "Editable role",
             false,
@@ -340,7 +369,7 @@ class AdminRoleControllerTest {
     @Test
     void updateName_blankName_returnsBadRequest() throws Exception {
         grantRolesManage();
-        authorizationRepository.createRole(new RoleDefinition("editable-role", "Editable role", false, List.of()));
+        authorizationRepository.createRole(new RoleDefinition(UUID.randomUUID(), "editable-role", "Editable role", false, List.of()));
         MockHttpSession session = authenticatedSession();
 
         adminPatch(session, AdminUserEndpoints.ROLES_BASE_PATH + "/editable-role", "{\"name\":\"   \"}")
@@ -353,6 +382,7 @@ class AdminRoleControllerTest {
     void replacePermissions_normalizesAndReplacesAtomically() throws Exception {
         grantRolesManage();
         authorizationRepository.createRole(new RoleDefinition(
+            UUID.randomUUID(),
             "editable-role",
             "Editable role",
             false,
@@ -378,6 +408,7 @@ class AdminRoleControllerTest {
     void replacePermissions_unknownPermission_keepsPreviousPermissions() throws Exception {
         grantRolesManage();
         authorizationRepository.createRole(new RoleDefinition(
+            UUID.randomUUID(),
             "editable-role",
             "Editable role",
             false,
@@ -411,7 +442,12 @@ class AdminRoleControllerTest {
             .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_BUILT_IN_ROLE_IMMUTABLE.name()));
 
         assertThat(authorizationRepository.findPermissionCodesByRole(RoleCodes.SYSTEM_ADMIN))
-            .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
+            .containsExactlyInAnyOrder(
+                PermissionCodes.USERS_MANAGE,
+                PermissionCodes.ROLES_MANAGE,
+                PermissionCodes.AUDIT_READ,
+                PermissionCodes.AUDIT_CONFIGURE
+            );
     }
 
     @Test
@@ -431,7 +467,7 @@ class AdminRoleControllerTest {
     @Test
     void replacePermissions_withoutPermissionCodes_returnsBadRequest() throws Exception {
         grantRolesManage();
-        authorizationRepository.createRole(new RoleDefinition("editable-role", "Editable role", false, List.of()));
+        authorizationRepository.createRole(new RoleDefinition(UUID.randomUUID(), "editable-role", "Editable role", false, List.of()));
         MockHttpSession session = authenticatedSession();
 
         adminPut(session, AdminUserEndpoints.ROLES_BASE_PATH + "/editable-role/permissions", "{}")
@@ -443,7 +479,7 @@ class AdminRoleControllerTest {
     @Test
     void delete_customUnassignedRole_returnsNoContentAndRemovesIt() throws Exception {
         grantRolesManage();
-        authorizationRepository.createRole(new RoleDefinition("free-role", "Free role", false, List.of()));
+        authorizationRepository.createRole(new RoleDefinition(UUID.randomUUID(), "free-role", "Free role", false, List.of()));
         MockHttpSession session = authenticatedSession();
 
         adminDelete(session, AdminUserEndpoints.ROLES_BASE_PATH + "/free-role")
@@ -457,7 +493,7 @@ class AdminRoleControllerTest {
     @Test
     void delete_assignedRole_returnsConflictAndKeepsAssignment() throws Exception {
         grantRolesManage();
-        authorizationRepository.createRole(new RoleDefinition("in-use-role", "In use role", false, List.of()));
+        authorizationRepository.createRole(new RoleDefinition(UUID.randomUUID(), "in-use-role", "In use role", false, List.of()));
         authorizationRepository.assignRoleToUser(ALICE_ID, "in-use-role");
         MockHttpSession session = authenticatedSession();
         int assignmentsBefore = ((AuthenticationTestConfig.TestAuthorizationRepository) authorizationRepository)
@@ -492,6 +528,191 @@ class AdminRoleControllerTest {
         adminDelete(session, AdminUserEndpoints.ROLES_BASE_PATH + "/missing-role")
             .andExpect(status().isNotFound())
             .andExpect(jsonPath("$.code").value(AdministrationErrorCode.ADMIN_ROLE_NOT_FOUND.name()));
+    }
+
+    @Test
+    void basicAuditMode_roleLifecycleRecordsCanonicalEventsWithInternalRoleId() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            adminPost(session, createRoleJson("audited-role", "Audited role", "[\"users.manage\"]"))
+                .andExpect(status().isCreated());
+            UUID roleId = authorizationRepository.findRoleByCode("audited-role").orElseThrow().id();
+
+            adminPatch(session, AdminUserEndpoints.ROLES_BASE_PATH + "/audited-role", "{\"name\":\"Renamed\"}")
+                .andExpect(status().isOk());
+            adminPut(
+                session,
+                AdminUserEndpoints.ROLES_BASE_PATH + "/audited-role/permissions",
+                "{\"permissionCodes\":[\"roles.manage\"]}"
+            ).andExpect(status().isOk());
+            adminDelete(session, AdminUserEndpoints.ROLES_BASE_PATH + "/audited-role")
+                .andExpect(status().isNoContent());
+
+            List<AuditEvent> events = auditEvents();
+            assertThat(events).extracting(AuditEvent::action).containsExactly(
+                AuditAction.ROLE_CREATED.name(),
+                AuditAction.ROLE_RENAMED.name(),
+                AuditAction.ROLE_PERMISSIONS_REPLACED.name(),
+                AuditAction.ROLE_DELETED.name()
+            );
+            assertThat(events).extracting(AuditEvent::authenticationType)
+                .containsOnly(AuditAuthenticationType.SESSION);
+            assertThat(events).extracting(AuditEvent::actorUserId).containsOnly(ALICE_ID);
+            assertThat(events).extracting(AuditEvent::actorUsername).containsOnly(USERNAME);
+            assertThat(events).extracting(AuditEvent::resourceType)
+                .containsOnly(AuditResourceType.ROLE.name());
+            assertThat(events).extracting(AuditEvent::resourceId).containsOnly(roleId.toString());
+            assertThat(events).allSatisfy(event -> {
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.requestId()).isNull();
+                assertThat(event.toString()).doesNotContain("audited-role");
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicAuditMode_noOpRoleRenameAndPermissionsReplacementDoNotRecordEvents() throws Exception {
+        grantRolesManage();
+        authorizationRepository.createRole(new RoleDefinition(
+            UUID.randomUUID(),
+            "editable-role",
+            "Editable role",
+            false,
+            List.of(PermissionCodes.USERS_MANAGE)
+        ));
+        MockHttpSession session = authenticatedSession();
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            adminPatch(session, AdminUserEndpoints.ROLES_BASE_PATH + "/editable-role", "{\"name\":\" Editable role \"}")
+                .andExpect(status().isOk());
+            adminPut(
+                session,
+                AdminUserEndpoints.ROLES_BASE_PATH + "/editable-role/permissions",
+                "{\"permissionCodes\":[\" USERS.MANAGE \",\"users.manage\"]}"
+            ).andExpect(status().isOk());
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void offAuditMode_roleCreationDoesNotRecordEvent() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+
+        adminPost(session, createRoleJson("off-audit-role", "Off audit role", "[]"))
+            .andExpect(status().isCreated());
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
+    void selectiveQueryOnly_auditsRoleListButNotDetail() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of(AuditResourceType.ROLE, AuditReadLevel.QUERY_ONLY));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.ROLES_BASE_PATH).session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(SYSTEM_ADMIN_PATH).session(session))
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.READ_QUERY.name());
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.ROLE.name());
+                assertThat(event.resourceId()).isNull();
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+            });
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void selectiveQueryAndObject_auditsRoleListAndDetailWithInternalId() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+        UUID systemAdminId = authorizationRepository.findRoleByCode(RoleCodes.SYSTEM_ADMIN)
+            .orElseThrow()
+            .id();
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of(AuditResourceType.ROLE, AuditReadLevel.QUERY_AND_OBJECT));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.ROLES_BASE_PATH).session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(SYSTEM_ADMIN_PATH).session(session))
+                .andExpect(status().isOk());
+
+            List<AuditEvent> events = auditEvents();
+            assertThat(events).extracting(AuditEvent::action).containsExactly(
+                AuditAction.READ_QUERY.name(),
+                AuditAction.READ_OBJECT.name()
+            );
+            assertThat(events.get(0).resourceId()).isNull();
+            assertThat(events.get(1).resourceId()).isEqualTo(systemAdminId.toString());
+            assertThat(events.get(1).resourceId()).isNotEqualTo(RoleCodes.SYSTEM_ADMIN);
+            assertThat(events).allSatisfy(event -> {
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.ROLE.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.toString()).doesNotContain("system-admin");
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void selectiveReadAudit_unknownRoleDoesNotRecord() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of(AuditResourceType.ROLE, AuditReadLevel.QUERY_AND_OBJECT));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.ROLES_BASE_PATH + "/missing-role").session(session))
+                .andExpect(status().isNotFound());
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicMode_doesNotAuditRoleReadsEvenWhenRulesArePersisted() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+        auditMode.setMode(AuditMode.BASIC);
+        auditMode.setReadRules(Map.of(AuditResourceType.ROLE, AuditReadLevel.QUERY_AND_OBJECT));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.ROLES_BASE_PATH).session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(SYSTEM_ADMIN_PATH).session(session))
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    private List<AuditEvent> auditEvents() {
+        return auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID);
     }
 
     private void grantRolesManage() {

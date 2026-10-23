@@ -1,7 +1,6 @@
 package es.alxarafe.alixar.authentication.api;
 
-import es.alxarafe.alixar.authentication.application.GetRoleUseCase;
-import es.alxarafe.alixar.authentication.application.ListRolesUseCase;
+import es.alxarafe.alixar.authentication.application.AuditedAdminReadService;
 import es.alxarafe.alixar.authentication.application.RoleDefinition;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminRoleService;
 import jakarta.validation.Valid;
@@ -26,23 +25,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(AdminUserEndpoints.ROLES_BASE_PATH)
 class AdminRoleController {
 
-    private final ListRolesUseCase listRoles;
-    private final GetRoleUseCase getRole;
+    private final AuditedAdminReadService adminReadService;
     private final TransactionalAdminRoleService adminRoleService;
 
     AdminRoleController(
-        ListRolesUseCase listRoles,
-        GetRoleUseCase getRole,
+        AuditedAdminReadService adminReadService,
         TransactionalAdminRoleService adminRoleService
     ) {
-        this.listRoles = listRoles;
-        this.getRole = getRole;
+        this.adminReadService = adminReadService;
         this.adminRoleService = adminRoleService;
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     List<AdminRoleResponse> list() {
-        return listRoles.execute().stream()
+        return adminReadService.listRoles().stream()
             .map(this::toResponse)
             .toList();
     }
@@ -52,7 +48,7 @@ class AdminRoleController {
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     AdminRoleResponse get(@PathVariable(AdminUserEndpoints.ROLE_CODE_PATH_VARIABLE) String code) {
-        return toResponse(getRole.execute(code));
+        return toResponse(adminReadService.getRole(code));
     }
 
     @PostMapping(

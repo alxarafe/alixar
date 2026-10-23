@@ -143,7 +143,7 @@ class RoleBasedAuthorizationTest {
 
     @Test
     void rolePermissionChanges_affectNextRequestWithSameSessionAndToken() throws Exception {
-        authorizationRepository.createRole(new RoleDefinition("probe-role", "Probe role", false, List.of()));
+        authorizationRepository.createRole(new RoleDefinition(UUID.randomUUID(), "probe-role", "Probe role", false, List.of()));
         authorizationRepository.assignRoleToUser(BOB_ID, "probe-role");
         authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
 
@@ -179,6 +179,7 @@ class RoleBasedAuthorizationTest {
     @Test
     void selfRevocation_appliesAfterCurrentRequestWithoutLogout() throws Exception {
         authorizationRepository.createRole(new RoleDefinition(
+            UUID.randomUUID(),
             "role-admin",
             "Role administrator",
             false,

@@ -1,13 +1,47 @@
 package es.alxarafe.alixar.persistence;
 
+import es.alxarafe.alixar.audit.application.AuditAction;
+import es.alxarafe.alixar.audit.application.AuditActor;
+import es.alxarafe.alixar.audit.application.AuditActorResolver;
+import es.alxarafe.alixar.audit.application.AuditCanonicalEncoder;
+import es.alxarafe.alixar.audit.application.AuditChainSource;
+import es.alxarafe.alixar.audit.application.AuditChainVerifier;
+import es.alxarafe.alixar.audit.application.AuditEventDraft;
+import es.alxarafe.alixar.audit.application.AuditEventQuery;
+import es.alxarafe.alixar.audit.application.AuditEventRepository;
+import es.alxarafe.alixar.audit.application.AuditHashCalculator;
+import es.alxarafe.alixar.audit.application.AuditMode;
+import es.alxarafe.alixar.audit.application.AuditUnavailableException;
+import es.alxarafe.alixar.audit.application.AuditReadLevel;
+import es.alxarafe.alixar.audit.application.AuditResourceType;
+import es.alxarafe.alixar.audit.application.AuditVerificationFailure;
+import es.alxarafe.alixar.audit.application.AuditVerificationResult;
+import es.alxarafe.alixar.audit.application.ListAuditEventsUseCase;
+import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
+import es.alxarafe.alixar.audit.domain.AuditChain;
+import es.alxarafe.alixar.audit.domain.AuditChainHead;
+import es.alxarafe.alixar.audit.domain.AuditEvent;
+import es.alxarafe.alixar.audit.domain.AuditResult;
+import es.alxarafe.alixar.audit.infrastructure.AuditConfigurationBootstrap;
+import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
+import es.alxarafe.alixar.audit.infrastructure.CachedAuditPolicyProvider;
+import es.alxarafe.alixar.audit.infrastructure.ConfiguredReadAuditRecorder;
+import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditConfigurationService;
+import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditReadPolicyService;
+import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditService;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
+import es.alxarafe.alixar.authentication.application.AuditedAdminReadService;
 import es.alxarafe.alixar.authentication.application.BuiltInRoleImmutableException;
 import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
 import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
 import es.alxarafe.alixar.authentication.application.EmailAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
+import es.alxarafe.alixar.authentication.application.GetAdminUserUseCase;
+import es.alxarafe.alixar.authentication.application.GetRoleUseCase;
+import es.alxarafe.alixar.authentication.application.ListAdminUsersUseCase;
+import es.alxarafe.alixar.authentication.application.ListRolesUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
 import es.alxarafe.alixar.authentication.application.PermissionCodes;
 import es.alxarafe.alixar.authentication.application.PermissionDefinition;
@@ -15,6 +49,7 @@ import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenGenerator;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.PermissionNotFoundException;
+import es.alxarafe.alixar.authentication.application.AdminUserSearchQuery;
 import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.RoleAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.RoleCodes;
@@ -29,19 +64,37 @@ import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminUserService;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminRoleService;
+import es.alxarafe.alixar.authentication.infrastructure.TransactionalApiTokenService;
+import es.alxarafe.alixar.authentication.infrastructure.TransactionalPasswordRecovery;
+import es.alxarafe.alixar.authentication.infrastructure.TransactionalUserSelfService;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Stream;
 import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.jooq.DSLContext;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -50,8 +103,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 // Runs explicitly in bin/check against its isolated Compose database.
 @SpringBootTest(properties = "spring.autoconfigure.exclude=")
+@Import(PersistenceIT.FixedAuditActorConfiguration.class)
 class PersistenceIT {
 
+    private static final UUID AUDIT_TEST_ACTOR_ID =
+        UUID.fromString("6e337a8b-7e9b-4f2d-8a0f-1b4c5d6e7f80");
     private static final String POSTGRESQL_VERSION = "18.6";
     private static final String HISTORY_TABLE = "flyway_schema_history";
     private static final String USER_TABLE = "authentication_user";
@@ -61,6 +117,11 @@ class PersistenceIT {
     private static final String PERMISSION_TABLE = "authentication_permission";
     private static final String ROLE_PERMISSION_TABLE = "authentication_role_permission";
     private static final String USER_ROLE_TABLE = "authentication_user_role";
+    private static final String AUDIT_HEAD_TABLE = "audit_chain_head";
+    private static final String AUDIT_EVENT_TABLE = "audit_event";
+    private static final String AUDIT_CONFIGURATION_TABLE = "audit_configuration";
+    private static final String AUDIT_READ_POLICY_TABLE = "audit_read_policy";
+    private static final UUID AUDIT_CHAIN_ID = AuditChain.DEFAULT_CHAIN_ID;
 
     @Autowired
     private DataSource dataSource;
@@ -101,6 +162,57 @@ class PersistenceIT {
     @Autowired
     private TransactionalAdminRoleService transactionalAdminRoleService;
 
+    @Autowired
+    private TransactionalApiTokenService transactionalApiTokenService;
+
+    @Autowired
+    private TransactionalUserSelfService transactionalUserSelfService;
+
+    @Autowired
+    private TransactionalPasswordRecovery transactionalPasswordRecovery;
+
+    @Autowired
+    private TransactionalAuditService transactionalAuditService;
+
+    @Autowired
+    private AuditChainVerifier auditChainVerifier;
+
+    @Autowired
+    private BlockingAuditChainSource blockingAuditChainSource;
+
+    @Autowired
+    private ListAuditEventsUseCase listAuditEvents;
+
+    @Autowired
+    private AuditProperties auditProperties;
+
+    @Autowired
+    private CachedAuditPolicyProvider auditPolicyProvider;
+
+    @Autowired
+    private AuditConfigurationBootstrap auditConfigurationBootstrap;
+
+    @Autowired
+    private TransactionalAuditConfigurationService transactionalAuditConfigurationService;
+
+    @Autowired
+    private TransactionalAuditReadPolicyService transactionalAuditReadPolicyService;
+
+    @Autowired
+    private AuditedAdminReadService auditedAdminReadService;
+
+    @Autowired
+    private ListAdminUsersUseCase listAdminUsersUseCase;
+
+    @Autowired
+    private GetAdminUserUseCase getAdminUserUseCase;
+
+    @Autowired
+    private ListRolesUseCase listRolesUseCase;
+
+    @Autowired
+    private GetRoleUseCase getRoleUseCase;
+
     @Test
     void bootIntegratesPostgresqlFlywayJooqAndAuthenticationMigration() throws Exception {
         try (var connection = dataSource.getConnection()) {
@@ -108,8 +220,8 @@ class PersistenceIT {
                 .startsWith(POSTGRESQL_VERSION);
         }
         assertThat(flyway.getConfiguration().getDataSource()).isSameAs(dataSource);
-        assertThat(flyway.info().all()).hasSize(5);
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("5");
+        assertThat(flyway.info().all()).hasSize(10);
+        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("10");
         assertThat(dsl.selectOne().fetchSingle().value1()).isEqualTo(1);
         assertThat(dsl.fetch("select tablename from pg_catalog.pg_tables where schemaname = current_schema()")
             .getValues(0, String.class)).containsExactlyInAnyOrder(
@@ -120,10 +232,14 @@ class PersistenceIT {
                 ROLE_TABLE,
                 PERMISSION_TABLE,
                 ROLE_PERMISSION_TABLE,
-                USER_ROLE_TABLE
+                USER_ROLE_TABLE,
+                AUDIT_HEAD_TABLE,
+                AUDIT_EVENT_TABLE,
+                AUDIT_CONFIGURATION_TABLE,
+                AUDIT_READ_POLICY_TABLE
             );
         assertThat(dsl.fetchCount(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(HISTORY_TABLE))))
-            .isEqualTo(5);
+            .isEqualTo(10);
     }
 
     @Test
@@ -834,11 +950,21 @@ class PersistenceIT {
     @Test
     void rbacMigration_seedsRoleAdministrationPermissionsAndBuiltInRole() {
         assertThat(dsl.fetch("select code from authentication_permission").getValues(0, String.class))
-            .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
+            .containsExactlyInAnyOrder(
+                PermissionCodes.USERS_MANAGE,
+                PermissionCodes.ROLES_MANAGE,
+                PermissionCodes.AUDIT_READ,
+                PermissionCodes.AUDIT_CONFIGURE
+            );
         assertThat(dsl.fetch("select code from authentication_role").getValues(0, String.class))
             .contains(RoleCodes.SYSTEM_ADMIN);
         assertThat(authorizationRepository.findPermissionCodesByRole(RoleCodes.SYSTEM_ADMIN))
-            .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
+            .containsExactlyInAnyOrder(
+                PermissionCodes.USERS_MANAGE,
+                PermissionCodes.ROLES_MANAGE,
+                PermissionCodes.AUDIT_READ,
+                PermissionCodes.AUDIT_CONFIGURE
+            );
         assertThat(dsl.fetch(
             "select built_in from authentication_role where code = ?",
             RoleCodes.SYSTEM_ADMIN
@@ -849,6 +975,8 @@ class PersistenceIT {
     void rbacPermissionCatalogue_isSortedAndIncludesRoleAdministration() {
         assertThat(authorizationRepository.findAllPermissions())
             .containsExactly(
+                new PermissionDefinition(PermissionCodes.AUDIT_CONFIGURE, "Configure audit policy"),
+                new PermissionDefinition(PermissionCodes.AUDIT_READ, "Read audit events"),
                 new PermissionDefinition(
                     PermissionCodes.ROLES_MANAGE,
                     "Manage roles and their permission assignments"
@@ -871,6 +999,7 @@ class PersistenceIT {
             assertThat(created.builtIn()).isFalse();
             assertThat(authorizationRepository.findRoleByCode(roleCode))
                 .contains(new RoleDefinition(
+                    created.id(),
                     roleCode,
                     "DB created role",
                     false,
@@ -883,6 +1012,7 @@ class PersistenceIT {
             ).getValues(0, Long.class)).containsExactly(0L);
 
             assertThatThrownBy(() -> authorizationRepository.createRole(new RoleDefinition(
+                UUID.randomUUID(),
                 roleCode,
                 "Concurrent duplicate",
                 false,
@@ -908,7 +1038,11 @@ class PersistenceIT {
 
         try {
             insertUser(userId, "rbac-renamed", "rbac-renamed@example.test");
-            transactionalAdminRoleService.create(roleCode, "Original name", List.of(PermissionCodes.USERS_MANAGE));
+            RoleDefinition created = transactionalAdminRoleService.create(
+                roleCode,
+                "Original name",
+                List.of(PermissionCodes.USERS_MANAGE)
+            );
             authorizationRepository.assignRoleToUser(userId, roleCode);
             long credentialsVersionBefore = userRepository.findById(userId).orElseThrow().credentialsVersion();
 
@@ -919,7 +1053,13 @@ class PersistenceIT {
             assertThat(renamed.builtIn()).isFalse();
             assertThat(renamed.permissionCodes()).containsExactly(PermissionCodes.USERS_MANAGE);
             assertThat(authorizationRepository.findRoleByCode(roleCode))
-                .contains(new RoleDefinition(roleCode, "Renamed role", false, List.of(PermissionCodes.USERS_MANAGE)));
+                .contains(new RoleDefinition(
+                    created.id(),
+                    roleCode,
+                    "Renamed role",
+                    false,
+                    List.of(PermissionCodes.USERS_MANAGE)
+                ));
             assertThat(authorizationRepository.findRoleCodesForUser(userId)).containsExactly(roleCode);
             assertThat(userRepository.findById(userId).orElseThrow().credentialsVersion())
                 .isEqualTo(credentialsVersionBefore);
@@ -934,13 +1074,18 @@ class PersistenceIT {
         String roleCode = "db-permissions-role";
 
         try {
-            transactionalAdminRoleService.create(roleCode, "Permissions role", List.of(PermissionCodes.USERS_MANAGE));
+            RoleDefinition created = transactionalAdminRoleService.create(
+                roleCode,
+                "Permissions role",
+                List.of(PermissionCodes.USERS_MANAGE)
+            );
 
             RoleDefinition replaced = transactionalAdminRoleService.replacePermissions(
                 roleCode,
                 List.of(" ROLES.MANAGE ", "roles.manage", "users.manage")
             );
 
+            assertThat(replaced.id()).isEqualTo(created.id());
             assertThat(replaced.name()).isEqualTo("Permissions role");
             assertThat(replaced.builtIn()).isFalse();
             assertThat(replaced.permissionCodes()).containsExactly(
@@ -974,13 +1119,17 @@ class PersistenceIT {
             )).isInstanceOf(BuiltInRoleImmutableException.class);
             assertThatThrownBy(() -> transactionalAdminRoleService.delete(RoleCodes.SYSTEM_ADMIN))
                 .isInstanceOf(BuiltInRoleImmutableException.class);
-            assertThat(authorizationRepository.findRoleByCode(RoleCodes.SYSTEM_ADMIN))
-                .contains(new RoleDefinition(
-                    RoleCodes.SYSTEM_ADMIN,
-                    "System administrator",
-                    true,
-                    List.of(PermissionCodes.ROLES_MANAGE, PermissionCodes.USERS_MANAGE)
-                ));
+            RoleDefinition builtIn = authorizationRepository.findRoleByCode(RoleCodes.SYSTEM_ADMIN)
+                .orElseThrow();
+            assertThat(builtIn.code()).isEqualTo(RoleCodes.SYSTEM_ADMIN);
+            assertThat(builtIn.name()).isEqualTo("System administrator");
+            assertThat(builtIn.builtIn()).isTrue();
+            assertThat(builtIn.permissionCodes()).containsExactly(
+                PermissionCodes.AUDIT_CONFIGURE,
+                PermissionCodes.AUDIT_READ,
+                PermissionCodes.ROLES_MANAGE,
+                PermissionCodes.USERS_MANAGE
+            );
         } finally {
             dsl.query("delete from authentication_role where code = ?", roleCode).execute();
         }
@@ -1061,6 +1210,8 @@ class PersistenceIT {
                 .containsExactlyInAnyOrder(
                     PermissionCodes.USERS_MANAGE,
                     PermissionCodes.ROLES_MANAGE,
+                    PermissionCodes.AUDIT_READ,
+                    PermissionCodes.AUDIT_CONFIGURE,
                     permissionCode
                 );
         } finally {
@@ -1081,7 +1232,12 @@ class PersistenceIT {
             authorizationRepository.assignRoleToUser(userId, RoleCodes.SYSTEM_ADMIN);
 
             assertThat(authorizationRepository.findEffectivePermissionCodes(userId))
-                .containsExactlyInAnyOrder(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE);
+                .containsExactlyInAnyOrder(
+                    PermissionCodes.USERS_MANAGE,
+                    PermissionCodes.ROLES_MANAGE,
+                    PermissionCodes.AUDIT_READ,
+                    PermissionCodes.AUDIT_CONFIGURE
+                );
             assertThat(dsl.selectCount()
                 .from(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(USER_ROLE_TABLE)))
                 .where(org.jooq.impl.DSL.field(
@@ -1323,6 +1479,1565 @@ class PersistenceIT {
         assertThat(isTransactional(controller, "revoke")).isFalse();
         assertThat(isTransactional(facade, "create")).isTrue();
         assertThat(isTransactional(facade, "revoke")).isTrue();
+    }
+
+    @Test
+    void auditTransactionBoundary_livesInInfrastructureFacade() throws Exception {
+        Class<?> facade = Class.forName(
+            "es.alxarafe.alixar.audit.infrastructure.TransactionalAuditService"
+        );
+
+        assertThat(isTransactional(facade, "append")).isTrue();
+        assertThat(isTransactional(facade, "appendIsolated")).isTrue();
+        var isolated = facade.getDeclaredMethod("appendIsolated", AuditEventDraft.class)
+            .getAnnotation(Transactional.class);
+        assertThat(isolated).isNotNull();
+        assertThat(isolated.propagation()).isEqualTo(Propagation.REQUIRES_NEW);
+        var verification = facade.getDeclaredMethod("verify", UUID.class)
+            .getAnnotation(Transactional.class);
+        assertThat(verification).isNotNull();
+        assertThat(verification.readOnly()).isTrue();
+        assertThat(verification.isolation()).isEqualTo(Isolation.REPEATABLE_READ);
+    }
+
+    @Test
+    void auditIsolatedAppend_survivesOuterTransactionRollback() {
+        resetAuditChain();
+
+        try {
+            var transactionTemplate = new TransactionTemplate(transactionManager);
+            transactionTemplate.executeWithoutResult(status -> {
+                transactionalAuditService.appendIsolated(auditDraft("ISOLATED_SECURITY_EVENT"));
+                status.setRollbackOnly();
+            });
+
+            assertThat(auditEventCount()).isEqualTo(1);
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditVerification_usesSingleSnapshotDuringConcurrentAppend() throws Exception {
+        resetAuditChain();
+        appendAuditEvents(3);
+        var gate = blockingAuditChainSource.blockNextEventRead();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        try {
+            Future<AuditVerificationResult> verification = executor.submit(
+                () -> transactionalAuditService.verify(AUDIT_CHAIN_ID)
+            );
+            assertThat(gate.awaitStarted()).isTrue();
+
+            transactionalAuditService.append(auditDraft("CONCURRENT_VERIFICATION"));
+            gate.release();
+
+            AuditVerificationResult result = verification.get(30, TimeUnit.SECONDS);
+            assertThat(result.valid()).isTrue();
+            assertThat(result.checkedEvents()).isEqualTo(3);
+
+            AuditVerificationResult afterAppend =
+                transactionalAuditService.verify(AUDIT_CHAIN_ID);
+            assertThat(afterAppend.valid()).isTrue();
+            assertThat(afterAppend.checkedEvents()).isEqualTo(4);
+        } finally {
+            gate.release();
+            executor.shutdownNow();
+            executor.awaitTermination(10, TimeUnit.SECONDS);
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditConcurrentAppends_produceSingleUnforkedChain() throws Exception {
+        resetAuditChain();
+        int writers = 8;
+        ExecutorService executor = Executors.newFixedThreadPool(writers);
+        CountDownLatch ready = new CountDownLatch(writers);
+        CountDownLatch start = new CountDownLatch(1);
+
+        try {
+            List<Future<AuditEvent>> futures = new ArrayList<>();
+            for (int index = 0; index < writers; index++) {
+                int writer = index;
+                futures.add(executor.submit(() -> {
+                    ready.countDown();
+                    start.await();
+                    return transactionalAuditService.append(auditDraft("CONCURRENT_" + writer));
+                }));
+            }
+
+            assertThat(ready.await(10, TimeUnit.SECONDS)).isTrue();
+            start.countDown();
+
+            List<AuditEvent> events = new ArrayList<>();
+            for (Future<AuditEvent> future : futures) {
+                events.add(future.get(30, TimeUnit.SECONDS));
+            }
+
+            assertThat(events).hasSize(writers);
+            assertThat(events.stream().map(AuditEvent::sequence).sorted().toList())
+                .containsExactlyElementsOf(
+                    java.util.stream.LongStream.rangeClosed(1, writers).boxed().toList()
+                );
+            assertThat(events.stream().map(AuditEvent::sequence).distinct().count())
+                .isEqualTo(writers);
+
+            AuditVerificationResult result = auditChainVerifier.verify(AUDIT_CHAIN_ID);
+            assertThat(result.valid()).isTrue();
+            assertThat(result.checkedEvents()).isEqualTo(writers);
+        } finally {
+            executor.shutdownNow();
+            executor.awaitTermination(10, TimeUnit.SECONDS);
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditVerifier_rejectsDirectDatabaseTampering() {
+        resetAuditChain();
+        try {
+            appendAuditEvents(3);
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+
+            dsl.query(
+                "update audit_event set action = 'TAMPERED' where chain_id = ? and sequence = 2",
+                AUDIT_CHAIN_ID
+            ).execute();
+            assertAuditVerificationFails(AuditVerificationFailure.EVENT_HASH_MISMATCH, 2);
+
+            resetAuditChain();
+            appendAuditEvents(3);
+            dsl.query(
+                "delete from audit_event where chain_id = ? and sequence = 2",
+                AUDIT_CHAIN_ID
+            ).execute();
+            assertAuditVerificationFails(AuditVerificationFailure.SEQUENCE_MISMATCH, 2);
+
+            resetAuditChain();
+            appendAuditEvents(3);
+            dsl.query(
+                "update audit_event set previous_hash = ? where chain_id = ? and sequence = 2",
+                "f".repeat(64),
+                AUDIT_CHAIN_ID
+            ).execute();
+            assertAuditVerificationFails(AuditVerificationFailure.PREVIOUS_HASH_MISMATCH, 2);
+
+            resetAuditChain();
+            appendAuditEvents(3);
+            dsl.query(
+                "update audit_event set event_hash = ? where chain_id = ? and sequence = 2",
+                "e".repeat(64),
+                AUDIT_CHAIN_ID
+            ).execute();
+            assertAuditVerificationFails(AuditVerificationFailure.EVENT_HASH_MISMATCH, 2);
+
+            resetAuditChain();
+            appendAuditEvents(3);
+            dsl.query(
+                "update audit_event set sequence = 99 where chain_id = ? and sequence = 2",
+                AUDIT_CHAIN_ID
+            ).execute();
+            assertAuditVerificationFails(AuditVerificationFailure.SEQUENCE_MISMATCH, 2);
+        } finally {
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditChainHead_cannotBeDeletedWhileEventsExist() {
+        resetAuditChain();
+        try {
+            appendAuditEvents(1);
+
+            assertThatThrownBy(() -> dsl.query(
+                "delete from audit_chain_head where chain_id = ?",
+                AUDIT_CHAIN_ID
+            ).execute()).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+        } finally {
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditEvent_doesNotPersistRetentionMetadataYet() {
+        assertThat(dsl.fetch(
+            "select column_name from information_schema.columns where table_name = ?",
+            AUDIT_EVENT_TABLE
+        ).getValues(0, String.class))
+            .doesNotContain("expires_at", "legal_hold");
+    }
+
+    @Test
+    void auditQuery_paginatesAndFiltersWithoutDuplicatesOrOmissions() {
+        UUID aliceId = UUID.fromString("1a2b3c4d-5e6f-4a70-8b91-c2d3e4f50617");
+        UUID bobId = UUID.fromString("2b3c4d5e-6f70-4b81-9ca2-d3e4f5061728");
+
+        resetAuditChain();
+        try {
+            appendQueryEvent(
+                AuditAction.ADMIN_USER_CREATED,
+                AuditResourceType.USER,
+                "user-1",
+                aliceId,
+                "alice",
+                AuditResult.SUCCESS
+            );
+            appendQueryEvent(
+                AuditAction.API_TOKEN_CREATED,
+                AuditResourceType.API_TOKEN,
+                "token-1",
+                bobId,
+                "bob",
+                AuditResult.SUCCESS
+            );
+            appendQueryEvent(
+                AuditAction.ROLE_CREATED,
+                AuditResourceType.ROLE,
+                "role-1",
+                aliceId,
+                "alice",
+                AuditResult.FAILURE
+            );
+            appendQueryEvent(
+                AuditAction.ADMIN_USER_CREATED,
+                AuditResourceType.USER,
+                "user-2",
+                bobId,
+                "bob",
+                AuditResult.SUCCESS
+            );
+            appendQueryEvent(
+                AuditAction.API_TOKEN_REVOKED,
+                AuditResourceType.API_TOKEN,
+                "token-1",
+                aliceId,
+                "alice",
+                AuditResult.SUCCESS
+            );
+            appendQueryEvent(
+                AuditAction.ROLE_DELETED,
+                AuditResourceType.ROLE,
+                "role-1",
+                bobId,
+                "bob",
+                AuditResult.DENIED
+            );
+            appendQueryEvent(
+                AuditAction.ADMIN_USER_CREATED,
+                AuditResourceType.USER,
+                "user-3",
+                aliceId,
+                "alice",
+                AuditResult.SUCCESS
+            );
+
+            List<AuditEvent> page1 = listAuditEvents.execute(query(0, 3, null, null, null, null, null));
+            List<AuditEvent> page2 = listAuditEvents.execute(query(3, 3, null, null, null, null, null));
+            List<AuditEvent> page3 = listAuditEvents.execute(query(6, 3, null, null, null, null, null));
+
+            assertThat(sequences(page1)).containsExactly(1L, 2L, 3L);
+            assertThat(sequences(page2)).containsExactly(4L, 5L, 6L);
+            assertThat(sequences(page3)).containsExactly(7L);
+            assertThat(Stream.of(page1, page2, page3)
+                .flatMap(List::stream)
+                .map(AuditEvent::sequence)
+                .toList()).containsExactly(1L, 2L, 3L, 4L, 5L, 6L, 7L);
+
+            assertThat(sequences(listAuditEvents.execute(query(
+                0,
+                10,
+                AuditAction.ADMIN_USER_CREATED,
+                AuditResourceType.USER,
+                null,
+                null,
+                AuditResult.SUCCESS
+            )))).containsExactly(1L, 4L, 7L);
+            assertThat(sequences(listAuditEvents.execute(query(
+                0,
+                10,
+                null,
+                null,
+                null,
+                bobId,
+                null
+            )))).containsExactly(2L, 4L, 6L);
+            assertThat(sequences(listAuditEvents.execute(query(
+                0,
+                10,
+                null,
+                null,
+                null,
+                null,
+                AuditResult.DENIED
+            )))).containsExactly(6L);
+            assertThat(sequences(listAuditEvents.execute(query(
+                0,
+                10,
+                null,
+                null,
+                "token-1",
+                null,
+                null
+            )))).containsExactly(2L, 5L);
+            assertThat(sequences(listAuditEvents.execute(query(
+                4,
+                10,
+                null,
+                null,
+                null,
+                null,
+                null
+            )))).containsExactly(5L, 6L, 7L);
+        } finally {
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackAdministrativeEnablement() {
+        UUID userId = UUID.randomUUID();
+        Instant now = Instant.now();
+        String resetTokenHash = tokenHasher.hash(PasswordResetTokenGenerator.generate());
+
+        resetAuditChain();
+        setAuditMode(AuditMode.BASIC);
+        try {
+            userRepository.create(new User(
+                userId,
+                "audit-rollback-" + userId,
+                "audit-rollback-" + userId + "@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                2,
+                now,
+                now
+            ));
+            passwordResetTokenRepository.create(new PasswordResetToken(
+                UUID.randomUUID(),
+                userId,
+                resetTokenHash,
+                now.plusSeconds(1800),
+                null,
+                now
+            ));
+
+            dsl.query(
+                "delete from audit_chain_head where chain_id = ?",
+                AUDIT_CHAIN_ID
+            ).execute();
+
+            assertThatThrownBy(() -> transactionalAdminUserService.setEnabled(userId, false))
+                .isInstanceOf(IllegalStateException.class);
+
+            User afterFailure = userRepository.findById(userId).orElseThrow();
+            assertThat(afterFailure.enabled()).isTrue();
+            assertThat(afterFailure.credentialsVersion()).isEqualTo(2);
+            assertThat(passwordResetTokenRepository.findByTokenHash(resetTokenHash).orElseThrow().isUsed())
+                .isFalse();
+            assertThat(dsl.fetchCount(
+                org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_EVENT_TABLE))
+            )).isZero();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteUser(userId);
+        }
+    }
+
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackAdminUserCreation() {
+        String suffix = UUID.randomUUID().toString();
+        String username = "audit-create-" + suffix;
+        resetAuditChain();
+        setAuditMode(AuditMode.BASIC);
+        try {
+            deleteAuditChainHead();
+
+            assertThatThrownBy(() -> transactionalAdminUserService.create(
+                username,
+                username + "@example.test",
+                "original-password-123",
+                List.of()
+            )).isInstanceOf(IllegalStateException.class);
+
+            assertThat(userRepository.findByUsername(username)).isEmpty();
+            assertThat(dsl.fetchCount(
+                org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_EVENT_TABLE))
+            )).isZero();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackAdminPasswordReset() {
+        UUID userId = UUID.randomUUID();
+        Instant now = Instant.now();
+        String username = "audit-admin-reset-" + userId;
+        String tokenHash = tokenHasher.hash(PasswordResetTokenGenerator.generate());
+
+        resetAuditChain();
+        setAuditMode(AuditMode.BASIC);
+        try {
+            userRepository.create(new User(
+                userId,
+                username,
+                username + "@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                2,
+                now,
+                now
+            ));
+            passwordResetTokenRepository.create(new PasswordResetToken(
+                UUID.randomUUID(),
+                userId,
+                tokenHash,
+                now.plusSeconds(1800),
+                null,
+                now
+            ));
+            deleteAuditChainHead();
+
+            assertThatThrownBy(() -> transactionalAdminUserService.resetPassword(
+                userId,
+                "new-admin-password-123"
+            )).isInstanceOf(IllegalStateException.class);
+
+            User persisted = userRepository.findById(userId).orElseThrow();
+            assertThat(persisted.credentialsVersion()).isEqualTo(2);
+            assertThat(passwordHasher.matches("original-password-123", persisted.passwordHash())).isTrue();
+            assertThat(passwordResetTokenRepository.findByTokenHash(tokenHash).orElseThrow().isUsed())
+                .isFalse();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackAdminRoleReplacement() {
+        UUID userId = UUID.randomUUID();
+        Instant now = Instant.now();
+        String username = "audit-admin-roles-" + userId;
+
+        resetAuditChain();
+        setAuditMode(AuditMode.BASIC);
+        try {
+            userRepository.create(new User(
+                userId,
+                username,
+                username + "@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                2,
+                now,
+                now
+            ));
+            authorizationRepository.assignRoleToUser(userId, RoleCodes.SYSTEM_ADMIN);
+            deleteAuditChainHead();
+
+            assertThatThrownBy(() -> transactionalAdminUserService.replaceRoles(userId, List.of()))
+                .isInstanceOf(IllegalStateException.class);
+
+            assertThat(authorizationRepository.findRoleCodesForUser(userId))
+                .containsExactly(RoleCodes.SYSTEM_ADMIN);
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackSelfServicePasswordChange() {
+        UUID userId = UUID.randomUUID();
+        Instant now = Instant.now();
+        String username = "audit-self-password-" + userId;
+        String tokenHash = tokenHasher.hash(PasswordResetTokenGenerator.generate());
+
+        resetAuditChain();
+        setAuditMode(AuditMode.BASIC);
+        try {
+            userRepository.create(new User(
+                userId,
+                username,
+                username + "@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                2,
+                now,
+                now
+            ));
+            passwordResetTokenRepository.create(new PasswordResetToken(
+                UUID.randomUUID(),
+                userId,
+                tokenHash,
+                now.plusSeconds(1800),
+                null,
+                now
+            ));
+            deleteAuditChainHead();
+
+            assertThatThrownBy(() -> transactionalUserSelfService.changePassword(
+                userId,
+                "original-password-123",
+                "new-self-password-123"
+            )).isInstanceOf(IllegalStateException.class);
+
+            User persisted = userRepository.findById(userId).orElseThrow();
+            assertThat(persisted.credentialsVersion()).isEqualTo(2);
+            assertThat(passwordHasher.matches("original-password-123", persisted.passwordHash())).isTrue();
+            assertThat(passwordResetTokenRepository.findByTokenHash(tokenHash).orElseThrow().isUsed())
+                .isFalse();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackPasswordResetCompleted() {
+        UUID userId = UUID.randomUUID();
+        Instant now = Instant.now();
+        String username = "audit-recovery-reset-" + userId;
+        String rawToken = PasswordResetTokenGenerator.generate();
+        String tokenHash = tokenHasher.hash(rawToken);
+
+        resetAuditChain();
+        setAuditMode(AuditMode.BASIC);
+        try {
+            userRepository.create(new User(
+                userId,
+                username,
+                username + "@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                2,
+                now,
+                now
+            ));
+            passwordResetTokenRepository.create(new PasswordResetToken(
+                UUID.randomUUID(),
+                userId,
+                tokenHash,
+                now.plusSeconds(1800),
+                null,
+                now
+            ));
+            deleteAuditChainHead();
+
+            assertThatThrownBy(() -> transactionalPasswordRecovery.resetPassword(
+                rawToken,
+                "new-recovery-password-123"
+            )).isInstanceOf(IllegalStateException.class);
+
+            User persisted = userRepository.findById(userId).orElseThrow();
+            assertThat(persisted.credentialsVersion()).isEqualTo(2);
+            assertThat(passwordHasher.matches("original-password-123", persisted.passwordHash())).isTrue();
+            assertThat(passwordResetTokenRepository.findByTokenHash(tokenHash).orElseThrow().isUsed())
+                .isFalse();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackApiTokenCreation() {
+        UUID userId = UUID.randomUUID();
+        Instant now = Instant.now();
+
+        resetAuditChain();
+        setAuditMode(AuditMode.BASIC);
+        try {
+            userRepository.create(new User(
+                userId,
+                "audit-token-create-" + userId,
+                "audit-token-create-" + userId + "@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                0,
+                now,
+                now
+            ));
+            deleteAuditChainHead();
+
+            assertThatThrownBy(() -> transactionalApiTokenService.create(
+                userId,
+                "audited-token",
+                now.plusSeconds(3600)
+            )).isInstanceOf(IllegalStateException.class);
+
+            assertThat(apiTokenRepository.findAllByUserId(userId)).isEmpty();
+            assertThat(dsl.fetchCount(
+                org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_EVENT_TABLE))
+            )).isZero();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackRolePermissionReplacement() {
+        String roleCode = "audit-permissions-role";
+
+        resetAuditChain();
+        setAuditMode(AuditMode.OFF);
+        try {
+            transactionalAdminRoleService.create(
+                roleCode,
+                "Audited permissions role",
+                List.of(PermissionCodes.USERS_MANAGE)
+            );
+            setAuditMode(AuditMode.BASIC);
+            deleteAuditChainHead();
+
+            assertThatThrownBy(() -> transactionalAdminRoleService.replacePermissions(
+                roleCode,
+                List.of(PermissionCodes.ROLES_MANAGE)
+            )).isInstanceOf(IllegalStateException.class);
+
+            assertThat(authorizationRepository.findPermissionCodesByRole(roleCode))
+                .containsExactly(PermissionCodes.USERS_MANAGE);
+            assertThat(dsl.fetchCount(
+                org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_EVENT_TABLE))
+            )).isZero();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            dsl.query("delete from authentication_role where code = ?", roleCode).execute();
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackRoleDeletion() {
+        String roleCode = "audit-deleted-role";
+
+        resetAuditChain();
+        setAuditMode(AuditMode.OFF);
+        try {
+            transactionalAdminRoleService.create(roleCode, "Audited deleted role", List.of());
+            setAuditMode(AuditMode.BASIC);
+            deleteAuditChainHead();
+
+            assertThatThrownBy(() -> transactionalAdminRoleService.delete(roleCode))
+                .isInstanceOf(IllegalStateException.class);
+
+            assertThat(authorizationRepository.findRoleByCode(roleCode)).isPresent();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            dsl.query("delete from authentication_role where code = ?", roleCode).execute();
+        }
+    }
+
+    @Test
+    void basicAuditMode_recordsApiTokenAndRoleEventsInOneChain() {
+        String suffix = UUID.randomUUID().toString();
+        UUID userId = UUID.randomUUID();
+        Instant now = Instant.now();
+        String roleCode = "audit-token-role";
+
+        resetAuditChain();
+        setAuditMode(AuditMode.OFF);
+        try {
+            userRepository.create(new User(
+                userId,
+                "audit-token-chain-" + suffix,
+                "audit-token-chain-" + suffix + "@example.test",
+                passwordHasher.hash("original-password-123"),
+                true,
+                0,
+                now,
+                now
+            ));
+
+            setAuditMode(AuditMode.BASIC);
+            var createdToken = transactionalApiTokenService.create(
+                userId,
+                "audited-token",
+                now.plusSeconds(3600)
+            );
+            RoleDefinition createdRole = transactionalAdminRoleService.create(
+                roleCode,
+                "Audited role",
+                List.of(PermissionCodes.USERS_MANAGE)
+            );
+            transactionalAdminRoleService.updateName(roleCode, "Renamed audited role");
+            transactionalAdminRoleService.replacePermissions(roleCode, List.of(PermissionCodes.ROLES_MANAGE));
+            transactionalAdminRoleService.updateName(roleCode, " Renamed audited role ");
+            transactionalAdminRoleService.replacePermissions(roleCode, List.of(" ROLES.MANAGE "));
+            transactionalApiTokenService.revoke(userId, createdToken.token().id());
+            transactionalApiTokenService.revoke(userId, createdToken.token().id());
+            transactionalAdminRoleService.delete(roleCode);
+
+            var events = dsl.fetch(
+                "select action, authentication_type, actor_user_id, resource_type, "
+                    + "resource_id from audit_event order by sequence"
+            );
+            assertThat(events.getValues("action", String.class)).containsExactly(
+                AuditAction.API_TOKEN_CREATED.name(),
+                AuditAction.ROLE_CREATED.name(),
+                AuditAction.ROLE_RENAMED.name(),
+                AuditAction.ROLE_PERMISSIONS_REPLACED.name(),
+                AuditAction.API_TOKEN_REVOKED.name(),
+                AuditAction.ROLE_DELETED.name()
+            );
+            assertThat(events.getValues("authentication_type", String.class))
+                .containsOnly(AuditAuthenticationType.SESSION.name());
+            assertThat(events.getValues("actor_user_id", UUID.class))
+                .containsOnly(AUDIT_TEST_ACTOR_ID);
+            assertThat(events.getValues("resource_type", String.class)).containsExactly(
+                AuditResourceType.API_TOKEN.name(),
+                AuditResourceType.ROLE.name(),
+                AuditResourceType.ROLE.name(),
+                AuditResourceType.ROLE.name(),
+                AuditResourceType.API_TOKEN.name(),
+                AuditResourceType.ROLE.name()
+            );
+            assertThat(events.getValues("resource_id", String.class)).containsExactly(
+                createdToken.token().id().toString(),
+                createdRole.id().toString(),
+                createdRole.id().toString(),
+                createdRole.id().toString(),
+                createdToken.token().id().toString(),
+                createdRole.id().toString()
+            );
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            dsl.query("delete from authentication_role where code = ?", roleCode).execute();
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void basicAuditMode_recordsAdministrativeAndSelfServiceEventsInOneChain() {
+        String suffix = UUID.randomUUID().toString();
+        UUID createdId = null;
+
+        resetAuditChain();
+        setAuditMode(AuditMode.BASIC);
+        try {
+            var created = transactionalAdminUserService.create(
+                "audit-chain-" + suffix,
+                "audit-chain-" + suffix + "@example.test",
+                "original-password-123",
+                List.of()
+            );
+            createdId = created.id();
+            transactionalAdminUserService.setEnabled(createdId, true);
+
+            transactionalAdminUserService.updateUsername(createdId, "audit-chain-renamed-" + suffix);
+            transactionalAdminUserService.resetPassword(createdId, "admin-reset-password-123");
+            transactionalAdminUserService.replaceRoles(createdId, List.of(RoleCodes.SYSTEM_ADMIN));
+            transactionalUserSelfService.changeUsername(createdId, "audit-chain-self-" + suffix);
+            transactionalUserSelfService.changePassword(
+                createdId,
+                "admin-reset-password-123",
+                "self-password-123"
+            );
+
+            String rawToken = PasswordResetTokenGenerator.generate();
+            String tokenHash = tokenHasher.hash(rawToken);
+            passwordResetTokenRepository.create(new PasswordResetToken(
+                UUID.randomUUID(),
+                createdId,
+                tokenHash,
+                Instant.now().plusSeconds(1800),
+                null,
+                Instant.now()
+            ));
+            var pendingToken = passwordResetTokenRepository.findByTokenHash(tokenHash).orElseThrow();
+            assertThat(pendingToken.usedAt()).isNull();
+            assertThat(pendingToken.expiresAt()).isAfter(Instant.now());
+            assertThat(userRepository.findById(createdId).orElseThrow().enabled()).isTrue();
+            transactionalPasswordRecovery.resetPassword(rawToken, "final-password-123");
+
+            var events = dsl.fetch(
+                "select action, authentication_type, actor_user_id, actor_username, resource_type, "
+                    + "resource_id from audit_event order by sequence"
+            );
+            assertThat(events.getValues("action", String.class)).containsExactly(
+                AuditAction.ADMIN_USER_CREATED.name(),
+                AuditAction.USER_ENABLED.name(),
+                AuditAction.ADMIN_USER_USERNAME_CHANGED.name(),
+                AuditAction.ADMIN_USER_PASSWORD_RESET.name(),
+                AuditAction.ADMIN_USER_ROLES_REPLACED.name(),
+                AuditAction.USER_USERNAME_CHANGED.name(),
+                AuditAction.USER_PASSWORD_CHANGED.name(),
+                AuditAction.PASSWORD_RESET_COMPLETED.name()
+            );
+            assertThat(events.getValues("authentication_type", String.class)).containsExactly(
+                AuditAuthenticationType.SESSION.name(),
+                AuditAuthenticationType.SESSION.name(),
+                AuditAuthenticationType.SESSION.name(),
+                AuditAuthenticationType.SESSION.name(),
+                AuditAuthenticationType.SESSION.name(),
+                AuditAuthenticationType.SESSION.name(),
+                AuditAuthenticationType.SESSION.name(),
+                AuditAuthenticationType.RECOVERY_TOKEN.name()
+            );
+            assertThat(events.getValues("actor_user_id", UUID.class)).containsExactly(
+                AUDIT_TEST_ACTOR_ID,
+                AUDIT_TEST_ACTOR_ID,
+                AUDIT_TEST_ACTOR_ID,
+                AUDIT_TEST_ACTOR_ID,
+                AUDIT_TEST_ACTOR_ID,
+                AUDIT_TEST_ACTOR_ID,
+                AUDIT_TEST_ACTOR_ID,
+                createdId
+            );
+            assertThat(events.getValues("actor_username", String.class)).containsExactly(
+                "audit-persistence-test",
+                "audit-persistence-test",
+                "audit-persistence-test",
+                "audit-persistence-test",
+                "audit-persistence-test",
+                "audit-persistence-test",
+                "audit-persistence-test",
+                "audit-chain-self-" + suffix
+            );
+            assertThat(events.getValues("resource_type", String.class)).containsOnly(
+                AuditResourceType.USER.name()
+            );
+            assertThat(events.getValues("resource_id", String.class)).containsOnly(createdId.toString());
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            if (createdId != null) {
+                deleteUser(createdId);
+            }
+        }
+    }
+
+    @Test
+    void selectiveReadAudit_persistsQueryAndObjectEventsInRealChain() {
+        String suffix = UUID.randomUUID().toString();
+        UUID userId = UUID.randomUUID();
+        Instant now = Instant.parse("2026-10-23T10:00:00Z");
+
+        resetAuditChain();
+        try {
+            userRepository.create(new User(
+                userId,
+                "read-audit-" + suffix,
+                "read-audit-" + suffix + "@example.test",
+                passwordHasher.hash("read-audit-password-123"),
+                true,
+                0,
+                now,
+                now
+            ));
+            setAuditMode(AuditMode.SELECTIVE);
+            transactionalAuditReadPolicyService.replaceRules(Map.of(
+                AuditResourceType.USER,
+                AuditReadLevel.QUERY_AND_OBJECT
+            ));
+            resetAuditChain();
+
+            auditedAdminReadService.listUsers(AdminUserSearchQuery.of(null, null, null, null));
+            auditedAdminReadService.getUser(userId);
+
+            var events = dsl.fetch(
+                "select action, actor_user_id, actor_username, authentication_type, "
+                    + "resource_type, resource_id, result from audit_event order by sequence"
+            );
+            assertThat(events.getValues("action", String.class)).containsExactly(
+                AuditAction.READ_QUERY.name(),
+                AuditAction.READ_OBJECT.name()
+            );
+            assertThat(events.getValues("resource_type", String.class)).containsExactly(
+                AuditResourceType.USER.name(),
+                AuditResourceType.USER.name()
+            );
+            assertThat(events.getValues("resource_id", String.class).get(0)).isNull();
+            assertThat(events.getValues("resource_id", String.class).get(1))
+                .isEqualTo(userId.toString());
+            assertThat(events.getValues("actor_user_id", UUID.class))
+                .containsOnly(AUDIT_TEST_ACTOR_ID);
+            assertThat(events.getValues("actor_username", String.class))
+                .containsOnly("audit-persistence-test");
+            assertThat(events.getValues("authentication_type", String.class))
+                .containsOnly(AuditAuthenticationType.SESSION.name());
+            assertThat(events.getValues("result", String.class))
+                .containsOnly(AuditResult.SUCCESS.name());
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void selectiveReadAudit_realAppendFailurePreventsSuccessfulResult() {
+        String suffix = UUID.randomUUID().toString();
+        UUID userId = UUID.randomUUID();
+        Instant now = Instant.parse("2026-10-23T10:00:00Z");
+
+        resetAuditChain();
+        try {
+            userRepository.create(new User(
+                userId,
+                "read-failure-" + suffix,
+                "read-failure-" + suffix + "@example.test",
+                passwordHasher.hash("read-failure-password-123"),
+                true,
+                0,
+                now,
+                now
+            ));
+            setAuditMode(AuditMode.SELECTIVE);
+            transactionalAuditReadPolicyService.replaceRules(Map.of(
+                AuditResourceType.USER,
+                AuditReadLevel.QUERY_AND_OBJECT
+            ));
+            resetAuditChain();
+
+            var failingRecorder = new ConfiguredReadAuditRecorder(
+                auditPolicyProvider,
+                () -> Optional.of(new AuditActor(
+                    AUDIT_TEST_ACTOR_ID,
+                    "x".repeat(101),
+                    AuditAuthenticationType.SESSION
+                )),
+                transactionalAuditService
+            );
+            var failingReadService = new AuditedAdminReadService(
+                listAdminUsersUseCase,
+                getAdminUserUseCase,
+                listRolesUseCase,
+                getRoleUseCase,
+                failingRecorder
+            );
+
+            assertThatThrownBy(() -> failingReadService.getUser(userId))
+                .isInstanceOf(AuditUnavailableException.class);
+            assertThat(auditEventCount()).isZero();
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+            assertThat(userRepository.findById(userId)).isPresent();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void auditConfiguration_isBootstrappedWithDefaultModeAndSingleRow() {
+        assertThat(persistedAuditConfigurationCount()).isEqualTo(1);
+        assertThat(persistedAuditMode()).isEqualTo(AuditMode.OFF);
+        assertThat(persistedAuditUpdatedAt()).isNotNull();
+        assertThat(auditPolicyProvider.currentMode()).isEqualTo(AuditMode.OFF);
+    }
+
+    @Test
+    void auditConfiguration_persistedModeIsAuthoritativeOverBootstrapProperty() {
+        setAuditMode(AuditMode.OFF);
+        java.time.OffsetDateTime before = persistedAuditUpdatedAt();
+        auditProperties.setMode(AuditMode.BASIC.name());
+        try {
+            auditConfigurationBootstrap.initialize();
+
+            assertThat(persistedAuditMode()).isEqualTo(AuditMode.OFF);
+            assertThat(persistedAuditUpdatedAt()).isEqualTo(before);
+            assertThat(auditPolicyProvider.currentMode()).isEqualTo(AuditMode.OFF);
+        } finally {
+            auditProperties.setMode(AuditMode.OFF.name());
+        }
+    }
+
+    @Test
+    void auditConfiguration_bootstrapCreatesMissingRowFromProperty() {
+        deleteAuditConfiguration();
+        auditProperties.setMode(AuditMode.BASIC.name());
+        try {
+            auditConfigurationBootstrap.initialize();
+
+            assertThat(persistedAuditConfigurationCount()).isEqualTo(1);
+            assertThat(persistedAuditMode()).isEqualTo(AuditMode.BASIC);
+            assertThat(auditPolicyProvider.currentMode()).isEqualTo(AuditMode.BASIC);
+        } finally {
+            auditProperties.setMode(AuditMode.OFF.name());
+            setAuditMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void auditConfiguration_bootstrapFailsWithInvalidPropertyOnlyWhenRowIsMissing() {
+        deleteAuditConfiguration();
+        auditProperties.setMode("INVALID");
+        try {
+            assertThatThrownBy(auditConfigurationBootstrap::initialize)
+                .isInstanceOf(IllegalArgumentException.class);
+            assertThat(persistedAuditConfigurationCount()).isZero();
+        } finally {
+            auditProperties.setMode(AuditMode.OFF.name());
+            setAuditMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void auditConfiguration_bootstrapIgnoresInvalidPropertyWhenRowExists() {
+        setAuditMode(AuditMode.BASIC);
+        auditProperties.setMode("INVALID");
+        try {
+            auditConfigurationBootstrap.initialize();
+
+            assertThat(persistedAuditMode()).isEqualTo(AuditMode.BASIC);
+            assertThat(auditPolicyProvider.currentMode()).isEqualTo(AuditMode.BASIC);
+        } finally {
+            auditProperties.setMode(AuditMode.OFF.name());
+            setAuditMode(AuditMode.OFF);
+        }
+    }
+
+    @Test
+    void auditConfiguration_enforcesSingletonRow() {
+        assertThatThrownBy(() -> dsl.query(
+            "insert into audit_configuration (id, singleton, mode) values (?, true, 'BASIC')",
+            UUID.randomUUID()
+        ).execute()).isInstanceOf(DuplicateKeyException.class);
+    }
+
+    @Test
+    void auditConfigurationUpdate_transitionsAppendExactlyOneMandatoryEvent() {
+        resetAuditChain();
+        setAuditMode(AuditMode.OFF);
+        UUID configurationId = persistedAuditConfigurationId();
+        try {
+            transactionalAuditConfigurationService.updateMode(AuditMode.BASIC);
+
+            assertThat(persistedAuditMode()).isEqualTo(AuditMode.BASIC);
+            assertThat(auditPolicyProvider.currentMode()).isEqualTo(AuditMode.BASIC);
+            assertSingleAuditConfigurationEvent(
+                1,
+                AuditAction.AUDIT_MODE_CHANGED_TO_BASIC,
+                configurationId
+            );
+
+            transactionalAuditConfigurationService.updateMode(AuditMode.BASIC);
+
+            assertThat(auditEventCount()).isEqualTo(1);
+
+            transactionalAuditConfigurationService.updateMode(AuditMode.OFF);
+
+            assertThat(persistedAuditMode()).isEqualTo(AuditMode.OFF);
+            assertThat(auditPolicyProvider.currentMode()).isEqualTo(AuditMode.OFF);
+            assertSingleAuditConfigurationEvent(
+                2,
+                AuditAction.AUDIT_MODE_CHANGED_TO_OFF,
+                configurationId
+            );
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditConfigurationUpdate_sameModeDoesNotChangeTimestampOrAppendEvent() {
+        resetAuditChain();
+        setAuditMode(AuditMode.OFF);
+        java.time.OffsetDateTime before = persistedAuditUpdatedAt();
+        try {
+            transactionalAuditConfigurationService.updateMode(AuditMode.OFF);
+
+            assertThat(persistedAuditUpdatedAt()).isEqualTo(before);
+            assertThat(auditEventCount()).isZero();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditConfigurationUpdate_rollsBackWhenMandatoryAppendFails() {
+        resetAuditChain();
+        setAuditMode(AuditMode.OFF);
+        try {
+            deleteAuditChainHead();
+
+            assertThatThrownBy(
+                () -> transactionalAuditConfigurationService.updateMode(AuditMode.BASIC)
+            ).isInstanceOf(IllegalStateException.class);
+
+            assertThat(persistedAuditMode()).isEqualTo(AuditMode.OFF);
+            assertThat(auditPolicyProvider.currentMode()).isEqualTo(AuditMode.OFF);
+            assertThat(auditEventCount()).isZero();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditReadPolicy_replacesRulesAndAppendsMandatoryEvents() {
+        resetAuditChain();
+        deleteAuditReadPolicy();
+        setAuditMode(AuditMode.SELECTIVE);
+        UUID configurationId = persistedAuditConfigurationId();
+        try {
+            var policy = transactionalAuditReadPolicyService.replaceRules(Map.of(
+                AuditResourceType.USER,
+                AuditReadLevel.QUERY_ONLY,
+                AuditResourceType.ROLE,
+                AuditReadLevel.QUERY_AND_OBJECT
+            ));
+
+            assertThat(persistedReadRules()).containsExactlyInAnyOrderEntriesOf(Map.of(
+                AuditResourceType.USER,
+                AuditReadLevel.QUERY_ONLY,
+                AuditResourceType.ROLE,
+                AuditReadLevel.QUERY_AND_OBJECT
+            ));
+            assertThat(policy.configurationId()).isEqualTo(configurationId);
+            assertThat(auditPolicyProvider.currentPolicy().readLevelFor(AuditResourceType.USER))
+                .isEqualTo(AuditReadLevel.QUERY_ONLY);
+            assertReadPolicyEvent(
+                1,
+                AuditAction.AUDIT_READ_POLICY_RULE_CHANGED_TO_QUERY_AND_OBJECT,
+                AuditResourceType.ROLE
+            );
+            assertReadPolicyEvent(
+                2,
+                AuditAction.AUDIT_READ_POLICY_RULE_CHANGED_TO_QUERY_ONLY,
+                AuditResourceType.USER
+            );
+
+            transactionalAuditReadPolicyService.replaceRules(Map.of(
+                AuditResourceType.USER,
+                AuditReadLevel.NONE,
+                AuditResourceType.ROLE,
+                AuditReadLevel.QUERY_ONLY
+            ));
+
+            assertThat(persistedReadRules()).containsExactlyEntriesOf(Map.of(
+                AuditResourceType.ROLE,
+                AuditReadLevel.QUERY_ONLY
+            ));
+            assertThat(auditPolicyProvider.currentPolicy().readLevelFor(AuditResourceType.ROLE))
+                .isEqualTo(AuditReadLevel.QUERY_ONLY);
+            assertThat(auditPolicyProvider.currentPolicy().readLevelFor(AuditResourceType.USER))
+                .isEqualTo(AuditReadLevel.NONE);
+            assertReadPolicyEvent(
+                3,
+                AuditAction.AUDIT_READ_POLICY_RULE_CHANGED_TO_QUERY_ONLY,
+                AuditResourceType.ROLE
+            );
+            assertReadPolicyEvent(
+                4,
+                AuditAction.AUDIT_READ_POLICY_RULE_CHANGED_TO_NONE,
+                AuditResourceType.USER
+            );
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            deleteAuditReadPolicy();
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditReadPolicy_rollsBackWhenMandatoryAppendFails() {
+        resetAuditChain();
+        deleteAuditReadPolicy();
+        setAuditMode(AuditMode.OFF);
+        try {
+            deleteAuditChainHead();
+
+            assertThatThrownBy(() -> transactionalAuditReadPolicyService.replaceRules(Map.of(
+                AuditResourceType.USER,
+                AuditReadLevel.QUERY_ONLY
+            ))).isInstanceOf(IllegalStateException.class);
+
+            assertThat(persistedReadRules()).isEmpty();
+            assertThat(auditPolicyProvider.currentPolicy().readLevelFor(AuditResourceType.USER))
+                .isEqualTo(AuditReadLevel.NONE);
+            assertThat(auditEventCount()).isZero();
+        } finally {
+            deleteAuditReadPolicy();
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+        }
+    }
+
+    @Test
+    void auditReadPolicy_tableRejectsUnsupportedRules() {
+        deleteAuditReadPolicy();
+        UUID configurationId = persistedAuditConfigurationId();
+        try {
+            assertThatThrownBy(() -> dsl.query(
+                "insert into audit_read_policy "
+                    + "(audit_configuration_id, resource_type, read_level, updated_at) "
+                    + "values (?, 'API_TOKEN', 'QUERY_ONLY', now())",
+                configurationId
+            ).execute()).isInstanceOf(
+                org.springframework.dao.DataIntegrityViolationException.class
+            );
+
+            assertThatThrownBy(() -> dsl.query(
+                "insert into audit_read_policy "
+                    + "(audit_configuration_id, resource_type, read_level, updated_at) "
+                    + "values (?, 'USER', 'EACH_RETURNED_OBJECT', now())",
+                configurationId
+            ).execute()).isInstanceOf(
+                org.springframework.dao.DataIntegrityViolationException.class
+            );
+        } finally {
+            deleteAuditReadPolicy();
+        }
+    }
+
+    private void assertReadPolicyEvent(
+        long expectedSequence,
+        AuditAction expectedAction,
+        AuditResourceType expectedResource
+    ) {
+        var events = dsl.fetch(
+            "select sequence, action, resource_type, resource_id, result "
+                + "from audit_event where sequence = ?",
+            expectedSequence
+        );
+        assertThat(events).hasSize(1);
+        var event = events.get(0);
+        assertThat(event.get("action", String.class)).isEqualTo(expectedAction.name());
+        assertThat(event.get("resource_type", String.class))
+            .isEqualTo(AuditResourceType.AUDIT_READ_POLICY.name());
+        assertThat(event.get("resource_id", String.class))
+            .isEqualTo(expectedResource.name());
+        assertThat(event.get("result", String.class)).isEqualTo(AuditResult.SUCCESS.name());
+    }
+
+    private Map<AuditResourceType, AuditReadLevel> persistedReadRules() {
+        Map<AuditResourceType, AuditReadLevel> rules = new java.util.EnumMap<>(
+            AuditResourceType.class
+        );
+        dsl.fetch("select resource_type, read_level from audit_read_policy")
+            .forEach(record -> rules.put(
+                AuditResourceType.valueOf(record.get("resource_type", String.class)),
+                AuditReadLevel.valueOf(record.get("read_level", String.class))
+            ));
+        return rules;
+    }
+
+    private void deleteAuditReadPolicy() {
+        dsl.query("delete from audit_read_policy").execute();
+    }
+
+    private void assertSingleAuditConfigurationEvent(
+        long expectedSequence,
+        AuditAction expectedAction,
+        UUID configurationId
+    ) {
+        var events = dsl.fetch(
+            "select sequence, action, resource_type, resource_id, result, actor_user_id, "
+                + "authentication_type from audit_event order by sequence"
+        );
+        assertThat(events).hasSize((int) expectedSequence);
+        var event = events.get((int) expectedSequence - 1);
+        assertThat(event.get("sequence", Long.class)).isEqualTo(expectedSequence);
+        assertThat(event.get("action", String.class)).isEqualTo(expectedAction.name());
+        assertThat(event.get("resource_type", String.class))
+            .isEqualTo(AuditResourceType.AUDIT_CONFIGURATION.name());
+        assertThat(event.get("resource_id", String.class))
+            .isEqualTo(configurationId.toString());
+        assertThat(event.get("result", String.class)).isEqualTo(AuditResult.SUCCESS.name());
+        assertThat(event.get("actor_user_id", UUID.class)).isEqualTo(AUDIT_TEST_ACTOR_ID);
+        assertThat(event.get("authentication_type", String.class))
+            .isEqualTo(AuditAuthenticationType.SESSION.name());
+    }
+
+    private int auditEventCount() {
+        return dsl.fetchCount(
+            org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_EVENT_TABLE))
+        );
+    }
+
+    private UUID persistedAuditConfigurationId() {
+        return dsl.fetch("select id from audit_configuration")
+            .getValues(0, UUID.class)
+            .get(0);
+    }
+
+    private AuditMode persistedAuditMode() {
+        return AuditMode.valueOf(
+            dsl.fetch("select mode from audit_configuration").getValues(0, String.class).get(0)
+        );
+    }
+
+    private java.time.OffsetDateTime persistedAuditUpdatedAt() {
+        return dsl.fetch("select updated_at from audit_configuration")
+            .getValues(0, java.time.OffsetDateTime.class)
+            .get(0);
+    }
+
+    private int persistedAuditConfigurationCount() {
+        return dsl.fetchCount(
+            org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(AUDIT_CONFIGURATION_TABLE))
+        );
+    }
+
+    private void deleteAuditConfiguration() {
+        deleteAuditReadPolicy();
+        dsl.query("delete from audit_configuration").execute();
+    }
+
+    private void deleteAuditChainHead() {
+        dsl.query(
+            "delete from audit_chain_head where chain_id = ?",
+            AUDIT_CHAIN_ID
+        ).execute();
+    }
+
+    @AfterEach
+    void resetAuditMode() {
+        deleteAuditReadPolicy();
+        setAuditMode(AuditMode.OFF);
+    }
+
+    private void setAuditMode(AuditMode mode) {
+        var configurationTable = org.jooq.impl.DSL.table(
+            org.jooq.impl.DSL.name(AUDIT_CONFIGURATION_TABLE)
+        );
+        var modeField = org.jooq.impl.DSL.field(
+            org.jooq.impl.DSL.name(AUDIT_CONFIGURATION_TABLE, "mode"),
+            String.class
+        );
+        var updatedAtField = org.jooq.impl.DSL.field(
+            org.jooq.impl.DSL.name(AUDIT_CONFIGURATION_TABLE, "updated_at"),
+            java.time.OffsetDateTime.class
+        );
+        java.time.OffsetDateTime now = java.time.OffsetDateTime.now();
+        int updated = dsl.update(configurationTable)
+            .set(modeField, mode.name())
+            .set(updatedAtField, now)
+            .execute();
+        if (updated == 0) {
+            dsl.insertInto(configurationTable)
+                .set(
+                    org.jooq.impl.DSL.field(
+                        org.jooq.impl.DSL.name(AUDIT_CONFIGURATION_TABLE, "id"),
+                        UUID.class
+                    ),
+                    UUID.randomUUID()
+                )
+                .set(
+                    org.jooq.impl.DSL.field(
+                        org.jooq.impl.DSL.name(AUDIT_CONFIGURATION_TABLE, "singleton"),
+                        Boolean.class
+                    ),
+                    true
+                )
+                .set(modeField, mode.name())
+                .set(updatedAtField, now)
+                .execute();
+        }
+        auditPolicyProvider.reload();
+    }
+
+    private void assertAuditVerificationFails(AuditVerificationFailure failure, long sequence) {
+        AuditVerificationResult result = auditChainVerifier.verify(AUDIT_CHAIN_ID);
+        assertThat(result.valid()).isFalse();
+        assertThat(result.failure()).isEqualTo(failure);
+        assertThat(result.failedSequence()).isEqualTo(sequence);
+    }
+
+    private void appendAuditEvents(int count) {
+        for (int index = 1; index <= count; index++) {
+            transactionalAuditService.append(auditDraft("AUDIT_TEST_" + index));
+        }
+    }
+
+    private AuditEventQuery query(
+        long afterSequence,
+        int limit,
+        AuditAction action,
+        AuditResourceType resourceType,
+        String resourceId,
+        UUID actorUserId,
+        AuditResult result
+    ) {
+        return new AuditEventQuery(
+            AUDIT_CHAIN_ID,
+            afterSequence,
+            limit,
+            action,
+            resourceType,
+            resourceId,
+            actorUserId,
+            result
+        );
+    }
+
+    private void appendQueryEvent(
+        AuditAction action,
+        AuditResourceType resourceType,
+        String resourceId,
+        UUID actorUserId,
+        String actorUsername,
+        AuditResult result
+    ) {
+        transactionalAuditService.append(new AuditEventDraft(
+            AUDIT_CHAIN_ID,
+            actorUserId,
+            actorUsername,
+            AuditAuthenticationType.SESSION,
+            action.name(),
+            resourceType.name(),
+            resourceId,
+            result,
+            null
+        ));
+    }
+
+    private List<Long> sequences(List<AuditEvent> events) {
+        return events.stream().map(AuditEvent::sequence).toList();
+    }
+
+    private AuditEventDraft auditDraft(String action) {
+        return new AuditEventDraft(
+            AUDIT_CHAIN_ID,
+            null,
+            "system",
+            AuditAuthenticationType.SYSTEM,
+            action,
+            "TEST",
+            null,
+            AuditResult.SUCCESS,
+            null
+        );
+    }
+
+    private void resetAuditChain() {
+        dsl.query(
+            "insert into audit_chain_head (chain_id, last_sequence, last_hash) "
+                + "values (?, 0, ?) on conflict (chain_id) do nothing",
+            AUDIT_CHAIN_ID,
+            AuditChain.GENESIS_HASH
+        ).execute();
+        dsl.query("delete from audit_event").execute();
+        dsl.query(
+            "update audit_chain_head set last_sequence = 0, last_hash = ?, updated_at = current_timestamp "
+                + "where chain_id = ?",
+            AuditChain.GENESIS_HASH,
+            AUDIT_CHAIN_ID
+        ).execute();
+    }
+
+    @TestConfiguration
+    static class FixedAuditActorConfiguration {
+
+        @Bean
+        @Primary
+        AuditActorResolver fixedAuditActorResolver() {
+            return () -> Optional.of(new AuditActor(
+                AUDIT_TEST_ACTOR_ID,
+                "audit-persistence-test",
+                AuditAuthenticationType.SESSION
+            ));
+        }
+
+        @Bean
+        @Primary
+        BlockingAuditChainSource blockingAuditChainSource(
+            AuditEventRepository auditEventRepository
+        ) {
+            return new BlockingAuditChainSource(auditEventRepository);
+        }
+
+        @Bean
+        @Primary
+        AuditChainVerifier blockingAuditChainVerifier(
+            BlockingAuditChainSource blockingAuditChainSource,
+            AuditCanonicalEncoder auditCanonicalEncoder,
+            AuditHashCalculator auditHashCalculator
+        ) {
+            return new AuditChainVerifier(
+                blockingAuditChainSource,
+                auditCanonicalEncoder,
+                auditHashCalculator
+            );
+        }
+    }
+
+    static final class BlockingAuditChainSource implements AuditChainSource {
+
+        private final AuditEventRepository delegate;
+        private ReadGate nextReadGate;
+
+        BlockingAuditChainSource(AuditEventRepository delegate) {
+            this.delegate = delegate;
+        }
+
+        synchronized ReadGate blockNextEventRead() {
+            nextReadGate = new ReadGate();
+            return nextReadGate;
+        }
+
+        @Override
+        public Optional<AuditChainHead> findChainHead(UUID chainId) {
+            return delegate.findChainHead(chainId);
+        }
+
+        @Override
+        public List<AuditEvent> readEvents(UUID chainId, long afterSequence, int limit) {
+            ReadGate gate;
+            synchronized (this) {
+                gate = nextReadGate;
+                nextReadGate = null;
+            }
+            if (gate != null) {
+                gate.signalStarted();
+                gate.awaitRelease();
+            }
+            return delegate.readEvents(chainId, afterSequence, limit);
+        }
+    }
+
+    static final class ReadGate {
+
+        private static final long TIMEOUT_SECONDS = 10;
+        private final CountDownLatch started = new CountDownLatch(1);
+        private final CountDownLatch released = new CountDownLatch(1);
+
+        boolean awaitStarted() throws InterruptedException {
+            return started.await(TIMEOUT_SECONDS, TimeUnit.SECONDS);
+        }
+
+        void signalStarted() {
+            started.countDown();
+        }
+
+        void release() {
+            released.countDown();
+        }
+
+        void awaitRelease() {
+            try {
+                if (!released.await(TIMEOUT_SECONDS, TimeUnit.SECONDS)) {
+                    throw new IllegalStateException("Timed out waiting for audit verification release");
+                }
+            } catch (InterruptedException exception) {
+                Thread.currentThread().interrupt();
+                throw new IllegalStateException(exception);
+            }
+        }
     }
 
     private boolean isTransactional(Class<?> controller, String methodName) {

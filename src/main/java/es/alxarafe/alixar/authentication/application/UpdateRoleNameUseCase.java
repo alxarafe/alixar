@@ -8,7 +8,7 @@ public class UpdateRoleNameUseCase {
         this.authorizationRepository = authorizationRepository;
     }
 
-    public RoleDefinition execute(String roleCode, String name) {
+    public UpdateRoleNameResult execute(String roleCode, String name) {
         RoleDefinition role = authorizationRepository.findRoleByCode(roleCode)
             .orElseThrow(() -> new RoleNotFoundException(roleCode));
         if (role.builtIn()) {
@@ -17,7 +17,10 @@ public class UpdateRoleNameUseCase {
 
         String normalizedName = normalizeName(name);
         authorizationRepository.updateRoleName(roleCode, normalizedName);
-        return new RoleDefinition(roleCode, normalizedName, false, role.permissionCodes());
+        return new UpdateRoleNameResult(
+            new RoleDefinition(role.id(), roleCode, normalizedName, false, role.permissionCodes()),
+            !role.name().equals(normalizedName)
+        );
     }
 
     private String normalizeName(String name) {

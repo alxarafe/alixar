@@ -27,6 +27,7 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 | Spring Security 7.1.1 for the initial web-session authentication foundation | Approved |
 | Opaque Personal Access Tokens presented as Bearer tokens for independent API consumers | Approved |
 | RBAC with permissions assigned exclusively to roles and no per-user overrides | Approved |
+| Append-only audit trail with a versioned canonical SHA-256 hash chain | Approved |
 
 ## Implemented
 
@@ -48,19 +49,55 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - Role-based authorization with permissions assigned exclusively to roles,
   effective permissions resolved from persistence on every authenticated
   request, deny-by-default policy, and identical authorization for session and
-  Bearer authentication. Built-in `system-admin` role with `users.manage` and
-  `roles.manage`; read-only permission catalogue; role detail, creation, rename,
-  permission replacement and deletion of unassigned custom roles; administrative
-  reads, creation of disabled users, username changes, enablement changes,
-  password resets and full role replacement
+  Bearer authentication. Built-in `system-admin` role with `users.manage`,
+  `roles.manage`, `audit.read` and `audit.configure`; read-only permission
+  catalogue; role detail,
+  creation, rename, permission replacement and deletion of unassigned custom
+  roles; administrative reads, creation of disabled users, username changes,
+  enablement changes, password resets and full role replacement
+- Append-only audit event persistence with per-chain sequence, chain-head
+  locking, canonical format v1, SHA-256 hash chain and an independent verifier.
+  `OFF` / `BASIC` / `SELECTIVE` policy and atomic events for administrative
+  user enablement,
+  creation, username changes, password resets and role replacement, self-service
+  username/password changes, completed password recovery, Personal Access Token
+  creation/revocation, and role creation/rename/permission-replacement/deletion
+  are implemented. Recovery-token events use `RECOVERY_TOKEN` and explicitly
+  identify the recovered user as actor. T1.4a adds the `audit.read` permission
+  and a read-only `GET /api/admin/audit-events` API with chain-scoped keyset
+  pagination and combinable filters. T1.4b adds chain verification at
+  `/api/admin/audit-events/verification`, which verifies the chain under one
+  read-only repeatable-read snapshot. T1.5a adds the singleton persisted
+  `audit_configuration` table, with `alixar.audit.mode` used only to bootstrap
+  the first row, and seeds the `audit.configure` permission. T1.5b exposes
+  `GET` / `PUT /api/admin/audit-configuration` and records mandatory policy
+  transition events. T1.6a records `LOGIN_SUCCEEDED`, `LOGIN_FAILED` and
+  `LOGOUT` under the `BASIC` baseline (`BASIC` / `SELECTIVE`): successful login
+  is mandatory and fail-closed, while failed login and logout use isolated
+  best-effort appends that cannot change the authentication outcome. T1.6b
+  records `ACCESS_DENIED` under the same baseline for authenticated
+  authorization denials, using a static HTTP resource family and
+  an isolated best-effort append that cannot change the original `403`. T1.7a
+  adds the `SELECTIVE` mode, a persisted read policy for `USER` and `ROLE` and
+  an administrative read-policy API. T1.7b appends mandatory `READ_QUERY` and
+  `READ_OBJECT` events for the administrative user and role reads under
+  `SELECTIVE`, failing closed when the required append fails. Event detail,
+  read event capture outside those endpoints, CSRF-specific events, the PAT
+  identifier as actor, retention, archive and checkpoints are not implemented
+  yet.
+  See [Audit](audit.md)
 
 ## Planned (Not Implemented)
+
+- the `FULL` audit mode, read event capture beyond the administrative user and
+  role reads, CSRF-specific audit events, the PAT identifier as actor, audit
+  event detail, retention, purge, archive and signed checkpoints
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Email change with new-address verification
 - Role groups
-- PAT scopes and authorization for business capabilities beyond `users.manage`
-  and `roles.manage`
+- PAT scopes and authorization for business capabilities beyond `users.manage`,
+  `roles.manage`, `audit.read` and `audit.configure`
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - OpenAPI specification
@@ -129,14 +166,15 @@ values. It works identically for session and Bearer authentication. Role changes
 therefore take effect on the next request without changing
 `credentials_version`, invalidating the session or revoking PATs.
 
-Business code authorizes by permission (`hasAuthority("users.manage")` or
-`hasAuthority("roles.manage")`), not by role name. `system-admin` is an
-administrative grouping of permissions and has no authorization special case.
+Business code authorizes by permission (`hasAuthority("users.manage")`,
+`hasAuthority("roles.manage")` or `hasAuthority("audit.read")`), not by role
+name. `system-admin` is an administrative grouping of permissions and has no
+authorization special case.
 Administrative reads resolve user summaries, user detail, the role catalogue,
-role detail and the permission catalogue through application use cases behind
-dedicated ports. Role creation validates the complete permission set before
-writing and uses an infrastructure-owned transaction for the role and its
-permissions. Role rename, permission replacement and deletion reuse the same
+role detail, the permission catalogue and the chain-scoped audit event list
+through application use cases behind dedicated ports. Role creation validates
+the complete permission set before writing and uses an infrastructure-owned
+transaction for the role and its permissions. Role rename, permission replacement and deletion reuse the same
 transactional facade; built-in role protection and assignment checks run in the
 application use cases, while a restrictive foreign key remains the final guard
 against deleting an assigned role. User creation and username changes also run
@@ -145,6 +183,59 @@ that keeps a new user and its role assignments atomic. A restrictive foreign key
 protects assigned roles from deletion independently of application checks. See
 [Authentication](authentication.md) for the RBAC model and the administrative
 namespace.
+
+## Audit Boundary
+
+The audit trail is separate from technical application logs. The current
+implementation owns an append-only `audit_event` history and a per-chain head.
+Events are linked by a SHA-256 hash over an explicit, versioned canonical
+representation; integrity does not depend on an arbitrary JSON serialization.
+
+Application code has no operation to update or delete an individual event. The
+verifier depends on a read-only `AuditChainSource` port rather than PostgreSQL or
+jOOQ, so the same verification core can later consume exported archives.
+
+The effective audit mode is persisted in the singleton `audit_configuration`
+table. `alixar.audit.mode` is a bootstrap-only value used when the table is
+empty; once a row exists the database is authoritative and an invalid bootstrap
+value is ignored rather than preventing startup. Read rules are persisted in
+`audit_read_policy`, keyed by configuration and resource type. A local cache of
+the mode and rules refreshed every 15 seconds keeps the `OFF` path free of SQL
+per audited operation and introduces a temporary multi-node visibility delay.
+In `BASIC` and `SELECTIVE`, explicitly instrumented successful operations record
+their event in the same transaction as the business change. `SELECTIVE` adds
+read rules for `USER` and `ROLE`, and the administrative read endpoints append
+`READ_QUERY` / `READ_OBJECT` events through an isolated transaction before
+returning. The
+instrumented set includes administrative user lifecycle operations,
+self-service username and password changes, completed password recovery,
+Personal Access Token creation and revocation, and role creation, rename,
+permission replacement and deletion. The application layer depends on an
+`AuditTrail` port and an `AuditPolicyProvider` port, not on environment variables,
+Spring Security or jOOQ. Authenticated operations resolve their actor
+implicitly; password recovery supplies an explicit `RECOVERY_TOKEN` actor. Every
+mandatory event is fail-closed. The `audit.read` permission, the read-only event
+query API and HTTP chain verification are implemented. Verification runs inside
+one read-only `REPEATABLE READ` transaction so its head and event reads share a
+consistent snapshot. T1.5b exposes the persisted configuration through
+`GET` / `PUT /api/admin/audit-configuration`; reads require `audit.read` or
+`audit.configure`, and writes require `audit.configure`. A mode transition locks
+the configuration row, updates the mode, appends a mandatory
+`AUDIT_CONFIGURATION` event and commits atomically. T1.6a adds a separate
+`SecurityAuditTrail` port for authentication events: successful login is
+mandatory and fail-closed, while failed login and logout use a
+`REQUIRES_NEW` isolated append whose failure is swallowed outside the
+transaction. T1.6b extends that port with `ACCESS_DENIED` for authenticated
+authorization denials. An `AccessDeniedHandler` resolves the actor, classifies
+the request into a static HTTP resource family and appends best-effort through
+the same isolated transaction; any failure preserves the original `403`. The
+local policy cache is reloaded best-effort after commit. Read auditing is
+fail-closed: under `SELECTIVE`, a read whose required event cannot be appended
+returns `503` without resource data. Database-level append-only privileges,
+event detail, read event capture outside the administrative user and role
+reads, CSRF-specific events, the PAT identifier as actor, retention and signing
+are not implemented. See [Audit](audit.md) for the canonical format and
+deferred capabilities.
 
 ## Internationalization (i18n) Architecture
 
@@ -155,6 +246,7 @@ Each functional module owns translations for its own concepts:
 - **Core module** (`i18n/core/messages*.properties`): Genuinely cross-module messages and templates (e.g., `validation.required`, `validation.required.title`)
 - **Contact module** (`i18n/contact/messages*.properties`): Contact-specific messages (e.g., `contact.notFound`, `contact.invalidThirdPartyReference`, `field.contact.lastName`)
 - **Authentication module** (`i18n/authentication/messages*.properties`): Authentication errors and authentication field labels
+- **Audit module** (`i18n/audit/messages*.properties`): Audit query errors and audit field labels
 
 ### Localization boundary
 

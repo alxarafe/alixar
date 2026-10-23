@@ -19,11 +19,13 @@ public class ReplaceAdminUserRolesUseCase {
         this.authorizationRepository = authorizationRepository;
     }
 
-    public AdminUser execute(UUID userId, List<String> roleCodes) {
+    public ReplaceAdminUserRolesResult execute(UUID userId, List<String> roleCodes) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new UserNotFoundException(userId));
 
         List<String> normalizedRoleCodes = normalizeRoleCodes(roleCodes);
+        List<String> currentRoleCodes = authorizationRepository.findRoleCodesForUser(userId);
+        boolean changed = !Set.copyOf(currentRoleCodes).equals(Set.copyOf(normalizedRoleCodes));
         Set<String> knownRoleCodes = authorizationRepository.findAllRoles().stream()
             .map(RoleDefinition::code)
             .collect(Collectors.toSet());
@@ -33,21 +35,24 @@ public class ReplaceAdminUserRolesUseCase {
             }
         }
 
-        for (String currentRoleCode : authorizationRepository.findRoleCodesForUser(userId)) {
+        for (String currentRoleCode : currentRoleCodes) {
             authorizationRepository.removeRoleFromUser(userId, currentRoleCode);
         }
         for (String roleCode : normalizedRoleCodes) {
             authorizationRepository.assignRoleToUser(userId, roleCode);
         }
 
-        return new AdminUser(
-            user.id(),
-            user.username(),
-            user.email(),
-            user.enabled(),
-            user.createdAt(),
-            user.updatedAt(),
-            authorizationRepository.findRoleCodesForUser(userId)
+        return new ReplaceAdminUserRolesResult(
+            new AdminUser(
+                user.id(),
+                user.username(),
+                user.email(),
+                user.enabled(),
+                user.createdAt(),
+                user.updatedAt(),
+                authorizationRepository.findRoleCodesForUser(userId)
+            ),
+            changed
         );
     }
 

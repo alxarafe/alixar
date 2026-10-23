@@ -18,7 +18,8 @@ public class I18nConfig {
         messageSource.setBasenames(
             "classpath:i18n/core/messages",
             "classpath:i18n/contact/messages",
-            "classpath:i18n/authentication/messages"
+            "classpath:i18n/authentication/messages",
+            "classpath:i18n/audit/messages"
         );
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(true);

@@ -1,5 +1,16 @@
 package es.alxarafe.alixar.authentication.api;
 
+import es.alxarafe.alixar.audit.AuditModeTestSupport;
+import es.alxarafe.alixar.audit.InMemoryAuditEventRepository;
+import es.alxarafe.alixar.audit.application.AuditAction;
+import es.alxarafe.alixar.audit.application.AuditChainVerifier;
+import es.alxarafe.alixar.audit.application.AuditMode;
+import es.alxarafe.alixar.audit.application.AuditReadLevel;
+import es.alxarafe.alixar.audit.application.AuditResourceType;
+import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
+import es.alxarafe.alixar.audit.domain.AuditChain;
+import es.alxarafe.alixar.audit.domain.AuditEvent;
+import es.alxarafe.alixar.audit.domain.AuditResult;
 import es.alxarafe.alixar.authentication.AuthenticationTestConfig;
 import es.alxarafe.alixar.authentication.application.AdministrationErrorCode;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
@@ -15,6 +26,7 @@ import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.domain.ApiToken;
 import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
+import com.jayway.jsonpath.JsonPath;
 import jakarta.servlet.http.Cookie;
 import java.time.Instant;
 import java.util.List;
@@ -76,12 +88,23 @@ class AdminUserControllerTest {
     @Autowired
     private TokenHasher tokenHasher;
 
+    @Autowired
+    private AuditModeTestSupport auditMode;
+
+    @Autowired
+    private InMemoryAuditEventRepository auditEventRepository;
+
+    @Autowired
+    private AuditChainVerifier auditChainVerifier;
+
     private MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         SecurityContextHolder.clearContext();
+        auditMode.reset();
+        auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
         Instant now = Instant.parse("2026-10-17T10:00:00Z");
         ((AuthenticationTestConfig.TestUserRepository) userRepository).replaceWith(
             user(ALICE_ID, "alice", "alice@example.test", true, 0, now),
@@ -300,9 +323,11 @@ class AdminUserControllerTest {
             .andExpect(jsonPath("$[0].code").value(RoleCodes.SYSTEM_ADMIN))
             .andExpect(jsonPath("$[0].name").value("System administrator"))
             .andExpect(jsonPath("$[0].builtIn").value(true))
-            .andExpect(jsonPath("$[0].permissionCodes.length()").value(2))
-            .andExpect(jsonPath("$[0].permissionCodes[0]").value(PermissionCodes.ROLES_MANAGE))
-            .andExpect(jsonPath("$[0].permissionCodes[1]").value(PermissionCodes.USERS_MANAGE))
+            .andExpect(jsonPath("$[0].permissionCodes.length()").value(4))
+            .andExpect(jsonPath("$[0].permissionCodes[0]").value(PermissionCodes.AUDIT_CONFIGURE))
+            .andExpect(jsonPath("$[0].permissionCodes[1]").value(PermissionCodes.AUDIT_READ))
+            .andExpect(jsonPath("$[0].permissionCodes[2]").value(PermissionCodes.ROLES_MANAGE))
+            .andExpect(jsonPath("$[0].permissionCodes[3]").value(PermissionCodes.USERS_MANAGE))
             .andExpect(jsonPath("$[0].permissions").doesNotExist())
             .andExpect(jsonPath("$[0].id").doesNotExist());
     }
@@ -727,6 +752,245 @@ class AdminUserControllerTest {
     }
 
     @Test
+    void offAuditMode_doesNotRecordEnablementEvents() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminPatchEnabled(session, BOB_ID, false)
+            .andExpect(status().isOk());
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
+    void basicAuditMode_sessionEnable_recordsUserEnabledWithSessionActor() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            adminPatchEnabled(session, CAROL_ID, true)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.enabled").value(true));
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.USER_ENABLED.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo("alice");
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(CAROL_ID.toString());
+                assertThat(event.requestId()).isNull();
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicAuditMode_patDisable_recordsUserDisabledWithPatActor() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        String rawToken = personalAccessToken(ALICE_ID);
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            mockMvc.perform(patch(AdminUserEndpoints.BASE_PATH + "/" + BOB_ID + "/enabled")
+                    .header("Authorization", "Bearer " + rawToken)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"enabled\":false}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.enabled").value(false));
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.USER_DISABLED.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.PAT);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo("alice");
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(BOB_ID.toString());
+                assertThat(event.toString()).doesNotContain(rawToken);
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicAuditMode_noOpEnablement_doesNotRecordEvent() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            adminPatchEnabled(session, ALICE_ID, true)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.enabled").value(true));
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+
+    @Test
+    void offAuditMode_createDoesNotRecordAnEvent() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+
+        adminPost(session, createUserJson(
+            "off-audit-user",
+            "off-audit-user@example.test",
+            "off-audit-password-123",
+            null
+        )).andExpect(status().isCreated());
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
+    void basicAuditMode_createRecordsAdminUserCreated() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            MvcResult result = adminPost(session, createUserJson(
+                "audited-user",
+                "audited-user@example.test",
+                "audited-password-123",
+                null
+            )).andExpect(status().isCreated()).andReturn();
+            String createdId = JsonPath.read(result.getResponse().getContentAsString(), "$.id");
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.ADMIN_USER_CREATED.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo("alice");
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(createdId);
+                assertThat(event.requestId()).isNull();
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicAuditMode_usernameChangeRecordsPreviousTarget() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            adminPatch(session, BOB_ID, "{\"username\":\"bob-renamed\"}")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("bob-renamed"));
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.ADMIN_USER_USERNAME_CHANGED.name());
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(BOB_ID.toString());
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicAuditMode_noOpUsernameChangeDoesNotRecordEvent() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            adminPatch(session, BOB_ID, "{\"username\":\"BOB\"}")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("bob"));
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicAuditMode_passwordResetRecordsAdminUserPasswordReset() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            adminResetPassword(session, BOB_ID, "new-bob-password-123")
+                .andExpect(status().isNoContent());
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.ADMIN_USER_PASSWORD_RESET.name());
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(BOB_ID.toString());
+                assertThat(event.toString()).doesNotContain("new-bob-password-123");
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicAuditMode_rolesReplacementRecordsAdminUserRolesReplaced() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            adminPutRoles(session, BOB_ID, "[\"" + RoleCodes.SYSTEM_ADMIN + "\"]")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.roles[0]").value(RoleCodes.SYSTEM_ADMIN));
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.ADMIN_USER_ROLES_REPLACED.name());
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.resourceId()).isEqualTo(BOB_ID.toString());
+                assertThat(event.toString()).doesNotContain(RoleCodes.SYSTEM_ADMIN);
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicAuditMode_noOpRolesReplacementDoesNotRecordEvent() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.BASIC);
+
+        try {
+            adminPutRoles(session, BOB_ID, "[]")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.roles").isEmpty());
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
     void disable_invalidatesPendingPasswordResetTokens() throws Exception {
         grantSystemAdmin(ALICE_ID);
         MockHttpSession session = authenticatedSession("alice", PASSWORD);
@@ -1029,6 +1293,164 @@ class AdminUserControllerTest {
             .containsExactly(RoleCodes.SYSTEM_ADMIN);
     }
 
+    @Test
+    void selectiveQueryOnly_auditsOneQueryPerPageAndEmptyList() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of(AuditResourceType.USER, AuditReadLevel.QUERY_ONLY));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH)
+                    .param(AdminUserEndpoints.PAGE_PARAM, "0")
+                    .param(AdminUserEndpoints.SIZE_PARAM, "2")
+                    .session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH)
+                    .param(AdminUserEndpoints.PAGE_PARAM, "1")
+                    .param(AdminUserEndpoints.SIZE_PARAM, "2")
+                    .session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID).session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH)
+                    .param(AdminUserEndpoints.QUERY_PARAM, "does-not-exist")
+                    .session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.total").value(0));
+
+            List<AuditEvent> events = auditEvents();
+            assertThat(events).hasSize(3);
+            assertThat(events).extracting(AuditEvent::action)
+                .containsOnly(AuditAction.READ_QUERY.name());
+            assertThat(events).extracting(AuditEvent::resourceType)
+                .containsOnly(AuditResourceType.USER.name());
+            assertThat(events).extracting(AuditEvent::resourceId).containsOnlyNulls();
+            assertThat(events).extracting(AuditEvent::actorUserId).containsOnly(ALICE_ID);
+            assertThat(events).extracting(AuditEvent::authenticationType)
+                .containsOnly(AuditAuthenticationType.SESSION);
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void selectiveQueryAndObject_auditsListAndUserDetail() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of(AuditResourceType.USER, AuditReadLevel.QUERY_AND_OBJECT));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH).session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID).session(session))
+                .andExpect(status().isOk());
+
+            List<AuditEvent> events = auditEvents();
+            assertThat(events).extracting(AuditEvent::action).containsExactly(
+                AuditAction.READ_QUERY.name(),
+                AuditAction.READ_OBJECT.name()
+            );
+            assertThat(events.get(0).resourceId()).isNull();
+            assertThat(events.get(1).resourceId()).isEqualTo(ALICE_ID.toString());
+            assertThat(events).allSatisfy(event -> {
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo("alice");
+                assertThat(event.requestId()).isNull();
+                assertThat(event.toString()).doesNotContain("alice@example.test");
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void selectiveReadAudit_recordsPatAuthenticationType() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        String rawToken = personalAccessToken(ALICE_ID);
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of(AuditResourceType.USER, AuditReadLevel.QUERY_ONLY));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH)
+                    .header("Authorization", "Bearer " + rawToken))
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.READ_QUERY.name());
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.PAT);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.resourceId()).isNull();
+            });
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void selectiveReadAudit_notFoundAndInvalidPaginationDoNotRecord() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of(AuditResourceType.USER, AuditReadLevel.QUERY_AND_OBJECT));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH + "/" + UUID.randomUUID()).session(session))
+                .andExpect(status().isNotFound());
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH)
+                    .param(AdminUserEndpoints.PAGE_PARAM, "-1")
+                    .session(session))
+                .andExpect(status().isBadRequest());
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicMode_doesNotAuditReadsEvenWhenRulesArePersisted() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.BASIC);
+        auditMode.setReadRules(Map.of(AuditResourceType.USER, AuditReadLevel.QUERY_AND_OBJECT));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH).session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID).session(session))
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void selectiveNone_doesNotAuditReads() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of());
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH).session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID).session(session))
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
     private ResultActions adminPost(MockHttpSession session, String body) throws Exception {
         Cookie csrfCookie = csrfCookieFromSafeRequest();
         return mockMvc.perform(post(AdminUserEndpoints.BASE_PATH)
@@ -1092,6 +1514,10 @@ class AdminUserControllerTest {
             + "\",\"email\":\"" + email
             + "\",\"password\":\"" + password + "\""
             + roleCodes + "}";
+    }
+
+    private List<AuditEvent> auditEvents() {
+        return auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID);
     }
 
     private ManagedState managedState() {

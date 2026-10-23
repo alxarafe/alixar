@@ -1,5 +1,7 @@
 package es.alxarafe.alixar.authentication.infrastructure.security;
 
+import es.alxarafe.alixar.audit.api.AuditEndpoints;
+import es.alxarafe.alixar.audit.application.SecurityAuditTrail;
 import es.alxarafe.alixar.authentication.api.AdminUserEndpoints;
 import es.alxarafe.alixar.authentication.api.UserEndpoints;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
@@ -21,6 +23,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.access.intercept.AuthorizationFilter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.session.ChangeSessionIdAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.CompositeSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
@@ -76,8 +79,22 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    AccessDeniedHandler accessDeniedHandler() {
-        return (request, response, exception) -> response.sendError(HttpStatus.FORBIDDEN.value());
+    HttpAuditResourceFamilyClassifier httpAuditResourceFamilyClassifier() {
+        return new HttpAuditResourceFamilyClassifier();
+    }
+
+    @Bean
+    AccessDeniedHandler accessDeniedHandler(
+        SecurityAuditTrail securityAuditTrail,
+        SecurityContextAuditActorResolver auditActorResolver,
+        HttpAuditResourceFamilyClassifier httpAuditResourceFamilyClassifier
+    ) {
+        return new AuditedAccessDeniedHandler(
+            (request, response, exception) -> response.sendError(HttpStatus.FORBIDDEN.value()),
+            securityAuditTrail,
+            auditActorResolver,
+            httpAuditResourceFamilyClassifier
+        );
     }
 
     @Bean
@@ -88,6 +105,23 @@ public class SecurityConfiguration {
     @Bean
     BearerTokenRequestMatcher bearerTokenRequestMatcher() {
         return new BearerTokenRequestMatcher();
+    }
+
+    @Bean
+    SecurityContextAuditActorResolver auditActorResolver() {
+        return new SecurityContextAuditActorResolver();
+    }
+
+    @Bean
+    LogoutSuccessHandler logoutSuccessHandler(
+        SecurityAuditTrail securityAuditTrail,
+        SecurityContextAuditActorResolver auditActorResolver
+    ) {
+        return new AuditedLogoutSuccessHandler(
+            new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT),
+            securityAuditTrail,
+            auditActorResolver
+        );
     }
 
     @Bean
@@ -114,7 +148,8 @@ public class SecurityConfiguration {
         CredentialsVersionCheckFilter credentialsVersionCheckFilter,
         ApiTokenAuthenticationFilter apiTokenAuthenticationFilter,
         EffectivePermissionsFilter effectivePermissionsFilter,
-        BearerTokenRequestMatcher bearerTokenRequestMatcher
+        BearerTokenRequestMatcher bearerTokenRequestMatcher,
+        LogoutSuccessHandler logoutSuccessHandler
     ) throws Exception {
         http
             .authenticationManager(authenticationManager)
@@ -143,6 +178,18 @@ public class SecurityConfiguration {
                     .hasAuthority(PermissionCodes.ROLES_MANAGE)
                 .requestMatchers(AdminUserEndpoints.PERMISSIONS_BASE_PATH)
                     .hasAuthority(PermissionCodes.ROLES_MANAGE)
+                .requestMatchers(HttpMethod.GET, AuditEndpoints.VERIFICATION_PATH)
+                    .hasAuthority(PermissionCodes.AUDIT_READ)
+                .requestMatchers(HttpMethod.GET, AuditEndpoints.BASE_PATH)
+                    .hasAuthority(PermissionCodes.AUDIT_READ)
+                .requestMatchers(HttpMethod.GET, AuditEndpoints.READ_POLICY_PATH)
+                    .hasAnyAuthority(PermissionCodes.AUDIT_READ, PermissionCodes.AUDIT_CONFIGURE)
+                .requestMatchers(HttpMethod.PUT, AuditEndpoints.READ_POLICY_PATH)
+                    .hasAuthority(PermissionCodes.AUDIT_CONFIGURE)
+                .requestMatchers(HttpMethod.GET, AuditEndpoints.CONFIGURATION_PATH)
+                    .hasAnyAuthority(PermissionCodes.AUDIT_READ, PermissionCodes.AUDIT_CONFIGURE)
+                .requestMatchers(HttpMethod.PUT, AuditEndpoints.CONFIGURATION_PATH)
+                    .hasAuthority(PermissionCodes.AUDIT_CONFIGURE)
                 .requestMatchers(AdminUserEndpoints.BASE_PATH, AdminUserEndpoints.USERS_PATH_PATTERN)
                     .hasAuthority(PermissionCodes.USERS_MANAGE)
                 .requestMatchers(
@@ -164,7 +211,7 @@ public class SecurityConfiguration {
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies(SESSION_COOKIE_NAME)
-                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT)));
+                .logoutSuccessHandler(logoutSuccessHandler));
         return http.build();
     }
 }

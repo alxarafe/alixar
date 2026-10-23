@@ -1,5 +1,7 @@
 package es.alxarafe.alixar.authentication.application;
 
+import java.util.UUID;
+
 public class DeleteRoleUseCase {
 
     private final AuthorizationRepository authorizationRepository;
@@ -8,7 +10,7 @@ public class DeleteRoleUseCase {
         this.authorizationRepository = authorizationRepository;
     }
 
-    public void execute(String roleCode) {
+    public UUID execute(String roleCode) {
         RoleDefinition role = authorizationRepository.findRoleByCode(roleCode)
             .orElseThrow(() -> new RoleNotFoundException(roleCode));
         if (role.builtIn()) {
@@ -16,5 +18,6 @@ public class DeleteRoleUseCase {
         }
 
         authorizationRepository.deleteRole(roleCode);
+        return role.id();
     }
 }

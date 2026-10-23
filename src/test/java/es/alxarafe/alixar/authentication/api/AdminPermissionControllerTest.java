@@ -148,12 +148,16 @@ class AdminPermissionControllerTest {
 
         mockMvc.perform(get(AdminUserEndpoints.PERMISSIONS_BASE_PATH).session(session))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.length()").value(2))
-            .andExpect(jsonPath("$[0].code").value(PermissionCodes.ROLES_MANAGE))
-            .andExpect(jsonPath("$[0].description")
+            .andExpect(jsonPath("$.length()").value(4))
+            .andExpect(jsonPath("$[0].code").value(PermissionCodes.AUDIT_CONFIGURE))
+            .andExpect(jsonPath("$[0].description").value("Configure audit policy"))
+            .andExpect(jsonPath("$[1].code").value(PermissionCodes.AUDIT_READ))
+            .andExpect(jsonPath("$[1].description").value("Read audit events"))
+            .andExpect(jsonPath("$[2].code").value(PermissionCodes.ROLES_MANAGE))
+            .andExpect(jsonPath("$[2].description")
                 .value("Manage roles and their permission assignments"))
-            .andExpect(jsonPath("$[1].code").value(PermissionCodes.USERS_MANAGE))
-            .andExpect(jsonPath("$[1].description").value("Manage users"))
+            .andExpect(jsonPath("$[3].code").value(PermissionCodes.USERS_MANAGE))
+            .andExpect(jsonPath("$[3].description").value("Manage users"))
             .andExpect(jsonPath("$[0].id").doesNotExist());
     }
 

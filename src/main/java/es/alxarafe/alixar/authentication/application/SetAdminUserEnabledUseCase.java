@@ -20,12 +20,12 @@ public class SetAdminUserEnabledUseCase {
         this.tokenRepository = tokenRepository;
     }
 
-    public AdminUser execute(UUID userId, boolean enabled) {
+    public SetAdminUserEnabledResult execute(UUID userId, boolean enabled) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new UserNotFoundException(userId));
 
         if (user.enabled() == enabled) {
-            return toAdminUser(user, user.updatedAt());
+            return new SetAdminUserEnabledResult(toAdminUser(user, user.updatedAt()), false);
         }
 
         long credentialsVersion = user.credentialsVersion();
@@ -36,7 +36,10 @@ public class SetAdminUserEnabledUseCase {
 
         userRepository.updateEnabledAndCredentialsVersion(userId, enabled, credentialsVersion);
 
-        return toAdminUser(user, enabled, credentialsVersion, Instant.now());
+        return new SetAdminUserEnabledResult(
+            toAdminUser(user, enabled, credentialsVersion, Instant.now()),
+            true
+        );
     }
 
     private AdminUser toAdminUser(User user, Instant updatedAt) {
