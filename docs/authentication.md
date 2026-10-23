@@ -111,6 +111,10 @@ cross-identifier matches all return the same `401` error with code
 `AUTH_INVALID_CREDENTIALS`. A failed `LOGIN_FAILED` audit append never changes
 that result.
 
+A missing or mismatched CSRF cookie/header pair is rejected with `403` before
+credentials are checked. This must remain distinct from invalid credentials
+(`401`) and a missing authenticated session (`GET /api/auth/me` returns `401`).
+
 Under `BASIC` and `SELECTIVE`, successful login is fail-closed with respect to
 its audit event. If `LOGIN_SUCCEEDED` cannot be persisted after the session has been created,
 the security context is cleared, any created session is invalidated and the
@@ -170,6 +174,19 @@ Any safe request, including `GET /health`, issues an `XSRF-TOKEN` cookie. The
 client must send that cookie value as `X-XSRF-TOKEN` for login and logout.
 Authentication and logout rotate or clear the token, so the client must make a
 subsequent safe request before its next unsafe request.
+
+Access-denied responses finish with `setStatus(403)`, without `sendError`.
+Servlet `sendError(403)` triggers an `ERROR` dispatch to `/error`; authorizing
+that second anonymous request through the deny-by-default rule can otherwise
+replace the original CSRF rejection with `401`. The handler completes the
+original denial instead of exempting error dispatches or allowing `/error`.
+All route and permission rules remain in force, including direct requests to
+`/error`. CSRF rejections remain excluded from authorization-denial auditing.
+
+`AuthHttpStatusTest` exercises these distinctions over actual HTTP against
+embedded Tomcat on a random port, with controlled authentication repositories.
+It runs with the normal deterministic suite and complements MockMvc, which
+does not perform the servlet container's error redispatch.
 
 No CORS policy is defined in this iteration. A cross-origin Solucar deployment
 requires an explicit future decision covering trusted origins, credentials and

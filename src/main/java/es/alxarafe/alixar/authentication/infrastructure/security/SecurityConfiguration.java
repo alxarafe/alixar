@@ -90,7 +90,9 @@ public class SecurityConfiguration {
         HttpAuditResourceFamilyClassifier httpAuditResourceFamilyClassifier
     ) {
         return new AuditedAccessDeniedHandler(
-            (request, response, exception) -> response.sendError(HttpStatus.FORBIDDEN.value()),
+            // Finish the API denial here: sendError redispatches to /error, whose
+            // deny-by-default rule can replace an anonymous CSRF rejection with 401.
+            (request, response, exception) -> response.setStatus(HttpStatus.FORBIDDEN.value()),
             securityAuditTrail,
             auditActorResolver,
             httpAuditResourceFamilyClassifier

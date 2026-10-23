@@ -192,7 +192,7 @@ This override is used **only** by `./bin/check-reference`.
 
 `./bin/check` is the complete validation authority for Alixar itself. It runs entirely in Docker and performs:
 
-1. Build and run the 407 deterministic tests (`mvnw clean verify`)
+1. Build and run the 415 deterministic tests (`mvnw clean verify`)
 2. Runtime image build
 3. Container startup with health check wait (database + app)
 4. PostgreSQL health verification (`pg_isready`)
@@ -237,7 +237,11 @@ the invocation's project. Cleanup errors are reported and fail an otherwise
 successful check; an earlier failure retains its exit code. Images/build cache
 are retained. No fixed development or previous check project is cleaned.
 
-`./bin/test` runs the 407 component/unit tests without PostgreSQL.
+`./bin/test` runs the 415 deterministic tests without PostgreSQL, including
+eight real HTTP status regressions against embedded Tomcat in
+`AuthHttpStatusTest`. These distinguish CSRF `403`, invalid credentials `401`,
+anonymous `/me` `401`, and permission denial `403`, while retaining deny-by-default
+coverage for unmapped routes and direct `/error` requests.
 Their persistence exclusions are centralized in `src/test/resources/application.properties`.
 The additional `PersistenceIT` uses Surefire's separate `*IT` naming convention
 and is explicitly selected by `bin/check` through `compose.check.yaml`, with
