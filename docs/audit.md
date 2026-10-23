@@ -905,14 +905,20 @@ the current design:
 - the `FULL` mode;
 - read event capture under `FULL`, `EACH_RETURNED_OBJECT`, broader resource
   types and endpoints outside the administrative `USER` and `ROLE` reads;
+- streaming read auditing, where a response is audited as its items are
+  produced rather than after the result is materialized;
 - instrumentation of bootstrap and password-reset request events;
 - atomic `SUCCESS` events for further business operations as they are
   instrumented;
 - an explicit strategy for `FAILURE` and `DENIED` events, separate from the
   business transaction;
+- audit-of-audit instrumentation for reads, exports and verification of the
+  audit history itself;
 - the PAT identifier in audit events;
 - request/correlation identifiers;
 - `GET /api/admin/audit-events/{id}`;
+- rate limiting for audit queries, verification and administrative audit
+  operations;
 - retention state, `purge_after`, `legal_hold`, batched internal purge and purge
   summary events;
 - archive before purge, with a verifiable JSON Lines package:
@@ -928,6 +934,14 @@ the current design:
 - local-directory archive first, with future S3-compatible, Azure Blob, Google
   Cloud Storage or immutable/WORM destinations;
 - periodic signed checkpoints, asymmetric signatures and external anchoring;
+- multiple active chains, an explicit chain-selection API and per-chain policy;
+- partitioning of audit storage, including creation, retention and verification
+  of partitioned chains;
+- a standalone verification CLI that applies the same canonical and chain rules
+  as the HTTP verifier;
+- a canonical representation v2, together with an explicit versioned
+  coexistence and migration policy for existing chains;
+- distributed cache invalidation and cross-node propagation of policy changes;
 - purpose, reason and case/reference extensions for sensitive sectors;
 - minimized, explicitly configured IP and User-Agent capture;
 - before/after change payloads with `AUDITABLE`, `REDACTED`, `HASHED` and
