@@ -1,9 +1,11 @@
 package es.alxarafe.alixar.authentication.infrastructure;
 
 import es.alxarafe.alixar.audit.application.AuditTrail;
+import es.alxarafe.alixar.audit.application.ReadAuditRecorder;
 import es.alxarafe.alixar.authentication.application.ApiTokenGenerator;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AssignRoleToUserUseCase;
+import es.alxarafe.alixar.authentication.application.AuditedAdminReadService;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.AuthenticateApiTokenUseCase;
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
@@ -108,6 +110,23 @@ public class AuthenticationConfiguration {
     @Bean
     GetRoleUseCase getRoleUseCase(AuthorizationRepository authorizationRepository) {
         return new GetRoleUseCase(authorizationRepository);
+    }
+
+    @Bean
+    AuditedAdminReadService auditedAdminReadService(
+        ListAdminUsersUseCase listAdminUsersUseCase,
+        GetAdminUserUseCase getAdminUserUseCase,
+        ListRolesUseCase listRolesUseCase,
+        GetRoleUseCase getRoleUseCase,
+        ReadAuditRecorder readAuditRecorder
+    ) {
+        return new AuditedAdminReadService(
+            listAdminUsersUseCase,
+            getAdminUserUseCase,
+            listRolesUseCase,
+            getRoleUseCase,
+            readAuditRecorder
+        );
     }
 
     @Bean

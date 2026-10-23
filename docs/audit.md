@@ -21,10 +21,11 @@ adds authentication security events for successful login, failed login and
 logout. T1.6b adds `ACCESS_DENIED` authorization events for authenticated
 callers rejected by an authorization rule. T1.7a adds the `SELECTIVE` mode, the
 persisted read-policy table and the administrative read-policy API, including
-mandatory rule-change events. Read event capture remains deferred to T1.7b.
-Event detail, retention, archive and checkpoints remain out of scope.
+mandatory rule-change events. T1.7b appends `READ_QUERY` and `READ_OBJECT`
+events for the administrative `USER` and `ROLE` read endpoints. Event detail,
+retention, archive and checkpoints remain out of scope.
 
-## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b, T1.5a, T1.5b, T1.6a, T1.6b and T1.7a)
+## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b, T1.5a, T1.5b, T1.6a, T1.6b, T1.7a and T1.7b)
 
 Implemented:
 
@@ -69,14 +70,16 @@ Implemented:
   and logout events;
 - `ACCESS_DENIED` authorization events under `BASIC` and `SELECTIVE` for authenticated callers
   rejected by an authorization rule, using a static resource family instead of
-  the raw request path.
+  the raw request path;
+- `READ_QUERY` and `READ_OBJECT` events for the administrative `USER` and
+  `ROLE` read endpoints under `SELECTIVE`, using the persisted read rules.
 
 Not implemented yet:
 
 - the `FULL` audit mode;
-- read event capture under `SELECTIVE` / `FULL`, including
-  `EACH_RETURNED_OBJECT` and read rules for resource types other than `USER`
-  and `ROLE`;
+- read event capture for `FULL`, `EACH_RETURNED_OBJECT`, resource types other
+  than `USER` and `ROLE`, and endpoints outside the administrative user and
+  role reads;
 - the PAT identifier as part of the actor;
 - bootstrap and password-reset request events;
 - CSRF-specific audit events, such as a future `CSRF_REJECTED`;
@@ -105,9 +108,9 @@ top of it. `BASIC` does **not** mean full coverage of all administrative or
 system events. It currently covers only the events listed below. Additional
 capabilities must be instrumented explicitly in later slices.
 
-T1.7a stores and administers read rules, but does not yet append read events.
-The rules are intended to take effect only when the effective mode is
-`SELECTIVE`. Read event capture is the subject of T1.7b. `FULL` is deferred.
+The read rules take effect only when the effective mode is `SELECTIVE`. T1.7b
+appends read events for the administrative `USER` and `ROLE` read endpoints.
+`FULL` is deferred.
 
 The effective mode is stored in the singleton `audit_configuration` table. On
 the first start, before that row exists, the bootstrap value is read from:
@@ -246,6 +249,75 @@ event. The local cache is reloaded after commit; if that reload fails, the
 15-second TTL eventually observes the new rules. Read rules are stored
 regardless of the current mode, but they are intended to apply only under
 `SELECTIVE`.
+
+### Read events (T1.7b)
+
+Under `SELECTIVE`, the administrative read endpoints are instrumented according
+to the persisted rules for `USER` and `ROLE`:
+
+| Endpoint | Action | Resource | Resource id |
+|---|---|---|---|
+| `GET /api/admin/users` | `READ_QUERY` | `USER` | `null` |
+| `GET /api/admin/users/{id}` | `READ_OBJECT` | `USER` | user internal UUID |
+| `GET /api/admin/roles` | `READ_QUERY` | `ROLE` | `null` |
+| `GET /api/admin/roles/{code}` | `READ_OBJECT` | `ROLE` | role internal UUID |
+
+The effective matrix is:
+
+| Mode and rule | List endpoint | Detail endpoint |
+|---|---|---|
+| `OFF` or `BASIC` | no event | no event |
+| `SELECTIVE` with `NONE` | no event | no event |
+| `SELECTIVE` with `QUERY_ONLY` | one `READ_QUERY` | no event |
+| `SELECTIVE` with `QUERY_AND_OBJECT` | one `READ_QUERY` | one `READ_OBJECT` |
+
+`BASIC` never emits read events, even when read rules are persisted.
+`SELECTIVE` keeps the complete `BASIC` baseline and adds these events. One list
+request, page included, emits at most one `READ_QUERY`; an empty successful page
+still emits it. A detail read emits only `READ_OBJECT`, never an additional
+`READ_QUERY`. Reading the audit event API itself is not instrumented.
+
+A read event means that the application completed the read, materialized the
+response, determined that the result could be delivered and persisted the
+mandatory event before returning the response. It does **not** prove that the
+client physically received the data: a later serialization, connection or
+client failure may occur after the append, so over-auditing is possible and is
+an accepted limitation.
+
+The guaranteed order is:
+
+```text
+evaluate the policy snapshot and resolve the actor
+→ if the actor cannot be resolved: fail with AUDIT_UNAVAILABLE
+→ execute the use case
+→ materialize the response
+→ if the result is 404, 400 or 500: return without a READ_* event
+→ append the mandatory event through an isolated transaction
+→ if the append fails: fail with AUDIT_UNAVAILABLE and return no resource data
+→ return the successful response
+```
+
+The read is not executed when the actor cannot be resolved. Append failures are
+never swallowed, retried automatically or buffered locally; an unknown outcome
+is treated as a failure. Under an effective `SELECTIVE` mode that requires the
+event, the response is `503` with code `AUDIT_UNAVAILABLE`. A `403` produces the
+usual `ACCESS_DENIED` event and no `READ_*` event. Unknown users or roles,
+invalid pagination and other `400`/`404`/`500` outcomes produce no `READ_*`
+event.
+
+The actor is the authenticated caller, with `SESSION` or `PAT` authentication,
+and its username is snapshotted in `actor_username`. `SYSTEM` is never used for
+a read. The event records `SUCCESS`, the action, the resource type and, for
+`READ_OBJECT`, the internal UUID. It never records the role code as a resource
+id. It contains no query string, search term, filter, pagination value, request
+body, header, cookie, token or returned resource data.
+
+The event is appended through a separate `REQUIRES_NEW` transaction before the
+response is returned. Each append still takes the chain-head lock, so concurrent
+audited reads serialize briefly on that lock. This is accepted for the current
+administrative read volume; there is no asynchronous queue or outbox. Read
+events are subject to the same append-only integrity and chain verification as
+the other events.
 
 ## Instrumented events (T1.3a and T1.3b)
 
@@ -454,8 +526,9 @@ QUERY_AND_OBJECT
 
 `NONE` means no row. `EACH_RETURNED_OBJECT` is a deferred level for future deep
 read auditing. A search returning many objects must not generate one event per
-object unless an explicit policy requires it. T1.7a stores the rules but does
-not yet emit read events.
+object unless an explicit policy requires it. T1.7b emits one query event per
+request/page and one object event per detail read, never one event per returned
+object.
 
 ## Read API (T1.4a)
 
@@ -513,10 +586,10 @@ UUIDs and unknown enum values return `400` with code `AUDIT_INVALID_QUERY` and a
 `field` property. An anonymous request returns `401`; an authenticated caller
 without `audit.read` returns `403`.
 
-Reads work independently of the effective audit mode, and a read does not
-append an audit event in T1.7a. Read event capture under `SELECTIVE` / `FULL`
-read-depth policy remains deferred. T1.4a adds no speculative database index and
-no total-count metadata.
+Querying the audit API works independently of the effective audit mode and does
+not append a read event. The administrative `USER` and `ROLE` read endpoints are
+instrumented separately under `SELECTIVE`; see [Read events](#read-events-t17b).
+T1.4a adds no speculative database index and no total-count metadata.
 
 ## Verification API (T1.4b)
 
@@ -830,8 +903,8 @@ The following capabilities are intentionally deferred and must not be blocked by
 the current design:
 
 - the `FULL` mode;
-- read event capture under `SELECTIVE` / `FULL`, including
-  `EACH_RETURNED_OBJECT` and broader resource types;
+- read event capture under `FULL`, `EACH_RETURNED_OBJECT`, broader resource
+  types and endpoints outside the administrative `USER` and `ROLE` reads;
 - instrumentation of bootstrap and password-reset request events;
 - atomic `SUCCESS` events for further business operations as they are
   instrumented;

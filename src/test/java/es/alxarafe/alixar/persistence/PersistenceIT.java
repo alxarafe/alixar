@@ -11,6 +11,7 @@ import es.alxarafe.alixar.audit.application.AuditEventQuery;
 import es.alxarafe.alixar.audit.application.AuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditHashCalculator;
 import es.alxarafe.alixar.audit.application.AuditMode;
+import es.alxarafe.alixar.audit.application.AuditUnavailableException;
 import es.alxarafe.alixar.audit.application.AuditReadLevel;
 import es.alxarafe.alixar.audit.application.AuditResourceType;
 import es.alxarafe.alixar.audit.application.AuditVerificationFailure;
@@ -24,17 +25,23 @@ import es.alxarafe.alixar.audit.domain.AuditResult;
 import es.alxarafe.alixar.audit.infrastructure.AuditConfigurationBootstrap;
 import es.alxarafe.alixar.audit.infrastructure.AuditProperties;
 import es.alxarafe.alixar.audit.infrastructure.CachedAuditPolicyProvider;
+import es.alxarafe.alixar.audit.infrastructure.ConfiguredReadAuditRecorder;
 import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditConfigurationService;
 import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditReadPolicyService;
 import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditService;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
+import es.alxarafe.alixar.authentication.application.AuditedAdminReadService;
 import es.alxarafe.alixar.authentication.application.BuiltInRoleImmutableException;
 import es.alxarafe.alixar.authentication.application.ChangePasswordUseCase;
 import es.alxarafe.alixar.authentication.application.ChangeUsernameUseCase;
 import es.alxarafe.alixar.authentication.application.EmailAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
+import es.alxarafe.alixar.authentication.application.GetAdminUserUseCase;
+import es.alxarafe.alixar.authentication.application.GetRoleUseCase;
+import es.alxarafe.alixar.authentication.application.ListAdminUsersUseCase;
+import es.alxarafe.alixar.authentication.application.ListRolesUseCase;
 import es.alxarafe.alixar.authentication.application.PasswordHasher;
 import es.alxarafe.alixar.authentication.application.PermissionCodes;
 import es.alxarafe.alixar.authentication.application.PermissionDefinition;
@@ -42,6 +49,7 @@ import es.alxarafe.alixar.authentication.application.PasswordResetNotifier;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenGenerator;
 import es.alxarafe.alixar.authentication.application.PasswordResetTokenRepository;
 import es.alxarafe.alixar.authentication.application.PermissionNotFoundException;
+import es.alxarafe.alixar.authentication.application.AdminUserSearchQuery;
 import es.alxarafe.alixar.authentication.application.ResetPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.RoleAlreadyExistsException;
 import es.alxarafe.alixar.authentication.application.RoleCodes;
@@ -189,6 +197,21 @@ class PersistenceIT {
 
     @Autowired
     private TransactionalAuditReadPolicyService transactionalAuditReadPolicyService;
+
+    @Autowired
+    private AuditedAdminReadService auditedAdminReadService;
+
+    @Autowired
+    private ListAdminUsersUseCase listAdminUsersUseCase;
+
+    @Autowired
+    private GetAdminUserUseCase getAdminUserUseCase;
+
+    @Autowired
+    private ListRolesUseCase listRolesUseCase;
+
+    @Autowired
+    private GetRoleUseCase getRoleUseCase;
 
     @Test
     void bootIntegratesPostgresqlFlywayJooqAndAuthenticationMigration() throws Exception {
@@ -2298,6 +2321,119 @@ class PersistenceIT {
             if (createdId != null) {
                 deleteUser(createdId);
             }
+        }
+    }
+
+    @Test
+    void selectiveReadAudit_persistsQueryAndObjectEventsInRealChain() {
+        String suffix = UUID.randomUUID().toString();
+        UUID userId = UUID.randomUUID();
+        Instant now = Instant.parse("2026-10-23T10:00:00Z");
+
+        resetAuditChain();
+        try {
+            userRepository.create(new User(
+                userId,
+                "read-audit-" + suffix,
+                "read-audit-" + suffix + "@example.test",
+                passwordHasher.hash("read-audit-password-123"),
+                true,
+                0,
+                now,
+                now
+            ));
+            setAuditMode(AuditMode.SELECTIVE);
+            transactionalAuditReadPolicyService.replaceRules(Map.of(
+                AuditResourceType.USER,
+                AuditReadLevel.QUERY_AND_OBJECT
+            ));
+            resetAuditChain();
+
+            auditedAdminReadService.listUsers(AdminUserSearchQuery.of(null, null, null, null));
+            auditedAdminReadService.getUser(userId);
+
+            var events = dsl.fetch(
+                "select action, actor_user_id, actor_username, authentication_type, "
+                    + "resource_type, resource_id, result from audit_event order by sequence"
+            );
+            assertThat(events.getValues("action", String.class)).containsExactly(
+                AuditAction.READ_QUERY.name(),
+                AuditAction.READ_OBJECT.name()
+            );
+            assertThat(events.getValues("resource_type", String.class)).containsExactly(
+                AuditResourceType.USER.name(),
+                AuditResourceType.USER.name()
+            );
+            assertThat(events.getValues("resource_id", String.class).get(0)).isNull();
+            assertThat(events.getValues("resource_id", String.class).get(1))
+                .isEqualTo(userId.toString());
+            assertThat(events.getValues("actor_user_id", UUID.class))
+                .containsOnly(AUDIT_TEST_ACTOR_ID);
+            assertThat(events.getValues("actor_username", String.class))
+                .containsOnly("audit-persistence-test");
+            assertThat(events.getValues("authentication_type", String.class))
+                .containsOnly(AuditAuthenticationType.SESSION.name());
+            assertThat(events.getValues("result", String.class))
+                .containsOnly(AuditResult.SUCCESS.name());
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteUser(userId);
+        }
+    }
+
+    @Test
+    void selectiveReadAudit_realAppendFailurePreventsSuccessfulResult() {
+        String suffix = UUID.randomUUID().toString();
+        UUID userId = UUID.randomUUID();
+        Instant now = Instant.parse("2026-10-23T10:00:00Z");
+
+        resetAuditChain();
+        try {
+            userRepository.create(new User(
+                userId,
+                "read-failure-" + suffix,
+                "read-failure-" + suffix + "@example.test",
+                passwordHasher.hash("read-failure-password-123"),
+                true,
+                0,
+                now,
+                now
+            ));
+            setAuditMode(AuditMode.SELECTIVE);
+            transactionalAuditReadPolicyService.replaceRules(Map.of(
+                AuditResourceType.USER,
+                AuditReadLevel.QUERY_AND_OBJECT
+            ));
+            resetAuditChain();
+
+            var failingRecorder = new ConfiguredReadAuditRecorder(
+                auditPolicyProvider,
+                () -> Optional.of(new AuditActor(
+                    AUDIT_TEST_ACTOR_ID,
+                    "x".repeat(101),
+                    AuditAuthenticationType.SESSION
+                )),
+                transactionalAuditService
+            );
+            var failingReadService = new AuditedAdminReadService(
+                listAdminUsersUseCase,
+                getAdminUserUseCase,
+                listRolesUseCase,
+                getRoleUseCase,
+                failingRecorder
+            );
+
+            assertThatThrownBy(() -> failingReadService.getUser(userId))
+                .isInstanceOf(AuditUnavailableException.class);
+            assertThat(auditEventCount()).isZero();
+            assertThat(auditChainVerifier.verify(AUDIT_CHAIN_ID).valid()).isTrue();
+            assertThat(userRepository.findById(userId)).isPresent();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteUser(userId);
         }
     }
 

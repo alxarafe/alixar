@@ -79,16 +79,19 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   authorization denials, using a static HTTP resource family and
   an isolated best-effort append that cannot change the original `403`. T1.7a
   adds the `SELECTIVE` mode, a persisted read policy for `USER` and `ROLE` and
-  an administrative read-policy API; read event capture remains deferred.
-  Event detail, CSRF-specific events, the PAT identifier as actor, retention,
-  archive and checkpoints are not implemented yet.
+  an administrative read-policy API. T1.7b appends mandatory `READ_QUERY` and
+  `READ_OBJECT` events for the administrative user and role reads under
+  `SELECTIVE`, failing closed when the required append fails. Event detail,
+  read event capture outside those endpoints, CSRF-specific events, the PAT
+  identifier as actor, retention, archive and checkpoints are not implemented
+  yet.
   See [Audit](audit.md)
 
 ## Planned (Not Implemented)
 
-- the `FULL` audit mode, read event capture, CSRF-specific audit events, the
-  PAT identifier as actor, audit event detail, retention, purge, archive and
-  signed checkpoints
+- the `FULL` audit mode, read event capture beyond the administrative user and
+  role reads, CSRF-specific audit events, the PAT identifier as actor, audit
+  event detail, retention, purge, archive and signed checkpoints
 
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ)
 - Email change with new-address verification
@@ -201,7 +204,9 @@ the mode and rules refreshed every 15 seconds keeps the `OFF` path free of SQL
 per audited operation and introduces a temporary multi-node visibility delay.
 In `BASIC` and `SELECTIVE`, explicitly instrumented successful operations record
 their event in the same transaction as the business change. `SELECTIVE` adds
-read rules for `USER` and `ROLE`; read event capture is not implemented yet. The
+read rules for `USER` and `ROLE`, and the administrative read endpoints append
+`READ_QUERY` / `READ_OBJECT` events through an isolated transaction before
+returning. The
 instrumented set includes administrative user lifecycle operations,
 self-service username and password changes, completed password recovery,
 Personal Access Token creation and revocation, and role creation, rename,
@@ -224,10 +229,13 @@ transaction. T1.6b extends that port with `ACCESS_DENIED` for authenticated
 authorization denials. An `AccessDeniedHandler` resolves the actor, classifies
 the request into a static HTTP resource family and appends best-effort through
 the same isolated transaction; any failure preserves the original `403`. The
-local policy cache is reloaded best-effort after commit. Database-level
-append-only privileges, event detail, read event capture, CSRF-specific events,
-the PAT identifier as actor, retention and signing are not implemented. See
-[Audit](audit.md) for the canonical format and deferred capabilities.
+local policy cache is reloaded best-effort after commit. Read auditing is
+fail-closed: under `SELECTIVE`, a read whose required event cannot be appended
+returns `503` without resource data. Database-level append-only privileges,
+event detail, read event capture outside the administrative user and role
+reads, CSRF-specific events, the PAT identifier as actor, retention and signing
+are not implemented. See [Audit](audit.md) for the canonical format and
+deferred capabilities.
 
 ## Internationalization (i18n) Architecture
 

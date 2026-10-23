@@ -5,6 +5,7 @@ import es.alxarafe.alixar.audit.InMemoryAuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditAction;
 import es.alxarafe.alixar.audit.application.AuditChainVerifier;
 import es.alxarafe.alixar.audit.application.AuditMode;
+import es.alxarafe.alixar.audit.application.AuditReadLevel;
 import es.alxarafe.alixar.audit.application.AuditResourceType;
 import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import es.alxarafe.alixar.audit.domain.AuditChain;
@@ -1290,6 +1291,164 @@ class AdminUserControllerTest {
             .andExpect(jsonPath("$.roles[0]").value(RoleCodes.SYSTEM_ADMIN));
         assertThat(authorizationRepository.findRoleCodesForUser(BOB_ID))
             .containsExactly(RoleCodes.SYSTEM_ADMIN);
+    }
+
+    @Test
+    void selectiveQueryOnly_auditsOneQueryPerPageAndEmptyList() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of(AuditResourceType.USER, AuditReadLevel.QUERY_ONLY));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH)
+                    .param(AdminUserEndpoints.PAGE_PARAM, "0")
+                    .param(AdminUserEndpoints.SIZE_PARAM, "2")
+                    .session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH)
+                    .param(AdminUserEndpoints.PAGE_PARAM, "1")
+                    .param(AdminUserEndpoints.SIZE_PARAM, "2")
+                    .session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID).session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH)
+                    .param(AdminUserEndpoints.QUERY_PARAM, "does-not-exist")
+                    .session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.total").value(0));
+
+            List<AuditEvent> events = auditEvents();
+            assertThat(events).hasSize(3);
+            assertThat(events).extracting(AuditEvent::action)
+                .containsOnly(AuditAction.READ_QUERY.name());
+            assertThat(events).extracting(AuditEvent::resourceType)
+                .containsOnly(AuditResourceType.USER.name());
+            assertThat(events).extracting(AuditEvent::resourceId).containsOnlyNulls();
+            assertThat(events).extracting(AuditEvent::actorUserId).containsOnly(ALICE_ID);
+            assertThat(events).extracting(AuditEvent::authenticationType)
+                .containsOnly(AuditAuthenticationType.SESSION);
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void selectiveQueryAndObject_auditsListAndUserDetail() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of(AuditResourceType.USER, AuditReadLevel.QUERY_AND_OBJECT));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH).session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID).session(session))
+                .andExpect(status().isOk());
+
+            List<AuditEvent> events = auditEvents();
+            assertThat(events).extracting(AuditEvent::action).containsExactly(
+                AuditAction.READ_QUERY.name(),
+                AuditAction.READ_OBJECT.name()
+            );
+            assertThat(events.get(0).resourceId()).isNull();
+            assertThat(events.get(1).resourceId()).isEqualTo(ALICE_ID.toString());
+            assertThat(events).allSatisfy(event -> {
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.USER.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo("alice");
+                assertThat(event.requestId()).isNull();
+                assertThat(event.toString()).doesNotContain("alice@example.test");
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void selectiveReadAudit_recordsPatAuthenticationType() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        String rawToken = personalAccessToken(ALICE_ID);
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of(AuditResourceType.USER, AuditReadLevel.QUERY_ONLY));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH)
+                    .header("Authorization", "Bearer " + rawToken))
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.READ_QUERY.name());
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.PAT);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.resourceId()).isNull();
+            });
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void selectiveReadAudit_notFoundAndInvalidPaginationDoNotRecord() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of(AuditResourceType.USER, AuditReadLevel.QUERY_AND_OBJECT));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH + "/" + UUID.randomUUID()).session(session))
+                .andExpect(status().isNotFound());
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH)
+                    .param(AdminUserEndpoints.PAGE_PARAM, "-1")
+                    .session(session))
+                .andExpect(status().isBadRequest());
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicMode_doesNotAuditReadsEvenWhenRulesArePersisted() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.BASIC);
+        auditMode.setReadRules(Map.of(AuditResourceType.USER, AuditReadLevel.QUERY_AND_OBJECT));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH).session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID).session(session))
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void selectiveNone_doesNotAuditReads() throws Exception {
+        grantSystemAdmin(ALICE_ID);
+        MockHttpSession session = authenticatedSession("alice", PASSWORD);
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of());
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH).session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(AdminUserEndpoints.BASE_PATH + "/" + ALICE_ID).session(session))
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
     }
 
     private ResultActions adminPost(MockHttpSession session, String body) throws Exception {

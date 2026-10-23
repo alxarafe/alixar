@@ -28,7 +28,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 383 deterministic tests and 66 PostgreSQL integration tests remain
+  the 407 deterministic tests and 68 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -114,11 +114,13 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   independent verifier. PostgreSQL tests append concurrently and tamper directly
   with rows to prove that verification fails.
 - **Audit policy and instrumentation
-  (T1.2, T1.3a, T1.3b, T1.5a, T1.5b, T1.6a, T1.6b and T1.7a)**: `OFF` (default),
-  `BASIC` and `SELECTIVE` modes persisted in the singleton `audit_configuration`
-  table. `SELECTIVE` includes the `BASIC` baseline and stores read rules for
-  `USER` and `ROLE` in `audit_read_policy`. T1.7a adds the read-policy API but
-  does not yet append read events. `alixar.audit.mode` / `ALIXAR_AUDIT_MODE`
+  (T1.2, T1.3a, T1.3b, T1.5a, T1.5b, T1.6a, T1.6b, T1.7a and T1.7b)**: `OFF`
+  (default), `BASIC` and `SELECTIVE` modes persisted in the singleton
+  `audit_configuration` table. `SELECTIVE` includes the `BASIC` baseline and
+  stores read rules for `USER` and `ROLE` in `audit_read_policy`. T1.7b appends
+  mandatory `READ_QUERY` / `READ_OBJECT` events for the administrative user and
+  role read endpoints and fails closed with `503` when a required append fails.
+  `alixar.audit.mode` / `ALIXAR_AUDIT_MODE`
   is a first-start bootstrap value only; once the row exists the database is
   authoritative and an invalid bootstrap value is ignored. A local 15-second
   cache keeps `OFF` free of SQL per audited operation, with a documented
@@ -159,7 +161,14 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   The resource is `HTTP_REQUEST` with a static family such as
   `PATCH /api/admin/users`, never the raw path; unknown routes, anonymous
   requests and CSRF rejections are not audited, and an append failure never
-  changes the `403`. `OFF` records none of these events.
+  changes the `403`. T1.7b instruments the administrative user and role read
+  endpoints under `SELECTIVE`: one `READ_QUERY` per list request at
+  `QUERY_ONLY` or `QUERY_AND_OBJECT`, and one `READ_OBJECT` per detail read at
+  `QUERY_AND_OBJECT`. `BASIC` never emits read events, and reading the audit
+  event API itself is not instrumented. A required read event is appended
+  before the response; if it cannot be persisted, the request returns `503`
+  `AUDIT_UNAVAILABLE` without resource data. `OFF` records none of these
+  events.
 - **Audit read and verification API (T1.4a and T1.4b)**: The event query at
   `/api/admin/audit-events` requires `audit.read` and returns chain-scoped
   events with ascending keyset pagination and combinable `action`,
@@ -173,8 +182,8 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   count and optional failed sequence; verification never repairs the chain.
   Reads and verification work when the audit mode is `OFF` and do not append
   events. T1.5a seeds the `audit.configure` permission for `system-admin`.
-  Event detail, read event capture, retention, archive and checkpoints are not
-  implemented yet. See [Audit](audit.md)
+  Event detail, read event capture beyond the administrative user and role
+  reads, retention, archive and checkpoints are not implemented yet. See [Audit](audit.md)
 
 ## Transitional integrations
 
@@ -201,9 +210,10 @@ See [Development](development.md) for full validation workflow details.
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
 - Role groups, PAT scopes and authorization for business capabilities beyond
   `users.manage`, `roles.manage`, `audit.read` and `audit.configure`
-- the `FULL` audit mode, read event capture, bootstrap and password-reset
-  request events, CSRF-specific audit events, audit event detail, retention,
-  purging, archive and signed checkpoints
+- the `FULL` audit mode, read event capture beyond the administrative user and
+  role reads, bootstrap and password-reset request events, CSRF-specific audit
+  events, audit event detail, retention, purging, archive and signed
+  checkpoints
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - Administration of other users' API tokens

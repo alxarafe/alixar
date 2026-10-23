@@ -60,8 +60,9 @@ T1.5a seeds the separate `audit.configure` permission and assigns it to
 T1.7a adds the `SELECTIVE` mode and the persisted read-policy API at
 `GET` / `PUT /api/admin/audit-configuration/read-policy`. Reading requires
 `audit.read` or `audit.configure`; replacing the rules requires
-`audit.configure`. `SELECTIVE` includes the `BASIC` baseline. T1.7a stores and
-administers read rules but does not yet append read events.
+`audit.configure`. `SELECTIVE` includes the `BASIC` baseline. T1.7b appends
+`READ_QUERY` and `READ_OBJECT` events for the administrative user and role read
+endpoints according to those rules.
 
 T1.6a adds authentication security events under `BASIC` and `SELECTIVE`.
 Successful login records `LOGIN_SUCCEEDED` mandatorily; failed login records
@@ -605,6 +606,16 @@ rule set, accepts `QUERY_ONLY`, `QUERY_AND_OBJECT` and `NONE`, and records one
 mandatory event per changed rule. Invalid resources or levels return
 `400 AUDIT_INVALID_READ_POLICY`. These endpoints are documented in
 [Audit](audit.md).
+
+Under `SELECTIVE`, the administrative user and role read endpoints append
+mandatory read events according to the persisted rules. `GET /api/admin/users`
+and `GET /api/admin/roles` produce one `READ_QUERY` per request when the level
+is `QUERY_ONLY` or `QUERY_AND_OBJECT`; the corresponding detail endpoints
+produce `READ_OBJECT` only at `QUERY_AND_OBJECT`. `BASIC` never produces read
+events. A successful read that cannot append its required event returns `503`
+with `AUDIT_UNAVAILABLE` and no resource data; a `403`, `404` or invalid request
+does not produce a `READ_*` event. Reading the audit event API itself is not
+instrumented. See [Audit](audit.md#read-events-t17b).
 
 Role responses contain only `code`, `name`, `builtIn` and `permissionCodes`.
 `GET /api/admin/roles` returns roles ordered by `code`, with permission codes

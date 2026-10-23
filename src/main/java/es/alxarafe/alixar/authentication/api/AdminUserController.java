@@ -3,8 +3,7 @@ package es.alxarafe.alixar.authentication.api;
 import es.alxarafe.alixar.authentication.application.AdminUser;
 import es.alxarafe.alixar.authentication.application.AdminUserPage;
 import es.alxarafe.alixar.authentication.application.AdminUserSearchQuery;
-import es.alxarafe.alixar.authentication.application.GetAdminUserUseCase;
-import es.alxarafe.alixar.authentication.application.ListAdminUsersUseCase;
+import es.alxarafe.alixar.authentication.application.AuditedAdminReadService;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminUserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -29,17 +28,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(AdminUserEndpoints.BASE_PATH)
 class AdminUserController {
 
-    private final ListAdminUsersUseCase listAdminUsers;
-    private final GetAdminUserUseCase getAdminUser;
+    private final AuditedAdminReadService adminReadService;
     private final TransactionalAdminUserService adminUserService;
 
     AdminUserController(
-        ListAdminUsersUseCase listAdminUsers,
-        GetAdminUserUseCase getAdminUser,
+        AuditedAdminReadService adminReadService,
         TransactionalAdminUserService adminUserService
     ) {
-        this.listAdminUsers = listAdminUsers;
-        this.getAdminUser = getAdminUser;
+        this.adminReadService = adminReadService;
         this.adminUserService = adminUserService;
     }
 
@@ -50,7 +46,9 @@ class AdminUserController {
         @RequestParam(name = AdminUserEndpoints.QUERY_PARAM, required = false) String query,
         @RequestParam(name = AdminUserEndpoints.ENABLED_PARAM, required = false) Boolean enabled
     ) {
-        AdminUserPage result = listAdminUsers.execute(AdminUserSearchQuery.of(page, size, query, enabled));
+        AdminUserPage result = adminReadService.listUsers(
+            AdminUserSearchQuery.of(page, size, query, enabled)
+        );
         return new AdminUserPageResponse(
             result.items().stream().map(this::toResponse).toList(),
             result.page(),
@@ -61,7 +59,7 @@ class AdminUserController {
 
     @GetMapping(value = AdminUserEndpoints.USER_RELATIVE_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
     AdminUserResponse get(@PathVariable(AdminUserEndpoints.ID_PATH_VARIABLE) UUID id) {
-        return toResponse(getAdminUser.execute(id));
+        return toResponse(adminReadService.getUser(id));
     }
 
     @PostMapping(

@@ -5,6 +5,7 @@ import es.alxarafe.alixar.audit.InMemoryAuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditAction;
 import es.alxarafe.alixar.audit.application.AuditChainVerifier;
 import es.alxarafe.alixar.audit.application.AuditMode;
+import es.alxarafe.alixar.audit.application.AuditReadLevel;
 import es.alxarafe.alixar.audit.application.AuditResourceType;
 import es.alxarafe.alixar.audit.domain.AuditAuthenticationType;
 import es.alxarafe.alixar.audit.domain.AuditChain;
@@ -22,6 +23,7 @@ import es.alxarafe.alixar.authentication.domain.User;
 import jakarta.servlet.http.Cookie;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -611,6 +613,102 @@ class AdminRoleControllerTest {
             .andExpect(status().isCreated());
 
         assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
+    void selectiveQueryOnly_auditsRoleListButNotDetail() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of(AuditResourceType.ROLE, AuditReadLevel.QUERY_ONLY));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.ROLES_BASE_PATH).session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(SYSTEM_ADMIN_PATH).session(session))
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.READ_QUERY.name());
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.ROLE.name());
+                assertThat(event.resourceId()).isNull();
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+            });
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void selectiveQueryAndObject_auditsRoleListAndDetailWithInternalId() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+        UUID systemAdminId = authorizationRepository.findRoleByCode(RoleCodes.SYSTEM_ADMIN)
+            .orElseThrow()
+            .id();
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of(AuditResourceType.ROLE, AuditReadLevel.QUERY_AND_OBJECT));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.ROLES_BASE_PATH).session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(SYSTEM_ADMIN_PATH).session(session))
+                .andExpect(status().isOk());
+
+            List<AuditEvent> events = auditEvents();
+            assertThat(events).extracting(AuditEvent::action).containsExactly(
+                AuditAction.READ_QUERY.name(),
+                AuditAction.READ_OBJECT.name()
+            );
+            assertThat(events.get(0).resourceId()).isNull();
+            assertThat(events.get(1).resourceId()).isEqualTo(systemAdminId.toString());
+            assertThat(events.get(1).resourceId()).isNotEqualTo(RoleCodes.SYSTEM_ADMIN);
+            assertThat(events).allSatisfy(event -> {
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.ROLE.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.toString()).doesNotContain("system-admin");
+            });
+            assertThat(auditChainVerifier.verify(AuditChain.DEFAULT_CHAIN_ID).valid()).isTrue();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void selectiveReadAudit_unknownRoleDoesNotRecord() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+        auditMode.setMode(AuditMode.SELECTIVE);
+        auditMode.setReadRules(Map.of(AuditResourceType.ROLE, AuditReadLevel.QUERY_AND_OBJECT));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.ROLES_BASE_PATH + "/missing-role").session(session))
+                .andExpect(status().isNotFound());
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void basicMode_doesNotAuditRoleReadsEvenWhenRulesArePersisted() throws Exception {
+        grantRolesManage();
+        MockHttpSession session = authenticatedSession();
+        auditMode.setMode(AuditMode.BASIC);
+        auditMode.setReadRules(Map.of(AuditResourceType.ROLE, AuditReadLevel.QUERY_AND_OBJECT));
+
+        try {
+            mockMvc.perform(get(AdminUserEndpoints.ROLES_BASE_PATH).session(session))
+                .andExpect(status().isOk());
+            mockMvc.perform(get(SYSTEM_ADMIN_PATH).session(session))
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents()).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
     }
 
     private List<AuditEvent> auditEvents() {

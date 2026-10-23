@@ -11,6 +11,7 @@ import es.alxarafe.alixar.audit.application.AuditPolicyProvider;
 import es.alxarafe.alixar.audit.application.AuditReadPolicyRepository;
 import es.alxarafe.alixar.audit.application.AuditTrail;
 import es.alxarafe.alixar.audit.application.ListAuditEventsUseCase;
+import es.alxarafe.alixar.audit.application.ReadAuditRecorder;
 import es.alxarafe.alixar.audit.application.SecurityAuditTrail;
 import java.time.Clock;
 import org.jooq.DSLContext;
@@ -119,6 +120,20 @@ public class AuditConfiguration {
     ) {
         return new ConfiguredSecurityAuditTrail(
             auditPolicyProvider,
+            transactionalAuditService
+        );
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(ReadAuditRecorder.class)
+    ReadAuditRecorder readAuditRecorder(
+        AuditPolicyProvider auditPolicyProvider,
+        AuditActorResolver auditActorResolver,
+        TransactionalAuditService transactionalAuditService
+    ) {
+        return new ConfiguredReadAuditRecorder(
+            auditPolicyProvider,
+            auditActorResolver,
             transactionalAuditService
         );
     }
