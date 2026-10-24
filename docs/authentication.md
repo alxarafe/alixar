@@ -123,11 +123,62 @@ from existing without its mandatory audit event.
 
 ### `GET /api/auth/me`
 
-Returns the same explicit identity DTO for the current authenticated identity.
-It accepts either a valid browser session or a valid
+Returns the current authenticated identity together with its authorization
+context. It accepts either a valid browser session or a valid
 `Authorization: Bearer <token>` header, and returns `401` when neither is valid.
 The response does not reveal which mechanism was used. Password hashes, enabled
 state, timestamps, and security internals are never returned.
+
+```json
+{
+  "id": "8f796219-e501-44e8-a4ab-4c014821ba58",
+  "username": "alice",
+  "email": "alice@example.test",
+  "roles": [
+    "accounting",
+    "system-admin"
+  ],
+  "permissions": [
+    "audit.configure",
+    "audit.read",
+    "roles.manage",
+    "users.manage"
+  ]
+}
+```
+
+`roles` contains the role codes currently assigned to the user. `permissions`
+contains the effective permission codes derived exclusively from those roles.
+Both arrays are de-duplicated, sorted alphabetically and returned as `[]` when
+empty; they are never `null`. Authentication still returns only `id`,
+`username` and `email`, so clients that need the current authorization context
+call this endpoint after login.
+
+The endpoint works identically for session and Bearer authentication: for the
+same user both mechanisms return the same current roles and effective
+permissions. Reading this endpoint does not change the model or the audit
+policy.
+
+### User → Roles → Permissions
+
+```text
+USER
+  ↓
+ROLES
+  ↓
+PERMISSIONS
+```
+
+Users receive roles; roles receive permissions. Effective permissions are the
+union of the permissions of all the user's current roles. There are no
+individual user permissions, no per-user overrides and no explicit `DENY`.
+Changing a role's permissions affects every user of that role, and changing a
+user's roles changes that user's effective permissions on the next request.
+
+The frontend may use `permissions` for navigation, buttons, guards and available
+actions, but it is never the authorization authority. Alixar continues to
+authorize every operation. Roles are informational and administrative
+assignments; capabilities are decided by permissions, not by role names.
 
 ### `POST /api/auth/logout`
 
@@ -495,7 +546,10 @@ Effective permissions are resolved from persistence on every authenticated
 request, after the identity and `credentials_version` checks and before Spring
 Security authorizes the request. `EffectivePermissionsFilter` loads the current
 permission codes and replaces the authenticated principal's authorities with
-the corresponding `GrantedAuthority` values.
+the corresponding `GrantedAuthority` values. `GET /api/auth/me` exposes those
+same authorities as `permissions`, so the response reflects exactly the
+capabilities with which Spring Security authorized that request. Its `roles`
+come from the user's current role assignments.
 
 Consequences:
 

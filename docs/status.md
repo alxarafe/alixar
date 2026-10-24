@@ -28,7 +28,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 415 deterministic tests and 68 PostgreSQL integration tests remain
+  the 423 deterministic tests and 68 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -64,7 +64,10 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   session and Bearer authentication, without changing `credentials_version`,
   invalidating sessions or revoking PATs. Built-in `system-admin` role contains
   `users.manage`, `roles.manage`, `audit.read` and `audit.configure`; there are
-  no per-user overrides, explicit `DENY`, role hierarchy or role groups
+  no per-user overrides, explicit `DENY`, role hierarchy or role groups.
+  `GET /api/auth/me` exposes the user's current role codes and effective
+  permission codes for the current request; these are informational for the
+  frontend and never replace backend authorization
 - **Administrative authorization management**: `GET /api/admin/roles` is
   available with `users.manage` or `roles.manage`; role detail, creation, rename,
   permission replacement and deletion, together with the read-only

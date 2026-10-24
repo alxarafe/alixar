@@ -17,6 +17,7 @@ import es.alxarafe.alixar.authentication.application.CreateRoleUseCase;
 import es.alxarafe.alixar.authentication.application.DeleteRoleUseCase;
 import es.alxarafe.alixar.authentication.application.ForgotPasswordUseCase;
 import es.alxarafe.alixar.authentication.application.GetAdminUserUseCase;
+import es.alxarafe.alixar.authentication.application.GetAssignedRoleCodesUseCase;
 import es.alxarafe.alixar.authentication.application.GetEffectivePermissionsUseCase;
 import es.alxarafe.alixar.authentication.application.GetRoleUseCase;
 import es.alxarafe.alixar.authentication.application.ListAdminUsersUseCase;
@@ -84,6 +85,11 @@ public class AuthenticationConfiguration {
     @Bean
     GetEffectivePermissionsUseCase getEffectivePermissionsUseCase(AuthorizationRepository authorizationRepository) {
         return new GetEffectivePermissionsUseCase(authorizationRepository);
+    }
+
+    @Bean
+    GetAssignedRoleCodesUseCase getAssignedRoleCodesUseCase(AuthorizationRepository authorizationRepository) {
+        return new GetAssignedRoleCodesUseCase(authorizationRepository);
     }
 
     @Bean

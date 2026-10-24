@@ -2,6 +2,7 @@ package es.alxarafe.alixar.authentication.api;
 
 import es.alxarafe.alixar.audit.application.AuditUnavailableException;
 import es.alxarafe.alixar.audit.application.SecurityAuditTrail;
+import es.alxarafe.alixar.authentication.application.GetAssignedRoleCodesUseCase;
 import es.alxarafe.alixar.authentication.application.InvalidCredentialsException;
 import es.alxarafe.alixar.authentication.application.InvalidPasswordException;
 import es.alxarafe.alixar.authentication.application.InvalidResetTokenException;
@@ -13,12 +14,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -41,6 +46,7 @@ class AuthController {
     private final TransactionalPasswordRecovery passwordRecovery;
     private final SecurityAuditTrail securityAuditTrail;
     private final SecurityContextAuditActorResolver auditActorResolver;
+    private final GetAssignedRoleCodesUseCase getAssignedRoleCodes;
     private final SecurityContextHolderStrategy securityContextHolderStrategy =
         SecurityContextHolder.getContextHolderStrategy();
 
@@ -50,7 +56,8 @@ class AuthController {
         SessionAuthenticationStrategy sessionAuthenticationStrategy,
         TransactionalPasswordRecovery passwordRecovery,
         SecurityAuditTrail securityAuditTrail,
-        SecurityContextAuditActorResolver auditActorResolver
+        SecurityContextAuditActorResolver auditActorResolver,
+        GetAssignedRoleCodesUseCase getAssignedRoleCodes
     ) {
         this.authenticationManager = authenticationManager;
         this.securityContextRepository = securityContextRepository;
@@ -58,6 +65,7 @@ class AuthController {
         this.passwordRecovery = passwordRecovery;
         this.securityAuditTrail = securityAuditTrail;
         this.auditActorResolver = auditActorResolver;
+        this.getAssignedRoleCodes = getAssignedRoleCodes;
     }
 
     @PostMapping(
@@ -112,8 +120,21 @@ class AuthController {
     }
 
     @GetMapping(value = AuthenticationEndpoints.ME_RELATIVE_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-    AuthenticatedUserResponse me(@AuthenticationPrincipal AuthenticatedUserPrincipal principal) {
-        return toResponse(principal);
+    CurrentUserResponse me(
+        @AuthenticationPrincipal AuthenticatedUserPrincipal principal,
+        Authentication authentication
+    ) {
+        List<String> roles = sortedDistinct(getAssignedRoleCodes.execute(principal.id()).stream());
+        List<String> permissions = sortedDistinct(authentication.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .filter(Objects::nonNull));
+        return new CurrentUserResponse(
+            principal.id(),
+            principal.username(),
+            principal.email(),
+            roles,
+            permissions
+        );
     }
 
     @PostMapping(
@@ -136,6 +157,10 @@ class AuthController {
 
     private AuthenticatedUserResponse toResponse(AuthenticatedUserPrincipal principal) {
         return new AuthenticatedUserResponse(principal.id(), principal.username(), principal.email());
+    }
+
+    private static List<String> sortedDistinct(Stream<String> values) {
+        return values.distinct().sorted().toList();
     }
 
     record LoginRequest(
