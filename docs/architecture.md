@@ -165,6 +165,9 @@ validation and before authorization, and converts them into `GrantedAuthority`
 values. It works identically for session and Bearer authentication. Role changes
 therefore take effect on the next request without changing
 `credentials_version`, invalidating the session or revoking PATs.
+`GET /api/auth/me` exposes the current role assignments and the effective
+permission codes resolved for that request; clients may use them for user
+experience, but Alixar remains the authorization authority.
 
 Business code authorizes by permission (`hasAuthority("users.manage")`,
 `hasAuthority("roles.manage")` or `hasAuthority("audit.read")`), not by role
