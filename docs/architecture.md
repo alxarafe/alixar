@@ -93,7 +93,11 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   role reads, CSRF-specific audit events, the PAT identifier as actor, audit
   event detail, retention, purge, archive and signed checkpoints
 
-- Alixar-owned Contact persistence (PostgreSQL + jOOQ)
+- ThirdParty canonical lifecycle: the contract is decided in
+  [ThirdParty](thirdparty.md), but domain, persistence, canonical API,
+  authorization and audit remain pending (`THIRDPARTY-002`)
+- Alixar-owned Contact persistence (PostgreSQL + jOOQ) and the restrictive
+  Contact → ThirdParty relationship (`CONTACT-002`)
 - Email change with new-address verification
 - Role groups
 - PAT scopes and authorization for business capabilities beyond `users.manage`,
@@ -101,7 +105,7 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - OpenAPI specification
-- ERP modules (thirdparties, catalog, sales, billing, inventory, accounting)
+- ERP modules beyond ThirdParty (catalog, sales, billing, inventory, accounting)
 - Module system
 - Testcontainers for integration tests
 - Bruno for API conformance tests

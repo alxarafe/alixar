@@ -15,7 +15,7 @@ It is a **coverage control**, not a commercial roadmap, changelog, commit list,
 endpoint catalogue, replacement for Dolibarr characterizations, or complete
 future ERP specification.
 
-Current snapshot: **2026-10-26**.
+Current snapshot: **2026-10-28**.
 
 ---
 
@@ -63,17 +63,19 @@ Implementation state
     what actually exists today in Alixar and Solucar
 ```
 
-Examples already known from `THIRDPARTY-REF-001` are **legacy evidence only**:
+Examples already known from `THIRDPARTY-REF-001` remain **legacy evidence**, and
+their canonical destination is now explicitly recorded by `THIRDPARTY-001`:
 
 | Legacy observation | Is it an Alixar requirement? |
 |--------------------|------------------------------|
-| `GET /thirdparties/0` returns a specimen object | No decision taken |
-| An empty third-party list returns HTTP 404 | No decision taken |
-| A blank third-party name can produce HTTP 500 | No decision taken |
-| Unknown create fields are ignored | No decision taken |
+| `GET /thirdparties/0` returns a specimen object | No. `DISCARD`; zero is an invalid identifier |
+| An empty third-party list returns HTTP 404 | No. `REPLACE`; an empty list is `200` with an empty collection |
+| A blank third-party name can produce HTTP 500 | No. `REPLACE`; it is a `400` validation error |
+| Unknown create JSON body fields are ignored | No. `REPLACE`; unknown JSON body fields are rejected |
 
 The master must never convert an observed Dolibarr quirk into an Alixar
-contract by implication.
+contract by implication. The decisions above are recorded in
+[ThirdParty](thirdparty.md).
 
 ---
 
@@ -251,7 +253,7 @@ characterized**. It is not an implementation claim.
 
 | Domain | Evidence source | Legacy evidence | Seed status |
 |--------|-----------------|-----------------|-------------|
-| Third Parties | API inventory `thirdparties`; `THIRDPARTY-REF-001` | Basic lifecycle, classification, supplier flag, status and Contact link characterized; fiscal identity partially observed; broad sub-resources only discovered | Seeded |
+| Third Parties | API inventory `thirdparties`; `THIRDPARTY-REF-001` | Basic lifecycle, classification, supplier flag, status and Contact link characterized; fiscal identity partially observed; broad sub-resources only discovered | Seeded; basic lifecycle contract decided |
 | Contacts | API inventory `contacts`; `CONTACT-REF-001` | `CHARACTERIZED` for basic lifecycle; other sub-resources discovered | Seeded; canonical create/read implemented |
 | Users and groups (Dolibarr) | API inventory `users` | `PENDING` | Discovered only; **not** equivalent to Alixar authentication users/roles |
 | Documents | API inventory `documents` | `PENDING` | Discovered only |
@@ -291,13 +293,15 @@ inventory of all Dolibarr.
 
 | ID | Domain / capability | Legacy reference | Evidence | Decision | Overall | Dependencies |
 |----|---------------------|------------------|----------|----------|---------|--------------|
-| `TP-BASIC` | Third Parties — basic lifecycle (create, read, list, update, delete) | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `PENDING` | `CHARACTERIZED` | Canonical ThirdParty contract; Contact native persistence |
-| `TP-CLASS` | Third Parties — customer/prospect classification (`client` 0/1/2/3) | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `PENDING` | `CHARACTERIZED` | `TP-BASIC` |
-| `TP-SUPPLIER` | Third Parties — supplier classification (`fournisseur`) | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `PENDING` | `CHARACTERIZED` | `TP-BASIC`; supplier-domain decision |
-| `TP-STATUS` | Third Parties — active/inactive status | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `PENDING` | `CHARACTERIZED` | `TP-BASIC` |
-| `TP-FISCAL` | Third Parties — ES fiscal identity | `THIRDPARTY-REF-001` | `PARTIAL` | `PENDING` | `PENDING` | Tax/legal validation decisions |
-| `TP-CONTACT-LINK` | Third Parties ↔ Contacts — association and deletion semantics | `THIRDPARTY-REF-001`; `CONTACT-REF-001` | `CHARACTERIZED` | `PENDING` | `CHARACTERIZED` | `TP-BASIC`; Contact persistence; deletion decision |
-| `TP-ADDRESS` | Third Parties — addresses and geography | `THIRDPARTY-REF-001` (fields only) | `PENDING` | `PENDING` | `PENDING` | Dictionaries/geography |
+| `TP-BASIC` | Third Parties — basic lifecycle (create, read, list, update, delete) | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `ADAPT` | `DECIDED` | Contact native persistence; `THIRDPARTY-002` |
+| `TP-CLASS` | Third Parties — customer/prospect classification (`client` 0/1/2/3) | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `ADAPT` | `DECIDED` | `TP-BASIC` |
+| `TP-SUPPLIER` | Third Parties — supplier classification (`fournisseur`) | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `ADAPT` | `DECIDED` | `TP-BASIC`; supplier-domain decision |
+| `TP-STATUS` | Third Parties — active/inactive status | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `ADAPT` | `DECIDED` | `TP-BASIC` |
+| `TP-FISCAL` | Third Parties — ES fiscal identity (basic subset) | `THIRDPARTY-REF-001` | `PARTIAL` | `ADAPT` | `DECIDED` | Tax/legal validation decisions for advanced rules |
+| `TP-FISCAL-ADVANCED` | Third Parties — advanced ES fiscal/tax rules | `THIRDPARTY-REF-001` (partial) | `PARTIAL` | `PENDING` | `PENDING` | Tax/legal validation decisions |
+| `TP-CONTACT-LINK` | Third Parties ↔ Contacts — association and deletion semantics | `THIRDPARTY-REF-001`; `CONTACT-REF-001` | `CHARACTERIZED` | `ADAPT` | `DECIDED` | `TP-BASIC`; Contact persistence; `CONTACT-002` |
+| `TP-ALIAS` | Third Parties — commercial alias / alternative name | `THIRDPARTY-REF-001` (`name_alias`) | `PARTIAL` | `PENDING` | `PENDING` | `TP-BASIC` |
+| `TP-ADDRESS` | Third Parties — structured addresses and geography | `THIRDPARTY-REF-001` (fields only) | `PENDING` | `PENDING` | `PENDING` | Dictionaries/geography |
 | `TP-BANK` | Third Parties — bank accounts | API inventory | `PENDING` | `PENDING` | `PENDING` | Bank/Cash domain |
 | `TP-ACCOUNTS` | Third Parties — external accounts | API inventory | `PENDING` | `PENDING` | `PENDING` | `TP-BASIC` |
 | `TP-REPRESENTATIVES` | Third Parties — sales representatives | API inventory | `PENDING` | `PENDING` | `PENDING` | Users/sales domain |
@@ -330,13 +334,15 @@ inventory of all Dolibarr.
 
 | ID | Alixar domain/app | Persistence | Canonical API | Authorization | Audit | Solucar | Data migration | Validation | Notes / gaps |
 |----|-------------------|-------------|---------------|---------------|-------|---------|----------------|------------|--------------|
-| `TP-BASIC` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Legacy CRUD fully observed; no canonical ThirdParty exists |
-| `TP-CLASS` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `client` 0/1/2/3 observed; `prospect` is not persisted; canonical representation pending |
-| `TP-SUPPLIER` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `fournisseur` independent of `client`; API accepts it even with supplier modules disabled |
-| `TP-STATUS` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Effective field is `status`; legacy `statut` stays null; functional effects not fully characterized |
-| `TP-FISCAL` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | ES mapping observed; no default format/VIES/uniqueness rules; advanced tax pending |
-| `TP-CONTACT-LINK` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Dolibarr app-level cascade vs DB `RESTRICT`; canonical cascade not decided |
-| `TP-ADDRESS` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Address fields appear in lifecycle evidence; semantics not characterized |
+| `TP-BASIC` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Canonical contract decided in [ThirdParty](thirdparty.md); no domain, persistence or API yet |
+| `TP-CLASS` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Decided as independent `customer` and `prospect` booleans; legacy `0/1/2/3` maps losslessly |
+| `TP-SUPPLIER` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Decided as an independent `supplier` boolean, not a procurement module |
+| `TP-STATUS` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Decided as a single `active` boolean; legacy `status`/`statut` names are not exposed |
+| `TP-FISCAL` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Basic `taxIdentifier` and `intraCommunityVatNumber` decided without format validation; advanced rules pending |
+| `TP-FISCAL-ADVANCED` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | VIES, ES format/check digit, uniqueness, subjection and local taxes remain undecided |
+| `TP-CONTACT-LINK` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Decided: optional `thirdPartyId`; linked Contacts block ThirdParty deletion with `409`; no cascade |
+| `TP-ALIAS` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `name_alias` observed but deferred from the first canonical contract |
+| `TP-ADDRESS` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Basic flat address/contact fields are part of `TP-BASIC`; structured addresses and geography pending |
 | `TP-BANK` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Discovered from legacy endpoints only |
 | `TP-ACCOUNTS` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Discovered from legacy endpoints only |
 | `TP-REPRESENTATIVES` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Discovered from legacy endpoints only |
@@ -390,18 +396,39 @@ Registered as characterized:
 - ThirdParty deletion behavior with a linked Contact;
 - list pagination and defaults.
 
-Alixar has **no canonical ThirdParty domain, persistence or API** yet. The
+`THIRDPARTY-001` now records explicit canonical decisions for the basic
+lifecycle in [ThirdParty](thirdparty.md). The decisions cover:
+
+- Alixar-generated numeric identity, independent of the legacy identifier;
+- required, trimmed, non-blank, non-unique name;
+- independent `customer` and `prospect` booleans;
+- independent `supplier` boolean;
+- single `active` boolean;
+- basic fiscal fields without format validation;
+- flat basic address and contact fields;
+- `201` create with `Location`, canonical read and list, `PATCH` partial update,
+  and physical delete with a linked-Contact conflict;
+- optional Contact → ThirdParty reference;
+- strict rejection of unknown JSON body fields; standard Spring query-parameter
+  binding without a global unknown-parameter rejection requirement;
+- decided `thirdparties.read` and `thirdparties.manage` permissions, not yet
+  implemented;
+- future `THIRD_PARTY_CREATED` / `THIRD_PARTY_UPDATED` / `THIRD_PARTY_DELETED`
+  audit events.
+
+Alixar still has **no canonical ThirdParty domain, persistence or API**. The
 aggregate state is therefore:
 
 ```text
-ThirdParty = CHARACTERIZED
+ThirdParty = DECIDED
 ```
 
 That aggregate refers to the basic lifecycle. `TP-FISCAL` evidence remains
-`PARTIAL` because advanced fiscal/tax behavior was not characterized.
+`PARTIAL` because advanced fiscal/tax behavior was not characterized, and
+`TP-FISCAL-ADVANCED`, `TP-ALIAS` and `TP-ADDRESS` remain pending.
 
-The purpose of this state is to record that legacy evidence is sufficient, not
-that migration has begun.
+The purpose of this state is to record that the decisions needed by
+`THIRDPARTY-002` exist, not that implementation has begun.
 
 Evidence: `dolibarr-reference: reference/characterization/THIRDPARTY-REF-001-thirdparty-lifecycle.md`.
 
@@ -440,7 +467,10 @@ Contact = IN_PROGRESS
 ```
 
 The Contact ↔ ThirdParty relationship is tracked separately as
-`TP-CONTACT-LINK`; its migration decision remains `PENDING`.
+`TP-CONTACT-LINK`; its migration decision is now `ADAPT`/`DECIDED`: the
+reference is optional, linked Contacts block ThirdParty deletion with `409`, and
+no cascade is reproduced. Native implementation remains pending and is the
+input for `CONTACT-002`.
 
 Evidence: `dolibarr-reference: reference/characterization/CONTACT-REF-001-contact-lifecycle.md`;
 Alixar `docs/status.md` and `src/main/java/es/alxarafe/alixar/contact/`;
@@ -517,13 +547,18 @@ the difference between active and inactive records.
 
 No business permission is invented in this document.
 
-- There is no canonical Alixar permission for Contact or ThirdParty yet.
-  Both are `PENDING`.
+- The ThirdParty permission model is decided (`thirdparties.read` and
+  `thirdparties.manage`) but **not implemented** and not seeded. Contact still
+  has no canonical business permission.
 - Contact is currently public and its POST is temporarily excluded from CSRF
   protection. That is **tracked debt**, not a target state.
 - The audit platform exists, but business instrumentation is only `DONE` when a
   concrete capability actually appends its events.
-- Contact and ThirdParty business audit instrumentation is `PENDING`.
+- ThirdParty mutation audit is decided (`THIRD_PARTY_CREATED`,
+  `THIRD_PARTY_UPDATED`, `THIRD_PARTY_DELETED`) but **not implemented**.
+  ThirdParty reads are not part of the baseline and `SELECTIVE` read auditing for
+  `THIRD_PARTY` is not implemented. Contact business audit instrumentation is
+  `PENDING`.
 - Do not mark a capability audited merely because the audit infrastructure
   exists.
 
@@ -557,9 +592,9 @@ Only dependencies that genuinely condition order are recorded.
 
 | Capability | Depends on |
 |------------|------------|
-| Contact native persistence | Native ThirdParty relationship semantics (`TP-CONTACT-LINK`) and the canonical Contact lifecycle decision |
-| ThirdParty canonical implementation | Explicit decisions on lifecycle, classification, status, fiscal identity and deletion semantics |
-| Data migration for ThirdParty/Contact | Canonical identity mapping and duplicate-resolution decisions |
+| Contact native persistence | Native ThirdParty relationship semantics (`TP-CONTACT-LINK`, decided) and the canonical Contact lifecycle decision (`CONTACT-002`) |
+| ThirdParty canonical implementation | `THIRDPARTY-001` decisions (complete) and native Contact persistence |
+| Data migration for ThirdParty/Contact | Explicit legacy-to-canonical identity mapping and duplicate-resolution decisions |
 | Categories/classifications | A canonical category domain |
 | Documents | A storage model and canonical object identity |
 | Object links | Canonical object identity; may be replaced by explicit domain relations |
@@ -571,23 +606,39 @@ Only dependencies that genuinely condition order are recorded.
 
 ---
 
-## 16. Pending migration decisions
+## 16. Migration decisions
 
-These are known open decisions derived from current evidence. This task does not
-resolve them.
+### 16.1 Closed by THIRDPARTY-001
+
+These decisions are recorded in [ThirdParty](thirdparty.md):
+
+| Decision | Canonical outcome |
+|----------|-------------------|
+| ThirdParty empty-list semantics | `200` with an empty collection |
+| ThirdParty `id=0` specimen behavior | `DISCARD`; zero is an invalid identifier |
+| Blank-name error semantics | `400 VALIDATION_REQUIRED` |
+| Unknown JSON body-field handling | Rejected with `400 VALIDATION_INVALID` |
+| Unknown query-parameter handling | Not a canonical rejection requirement; standard Spring binding; closed-list validation where natural |
+| ThirdParty deletion with linked Contacts | `409 THIRD_PARTY_DELETE_CONFLICT`; unlink or reassign first |
+| Customer/prospect representation | Independent `customer` and `prospect` booleans |
+| Supplier semantics | Independent `supplier` boolean |
+| Active state | Single `active` boolean |
+| Contact → ThirdParty deletion semantics | No cascade; linked Contacts block deletion |
+| ThirdParty authorization model | `thirdparties.read` and `thirdparties.manage` (not implemented) |
+| ThirdParty mutation audit | `THIRD_PARTY_CREATED` / `THIRD_PARTY_UPDATED` / `THIRD_PARTY_DELETED` (not implemented) |
+
+### 16.2 Still open
 
 | Decision | Why it matters |
 |----------|----------------|
-| ThirdParty empty-list canonical semantics | Legacy returns HTTP 404; Alixar must decide whether an empty collection is empty, not found, or another result |
-| ThirdParty `id=0` specimen behavior | Legacy returns a specimen object; this must not become an accidental canonical contract |
-| Blank-name error semantics | Legacy can return HTTP 500; Alixar must define a deliberate validation error |
-| Unknown-field handling | Legacy ignores unknown create fields; Alixar must decide strict or lenient input handling |
-| ThirdParty deletion with linked Contacts | Legacy cascades at application level while the DB FK is restrictive; canonical deletion semantics are undecided |
-| Canonical representation of customer/prospect states | Legacy stores `client` 0/1/2/3 and does not persist `prospect`; the canonical model must be explicit |
-| Canonical supplier semantics | Legacy has an independent supplier flag even when supplier modules are disabled; Alixar must decide its meaning |
-| Contact → ThirdParty deletion semantics | A linked Contact is deleted with the ThirdParty in Dolibarr; Alixar has not decided whether to reproduce this |
-| Contact list/update/delete lifecycle | Only create and read are implemented canonically |
-| Contact/ThirdParty authorization and audit | No canonical business permissions or business audit instrumentation exist |
+| Contact list/update/delete lifecycle | Only create and read are implemented canonically; `CONTACT-002` must close it |
+| Contact authorization and audit | Contact is still public and has no canonical business permission or audit instrumentation |
+| ThirdParty advanced fiscal/tax rules | VIES, ES format/check digit, uniqueness and subjection rules are not characterized |
+| ThirdParty commercial alias | `name_alias` is observed but deferred |
+| ThirdParty structured addresses and geography | Address semantics, states and country catalogue are pending |
+| ThirdParty data migration | Canonical identity mapping, duplicate handling and fiscal-data preservation remain to be designed |
+| ThirdParty merge/deduplication | Merge rules are not characterized |
+| Remaining ThirdParty sub-resources | Bank accounts, categories, representatives, discounts, notifications, documents and financial context remain discovered only |
 
 ---
 
@@ -622,9 +673,9 @@ live in separate repositories.
 
 | Area | Legacy evidence | Alixar source/documentation | Solucar source/documentation |
 |------|-----------------|-----------------------------|------------------------------|
-| ThirdParty | `dolibarr-reference: reference/characterization/THIRDPARTY-REF-001-thirdparty-lifecycle.md` | None yet (`docs/status.md` lists ERP modules as pending) | None |
+| ThirdParty | `dolibarr-reference: reference/characterization/THIRDPARTY-REF-001-thirdparty-lifecycle.md` | [ThirdParty](thirdparty.md); `docs/status.md` | None yet |
 | Contact | `dolibarr-reference: reference/characterization/CONTACT-REF-001-contact-lifecycle.md` | `docs/status.md`; `src/main/java/es/alxarafe/alixar/contact/` | `src/app/features/contact/`; `src/app/core/api/contact-api.ts`; `docs/status.md` |
-| Contact ↔ ThirdParty | `THIRDPARTY-REF-001`; `CONTACT-REF-001` | `DolibarrContactAdapter`; `InvalidThirdPartyReferenceException`; `Contact.thirdPartyId` | `CreateContactRequest.thirdPartyId`; Contact create form |
+| Contact ↔ ThirdParty | `THIRDPARTY-REF-001`; `CONTACT-REF-001` | [ThirdParty](thirdparty.md); `DolibarrContactAdapter`; `InvalidThirdPartyReferenceException`; `Contact.thirdPartyId` | `CreateContactRequest.thirdPartyId`; Contact create form |
 | Platform security | No Dolibarr business equivalence claimed | `docs/authentication.md`; `src/main/java/es/alxarafe/alixar/authentication/` | `docs/architecture.md`; `src/app/core/auth/`; admin features |
 | Audit | No Dolibarr business equivalence claimed | `docs/audit.md`; `src/main/java/es/alxarafe/alixar/audit/` | `src/app/features/admin-audit/`; `src/app/core/api/admin-audit-api.ts` |
 | Discovered domains | `dolibarr-reference: reference/baseline/api-inventory.tsv`; `reference/baseline/technical-reference.json` | None yet | None |
@@ -635,26 +686,29 @@ live in separate repositories.
 
 ```text
 Contact      = IN_PROGRESS
-ThirdParty   = CHARACTERIZED
+ThirdParty   = DECIDED
 Other discovered ERP business = PENDING
 Platform foundation = largely DONE, with the exceptions in section 11
 No legacy business capability = MIGRATED
 ```
 
 The ThirdParty aggregate refers to the basic lifecycle; `TP-FISCAL` evidence
-remains `PARTIAL`.
+remains `PARTIAL`, and advanced fiscal, alias, structured address/geography and
+data migration remain pending.
 
 No arbitrary percentages are used. Progress is expressed only through the
 controlled states and the dimensions in section 8.
 
-The next decision gates are the pending decisions in section 16, beginning with
-the canonical ThirdParty lifecycle and the Contact ↔ ThirdParty relationship.
+The next implementation gate is `THIRDPARTY-002`. The next Contact decision gate
+is `CONTACT-002`, which must close the Contact list/update/delete lifecycle,
+native persistence and the restrictive ThirdParty relationship.
 
 ---
 
 ## 20. Related documentation
 
 - [Current implementation status](status.md)
+- [ThirdParty](thirdparty.md)
 - [Architecture](architecture.md)
 - [Authentication](authentication.md)
 - [Audit](audit.md)

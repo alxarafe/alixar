@@ -211,6 +211,9 @@ See [Development](development.md) for full validation workflow details.
 ## Not yet implemented
 
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
+- ThirdParty canonical lifecycle: the contract is decided in
+  [ThirdParty](thirdparty.md), but domain, persistence, canonical API,
+  authorization and audit remain pending (`THIRDPARTY-002`)
 - Role groups, PAT scopes and authorization for business capabilities beyond
   `users.manage`, `roles.manage`, `audit.read` and `audit.configure`
 - the `FULL` audit mode, read event capture beyond the administrative user and
