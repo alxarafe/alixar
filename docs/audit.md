@@ -22,8 +22,9 @@ logout. T1.6b adds `ACCESS_DENIED` authorization events for authenticated
 callers rejected by an authorization rule. T1.7a adds the `SELECTIVE` mode, the
 persisted read-policy table and the administrative read-policy API, including
 mandatory rule-change events. T1.7b appends `READ_QUERY` and `READ_OBJECT`
-events for the administrative `USER` and `ROLE` read endpoints. Event detail,
-retention, archive and checkpoints remain out of scope.
+events for the administrative `USER` and `ROLE` read endpoints. THIRDPARTY-002A
+adds `THIRD_PARTY_CREATED` as the first business-capability mutation event.
+Event detail, retention, archive and checkpoints remain out of scope.
 
 ## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b, T1.5a, T1.5b, T1.6a, T1.6b, T1.7a and T1.7b)
 
@@ -340,6 +341,12 @@ The following operations are instrumented atomically under `BASIC` and
 | Role rename | `ROLE_RENAMED` | `ROLE` / internal role id | `SUCCESS` |
 | Role permission replacement | `ROLE_PERMISSIONS_REPLACED` | `ROLE` / internal role id | `SUCCESS` |
 | Role deletion | `ROLE_DELETED` | `ROLE` / internal role id | `SUCCESS` |
+| ThirdParty creation | `THIRD_PARTY_CREATED` | `THIRD_PARTY` / canonical third-party id | `SUCCESS` |
+
+The ThirdParty create event is the first business-capability event. It records
+only the canonical identifier, action, resource type and result; never the
+ThirdParty object, fiscal identifiers, address or contact data. ThirdParty
+reads are not audited in the baseline.
 
 ### Mandatory policy-change events (T1.5b and T1.7a)
 

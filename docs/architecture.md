@@ -35,6 +35,10 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - Canonical Contact creation (`POST /api/contacts`)
 - Dolibarr adapter for Contact read (anti-corruption layer)
 - Real integration verification against `dolibarr-reference` 24.0.1
+- Canonical ThirdParty creation (`POST /api/thirdparties`) and read
+  (`GET /api/thirdparties/{id}`) with native Alixar PostgreSQL/jOOQ persistence,
+  `thirdparties.read` / `thirdparties.manage` authorization and atomic
+  `THIRD_PARTY_CREATED` audit
 - PostgreSQL 18.6 persistence infrastructure
 - Flyway migration infrastructure
 - jOOQ runtime infrastructure (PostgreSQL dialect)
@@ -50,7 +54,8 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   effective permissions resolved from persistence on every authenticated
   request, deny-by-default policy, and identical authorization for session and
   Bearer authentication. Built-in `system-admin` role with `users.manage`,
-  `roles.manage`, `audit.read` and `audit.configure`; read-only permission
+  `roles.manage`, `audit.read`, `audit.configure`, `thirdparties.read` and
+  `thirdparties.manage`; read-only permission
   catalogue; role detail,
   creation, rename, permission replacement and deletion of unassigned custom
   roles; administrative reads, creation of disabled users, username changes,
@@ -93,9 +98,10 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   role reads, CSRF-specific audit events, the PAT identifier as actor, audit
   event detail, retention, purge, archive and signed checkpoints
 
-- ThirdParty canonical lifecycle: the contract is decided in
-  [ThirdParty](thirdparty.md), but domain, persistence, canonical API,
-  authorization and audit remain pending (`THIRDPARTY-002`)
+- ThirdParty list, filters, pagination, partial update and delete with the
+  linked-Contact conflict (`THIRDPARTY-002B`/`002C`/`002D`); create and read are
+  implemented in [ThirdParty](thirdparty.md)
+- ThirdParty Solucar UI and historical data migration
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ) and the restrictive
   Contact → ThirdParty relationship (`CONTACT-002`)
 - Email change with new-address verification
@@ -174,8 +180,9 @@ permission codes resolved for that request; clients may use them for user
 experience, but Alixar remains the authorization authority.
 
 Business code authorizes by permission (`hasAuthority("users.manage")`,
-`hasAuthority("roles.manage")` or `hasAuthority("audit.read")`), not by role
-name. `system-admin` is an administrative grouping of permissions and has no
+`hasAuthority("roles.manage")`, `hasAuthority("audit.read")`,
+`hasAuthority("thirdparties.read")` or `hasAuthority("thirdparties.manage")`),
+not by role name. `system-admin` is an administrative grouping of permissions and has no
 authorization special case.
 Administrative reads resolve user summaries, user detail, the role catalogue,
 role detail, the permission catalogue and the chain-scoped audit event list
@@ -216,8 +223,10 @@ read rules for `USER` and `ROLE`, and the administrative read endpoints append
 returning. The
 instrumented set includes administrative user lifecycle operations,
 self-service username and password changes, completed password recovery,
-Personal Access Token creation and revocation, and role creation, rename,
-permission replacement and deletion. The application layer depends on an
+Personal Access Token creation and revocation, role creation, rename,
+permission replacement and deletion, and ThirdParty creation
+(`THIRD_PARTY_CREATED`, recording only the canonical identifier). The application
+layer depends on an
 `AuditTrail` port and an `AuditPolicyProvider` port, not on environment variables,
 Spring Security or jOOQ. Authenticated operations resolve their actor
 implicitly; password recovery supplies an explicit `RECOVERY_TOKEN` actor. Every
@@ -254,6 +263,7 @@ Each functional module owns translations for its own concepts:
 - **Contact module** (`i18n/contact/messages*.properties`): Contact-specific messages (e.g., `contact.notFound`, `contact.invalidThirdPartyReference`, `field.contact.lastName`)
 - **Authentication module** (`i18n/authentication/messages*.properties`): Authentication errors and authentication field labels
 - **Audit module** (`i18n/audit/messages*.properties`): Audit query errors and audit field labels
+- **ThirdParty module** (`i18n/thirdparty/messages*.properties`): ThirdParty field labels, not-found and validation messages
 
 ### Localization boundary
 

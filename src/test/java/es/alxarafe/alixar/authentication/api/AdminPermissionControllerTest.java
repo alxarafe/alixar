@@ -148,7 +148,7 @@ class AdminPermissionControllerTest {
 
         mockMvc.perform(get(AdminUserEndpoints.PERMISSIONS_BASE_PATH).session(session))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.length()").value(4))
+            .andExpect(jsonPath("$.length()").value(6))
             .andExpect(jsonPath("$[0].code").value(PermissionCodes.AUDIT_CONFIGURE))
             .andExpect(jsonPath("$[0].description").value("Configure audit policy"))
             .andExpect(jsonPath("$[1].code").value(PermissionCodes.AUDIT_READ))
@@ -156,8 +156,12 @@ class AdminPermissionControllerTest {
             .andExpect(jsonPath("$[2].code").value(PermissionCodes.ROLES_MANAGE))
             .andExpect(jsonPath("$[2].description")
                 .value("Manage roles and their permission assignments"))
-            .andExpect(jsonPath("$[3].code").value(PermissionCodes.USERS_MANAGE))
-            .andExpect(jsonPath("$[3].description").value("Manage users"))
+            .andExpect(jsonPath("$[3].code").value(PermissionCodes.THIRD_PARTIES_MANAGE))
+            .andExpect(jsonPath("$[3].description").value("Manage third parties"))
+            .andExpect(jsonPath("$[4].code").value(PermissionCodes.THIRD_PARTIES_READ))
+            .andExpect(jsonPath("$[4].description").value("Read third parties"))
+            .andExpect(jsonPath("$[5].code").value(PermissionCodes.USERS_MANAGE))
+            .andExpect(jsonPath("$[5].description").value("Manage users"))
             .andExpect(jsonPath("$[0].id").doesNotExist());
     }
 

@@ -29,9 +29,12 @@ Dolibarr is evidence. It is not the future contract. Legacy names such as
 and migration sections of this document. They do not form part of the canonical
 Alixar API unless a decision below explicitly says so.
 
-At this snapshot the basic ThirdParty lifecycle is **DECIDED**. No ThirdParty
-domain, persistence, canonical API, authorization or audit instrumentation has
-been implemented yet. Those belong to `THIRDPARTY-002`.
+At this snapshot the basic ThirdParty lifecycle is **DECIDED** and partially
+implemented. `THIRDPARTY-002A` provides native Alixar persistence plus the
+canonical create and read operations, their permissions and the create audit
+event. List, partial update and delete remain future slices
+(`THIRDPARTY-002B`/`002C`/`002D`), and native Contact persistence remains
+`CONTACT-002`.
 
 ## 2. Scope
 
@@ -168,7 +171,7 @@ Initial storage limits, aligned with the observed legacy columns:
 | `phone` | 30 |
 | `website` | 255 |
 
-These limits are implementation constraints for `THIRDPARTY-002`, not an
+These limits are implementation constraints for `THIRDPARTY-002A`, not an
 invitation to copy the rest of the legacy schema. A future task may revisit them
 with an explicit decision.
 
@@ -612,12 +615,12 @@ Using `PUT` for partial updates only because Dolibarr does so is rejected. When
 (RFC 7396).
 
 Implementation restriction: `application/merge-patch+json` is the preferred
-contract only if `THIRDPARTY-002` can implement it cleanly with Spring and the
-current design, for example with a dedicated request DTO that tracks field
+contract only if the update slice (`THIRDPARTY-002C`) can implement it cleanly
+with Spring and the current design, for example with a dedicated request DTO that tracks field
 presence and standard Spring MVC. It must not introduce generic merge-patch
 infrastructure, a framework extension, or a complex abstraction solely to
 support RFC 7396. If that clean implementation is not possible,
-`THIRDPARTY-002` must use `application/json` with the same functional rules in
+`THIRDPARTY-002C` must use `application/json` with the same functional rules in
 section 16.2 rather than add that infrastructure. Those functional rules are
 binding regardless of the selected media type.
 
@@ -800,8 +803,9 @@ Additional decisions:
 - no email-uniqueness error exists, because email is not unique;
 - advanced fiscal validation errors are not introduced in the first contract.
 
-These codes are part of this contract. `THIRDPARTY-002` must implement them;
-none of them is implemented by this task.
+These codes are part of this contract. `THIRDPARTY-002A` implements the create
+and read codes; the remaining lifecycle slices implement the update and delete
+codes.
 
 ---
 
@@ -824,9 +828,10 @@ Rationale:
   role names are introduced;
 - a separate delete permission is not justified by a current real need.
 
-`THIRDPARTY-002` must seed both permissions and assign them to the built-in
-`system-admin` role unless a later explicit decision changes that. They are not
-implemented or seeded now.
+`THIRDPARTY-002A` seeds both permissions and assigns them to the built-in
+`system-admin` role. `GET` operations require `thirdparties.read`; create
+requires `thirdparties.manage`. They are enforced identically for session and
+Bearer authentication.
 
 Existing HTTP semantics remain:
 
@@ -880,16 +885,29 @@ should follow the existing `READ_QUERY` / `READ_OBJECT` rules.
 
 ```text
 Canonical requirement: decided in this document.
-Currently implemented: nothing for ThirdParty.
+Implemented in THIRDPARTY-002A:
+  THIRD_PARTY_CREATED, resource type THIRD_PARTY, result SUCCESS
+  appended atomically with the create transaction
+Not implemented yet:
+  THIRD_PARTY_UPDATED / THIRD_PARTY_DELETED (future update/delete slices)
+  ThirdParty read auditing (not part of the baseline)
 ```
 
-The migration master keeps the implementation and audit dimensions `PENDING`.
+The create event records only the canonical identifier, action, resource type
+and result. It never records the full object, fiscal identifiers, address,
+email or other business payload. Under `OFF` no ThirdParty event is appended;
+under `BASIC` and `SELECTIVE` the create event is mandatory and fail-closed, so
+an audit append failure rolls back the creation and returns
+`503 AUDIT_UNAVAILABLE`.
+
+The migration master tracks the aggregate and its sub-capabilities separately
+and keeps `TP-BASIC` as `IN_PROGRESS`.
 
 ---
 
 ## 23. Solucar capabilities
 
-Solucar will need, after `THIRDPARTY-002`:
+Solucar will need, after the remaining `THIRDPARTY-002` slices:
 
 - ThirdParty list with filters for customer, prospect, supplier and active;
 - ThirdParty detail;
@@ -1067,7 +1085,7 @@ Solucar UI
 | Merge (`TP-MERGE`) | `PENDING` | Duplicate-resolution rules not characterized |
 | Supplier-side business (`SUPPLIER-SIDE`) | `PENDING` | Only the supplier flag is in scope |
 | Data migration | `PENDING` | No importer designed |
-| Solucar UI | `PENDING` | Depends on `THIRDPARTY-002` |
+| Solucar UI | `PENDING` | Depends on the remaining `THIRDPARTY-002` slices |
 
 ---
 
@@ -1085,7 +1103,10 @@ Solucar UI
 Implementation gate:
 
 ```text
-THIRDPARTY-001 = decisions only
-THIRDPARTY-002 = domain + persistence + API + authorization + audit
-CONTACT-002     = Contact lifecycle and native relationship implementation
+THIRDPARTY-001  = decisions only (complete)
+THIRDPARTY-002A = native persistence + create + read + RBAC + create audit (implemented)
+THIRDPARTY-002B = list + filters + pagination (pending)
+THIRDPARTY-002C = partial update (pending)
+THIRDPARTY-002D = delete with linked-Contact conflict (pending)
+CONTACT-002     = Contact lifecycle and native relationship implementation (pending)
 ```
