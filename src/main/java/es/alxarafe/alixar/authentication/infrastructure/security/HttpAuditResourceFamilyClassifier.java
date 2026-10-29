@@ -4,6 +4,7 @@ import es.alxarafe.alixar.audit.api.AuditEndpoints;
 import es.alxarafe.alixar.authentication.api.AdminUserEndpoints;
 import es.alxarafe.alixar.authentication.api.AuthenticationEndpoints;
 import es.alxarafe.alixar.authentication.api.UserEndpoints;
+import es.alxarafe.alixar.thirdparty.api.ThirdPartyEndpoints;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
@@ -38,6 +39,7 @@ public class HttpAuditResourceFamilyClassifier {
         AdminUserEndpoints.BASE_PATH,
         AdminUserEndpoints.ROLES_BASE_PATH,
         AdminUserEndpoints.PERMISSIONS_BASE_PATH,
+        ThirdPartyEndpoints.BASE_PATH,
         AuditEndpoints.BASE_PATH,
         AuditEndpoints.CONFIGURATION_PATH
     );

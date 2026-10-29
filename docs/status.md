@@ -15,6 +15,33 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
 - **English/Spanish API error internationalization**: RFC 9457 `ProblemDetail` responses with stable error codes (`VALIDATION_REQUIRED`, `CONTACT_NOT_FOUND`, etc.) and localized human-readable text via module-owned translation bundles (`i18n/core/`, `i18n/contact/`)
 - **Real compatibility validation**: Verified against `dolibarr-reference` 24.0.1 through `./bin/check-reference`
 
+### ThirdParty
+
+- **Native canonical creation**: `POST /api/thirdparties` persists a ThirdParty
+  through Alixar-owned PostgreSQL/jOOQ infrastructure and returns
+  `201 Created` with `Location: /api/thirdparties/{id}` and `{"id": ...}`.
+  `name` is required, trimmed and non-blank; booleans default to
+  `customer=false`, `prospect=false`, `supplier=false`, `active=true`; optional
+  text is trimmed and blank values become `null`. Duplicate names are allowed
+- **Native canonical read**: `GET /api/thirdparties/{id}` returns the full
+  canonical representation, including `null` for absent optional fields.
+  Positive unknown identifiers return `404 THIRD_PARTY_NOT_FOUND`; zero,
+  negative and non-numeric identifiers return `400 VALIDATION_INVALID`
+- **Strict JSON contract**: Unknown JSON members and invalid member types are
+  rejected with `400 VALIDATION_INVALID`; missing, `null` or blank `name`
+  returns `400 VALIDATION_REQUIRED`
+- **Authorization**: `thirdparties.read` protects reads and
+  `thirdparties.manage` protects creation; both are seeded and assigned to
+  `system-admin`. They apply identically to session and Bearer authentication
+- **CSRF**: Session-authenticated creation requires a valid CSRF token; Bearer
+  authentication does not. ThirdParty is not added to any CSRF exclusion
+- **Audit**: `THIRD_PARTY_CREATED` (`THIRD_PARTY` / `SUCCESS`) is appended
+  atomically with creation under `BASIC` and `SELECTIVE`, recording only the
+  canonical identifier. An append failure returns `503 AUDIT_UNAVAILABLE` and
+  rolls back the creation. Reads are not audited
+- **Pending**: list/filters/pagination, partial update, delete with
+  linked-Contact conflict, Solucar UI and historical data migration
+
 ### Persistence Infrastructure
 
 - **PostgreSQL 18.6**: Docker Compose service with a pinned image digest, internal
@@ -22,13 +49,16 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
 - **Flyway 12.4.0**: Managed by Spring Boot 4.1.1; applies the authentication
   user, password recovery, Personal Access Token, role-based authorization,
   role-administration authorization, audit integrity-core, recovery-token
-  audit-authentication, audit-read authorization and persisted
-  audit-configuration migrations
+  audit-authentication, audit-read authorization, persisted
+  audit-configuration and native ThirdParty migrations
 - **jOOQ runtime**: PostgreSQL dialect and Spring-provided `DSLContext` verified
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
+- **Native ThirdParty table**: `third_party` is owned by Alixar, with an
+  identity identifier, canonical defaults, storage limits and no legacy column
+  names, Contact foreign key or speculative soft-delete
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 423 deterministic tests and 68 PostgreSQL integration tests remain
+  the 452 deterministic tests and 75 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -63,7 +93,8 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   roles. Role changes take effect on the next authenticated request for both
   session and Bearer authentication, without changing `credentials_version`,
   invalidating sessions or revoking PATs. Built-in `system-admin` role contains
-  `users.manage`, `roles.manage`, `audit.read` and `audit.configure`; there are
+  `users.manage`, `roles.manage`, `audit.read`, `audit.configure`,
+  `thirdparties.read` and `thirdparties.manage`; there are
   no per-user overrides, explicit `DENY`, role hierarchy or role groups.
   `GET /api/auth/me` exposes the user's current role codes and effective
   permission codes for the current request; these are informational for the
@@ -140,9 +171,11 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   internal role UUID, not the role code. Revoking an already revoked PAT and
   no-op role rename/permission replacement record no event. Self-revocation is
   audited during the current request with `PAT` as the actor authentication type.
-  The `SUCCESS` event is atomic with the business transaction and fail-closed;
-  `SESSION` and `PAT` actors are distinguished for authenticated operations.
-  `BASIC` and `SELECTIVE` still cover only explicitly instrumented operations.
+  THIRDPARTY-002A adds `THIRD_PARTY_CREATED` with `THIRD_PARTY` as resource type
+  and only the canonical identifier as resource id. The `SUCCESS` event is
+  atomic with the business transaction and fail-closed; `SESSION` and `PAT`
+  actors are distinguished for authenticated operations. `BASIC` and
+  `SELECTIVE` still cover only explicitly instrumented operations.
   T1.5b exposes `GET` / `PUT /api/admin/audit-configuration`. Reads require
   `audit.read` or `audit.configure`; writes require `audit.configure`. A mode
   transition locks the configuration row, updates it, appends
@@ -211,11 +244,13 @@ See [Development](development.md) for full validation workflow details.
 ## Not yet implemented
 
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
-- ThirdParty canonical lifecycle: the contract is decided in
-  [ThirdParty](thirdparty.md), but domain, persistence, canonical API,
-  authorization and audit remain pending (`THIRDPARTY-002`)
-- Role groups, PAT scopes and authorization for business capabilities beyond
-  `users.manage`, `roles.manage`, `audit.read` and `audit.configure`
+- ThirdParty list, partial update and delete: create and read are implemented
+  in [ThirdParty](thirdparty.md); list, filters, pagination, update and delete
+  with the linked-Contact conflict remain pending (`THIRDPARTY-002B`/`002C`/`002D`)
+- ThirdParty Solucar UI and historical data migration
+- Role groups, PAT scopes and additional business authorization beyond
+  `users.manage`, `roles.manage`, `audit.read`, `audit.configure`,
+  `thirdparties.read` and `thirdparties.manage`
 - the `FULL` audit mode, read event capture beyond the administrative user and
   role reads, bootstrap and password-reset request events, CSRF-specific audit
   events, audit event detail, retention, purging, archive and signed

@@ -67,6 +67,11 @@ import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminRoleSe
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalApiTokenService;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalPasswordRecovery;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalUserSelfService;
+import es.alxarafe.alixar.thirdparty.application.CreateThirdPartyCommand;
+import es.alxarafe.alixar.thirdparty.application.ThirdPartyRepository;
+import es.alxarafe.alixar.thirdparty.domain.NewThirdParty;
+import es.alxarafe.alixar.thirdparty.domain.ThirdParty;
+import es.alxarafe.alixar.thirdparty.infrastructure.TransactionalThirdPartyService;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -121,6 +126,7 @@ class PersistenceIT {
     private static final String AUDIT_EVENT_TABLE = "audit_event";
     private static final String AUDIT_CONFIGURATION_TABLE = "audit_configuration";
     private static final String AUDIT_READ_POLICY_TABLE = "audit_read_policy";
+    private static final String THIRD_PARTY_TABLE = "third_party";
     private static final UUID AUDIT_CHAIN_ID = AuditChain.DEFAULT_CHAIN_ID;
 
     @Autowired
@@ -213,6 +219,12 @@ class PersistenceIT {
     @Autowired
     private GetRoleUseCase getRoleUseCase;
 
+    @Autowired
+    private ThirdPartyRepository thirdPartyRepository;
+
+    @Autowired
+    private TransactionalThirdPartyService transactionalThirdPartyService;
+
     @Test
     void bootIntegratesPostgresqlFlywayJooqAndAuthenticationMigration() throws Exception {
         try (var connection = dataSource.getConnection()) {
@@ -220,8 +232,8 @@ class PersistenceIT {
                 .startsWith(POSTGRESQL_VERSION);
         }
         assertThat(flyway.getConfiguration().getDataSource()).isSameAs(dataSource);
-        assertThat(flyway.info().all()).hasSize(10);
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("10");
+        assertThat(flyway.info().all()).hasSize(11);
+        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("11");
         assertThat(dsl.selectOne().fetchSingle().value1()).isEqualTo(1);
         assertThat(dsl.fetch("select tablename from pg_catalog.pg_tables where schemaname = current_schema()")
             .getValues(0, String.class)).containsExactlyInAnyOrder(
@@ -236,10 +248,11 @@ class PersistenceIT {
                 AUDIT_HEAD_TABLE,
                 AUDIT_EVENT_TABLE,
                 AUDIT_CONFIGURATION_TABLE,
-                AUDIT_READ_POLICY_TABLE
+                AUDIT_READ_POLICY_TABLE,
+                THIRD_PARTY_TABLE
             );
         assertThat(dsl.fetchCount(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(HISTORY_TABLE))))
-            .isEqualTo(10);
+            .isEqualTo(11);
     }
 
     @Test
@@ -948,13 +961,217 @@ class PersistenceIT {
     }
 
     @Test
+    void thirdParty_persistsAndReadsCompleteRecord() {
+        Long id = null;
+        try {
+            id = thirdPartyRepository.create(new NewThirdParty(
+                "Acme Ibérica, S.L.",
+                true,
+                false,
+                true,
+                true,
+                "B12345678",
+                "ESB12345678",
+                "Calle Mayor 1",
+                "28001",
+                "Madrid",
+                "ES",
+                "info@example.test",
+                "+34 900 000 000",
+                "https://example.test"
+            ));
+
+            ThirdParty thirdParty = thirdPartyRepository.findById(id).orElseThrow();
+            assertThat(thirdParty.id()).isEqualTo(id);
+            assertThat(thirdParty.name()).isEqualTo("Acme Ibérica, S.L.");
+            assertThat(thirdParty.customer()).isTrue();
+            assertThat(thirdParty.prospect()).isFalse();
+            assertThat(thirdParty.supplier()).isTrue();
+            assertThat(thirdParty.active()).isTrue();
+            assertThat(thirdParty.taxIdentifier()).isEqualTo("B12345678");
+            assertThat(thirdParty.intraCommunityVatNumber()).isEqualTo("ESB12345678");
+            assertThat(thirdParty.address()).isEqualTo("Calle Mayor 1");
+            assertThat(thirdParty.postalCode()).isEqualTo("28001");
+            assertThat(thirdParty.town()).isEqualTo("Madrid");
+            assertThat(thirdParty.countryCode()).isEqualTo("ES");
+            assertThat(thirdParty.email()).isEqualTo("info@example.test");
+            assertThat(thirdParty.phone()).isEqualTo("+34 900 000 000");
+            assertThat(thirdParty.website()).isEqualTo("https://example.test");
+        } finally {
+            if (id != null) {
+                dsl.query("delete from third_party where id = ?", id).execute();
+            }
+        }
+    }
+
+    @Test
+    void thirdParty_rejectsBlankNameAtTheDatabaseBoundary() {
+        assertThatThrownBy(() -> thirdPartyRepository.create(new NewThirdParty(
+            "   ",
+            false,
+            false,
+            false,
+            true,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ))).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void thirdParty_databaseDefaultsApplyWhenOnlyNameIsPersisted() {
+        Long id = null;
+        try {
+            id = dsl.fetchOne(
+                "insert into third_party (name) values (?) returning id",
+                "Defaults Co"
+            ).get(0, Long.class);
+
+            ThirdParty thirdParty = thirdPartyRepository.findById(id).orElseThrow();
+            assertThat(thirdParty.customer()).isFalse();
+            assertThat(thirdParty.prospect()).isFalse();
+            assertThat(thirdParty.supplier()).isFalse();
+            assertThat(thirdParty.active()).isTrue();
+            assertThat(thirdParty.taxIdentifier()).isNull();
+            assertThat(thirdParty.intraCommunityVatNumber()).isNull();
+            assertThat(thirdParty.address()).isNull();
+            assertThat(thirdParty.postalCode()).isNull();
+            assertThat(thirdParty.town()).isNull();
+            assertThat(thirdParty.countryCode()).isNull();
+            assertThat(thirdParty.email()).isNull();
+            assertThat(thirdParty.phone()).isNull();
+            assertThat(thirdParty.website()).isNull();
+        } finally {
+            if (id != null) {
+                dsl.query("delete from third_party where id = ?", id).execute();
+            }
+        }
+    }
+
+    @Test
+    void thirdParty_acceptsDuplicateNames() {
+        Long first = null;
+        Long second = null;
+        try {
+            first = thirdPartyRepository.create(new NewThirdParty(
+                "Duplicate Co",
+                false, false, false, true,
+                null, null, null, null, null, null, null, null, null
+            ));
+            second = thirdPartyRepository.create(new NewThirdParty(
+                "Duplicate Co",
+                false, false, false, true,
+                null, null, null, null, null, null, null, null, null
+            ));
+
+            assertThat(first).isPositive();
+            assertThat(second).isPositive().isNotEqualTo(first);
+            assertThat(thirdPartyRepository.findById(first).orElseThrow().name())
+                .isEqualTo("Duplicate Co");
+            assertThat(thirdPartyRepository.findById(second).orElseThrow().name())
+                .isEqualTo("Duplicate Co");
+        } finally {
+            if (first != null) {
+                dsl.query("delete from third_party where id = ?", first).execute();
+            }
+            if (second != null) {
+                dsl.query("delete from third_party where id = ?", second).execute();
+            }
+        }
+    }
+
+    @Test
+    void thirdParty_persistsEveryBooleanCombinationWithNullOptionals() {
+        List<Long> ids = new ArrayList<>();
+        try {
+            for (boolean customer : List.of(false, true)) {
+                for (boolean prospect : List.of(false, true)) {
+                    for (boolean supplier : List.of(false, true)) {
+                        for (boolean active : List.of(false, true)) {
+                            long id = thirdPartyRepository.create(new NewThirdParty(
+                                "Combination Co",
+                                customer,
+                                prospect,
+                                supplier,
+                                active,
+                                null, null, null, null, null, null, null, null, null
+                            ));
+                            ids.add(id);
+                            ThirdParty stored = thirdPartyRepository.findById(id).orElseThrow();
+                            assertThat(stored.customer()).isEqualTo(customer);
+                            assertThat(stored.prospect()).isEqualTo(prospect);
+                            assertThat(stored.supplier()).isEqualTo(supplier);
+                            assertThat(stored.active()).isEqualTo(active);
+                            assertThat(stored.email()).isNull();
+                        }
+                    }
+                }
+            }
+            assertThat(ids).allMatch(id -> id > 0);
+        } finally {
+            ids.forEach(id -> dsl.query("delete from third_party where id = ?", id).execute());
+        }
+    }
+
+    @Test
+    void thirdParty_databaseConstraintsProtectStorageLimitsAndCountryCode() {
+        assertThatThrownBy(() -> thirdPartyRepository.create(new NewThirdParty(
+            "x".repeat(129),
+            false, false, false, true,
+            null, null, null, null, null, null, null, null, null
+        ))).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+
+        assertThatThrownBy(() -> dsl.query(
+            "insert into third_party (name, country_code) values (?, ?)",
+            "Lowercase Country Co",
+            "es"
+        ).execute()).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackThirdPartyCreation() {
+        resetAuditChain();
+        setAuditMode(AuditMode.BASIC);
+        String name = "Audit rollback " + UUID.randomUUID();
+        try {
+            deleteAuditChainHead();
+
+            assertThatThrownBy(() -> transactionalThirdPartyService.create(
+                new CreateThirdPartyCommand(
+                    name,
+                    null, null, null, null,
+                    null, null, null, null, null, null, null, null, null
+                )
+            )).isInstanceOf(AuditUnavailableException.class);
+
+            assertThat(dsl.fetchCount(
+                org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(THIRD_PARTY_TABLE)),
+                org.jooq.impl.DSL.field(
+                    org.jooq.impl.DSL.name(THIRD_PARTY_TABLE, "name")
+                ).eq(name)
+            )).isZero();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+        }
+    }
+
+    @Test
     void rbacMigration_seedsRoleAdministrationPermissionsAndBuiltInRole() {
         assertThat(dsl.fetch("select code from authentication_permission").getValues(0, String.class))
             .containsExactlyInAnyOrder(
                 PermissionCodes.USERS_MANAGE,
                 PermissionCodes.ROLES_MANAGE,
                 PermissionCodes.AUDIT_READ,
-                PermissionCodes.AUDIT_CONFIGURE
+                PermissionCodes.AUDIT_CONFIGURE,
+                PermissionCodes.THIRD_PARTIES_READ,
+                PermissionCodes.THIRD_PARTIES_MANAGE
             );
         assertThat(dsl.fetch("select code from authentication_role").getValues(0, String.class))
             .contains(RoleCodes.SYSTEM_ADMIN);
@@ -963,7 +1180,9 @@ class PersistenceIT {
                 PermissionCodes.USERS_MANAGE,
                 PermissionCodes.ROLES_MANAGE,
                 PermissionCodes.AUDIT_READ,
-                PermissionCodes.AUDIT_CONFIGURE
+                PermissionCodes.AUDIT_CONFIGURE,
+                PermissionCodes.THIRD_PARTIES_READ,
+                PermissionCodes.THIRD_PARTIES_MANAGE
             );
         assertThat(dsl.fetch(
             "select built_in from authentication_role where code = ?",
@@ -981,6 +1200,8 @@ class PersistenceIT {
                     PermissionCodes.ROLES_MANAGE,
                     "Manage roles and their permission assignments"
                 ),
+                new PermissionDefinition(PermissionCodes.THIRD_PARTIES_MANAGE, "Manage third parties"),
+                new PermissionDefinition(PermissionCodes.THIRD_PARTIES_READ, "Read third parties"),
                 new PermissionDefinition(PermissionCodes.USERS_MANAGE, "Manage users")
             );
     }
@@ -1128,6 +1349,8 @@ class PersistenceIT {
                 PermissionCodes.AUDIT_CONFIGURE,
                 PermissionCodes.AUDIT_READ,
                 PermissionCodes.ROLES_MANAGE,
+                PermissionCodes.THIRD_PARTIES_MANAGE,
+                PermissionCodes.THIRD_PARTIES_READ,
                 PermissionCodes.USERS_MANAGE
             );
         } finally {
@@ -1212,6 +1435,8 @@ class PersistenceIT {
                     PermissionCodes.ROLES_MANAGE,
                     PermissionCodes.AUDIT_READ,
                     PermissionCodes.AUDIT_CONFIGURE,
+                    PermissionCodes.THIRD_PARTIES_READ,
+                    PermissionCodes.THIRD_PARTIES_MANAGE,
                     permissionCode
                 );
         } finally {
@@ -1236,7 +1461,9 @@ class PersistenceIT {
                     PermissionCodes.USERS_MANAGE,
                     PermissionCodes.ROLES_MANAGE,
                     PermissionCodes.AUDIT_READ,
-                    PermissionCodes.AUDIT_CONFIGURE
+                    PermissionCodes.AUDIT_CONFIGURE,
+                    PermissionCodes.THIRD_PARTIES_READ,
+                    PermissionCodes.THIRD_PARTIES_MANAGE
                 );
             assertThat(dsl.selectCount()
                 .from(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(USER_ROLE_TABLE)))

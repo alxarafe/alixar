@@ -15,6 +15,7 @@ import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.domain.ApiToken;
 import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
+import es.alxarafe.alixar.thirdparty.ThirdPartyTestConfig;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -33,7 +34,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 
 @TestConfiguration
-@Import(AuditTestConfig.class)
+@Import({AuditTestConfig.class, ThirdPartyTestConfig.class})
 public class AuthenticationTestConfig {
 
     @Bean
@@ -289,7 +290,9 @@ public class AuthenticationTestConfig {
                     PermissionCodes.USERS_MANAGE,
                     PermissionCodes.ROLES_MANAGE,
                     PermissionCodes.AUDIT_READ,
-                    PermissionCodes.AUDIT_CONFIGURE
+                    PermissionCodes.AUDIT_CONFIGURE,
+                    PermissionCodes.THIRD_PARTIES_READ,
+                    PermissionCodes.THIRD_PARTIES_MANAGE
                 ))
             );
         }
@@ -361,6 +364,14 @@ public class AuthenticationTestConfig {
                 new PermissionDefinition(
                     PermissionCodes.ROLES_MANAGE,
                     "Manage roles and their permission assignments"
+                ),
+                new PermissionDefinition(
+                    PermissionCodes.THIRD_PARTIES_MANAGE,
+                    "Manage third parties"
+                ),
+                new PermissionDefinition(
+                    PermissionCodes.THIRD_PARTIES_READ,
+                    "Read third parties"
                 ),
                 new PermissionDefinition(PermissionCodes.USERS_MANAGE, "Manage users")
             );

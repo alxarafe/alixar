@@ -30,5 +30,6 @@ public enum AuditAction {
     LOGIN_SUCCEEDED,
     LOGIN_FAILED,
     LOGOUT,
-    ACCESS_DENIED
+    ACCESS_DENIED,
+    THIRD_PARTY_CREATED
 }

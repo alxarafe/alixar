@@ -532,8 +532,10 @@ The initial catalogue contains:
 | `roles.manage` | Manage roles and their permission assignments (ALIXAR-DEV-003G) |
 | `audit.read` | Read audit events (ALIXAR-DEV-003H T1.4a) |
 | `audit.configure` | Configure the audit policy (ALIXAR-DEV-003H T1.5b) |
+| `thirdparties.read` | Read ThirdParty data (THIRDPARTY-002A) |
+| `thirdparties.manage` | Create, update and delete ThirdParty data (THIRDPARTY-002A) |
 
-The built-in role `system-admin` contains all four permissions. The role name
+The built-in role `system-admin` contains all six permissions. The role name
 and code are stable identifiers, but application code authorizes by permission,
 not by role name. No role is special in authorization: `system-admin` is simply
 a role whose permissions are maintained by migrations. The `built_in` flag marks
@@ -583,6 +585,8 @@ The administrative namespace is split by capability:
 | Path | Required authority |
 |------|--------------------|
 | `/api/admin/users/**` | `users.manage` |
+| `GET /api/thirdparties/{id}` | `thirdparties.read` |
+| `POST /api/thirdparties` | `thirdparties.manage` |
 | `GET /api/admin/roles` | `users.manage` or `roles.manage` |
 | Any other `/api/admin/roles/**` method | `roles.manage` |
 | `/api/admin/permissions` | `roles.manage` |

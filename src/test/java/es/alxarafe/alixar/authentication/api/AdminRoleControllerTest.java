@@ -200,11 +200,13 @@ class AdminRoleControllerTest {
             .andExpect(jsonPath("$.code").value(RoleCodes.SYSTEM_ADMIN))
             .andExpect(jsonPath("$.name").value("System administrator"))
             .andExpect(jsonPath("$.builtIn").value(true))
-            .andExpect(jsonPath("$.permissionCodes.length()").value(4))
+            .andExpect(jsonPath("$.permissionCodes.length()").value(6))
             .andExpect(jsonPath("$.permissionCodes[0]").value(PermissionCodes.AUDIT_CONFIGURE))
             .andExpect(jsonPath("$.permissionCodes[1]").value(PermissionCodes.AUDIT_READ))
             .andExpect(jsonPath("$.permissionCodes[2]").value(PermissionCodes.ROLES_MANAGE))
-            .andExpect(jsonPath("$.permissionCodes[3]").value(PermissionCodes.USERS_MANAGE))
+            .andExpect(jsonPath("$.permissionCodes[3]").value(PermissionCodes.THIRD_PARTIES_MANAGE))
+            .andExpect(jsonPath("$.permissionCodes[4]").value(PermissionCodes.THIRD_PARTIES_READ))
+            .andExpect(jsonPath("$.permissionCodes[5]").value(PermissionCodes.USERS_MANAGE))
             .andExpect(jsonPath("$.permissions").doesNotExist());
     }
 
@@ -446,7 +448,9 @@ class AdminRoleControllerTest {
                 PermissionCodes.USERS_MANAGE,
                 PermissionCodes.ROLES_MANAGE,
                 PermissionCodes.AUDIT_READ,
-                PermissionCodes.AUDIT_CONFIGURE
+                PermissionCodes.AUDIT_CONFIGURE,
+                PermissionCodes.THIRD_PARTIES_READ,
+                PermissionCodes.THIRD_PARTIES_MANAGE
             );
     }
 
