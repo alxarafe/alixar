@@ -281,34 +281,56 @@ handling follow the same rules as the self-contained check.
 
 ## Eclipse (optional editor)
 
-Eclipse is an optional editor only. Docker remains the authority for building,
-testing, and running Alixar. No host Java or Maven installation is required.
+Eclipse is an optional editor for editing, navigation, refactoring, and fast
+feedback. It is not required to build Alixar. Docker remains the authoritative
+build and test environment, and `./bin/check` is the complete validation
+authority. Do not install Java or Maven on the host.
 
 ### Import
 
 Import the repository as an existing Maven project:
 
 1. `File > Import... > Maven > Existing Maven Projects`.
-2. Select the repository root as the root directory.
+2. Select the Alixar repository root as the root directory.
 3. Finish the import and let m2e resolve the dependencies.
 
-### JDK 25 from Docker
+### Local JDK for JDT and m2e
 
-JDT and m2e need a local Java runtime even when all builds run in Docker.
-Extract the JDK from the same pinned build image used by the `Dockerfile` into
-the Git-ignored `.jdk/` directory instead of installing Java on the host:
+JDT and m2e need a local Java runtime even when all builds run in Docker. The
+`Dockerfile` build stage is the only source of truth for that JDK.
+
+Prepare the local copy with:
 
 ```bash
-docker run --rm --user "$(id -u):$(id -g)" \
-  -v "$PWD/.jdk:/target" \
-  --entrypoint sh \
-  maven:3.9-eclipse-temurin-25@sha256:93b8a14ea2f412782e4e842651273b4d903e35cc496284f178fbbe2d67d00976 \
-  -c 'cp -R "$JAVA_HOME"/. /target/'
+./bin/eclipse-jdk
 ```
 
-Register the extracted directory in
-`Window > Preferences > Java > Installed JREs > Add... > Standard VM` and keep
-the project on `JavaSE-25`.
+The command reads the `FROM <image> AS build` reference from the `Dockerfile`,
+extracts it into the Git-ignored `.jdk/` directory, and records the exact image
+in `.jdk/.source-image`. It uses only Docker, Git, and Bash; no host Java,
+Maven, sudo, or credentials are involved.
+
+Register the stable path in
+`Window > Preferences > Java > Installed JREs > Add... > Standard VM` and select
+`<repo>/.jdk`. Eclipse resolves the project compliance from the Maven
+configuration.
+
+After a repository update:
+
+```bash
+git pull
+./bin/eclipse-jdk
+```
+
+If the build image did not change, the command exits immediately. If it changed,
+it validates a fresh copy and replaces `.jdk/` only after validation succeeds.
+Eclipse keeps using the same path.
+
+Options:
+
+- `./bin/eclipse-jdk --force` regenerates the local copy.
+- `./bin/eclipse-jdk --print-image` prints the current build image without
+  running Docker or modifying `.jdk/`.
 
 ### Working with Docker
 
@@ -322,8 +344,9 @@ There is no hot reload. Tests that require PostgreSQL (`PersistenceIT`) cannot
 run from Eclipse because the database publishes no host port; run them through
 `./bin/check` in Docker. Tests that do not need PostgreSQL may run in Eclipse.
 
-Eclipse metadata (`.project`, `.classpath`, `.settings/`) and `.jdk/` are local
-only and excluded from Git and from the Docker build context.
+Eclipse metadata (`.project`, `.classpath`, `.settings/`, and related m2e/Spring
+Tools files) and `.jdk/` are local only and excluded from Git and from the
+Docker build context.
 
 ## CI
 

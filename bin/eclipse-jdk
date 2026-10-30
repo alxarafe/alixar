@@ -1,0 +1,153 @@
+#!/usr/bin/env bash
+# bin/eclipse-jdk — Prepare the Eclipse JDT/m2e JDK from the Docker build image
+
+set -euo pipefail
+
+usage() {
+    echo "Usage: ./bin/eclipse-jdk [--force|--print-image]" >&2
+}
+
+resolve_project_root() {
+    local root
+    if ! root="$(git -C "$(dirname "${BASH_SOURCE[0]}")" rev-parse --show-toplevel 2>/dev/null)"; then
+        echo "error: not inside a Git repository" >&2
+        exit 1
+    fi
+    printf '%s\n' "$root"
+}
+
+read_build_image() {
+    local line
+    local -a images=()
+
+    while IFS= read -r line || [ -n "${line}" ]; do
+        line="${line%$'\r'}"
+        if [[ "${line}" =~ ^[[:space:]]*[Ff][Rr][Oo][Mm][[:space:]]+([^[:space:]]+)[[:space:]]+[Aa][Ss][[:space:]]+[Bb][Uu][Ii][Ll][Dd][[:space:]]*(#.*)?$ ]]; then
+            images+=("${BASH_REMATCH[1]}")
+        fi
+    done < "${PROJECT_ROOT}/Dockerfile"
+
+    if [ "${#images[@]}" -ne 1 ]; then
+        echo "error: expected exactly one 'FROM <image> AS build' stage in ${PROJECT_ROOT}/Dockerfile (found ${#images[@]})" >&2
+        exit 1
+    fi
+
+    printf '%s\n' "${images[0]}"
+}
+
+temporary_jdk=""
+backup_jdk=""
+
+cleanup() {
+    if [ -n "${temporary_jdk}" ] && [ -d "${temporary_jdk}" ]; then
+        rm -rf "${temporary_jdk}"
+    fi
+    if [ -n "${backup_jdk}" ] && [ -d "${backup_jdk}" ]; then
+        if [ ! -e "${JDK_DIR}" ]; then
+            mv "${backup_jdk}" "${JDK_DIR}"
+        else
+            rm -rf "${backup_jdk}"
+        fi
+    fi
+}
+
+force=false
+print_image=false
+
+if [ "$#" -gt 1 ]; then
+    usage
+    exit 1
+fi
+
+case "${1:-}" in
+    "")
+        ;;
+    --force)
+        force=true
+        ;;
+    --print-image)
+        print_image=true
+        ;;
+    *)
+        usage
+        exit 1
+        ;;
+esac
+
+PROJECT_ROOT="$(resolve_project_root)"
+JDK_DIR="${PROJECT_ROOT}/.jdk"
+MARKER="${JDK_DIR}/.source-image"
+
+if [ ! -f "${PROJECT_ROOT}/Dockerfile" ]; then
+    echo "error: Dockerfile not found in ${PROJECT_ROOT}" >&2
+    exit 1
+fi
+
+source_image="$(read_build_image)"
+
+if [ "${print_image}" = true ]; then
+    printf '%s\n' "${source_image}"
+    exit 0
+fi
+
+if [ "${force}" = false ] && [ -x "${JDK_DIR}/bin/java" ] && [ -f "${MARKER}" ]; then
+    installed_image="$(cat "${MARKER}")"
+    if [ "${installed_image}" = "${source_image}" ]; then
+        echo "Eclipse JDK already up to date: ${source_image}"
+        exit 0
+    fi
+fi
+
+if ! command -v docker >/dev/null 2>&1; then
+    echo "error: docker is required to extract the JDK from ${source_image}" >&2
+    exit 1
+fi
+
+temporary_jdk="$(mktemp -d "${PROJECT_ROOT}/.jdk.tmp.XXXXXX")"
+trap cleanup EXIT
+
+echo "Extracting JDK from ${source_image} into .jdk..."
+
+docker run --rm --user "$(id -u):$(id -g)" \
+    -v "${temporary_jdk}:/target" \
+    --entrypoint sh \
+    "${source_image}" \
+    -c 'if [ -z "${JAVA_HOME:-}" ]; then echo "JAVA_HOME is not set in the image" >&2; exit 1; fi; cp -R "${JAVA_HOME}"/. /target/'
+
+if [ ! -x "${temporary_jdk}/bin/java" ]; then
+    echo "error: extracted JDK does not contain an executable bin/java" >&2
+    exit 1
+fi
+
+if ! "${temporary_jdk}/bin/java" -version >/dev/null 2>&1; then
+    echo "error: extracted JDK failed to run bin/java -version" >&2
+    exit 1
+fi
+
+printf '%s\n' "${source_image}" > "${temporary_jdk}/.source-image"
+
+backup_jdk=""
+if [ -e "${JDK_DIR}" ]; then
+    backup_jdk="${PROJECT_ROOT}/.jdk.old.$$"
+    if [ -e "${backup_jdk}" ]; then
+        backup_jdk="${backup_jdk}.${RANDOM}"
+    fi
+    mv "${JDK_DIR}" "${backup_jdk}"
+fi
+
+if ! mv "${temporary_jdk}" "${JDK_DIR}"; then
+    if [ -n "${backup_jdk}" ]; then
+        mv "${backup_jdk}" "${JDK_DIR}"
+        backup_jdk=""
+    fi
+    echo "error: failed to install the extracted JDK into ${JDK_DIR}" >&2
+    exit 1
+fi
+
+temporary_jdk=""
+if [ -n "${backup_jdk}" ]; then
+    rm -rf "${backup_jdk}"
+    backup_jdk=""
+fi
+
+echo "Eclipse JDK ready: ${JDK_DIR} (${source_image})"
