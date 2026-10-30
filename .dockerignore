@@ -2,6 +2,10 @@
 private
 target
 tmp
+.jdk
+.project
+.classpath
+.settings
 .idea
 .vscode
 .DS_Store

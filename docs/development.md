@@ -279,6 +279,52 @@ handling follow the same rules as the self-contained check.
 - `ALIXAR_JAVA_PORT` (default dynamically assigned) — optional host port for Alixar health/API
 - `DOLIBARR_REFERENCE_PORT` (default 48240) — host port for Dolibarr
 
+## Eclipse (optional editor)
+
+Eclipse is an optional editor only. Docker remains the authority for building,
+testing, and running Alixar. No host Java or Maven installation is required.
+
+### Import
+
+Import the repository as an existing Maven project:
+
+1. `File > Import... > Maven > Existing Maven Projects`.
+2. Select the repository root as the root directory.
+3. Finish the import and let m2e resolve the dependencies.
+
+### JDK 25 from Docker
+
+JDT and m2e need a local Java runtime even when all builds run in Docker.
+Extract the JDK from the same pinned build image used by the `Dockerfile` into
+the Git-ignored `.jdk/` directory instead of installing Java on the host:
+
+```bash
+docker run --rm --user "$(id -u):$(id -g)" \
+  -v "$PWD/.jdk:/target" \
+  --entrypoint sh \
+  maven:3.9-eclipse-temurin-25@sha256:93b8a14ea2f412782e4e842651273b4d903e35cc496284f178fbbe2d67d00976 \
+  -c 'cp -R "$JAVA_HOME"/. /target/'
+```
+
+Register the extracted directory in
+`Window > Preferences > Java > Installed JREs > Add... > Standard VM` and keep
+the project on `JavaSE-25`.
+
+### Working with Docker
+
+Edits made in Eclipse change the working tree, so the next build includes them:
+
+- `./bin/up` rebuilds the image and restarts the development environment.
+- `./bin/test` rebuilds the image and runs the deterministic tests.
+- `./bin/check` remains the complete validation authority.
+
+There is no hot reload. Tests that require PostgreSQL (`PersistenceIT`) cannot
+run from Eclipse because the database publishes no host port; run them through
+`./bin/check` in Docker. Tests that do not need PostgreSQL may run in Eclipse.
+
+Eclipse metadata (`.project`, `.classpath`, `.settings/`) and `.jdk/` are local
+only and excluded from Git and from the Docker build context.
+
 ## CI
 
 GitHub Actions workflow (`.github/workflows/ci.yml`) runs `./bin/check` on ubuntu-24.04.
