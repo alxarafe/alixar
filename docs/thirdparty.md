@@ -32,9 +32,9 @@ Alixar API unless a decision below explicitly says so.
 At this snapshot the basic ThirdParty lifecycle is **DECIDED** and partially
 implemented. `THIRDPARTY-002A` provides native Alixar persistence plus the
 canonical create and read operations, their permissions and the create audit
-event. List, partial update and delete remain future slices
-(`THIRDPARTY-002B`/`002C`/`002D`), and native Contact persistence remains
-`CONTACT-002`.
+event. `THIRDPARTY-002B` provides the canonical list with pagination and exact
+boolean filters. Partial update and delete remain future slices
+(`THIRDPARTY-002C`/`002D`), and native Contact persistence remains `CONTACT-002`.
 
 ## 2. Scope
 
@@ -596,6 +596,13 @@ capability if a real use case requires it.
 - audit append failure if read auditing is ever enabled for this resource →
   `503 AUDIT_UNAVAILABLE` without data (not applicable to the current baseline).
 
+### 15.8 Implementation status
+
+`THIRDPARTY-002B` implements `GET /api/thirdparties` with 0-based pagination,
+size `1..100`, deterministic `id ASC` ordering, the exact boolean filters and
+`thirdparties.read` authorization. Listing does not append ThirdParty audit
+events.
+
 ---
 
 ## 16. Partial update
@@ -1105,7 +1112,7 @@ Implementation gate:
 ```text
 THIRDPARTY-001  = decisions only (complete)
 THIRDPARTY-002A = native persistence + create + read + RBAC + create audit (implemented)
-THIRDPARTY-002B = list + filters + pagination (pending)
+THIRDPARTY-002B = list + filters + pagination (implemented)
 THIRDPARTY-002C = partial update (pending)
 THIRDPARTY-002D = delete with linked-Contact conflict (pending)
 CONTACT-002     = Contact lifecycle and native relationship implementation (pending)

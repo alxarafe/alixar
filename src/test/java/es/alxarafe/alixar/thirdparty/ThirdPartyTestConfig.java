@@ -1,8 +1,11 @@
 package es.alxarafe.alixar.thirdparty;
 
+import es.alxarafe.alixar.thirdparty.application.ThirdPartyListQuery;
+import es.alxarafe.alixar.thirdparty.application.ThirdPartyPage;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyRepository;
 import es.alxarafe.alixar.thirdparty.domain.NewThirdParty;
 import es.alxarafe.alixar.thirdparty.domain.ThirdParty;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +43,26 @@ public class ThirdPartyTestConfig {
         }
 
         @Override
+        public ThirdPartyPage findPage(ThirdPartyListQuery query) {
+            List<ThirdParty> filtered = thirdParties.values().stream()
+                .filter(thirdParty -> matches(query.customer(), thirdParty.customer()))
+                .filter(thirdParty -> matches(query.prospect(), thirdParty.prospect()))
+                .filter(thirdParty -> matches(query.supplier(), thirdParty.supplier()))
+                .filter(thirdParty -> matches(query.active(), thirdParty.active()))
+                .sorted(Comparator.comparingLong(ThirdParty::id))
+                .toList();
+            long total = filtered.size();
+            int from = (int) Math.min(query.offset(), total);
+            int to = Math.min(from + query.size(), filtered.size());
+            return new ThirdPartyPage(
+                filtered.subList(from, to),
+                query.page(),
+                query.size(),
+                total
+            );
+        }
+
+        @Override
         public long create(NewThirdParty thirdParty) {
             long id = ++sequence;
             thirdParties.put(id, new ThirdParty(
@@ -60,6 +83,10 @@ public class ThirdPartyTestConfig {
                 thirdParty.website()
             ));
             return id;
+        }
+
+        private boolean matches(Boolean filter, boolean value) {
+            return filter == null || filter == value;
         }
     }
 }

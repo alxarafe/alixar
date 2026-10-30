@@ -8,9 +8,11 @@ import static es.alxarafe.alixar.thirdparty.application.ThirdPartyFieldNames.CUS
 import static es.alxarafe.alixar.thirdparty.application.ThirdPartyFieldNames.EMAIL;
 import static es.alxarafe.alixar.thirdparty.application.ThirdPartyFieldNames.INTRA_COMMUNITY_VAT_NUMBER;
 import static es.alxarafe.alixar.thirdparty.application.ThirdPartyFieldNames.NAME;
+import static es.alxarafe.alixar.thirdparty.application.ThirdPartyFieldNames.PAGE;
 import static es.alxarafe.alixar.thirdparty.application.ThirdPartyFieldNames.PHONE;
 import static es.alxarafe.alixar.thirdparty.application.ThirdPartyFieldNames.POSTAL_CODE;
 import static es.alxarafe.alixar.thirdparty.application.ThirdPartyFieldNames.PROSPECT;
+import static es.alxarafe.alixar.thirdparty.application.ThirdPartyFieldNames.SIZE;
 import static es.alxarafe.alixar.thirdparty.application.ThirdPartyFieldNames.SUPPLIER;
 import static es.alxarafe.alixar.thirdparty.application.ThirdPartyFieldNames.TAX_IDENTIFIER;
 import static es.alxarafe.alixar.thirdparty.application.ThirdPartyFieldNames.TOWN;
@@ -20,9 +22,13 @@ import es.alxarafe.alixar.core.application.ErrorCode;
 import es.alxarafe.alixar.thirdparty.application.CreateThirdPartyCommand;
 import es.alxarafe.alixar.thirdparty.application.GetThirdPartyUseCase;
 import es.alxarafe.alixar.thirdparty.application.InvalidThirdPartyDataException;
+import es.alxarafe.alixar.thirdparty.application.ListThirdPartiesUseCase;
+import es.alxarafe.alixar.thirdparty.application.ThirdPartyListQuery;
+import es.alxarafe.alixar.thirdparty.application.ThirdPartyPage;
 import es.alxarafe.alixar.thirdparty.domain.ThirdParty;
 import es.alxarafe.alixar.thirdparty.infrastructure.TransactionalThirdPartyService;
 import java.net.URI;
+import java.util.List;
 import java.util.Set;
 import org.springframework.http.MediaType;
 import tools.jackson.databind.JsonNode;
@@ -32,6 +38,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -56,14 +63,37 @@ class ThirdPartyController {
     );
 
     private final GetThirdPartyUseCase getThirdPartyUseCase;
+    private final ListThirdPartiesUseCase listThirdPartiesUseCase;
     private final TransactionalThirdPartyService thirdPartyService;
 
     ThirdPartyController(
         GetThirdPartyUseCase getThirdPartyUseCase,
+        ListThirdPartiesUseCase listThirdPartiesUseCase,
         TransactionalThirdPartyService thirdPartyService
     ) {
         this.getThirdPartyUseCase = getThirdPartyUseCase;
+        this.listThirdPartiesUseCase = listThirdPartiesUseCase;
         this.thirdPartyService = thirdPartyService;
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<ThirdPartyPageResponse> list(
+        @RequestParam(name = PAGE, required = false) Integer page,
+        @RequestParam(name = SIZE, required = false) Integer size,
+        @RequestParam(name = CUSTOMER, required = false) Boolean customer,
+        @RequestParam(name = PROSPECT, required = false) Boolean prospect,
+        @RequestParam(name = SUPPLIER, required = false) Boolean supplier,
+        @RequestParam(name = ACTIVE, required = false) Boolean active
+    ) {
+        ThirdPartyPage result = listThirdPartiesUseCase.execute(
+            ThirdPartyListQuery.of(page, size, customer, prospect, supplier, active)
+        );
+        return ResponseEntity.ok(new ThirdPartyPageResponse(
+            result.items().stream().map(this::toResponse).toList(),
+            result.page(),
+            result.size(),
+            result.total()
+        ));
     }
 
     @GetMapping(
@@ -182,6 +212,14 @@ class ThirdPartyController {
 
     record CreateThirdPartyResponse(
         long id
+    ) {
+    }
+
+    record ThirdPartyPageResponse(
+        List<ThirdPartyResponse> items,
+        int page,
+        int size,
+        long total
     ) {
     }
 

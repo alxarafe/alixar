@@ -27,10 +27,16 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   canonical representation, including `null` for absent optional fields.
   Positive unknown identifiers return `404 THIRD_PARTY_NOT_FOUND`; zero,
   negative and non-numeric identifiers return `400 VALIDATION_INVALID`
+- **Native canonical list**: `GET /api/thirdparties` returns
+  `{items,page,size,total}` with 0-based `page`, `size` defaulting to `20` and
+  limited to `1..100`, deterministic `id ASC` ordering and exact boolean
+  filters for `customer`, `prospect`, `supplier` and `active`. Filters combine
+  with `AND`; `total` reflects the filters independently of the page. Empty
+  results are `200` with `items: []` and `total: 0`
 - **Strict JSON contract**: Unknown JSON members and invalid member types are
   rejected with `400 VALIDATION_INVALID`; missing, `null` or blank `name`
   returns `400 VALIDATION_REQUIRED`
-- **Authorization**: `thirdparties.read` protects reads and
+- **Authorization**: `thirdparties.read` protects reads and listing;
   `thirdparties.manage` protects creation; both are seeded and assigned to
   `system-admin`. They apply identically to session and Bearer authentication
 - **CSRF**: Session-authenticated creation requires a valid CSRF token; Bearer
@@ -38,9 +44,9 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
 - **Audit**: `THIRD_PARTY_CREATED` (`THIRD_PARTY` / `SUCCESS`) is appended
   atomically with creation under `BASIC` and `SELECTIVE`, recording only the
   canonical identifier. An append failure returns `503 AUDIT_UNAVAILABLE` and
-  rolls back the creation. Reads are not audited
-- **Pending**: list/filters/pagination, partial update, delete with
-  linked-Contact conflict, Solucar UI and historical data migration
+  rolls back the creation. Reads and listing are not audited
+- **Pending**: partial update, delete with linked-Contact conflict, Solucar UI
+  and historical data migration
 
 ### Persistence Infrastructure
 
@@ -58,7 +64,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   names, Contact foreign key or speculative soft-delete
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 452 deterministic tests and 75 PostgreSQL integration tests remain
+  the 466 deterministic tests and 78 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -244,9 +250,9 @@ See [Development](development.md) for full validation workflow details.
 ## Not yet implemented
 
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
-- ThirdParty list, partial update and delete: create and read are implemented
-  in [ThirdParty](thirdparty.md); list, filters, pagination, update and delete
-  with the linked-Contact conflict remain pending (`THIRDPARTY-002B`/`002C`/`002D`)
+- ThirdParty partial update and delete: create, read and list are implemented
+  in [ThirdParty](thirdparty.md); update and delete with the linked-Contact
+  conflict remain pending (`THIRDPARTY-002C`/`002D`)
 - ThirdParty Solucar UI and historical data migration
 - Role groups, PAT scopes and additional business authorization beyond
   `users.manage`, `roles.manage`, `audit.read`, `audit.configure`,

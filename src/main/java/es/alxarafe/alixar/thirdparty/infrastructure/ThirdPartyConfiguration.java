@@ -3,6 +3,7 @@ package es.alxarafe.alixar.thirdparty.infrastructure;
 import es.alxarafe.alixar.audit.application.AuditTrail;
 import es.alxarafe.alixar.thirdparty.application.CreateThirdPartyUseCase;
 import es.alxarafe.alixar.thirdparty.application.GetThirdPartyUseCase;
+import es.alxarafe.alixar.thirdparty.application.ListThirdPartiesUseCase;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyRepository;
 import es.alxarafe.alixar.thirdparty.infrastructure.persistence.JooqThirdPartyRepository;
 import org.jooq.DSLContext;
@@ -27,6 +28,11 @@ public class ThirdPartyConfiguration {
     @Bean
     GetThirdPartyUseCase getThirdPartyUseCase(ThirdPartyRepository thirdPartyRepository) {
         return new GetThirdPartyUseCase(thirdPartyRepository);
+    }
+
+    @Bean
+    ListThirdPartiesUseCase listThirdPartiesUseCase(ThirdPartyRepository thirdPartyRepository) {
+        return new ListThirdPartiesUseCase(thirdPartyRepository);
     }
 
     @Bean

@@ -9,4 +9,6 @@ public interface ThirdPartyRepository {
     Optional<ThirdParty> findById(long id);
 
     long create(NewThirdParty thirdParty);
+
+    ThirdPartyPage findPage(ThirdPartyListQuery query);
 }
