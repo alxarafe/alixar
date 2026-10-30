@@ -33,8 +33,10 @@ At this snapshot the basic ThirdParty lifecycle is **DECIDED** and partially
 implemented. `THIRDPARTY-002A` provides native Alixar persistence plus the
 canonical create and read operations, their permissions and the create audit
 event. `THIRDPARTY-002B` provides the canonical list with pagination and exact
-boolean filters. Partial update and delete remain future slices
-(`THIRDPARTY-002C`/`002D`), and native Contact persistence remains `CONTACT-002`.
+boolean filters. `THIRDPARTY-002C` provides the canonical partial update with
+presence-aware merge-patch semantics, no-op detection and the update audit event.
+Delete remains a future slice (`THIRDPARTY-002D`), and native Contact persistence
+remains `CONTACT-002`.
 
 ## 2. Scope
 
@@ -669,6 +671,20 @@ Example:
   update is not committed;
 - a PATCH that produces no actual change records no audit event.
 
+### 16.4 Implementation status
+
+`THIRDPARTY-002C` implements `PATCH /api/thirdparties/{id}` with
+`application/merge-patch+json`, explicit member-presence tracking and
+`application/json` requests rejected as unsupported media types. It rejects
+unknown members and body `id`, applies the shared normalization rules, protects
+the operation with `thirdparties.manage`, requires CSRF for session PATCH, and
+returns the full canonical representation. A no-op performs no `UPDATE` and
+records no audit event. A real change appends `THIRD_PARTY_UPDATED` atomically;
+an append failure returns `503 AUDIT_UNAVAILABLE` and rolls back the update.
+
+Delete, Contact persistence and the linked-Contact conflict remain outside this
+slice.
+
 ---
 
 ## 17. Delete
@@ -811,8 +827,8 @@ Additional decisions:
 - advanced fiscal validation errors are not introduced in the first contract.
 
 These codes are part of this contract. `THIRDPARTY-002A` implements the create
-and read codes; the remaining lifecycle slices implement the update and delete
-codes.
+and read codes; `THIRDPARTY-002C` implements the update codes; the delete slice
+implements the remaining delete code.
 
 ---
 
@@ -836,9 +852,9 @@ Rationale:
 - a separate delete permission is not justified by a current real need.
 
 `THIRDPARTY-002A` seeds both permissions and assigns them to the built-in
-`system-admin` role. `GET` operations require `thirdparties.read`; create
-requires `thirdparties.manage`. They are enforced identically for session and
-Bearer authentication.
+`system-admin` role. `GET` operations require `thirdparties.read`; create and
+partial update require `thirdparties.manage`. They are enforced identically for
+session and Bearer authentication.
 
 Existing HTTP semantics remain:
 
@@ -895,17 +911,20 @@ Canonical requirement: decided in this document.
 Implemented in THIRDPARTY-002A:
   THIRD_PARTY_CREATED, resource type THIRD_PARTY, result SUCCESS
   appended atomically with the create transaction
+Implemented in THIRDPARTY-002C:
+  THIRD_PARTY_UPDATED, resource type THIRD_PARTY, result SUCCESS
+  appended atomically with real updates; no-op updates record no event
 Not implemented yet:
-  THIRD_PARTY_UPDATED / THIRD_PARTY_DELETED (future update/delete slices)
+  THIRD_PARTY_DELETED (future delete slice)
   ThirdParty read auditing (not part of the baseline)
 ```
 
-The create event records only the canonical identifier, action, resource type
-and result. It never records the full object, fiscal identifiers, address,
-email or other business payload. Under `OFF` no ThirdParty event is appended;
-under `BASIC` and `SELECTIVE` the create event is mandatory and fail-closed, so
-an audit append failure rolls back the creation and returns
-`503 AUDIT_UNAVAILABLE`.
+The ThirdParty mutation events record only the canonical identifier, action,
+resource type and result. They never record the full object, fiscal
+identifiers, address, email or other business payload. Under `OFF` no
+ThirdParty event is appended; under `BASIC` and `SELECTIVE` create and real
+update events are mandatory and fail-closed, so an audit append failure rolls
+back the business change and returns `503 AUDIT_UNAVAILABLE`.
 
 The migration master tracks the aggregate and its sub-capabilities separately
 and keeps `TP-BASIC` as `IN_PROGRESS`.
@@ -1113,7 +1132,7 @@ Implementation gate:
 THIRDPARTY-001  = decisions only (complete)
 THIRDPARTY-002A = native persistence + create + read + RBAC + create audit (implemented)
 THIRDPARTY-002B = list + filters + pagination (implemented)
-THIRDPARTY-002C = partial update (pending)
+THIRDPARTY-002C = partial update (implemented)
 THIRDPARTY-002D = delete with linked-Contact conflict (pending)
 CONTACT-002     = Contact lifecycle and native relationship implementation (pending)
 ```

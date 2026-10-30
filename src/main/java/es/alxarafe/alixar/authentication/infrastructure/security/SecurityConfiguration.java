@@ -188,6 +188,8 @@ public class SecurityConfiguration {
                 ).hasAuthority(PermissionCodes.THIRD_PARTIES_READ)
                 .requestMatchers(HttpMethod.POST, ThirdPartyEndpoints.BASE_PATH)
                     .hasAuthority(PermissionCodes.THIRD_PARTIES_MANAGE)
+                .requestMatchers(HttpMethod.PATCH, ThirdPartyEndpoints.ITEM_PATH_PATTERN)
+                    .hasAuthority(PermissionCodes.THIRD_PARTIES_MANAGE)
                 .requestMatchers(HttpMethod.GET, AuditEndpoints.VERIFICATION_PATH)
                     .hasAuthority(PermissionCodes.AUDIT_READ)
                 .requestMatchers(HttpMethod.GET, AuditEndpoints.BASE_PATH)

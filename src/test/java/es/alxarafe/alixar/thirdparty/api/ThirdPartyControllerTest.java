@@ -45,8 +45,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -654,6 +656,330 @@ class ThirdPartyControllerTest {
         }
     }
 
+    @Test
+    void update_name_returnsCompleteRepresentation() throws Exception {
+        long id = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        patchThirdParty(session, csrfCookie, id, "{\"name\":\"  Updated Name  \"}")
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.id").value(id))
+            .andExpect(jsonPath("$.name").value("Updated Name"))
+            .andExpect(jsonPath("$.customer").value(true))
+            .andExpect(jsonPath("$.prospect").value(false))
+            .andExpect(jsonPath("$.supplier").value(true))
+            .andExpect(jsonPath("$.active").value(true))
+            .andExpect(jsonPath("$.taxIdentifier").value("B12345678"))
+            .andExpect(jsonPath("$.intraCommunityVatNumber").value("ESB12345678"))
+            .andExpect(jsonPath("$.address").value("Calle Mayor 1"))
+            .andExpect(jsonPath("$.postalCode").value("28001"))
+            .andExpect(jsonPath("$.town").value("Madrid"))
+            .andExpect(jsonPath("$.countryCode").value("ES"))
+            .andExpect(jsonPath("$.email").value("info@example.test"))
+            .andExpect(jsonPath("$.phone").value("+34 900 000 000"))
+            .andExpect(jsonPath("$.website").value("https://example.test"));
+
+        assertThat(repository().findById(id).orElseThrow().name()).isEqualTo("Updated Name");
+    }
+
+    @Test
+    void update_booleansAndMultipleFieldsPersist() throws Exception {
+        long id = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        patchThirdParty(session, csrfCookie, id, """
+            {
+              "name": "Acme Renamed",
+              "customer": false,
+              "prospect": true,
+              "supplier": false,
+              "active": false,
+              "taxIdentifier": " C123 ",
+              "intraCommunityVatNumber": null,
+              "address": "   ",
+              "postalCode": " 08001 ",
+              "town": " Barcelona ",
+              "countryCode": " fr ",
+              "email": " new@example.test ",
+              "phone": null,
+              "website": " https://new.example.test "
+            }
+            """)
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("Acme Renamed"))
+            .andExpect(jsonPath("$.customer").value(false))
+            .andExpect(jsonPath("$.prospect").value(true))
+            .andExpect(jsonPath("$.supplier").value(false))
+            .andExpect(jsonPath("$.active").value(false))
+            .andExpect(jsonPath("$.taxIdentifier").value("C123"))
+            .andExpect(jsonPath("$.intraCommunityVatNumber").value(nullValue()))
+            .andExpect(jsonPath("$.address").value(nullValue()))
+            .andExpect(jsonPath("$.postalCode").value("08001"))
+            .andExpect(jsonPath("$.town").value("Barcelona"))
+            .andExpect(jsonPath("$.countryCode").value("FR"))
+            .andExpect(jsonPath("$.email").value("new@example.test"))
+            .andExpect(jsonPath("$.phone").value(nullValue()))
+            .andExpect(jsonPath("$.website").value("https://new.example.test"));
+
+        assertThat(repository().findById(id).orElseThrow()).satisfies(thirdParty -> {
+            assertThat(thirdParty.name()).isEqualTo("Acme Renamed");
+            assertThat(thirdParty.customer()).isFalse();
+            assertThat(thirdParty.prospect()).isTrue();
+            assertThat(thirdParty.supplier()).isFalse();
+            assertThat(thirdParty.active()).isFalse();
+            assertThat(thirdParty.intraCommunityVatNumber()).isNull();
+            assertThat(thirdParty.address()).isNull();
+            assertThat(thirdParty.countryCode()).isEqualTo("FR");
+            assertThat(thirdParty.phone()).isNull();
+        });
+    }
+
+    @Test
+    void update_clearOptionalFieldAndPreserveOmittedFields() throws Exception {
+        long id = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        patchThirdParty(session, csrfCookie, id, "{\"email\":null}")
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.email").value(nullValue()))
+            .andExpect(jsonPath("$.name").value("Acme Ibérica, S.L."))
+            .andExpect(jsonPath("$.taxIdentifier").value("B12345678"))
+            .andExpect(jsonPath("$.phone").value("+34 900 000 000"));
+    }
+
+    @Test
+    void update_unknownMemberAndBodyId_areRejected() throws Exception {
+        long id = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        patchThirdParty(session, csrfCookie, id, "{\"legacyId\":7}")
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(ErrorCode.VALIDATION_INVALID.name()))
+            .andExpect(jsonPath("$.field").value("legacyId"));
+        patchThirdParty(session, csrfCookie, id, "{\"id\":7}")
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(ErrorCode.VALIDATION_INVALID.name()))
+            .andExpect(jsonPath("$.field").value("id"));
+    }
+
+    @Test
+    void update_invalidTypesAndNullNonNullableFields_areRejected() throws Exception {
+        long id = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        patchThirdParty(session, csrfCookie, id, "{\"name\":123}")
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(ErrorCode.VALIDATION_INVALID.name()))
+            .andExpect(jsonPath("$.field").value("name"));
+        patchThirdParty(session, csrfCookie, id, "{\"customer\":\"yes\"}")
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(ErrorCode.VALIDATION_INVALID.name()))
+            .andExpect(jsonPath("$.field").value("customer"));
+        patchThirdParty(session, csrfCookie, id, "{\"name\":null}")
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(ErrorCode.VALIDATION_REQUIRED.name()))
+            .andExpect(jsonPath("$.field").value("name"));
+        patchThirdParty(session, csrfCookie, id, "{\"name\":\"   \"}")
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(ErrorCode.VALIDATION_REQUIRED.name()))
+            .andExpect(jsonPath("$.field").value("name"));
+
+        for (String field : List.of("customer", "prospect", "supplier", "active")) {
+            patchThirdParty(session, csrfCookie, id, "{\"" + field + "\":null}")
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(ErrorCode.VALIDATION_INVALID.name()))
+                .andExpect(jsonPath("$.field").value(field));
+        }
+    }
+
+    @Test
+    void update_invalidPathIdentifier_returnsValidationInvalid() throws Exception {
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        for (String id : List.of("0", "-1", "abc")) {
+            patchThirdParty(session, csrfCookie, id, "{\"name\":\"Acme\"}")
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(ErrorCode.VALIDATION_INVALID.name()))
+                .andExpect(jsonPath("$.field").value("id"));
+        }
+    }
+
+    @Test
+    void update_missingPositiveIdentifier_returnsNotFound() throws Exception {
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        patchThirdParty(session, csrfCookie, "404", "{\"name\":\"Acme\"}")
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(ThirdPartyErrorCode.THIRD_PARTY_NOT_FOUND.name()));
+    }
+
+    @Test
+    void update_requiresManagePermissionForSessionsAndBearerTokens() throws Exception {
+        long id = seedThirdParty();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        patchThirdParty(null, csrfCookie, id, "{\"name\":\"Acme\"}")
+            .andExpect(status().isUnauthorized());
+
+        grantOnly(PermissionCodes.THIRD_PARTIES_READ);
+        MockHttpSession readSession = authenticatedSession();
+        patchThirdParty(readSession, csrfCookie, id, "{\"name\":\"Acme\"}")
+            .andExpect(status().isForbidden());
+
+        grantOnly(PermissionCodes.THIRD_PARTIES_MANAGE);
+        MockHttpSession manageSession = authenticatedSession();
+        patchThirdParty(manageSession, csrfCookie, id, "{\"name\":\"Acme Updated\"}")
+            .andExpect(status().isOk());
+
+        authorizationRepository.replaceRolePermissions(
+            RoleCodes.SYSTEM_ADMIN,
+            List.of(PermissionCodes.THIRD_PARTIES_MANAGE)
+        );
+        String rawToken = personalAccessToken();
+        patchThirdPartyWithBearer(id, rawToken, "{\"name\":\"Acme Bearer\"}")
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    void update_sessionRequiresCsrfAndBearerDoesNot() throws Exception {
+        long id = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        mockMvc.perform(patch(ThirdPartyEndpoints.BASE_PATH + "/" + id)
+                .session(session)
+                .contentType(ThirdPartyEndpoints.MERGE_PATCH_MEDIA_TYPE)
+                .content("{\"name\":\"No CSRF\"}"))
+            .andExpect(status().isForbidden());
+
+        patchThirdParty(session, csrfCookie, id, "{\"name\":\"With CSRF\"}")
+            .andExpect(status().isOk());
+
+        String rawToken = personalAccessToken();
+        patchThirdPartyWithBearer(id, rawToken, "{\"name\":\"Bearer\"}")
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    void update_applicationJsonMediaType_isUnsupported() throws Exception {
+        long id = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        mockMvc.perform(patch(ThirdPartyEndpoints.BASE_PATH + "/" + id)
+                .session(session)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\":\"Acme\"}"))
+            .andExpect(status().isUnsupportedMediaType());
+    }
+
+    @Test
+    void update_offMode_doesNotAppendAuditEvent() throws Exception {
+        long id = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        patchThirdParty(session, csrfCookie, id, "{\"name\":\"Updated\"}")
+            .andExpect(status().isOk());
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
+    void update_basicAndSelectiveModes_appendUpdatedEvent() throws Exception {
+        long id = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            patchThirdParty(session, csrfCookie, id, "{\"name\":\"Basic Updated\"}")
+                .andExpect(status().isOk());
+            auditMode.setMode(AuditMode.SELECTIVE);
+            patchThirdParty(session, csrfCookie, id, "{\"active\":false}")
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents()).hasSize(2).allSatisfy(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.THIRD_PARTY_UPDATED.name());
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.THIRD_PARTY.name());
+                assertThat(event.resourceId()).isEqualTo(Long.toString(id));
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo(USERNAME);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.toString()).doesNotContain("Acme", "B12345678", "info@example.test");
+            });
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void update_noOp_doesNotAppendAuditEventOrChangeData() throws Exception {
+        long id = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            patchThirdParty(session, csrfCookie, id, "{}")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("Acme Ibérica, S.L."));
+            patchThirdParty(session, csrfCookie, id, "{\"name\":\"  Acme Ibérica, S.L.  \"}")
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents())
+                .noneMatch(event -> event.action().equals(AuditAction.THIRD_PARTY_UPDATED.name()));
+            assertThat(repository().findById(id).orElseThrow().name())
+                .isEqualTo("Acme Ibérica, S.L.");
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void update_validationFailureAndNotFound_doNotAppendAuditEvent() throws Exception {
+        long id = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            patchThirdParty(session, csrfCookie, id, "{\"name\":\"   \"}")
+                .andExpect(status().isBadRequest());
+            patchThirdParty(session, csrfCookie, 404, "{\"name\":\"Acme\"}")
+                .andExpect(status().isNotFound());
+
+            assertThat(auditEvents())
+                .noneMatch(event -> event.action().equals(AuditAction.THIRD_PARTY_UPDATED.name()));
+        } finally {
+            auditMode.reset();
+        }
+    }
+
     private void assertInvalidListParameter(
         MockHttpSession session,
         String parameter,
@@ -702,6 +1028,43 @@ class ThirdPartyControllerTest {
             .cookie(csrfCookie)
             .header(CSRF_HEADER, csrfCookie.getValue())
             .contentType(MediaType.APPLICATION_JSON)
+            .content(body));
+    }
+
+    private ResultActions patchThirdParty(
+        MockHttpSession session,
+        Cookie csrfCookie,
+        long id,
+        String body
+    ) throws Exception {
+        return patchThirdParty(session, csrfCookie, Long.toString(id), body);
+    }
+
+    private ResultActions patchThirdParty(
+        MockHttpSession session,
+        Cookie csrfCookie,
+        String id,
+        String body
+    ) throws Exception {
+        var request = patch(ThirdPartyEndpoints.BASE_PATH + "/" + id)
+            .cookie(csrfCookie)
+            .header(CSRF_HEADER, csrfCookie.getValue())
+            .contentType(ThirdPartyEndpoints.MERGE_PATCH_MEDIA_TYPE)
+            .content(body);
+        if (session != null) {
+            request.session(session);
+        }
+        return mockMvc.perform(request);
+    }
+
+    private ResultActions patchThirdPartyWithBearer(
+        long id,
+        String token,
+        String body
+    ) throws Exception {
+        return mockMvc.perform(patch(ThirdPartyEndpoints.BASE_PATH + "/" + id)
+            .header("Authorization", "Bearer " + token)
+            .contentType(ThirdPartyEndpoints.MERGE_PATCH_MEDIA_TYPE)
             .content(body));
     }
 

@@ -5,6 +5,7 @@ import es.alxarafe.alixar.thirdparty.application.CreateThirdPartyUseCase;
 import es.alxarafe.alixar.thirdparty.application.GetThirdPartyUseCase;
 import es.alxarafe.alixar.thirdparty.application.ListThirdPartiesUseCase;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyRepository;
+import es.alxarafe.alixar.thirdparty.application.UpdateThirdPartyUseCase;
 import es.alxarafe.alixar.thirdparty.infrastructure.persistence.JooqThirdPartyRepository;
 import org.jooq.DSLContext;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -36,10 +37,20 @@ public class ThirdPartyConfiguration {
     }
 
     @Bean
+    UpdateThirdPartyUseCase updateThirdPartyUseCase(ThirdPartyRepository thirdPartyRepository) {
+        return new UpdateThirdPartyUseCase(thirdPartyRepository);
+    }
+
+    @Bean
     TransactionalThirdPartyService transactionalThirdPartyService(
         CreateThirdPartyUseCase createThirdPartyUseCase,
+        UpdateThirdPartyUseCase updateThirdPartyUseCase,
         AuditTrail auditTrail
     ) {
-        return new TransactionalThirdPartyService(createThirdPartyUseCase, auditTrail);
+        return new TransactionalThirdPartyService(
+            createThirdPartyUseCase,
+            updateThirdPartyUseCase,
+            auditTrail
+        );
     }
 }
