@@ -14,6 +14,9 @@ import es.alxarafe.alixar.authentication.application.PasswordHasher;
 import es.alxarafe.alixar.authentication.application.RoleCodes;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.domain.User;
+import es.alxarafe.alixar.thirdparty.ThirdPartyTestConfig.InMemoryThirdPartyRepository;
+import es.alxarafe.alixar.thirdparty.application.ThirdPartyRepository;
+import es.alxarafe.alixar.thirdparty.domain.NewThirdParty;
 import jakarta.servlet.http.Cookie;
 import java.time.Instant;
 import java.util.UUID;
@@ -38,6 +41,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -73,6 +77,9 @@ class ThirdPartyAuditFailureTest {
     @Autowired
     private InMemoryAuditEventRepository auditEventRepository;
 
+    @Autowired
+    private ThirdPartyRepository thirdPartyRepository;
+
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -80,6 +87,7 @@ class ThirdPartyAuditFailureTest {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         auditMode.reset();
         auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
+        ((InMemoryThirdPartyRepository) thirdPartyRepository).reset();
         Instant now = Instant.parse("2026-10-28T10:00:00Z");
         ((TestUserRepository) userRepository).replaceWith(new User(
             ALICE_ID,
@@ -107,6 +115,45 @@ class ThirdPartyAuditFailureTest {
                     .header(CSRF_HEADER, csrfCookie.getValue())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{\"name\":\"Acme\",\"taxIdentifier\":\"B12345678\"}"))
+                .andExpect(status().isServiceUnavailable())
+                .andExpect(jsonPath("$.code").value(AuditErrorCode.AUDIT_UNAVAILABLE.name()))
+                .andExpect(jsonPath("$.name").doesNotExist())
+                .andExpect(jsonPath("$.taxIdentifier").doesNotExist());
+
+            assertThat(auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID)).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void update_auditFailure_returnsAuditUnavailableWithoutBusinessData() throws Exception {
+        long id = thirdPartyRepository.create(new NewThirdParty(
+            "Acme Ibérica, S.L.",
+            true,
+            false,
+            true,
+            true,
+            "B12345678",
+            "ESB12345678",
+            "Calle Mayor 1",
+            "28001",
+            "Madrid",
+            "ES",
+            "info@example.test",
+            "+34 900 000 000",
+            "https://example.test"
+        ));
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            mockMvc.perform(patch(ThirdPartyEndpoints.BASE_PATH + "/" + id)
+                    .session(session)
+                    .cookie(csrfCookie)
+                    .header(CSRF_HEADER, csrfCookie.getValue())
+                    .contentType(ThirdPartyEndpoints.MERGE_PATCH_MEDIA_TYPE)
+                    .content("{\"name\":\"Updated\"}"))
                 .andExpect(status().isServiceUnavailable())
                 .andExpect(jsonPath("$.code").value(AuditErrorCode.AUDIT_UNAVAILABLE.name()))
                 .andExpect(jsonPath("$.name").doesNotExist())

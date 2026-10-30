@@ -105,6 +105,27 @@ public class JooqThirdPartyRepository implements ThirdPartyRepository {
     }
 
     @Override
+    public void update(ThirdParty thirdParty) {
+        dsl.update(THIRD_PARTY_TABLE)
+            .set(NAME, thirdParty.name())
+            .set(CUSTOMER, thirdParty.customer())
+            .set(PROSPECT, thirdParty.prospect())
+            .set(SUPPLIER, thirdParty.supplier())
+            .set(ACTIVE, thirdParty.active())
+            .set(TAX_IDENTIFIER, thirdParty.taxIdentifier())
+            .set(INTRA_COMMUNITY_VAT_NUMBER, thirdParty.intraCommunityVatNumber())
+            .set(ADDRESS, thirdParty.address())
+            .set(POSTAL_CODE, thirdParty.postalCode())
+            .set(TOWN, thirdParty.town())
+            .set(COUNTRY_CODE, thirdParty.countryCode())
+            .set(EMAIL, thirdParty.email())
+            .set(PHONE, thirdParty.phone())
+            .set(WEBSITE, thirdParty.website())
+            .where(ID.eq(thirdParty.id()))
+            .execute();
+    }
+
+    @Override
     public long create(NewThirdParty thirdParty) {
         return dsl.insertInto(THIRD_PARTY_TABLE)
             .columns(

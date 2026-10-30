@@ -99,8 +99,8 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   role reads, CSRF-specific audit events, the PAT identifier as actor, audit
   event detail, retention, purge, archive and signed checkpoints
 
-- ThirdParty partial update and delete with the linked-Contact conflict
-  (`THIRDPARTY-002C`/`002D`); create, read and list are implemented in
+- ThirdParty delete with the linked-Contact conflict (`THIRDPARTY-002D`);
+  create, read, list and partial update are implemented in
   [ThirdParty](thirdparty.md)
 - ThirdParty Solucar UI and historical data migration
 - Alixar-owned Contact persistence (PostgreSQL + jOOQ) and the restrictive

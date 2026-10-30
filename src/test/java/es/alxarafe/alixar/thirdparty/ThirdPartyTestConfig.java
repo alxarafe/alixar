@@ -63,6 +63,11 @@ public class ThirdPartyTestConfig {
         }
 
         @Override
+        public void update(ThirdParty thirdParty) {
+            thirdParties.replace(thirdParty.id(), thirdParty);
+        }
+
+        @Override
         public long create(NewThirdParty thirdParty) {
             long id = ++sequence;
             thirdParties.put(id, new ThirdParty(

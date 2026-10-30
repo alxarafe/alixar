@@ -33,20 +33,28 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   filters for `customer`, `prospect`, `supplier` and `active`. Filters combine
   with `AND`; `total` reflects the filters independently of the page. Empty
   results are `200` with `items: []` and `total: 0`
+- **Native canonical partial update**: `PATCH /api/thirdparties/{id}` with
+  `application/merge-patch+json` distinguishes omitted, `null` and value
+  members. Omitted fields remain unchanged, `null` clears optional fields,
+  non-nullable fields reject `null`, unknown members and body `id` are rejected,
+  and values use the same trimming, blank-to-`null`, length and country-code
+  normalization as creation. It returns the full canonical representation
 - **Strict JSON contract**: Unknown JSON members and invalid member types are
   rejected with `400 VALIDATION_INVALID`; missing, `null` or blank `name`
   returns `400 VALIDATION_REQUIRED`
 - **Authorization**: `thirdparties.read` protects reads and listing;
-  `thirdparties.manage` protects creation; both are seeded and assigned to
-  `system-admin`. They apply identically to session and Bearer authentication
-- **CSRF**: Session-authenticated creation requires a valid CSRF token; Bearer
-  authentication does not. ThirdParty is not added to any CSRF exclusion
-- **Audit**: `THIRD_PARTY_CREATED` (`THIRD_PARTY` / `SUCCESS`) is appended
-  atomically with creation under `BASIC` and `SELECTIVE`, recording only the
-  canonical identifier. An append failure returns `503 AUDIT_UNAVAILABLE` and
-  rolls back the creation. Reads and listing are not audited
-- **Pending**: partial update, delete with linked-Contact conflict, Solucar UI
-  and historical data migration
+  `thirdparties.manage` protects creation and partial update; both are seeded
+  and assigned to `system-admin`. They apply identically to session and Bearer
+  authentication
+- **CSRF**: Session-authenticated create and PATCH require a valid CSRF token;
+  Bearer authentication does not. ThirdParty is not added to any CSRF exclusion
+- **Audit**: `THIRD_PARTY_CREATED` and `THIRD_PARTY_UPDATED` (`THIRD_PARTY` /
+  `SUCCESS`) are appended atomically with creation and real updates under
+  `BASIC` and `SELECTIVE`, recording only the canonical identifier. A no-op
+  PATCH records no event. An append failure returns `503 AUDIT_UNAVAILABLE` and
+  rolls back the mutation. Reads and listing are not audited
+- **Pending**: delete with linked-Contact conflict, Solucar UI and historical
+  data migration
 
 ### Persistence Infrastructure
 
@@ -64,7 +72,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   names, Contact foreign key or speculative soft-delete
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 466 deterministic tests and 78 PostgreSQL integration tests remain
+  the 496 deterministic tests and 81 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -177,7 +185,8 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   internal role UUID, not the role code. Revoking an already revoked PAT and
   no-op role rename/permission replacement record no event. Self-revocation is
   audited during the current request with `PAT` as the actor authentication type.
-  THIRDPARTY-002A adds `THIRD_PARTY_CREATED` with `THIRD_PARTY` as resource type
+  THIRDPARTY-002A adds `THIRD_PARTY_CREATED`, and THIRDPARTY-002C adds
+  `THIRD_PARTY_UPDATED` for real updates, with `THIRD_PARTY` as resource type
   and only the canonical identifier as resource id. The `SUCCESS` event is
   atomic with the business transaction and fail-closed; `SESSION` and `PAT`
   actors are distinguished for authenticated operations. `BASIC` and
@@ -250,9 +259,9 @@ See [Development](development.md) for full validation workflow details.
 ## Not yet implemented
 
 - Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
-- ThirdParty partial update and delete: create, read and list are implemented
-  in [ThirdParty](thirdparty.md); update and delete with the linked-Contact
-  conflict remain pending (`THIRDPARTY-002C`/`002D`)
+- ThirdParty delete with the linked-Contact conflict: create, read, list and
+  partial update are implemented in [ThirdParty](thirdparty.md); delete remains
+  pending (`THIRDPARTY-002D`)
 - ThirdParty Solucar UI and historical data migration
 - Role groups, PAT scopes and additional business authorization beyond
   `users.manage`, `roles.manage`, `audit.read`, `audit.configure`,

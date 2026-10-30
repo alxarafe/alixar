@@ -68,6 +68,8 @@ import es.alxarafe.alixar.authentication.infrastructure.TransactionalApiTokenSer
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalPasswordRecovery;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalUserSelfService;
 import es.alxarafe.alixar.thirdparty.application.CreateThirdPartyCommand;
+import es.alxarafe.alixar.thirdparty.application.FieldUpdate;
+import es.alxarafe.alixar.thirdparty.application.UpdateThirdPartyCommand;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyListQuery;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyPage;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyRepository;
@@ -1007,6 +1009,114 @@ class PersistenceIT {
     }
 
     @Test
+    void thirdParty_updatePersistsEveryEditableFieldAndClearsNullables() {
+        Long id = null;
+        try {
+            id = thirdPartyRepository.create(new NewThirdParty(
+                "Before Update",
+                true,
+                false,
+                true,
+                true,
+                "B12345678",
+                "ESB12345678",
+                "Calle Mayor 1",
+                "28001",
+                "Madrid",
+                "ES",
+                "info@example.test",
+                "+34 900 000 000",
+                "https://example.test"
+            ));
+            ThirdParty updated = new ThirdParty(
+                id,
+                "After Update",
+                false,
+                true,
+                false,
+                false,
+                "C123",
+                null,
+                null,
+                "08001",
+                "Barcelona",
+                "FR",
+                null,
+                "+34 911 111 111",
+                "https://updated.example.test"
+            );
+
+            thirdPartyRepository.update(updated);
+
+            assertThat(thirdPartyRepository.findById(id).orElseThrow()).isEqualTo(updated);
+        } finally {
+            if (id != null) {
+                dsl.query("delete from third_party where id = ?", id).execute();
+            }
+        }
+    }
+
+    @Test
+    void thirdParty_partialUpdatePreservesOmittedFieldsAndClearsPresentNull() {
+        Long id = null;
+        try {
+            id = thirdPartyRepository.create(new NewThirdParty(
+                "Acme Ibérica, S.L.",
+                true,
+                false,
+                true,
+                true,
+                "B12345678",
+                "ESB12345678",
+                "Calle Mayor 1",
+                "28001",
+                "Madrid",
+                "ES",
+                "info@example.test",
+                "+34 900 000 000",
+                "https://example.test"
+            ));
+
+            transactionalThirdPartyService.update(id, new UpdateThirdPartyCommand(
+                FieldUpdate.of("  Renamed Co  "),
+                FieldUpdate.absent(),
+                FieldUpdate.absent(),
+                FieldUpdate.absent(),
+                FieldUpdate.absent(),
+                FieldUpdate.absent(),
+                FieldUpdate.absent(),
+                FieldUpdate.absent(),
+                FieldUpdate.absent(),
+                FieldUpdate.absent(),
+                FieldUpdate.absent(),
+                FieldUpdate.of(null),
+                FieldUpdate.absent(),
+                FieldUpdate.absent()
+            ));
+
+            ThirdParty stored = thirdPartyRepository.findById(id).orElseThrow();
+            assertThat(stored.name()).isEqualTo("Renamed Co");
+            assertThat(stored.email()).isNull();
+            assertThat(stored.customer()).isTrue();
+            assertThat(stored.prospect()).isFalse();
+            assertThat(stored.supplier()).isTrue();
+            assertThat(stored.active()).isTrue();
+            assertThat(stored.taxIdentifier()).isEqualTo("B12345678");
+            assertThat(stored.intraCommunityVatNumber()).isEqualTo("ESB12345678");
+            assertThat(stored.address()).isEqualTo("Calle Mayor 1");
+            assertThat(stored.postalCode()).isEqualTo("28001");
+            assertThat(stored.town()).isEqualTo("Madrid");
+            assertThat(stored.countryCode()).isEqualTo("ES");
+            assertThat(stored.phone()).isEqualTo("+34 900 000 000");
+            assertThat(stored.website()).isEqualTo("https://example.test");
+        } finally {
+            if (id != null) {
+                dsl.query("delete from third_party where id = ?", id).execute();
+            }
+        }
+    }
+
+    @Test
     void thirdParty_rejectsBlankNameAtTheDatabaseBoundary() {
         assertThatThrownBy(() -> thirdPartyRepository.create(new NewThirdParty(
             "   ",
@@ -1268,6 +1378,51 @@ class PersistenceIT {
         } finally {
             setAuditMode(AuditMode.OFF);
             resetAuditChain();
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackThirdPartyUpdate() {
+        Long id = null;
+        try {
+            id = thirdPartyRepository.create(new NewThirdParty(
+                "Before Failed Update",
+                false, false, false, true,
+                null, null, null, null, null, null, null, null, null
+            ));
+            resetAuditChain();
+            setAuditMode(AuditMode.BASIC);
+            deleteAuditChainHead();
+
+            long thirdPartyId = id;
+            assertThatThrownBy(() -> transactionalThirdPartyService.update(
+                thirdPartyId,
+                new UpdateThirdPartyCommand(
+                    FieldUpdate.of("After Failed Update"),
+                    FieldUpdate.absent(),
+                    FieldUpdate.absent(),
+                    FieldUpdate.absent(),
+                    FieldUpdate.absent(),
+                    FieldUpdate.absent(),
+                    FieldUpdate.absent(),
+                    FieldUpdate.absent(),
+                    FieldUpdate.absent(),
+                    FieldUpdate.absent(),
+                    FieldUpdate.absent(),
+                    FieldUpdate.absent(),
+                    FieldUpdate.absent(),
+                    FieldUpdate.absent()
+                )
+            )).isInstanceOf(AuditUnavailableException.class);
+
+            assertThat(thirdPartyRepository.findById(thirdPartyId).orElseThrow().name())
+                .isEqualTo("Before Failed Update");
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            if (id != null) {
+                dsl.query("delete from third_party where id = ?", id).execute();
+            }
         }
     }
 

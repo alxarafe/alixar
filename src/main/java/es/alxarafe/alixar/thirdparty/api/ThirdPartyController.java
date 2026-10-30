@@ -20,11 +20,13 @@ import static es.alxarafe.alixar.thirdparty.application.ThirdPartyFieldNames.WEB
 
 import es.alxarafe.alixar.core.application.ErrorCode;
 import es.alxarafe.alixar.thirdparty.application.CreateThirdPartyCommand;
+import es.alxarafe.alixar.thirdparty.application.FieldUpdate;
 import es.alxarafe.alixar.thirdparty.application.GetThirdPartyUseCase;
 import es.alxarafe.alixar.thirdparty.application.InvalidThirdPartyDataException;
 import es.alxarafe.alixar.thirdparty.application.ListThirdPartiesUseCase;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyListQuery;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyPage;
+import es.alxarafe.alixar.thirdparty.application.UpdateThirdPartyCommand;
 import es.alxarafe.alixar.thirdparty.domain.ThirdParty;
 import es.alxarafe.alixar.thirdparty.infrastructure.TransactionalThirdPartyService;
 import java.net.URI;
@@ -34,6 +36,7 @@ import org.springframework.http.MediaType;
 import tools.jackson.databind.JsonNode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -117,6 +120,42 @@ class ThirdPartyController {
         return ResponseEntity.created(location).body(new CreateThirdPartyResponse(id));
     }
 
+    @PatchMapping(
+        value = ThirdPartyEndpoints.ITEM_RELATIVE_PATH,
+        consumes = ThirdPartyEndpoints.MERGE_PATCH_MEDIA_TYPE,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    ResponseEntity<ThirdPartyResponse> update(
+        @PathVariable(ThirdPartyEndpoints.ID_PATH_VARIABLE) long id,
+        @RequestBody JsonNode request
+    ) {
+        ThirdParty thirdParty = thirdPartyService.update(id, toUpdateCommand(request));
+        return ResponseEntity.ok(toResponse(thirdParty));
+    }
+
+    private UpdateThirdPartyCommand toUpdateCommand(JsonNode request) {
+        if (request == null || !request.isObject()) {
+            throw invalid(BODY);
+        }
+        rejectUnknownFields(request);
+        return new UpdateThirdPartyCommand(
+            patchText(request, NAME, true),
+            patchBoolean(request, CUSTOMER),
+            patchBoolean(request, PROSPECT),
+            patchBoolean(request, SUPPLIER),
+            patchBoolean(request, ACTIVE),
+            patchText(request, TAX_IDENTIFIER, false),
+            patchText(request, INTRA_COMMUNITY_VAT_NUMBER, false),
+            patchText(request, ADDRESS, false),
+            patchText(request, POSTAL_CODE, false),
+            patchText(request, TOWN, false),
+            patchText(request, COUNTRY_CODE, false),
+            patchText(request, EMAIL, false),
+            patchText(request, PHONE, false),
+            patchText(request, WEBSITE, false)
+        );
+    }
+
     private CreateThirdPartyCommand toCommand(JsonNode request) {
         if (request == null || !request.isObject()) {
             throw invalid(BODY);
@@ -180,6 +219,34 @@ class ThirdPartyController {
             throw invalid(field);
         }
         return value.booleanValue();
+    }
+
+    private FieldUpdate<String> patchText(JsonNode request, String field, boolean required) {
+        if (!request.has(field)) {
+            return FieldUpdate.absent();
+        }
+        JsonNode value = request.get(field);
+        if (value.isNull()) {
+            if (required) {
+                throw required(field);
+            }
+            return FieldUpdate.of(null);
+        }
+        if (!value.isTextual()) {
+            throw invalid(field);
+        }
+        return FieldUpdate.of(value.textValue());
+    }
+
+    private FieldUpdate<Boolean> patchBoolean(JsonNode request, String field) {
+        if (!request.has(field)) {
+            return FieldUpdate.absent();
+        }
+        JsonNode value = request.get(field);
+        if (!value.isBoolean()) {
+            throw invalid(field);
+        }
+        return FieldUpdate.of(value.booleanValue());
     }
 
     private InvalidThirdPartyDataException required(String field) {

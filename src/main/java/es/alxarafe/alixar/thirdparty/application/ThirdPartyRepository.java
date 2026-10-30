@@ -10,5 +10,7 @@ public interface ThirdPartyRepository {
 
     long create(NewThirdParty thirdParty);
 
+    void update(ThirdParty thirdParty);
+
     ThirdPartyPage findPage(ThirdPartyListQuery query);
 }
