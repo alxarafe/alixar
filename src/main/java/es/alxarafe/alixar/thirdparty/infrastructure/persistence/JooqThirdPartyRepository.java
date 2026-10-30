@@ -1,9 +1,13 @@
 package es.alxarafe.alixar.thirdparty.infrastructure.persistence;
 
+import es.alxarafe.alixar.thirdparty.application.ThirdPartyListQuery;
+import es.alxarafe.alixar.thirdparty.application.ThirdPartyPage;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyRepository;
 import es.alxarafe.alixar.thirdparty.domain.NewThirdParty;
 import es.alxarafe.alixar.thirdparty.domain.ThirdParty;
+import java.util.List;
 import java.util.Optional;
+import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record;
@@ -11,6 +15,7 @@ import org.jooq.Table;
 
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
+import static org.jooq.impl.DSL.noCondition;
 import static org.jooq.impl.DSL.table;
 
 public class JooqThirdPartyRepository implements ThirdPartyRepository {
@@ -66,6 +71,40 @@ public class JooqThirdPartyRepository implements ThirdPartyRepository {
     }
 
     @Override
+    public ThirdPartyPage findPage(ThirdPartyListQuery query) {
+        Condition condition = filterCondition(query);
+        long total = dsl.selectCount()
+            .from(THIRD_PARTY_TABLE)
+            .where(condition)
+            .fetchOne(0, long.class);
+        List<ThirdParty> items = dsl.select(
+                ID,
+                NAME,
+                CUSTOMER,
+                PROSPECT,
+                SUPPLIER,
+                ACTIVE,
+                TAX_IDENTIFIER,
+                INTRA_COMMUNITY_VAT_NUMBER,
+                ADDRESS,
+                POSTAL_CODE,
+                TOWN,
+                COUNTRY_CODE,
+                EMAIL,
+                PHONE,
+                WEBSITE
+            )
+            .from(THIRD_PARTY_TABLE)
+            .where(condition)
+            .orderBy(ID.asc())
+            .limit(query.size())
+            .offset(query.offset())
+            .fetch(this::toThirdParty);
+
+        return new ThirdPartyPage(items, query.page(), query.size(), total);
+    }
+
+    @Override
     public long create(NewThirdParty thirdParty) {
         return dsl.insertInto(THIRD_PARTY_TABLE)
             .columns(
@@ -102,6 +141,23 @@ public class JooqThirdPartyRepository implements ThirdPartyRepository {
             )
             .returning(ID)
             .fetchOne(ID);
+    }
+
+    private Condition filterCondition(ThirdPartyListQuery query) {
+        Condition condition = noCondition();
+        if (query.customer() != null) {
+            condition = condition.and(CUSTOMER.eq(query.customer()));
+        }
+        if (query.prospect() != null) {
+            condition = condition.and(PROSPECT.eq(query.prospect()));
+        }
+        if (query.supplier() != null) {
+            condition = condition.and(SUPPLIER.eq(query.supplier()));
+        }
+        if (query.active() != null) {
+            condition = condition.and(ACTIVE.eq(query.active()));
+        }
+        return condition;
     }
 
     private ThirdParty toThirdParty(Record record) {

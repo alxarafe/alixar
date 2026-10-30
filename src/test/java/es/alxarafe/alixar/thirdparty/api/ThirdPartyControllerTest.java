@@ -495,6 +495,203 @@ class ThirdPartyControllerTest {
         }
     }
 
+    @Test
+    void list_empty_returnsCanonicalPage() throws Exception {
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH).session(session))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.items.length()").value(0))
+            .andExpect(jsonPath("$.page").value(0))
+            .andExpect(jsonPath("$.size").value(20))
+            .andExpect(jsonPath("$.total").value(0));
+    }
+
+    @Test
+    void list_defaultsAndCustomPaginationReportIndependentTotal() throws Exception {
+        seedThirdParty("One", true, false, false, true);
+        seedThirdParty("Two", false, false, false, true);
+        seedThirdParty("Three", false, false, false, true);
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH).session(session))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.page").value(0))
+            .andExpect(jsonPath("$.size").value(20))
+            .andExpect(jsonPath("$.total").value(3))
+            .andExpect(jsonPath("$.items.length()").value(3))
+            .andExpect(jsonPath("$.items[0].id").value(1))
+            .andExpect(jsonPath("$.items[1].id").value(2))
+            .andExpect(jsonPath("$.items[2].id").value(3));
+
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH)
+                .param("page", "1")
+                .param("size", "1")
+                .session(session))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.page").value(1))
+            .andExpect(jsonPath("$.size").value(1))
+            .andExpect(jsonPath("$.total").value(3))
+            .andExpect(jsonPath("$.items.length()").value(1))
+            .andExpect(jsonPath("$.items[0].id").value(2));
+
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH)
+                .param("size", "2")
+                .session(session))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.page").value(0))
+            .andExpect(jsonPath("$.size").value(2))
+            .andExpect(jsonPath("$.total").value(3))
+            .andExpect(jsonPath("$.items.length()").value(2));
+    }
+
+    @Test
+    void list_supportsIndividualAndCombinedBooleanFilters() throws Exception {
+        seedThirdParty("Customer", true, false, false, true);
+        seedThirdParty("Prospect", false, true, false, true);
+        seedThirdParty("Supplier", false, false, true, false);
+        seedThirdParty("CustomerSupplier", true, false, true, true);
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH)
+                .param("customer", "true")
+                .session(session))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.total").value(2))
+            .andExpect(jsonPath("$.items[0].id").value(1))
+            .andExpect(jsonPath("$.items[1].id").value(4));
+
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH)
+                .param("prospect", "true")
+                .session(session))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.total").value(1))
+            .andExpect(jsonPath("$.items[0].id").value(2));
+
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH)
+                .param("supplier", "true")
+                .session(session))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.total").value(2))
+            .andExpect(jsonPath("$.items[0].id").value(3))
+            .andExpect(jsonPath("$.items[1].id").value(4));
+
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH)
+                .param("active", "false")
+                .session(session))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.total").value(1))
+            .andExpect(jsonPath("$.items[0].id").value(3));
+
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH)
+                .param("customer", "true")
+                .param("supplier", "true")
+                .param("active", "true")
+                .session(session))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.total").value(1))
+            .andExpect(jsonPath("$.items[0].id").value(4));
+    }
+
+    @Test
+    void list_invalidPaginationOrFilterValue_returnsValidationInvalid() throws Exception {
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+
+        assertInvalidListParameter(session, "page", "-1");
+        assertInvalidListParameter(session, "size", "0");
+        assertInvalidListParameter(session, "size", "101");
+        assertInvalidListParameter(session, "customer", "invalid");
+    }
+
+    @Test
+    void list_requiresReadPermissionForSessionsAndBearerTokens() throws Exception {
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH))
+            .andExpect(status().isUnauthorized());
+
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        authorizationRepository.replaceRolePermissions(
+            RoleCodes.SYSTEM_ADMIN,
+            List.of(PermissionCodes.THIRD_PARTIES_MANAGE)
+        );
+        MockHttpSession session = authenticatedSession();
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH).session(session))
+            .andExpect(status().isForbidden());
+
+        grantOnly(PermissionCodes.THIRD_PARTIES_READ);
+        MockHttpSession readSession = authenticatedSession();
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH).session(readSession))
+            .andExpect(status().isOk());
+
+        String rawToken = personalAccessToken();
+        authorizationRepository.replaceRolePermissions(
+            RoleCodes.SYSTEM_ADMIN,
+            List.of(PermissionCodes.THIRD_PARTIES_READ)
+        );
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH)
+                .header("Authorization", "Bearer " + rawToken))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    void list_doesNotAppendThirdPartyAuditEvent() throws Exception {
+        seedThirdParty("Acme", true, false, false, true);
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH).session(session))
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents())
+                .noneMatch(event -> event.resourceType().equals(AuditResourceType.THIRD_PARTY.name()));
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    private void assertInvalidListParameter(
+        MockHttpSession session,
+        String parameter,
+        String value
+    ) throws Exception {
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH)
+                .param(parameter, value)
+                .session(session))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(ErrorCode.VALIDATION_INVALID.name()))
+            .andExpect(jsonPath("$.field").value(parameter));
+    }
+
+    private long seedThirdParty(
+        String name,
+        boolean customer,
+        boolean prospect,
+        boolean supplier,
+        boolean active
+    ) {
+        return repository().create(new NewThirdParty(
+            name,
+            customer,
+            prospect,
+            supplier,
+            active,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        ));
+    }
+
     private ResultActions create(
         MockHttpSession session,
         Cookie csrfCookie,

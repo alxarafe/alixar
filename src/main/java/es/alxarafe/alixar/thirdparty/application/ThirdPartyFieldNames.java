@@ -18,6 +18,8 @@ public final class ThirdPartyFieldNames {
     public static final String PHONE = "phone";
     public static final String WEBSITE = "website";
     public static final String BODY = "body";
+    public static final String PAGE = "page";
+    public static final String SIZE = "size";
 
     private ThirdPartyFieldNames() {
     }

@@ -68,6 +68,8 @@ import es.alxarafe.alixar.authentication.infrastructure.TransactionalApiTokenSer
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalPasswordRecovery;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalUserSelfService;
 import es.alxarafe.alixar.thirdparty.application.CreateThirdPartyCommand;
+import es.alxarafe.alixar.thirdparty.application.ThirdPartyListQuery;
+import es.alxarafe.alixar.thirdparty.application.ThirdPartyPage;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyRepository;
 import es.alxarafe.alixar.thirdparty.domain.NewThirdParty;
 import es.alxarafe.alixar.thirdparty.domain.ThirdParty;
@@ -1132,6 +1134,113 @@ class PersistenceIT {
             "Lowercase Country Co",
             "es"
         ).execute()).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void thirdParty_list_emptyReturnsCanonicalEmptyPage() {
+        clearThirdParties();
+        try {
+            ThirdPartyPage page = thirdPartyRepository.findPage(
+                ThirdPartyListQuery.of(null, null, null, null, null, null)
+            );
+
+            assertThat(page.items()).isEmpty();
+            assertThat(page.page()).isZero();
+            assertThat(page.size()).isEqualTo(20);
+            assertThat(page.total()).isZero();
+        } finally {
+            clearThirdParties();
+        }
+    }
+
+    @Test
+    void thirdParty_list_ordersByIdAscendingAndPaginatesWithTotal() {
+        clearThirdParties();
+        try {
+            long first = createThirdPartyForList("List One", true, false, false, true);
+            long second = createThirdPartyForList("List Two", false, true, false, true);
+            long third = createThirdPartyForList("List Three", false, false, true, false);
+
+            ThirdPartyPage page0 = thirdPartyRepository.findPage(
+                ThirdPartyListQuery.of(0, 2, null, null, null, null)
+            );
+            assertThat(page0.page()).isZero();
+            assertThat(page0.size()).isEqualTo(2);
+            assertThat(page0.total()).isEqualTo(3);
+            assertThat(page0.items()).extracting(ThirdParty::id)
+                .containsExactly(first, second);
+
+            ThirdPartyPage page1 = thirdPartyRepository.findPage(
+                ThirdPartyListQuery.of(1, 2, null, null, null, null)
+            );
+            assertThat(page1.page()).isEqualTo(1);
+            assertThat(page1.size()).isEqualTo(2);
+            assertThat(page1.total()).isEqualTo(3);
+            assertThat(page1.items()).extracting(ThirdParty::id)
+                .containsExactly(third);
+            assertThat(first).isLessThan(second).isLessThan(third);
+        } finally {
+            clearThirdParties();
+        }
+    }
+
+    @Test
+    void thirdParty_list_filtersExactBooleansAndCombinesWithAnd() {
+        clearThirdParties();
+        try {
+            long customer = createThirdPartyForList("Filter Customer", true, false, false, true);
+            long prospect = createThirdPartyForList("Filter Prospect", false, true, false, true);
+            long supplier = createThirdPartyForList("Filter Supplier", false, false, true, false);
+            long customerSupplier =
+                createThirdPartyForList("Filter Customer Supplier", true, false, true, true);
+
+            assertFilteredIds(true, null, null, null, customer, customerSupplier);
+            assertFilteredIds(false, null, null, null, prospect, supplier);
+            assertFilteredIds(null, true, null, null, prospect);
+            assertFilteredIds(null, null, true, null, supplier, customerSupplier);
+            assertFilteredIds(null, null, null, false, supplier);
+            assertFilteredIds(null, null, null, true, customer, prospect, customerSupplier);
+            assertFilteredIds(true, null, true, true, customerSupplier);
+            assertFilteredIds(false, true, null, true, prospect);
+        } finally {
+            clearThirdParties();
+        }
+    }
+
+    private void assertFilteredIds(
+        Boolean customer,
+        Boolean prospect,
+        Boolean supplier,
+        Boolean active,
+        long... expectedIds
+    ) {
+        ThirdPartyPage page = thirdPartyRepository.findPage(
+            ThirdPartyListQuery.of(0, 100, customer, prospect, supplier, active)
+        );
+        Long[] expected = Arrays.stream(expectedIds).boxed().toArray(Long[]::new);
+        assertThat(page.items()).extracting(ThirdParty::id).containsExactly(expected);
+        assertThat(page.total()).isEqualTo(expectedIds.length);
+    }
+
+    private long createThirdPartyForList(
+        String name,
+        boolean customer,
+        boolean prospect,
+        boolean supplier,
+        boolean active
+    ) {
+        return thirdPartyRepository.create(new NewThirdParty(
+            name,
+            customer,
+            prospect,
+            supplier,
+            active,
+            null, null, null, null, null, null, null, null, null
+        ));
+    }
+
+    private void clearThirdParties() {
+        dsl.query("delete from third_party").execute();
     }
 
     @Test
