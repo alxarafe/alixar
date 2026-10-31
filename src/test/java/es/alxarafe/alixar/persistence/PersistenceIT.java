@@ -67,6 +67,12 @@ import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminRoleSe
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalApiTokenService;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalPasswordRecovery;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalUserSelfService;
+import es.alxarafe.alixar.contact.application.ContactNotFoundException;
+import es.alxarafe.alixar.contact.application.ContactRepository;
+import es.alxarafe.alixar.contact.application.CreateContactCommand;
+import es.alxarafe.alixar.contact.application.CreateContactUseCase;
+import es.alxarafe.alixar.contact.application.InvalidThirdPartyReferenceException;
+import es.alxarafe.alixar.contact.domain.Contact;
 import es.alxarafe.alixar.thirdparty.application.CreateThirdPartyCommand;
 import es.alxarafe.alixar.thirdparty.application.FieldUpdate;
 import es.alxarafe.alixar.thirdparty.application.UpdateThirdPartyCommand;
@@ -101,14 +107,25 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 // Runs explicitly in bin/check against its isolated Compose database.
 @SpringBootTest(properties = "spring.autoconfigure.exclude=")
@@ -131,6 +148,7 @@ class PersistenceIT {
     private static final String AUDIT_CONFIGURATION_TABLE = "audit_configuration";
     private static final String AUDIT_READ_POLICY_TABLE = "audit_read_policy";
     private static final String THIRD_PARTY_TABLE = "third_party";
+    private static final String CONTACT_TABLE = "contact";
     private static final UUID AUDIT_CHAIN_ID = AuditChain.DEFAULT_CHAIN_ID;
 
     @Autowired
@@ -229,6 +247,15 @@ class PersistenceIT {
     @Autowired
     private TransactionalThirdPartyService transactionalThirdPartyService;
 
+    @Autowired
+    private ContactRepository contactRepository;
+
+    @Autowired
+    private CreateContactUseCase createContactUseCase;
+
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
     @Test
     void bootIntegratesPostgresqlFlywayJooqAndAuthenticationMigration() throws Exception {
         try (var connection = dataSource.getConnection()) {
@@ -236,8 +263,8 @@ class PersistenceIT {
                 .startsWith(POSTGRESQL_VERSION);
         }
         assertThat(flyway.getConfiguration().getDataSource()).isSameAs(dataSource);
-        assertThat(flyway.info().all()).hasSize(11);
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("11");
+        assertThat(flyway.info().all()).hasSize(12);
+        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("12");
         assertThat(dsl.selectOne().fetchSingle().value1()).isEqualTo(1);
         assertThat(dsl.fetch("select tablename from pg_catalog.pg_tables where schemaname = current_schema()")
             .getValues(0, String.class)).containsExactlyInAnyOrder(
@@ -253,10 +280,11 @@ class PersistenceIT {
                 AUDIT_EVENT_TABLE,
                 AUDIT_CONFIGURATION_TABLE,
                 AUDIT_READ_POLICY_TABLE,
-                THIRD_PARTY_TABLE
+                THIRD_PARTY_TABLE,
+                CONTACT_TABLE
             );
         assertThat(dsl.fetchCount(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(HISTORY_TABLE))))
-            .isEqualTo(11);
+            .isEqualTo(12);
     }
 
     @Test
@@ -1350,7 +1378,293 @@ class PersistenceIT {
     }
 
     private void clearThirdParties() {
+        dsl.query("delete from contact").execute();
         dsl.query("delete from third_party").execute();
+    }
+
+    @Test
+    void contact_createStandaloneAndReadBackFromPostgres() {
+        Long id = null;
+        try {
+            id = contactRepository.create(new CreateContactCommand(
+                "García",
+                "Ana",
+                "ana@example.test",
+                null
+            ));
+
+            Contact stored = contactRepository.findById(id);
+            assertThat(id).isPositive();
+            assertThat(stored.id()).isEqualTo(id);
+            assertThat(stored.lastName()).isEqualTo("García");
+            assertThat(stored.firstName()).isEqualTo("Ana");
+            assertThat(stored.email()).isEqualTo("ana@example.test");
+            assertThat(stored.thirdPartyId()).isNull();
+        } finally {
+            deleteContact(id);
+        }
+    }
+
+    @Test
+    void contact_createLinkedToThirdPartyAndReadBackFromPostgres() {
+        Long thirdPartyId = null;
+        Long contactId = null;
+        try {
+            thirdPartyId = createThirdPartyForContact("Linked Contact Co");
+            contactId = contactRepository.create(new CreateContactCommand(
+                "Doe",
+                "John",
+                "john@example.test",
+                thirdPartyId
+            ));
+
+            Contact stored = contactRepository.findById(contactId);
+            assertThat(stored.id()).isEqualTo(contactId);
+            assertThat(stored.thirdPartyId()).isEqualTo(thirdPartyId);
+        } finally {
+            deleteContact(contactId);
+            deleteThirdParty(thirdPartyId);
+        }
+    }
+
+    @Test
+    void contact_schemaDefinesIdentityCanonicalColumnsAndRestrictiveForeignKey() {
+        var columns = dsl.fetch("""
+            select column_name, data_type, is_nullable, is_identity
+            from information_schema.columns
+            where table_schema = current_schema() and table_name = 'contact'
+            order by ordinal_position
+            """);
+
+        assertThat(columns.getValues("column_name", String.class))
+            .containsExactly("id", "last_name", "first_name", "email", "third_party_id");
+        assertThat(columns.getValues("data_type", String.class))
+            .containsExactly("bigint", "text", "text", "text", "bigint");
+        assertThat(columns.getValues("is_nullable", String.class))
+            .containsExactly("NO", "NO", "YES", "YES", "YES");
+        assertThat(columns.getValues("is_identity", String.class))
+            .containsExactly("YES", "NO", "NO", "NO", "NO");
+
+        var foreignKeys = dsl.fetch("""
+            select confdeltype::text as delete_action
+            from pg_constraint constraint_definition
+            join pg_class source_table on source_table.oid = constraint_definition.conrelid
+            join pg_class target_table on target_table.oid = constraint_definition.confrelid
+            where constraint_definition.contype = 'f'
+              and source_table.relname = 'contact'
+              and target_table.relname = 'third_party'
+            """);
+        assertThat(foreignKeys.getValues("delete_action", String.class)).containsExactly("r");
+    }
+
+    @Test
+    void contact_rejectsBlankOrNullLastNameAtTheDatabaseBoundary() {
+        assertThatThrownBy(() -> contactRepository.create(new CreateContactCommand(
+            "   ",
+            null,
+            null,
+            null
+        ))).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+
+        assertThatThrownBy(() -> dsl.query(
+            "insert into contact (last_name) values (null)"
+        ).execute()).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void contact_applicationRejectsMissingThirdPartyReference() {
+        long missingThirdPartyId = 999_999_999L;
+
+        assertThatThrownBy(() -> createContactUseCase.execute(new CreateContactCommand(
+            "Doe",
+            "John",
+            "john@example.test",
+            missingThirdPartyId
+        ))).isInstanceOf(InvalidThirdPartyReferenceException.class);
+
+        assertThat(dsl.fetchCount(
+            org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(CONTACT_TABLE)),
+            org.jooq.impl.DSL.field(org.jooq.impl.DSL.name(CONTACT_TABLE, "third_party_id"))
+                .eq(missingThirdPartyId)
+        )).isZero();
+    }
+
+    @Test
+    void contact_databaseForeignKeyRejectsMissingThirdPartyReference() {
+        long missingThirdPartyId = 999_999_999L;
+
+        assertThatThrownBy(() -> dsl.query(
+            "insert into contact (last_name, third_party_id) values (?, ?)",
+            "Orphan",
+            missingThirdPartyId
+        ).execute()).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+    }
+
+    @Test
+    void contact_multipleContactsShareThirdPartyAndDeletionIsRestrictedWithoutCascade() {
+        Long thirdPartyId = null;
+        Long firstContactId = null;
+        Long secondContactId = null;
+        try {
+            thirdPartyId = createThirdPartyForContact("Shared Contact Co");
+            firstContactId = contactRepository.create(new CreateContactCommand(
+                "First",
+                null,
+                null,
+                thirdPartyId
+            ));
+            secondContactId = contactRepository.create(new CreateContactCommand(
+                "Second",
+                null,
+                null,
+                thirdPartyId
+            ));
+
+            long sharedThirdPartyId = thirdPartyId;
+            assertThatThrownBy(() -> dsl.query(
+                "delete from third_party where id = ?",
+                sharedThirdPartyId
+            ).execute()).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+
+            assertThat(contactRepository.findById(firstContactId).thirdPartyId())
+                .isEqualTo(thirdPartyId);
+            assertThat(contactRepository.findById(secondContactId).thirdPartyId())
+                .isEqualTo(thirdPartyId);
+        } finally {
+            deleteContact(firstContactId);
+            deleteContact(secondContactId);
+            deleteThirdParty(thirdPartyId);
+        }
+    }
+
+    @Test
+    void contact_generatedIdentifiersArePositiveAndDistinct() {
+        Long firstId = null;
+        Long secondId = null;
+        try {
+            firstId = contactRepository.create(new CreateContactCommand("One", null, null, null));
+            secondId = contactRepository.create(new CreateContactCommand("Two", null, null, null));
+
+            assertThat(firstId).isPositive();
+            assertThat(secondId).isPositive().isGreaterThan(firstId);
+        } finally {
+            deleteContact(firstId);
+            deleteContact(secondId);
+        }
+    }
+
+    @Test
+    void contact_findByIdMissing_throwsContactNotFoundException() {
+        assertThatThrownBy(() -> contactRepository.findById(Long.MAX_VALUE))
+            .isInstanceOf(ContactNotFoundException.class);
+    }
+
+    @Test
+    void contactApi_persistsStandaloneContactAndReadsItBackFromPostgres() throws Exception {
+        long id = postContact("""
+            {"lastName":"García","firstName":"Ana","email":"ana@example.test"}
+            """);
+        try {
+            mockMvc().perform(get("/api/contacts/{id}", id))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.lastName").value("García"))
+                .andExpect(jsonPath("$.firstName").value("Ana"))
+                .andExpect(jsonPath("$.email").value("ana@example.test"))
+                .andExpect(jsonPath("$.thirdPartyId").doesNotExist())
+                .andExpect(jsonPath("$.lastname").doesNotExist());
+
+            Contact stored = contactRepository.findById(id);
+            assertThat(stored.lastName()).isEqualTo("García");
+            assertThat(stored.thirdPartyId()).isNull();
+        } finally {
+            deleteContact(id);
+        }
+    }
+
+    @Test
+    void contactApi_persistsLinkedContactAndReadsThirdPartyIdFromPostgres() throws Exception {
+        Long thirdPartyId = null;
+        Long contactId = null;
+        try {
+            thirdPartyId = createThirdPartyForContact("API Linked Co");
+            contactId = postContact("""
+                {"lastName":"Doe","firstName":"John","email":"john@example.test","thirdPartyId":%d}
+                """.formatted(thirdPartyId));
+
+            mockMvc().perform(get("/api/contacts/{id}", contactId))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(contactId))
+                .andExpect(jsonPath("$.thirdPartyId").value(thirdPartyId))
+                .andExpect(jsonPath("$.thirdPartyName").doesNotExist())
+                .andExpect(jsonPath("$._links").doesNotExist());
+        } finally {
+            deleteContact(contactId);
+            deleteThirdParty(thirdPartyId);
+        }
+    }
+
+    @Test
+    void contactApi_rejectsMissingThirdPartyWithCanonicalUnprocessableEntity() throws Exception {
+        mockMvc().perform(post("/api/contacts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {"lastName":"Doe","thirdPartyId":999999999}
+                    """))
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON))
+            .andExpect(jsonPath("$.code").value("CONTACT_INVALID_THIRD_PARTY_REFERENCE"));
+    }
+
+    @Test
+    void contactApi_readMissingContactReturnsNotFound() throws Exception {
+        mockMvc().perform(get("/api/contacts/{id}", Long.MAX_VALUE))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value("CONTACT_NOT_FOUND"));
+    }
+
+    private long postContact(String body) throws Exception {
+        var result = mockMvc().perform(post("/api/contacts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+            .andExpect(status().isCreated())
+            .andExpect(header().exists("Location"))
+            .andExpect(jsonPath("$.id").isNumber())
+            .andReturn();
+
+        long id = ((Number) com.jayway.jsonpath.JsonPath.read(
+            result.getResponse().getContentAsString(),
+            "$.id"
+        )).longValue();
+        assertThat(result.getResponse().getHeader("Location")).isEqualTo("/api/contacts/" + id);
+        return id;
+    }
+
+    private MockMvc mockMvc() {
+        return MockMvcBuilders.webAppContextSetup(webApplicationContext)
+            .apply(springSecurity())
+            .build();
+    }
+
+    private long createThirdPartyForContact(String name) {
+        return thirdPartyRepository.create(new NewThirdParty(
+            name,
+            false, false, false, true,
+            null, null, null, null, null, null, null, null, null
+        ));
+    }
+
+    private void deleteContact(Long id) {
+        if (id != null) {
+            dsl.query("delete from contact where id = ?", id).execute();
+        }
+    }
+
+    private void deleteThirdParty(Long id) {
+        if (id != null) {
+            dsl.query("delete from third_party where id = ?", id).execute();
+        }
     }
 
     @Test

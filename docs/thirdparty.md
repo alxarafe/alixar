@@ -35,8 +35,9 @@ canonical create and read operations, their permissions and the create audit
 event. `THIRDPARTY-002B` provides the canonical list with pagination and exact
 boolean filters. `THIRDPARTY-002C` provides the canonical partial update with
 presence-aware merge-patch semantics, no-op detection and the update audit event.
-Delete remains a future slice (`THIRDPARTY-002D`), and native Contact persistence
-remains `CONTACT-002`.
+Delete remains a future slice (`THIRDPARTY-002D`). Native Contact create/read
+persistence and the optional restrictive Contact → ThirdParty relationship are
+implemented by `CONTACT-002`.
 
 ## 2. Scope
 
@@ -682,8 +683,9 @@ returns the full canonical representation. A no-op performs no `UPDATE` and
 records no audit event. A real change appends `THIRD_PARTY_UPDATED` atomically;
 an append failure returns `503 AUDIT_UNAVAILABLE` and rolls back the update.
 
-Delete, Contact persistence and the linked-Contact conflict remain outside this
-slice.
+Delete and the canonical linked-Contact conflict remain outside this slice.
+Native Contact persistence and the restrictive relationship are implemented by
+`CONTACT-002`.
 
 ---
 
@@ -755,9 +757,12 @@ Decisions:
   `THIRD_PARTY_DELETE_CONFLICT` until the Contacts are unlinked or reassigned;
 - deleting a Contact does not affect the ThirdParty.
 
-No native foreign key is implemented in this task. A future Contact/ThirdParty
-persistence task must use a restrictive foreign key (`RESTRICT`/`NO ACTION`), not
-a cascading delete. This decision is the input for `CONTACT-002`.
+The native `contact` table implements a real nullable foreign key
+`contact.third_party_id → third_party(id)` with `ON DELETE RESTRICT`; it never
+cascades. Contact creation pre-validates the reference and returns
+`422 CONTACT_INVALID_THIRD_PARTY_REFERENCE` when the ThirdParty does not exist.
+The canonical `409 THIRD_PARTY_DELETE_CONFLICT` response remains part of the
+pending `THIRDPARTY-002D` delete slice.
 
 The canonical Contact representation does not yet embed a ThirdParty object or
 denormalized ThirdParty name. `thirdPartyId` remains the canonical reference.
@@ -1134,5 +1139,5 @@ THIRDPARTY-002A = native persistence + create + read + RBAC + create audit (impl
 THIRDPARTY-002B = list + filters + pagination (implemented)
 THIRDPARTY-002C = partial update (implemented)
 THIRDPARTY-002D = delete with linked-Contact conflict (pending)
-CONTACT-002     = Contact lifecycle and native relationship implementation (pending)
+CONTACT-002     = native Contact create/read persistence + restrictive relationship (implemented)
 ```

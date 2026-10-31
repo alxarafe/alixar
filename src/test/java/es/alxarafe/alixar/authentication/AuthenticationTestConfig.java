@@ -15,6 +15,7 @@ import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.domain.ApiToken;
 import es.alxarafe.alixar.authentication.domain.PasswordResetToken;
 import es.alxarafe.alixar.authentication.domain.User;
+import es.alxarafe.alixar.contact.ContactTestConfig;
 import es.alxarafe.alixar.thirdparty.ThirdPartyTestConfig;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 
 @TestConfiguration
-@Import({AuditTestConfig.class, ThirdPartyTestConfig.class})
+@Import({AuditTestConfig.class, ContactTestConfig.class, ThirdPartyTestConfig.class})
 public class AuthenticationTestConfig {
 
     @Bean

@@ -173,9 +173,10 @@ interchangeable:
   image, runs tests, starts container, verifies `/health`, cleans up. Does not
   depend on any external reference system.
 
-- **`./bin/check-reference`** — Real compatibility/integration verification
-  against the sibling `dolibarr-reference` repository. Uses actual Dolibarr 24.0.1
-  to prove the adapter works against observed legacy behavior.
+- **`./bin/check-reference`** — Real reference verification against the sibling
+  `dolibarr-reference` repository. Uses actual Dolibarr 24.0.1 to prove observed
+  legacy behavior remains reproducible and to confirm native Alixar runtime
+  independence from Dolibarr.
 
 A green `./bin/test` does not prove real Dolibarr compatibility.
 A passing `./bin/check-reference` does not replace normal tests or CI.

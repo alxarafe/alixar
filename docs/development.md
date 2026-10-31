@@ -17,7 +17,7 @@ The host must provide only:
 ./bin/down           # Stop development server
 ./bin/test           # Run tests in Docker
 ./bin/check          # Complete local validation (build, test, image, runtime, health)
-./bin/check-reference # Real Dolibarr integration validation (requires sibling dolibarr-reference)
+./bin/check-reference # Dolibarr reference verification + native runtime independence (requires sibling dolibarr-reference)
 ```
 
 ## Port Configuration
@@ -85,7 +85,10 @@ grants it to `system-admin`, and
 `V9__persist_audit_configuration.sql` adds the singleton
 `audit_configuration` table and seeds `audit.configure` for `system-admin`, and
 `V10__add_selective_audit_read_policy.sql` adds `SELECTIVE` to the persisted
-mode constraint and creates `audit_read_policy`. Boot calls Flyway on
+mode constraint and creates `audit_read_policy`.
+`V11__create_third_party_and_authorization.sql` creates the native ThirdParty
+table and seeds its permissions, and `V12__create_contact.sql` creates the native
+Contact table with its restrictive ThirdParty foreign key. Boot calls Flyway on
 startup using its default `classpath:db/migration`
 location. `PersistenceIT` verifies the migrations, their constraints, RBAC
 resolution and authentication transaction behaviour against PostgreSQL.
@@ -176,15 +179,12 @@ The `compose.yaml` defines:
 - `database` — PostgreSQL 18.6 service (normal Alixar infrastructure)
 - `app` — Alixar application (depends on healthy database)
 
-### Reference Check Override
+### Reference Check Isolation
 
-`compose.reference.yaml` extends `compose.yaml` for the Dolibarr reference integration check:
-- Attaches Alixar to the external `dolibarr-reference` network
-- Configures `ALIXAR_DOLIBARR_BASE_URL=http://dolibarr/api/index.php` (service DNS)
-- Requires `ALIXAR_DOLIBARR_API_KEY` from environment
-- Uses a fresh `alixar-reference-check-<pid>-<random>` project for each invocation
-
-This override is used **only** by `./bin/check-reference`.
+`./bin/check-reference` uses the normal `compose.yaml` with a fresh
+`alixar-reference-check-<pid>-<random>` project. It does not attach Alixar to the
+Dolibarr Docker network and does not configure Dolibarr runtime settings for
+Alixar. A separate override file is not required.
 
 ## Validation
 
@@ -192,12 +192,12 @@ This override is used **only** by `./bin/check-reference`.
 
 `./bin/check` is the complete validation authority for Alixar itself. It runs entirely in Docker and performs:
 
-1. Build and run the 415 deterministic tests (`mvnw clean verify`)
+1. Build and run the 478 deterministic tests (`mvnw clean verify`)
 2. Runtime image build
 3. Container startup with health check wait (database + app)
 4. PostgreSQL health verification (`pg_isready`)
 5. Run `PersistenceIT` against the real isolated PostgreSQL service: verify the
-   Boot datasource, Flyway `V1`/`V2`/`V3`/`V4`/`V5`/`V6`/`V7`/`V8`/`V9`/`V10`, a jOOQ `DSLContext`
+   Boot datasource, Flyway `V1`/`V2`/`V3`/`V4`/`V5`/`V6`/`V7`/`V8`/`V9`/`V10`/`V11`/`V12`, a jOOQ `DSLContext`
    executing `SELECT 1`, PostgreSQL 18.6, the authentication, API token and RBAC
    tables and constraints, permission-catalogue ordering, effective-permission
    resolution, restrictive role deletion, administrative user
@@ -237,7 +237,7 @@ the invocation's project. Cleanup errors are reported and fail an otherwise
 successful check; an earlier failure retains its exit code. Images/build cache
 are retained. No fixed development or previous check project is cleaned.
 
-`./bin/test` runs the 415 deterministic tests without PostgreSQL, including
+`./bin/test` runs the 478 deterministic tests without PostgreSQL, including
 eight real HTTP status regressions against embedded Tomcat in
 `AuthHttpStatusTest`. These distinguish CSRF `403`, invalid credentials `401`,
 anonymous `/me` `401`, and permission denial `403`, while retaining deny-by-default
@@ -251,9 +251,10 @@ development startup. The runtime image still contains only the runtime artifact.
 `.dockerignore` keeps private notes, Git metadata, local configuration, and build
 artifacts outside the build context.
 
-### `./bin/check-reference` — Real Dolibarr Compatibility Check
+### `./bin/check-reference` — Real Dolibarr Reference Check
 
-`./bin/check-reference` validates Alixar's contact adapter against a **real Dolibarr 24.0.1 instance**.
+`./bin/check-reference` verifies the observed legacy behavior against a **real
+Dolibarr 24.0.1 instance** and confirms that Alixar's Contact runtime is native.
 
 **Prerequisites:**
 - Sibling repository `../dolibarr-reference` (not part of normal Alixar development)
@@ -261,19 +262,21 @@ artifacts outside the build context.
 
 **What it does:**
 1. Starts `dolibarr-reference` via its own `./bin/up` (provisions API key if needed)
-2. Discovers the running Dolibarr container and its Docker network
-3. Builds the current Alixar code and starts that same project's image with
-   `--no-build`, using `compose.yaml + compose.reference.yaml` and a fresh project
-4. Alixar reaches Dolibarr via service DNS (`http://dolibarr/api/index.php`), not `127.0.0.1`
-5. Runs contact creation/read, mapping, 404, and legacy-field verification
+2. Creates and reads a Contact directly in Dolibarr, verifying the legacy
+   `lastname`/`firstname`/`email` fields remain reproducible
+3. Builds the current Alixar code and starts it with the normal `compose.yaml`
+   in a fresh project, without any Dolibarr runtime configuration
+4. Verifies the Alixar container receives no `ALIXAR_DOLIBARR_*` environment
+   variables
+5. Verifies canonical Contact create/read, the missing-ThirdParty `422` error,
+   the missing-Contact `404` error and the absence of legacy fields
 6. Cleans up only this invocation's Alixar containers, network, and PostgreSQL
    volume, verifies removal, and leaves `dolibarr-reference` running
 
-The external reference network is retained. Existing Alixar reference projects,
-including `alixar-reference_alixar-db-data`, are neither reused nor removed.
-The existing compatibility workflow creates test contacts in Dolibarr; it does
-not change reference code or schema. Its Alixar port discovery and cleanup error
-handling follow the same rules as the self-contained check.
+Existing Alixar reference projects are neither reused nor removed. The
+compatibility workflow creates test contacts in Dolibarr; it does not change
+reference code or schema. Its Alixar port discovery and cleanup error handling
+follow the same rules as the self-contained check.
 
 **Environment variables:**
 - `ALIXAR_JAVA_PORT` (default dynamically assigned) — optional host port for Alixar health/API
