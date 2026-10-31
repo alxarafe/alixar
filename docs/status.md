@@ -8,12 +8,32 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
 
 ### Contact
 
-- **Canonical read**: `GET /api/contacts/{id}` — Returns contact in Alixar canonical format
-- **Canonical creation**: `POST /api/contacts` — Creates contact through Alixar API
-- **Domain/API boundary**: Contact domain model and use cases are owned by Alixar; no Dolibarr types leak into the canonical API
-- **Dolibarr anti-corruption adapter**: Legacy Dolibarr fields (`lastname`, `firstname`, `fk_soc`, `socid`, `socname`, `statut`, `array_options`) are transformed to canonical Alixar fields (`lastName`, `firstName`, `thirdPartyId`, etc.) and legacy fields do not appear in responses
-- **English/Spanish API error internationalization**: RFC 9457 `ProblemDetail` responses with stable error codes (`VALIDATION_REQUIRED`, `CONTACT_NOT_FOUND`, etc.) and localized human-readable text via module-owned translation bundles (`i18n/core/`, `i18n/contact/`)
-- **Real compatibility validation**: Verified against `dolibarr-reference` 24.0.1 through `./bin/check-reference`
+- **Native canonical read**: `GET /api/contacts/{id}` reads the Contact from
+  Alixar-owned PostgreSQL through jOOQ and returns the canonical representation.
+  Positive unknown identifiers return `404 CONTACT_NOT_FOUND`
+- **Native canonical creation**: `POST /api/contacts` persists a standalone or
+  ThirdParty-linked Contact natively and returns `201 Created` with
+  `Location: /api/contacts/{id}` and `{"id": ...}`. `lastName` is required and
+  non-blank; `firstName` and `email` are optional; no additional Contact fields
+  are introduced
+- **Optional native ThirdParty relationship**: `thirdPartyId` is nullable. When
+  present it must reference an existing native ThirdParty; otherwise creation
+  returns `422 CONTACT_INVALID_THIRD_PARTY_REFERENCE`. The database enforces a
+  real restrictive foreign key and never cascades Contact deletion
+- **Domain/API boundary**: Contact domain model and use cases are owned by
+  Alixar; no Dolibarr types, legacy fields or runtime dependency leak into the
+  canonical API or persistence
+- **English/Spanish API error internationalization**: RFC 9457 `ProblemDetail`
+  responses with stable error codes (`VALIDATION_REQUIRED`,
+  `CONTACT_NOT_FOUND`, `CONTACT_INVALID_THIRD_PARTY_REFERENCE`) and localized
+  human-readable text via module-owned translation bundles (`i18n/core/`,
+  `i18n/contact/`)
+- **Reference validation**: `./bin/check-reference` verifies the observed Dolibarr
+  24.0.1 Contact behavior remains reproducible and that Alixar's Contact runtime
+  no longer depends on Dolibarr
+- **Pending**: Contact list, update, delete, canonical business authorization,
+  CSRF hardening for Contact mutations, business audit instrumentation and
+  historical data migration
 
 ### ThirdParty
 
@@ -64,15 +84,18 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   user, password recovery, Personal Access Token, role-based authorization,
   role-administration authorization, audit integrity-core, recovery-token
   audit-authentication, audit-read authorization, persisted
-  audit-configuration and native ThirdParty migrations
+  audit-configuration, native ThirdParty and native Contact migrations
 - **jOOQ runtime**: PostgreSQL dialect and Spring-provided `DSLContext` verified
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Native ThirdParty table**: `third_party` is owned by Alixar, with an
   identity identifier, canonical defaults, storage limits and no legacy column
-  names, Contact foreign key or speculative soft-delete
+  names or speculative soft-delete
+- **Native Contact table**: `contact` is owned by Alixar, with an identity
+  identifier, required non-blank `last_name`, optional `first_name` and `email`,
+  and a nullable restrictive foreign key to `third_party`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 496 deterministic tests and 81 PostgreSQL integration tests remain
+  the 478 deterministic tests and 94 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -244,7 +267,7 @@ Dolibarr is a **temporary compatibility/reference backend** for capabilities sti
 - **Not** Alixar's canonical API
 - **Not** normal Alixar infrastructure
 
-The target Alixar architecture does not treat Dolibarr as normal infrastructure or as part of the canonical domain/API model. The `dolibarr-reference` repository exists solely to reproduce and verify observed legacy behaviour during progressive migration.
+The target Alixar architecture does not treat Dolibarr as normal infrastructure or as part of the canonical domain/API model. The `dolibarr-reference` repository exists solely to reproduce and verify observed legacy behaviour during progressive migration. Contact create/read now use Alixar-owned persistence and have no Dolibarr runtime configuration or adapter.
 
 ## Validation
 
@@ -252,13 +275,15 @@ The target Alixar architecture does not treat Dolibarr as normal infrastructure 
 |--------|---------|--------------|
 | `./bin/test` | Deterministic application/component tests | None (Docker only) |
 | `./bin/check` | Complete self-contained validation of Alixar | None (Docker only) |
-| `./bin/check-reference` | Real Dolibarr compatibility/integration check | Requires sibling `dolibarr-reference` |
+| `./bin/check-reference` | Real Dolibarr reference verification plus native Contact runtime independence | Requires sibling `dolibarr-reference` |
 
 See [Development](development.md) for full validation workflow details.
 
 ## Not yet implemented
 
-- Alixar-owned persistence for migrated ERP capabilities (Contact still backed by Dolibarr adapter)
+- Contact list, update, delete, canonical business authorization, business
+  audit instrumentation and historical data migration; create and read are
+  already native
 - ThirdParty delete with the linked-Contact conflict: create, read, list and
   partial update are implemented in [ThirdParty](thirdparty.md); delete remains
   pending (`THIRDPARTY-002D`)
