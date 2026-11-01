@@ -35,6 +35,7 @@ import java.util.Set;
 import org.springframework.http.MediaType;
 import tools.jackson.databind.JsonNode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -131,6 +132,14 @@ class ThirdPartyController {
     ) {
         ThirdParty thirdParty = thirdPartyService.update(id, toUpdateCommand(request));
         return ResponseEntity.ok(toResponse(thirdParty));
+    }
+
+    @DeleteMapping(ThirdPartyEndpoints.ITEM_RELATIVE_PATH)
+    ResponseEntity<Void> delete(
+        @PathVariable(ThirdPartyEndpoints.ID_PATH_VARIABLE) long id
+    ) {
+        thirdPartyService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     private UpdateThirdPartyCommand toUpdateCommand(JsonNode request) {

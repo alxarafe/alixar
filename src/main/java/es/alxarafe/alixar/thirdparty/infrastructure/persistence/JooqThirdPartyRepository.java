@@ -1,5 +1,6 @@
 package es.alxarafe.alixar.thirdparty.infrastructure.persistence;
 
+import es.alxarafe.alixar.thirdparty.application.ThirdPartyDeleteConflictException;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyListQuery;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyPage;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyRepository;
@@ -7,11 +8,15 @@ import es.alxarafe.alixar.thirdparty.domain.NewThirdParty;
 import es.alxarafe.alixar.thirdparty.domain.ThirdParty;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record;
 import org.jooq.Table;
+import org.postgresql.util.PSQLException;
+import org.postgresql.util.ServerErrorMessage;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import static org.jooq.impl.DSL.field;
 import static org.jooq.impl.DSL.name;
@@ -39,6 +44,13 @@ public class JooqThirdPartyRepository implements ThirdPartyRepository {
     private static final Field<String> EMAIL = field(name("email"), String.class);
     private static final Field<String> PHONE = field(name("phone"), String.class);
     private static final Field<String> WEBSITE = field(name("website"), String.class);
+
+    private static final Set<String> REFERENTIAL_INTEGRITY_SQL_STATES = Set.of(
+        "23503",
+        "23001"
+    );
+    private static final String CONTACT_THIRD_PARTY_FK_CONSTRAINT =
+        "contact_third_party_id_fkey";
 
     private final DSLContext dsl;
 
@@ -126,6 +138,20 @@ public class JooqThirdPartyRepository implements ThirdPartyRepository {
     }
 
     @Override
+    public int deleteById(long id) {
+        try {
+            return dsl.deleteFrom(THIRD_PARTY_TABLE)
+                .where(ID.eq(id))
+                .execute();
+        } catch (DataIntegrityViolationException exception) {
+            if (isContactThirdPartyReferenceViolation(exception)) {
+                throw new ThirdPartyDeleteConflictException();
+            }
+            throw exception;
+        }
+    }
+
+    @Override
     public long create(NewThirdParty thirdParty) {
         return dsl.insertInto(THIRD_PARTY_TABLE)
             .columns(
@@ -162,6 +188,24 @@ public class JooqThirdPartyRepository implements ThirdPartyRepository {
             )
             .returning(ID)
             .fetchOne(ID);
+    }
+
+    static boolean isContactThirdPartyReferenceViolation(Throwable throwable) {
+        Throwable cause = throwable;
+        while (cause != null) {
+            if (cause instanceof PSQLException psqlException
+                && REFERENTIAL_INTEGRITY_SQL_STATES.contains(psqlException.getSQLState())
+                && isContactThirdPartyConstraint(psqlException.getServerErrorMessage())) {
+                return true;
+            }
+            cause = cause.getCause();
+        }
+        return false;
+    }
+
+    private static boolean isContactThirdPartyConstraint(ServerErrorMessage error) {
+        return error != null
+            && CONTACT_THIRD_PARTY_FK_CONSTRAINT.equals(error.getConstraint());
     }
 
     private Condition filterCondition(ThirdPartyListQuery query) {

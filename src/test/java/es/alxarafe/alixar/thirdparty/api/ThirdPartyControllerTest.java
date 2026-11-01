@@ -24,6 +24,7 @@ import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.domain.ApiToken;
 import es.alxarafe.alixar.authentication.domain.User;
 import es.alxarafe.alixar.core.application.ErrorCode;
+import es.alxarafe.alixar.thirdparty.ThirdPartyTestConfig.InMemoryLinkedContactChecker;
 import es.alxarafe.alixar.thirdparty.ThirdPartyTestConfig.InMemoryThirdPartyRepository;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyErrorCode;
 import es.alxarafe.alixar.thirdparty.domain.NewThirdParty;
@@ -47,6 +48,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -92,6 +94,9 @@ class ThirdPartyControllerTest {
     @Autowired
     private InMemoryAuditEventRepository auditEventRepository;
 
+    @Autowired
+    private InMemoryLinkedContactChecker linkedContactChecker;
+
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -111,6 +116,7 @@ class ThirdPartyControllerTest {
         ((TestApiTokenRepository) apiTokenRepository).replaceWith();
         ((TestAuthorizationRepository) authorizationRepository).reset();
         ((InMemoryThirdPartyRepository) thirdPartyRepository).reset();
+        linkedContactChecker.reset();
         auditMode.reset();
         auditEventRepository.seedChain(AuditChain.DEFAULT_CHAIN_ID);
     }
@@ -975,6 +981,213 @@ class ThirdPartyControllerTest {
 
             assertThat(auditEvents())
                 .noneMatch(event -> event.action().equals(AuditAction.THIRD_PARTY_UPDATED.name()));
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void delete_existingUnlinked_returnsNoContentAndRemovesIt() throws Exception {
+        long id = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/" + id)
+                .session(session)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue()))
+            .andExpect(status().isNoContent())
+            .andExpect(content().string(""));
+
+        mockMvc.perform(get(ThirdPartyEndpoints.BASE_PATH + "/" + id).session(session))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(ThirdPartyErrorCode.THIRD_PARTY_NOT_FOUND.name()));
+        assertThat(repository().findById(id)).isEmpty();
+    }
+
+    @Test
+    void delete_missingPositiveIdentifier_returnsNotFound() throws Exception {
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/404")
+                .session(session)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue()))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value(ThirdPartyErrorCode.THIRD_PARTY_NOT_FOUND.name()));
+    }
+
+    @Test
+    void delete_invalidIdentifier_returnsValidationInvalid() throws Exception {
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        for (String id : List.of("0", "-1", "abc")) {
+            mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/" + id)
+                    .session(session)
+                    .cookie(csrfCookie)
+                    .header(CSRF_HEADER, csrfCookie.getValue()))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value(ErrorCode.VALIDATION_INVALID.name()))
+                .andExpect(jsonPath("$.field").value("id"));
+        }
+    }
+
+    @Test
+    void delete_linkedContact_returnsConflictAndPreservesThirdParty() throws Exception {
+        long id = seedThirdParty();
+        linkedContactChecker.link(id);
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/" + id)
+                .session(session)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue()))
+            .andExpect(status().isConflict())
+            .andExpect(jsonPath("$.code")
+                .value(ThirdPartyErrorCode.THIRD_PARTY_DELETE_CONFLICT.name()))
+            .andExpect(jsonPath("$.type")
+                .value("urn:alixar:error:third-party-delete-conflict"));
+
+        assertThat(repository().findById(id)).isPresent();
+    }
+
+    @Test
+    void delete_requiresManagePermissionForSessionsAndBearerTokens() throws Exception {
+        long id = seedThirdParty();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/" + id)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue()))
+            .andExpect(status().isUnauthorized());
+
+        grantOnly(PermissionCodes.THIRD_PARTIES_READ);
+        MockHttpSession readSession = authenticatedSession();
+        mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/" + id)
+                .session(readSession)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue()))
+            .andExpect(status().isForbidden());
+        assertThat(repository().findById(id)).isPresent();
+
+        grantOnly(PermissionCodes.THIRD_PARTIES_MANAGE);
+        MockHttpSession manageSession = authenticatedSession();
+        mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/" + id)
+                .session(manageSession)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue()))
+            .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void delete_sessionRequiresCsrfAndBearerDoesNot() throws Exception {
+        long sessionId = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/" + sessionId)
+                .session(session))
+            .andExpect(status().isForbidden());
+
+        mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/" + sessionId)
+                .session(session)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue()))
+            .andExpect(status().isNoContent());
+
+        long bearerId = seedThirdParty();
+        String rawToken = personalAccessToken();
+        mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/" + bearerId)
+                .header("Authorization", "Bearer " + rawToken))
+            .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void delete_offMode_doesNotAppendAuditEvent() throws Exception {
+        long id = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/" + id)
+                .session(session)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue()))
+            .andExpect(status().isNoContent());
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
+    void delete_basicAndSelectiveModes_appendDeletedEvent() throws Exception {
+        long basicId = seedThirdParty();
+        long selectiveId = seedThirdParty();
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/" + basicId)
+                    .session(session)
+                    .cookie(csrfCookie)
+                    .header(CSRF_HEADER, csrfCookie.getValue()))
+                .andExpect(status().isNoContent());
+            auditMode.setMode(AuditMode.SELECTIVE);
+            mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/" + selectiveId)
+                    .session(session)
+                    .cookie(csrfCookie)
+                    .header(CSRF_HEADER, csrfCookie.getValue()))
+                .andExpect(status().isNoContent());
+
+            assertThat(auditEvents()).hasSize(2).allSatisfy(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.THIRD_PARTY_DELETED.name());
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.THIRD_PARTY.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo(USERNAME);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.toString()).doesNotContain("Acme", "B12345678", "info@example.test");
+            });
+            assertThat(auditEvents())
+                .extracting(AuditEvent::resourceId)
+                .containsExactly(Long.toString(basicId), Long.toString(selectiveId));
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void delete_conflictAndNotFound_doNotAppendAuditEvent() throws Exception {
+        long id = seedThirdParty();
+        linkedContactChecker.link(id);
+        authorizationRepository.assignRoleToUser(ALICE_ID, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/" + id)
+                    .session(session)
+                    .cookie(csrfCookie)
+                    .header(CSRF_HEADER, csrfCookie.getValue()))
+                .andExpect(status().isConflict());
+            mockMvc.perform(delete(ThirdPartyEndpoints.BASE_PATH + "/404")
+                    .session(session)
+                    .cookie(csrfCookie)
+                    .header(CSRF_HEADER, csrfCookie.getValue()))
+                .andExpect(status().isNotFound());
+
+            assertThat(auditEvents())
+                .noneMatch(event -> event.action().equals(AuditAction.THIRD_PARTY_DELETED.name()));
         } finally {
             auditMode.reset();
         }

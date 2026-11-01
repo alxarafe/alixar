@@ -6,6 +6,7 @@ import es.alxarafe.alixar.audit.application.AuditErrorCode;
 import es.alxarafe.alixar.audit.application.AuditUnavailableException;
 import es.alxarafe.alixar.core.application.ErrorCode;
 import es.alxarafe.alixar.thirdparty.application.InvalidThirdPartyDataException;
+import es.alxarafe.alixar.thirdparty.application.ThirdPartyDeleteConflictException;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyNotFoundException;
 import java.net.URI;
 import java.util.Locale;
@@ -27,6 +28,8 @@ class ThirdPartyExceptionHandler {
         URI.create("urn:alixar:error:validation-invalid");
     private static final URI THIRD_PARTY_NOT_FOUND_TYPE =
         URI.create("urn:alixar:error:third-party-not-found");
+    private static final URI THIRD_PARTY_DELETE_CONFLICT_TYPE =
+        URI.create("urn:alixar:error:third-party-delete-conflict");
     private static final URI AUDIT_UNAVAILABLE_TYPE =
         URI.create("urn:alixar:error:audit-unavailable");
 
@@ -44,6 +47,23 @@ class ThirdPartyExceptionHandler {
         );
         problem.setType(THIRD_PARTY_NOT_FOUND_TYPE);
         problem.setTitle(messageSource.getMessage("thirdparty.notFound.title", null, locale));
+        problem.setProperty("code", exception.errorCode().name());
+        return problem;
+    }
+
+    @ExceptionHandler(ThirdPartyDeleteConflictException.class)
+    ProblemDetail handleDeleteConflict(
+        ThirdPartyDeleteConflictException exception,
+        Locale locale
+    ) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.CONFLICT,
+            messageSource.getMessage("thirdparty.deleteConflict", null, locale)
+        );
+        problem.setType(THIRD_PARTY_DELETE_CONFLICT_TYPE);
+        problem.setTitle(
+            messageSource.getMessage("thirdparty.deleteConflict.title", null, locale)
+        );
         problem.setProperty("code", exception.errorCode().name());
         return problem;
     }

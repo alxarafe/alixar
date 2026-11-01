@@ -1,15 +1,18 @@
 package es.alxarafe.alixar.thirdparty;
 
+import es.alxarafe.alixar.thirdparty.application.LinkedContactChecker;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyListQuery;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyPage;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyRepository;
 import es.alxarafe.alixar.thirdparty.domain.NewThirdParty;
 import es.alxarafe.alixar.thirdparty.domain.ThirdParty;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
@@ -21,6 +24,34 @@ public class ThirdPartyTestConfig {
     @Primary
     public InMemoryThirdPartyRepository thirdPartyRepository() {
         return new InMemoryThirdPartyRepository();
+    }
+
+    @Bean
+    @Primary
+    public InMemoryLinkedContactChecker linkedContactChecker() {
+        return new InMemoryLinkedContactChecker();
+    }
+
+    public static class InMemoryLinkedContactChecker implements LinkedContactChecker {
+
+        private final Set<Long> linkedThirdPartyIds = new HashSet<>();
+
+        public void reset() {
+            linkedThirdPartyIds.clear();
+        }
+
+        public void link(long thirdPartyId) {
+            linkedThirdPartyIds.add(thirdPartyId);
+        }
+
+        public void unlink(long thirdPartyId) {
+            linkedThirdPartyIds.remove(thirdPartyId);
+        }
+
+        @Override
+        public boolean existsForThirdParty(long thirdPartyId) {
+            return linkedThirdPartyIds.contains(thirdPartyId);
+        }
     }
 
     public static class InMemoryThirdPartyRepository implements ThirdPartyRepository {
@@ -65,6 +96,11 @@ public class ThirdPartyTestConfig {
         @Override
         public void update(ThirdParty thirdParty) {
             thirdParties.replace(thirdParty.id(), thirdParty);
+        }
+
+        @Override
+        public int deleteById(long id) {
+            return thirdParties.remove(id) == null ? 0 : 1;
         }
 
         @Override

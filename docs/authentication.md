@@ -533,7 +533,7 @@ The initial catalogue contains:
 | `audit.read` | Read audit events (ALIXAR-DEV-003H T1.4a) |
 | `audit.configure` | Configure the audit policy (ALIXAR-DEV-003H T1.5b) |
 | `thirdparties.read` | Read ThirdParty data (THIRDPARTY-002A) |
-| `thirdparties.manage` | Create, update and delete ThirdParty data (THIRDPARTY-002A) |
+| `thirdparties.manage` | Create, update and delete ThirdParty data (THIRDPARTY-002A, THIRDPARTY-002D) |
 
 The built-in role `system-admin` contains all six permissions. The role name
 and code are stable identifiers, but application code authorizes by permission,
