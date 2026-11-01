@@ -8,6 +8,7 @@ import es.alxarafe.alixar.audit.application.AuditChainSource;
 import es.alxarafe.alixar.audit.application.AuditChainVerifier;
 import es.alxarafe.alixar.audit.application.AuditEventDraft;
 import es.alxarafe.alixar.audit.application.AuditEventQuery;
+import es.alxarafe.alixar.audit.application.AuditErrorCode;
 import es.alxarafe.alixar.audit.application.AuditEventRepository;
 import es.alxarafe.alixar.audit.application.AuditHashCalculator;
 import es.alxarafe.alixar.audit.application.AuditMode;
@@ -29,6 +30,7 @@ import es.alxarafe.alixar.audit.infrastructure.ConfiguredReadAuditRecorder;
 import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditConfigurationService;
 import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditReadPolicyService;
 import es.alxarafe.alixar.audit.infrastructure.TransactionalAuditService;
+import es.alxarafe.alixar.authentication.api.AuthenticationEndpoints;
 import es.alxarafe.alixar.authentication.application.ApiTokenRepository;
 import es.alxarafe.alixar.authentication.application.AuthorizationRepository;
 import es.alxarafe.alixar.authentication.application.AuthenticateUserUseCase;
@@ -76,10 +78,12 @@ import es.alxarafe.alixar.contact.domain.Contact;
 import es.alxarafe.alixar.thirdparty.application.CreateThirdPartyCommand;
 import es.alxarafe.alixar.thirdparty.application.FieldUpdate;
 import es.alxarafe.alixar.thirdparty.application.UpdateThirdPartyCommand;
+import es.alxarafe.alixar.thirdparty.application.ThirdPartyDeleteConflictException;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyListQuery;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyPage;
 import es.alxarafe.alixar.thirdparty.application.ThirdPartyRepository;
 import es.alxarafe.alixar.thirdparty.domain.NewThirdParty;
+import es.alxarafe.alixar.thirdparty.api.ThirdPartyEndpoints;
 import es.alxarafe.alixar.thirdparty.domain.ThirdParty;
 import es.alxarafe.alixar.thirdparty.infrastructure.TransactionalThirdPartyService;
 import java.time.Instant;
@@ -95,6 +99,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
+import jakarta.servlet.http.Cookie;
 import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.jooq.DSLContext;
@@ -108,6 +113,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -120,6 +126,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -1360,6 +1367,247 @@ class PersistenceIT {
         assertThat(page.total()).isEqualTo(expectedIds.length);
     }
 
+    @Test
+    void thirdParty_deleteRemovesUnlinkedRowPhysically() {
+        Long id = null;
+        try {
+            id = createThirdPartyForContact("Delete Unlinked Co");
+
+            assertThat(thirdPartyRepository.deleteById(id)).isEqualTo(1);
+            assertThat(thirdPartyRepository.findById(id)).isEmpty();
+            id = null;
+        } finally {
+            deleteThirdParty(id);
+        }
+    }
+
+    @Test
+    void thirdParty_deleteWithLinkedContactsIsRejectedByApplicationPrecheck() {
+        Long thirdPartyId = null;
+        Long firstContactId = null;
+        Long secondContactId = null;
+        try {
+            thirdPartyId = createThirdPartyForContact("Delete Linked Co");
+            firstContactId = contactRepository.create(new CreateContactCommand(
+                "First",
+                null,
+                null,
+                thirdPartyId
+            ));
+            secondContactId = contactRepository.create(new CreateContactCommand(
+                "Second",
+                null,
+                null,
+                thirdPartyId
+            ));
+
+            long targetId = thirdPartyId;
+            assertThatThrownBy(() -> transactionalThirdPartyService.delete(targetId))
+                .isInstanceOf(ThirdPartyDeleteConflictException.class);
+
+            assertThat(thirdPartyRepository.findById(targetId)).isPresent();
+            assertThat(contactRepository.findById(firstContactId).thirdPartyId())
+                .isEqualTo(targetId);
+            assertThat(contactRepository.findById(secondContactId).thirdPartyId())
+                .isEqualTo(targetId);
+        } finally {
+            deleteContact(firstContactId);
+            deleteContact(secondContactId);
+            deleteThirdParty(thirdPartyId);
+        }
+    }
+
+    @Test
+    void thirdParty_deleteTranslatesForeignKeyViolationWithoutBypassingTheConstraint() {
+        Long thirdPartyId = null;
+        Long contactId = null;
+        try {
+            thirdPartyId = createThirdPartyForContact("Delete FK Backstop Co");
+            contactId = contactRepository.create(new CreateContactCommand(
+                "Linked",
+                null,
+                null,
+                thirdPartyId
+            ));
+
+            String constraintName = dsl.fetchOne(
+                "select conname from pg_constraint "
+                    + "where conrelid = 'contact'::regclass "
+                    + "and confrelid = 'third_party'::regclass "
+                    + "and contype = 'f'"
+            ).get("conname", String.class);
+            assertThat(constraintName).isEqualTo("contact_third_party_id_fkey");
+
+            long targetId = thirdPartyId;
+            assertThatThrownBy(() -> thirdPartyRepository.deleteById(targetId))
+                .isInstanceOf(ThirdPartyDeleteConflictException.class);
+
+            assertThat(thirdPartyRepository.findById(targetId)).isPresent();
+            assertThat(contactRepository.findById(contactId).thirdPartyId()).isEqualTo(targetId);
+        } finally {
+            deleteContact(contactId);
+            deleteThirdParty(thirdPartyId);
+        }
+    }
+
+    @Test
+    void thirdParty_deletePropagatesReferentialViolationFromAnotherForeignKey() {
+        Long thirdPartyId = null;
+        String childTable = "thirdparty_delete_other_fk_"
+            + UUID.randomUUID().toString().replace("-", "");
+        try {
+            thirdPartyId = createThirdPartyForContact("Delete Other FK Co");
+            dsl.execute(
+                "create table " + childTable + " ("
+                    + "id bigint generated by default as identity primary key, "
+                    + "third_party_id bigint not null "
+                    + "references third_party(id) on delete restrict)"
+            );
+            dsl.execute(
+                "insert into " + childTable + " (third_party_id) values (?)",
+                thirdPartyId
+            );
+
+            long targetId = thirdPartyId;
+            assertThatThrownBy(() -> thirdPartyRepository.deleteById(targetId))
+                .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class)
+                .isNotInstanceOf(ThirdPartyDeleteConflictException.class);
+
+            assertThat(thirdPartyRepository.findById(targetId)).isPresent();
+        } finally {
+            dsl.execute("drop table if exists " + childTable);
+            deleteThirdParty(thirdPartyId);
+        }
+    }
+
+    @Test
+    void thirdParty_deleteIgnoresContactsLinkedToAnotherThirdParty() {
+        Long deletableId = null;
+        Long retainedId = null;
+        Long contactId = null;
+        try {
+            deletableId = createThirdPartyForContact("Delete Unrelated Co");
+            retainedId = createThirdPartyForContact("Retain Related Co");
+            contactId = contactRepository.create(new CreateContactCommand(
+                "Other",
+                null,
+                null,
+                retainedId
+            ));
+
+            transactionalThirdPartyService.delete(deletableId);
+
+            assertThat(thirdPartyRepository.findById(deletableId)).isEmpty();
+            assertThat(thirdPartyRepository.findById(retainedId)).isPresent();
+            assertThat(contactRepository.findById(contactId).thirdPartyId()).isEqualTo(retainedId);
+            deletableId = null;
+        } finally {
+            deleteContact(contactId);
+            deleteThirdParty(deletableId);
+            deleteThirdParty(retainedId);
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackThirdPartyDelete() {
+        Long id = null;
+        try {
+            id = createThirdPartyForContact("Delete Audit Rollback Co");
+            resetAuditChain();
+            setAuditMode(AuditMode.BASIC);
+            deleteAuditChainHead();
+
+            long targetId = id;
+            assertThatThrownBy(() -> transactionalThirdPartyService.delete(targetId))
+                .isInstanceOf(AuditUnavailableException.class);
+
+            assertThat(thirdPartyRepository.findById(targetId)).isPresent();
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteThirdParty(id);
+        }
+    }
+
+    @Test
+    void basicAuditMode_successfulDeleteAndAuditCommitTogether() {
+        Long id = null;
+        try {
+            id = createThirdPartyForContact("Delete Audited Co");
+            resetAuditChain();
+            setAuditMode(AuditMode.BASIC);
+
+            transactionalThirdPartyService.delete(id);
+
+            assertThat(thirdPartyRepository.findById(id)).isEmpty();
+            var events = dsl.fetch(
+                "select action, resource_type, resource_id, result from audit_event order by sequence"
+            );
+            assertThat(events).hasSize(1);
+            assertThat(events.get(0).get("action", String.class))
+                .isEqualTo(AuditAction.THIRD_PARTY_DELETED.name());
+            assertThat(events.get(0).get("resource_type", String.class))
+                .isEqualTo(AuditResourceType.THIRD_PARTY.name());
+            assertThat(events.get(0).get("resource_id", String.class))
+                .isEqualTo(Long.toString(id));
+            assertThat(events.get(0).get("result", String.class))
+                .isEqualTo(AuditResult.SUCCESS.name());
+            id = null;
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteThirdParty(id);
+        }
+    }
+
+    @Test
+    void thirdPartyDelete_auditFailureReturnsServiceUnavailableAndRollsBack() throws Exception {
+        String suffix = UUID.randomUUID().toString();
+        UUID userId = UUID.randomUUID();
+        String username = "delete-audit-failure-" + suffix;
+        String password = "delete-audit-password-123";
+        Instant now = Instant.now();
+        Long thirdPartyId = null;
+
+        resetAuditChain();
+        setAuditMode(AuditMode.OFF);
+        try {
+            userRepository.create(new User(
+                userId,
+                username,
+                username + "@example.test",
+                passwordHasher.hash(password),
+                true,
+                0,
+                now,
+                now
+            ));
+            authorizationRepository.assignRoleToUser(userId, RoleCodes.SYSTEM_ADMIN);
+            thirdPartyId = createThirdPartyForContact("Delete API Audit Failure Co");
+            MockHttpSession session = authenticatedSession(username, password);
+            Cookie csrfCookie = csrfCookieFromSafeRequest();
+            setAuditMode(AuditMode.BASIC);
+            deleteAuditChainHead();
+
+            long targetId = thirdPartyId;
+            mockMvc().perform(delete(ThirdPartyEndpoints.BASE_PATH + "/" + targetId)
+                    .session(session)
+                    .cookie(csrfCookie)
+                    .header("X-XSRF-TOKEN", csrfCookie.getValue()))
+                .andExpect(status().isServiceUnavailable())
+                .andExpect(jsonPath("$.code").value(AuditErrorCode.AUDIT_UNAVAILABLE.name()));
+
+            mockMvc().perform(get(ThirdPartyEndpoints.BASE_PATH + "/" + targetId).session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(targetId));
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteThirdParty(thirdPartyId);
+            deleteUser(userId);
+        }
+    }
+
     private long createThirdPartyForList(
         String name,
         boolean customer,
@@ -1639,6 +1887,25 @@ class PersistenceIT {
         )).longValue();
         assertThat(result.getResponse().getHeader("Location")).isEqualTo("/api/contacts/" + id);
         return id;
+    }
+
+    private MockHttpSession authenticatedSession(String username, String password) throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        var result = mockMvc().perform(post(AuthenticationEndpoints.LOGIN_PATH)
+                .cookie(csrfCookie)
+                .header("X-XSRF-TOKEN", csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"identifier\":\"" + username + "\",\"password\":\"" + password + "\"}"))
+            .andExpect(status().isOk())
+            .andReturn();
+        return (MockHttpSession) result.getRequest().getSession(false);
+    }
+
+    private Cookie csrfCookieFromSafeRequest() throws Exception {
+        var result = mockMvc().perform(get("/health"))
+            .andExpect(status().isOk())
+            .andReturn();
+        return result.getResponse().getCookie("XSRF-TOKEN");
     }
 
     private MockMvc mockMvc() {

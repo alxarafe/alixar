@@ -6,6 +6,7 @@ import es.alxarafe.alixar.audit.application.AuditTrail;
 import es.alxarafe.alixar.audit.application.AuditUnavailableException;
 import es.alxarafe.alixar.thirdparty.application.CreateThirdPartyCommand;
 import es.alxarafe.alixar.thirdparty.application.CreateThirdPartyUseCase;
+import es.alxarafe.alixar.thirdparty.application.DeleteThirdPartyUseCase;
 import es.alxarafe.alixar.thirdparty.application.UpdateThirdPartyCommand;
 import es.alxarafe.alixar.thirdparty.application.UpdateThirdPartyResult;
 import es.alxarafe.alixar.thirdparty.application.UpdateThirdPartyUseCase;
@@ -16,15 +17,18 @@ public class TransactionalThirdPartyService {
 
     private final CreateThirdPartyUseCase createThirdPartyUseCase;
     private final UpdateThirdPartyUseCase updateThirdPartyUseCase;
+    private final DeleteThirdPartyUseCase deleteThirdPartyUseCase;
     private final AuditTrail auditTrail;
 
     public TransactionalThirdPartyService(
         CreateThirdPartyUseCase createThirdPartyUseCase,
         UpdateThirdPartyUseCase updateThirdPartyUseCase,
+        DeleteThirdPartyUseCase deleteThirdPartyUseCase,
         AuditTrail auditTrail
     ) {
         this.createThirdPartyUseCase = createThirdPartyUseCase;
         this.updateThirdPartyUseCase = updateThirdPartyUseCase;
+        this.deleteThirdPartyUseCase = deleteThirdPartyUseCase;
         this.auditTrail = auditTrail;
     }
 
@@ -42,6 +46,12 @@ public class TransactionalThirdPartyService {
             recordAudit(AuditAction.THIRD_PARTY_UPDATED, id);
         }
         return result.thirdParty();
+    }
+
+    @Transactional
+    public void delete(long id) {
+        deleteThirdPartyUseCase.execute(id);
+        recordAudit(AuditAction.THIRD_PARTY_DELETED, id);
     }
 
     private void recordAudit(AuditAction action, long id) {

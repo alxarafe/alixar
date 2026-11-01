@@ -24,7 +24,8 @@ persisted read-policy table and the administrative read-policy API, including
 mandatory rule-change events. T1.7b appends `READ_QUERY` and `READ_OBJECT`
 events for the administrative `USER` and `ROLE` read endpoints. THIRDPARTY-002A
 adds `THIRD_PARTY_CREATED` as the first business-capability mutation event, and
-THIRDPARTY-002C adds `THIRD_PARTY_UPDATED` for real partial updates. Event
+THIRDPARTY-002C adds `THIRD_PARTY_UPDATED` for real partial updates, and
+THIRDPARTY-002D adds `THIRD_PARTY_DELETED` for successful physical deletes. Event
 detail, retention, archive and checkpoints remain out of scope.
 
 ## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b, T1.5a, T1.5b, T1.6a, T1.6b, T1.7a and T1.7b)
@@ -344,12 +345,13 @@ The following operations are instrumented atomically under `BASIC` and
 | Role deletion | `ROLE_DELETED` | `ROLE` / internal role id | `SUCCESS` |
 | ThirdParty creation | `THIRD_PARTY_CREATED` | `THIRD_PARTY` / canonical third-party id | `SUCCESS` |
 | ThirdParty partial update with real change | `THIRD_PARTY_UPDATED` | `THIRD_PARTY` / canonical third-party id | `SUCCESS` |
+| ThirdParty successful physical delete | `THIRD_PARTY_DELETED` | `THIRD_PARTY` / canonical third-party id | `SUCCESS` |
 
 The ThirdParty create event is the first business-capability event. ThirdParty
 mutation events record only the canonical identifier, action, resource type and
 result; never the ThirdParty object, fiscal identifiers, address or contact
-data. A no-op partial update records no event. ThirdParty reads are not audited
-in the baseline.
+data. A no-op partial update records no event, and rejected or failed deletes
+record no event. ThirdParty reads are not audited in the baseline.
 
 ### Mandatory policy-change events (T1.5b and T1.7a)
 

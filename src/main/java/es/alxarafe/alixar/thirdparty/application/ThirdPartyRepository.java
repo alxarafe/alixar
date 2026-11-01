@@ -12,5 +12,7 @@ public interface ThirdPartyRepository {
 
     void update(ThirdParty thirdParty);
 
+    int deleteById(long id);
+
     ThirdPartyPage findPage(ThirdPartyListQuery query);
 }

@@ -253,7 +253,7 @@ characterized**. It is not an implementation claim.
 
 | Domain | Evidence source | Legacy evidence | Seed status |
 |--------|-----------------|-----------------|-------------|
-| Third Parties | API inventory `thirdparties`; `THIRDPARTY-REF-001` | Basic lifecycle, classification, supplier flag, status and Contact link characterized; fiscal identity partially observed; broad sub-resources only discovered | Seeded; native create/read/list/update implemented; delete pending |
+| Third Parties | API inventory `thirdparties`; `THIRDPARTY-REF-001` | Basic lifecycle, classification, supplier flag, status and Contact link characterized; fiscal identity partially observed; broad sub-resources only discovered | Seeded; native create/read/list/update/delete implemented |
 | Contacts | API inventory `contacts`; `CONTACT-REF-001` | `CHARACTERIZED` for basic lifecycle; other sub-resources discovered | Seeded; native canonical create/read implemented |
 | Users and groups (Dolibarr) | API inventory `users` | `PENDING` | Discovered only; **not** equivalent to Alixar authentication users/roles |
 | Documents | API inventory `documents` | `PENDING` | Discovered only |
@@ -298,7 +298,7 @@ inventory of all Dolibarr.
 | `TP-READ` | Third Parties — read by canonical identifier | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `ADAPT` | `IN_PROGRESS` | `TP-BASIC` |
 | `TP-LIST` | Third Parties — list, filters and pagination | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `ADAPT` | `IN_PROGRESS` | `TP-BASIC` |
 | `TP-UPDATE` | Third Parties — partial update | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `ADAPT` | `DONE` | `TP-BASIC` |
-| `TP-DELETE` | Third Parties — delete and linked-Contact conflict | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `ADAPT` | `DECIDED` | `TP-BASIC`; `TP-CONTACT-LINK` |
+| `TP-DELETE` | Third Parties — delete and linked-Contact conflict | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `ADAPT` | `DONE` | `TP-BASIC`; `TP-CONTACT-LINK` |
 | `TP-CLASS` | Third Parties — customer/prospect classification (`client` 0/1/2/3) | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `ADAPT` | `DECIDED` | `TP-BASIC` |
 | `TP-SUPPLIER` | Third Parties — supplier classification (`fournisseur`) | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `ADAPT` | `DECIDED` | `TP-BASIC`; supplier-domain decision |
 | `TP-STATUS` | Third Parties — active/inactive status | `THIRDPARTY-REF-001` | `CHARACTERIZED` | `ADAPT` | `DECIDED` | `TP-BASIC` |
@@ -339,18 +339,18 @@ inventory of all Dolibarr.
 
 | ID | Alixar domain/app | Persistence | Canonical API | Authorization | Audit | Solucar | Data migration | Validation | Notes / gaps |
 |----|-------------------|-------------|---------------|---------------|-------|---------|----------------|------------|--------------|
-| `TP-BASIC` | `PARTIAL` | `DONE` | `PARTIAL` | `PARTIAL` | `PARTIAL` | `PENDING` | `PENDING` | `PARTIAL` | Aggregate: create/read implemented natively in `THIRDPARTY-002A`; list implemented in `THIRDPARTY-002B`; partial update implemented in `THIRDPARTY-002C`; delete pending |
+| `TP-BASIC` | `PARTIAL` | `DONE` | `PARTIAL` | `PARTIAL` | `PARTIAL` | `PENDING` | `PENDING` | `PARTIAL` | Aggregate: create/read implemented natively in `THIRDPARTY-002A`; list implemented in `THIRDPARTY-002B`; partial update implemented in `THIRDPARTY-002C`; delete implemented in `THIRDPARTY-002D`; Solucar and data migration pending |
 | `TP-CREATE` | `DONE` | `DONE` | `DONE` | `DONE` | `DONE` | `PENDING` | `PENDING` | `PARTIAL` | `POST /api/thirdparties`, `201` + `Location` + `{"id":...}`, `THIRD_PARTY_CREATED` audit; Solucar and data migration pending |
 | `TP-READ` | `DONE` | `DONE` | `DONE` | `DONE` | `N/A` | `PENDING` | `PENDING` | `PARTIAL` | `GET /api/thirdparties/{id}` with full canonical representation; reads are not audited in the baseline |
 | `TP-LIST` | `DONE` | `DONE` | `DONE` | `DONE` | `N/A` | `PENDING` | `PENDING` | `DONE` | `GET /api/thirdparties` with 0-based `page`/`size`, `id ASC`, exact boolean filters combined with `AND`, filtered `total`, and no read audit; Solucar and data migration pending |
 | `TP-UPDATE` | `DONE` | `DONE` | `DONE` | `DONE` | `DONE` | `PENDING` | `PENDING` | `DONE` | `PATCH /api/thirdparties/{id}` with `application/merge-patch+json`, unknown members rejected, null handling, no-op records no event, `THIRD_PARTY_UPDATED` audit; Solucar and data migration pending |
-| `TP-DELETE` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Contract decided: physical delete, `409 THIRD_PARTY_DELETE_CONFLICT` with linked Contacts; implementation pending (`THIRDPARTY-002D`) |
+| `TP-DELETE` | `DONE` | `DONE` | `DONE` | `DONE` | `DONE` | `PENDING` | `PENDING` | `DONE` | `DELETE /api/thirdparties/{id}`, `204` on success, `409 THIRD_PARTY_DELETE_CONFLICT` with linked Contacts, `THIRD_PARTY_DELETED` audit; Solucar and data migration pending |
 | `TP-CLASS` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Decided as independent `customer` and `prospect` booleans; legacy `0/1/2/3` maps losslessly |
 | `TP-SUPPLIER` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Decided as an independent `supplier` boolean, not a procurement module |
 | `TP-STATUS` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Decided as a single `active` boolean; legacy `status`/`statut` names are not exposed |
 | `TP-FISCAL` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Basic `taxIdentifier` and `intraCommunityVatNumber` decided without format validation; advanced rules pending |
 | `TP-FISCAL-ADVANCED` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | VIES, ES format/check digit, uniqueness, subjection and local taxes remain undecided |
-| `TP-CONTACT-LINK` | `DONE` | `DONE` | `DONE` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PARTIAL` | Optional `thirdPartyId` with native restrictive FK and `422` validation; linked Contacts block ThirdParty deletion at the database level; canonical `409` delete conflict remains pending (`THIRDPARTY-002D`) |
+| `TP-CONTACT-LINK` | `DONE` | `DONE` | `DONE` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PARTIAL` | Optional `thirdPartyId` with native restrictive FK and `422` validation; linked Contacts block ThirdParty deletion through the canonical `409` conflict and the database backstop |
 | `TP-ALIAS` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `name_alias` observed but deferred from the first canonical contract |
 | `TP-ADDRESS` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Basic flat address/contact fields are part of `TP-BASIC`; structured addresses and geography pending |
 | `TP-BANK` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Discovered from legacy endpoints only |
@@ -430,16 +430,16 @@ read, both permissions, and the atomic `THIRD_PARTY_CREATED` event.
 `THIRDPARTY-002B` implements the canonical list with pagination, deterministic
 `id ASC` ordering and exact boolean filters. `THIRDPARTY-002C` implements the
 canonical partial update with presence-aware merge-patch semantics, no-op
-detection and atomic `THIRD_PARTY_UPDATED` audit. Delete remains pending. The
-aggregate state is therefore:
+detection and atomic `THIRD_PARTY_UPDATED` audit. `THIRDPARTY-002D` implements
+the physical delete, the canonical linked-Contact `409` conflict and the atomic
+`THIRD_PARTY_DELETED` event. The aggregate state is therefore:
 
 ```text
 ThirdParty = IN_PROGRESS
 ```
 
-The `TP-BASIC` aggregate is `IN_PROGRESS` because `TP-CREATE`, `TP-READ`,
-`TP-LIST` and `TP-UPDATE` are implemented while `TP-DELETE` remains pending, and
-all implemented capabilities still lack the Solucar dimension and historical
+The `TP-BASIC` aggregate is `IN_PROGRESS` because its backend capabilities are
+implemented but all of them still lack the Solucar dimension and historical
 data migration. `TP-FISCAL` evidence remains `PARTIAL` because
 advanced fiscal/tax behavior was not characterized, and
 `TP-FISCAL-ADVANCED`, `TP-ALIAS` and `TP-ADDRESS` remain pending.
@@ -490,7 +490,7 @@ The Contact ↔ ThirdParty relationship is tracked separately as
 `TP-CONTACT-LINK`; its migration decision is `ADAPT`: the reference is optional,
 the native database uses `ON DELETE RESTRICT`, and no cascade is reproduced.
 The association and read dimensions are implemented; the canonical `409`
-ThirdParty deletion conflict remains pending under `THIRDPARTY-002D`.
+ThirdParty deletion conflict is implemented under `THIRDPARTY-002D`.
 
 Evidence: `dolibarr-reference: reference/characterization/CONTACT-REF-001-contact-lifecycle.md`;
 Alixar `docs/status.md` and `src/main/java/es/alxarafe/alixar/contact/`;
@@ -577,12 +577,12 @@ No business permission is invented in this document.
   do not, and no exclusion is added for `/api/thirdparties/**`.
 - The audit platform exists, but business instrumentation is only `DONE` when a
   concrete capability actually appends its events.
-- ThirdParty creation and update audit are implemented: `THIRD_PARTY_CREATED`
-  and `THIRD_PARTY_UPDATED` are appended atomically with their mutations and
-  record only the canonical identifier; no-op updates record no event.
-  `THIRD_PARTY_DELETED` remains decided but not implemented. ThirdParty reads
-  are not part of the baseline and `SELECTIVE` read auditing for `THIRD_PARTY`
-  is not implemented. Contact business audit instrumentation is `PENDING`.
+- ThirdParty mutation audit is implemented: `THIRD_PARTY_CREATED`,
+  `THIRD_PARTY_UPDATED` and `THIRD_PARTY_DELETED` are appended atomically with
+  their mutations and record only the canonical identifier; no-op updates and
+  rejected deletes record no event. ThirdParty reads are not part of the
+  baseline and `SELECTIVE` read auditing for `THIRD_PARTY` is not implemented.
+  Contact business audit instrumentation is `PENDING`.
 - Do not mark a capability audited merely because the audit infrastructure
   exists.
 
@@ -649,7 +649,7 @@ These decisions are recorded in [ThirdParty](thirdparty.md):
 | Active state | Single `active` boolean |
 | Contact → ThirdParty deletion semantics | No cascade; linked Contacts block deletion |
 | ThirdParty authorization model | `thirdparties.read` and `thirdparties.manage` (implemented and seeded in `THIRDPARTY-002A`) |
-| ThirdParty mutation audit | `THIRD_PARTY_CREATED` implemented in `THIRDPARTY-002A`; `THIRD_PARTY_UPDATED` implemented in `THIRDPARTY-002C`; `THIRD_PARTY_DELETED` still pending |
+| ThirdParty mutation audit | `THIRD_PARTY_CREATED` implemented in `THIRDPARTY-002A`; `THIRD_PARTY_UPDATED` implemented in `THIRDPARTY-002C`; `THIRD_PARTY_DELETED` implemented in `THIRDPARTY-002D` |
 
 ### 16.2 Still open
 
@@ -716,10 +716,10 @@ Platform foundation = largely DONE, with the exceptions in section 11
 No legacy business capability = MIGRATED
 ```
 
-The ThirdParty aggregate refers to the basic lifecycle. Create, read, list and
-partial update are implemented natively, while delete remains pending;
-`TP-FISCAL` evidence remains `PARTIAL`, and advanced fiscal, alias, structured
-address/geography and data migration remain pending. Contact create/read are
+The ThirdParty aggregate refers to the basic lifecycle. Create, read, list,
+partial update and delete are implemented natively; `TP-FISCAL` evidence remains
+`PARTIAL`, and advanced fiscal, alias, structured address/geography, Solucar UI
+and data migration remain pending. Contact create/read are
 implemented natively with an optional restrictive ThirdParty relationship;
 list, update, delete, authorization, audit and historical data migration remain
 pending.
@@ -727,11 +727,12 @@ pending.
 No arbitrary percentages are used. Progress is expressed only through the
 controlled states and the dimensions in section 8.
 
-The next ThirdParty implementation gate is `THIRDPARTY-002D` for delete,
-including the canonical linked-Contact conflict. The next Contact lifecycle
-decision must cover list, update, delete, canonical authorization, audit and
-historical data migration; native create/read persistence and the restrictive
-ThirdParty relationship are already implemented.
+With `THIRDPARTY-002D` the canonical ThirdParty lifecycle backend is complete;
+the next gates are the Solucar UI and historical data migration. The next
+Contact lifecycle decision must cover list, update, delete, canonical
+authorization, audit and historical data migration; native create/read
+persistence and the restrictive ThirdParty relationship are already
+implemented.
 
 ---
 

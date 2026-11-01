@@ -38,10 +38,11 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - Real Dolibarr reference verification against `dolibarr-reference` 24.0.1,
   including confirmation that the Contact runtime does not depend on Dolibarr
 - Canonical ThirdParty creation (`POST /api/thirdparties`), read
-  (`GET /api/thirdparties/{id}`) and canonical list with filters and pagination
-  (`GET /api/thirdparties`) with native Alixar PostgreSQL/jOOQ persistence,
-  `thirdparties.read` / `thirdparties.manage` authorization and atomic
-  `THIRD_PARTY_CREATED` audit
+  (`GET /api/thirdparties/{id}`), canonical list with filters and pagination
+  (`GET /api/thirdparties`), partial update (`PATCH /api/thirdparties/{id}`) and
+  physical delete with linked-Contact conflict (`DELETE /api/thirdparties/{id}`)
+  with native Alixar PostgreSQL/jOOQ persistence, `thirdparties.read` /
+  `thirdparties.manage` authorization and atomic ThirdParty mutation audit
 - PostgreSQL 18.6 persistence infrastructure
 - Flyway migration infrastructure
 - jOOQ runtime infrastructure (PostgreSQL dialect)
@@ -101,9 +102,6 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   role reads, CSRF-specific audit events, the PAT identifier as actor, audit
   event detail, retention, purge, archive and signed checkpoints
 
-- ThirdParty delete with the linked-Contact conflict (`THIRDPARTY-002D`);
-  create, read, list and partial update are implemented in
-  [ThirdParty](thirdparty.md)
 - ThirdParty Solucar UI and historical data migration
 - Contact list, update and delete, canonical business authorization, business
   audit instrumentation and historical data migration; native create/read
@@ -229,8 +227,9 @@ returning. The
 instrumented set includes administrative user lifecycle operations,
 self-service username and password changes, completed password recovery,
 Personal Access Token creation and revocation, role creation, rename,
-permission replacement and deletion, and ThirdParty creation
-(`THIRD_PARTY_CREATED`, recording only the canonical identifier). The application
+permission replacement and deletion, and ThirdParty creation, real update and
+successful physical delete (`THIRD_PARTY_CREATED`, `THIRD_PARTY_UPDATED`,
+`THIRD_PARTY_DELETED`, recording only the canonical identifier). The application
 layer depends on an
 `AuditTrail` port and an `AuditPolicyProvider` port, not on environment variables,
 Spring Security or jOOQ. Authenticated operations resolve their actor

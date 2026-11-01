@@ -35,9 +35,10 @@ canonical create and read operations, their permissions and the create audit
 event. `THIRDPARTY-002B` provides the canonical list with pagination and exact
 boolean filters. `THIRDPARTY-002C` provides the canonical partial update with
 presence-aware merge-patch semantics, no-op detection and the update audit event.
-Delete remains a future slice (`THIRDPARTY-002D`). Native Contact create/read
-persistence and the optional restrictive Contact → ThirdParty relationship are
-implemented by `CONTACT-002`.
+`THIRDPARTY-002D` provides the canonical physical delete, the linked-Contact
+conflict and the delete audit event. Native Contact create/read persistence and
+the optional restrictive Contact → ThirdParty relationship are implemented by
+`CONTACT-002`.
 
 ## 2. Scope
 
@@ -683,9 +684,9 @@ returns the full canonical representation. A no-op performs no `UPDATE` and
 records no audit event. A real change appends `THIRD_PARTY_UPDATED` atomically;
 an append failure returns `503 AUDIT_UNAVAILABLE` and rolls back the update.
 
-Delete and the canonical linked-Contact conflict remain outside this slice.
-Native Contact persistence and the restrictive relationship are implemented by
-`CONTACT-002`.
+Delete and the canonical linked-Contact conflict are implemented by
+`THIRDPARTY-002D` (section 17.4). Native Contact persistence and the restrictive
+relationship are implemented by `CONTACT-002`.
 
 ---
 
@@ -724,7 +725,7 @@ evidence:
 
 - it avoids accidental loss of Contact data;
 - it keeps deletion explicit;
-- it prepares a future restrictive database foreign key;
+- it is backed by the restrictive database foreign key;
 - it does not require a cascading operation that is not yet justified.
 
 Deleting a Contact never deletes its ThirdParty.
@@ -734,6 +735,17 @@ Deleting a Contact never deletes its ThirdParty.
 Future modules (orders, invoices, proposals, projects, etc.) may add their own
 restrictive deletion rules and conflict errors. They are outside this contract
 and are not simulated now.
+
+### 17.4 Implementation status
+
+`THIRDPARTY-002D` implements `DELETE /api/thirdparties/{id}` as a physical
+delete protected by `thirdparties.manage` with CSRF required for session
+requests. The application checks for linked Contacts before deleting and
+returns `409 THIRD_PARTY_DELETE_CONFLICT` without touching the row. A successful
+delete returns `204` with no body and appends `THIRD_PARTY_DELETED` atomically;
+an append failure under `BASIC` or `SELECTIVE` returns `503 AUDIT_UNAVAILABLE`
+and rolls back the delete. The restrictive foreign key remains the database
+backstop for a concurrent Contact link.
 
 ---
 
@@ -761,8 +773,8 @@ The native `contact` table implements a real nullable foreign key
 `contact.third_party_id → third_party(id)` with `ON DELETE RESTRICT`; it never
 cascades. Contact creation pre-validates the reference and returns
 `422 CONTACT_INVALID_THIRD_PARTY_REFERENCE` when the ThirdParty does not exist.
-The canonical `409 THIRD_PARTY_DELETE_CONFLICT` response remains part of the
-pending `THIRDPARTY-002D` delete slice.
+The canonical `409 THIRD_PARTY_DELETE_CONFLICT` response is implemented by
+`THIRDPARTY-002D`.
 
 The canonical Contact representation does not yet embed a ThirdParty object or
 denormalized ThirdParty name. `thirdPartyId` remains the canonical reference.
@@ -919,17 +931,19 @@ Implemented in THIRDPARTY-002A:
 Implemented in THIRDPARTY-002C:
   THIRD_PARTY_UPDATED, resource type THIRD_PARTY, result SUCCESS
   appended atomically with real updates; no-op updates record no event
+Implemented in THIRDPARTY-002D:
+  THIRD_PARTY_DELETED, resource type THIRD_PARTY, result SUCCESS
+  appended atomically with the successful delete
 Not implemented yet:
-  THIRD_PARTY_DELETED (future delete slice)
   ThirdParty read auditing (not part of the baseline)
 ```
 
 The ThirdParty mutation events record only the canonical identifier, action,
 resource type and result. They never record the full object, fiscal
 identifiers, address, email or other business payload. Under `OFF` no
-ThirdParty event is appended; under `BASIC` and `SELECTIVE` create and real
-update events are mandatory and fail-closed, so an audit append failure rolls
-back the business change and returns `503 AUDIT_UNAVAILABLE`.
+ThirdParty event is appended; under `BASIC` and `SELECTIVE` create, real update
+and successful delete events are mandatory and fail-closed, so an audit append
+failure rolls back the business change and returns `503 AUDIT_UNAVAILABLE`.
 
 The migration master tracks the aggregate and its sub-capabilities separately
 and keeps `TP-BASIC` as `IN_PROGRESS`.
@@ -1138,6 +1152,6 @@ THIRDPARTY-001  = decisions only (complete)
 THIRDPARTY-002A = native persistence + create + read + RBAC + create audit (implemented)
 THIRDPARTY-002B = list + filters + pagination (implemented)
 THIRDPARTY-002C = partial update (implemented)
-THIRDPARTY-002D = delete with linked-Contact conflict (pending)
+THIRDPARTY-002D = delete with linked-Contact conflict (implemented)
 CONTACT-002     = native Contact create/read persistence + restrictive relationship (implemented)
 ```

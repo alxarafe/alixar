@@ -62,19 +62,28 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
 - **Strict JSON contract**: Unknown JSON members and invalid member types are
   rejected with `400 VALIDATION_INVALID`; missing, `null` or blank `name`
   returns `400 VALIDATION_REQUIRED`
+- **Native canonical delete**: `DELETE /api/thirdparties/{id}` performs a
+  physical delete and returns `204 No Content` with no body. Positive unknown
+  identifiers return `404 THIRD_PARTY_NOT_FOUND`; zero, negative and
+  non-numeric identifiers return `400 VALIDATION_INVALID`. A ThirdParty with
+  linked Contacts is not deleted and returns
+  `409 THIRD_PARTY_DELETE_CONFLICT`; the restrictive database foreign key is
+  the concurrency backstop
 - **Authorization**: `thirdparties.read` protects reads and listing;
-  `thirdparties.manage` protects creation and partial update; both are seeded
-  and assigned to `system-admin`. They apply identically to session and Bearer
-  authentication
-- **CSRF**: Session-authenticated create and PATCH require a valid CSRF token;
-  Bearer authentication does not. ThirdParty is not added to any CSRF exclusion
-- **Audit**: `THIRD_PARTY_CREATED` and `THIRD_PARTY_UPDATED` (`THIRD_PARTY` /
-  `SUCCESS`) are appended atomically with creation and real updates under
-  `BASIC` and `SELECTIVE`, recording only the canonical identifier. A no-op
-  PATCH records no event. An append failure returns `503 AUDIT_UNAVAILABLE` and
-  rolls back the mutation. Reads and listing are not audited
-- **Pending**: delete with linked-Contact conflict, Solucar UI and historical
-  data migration
+  `thirdparties.manage` protects creation, partial update and deletion; both are
+  seeded and assigned to `system-admin`. They apply identically to session and
+  Bearer authentication
+- **CSRF**: Session-authenticated create, PATCH and DELETE require a valid CSRF
+  token; Bearer authentication does not. ThirdParty is not added to any CSRF
+  exclusion
+- **Audit**: `THIRD_PARTY_CREATED`, `THIRD_PARTY_UPDATED` and
+  `THIRD_PARTY_DELETED` (`THIRD_PARTY` / `SUCCESS`) are appended atomically with
+  creation, real updates and successful deletes under `BASIC` and `SELECTIVE`,
+  recording only the canonical identifier. A no-op PATCH and rejected or
+  failed deletes record no event. An append failure returns
+  `503 AUDIT_UNAVAILABLE` and rolls back the mutation. Reads and listing are
+  not audited
+- **Pending**: Solucar UI and historical data migration
 
 ### Persistence Infrastructure
 
@@ -208,9 +217,10 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   internal role UUID, not the role code. Revoking an already revoked PAT and
   no-op role rename/permission replacement record no event. Self-revocation is
   audited during the current request with `PAT` as the actor authentication type.
-  THIRDPARTY-002A adds `THIRD_PARTY_CREATED`, and THIRDPARTY-002C adds
-  `THIRD_PARTY_UPDATED` for real updates, with `THIRD_PARTY` as resource type
-  and only the canonical identifier as resource id. The `SUCCESS` event is
+  THIRDPARTY-002A adds `THIRD_PARTY_CREATED`, THIRDPARTY-002C adds
+  `THIRD_PARTY_UPDATED` for real updates, and THIRDPARTY-002D adds
+  `THIRD_PARTY_DELETED` for successful deletes, with `THIRD_PARTY` as resource
+  type and only the canonical identifier as resource id. The `SUCCESS` event is
   atomic with the business transaction and fail-closed; `SESSION` and `PAT`
   actors are distinguished for authenticated operations. `BASIC` and
   `SELECTIVE` still cover only explicitly instrumented operations.
@@ -284,9 +294,6 @@ See [Development](development.md) for full validation workflow details.
 - Contact list, update, delete, canonical business authorization, business
   audit instrumentation and historical data migration; create and read are
   already native
-- ThirdParty delete with the linked-Contact conflict: create, read, list and
-  partial update are implemented in [ThirdParty](thirdparty.md); delete remains
-  pending (`THIRDPARTY-002D`)
 - ThirdParty Solucar UI and historical data migration
 - Role groups, PAT scopes and additional business authorization beyond
   `users.manage`, `roles.manage`, `audit.read`, `audit.configure`,
