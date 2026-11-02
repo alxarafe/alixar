@@ -187,8 +187,11 @@ public class SecurityConfiguration {
                     .hasAuthority(PermissionCodes.THIRD_PARTIES_MANAGE)
                 .requestMatchers(HttpMethod.DELETE, ThirdPartyEndpoints.ITEM_PATH_PATTERN)
                     .hasAuthority(PermissionCodes.THIRD_PARTIES_MANAGE)
-                .requestMatchers(HttpMethod.GET, ContactEndpoints.ITEM_PATH_PATTERN)
-                    .hasAuthority(PermissionCodes.CONTACTS_READ)
+                .requestMatchers(
+                    HttpMethod.GET,
+                    ContactEndpoints.BASE_PATH,
+                    ContactEndpoints.ITEM_PATH_PATTERN
+                ).hasAuthority(PermissionCodes.CONTACTS_READ)
                 .requestMatchers(HttpMethod.POST, ContactEndpoints.BASE_PATH)
                     .hasAuthority(PermissionCodes.CONTACTS_MANAGE)
                 .requestMatchers(HttpMethod.GET, AuditEndpoints.VERIFICATION_PATH)

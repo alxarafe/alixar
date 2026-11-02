@@ -69,7 +69,9 @@ import es.alxarafe.alixar.authentication.infrastructure.TransactionalAdminRoleSe
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalApiTokenService;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalPasswordRecovery;
 import es.alxarafe.alixar.authentication.infrastructure.TransactionalUserSelfService;
+import es.alxarafe.alixar.contact.application.ContactListQuery;
 import es.alxarafe.alixar.contact.application.ContactNotFoundException;
+import es.alxarafe.alixar.contact.application.ContactPage;
 import es.alxarafe.alixar.contact.application.ContactRepository;
 import es.alxarafe.alixar.contact.application.CreateContactCommand;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
@@ -1805,6 +1807,136 @@ class PersistenceIT {
     void contact_findByIdMissing_throwsContactNotFoundException() {
         assertThatThrownBy(() -> contactRepository.findById(Long.MAX_VALUE))
             .isInstanceOf(ContactNotFoundException.class);
+    }
+
+    @Test
+    void contact_list_emptyReturnsCanonicalEmptyPage() {
+        clearThirdParties();
+        try {
+            ContactPage page = contactRepository.findPage(
+                ContactListQuery.of(null, null, null)
+            );
+
+            assertThat(page.items()).isEmpty();
+            assertThat(page.page()).isZero();
+            assertThat(page.size()).isEqualTo(20);
+            assertThat(page.total()).isZero();
+        } finally {
+            clearThirdParties();
+        }
+    }
+
+    @Test
+    void contact_list_ordersByIdAscendingAndPaginatesWithFilteredTotal() {
+        clearThirdParties();
+        try {
+            long first = contactRepository.create(new CreateContactCommand(
+                "List First", null, null, null
+            ));
+            long second = contactRepository.create(new CreateContactCommand(
+                "List Second", null, null, null
+            ));
+            long third = contactRepository.create(new CreateContactCommand(
+                "List Third", null, null, null
+            ));
+
+            ContactPage page0 = contactRepository.findPage(
+                ContactListQuery.of(0, 2, null)
+            );
+            assertThat(page0.page()).isZero();
+            assertThat(page0.size()).isEqualTo(2);
+            assertThat(page0.total()).isEqualTo(3);
+            assertThat(page0.items()).extracting(Contact::id)
+                .containsExactly(first, second);
+
+            ContactPage page1 = contactRepository.findPage(
+                ContactListQuery.of(1, 2, null)
+            );
+            assertThat(page1.page()).isEqualTo(1);
+            assertThat(page1.size()).isEqualTo(2);
+            assertThat(page1.total()).isEqualTo(3);
+            assertThat(page1.items()).extracting(Contact::id)
+                .containsExactly(third);
+            assertThat(first).isLessThan(second).isLessThan(third);
+        } finally {
+            clearThirdParties();
+        }
+    }
+
+    @Test
+    void contact_list_filtersByExactThirdPartyIdWithoutPriorExistenceCheck() {
+        clearThirdParties();
+        try {
+            long firstThirdParty = createThirdPartyForContact("Contact List Co One");
+            long secondThirdParty = createThirdPartyForContact("Contact List Co Two");
+            long emptyThirdParty = createThirdPartyForContact("Contact List Co Empty");
+            long first = contactRepository.create(new CreateContactCommand(
+                "First", null, null, firstThirdParty
+            ));
+            long second = contactRepository.create(new CreateContactCommand(
+                "Second", null, null, firstThirdParty
+            ));
+            long third = contactRepository.create(new CreateContactCommand(
+                "Third", null, null, secondThirdParty
+            ));
+            long standalone = contactRepository.create(new CreateContactCommand(
+                "Standalone", null, null, null
+            ));
+
+            ContactPage page = contactRepository.findPage(
+                ContactListQuery.of(0, 100, firstThirdParty)
+            );
+            assertThat(page.items()).extracting(Contact::id)
+                .containsExactly(first, second);
+            assertThat(page.items()).extracting(Contact::thirdPartyId)
+                .containsOnly(firstThirdParty);
+            assertThat(page.total()).isEqualTo(2);
+            assertThat(page.items()).extracting(Contact::id)
+                .doesNotContain(third, standalone);
+
+            ContactPage emptyPage = contactRepository.findPage(
+                ContactListQuery.of(0, 100, emptyThirdParty)
+            );
+            assertThat(emptyPage.items()).isEmpty();
+            assertThat(emptyPage.total()).isZero();
+        } finally {
+            clearThirdParties();
+        }
+    }
+
+    @Test
+    void contactApi_listsFilteredContactsFromPostgres() throws Exception {
+        ContactApiAuth auth = contactApiAuth("contact-api-list");
+        Long thirdPartyId = null;
+        try {
+            thirdPartyId = createThirdPartyForContact("API Contact List Co");
+            long first = contactRepository.create(new CreateContactCommand(
+                "First", "Ana", "ana@example.test", thirdPartyId
+            ));
+            long second = contactRepository.create(new CreateContactCommand(
+                "Second", "Luis", "luis@example.test", thirdPartyId
+            ));
+            contactRepository.create(new CreateContactCommand(
+                "Standalone", null, null, null
+            ));
+
+            mockMvc().perform(get("/api/contacts")
+                    .param("thirdPartyId", thirdPartyId.toString())
+                    .param("page", "0")
+                    .param("size", "10")
+                    .session(auth.session()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[0].id").value(first))
+                .andExpect(jsonPath("$.items[1].id").value(second))
+                .andExpect(jsonPath("$.items[0].lastName").value("First"))
+                .andExpect(jsonPath("$.items[0].thirdPartyId").value(thirdPartyId))
+                .andExpect(jsonPath("$.page").value(0))
+                .andExpect(jsonPath("$.size").value(10))
+                .andExpect(jsonPath("$.total").value(2));
+        } finally {
+            clearThirdParties();
+            deleteUser(auth.userId());
+        }
     }
 
     @Test

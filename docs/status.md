@@ -11,6 +11,12 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
 - **Native canonical read**: `GET /api/contacts/{id}` reads the Contact from
   Alixar-owned PostgreSQL through jOOQ and returns the canonical representation.
   Positive unknown identifiers return `404 CONTACT_NOT_FOUND`
+- **Native canonical list**: `GET /api/contacts` returns `{items,page,size,total}`
+  with 0-based `page`, `size` defaulting to `20` and limited to `1..100`,
+  deterministic `id ASC` ordering and an optional exact `thirdPartyId` filter.
+  `total` reflects the filtered collection independently of the page. Empty
+  results are `200` with `items: []`; the referenced ThirdParty is not checked
+  for prior existence
 - **Native canonical creation**: `POST /api/contacts` persists a standalone or
   ThirdParty-linked Contact natively and returns `201 Created` with
   `Location: /api/contacts/{id}` and `{"id": ...}`. `lastName` is required and
@@ -24,12 +30,13 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   Alixar; no Dolibarr types, legacy fields or runtime dependency leak into the
   canonical API or persistence
 - **English/Spanish API error internationalization**: RFC 9457 `ProblemDetail`
-  responses with stable error codes (`VALIDATION_REQUIRED`,
+  responses with stable error codes (`VALIDATION_REQUIRED`, `VALIDATION_INVALID`,
   `CONTACT_NOT_FOUND`, `CONTACT_INVALID_THIRD_PARTY_REFERENCE`) and localized
   human-readable text via module-owned translation bundles (`i18n/core/`,
   `i18n/contact/`)
-- **Canonical business authorization**: `GET /api/contacts/{id}` requires
-  `contacts.read`; `POST /api/contacts` requires `contacts.manage`. Anonymous
+- **Canonical business authorization**: `GET /api/contacts`,
+  `GET /api/contacts/{id}` require `contacts.read`; `POST /api/contacts`
+  requires `contacts.manage`. Anonymous
   requests receive `401`, authenticated callers without the permission receive
   `403`, and both SESSION and PAT authentication follow the same rules
 - **CSRF hardening**: `/api/contacts/**` is no longer excluded from CSRF.
@@ -42,7 +49,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
 - **Reference validation**: `./bin/check-reference` verifies the observed Dolibarr
   24.0.1 Contact behavior remains reproducible and that Alixar's Contact runtime
   no longer depends on Dolibarr
-- **Pending**: Contact list, update, delete and historical data migration
+- **Pending**: Contact update, delete and historical data migration
 
 ### ThirdParty
 
@@ -113,7 +120,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   and a nullable restrictive foreign key to `third_party`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 504 deterministic tests and 102 PostgreSQL integration tests remain
+  the 518 deterministic tests and 106 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -286,7 +293,7 @@ Dolibarr is a **temporary compatibility/reference backend** for capabilities sti
 - **Not** Alixar's canonical API
 - **Not** normal Alixar infrastructure
 
-The target Alixar architecture does not treat Dolibarr as normal infrastructure or as part of the canonical domain/API model. The `dolibarr-reference` repository exists solely to reproduce and verify observed legacy behaviour during progressive migration. Contact create/read now use Alixar-owned persistence and have no Dolibarr runtime configuration or adapter.
+The target Alixar architecture does not treat Dolibarr as normal infrastructure or as part of the canonical domain/API model. The `dolibarr-reference` repository exists solely to reproduce and verify observed legacy behaviour during progressive migration. Contact create/read/list now use Alixar-owned persistence and have no Dolibarr runtime configuration or adapter.
 
 ## Validation
 
@@ -300,7 +307,7 @@ See [Development](development.md) for full validation workflow details.
 
 ## Not yet implemented
 
-- Contact list, update, delete and historical data migration; create and read
+- Contact update, delete and historical data migration; create, read and list
   are already native, authorized and covered by creation audit
 - ThirdParty Solucar UI and historical data migration
 - Role groups, PAT scopes and additional business authorization beyond

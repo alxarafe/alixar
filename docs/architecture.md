@@ -31,10 +31,10 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 
 ## Implemented
 
-- Canonical Contact read (`GET /api/contacts/{id}`) and creation
-  (`POST /api/contacts`) with native Alixar PostgreSQL/jOOQ persistence,
-  `contacts.read` / `contacts.manage` authorization, mandatory session CSRF and
-  atomic `CONTACT_CREATED` audit
+- Canonical Contact read (`GET /api/contacts/{id}`), list (`GET /api/contacts`)
+  and creation (`POST /api/contacts`) with native Alixar PostgreSQL/jOOQ
+  persistence, `contacts.read` / `contacts.manage` authorization, mandatory
+  session CSRF and atomic `CONTACT_CREATED` audit
 - Optional Contact → ThirdParty relationship with a restrictive native foreign
   key and canonical `422` validation for missing references
 - Real Dolibarr reference verification against `dolibarr-reference` 24.0.1,
@@ -106,7 +106,7 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   event detail, retention, purge, archive and signed checkpoints
 
 - ThirdParty Solucar UI and historical data migration
-- Contact list, update, delete and historical data migration; native create/read
+- Contact update, delete and historical data migration; native create/read/list
   persistence, canonical authorization, CSRF hardening, creation audit and the
   restrictive Contact → ThirdParty relationship are implemented
 - Email change with new-address verification

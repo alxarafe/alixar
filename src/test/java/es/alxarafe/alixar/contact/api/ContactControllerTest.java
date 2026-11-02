@@ -14,7 +14,9 @@ import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.domain.ApiToken;
 import es.alxarafe.alixar.authentication.domain.User;
 import es.alxarafe.alixar.contact.ContactTestConfig;
+import es.alxarafe.alixar.contact.application.ContactListQuery;
 import es.alxarafe.alixar.contact.application.ContactNotFoundException;
+import es.alxarafe.alixar.contact.application.ContactPage;
 import es.alxarafe.alixar.contact.application.ContactRepository;
 import es.alxarafe.alixar.contact.application.CreateContactCommand;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
@@ -171,6 +173,117 @@ class ContactControllerTest {
 
         when(getContactUseCase.execute(3L)).thenReturn(contact);
         mockMvc.perform(get(ContactEndpoints.BASE_PATH + "/3")
+                .header("Authorization", "Bearer " + personalAccessToken()))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    void listContacts_usesDefaultPageAndSize() throws Exception {
+        Contact contact = new Contact(1L, "Doe", "John", "john@example.test", 10L);
+        when(contactRepository.findPage(new ContactListQuery(0, 20, null)))
+            .thenReturn(new ContactPage(List.of(contact), 0, 20, 1));
+
+        mockMvc.perform(get(ContactEndpoints.BASE_PATH).session(authenticatedSession()))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/json"))
+            .andExpect(jsonPath("$.items[0].id").value(1))
+            .andExpect(jsonPath("$.items[0].lastName").value("Doe"))
+            .andExpect(jsonPath("$.items[0].firstName").value("John"))
+            .andExpect(jsonPath("$.items[0].email").value("john@example.test"))
+            .andExpect(jsonPath("$.items[0].thirdPartyId").value(10))
+            .andExpect(jsonPath("$.page").value(0))
+            .andExpect(jsonPath("$.size").value(20))
+            .andExpect(jsonPath("$.total").value(1));
+    }
+
+    @Test
+    void listContacts_forwardsPaginationAndReportsFilteredTotal() throws Exception {
+        when(contactRepository.findPage(new ContactListQuery(2, 5, null)))
+            .thenReturn(new ContactPage(List.of(), 2, 5, 12));
+
+        mockMvc.perform(get(ContactEndpoints.BASE_PATH)
+                .param("page", "2")
+                .param("size", "5")
+                .session(authenticatedSession()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.items").isEmpty())
+            .andExpect(jsonPath("$.page").value(2))
+            .andExpect(jsonPath("$.size").value(5))
+            .andExpect(jsonPath("$.total").value(12));
+    }
+
+    @Test
+    void listContacts_emptyPageReturnsOk() throws Exception {
+        when(contactRepository.findPage(new ContactListQuery(0, 20, null)))
+            .thenReturn(new ContactPage(List.of(), 0, 20, 0));
+
+        mockMvc.perform(get(ContactEndpoints.BASE_PATH).session(authenticatedSession()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.items").isEmpty())
+            .andExpect(jsonPath("$.total").value(0));
+    }
+
+    @Test
+    void listContacts_filtersByThirdPartyId() throws Exception {
+        Contact contact = new Contact(3L, "Doe", "John", "john@example.test", 42L);
+        when(contactRepository.findPage(new ContactListQuery(0, 20, 42L)))
+            .thenReturn(new ContactPage(List.of(contact), 0, 20, 1));
+
+        mockMvc.perform(get(ContactEndpoints.BASE_PATH)
+                .param("thirdPartyId", "42")
+                .session(authenticatedSession()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.items.length()").value(1))
+            .andExpect(jsonPath("$.items[0].thirdPartyId").value(42))
+            .andExpect(jsonPath("$.total").value(1));
+    }
+
+    @Test
+    void listContacts_thirdPartyFilterWithoutMatchesReturnsEmptyPage() throws Exception {
+        when(contactRepository.findPage(new ContactListQuery(0, 20, 999L)))
+            .thenReturn(new ContactPage(List.of(), 0, 20, 0));
+
+        mockMvc.perform(get(ContactEndpoints.BASE_PATH)
+                .param("thirdPartyId", "999")
+                .session(authenticatedSession()))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.items").isEmpty())
+            .andExpect(jsonPath("$.total").value(0));
+    }
+
+    @Test
+    void listContacts_invalidPaginationAndFilterReturnValidationInvalid() throws Exception {
+        assertListValidationError("page", "-1");
+        assertListValidationError("size", "0");
+        assertListValidationError("size", "101");
+        assertListValidationError("thirdPartyId", "0");
+    }
+
+    private void assertListValidationError(String parameter, String value) throws Exception {
+        mockMvc.perform(get(ContactEndpoints.BASE_PATH)
+                .param(parameter, value)
+                .session(authenticatedSession()))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("VALIDATION_INVALID"))
+            .andExpect(jsonPath("$.field").value(parameter));
+    }
+
+    @Test
+    void listContacts_requiresAuthenticationAndReadPermission() throws Exception {
+        mockMvc.perform(get(ContactEndpoints.BASE_PATH))
+            .andExpect(status().isUnauthorized());
+
+        grantOnly(PermissionCodes.CONTACTS_MANAGE);
+        mockMvc.perform(get(ContactEndpoints.BASE_PATH).session(authenticatedSession()))
+            .andExpect(status().isForbidden());
+
+        grantOnly(PermissionCodes.CONTACTS_READ);
+        when(contactRepository.findPage(new ContactListQuery(0, 20, null)))
+            .thenReturn(new ContactPage(List.of(), 0, 20, 0));
+        mockMvc.perform(get(ContactEndpoints.BASE_PATH).session(authenticatedSession()))
+            .andExpect(status().isOk());
+
+        mockMvc.perform(get(ContactEndpoints.BASE_PATH)
                 .header("Authorization", "Bearer " + personalAccessToken()))
             .andExpect(status().isOk());
     }
