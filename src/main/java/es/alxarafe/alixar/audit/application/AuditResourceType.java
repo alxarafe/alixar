@@ -11,5 +11,6 @@ public enum AuditResourceType {
     AUDIT_READ_POLICY,
     AUTHENTICATION,
     HTTP_REQUEST,
-    THIRD_PARTY
+    THIRD_PARTY,
+    CONTACT
 }
