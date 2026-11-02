@@ -24,6 +24,8 @@ import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.authentication.domain.ApiToken;
 import es.alxarafe.alixar.authentication.domain.User;
 import es.alxarafe.alixar.contact.ContactTestConfig;
+import es.alxarafe.alixar.contact.application.ContactListQuery;
+import es.alxarafe.alixar.contact.application.ContactPage;
 import es.alxarafe.alixar.contact.application.ContactRepository;
 import es.alxarafe.alixar.contact.application.CreateContactCommand;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
@@ -176,6 +178,24 @@ class ContactAuditTest {
             });
         } finally {
             auditMode.reset();
+        }
+    }
+
+    @Test
+    void list_doesNotAppendReadAuditEvents() throws Exception {
+        when(contactRepository.findPage(new ContactListQuery(0, 20, null)))
+            .thenReturn(new ContactPage(List.of(), 0, 20, 0));
+        MockHttpSession session = authenticatedSession();
+
+        for (AuditMode mode : List.of(AuditMode.BASIC, AuditMode.SELECTIVE)) {
+            auditMode.setMode(mode);
+            try {
+                mockMvc.perform(get(ContactEndpoints.BASE_PATH).session(session))
+                    .andExpect(status().isOk());
+                assertThat(auditEvents()).isEmpty();
+            } finally {
+                auditMode.reset();
+            }
         }
     }
 

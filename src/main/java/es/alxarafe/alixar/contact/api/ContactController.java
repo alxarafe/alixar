@@ -1,11 +1,19 @@
 package es.alxarafe.alixar.contact.api;
 
+import static es.alxarafe.alixar.contact.application.ContactFieldNames.PAGE;
+import static es.alxarafe.alixar.contact.application.ContactFieldNames.SIZE;
+import static es.alxarafe.alixar.contact.application.ContactFieldNames.THIRD_PARTY_ID;
+
+import es.alxarafe.alixar.contact.application.ContactListQuery;
+import es.alxarafe.alixar.contact.application.ContactPage;
 import es.alxarafe.alixar.contact.application.CreateContactCommand;
 import es.alxarafe.alixar.contact.application.GetContactUseCase;
+import es.alxarafe.alixar.contact.application.ListContactsUseCase;
 import es.alxarafe.alixar.contact.domain.Contact;
 import es.alxarafe.alixar.contact.infrastructure.TransactionalContactService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,11 +29,34 @@ import org.springframework.web.bind.annotation.RestController;
 class ContactController {
 
     private final GetContactUseCase getContactUseCase;
+    private final ListContactsUseCase listContactsUseCase;
     private final TransactionalContactService contactService;
 
-    ContactController(GetContactUseCase getContactUseCase, TransactionalContactService contactService) {
+    ContactController(
+        GetContactUseCase getContactUseCase,
+        ListContactsUseCase listContactsUseCase,
+        TransactionalContactService contactService
+    ) {
         this.getContactUseCase = getContactUseCase;
+        this.listContactsUseCase = listContactsUseCase;
         this.contactService = contactService;
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<ContactPageResponse> listContacts(
+        @RequestParam(name = PAGE, required = false) Integer page,
+        @RequestParam(name = SIZE, required = false) Integer size,
+        @RequestParam(name = THIRD_PARTY_ID, required = false) Long thirdPartyId
+    ) {
+        ContactPage result = listContactsUseCase.execute(
+            ContactListQuery.of(page, size, thirdPartyId)
+        );
+        return ResponseEntity.ok(new ContactPageResponse(
+            result.items().stream().map(this::toResponse).toList(),
+            result.page(),
+            result.size(),
+            result.total()
+        ));
     }
 
     @GetMapping(
@@ -63,6 +95,14 @@ class ContactController {
             contact.email(),
             contact.thirdPartyId()
         );
+    }
+
+    record ContactPageResponse(
+        List<ContactResponse> items,
+        int page,
+        int size,
+        long total
+    ) {
     }
 
     record ContactResponse(
