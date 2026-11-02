@@ -1,9 +1,9 @@
 package es.alxarafe.alixar.contact.api;
 
-import es.alxarafe.alixar.contact.application.CreateContactUseCase;
 import es.alxarafe.alixar.contact.application.CreateContactCommand;
 import es.alxarafe.alixar.contact.application.GetContactUseCase;
 import es.alxarafe.alixar.contact.domain.Contact;
+import es.alxarafe.alixar.contact.infrastructure.TransactionalContactService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.http.MediaType;
@@ -16,27 +16,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/contacts")
+@RequestMapping(ContactEndpoints.BASE_PATH)
 class ContactController {
 
     private final GetContactUseCase getContactUseCase;
-    private final CreateContactUseCase createContactUseCase;
+    private final TransactionalContactService contactService;
 
-    ContactController(GetContactUseCase getContactUseCase, CreateContactUseCase createContactUseCase) {
+    ContactController(GetContactUseCase getContactUseCase, TransactionalContactService contactService) {
         this.getContactUseCase = getContactUseCase;
-        this.createContactUseCase = createContactUseCase;
+        this.contactService = contactService;
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<ContactResponse> getContact(@PathVariable("id") long id) {
+    @GetMapping(
+        value = ContactEndpoints.ITEM_RELATIVE_PATH,
+        produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    ResponseEntity<ContactResponse> getContact(
+        @PathVariable(ContactEndpoints.ID_PATH_VARIABLE) long id
+    ) {
         Contact contact = getContactUseCase.execute(id);
         return ResponseEntity.ok(toResponse(contact));
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<CreateContactResponse> createContact(@Valid @RequestBody CreateContactRequest request) {
-        long createdId = createContactUseCase.execute(toCommand(request));
-        return ResponseEntity.created(java.net.URI.create("/api/contacts/" + createdId))
+        long createdId = contactService.create(toCommand(request));
+        return ResponseEntity.created(
+                java.net.URI.create(ContactEndpoints.BASE_PATH + "/" + createdId))
             .body(new CreateContactResponse(createdId));
     }
 

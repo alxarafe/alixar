@@ -32,7 +32,9 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 ## Implemented
 
 - Canonical Contact read (`GET /api/contacts/{id}`) and creation
-  (`POST /api/contacts`) with native Alixar PostgreSQL/jOOQ persistence
+  (`POST /api/contacts`) with native Alixar PostgreSQL/jOOQ persistence,
+  `contacts.read` / `contacts.manage` authorization, mandatory session CSRF and
+  atomic `CONTACT_CREATED` audit
 - Optional Contact → ThirdParty relationship with a restrictive native foreign
   key and canonical `422` validation for missing references
 - Real Dolibarr reference verification against `dolibarr-reference` 24.0.1,
@@ -58,8 +60,9 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   effective permissions resolved from persistence on every authenticated
   request, deny-by-default policy, and identical authorization for session and
   Bearer authentication. Built-in `system-admin` role with `users.manage`,
-  `roles.manage`, `audit.read`, `audit.configure`, `thirdparties.read` and
-  `thirdparties.manage`; read-only permission
+  `roles.manage`, `audit.read`, `audit.configure`, `thirdparties.read`,
+  `thirdparties.manage`, `contacts.read` and `contacts.manage`; read-only
+  permission
   catalogue; role detail,
   creation, rename, permission replacement and deletion of unassigned custom
   roles; administrative reads, creation of disabled users, username changes,
@@ -103,14 +106,14 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   event detail, retention, purge, archive and signed checkpoints
 
 - ThirdParty Solucar UI and historical data migration
-- Contact list, update and delete, canonical business authorization, business
-  audit instrumentation and historical data migration; native create/read
-  persistence and the restrictive Contact → ThirdParty relationship are
-  implemented
+- Contact list, update, delete and historical data migration; native create/read
+  persistence, canonical authorization, CSRF hardening, creation audit and the
+  restrictive Contact → ThirdParty relationship are implemented
 - Email change with new-address verification
 - Role groups
 - PAT scopes and authorization for business capabilities beyond `users.manage`,
-  `roles.manage`, `audit.read` and `audit.configure`
+  `roles.manage`, `audit.read`, `audit.configure`, `thirdparties.read`,
+  `thirdparties.manage`, `contacts.read` and `contacts.manage`
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - OpenAPI specification
@@ -184,7 +187,8 @@ experience, but Alixar remains the authorization authority.
 
 Business code authorizes by permission (`hasAuthority("users.manage")`,
 `hasAuthority("roles.manage")`, `hasAuthority("audit.read")`,
-`hasAuthority("thirdparties.read")` or `hasAuthority("thirdparties.manage")`),
+`hasAuthority("thirdparties.read")`, `hasAuthority("thirdparties.manage")`,
+`hasAuthority("contacts.read")` or `hasAuthority("contacts.manage")`),
 not by role name. `system-admin` is an administrative grouping of permissions and has no
 authorization special case.
 Administrative reads resolve user summaries, user detail, the role catalogue,
@@ -227,9 +231,10 @@ returning. The
 instrumented set includes administrative user lifecycle operations,
 self-service username and password changes, completed password recovery,
 Personal Access Token creation and revocation, role creation, rename,
-permission replacement and deletion, and ThirdParty creation, real update and
+permission replacement and deletion, ThirdParty creation, real update and
 successful physical delete (`THIRD_PARTY_CREATED`, `THIRD_PARTY_UPDATED`,
-`THIRD_PARTY_DELETED`, recording only the canonical identifier). The application
+`THIRD_PARTY_DELETED`) and Contact creation (`CONTACT_CREATED`), recording only
+the canonical identifier. The application
 layer depends on an
 `AuditTrail` port and an `AuditPolicyProvider` port, not on environment variables,
 Spring Security or jOOQ. Authenticated operations resolve their actor

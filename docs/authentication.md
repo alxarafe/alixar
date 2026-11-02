@@ -477,7 +477,9 @@ CSRF protection is not disabled globally. Requests authenticated by the session
 cookie continue to require the `XSRF-TOKEN` cookie and `X-XSRF-TOKEN` header.
 Requests that present an `Authorization: Bearer ...` header are exempt from CSRF
 because browsers do not attach that header automatically; this exemption does
-not apply to session-only requests. The existing Contact CSRF debt is unchanged.
+not apply to session-only requests. Contact follows the same rule: a
+session-authenticated `POST /api/contacts` requires CSRF, while a Bearer request
+does not.
 
 ### `credentials_version` and PAT revocation
 
@@ -534,8 +536,10 @@ The initial catalogue contains:
 | `audit.configure` | Configure the audit policy (ALIXAR-DEV-003H T1.5b) |
 | `thirdparties.read` | Read ThirdParty data (THIRDPARTY-002A) |
 | `thirdparties.manage` | Create, update and delete ThirdParty data (THIRDPARTY-002A, THIRDPARTY-002D) |
+| `contacts.read` | Read Contact data (CONTACT-003) |
+| `contacts.manage` | Create Contact data (CONTACT-003) |
 
-The built-in role `system-admin` contains all six permissions. The role name
+The built-in role `system-admin` contains all eight permissions. The role name
 and code are stable identifiers, but application code authorizes by permission,
 not by role name. No role is special in authorization: `system-admin` is simply
 a role whose permissions are maintained by migrations. The `built_in` flag marks
@@ -587,6 +591,8 @@ The administrative namespace is split by capability:
 | `/api/admin/users/**` | `users.manage` |
 | `GET /api/thirdparties/{id}` | `thirdparties.read` |
 | `POST /api/thirdparties` | `thirdparties.manage` |
+| `GET /api/contacts/{id}` | `contacts.read` |
+| `POST /api/contacts` | `contacts.manage` |
 | `GET /api/admin/roles` | `users.manage` or `roles.manage` |
 | Any other `/api/admin/roles/**` method | `roles.manage` |
 | `/api/admin/permissions` | `roles.manage` |
@@ -622,7 +628,9 @@ Method security is enabled. Operations can be protected with
 `@PreAuthorize("hasAuthority('users.manage')")` or
 `@PreAuthorize("hasAuthority('roles.manage')")`; the stable permission
 constants are `PermissionCodes.USERS_MANAGE`, `PermissionCodes.ROLES_MANAGE`,
-`PermissionCodes.AUDIT_READ` and `PermissionCodes.AUDIT_CONFIGURE`.
+`PermissionCodes.AUDIT_READ`, `PermissionCodes.AUDIT_CONFIGURE`,
+`PermissionCodes.THIRD_PARTIES_READ`, `PermissionCodes.THIRD_PARTIES_MANAGE`,
+`PermissionCodes.CONTACTS_READ` and `PermissionCodes.CONTACTS_MANAGE`.
 
 ### Bootstrap and the first administrator
 
@@ -905,29 +913,25 @@ uniqueness constraint.
 ## Current public access
 
 `/health`, the login endpoint, the `password/forgot` and `password/reset`
-endpoints, and the existing Contact endpoints remain anonymous. The
-`GET /api/auth/me`, `PATCH /api/users/me`, `POST /api/users/me/password` and
-the `/api/users/me/api-tokens` endpoints require an authenticated identity:
-either a valid session or a valid Bearer token. `/api/auth/me` works with both
-mechanisms. The `/api/admin/users/**` namespace requires `users.manage`;
-`GET /api/admin/roles` accepts `users.manage` or `roles.manage`; role detail,
-role creation and the permission catalogue require `roles.manage`. Contact
-remains public solely to preserve its established contract
-and the real Dolibarr compatibility check during this authentication foundation.
-Its existing POST is temporarily excluded from CSRF protection. Protecting
-migrated business capabilities is an authorization decision for a later
-iteration.
+endpoints remain anonymous. The `GET /api/auth/me`, `PATCH /api/users/me`,
+`POST /api/users/me/password` and the `/api/users/me/api-tokens` endpoints
+require an authenticated identity: either a valid session or a valid Bearer
+token. `/api/auth/me` works with both mechanisms. The `/api/admin/users/**`
+namespace requires `users.manage`; `GET /api/admin/roles` accepts
+`users.manage` or `roles.manage`; role detail, role creation and the permission
+catalogue require `roles.manage`. `GET /api/contacts/{id}` requires
+`contacts.read` and `POST /api/contacts` requires `contacts.manage`. Contact
+authorization is identical for session and Bearer authentication.
 
-### Tracked debt: CSRF exclusion for Contact
+### Contact CSRF policy
 
-The temporary CSRF exclusion covers the whole `/api/contacts/**` pattern, not
-only its current POST method. It is **pending/trackable debt**, not a target
-state: it currently weakens CSRF protection for any Contact request and would
-also exempt future mutating Contact methods (`PUT`, `PATCH`, `DELETE`) once they
-are introduced. Removing the exclusion requires Contact to obtain a CSRF
-token/header pair, which is a change to the Contact contract and must be
-decided explicitly in a dedicated iteration. ALIXAR-DEV-003A intentionally
-leaves the Contact contract unchanged.
+`/api/contacts/**` is no longer excluded from CSRF. A session-authenticated
+`POST /api/contacts` without a valid CSRF cookie/header pair is rejected with
+`403` before authorization; with a valid pair and `contacts.manage` it proceeds.
+Bearer requests are exempt from CSRF because the credential is explicitly
+presented in the `Authorization` header. No Contact-specific authorization or
+CSRF rule exists for collection reads, `PUT`, `PATCH` or `DELETE`; those
+operations are not implemented.
 
 ## Future API authentication evolution
 

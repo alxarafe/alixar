@@ -54,7 +54,9 @@ class BootstrapUserInitializerTest {
                 PermissionCodes.AUDIT_READ,
                 PermissionCodes.AUDIT_CONFIGURE,
                 PermissionCodes.THIRD_PARTIES_READ,
-                PermissionCodes.THIRD_PARTIES_MANAGE
+                PermissionCodes.THIRD_PARTIES_MANAGE,
+                PermissionCodes.CONTACTS_READ,
+                PermissionCodes.CONTACTS_MANAGE
             );
         assertThat(authorizationRepository.findPermissionCodesByRole(RoleCodes.SYSTEM_ADMIN))
             .containsExactlyInAnyOrder(
@@ -63,7 +65,9 @@ class BootstrapUserInitializerTest {
                 PermissionCodes.AUDIT_READ,
                 PermissionCodes.AUDIT_CONFIGURE,
                 PermissionCodes.THIRD_PARTIES_READ,
-                PermissionCodes.THIRD_PARTIES_MANAGE
+                PermissionCodes.THIRD_PARTIES_MANAGE,
+                PermissionCodes.CONTACTS_READ,
+                PermissionCodes.CONTACTS_MANAGE
             );
     }
 
@@ -84,7 +88,9 @@ class BootstrapUserInitializerTest {
                 PermissionCodes.AUDIT_READ,
                 PermissionCodes.AUDIT_CONFIGURE,
                 PermissionCodes.THIRD_PARTIES_READ,
-                PermissionCodes.THIRD_PARTIES_MANAGE
+                PermissionCodes.THIRD_PARTIES_MANAGE,
+                PermissionCodes.CONTACTS_READ,
+                PermissionCodes.CONTACTS_MANAGE
             );
     }
 

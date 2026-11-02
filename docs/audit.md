@@ -25,7 +25,8 @@ mandatory rule-change events. T1.7b appends `READ_QUERY` and `READ_OBJECT`
 events for the administrative `USER` and `ROLE` read endpoints. THIRDPARTY-002A
 adds `THIRD_PARTY_CREATED` as the first business-capability mutation event, and
 THIRDPARTY-002C adds `THIRD_PARTY_UPDATED` for real partial updates, and
-THIRDPARTY-002D adds `THIRD_PARTY_DELETED` for successful physical deletes. Event
+THIRDPARTY-002D adds `THIRD_PARTY_DELETED` for successful physical deletes.
+CONTACT-003 adds `CONTACT_CREATED` for successful Contact creation. Event
 detail, retention, archive and checkpoints remain out of scope.
 
 ## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b, T1.5a, T1.5b, T1.6a, T1.6b, T1.7a and T1.7b)
@@ -55,6 +56,8 @@ Implemented:
   revocation transitions;
 - atomic `SUCCESS` events for role creation, rename, permission replacement and
   deletion;
+- atomic `SUCCESS` events for native Contact creation under `BASIC` and
+  `SELECTIVE`;
 - `RECOVERY_TOKEN` as an audit authentication type;
 - `audit.read` permission and a read-only, chain-scoped event query API with
   keyset pagination and combinable filters;
@@ -346,12 +349,19 @@ The following operations are instrumented atomically under `BASIC` and
 | ThirdParty creation | `THIRD_PARTY_CREATED` | `THIRD_PARTY` / canonical third-party id | `SUCCESS` |
 | ThirdParty partial update with real change | `THIRD_PARTY_UPDATED` | `THIRD_PARTY` / canonical third-party id | `SUCCESS` |
 | ThirdParty successful physical delete | `THIRD_PARTY_DELETED` | `THIRD_PARTY` / canonical third-party id | `SUCCESS` |
+| Contact creation | `CONTACT_CREATED` | `CONTACT` / canonical contact id | `SUCCESS` |
 
-The ThirdParty create event is the first business-capability event. ThirdParty
-mutation events record only the canonical identifier, action, resource type and
-result; never the ThirdParty object, fiscal identifiers, address or contact
-data. A no-op partial update records no event, and rejected or failed deletes
-record no event. ThirdParty reads are not audited in the baseline.
+The ThirdParty create event was the first business-capability event. ThirdParty
+and Contact mutation events record only the canonical identifier, action,
+resource type and result; never the business object, fiscal identifiers,
+address, name or contact data. A no-op partial update records no event, and
+rejected or failed deletes record no event. ThirdParty and Contact reads are
+not audited in the baseline.
+
+The Contact creation event is appended in the same transaction as the Contact
+insert. If the append fails, the operation returns `503` with code
+`AUDIT_UNAVAILABLE` and no Contact is persisted. The event records the
+authenticated actor, the canonical Contact id and no Contact payload.
 
 ### Mandatory policy-change events (T1.5b and T1.7a)
 
@@ -427,6 +437,7 @@ PATCH /api/admin/users
 PUT   /api/admin/roles
 GET   /api/admin/audit-events
 POST  /api/users/me/api-tokens
+POST  /api/contacts
 ```
 
 The raw path is never stored. Query strings, request bodies, headers, UUIDs,

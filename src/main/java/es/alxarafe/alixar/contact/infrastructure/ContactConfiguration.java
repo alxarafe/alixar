@@ -1,6 +1,8 @@
 package es.alxarafe.alixar.contact.infrastructure;
 
+import es.alxarafe.alixar.audit.application.AuditTrail;
 import es.alxarafe.alixar.contact.application.ContactRepository;
+import es.alxarafe.alixar.contact.application.CreateContactUseCase;
 import es.alxarafe.alixar.contact.application.ThirdPartyReferenceChecker;
 import es.alxarafe.alixar.contact.infrastructure.persistence.JooqContactRepository;
 import es.alxarafe.alixar.contact.infrastructure.persistence.JooqThirdPartyReferenceChecker;
@@ -22,5 +24,13 @@ public class ContactConfiguration {
     @ConditionalOnMissingBean(ThirdPartyReferenceChecker.class)
     ThirdPartyReferenceChecker thirdPartyReferenceChecker(DSLContext dsl) {
         return new JooqThirdPartyReferenceChecker(dsl);
+    }
+
+    @Bean
+    TransactionalContactService transactionalContactService(
+        CreateContactUseCase createContactUseCase,
+        AuditTrail auditTrail
+    ) {
+        return new TransactionalContactService(createContactUseCase, auditTrail);
     }
 }

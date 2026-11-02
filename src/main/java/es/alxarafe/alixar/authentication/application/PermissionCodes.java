@@ -8,6 +8,8 @@ public final class PermissionCodes {
     public static final String AUDIT_CONFIGURE = "audit.configure";
     public static final String THIRD_PARTIES_READ = "thirdparties.read";
     public static final String THIRD_PARTIES_MANAGE = "thirdparties.manage";
+    public static final String CONTACTS_READ = "contacts.read";
+    public static final String CONTACTS_MANAGE = "contacts.manage";
 
     private PermissionCodes() {
     }

@@ -293,7 +293,9 @@ public class AuthenticationTestConfig {
                     PermissionCodes.AUDIT_READ,
                     PermissionCodes.AUDIT_CONFIGURE,
                     PermissionCodes.THIRD_PARTIES_READ,
-                    PermissionCodes.THIRD_PARTIES_MANAGE
+                    PermissionCodes.THIRD_PARTIES_MANAGE,
+                    PermissionCodes.CONTACTS_READ,
+                    PermissionCodes.CONTACTS_MANAGE
                 ))
             );
         }
@@ -362,6 +364,8 @@ public class AuthenticationTestConfig {
             return List.of(
                 new PermissionDefinition(PermissionCodes.AUDIT_CONFIGURE, "Configure audit policy"),
                 new PermissionDefinition(PermissionCodes.AUDIT_READ, "Read audit events"),
+                new PermissionDefinition(PermissionCodes.CONTACTS_MANAGE, "Manage contacts"),
+                new PermissionDefinition(PermissionCodes.CONTACTS_READ, "Read contacts"),
                 new PermissionDefinition(
                     PermissionCodes.ROLES_MANAGE,
                     "Manage roles and their permission assignments"

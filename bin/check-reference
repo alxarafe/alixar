@@ -22,6 +22,7 @@ log_error() { echo -e "${RED}[ERROR]${NC} $*"; }
 
 COMPOSE_PROJECT="alixar-reference-check-$$-${RANDOM}${RANDOM}"
 COMPOSE=(docker compose -p "${COMPOSE_PROJECT}" -f "${ALIXAR_ROOT}/compose.yaml")
+COOKIE_JAR=""
 for resource in container network volume; do
     resource_args=(ls -q)
     if [[ "${resource}" == container ]]; then resource_args+=(--all); fi
@@ -36,6 +37,9 @@ ALIXAR_STARTED=false
 cleanup() {
     local exit_code=$? cleanup_code=0
     trap - EXIT
+    if [[ -n "${COOKIE_JAR}" ]]; then
+        rm -f "${COOKIE_JAR}"
+    fi
     if [[ "${ALIXAR_STARTED}" == true ]]; then
         log_info "Cleaning up ${COMPOSE_PROJECT}..."
         if ! "${COMPOSE[@]}" down --volumes; then
@@ -119,6 +123,14 @@ fi
 log_info "Dolibarr reference contact create/read verified (ID ${REF_CONTACT_ID})"
 
 cd "${ALIXAR_ROOT}"
+# Contact now requires canonical authorization. Bootstrap a throwaway
+# system administrator for this isolated run; the generated password is never
+# logged and the project volume is removed by the cleanup trap.
+export ALIXAR_BOOTSTRAP_USERNAME="reference-check"
+export ALIXAR_BOOTSTRAP_EMAIL="reference-check@example.test"
+export ALIXAR_BOOTSTRAP_PASSWORD="Ref-${RANDOM}-${RANDOM}-${RANDOM}!"
+export ALIXAR_BOOTSTRAP_SYSTEM_ADMIN="true"
+
 log_info "Building current Alixar code for ${COMPOSE_PROJECT}..."
 "${COMPOSE[@]}" build app
 BUILT_IMAGE=$(docker image inspect "${COMPOSE_PROJECT}-app" --format '{{.Id}}')
@@ -163,11 +175,34 @@ for i in {1..30}; do
     sleep 2
 done
 
+COOKIE_JAR="$(mktemp)"
+log_info "Authenticating against the canonical API..."
+curl -s -c "${COOKIE_JAR}" "${ALIXAR_BASE}/health" > /dev/null
+csrf_token() {
+    awk '$6 == "XSRF-TOKEN" { print $7 }' "${COOKIE_JAR}"
+}
+CSRF_TOKEN=$(csrf_token)
+LOGIN_HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" \
+    -b "${COOKIE_JAR}" -c "${COOKIE_JAR}" \
+    -H "Content-Type: application/json" \
+    -H "X-XSRF-TOKEN: ${CSRF_TOKEN}" \
+    -d "{\"identifier\":\"${ALIXAR_BOOTSTRAP_USERNAME}\",\"password\":\"${ALIXAR_BOOTSTRAP_PASSWORD}\"}" \
+    "${ALIXAR_BASE}/api/auth/login")
+if [[ "${LOGIN_HTTP_CODE}" != "200" ]]; then
+    log_error "Alixar login returned HTTP ${LOGIN_HTTP_CODE}, expected 200"
+    exit 1
+fi
+# Login rotates the session and clears the pre-authentication CSRF cookie.
+# A safe request issues a fresh token bound to the authenticated session.
+curl -s -b "${COOKIE_JAR}" -c "${COOKIE_JAR}" "${ALIXAR_BASE}/health" > /dev/null
+
 log_info "Creating a standalone Contact through the canonical API..."
 CREATE_PAYLOAD='{"lastName":"Native","firstName":"Reference","email":"alixar.native@example.test"}'
 CREATE_RESPONSE=$(curl -i -s -w "\n%{http_code}" \
+    -b "${COOKIE_JAR}" -c "${COOKIE_JAR}" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
+    -H "X-XSRF-TOKEN: $(csrf_token)" \
     -d "${CREATE_PAYLOAD}" \
     "${ALIXAR_BASE}/api/contacts")
 CREATE_HTTP_CODE=$(echo "${CREATE_RESPONSE}" | tail -n1)
@@ -191,6 +226,7 @@ fi
 log_info "Native contact created with ID ${NATIVE_CONTACT_ID}"
 
 GET_RESPONSE=$(curl -s -w "\n%{http_code}" \
+    -b "${COOKIE_JAR}" -c "${COOKIE_JAR}" \
     -H "Accept: application/json" \
     "${ALIXAR_BASE}/api/contacts/${NATIVE_CONTACT_ID}")
 GET_HTTP_CODE=$(echo "${GET_RESPONSE}" | tail -n1)
@@ -224,8 +260,10 @@ log_info "Native canonical Contact create/read verified without Dolibarr"
 
 log_info "Verifying invalid third-party references are rejected natively..."
 INVALID_RESPONSE=$(curl -s -w "\n%{http_code}" \
+    -b "${COOKIE_JAR}" -c "${COOKIE_JAR}" \
     -H "Content-Type: application/json" \
     -H "Accept: application/json" \
+    -H "X-XSRF-TOKEN: $(csrf_token)" \
     -d '{"lastName":"Invalid","thirdPartyId":999999999}' \
     "${ALIXAR_BASE}/api/contacts")
 INVALID_HTTP_CODE=$(echo "${INVALID_RESPONSE}" | tail -n1)
@@ -243,6 +281,7 @@ log_info "Invalid third-party reference correctly rejected with 422"
 
 log_info "Verifying missing Contact returns canonical 404..."
 NOT_FOUND_RESPONSE=$(curl -s -w "\n%{http_code}" \
+    -b "${COOKIE_JAR}" -c "${COOKIE_JAR}" \
     -H "Accept: application/json" \
     "${ALIXAR_BASE}/api/contacts/999999999")
 NOT_FOUND_HTTP_CODE=$(echo "${NOT_FOUND_RESPONSE}" | tail -n1)

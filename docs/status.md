@@ -28,12 +28,21 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   `CONTACT_NOT_FOUND`, `CONTACT_INVALID_THIRD_PARTY_REFERENCE`) and localized
   human-readable text via module-owned translation bundles (`i18n/core/`,
   `i18n/contact/`)
+- **Canonical business authorization**: `GET /api/contacts/{id}` requires
+  `contacts.read`; `POST /api/contacts` requires `contacts.manage`. Anonymous
+  requests receive `401`, authenticated callers without the permission receive
+  `403`, and both SESSION and PAT authentication follow the same rules
+- **CSRF hardening**: `/api/contacts/**` is no longer excluded from CSRF.
+  Session-authenticated creation requires a valid CSRF cookie/header pair;
+  Bearer creation does not
+- **Business audit**: Successful creation appends an atomic `CONTACT_CREATED`
+  event under `BASIC` and `SELECTIVE` with the canonical Contact id and
+  authenticated actor, but no Contact payload. An append failure returns `503
+  AUDIT_UNAVAILABLE` and rolls back the creation
 - **Reference validation**: `./bin/check-reference` verifies the observed Dolibarr
   24.0.1 Contact behavior remains reproducible and that Alixar's Contact runtime
   no longer depends on Dolibarr
-- **Pending**: Contact list, update, delete, canonical business authorization,
-  CSRF hardening for Contact mutations, business audit instrumentation and
-  historical data migration
+- **Pending**: Contact list, update, delete and historical data migration
 
 ### ThirdParty
 
@@ -104,7 +113,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   and a nullable restrictive foreign key to `third_party`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 478 deterministic tests and 94 PostgreSQL integration tests remain
+  the 504 deterministic tests and 102 PostgreSQL integration tests remain
   enabled
 
 ### Authentication
@@ -291,13 +300,13 @@ See [Development](development.md) for full validation workflow details.
 
 ## Not yet implemented
 
-- Contact list, update, delete, canonical business authorization, business
-  audit instrumentation and historical data migration; create and read are
-  already native
+- Contact list, update, delete and historical data migration; create and read
+  are already native, authorized and covered by creation audit
 - ThirdParty Solucar UI and historical data migration
 - Role groups, PAT scopes and additional business authorization beyond
   `users.manage`, `roles.manage`, `audit.read`, `audit.configure`,
-  `thirdparties.read` and `thirdparties.manage`
+  `thirdparties.read`, `thirdparties.manage`, `contacts.read` and
+  `contacts.manage`
 - the `FULL` audit mode, read event capture beyond the administrative user and
   role reads, bootstrap and password-reset request events, CSRF-specific audit
   events, audit event detail, retention, purging, archive and signed

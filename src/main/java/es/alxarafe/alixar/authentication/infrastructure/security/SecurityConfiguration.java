@@ -9,6 +9,7 @@ import es.alxarafe.alixar.authentication.application.AuthenticateApiTokenUseCase
 import es.alxarafe.alixar.authentication.application.GetEffectivePermissionsUseCase;
 import es.alxarafe.alixar.authentication.application.PermissionCodes;
 import es.alxarafe.alixar.authentication.application.UserRepository;
+import es.alxarafe.alixar.contact.api.ContactEndpoints;
 import es.alxarafe.alixar.thirdparty.api.ThirdPartyEndpoints;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,7 +45,6 @@ import static es.alxarafe.alixar.authentication.api.AuthenticationEndpoints.BASE
 public class SecurityConfiguration {
 
     private static final String HEALTH_PATH = "/health";
-    private static final String CONTACTS_PATH_PATTERN = "/api/contacts/**";
     private static final String SESSION_COOKIE_NAME = "JSESSIONID";
 
     @Bean
@@ -163,18 +163,13 @@ public class SecurityConfiguration {
             .csrf(csrf -> {
                 csrf.spa();
                 csrf.csrfTokenRepository(csrfTokenRepository);
-                // TODO(ALIXAR-DEV-003A): tracked debt. This temporary exclusion covers the
-                // whole CONTACTS_PATH_PATTERN, so it also weakens CSRF protection for future
-                // mutating Contact methods (PUT/PATCH/DELETE). Removing it changes the Contact
-                // contract and requires a dedicated iteration. See docs/authentication.md.
-                csrf.ignoringRequestMatchers(CONTACTS_PATH_PATTERN);
                 csrf.ignoringRequestMatchers(bearerTokenRequestMatcher);
             })
             .addFilterBefore(apiTokenAuthenticationFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
             .addFilterAfter(credentialsVersionCheckFilter, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(effectivePermissionsFilter, AuthorizationFilter.class)
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(HEALTH_PATH, CONTACTS_PATH_PATTERN, LOGIN_PATH, BASE_PATH + "/password/forgot", BASE_PATH + "/password/reset").permitAll()
+                .requestMatchers(HEALTH_PATH, LOGIN_PATH, BASE_PATH + "/password/forgot", BASE_PATH + "/password/reset").permitAll()
                 .requestMatchers(HttpMethod.GET, AdminUserEndpoints.ROLES_BASE_PATH)
                     .hasAnyAuthority(PermissionCodes.USERS_MANAGE, PermissionCodes.ROLES_MANAGE)
                 .requestMatchers(AdminUserEndpoints.ROLES_BASE_PATH, AdminUserEndpoints.ROLES_PATH_PATTERN)
@@ -192,6 +187,10 @@ public class SecurityConfiguration {
                     .hasAuthority(PermissionCodes.THIRD_PARTIES_MANAGE)
                 .requestMatchers(HttpMethod.DELETE, ThirdPartyEndpoints.ITEM_PATH_PATTERN)
                     .hasAuthority(PermissionCodes.THIRD_PARTIES_MANAGE)
+                .requestMatchers(HttpMethod.GET, ContactEndpoints.ITEM_PATH_PATTERN)
+                    .hasAuthority(PermissionCodes.CONTACTS_READ)
+                .requestMatchers(HttpMethod.POST, ContactEndpoints.BASE_PATH)
+                    .hasAuthority(PermissionCodes.CONTACTS_MANAGE)
                 .requestMatchers(HttpMethod.GET, AuditEndpoints.VERIFICATION_PATH)
                     .hasAuthority(PermissionCodes.AUDIT_READ)
                 .requestMatchers(HttpMethod.GET, AuditEndpoints.BASE_PATH)

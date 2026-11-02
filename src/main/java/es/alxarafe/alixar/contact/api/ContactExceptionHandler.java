@@ -1,5 +1,7 @@
 package es.alxarafe.alixar.contact.api;
 
+import es.alxarafe.alixar.audit.application.AuditErrorCode;
+import es.alxarafe.alixar.audit.application.AuditUnavailableException;
 import es.alxarafe.alixar.contact.application.ContactNotFoundException;
 import es.alxarafe.alixar.contact.application.InvalidContactDataException;
 import es.alxarafe.alixar.contact.application.InvalidThirdPartyReferenceException;
@@ -53,6 +55,18 @@ public class ContactExceptionHandler {
         problem.setType(URI.create("urn:alixar:error:contact-invalid-third-party-reference"));
         problem.setTitle(getMessage("contact.invalidThirdPartyReference.title", locale));
         problem.setProperty("code", ex.errorCode().name());
+        return problem;
+    }
+
+    @ExceptionHandler(AuditUnavailableException.class)
+    ProblemDetail handleAuditUnavailable(Locale locale) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.SERVICE_UNAVAILABLE,
+            getMessage("audit.unavailable", locale)
+        );
+        problem.setType(URI.create("urn:alixar:error:audit-unavailable"));
+        problem.setTitle(getMessage("audit.unavailable.title", locale));
+        problem.setProperty("code", AuditErrorCode.AUDIT_UNAVAILABLE.name());
         return problem;
     }
 

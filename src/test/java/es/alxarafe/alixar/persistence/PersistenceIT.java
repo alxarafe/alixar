@@ -270,8 +270,8 @@ class PersistenceIT {
                 .startsWith(POSTGRESQL_VERSION);
         }
         assertThat(flyway.getConfiguration().getDataSource()).isSameAs(dataSource);
-        assertThat(flyway.info().all()).hasSize(12);
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("12");
+        assertThat(flyway.info().all()).hasSize(13);
+        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("13");
         assertThat(dsl.selectOne().fetchSingle().value1()).isEqualTo(1);
         assertThat(dsl.fetch("select tablename from pg_catalog.pg_tables where schemaname = current_schema()")
             .getValues(0, String.class)).containsExactlyInAnyOrder(
@@ -291,7 +291,7 @@ class PersistenceIT {
                 CONTACT_TABLE
             );
         assertThat(dsl.fetchCount(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(HISTORY_TABLE))))
-            .isEqualTo(12);
+            .isEqualTo(13);
     }
 
     @Test
@@ -1809,11 +1809,12 @@ class PersistenceIT {
 
     @Test
     void contactApi_persistsStandaloneContactAndReadsItBackFromPostgres() throws Exception {
-        long id = postContact("""
+        ContactApiAuth auth = contactApiAuth("contact-api-standalone");
+        long id = postContact(auth, """
             {"lastName":"García","firstName":"Ana","email":"ana@example.test"}
             """);
         try {
-            mockMvc().perform(get("/api/contacts/{id}", id))
+            mockMvc().perform(get("/api/contacts/{id}", id).session(auth.session()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(id))
@@ -1828,20 +1829,22 @@ class PersistenceIT {
             assertThat(stored.thirdPartyId()).isNull();
         } finally {
             deleteContact(id);
+            deleteUser(auth.userId());
         }
     }
 
     @Test
     void contactApi_persistsLinkedContactAndReadsThirdPartyIdFromPostgres() throws Exception {
+        ContactApiAuth auth = contactApiAuth("contact-api-linked");
         Long thirdPartyId = null;
         Long contactId = null;
         try {
             thirdPartyId = createThirdPartyForContact("API Linked Co");
-            contactId = postContact("""
+            contactId = postContact(auth, """
                 {"lastName":"Doe","firstName":"John","email":"john@example.test","thirdPartyId":%d}
                 """.formatted(thirdPartyId));
 
-            mockMvc().perform(get("/api/contacts/{id}", contactId))
+            mockMvc().perform(get("/api/contacts/{id}", contactId).session(auth.session()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(contactId))
                 .andExpect(jsonPath("$.thirdPartyId").value(thirdPartyId))
@@ -1850,30 +1853,68 @@ class PersistenceIT {
         } finally {
             deleteContact(contactId);
             deleteThirdParty(thirdPartyId);
+            deleteUser(auth.userId());
         }
     }
 
     @Test
     void contactApi_rejectsMissingThirdPartyWithCanonicalUnprocessableEntity() throws Exception {
-        mockMvc().perform(post("/api/contacts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("""
-                    {"lastName":"Doe","thirdPartyId":999999999}
-                    """))
-            .andExpect(status().isUnprocessableEntity())
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(jsonPath("$.code").value("CONTACT_INVALID_THIRD_PARTY_REFERENCE"));
+        ContactApiAuth auth = contactApiAuth("contact-api-invalid-third-party");
+        try {
+            mockMvc().perform(post("/api/contacts")
+                    .session(auth.session())
+                    .cookie(auth.csrfCookie())
+                    .header("X-XSRF-TOKEN", auth.csrfCookie().getValue())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("""
+                        {"lastName":"Doe","thirdPartyId":999999999}
+                        """))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.code").value("CONTACT_INVALID_THIRD_PARTY_REFERENCE"));
+        } finally {
+            deleteUser(auth.userId());
+        }
     }
 
     @Test
     void contactApi_readMissingContactReturnsNotFound() throws Exception {
-        mockMvc().perform(get("/api/contacts/{id}", Long.MAX_VALUE))
-            .andExpect(status().isNotFound())
-            .andExpect(jsonPath("$.code").value("CONTACT_NOT_FOUND"));
+        ContactApiAuth auth = contactApiAuth("contact-api-missing");
+        try {
+            mockMvc().perform(get("/api/contacts/{id}", Long.MAX_VALUE).session(auth.session()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("CONTACT_NOT_FOUND"));
+        } finally {
+            deleteUser(auth.userId());
+        }
     }
 
-    private long postContact(String body) throws Exception {
+    private ContactApiAuth contactApiAuth(String prefix) throws Exception {
+        String suffix = UUID.randomUUID().toString();
+        UUID userId = UUID.randomUUID();
+        String username = prefix + "-" + suffix;
+        String password = "contact-api-password-123";
+        Instant now = Instant.now();
+        userRepository.create(new User(
+            userId,
+            username,
+            username + "@example.test",
+            passwordHasher.hash(password),
+            true,
+            0,
+            now,
+            now
+        ));
+        authorizationRepository.assignRoleToUser(userId, RoleCodes.SYSTEM_ADMIN);
+        MockHttpSession session = authenticatedSession(username, password);
+        return new ContactApiAuth(userId, session, csrfCookieFromSafeRequest());
+    }
+
+    private long postContact(ContactApiAuth auth, String body) throws Exception {
         var result = mockMvc().perform(post("/api/contacts")
+                .session(auth.session())
+                .cookie(auth.csrfCookie())
+                .header("X-XSRF-TOKEN", auth.csrfCookie().getValue())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
             .andExpect(status().isCreated())
@@ -1887,6 +1928,9 @@ class PersistenceIT {
         )).longValue();
         assertThat(result.getResponse().getHeader("Location")).isEqualTo("/api/contacts/" + id);
         return id;
+    }
+
+    private record ContactApiAuth(UUID userId, MockHttpSession session, Cookie csrfCookie) {
     }
 
     private MockHttpSession authenticatedSession(String username, String password) throws Exception {
@@ -2016,7 +2060,9 @@ class PersistenceIT {
                 PermissionCodes.AUDIT_READ,
                 PermissionCodes.AUDIT_CONFIGURE,
                 PermissionCodes.THIRD_PARTIES_READ,
-                PermissionCodes.THIRD_PARTIES_MANAGE
+                PermissionCodes.THIRD_PARTIES_MANAGE,
+                PermissionCodes.CONTACTS_READ,
+                PermissionCodes.CONTACTS_MANAGE
             );
         assertThat(dsl.fetch("select code from authentication_role").getValues(0, String.class))
             .contains(RoleCodes.SYSTEM_ADMIN);
@@ -2027,7 +2073,9 @@ class PersistenceIT {
                 PermissionCodes.AUDIT_READ,
                 PermissionCodes.AUDIT_CONFIGURE,
                 PermissionCodes.THIRD_PARTIES_READ,
-                PermissionCodes.THIRD_PARTIES_MANAGE
+                PermissionCodes.THIRD_PARTIES_MANAGE,
+                PermissionCodes.CONTACTS_READ,
+                PermissionCodes.CONTACTS_MANAGE
             );
         assertThat(dsl.fetch(
             "select built_in from authentication_role where code = ?",
@@ -2041,6 +2089,8 @@ class PersistenceIT {
             .containsExactly(
                 new PermissionDefinition(PermissionCodes.AUDIT_CONFIGURE, "Configure audit policy"),
                 new PermissionDefinition(PermissionCodes.AUDIT_READ, "Read audit events"),
+                new PermissionDefinition(PermissionCodes.CONTACTS_MANAGE, "Manage contacts"),
+                new PermissionDefinition(PermissionCodes.CONTACTS_READ, "Read contacts"),
                 new PermissionDefinition(
                     PermissionCodes.ROLES_MANAGE,
                     "Manage roles and their permission assignments"
@@ -2193,6 +2243,8 @@ class PersistenceIT {
             assertThat(builtIn.permissionCodes()).containsExactly(
                 PermissionCodes.AUDIT_CONFIGURE,
                 PermissionCodes.AUDIT_READ,
+                PermissionCodes.CONTACTS_MANAGE,
+                PermissionCodes.CONTACTS_READ,
                 PermissionCodes.ROLES_MANAGE,
                 PermissionCodes.THIRD_PARTIES_MANAGE,
                 PermissionCodes.THIRD_PARTIES_READ,
@@ -2282,6 +2334,8 @@ class PersistenceIT {
                     PermissionCodes.AUDIT_CONFIGURE,
                     PermissionCodes.THIRD_PARTIES_READ,
                     PermissionCodes.THIRD_PARTIES_MANAGE,
+                    PermissionCodes.CONTACTS_READ,
+                    PermissionCodes.CONTACTS_MANAGE,
                     permissionCode
                 );
         } finally {
@@ -2308,7 +2362,9 @@ class PersistenceIT {
                     PermissionCodes.AUDIT_READ,
                     PermissionCodes.AUDIT_CONFIGURE,
                     PermissionCodes.THIRD_PARTIES_READ,
-                    PermissionCodes.THIRD_PARTIES_MANAGE
+                    PermissionCodes.THIRD_PARTIES_MANAGE,
+                    PermissionCodes.CONTACTS_READ,
+                    PermissionCodes.CONTACTS_MANAGE
                 );
             assertThat(dsl.selectCount()
                 .from(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(USER_ROLE_TABLE)))

@@ -254,7 +254,7 @@ characterized**. It is not an implementation claim.
 | Domain | Evidence source | Legacy evidence | Seed status |
 |--------|-----------------|-----------------|-------------|
 | Third Parties | API inventory `thirdparties`; `THIRDPARTY-REF-001` | Basic lifecycle, classification, supplier flag, status and Contact link characterized; fiscal identity partially observed; broad sub-resources only discovered | Seeded; native create/read/list/update/delete implemented |
-| Contacts | API inventory `contacts`; `CONTACT-REF-001` | `CHARACTERIZED` for basic lifecycle; other sub-resources discovered | Seeded; native canonical create/read implemented |
+| Contacts | API inventory `contacts`; `CONTACT-REF-001` | `CHARACTERIZED` for basic lifecycle; other sub-resources discovered | Seeded; native canonical create/read implemented with canonical authorization, CSRF and creation audit |
 | Users and groups (Dolibarr) | API inventory `users` | `PENDING` | Discovered only; **not** equivalent to Alixar authentication users/roles |
 | Documents | API inventory `documents` | `PENDING` | Discovered only |
 | Email templates | API inventory `emailtemplates` | `PENDING` | Discovered only |
@@ -360,8 +360,8 @@ inventory of all Dolibarr.
 | `TP-FINANCIAL` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Outstanding sales endpoints discovered; no functional characterization |
 | `TP-NOTIFICATIONS` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Discovered from legacy endpoints only |
 | `TP-MERGE` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Merge endpoint discovered; merge rules not characterized |
-| `CT-CREATE` | `DONE` | `DONE` | `DONE` | `PENDING` | `PENDING` | `DONE` | `PENDING` | `DONE` | Native PostgreSQL/jOOQ persistence; canonical model/use case; `201` + `Location` + ID; optional ThirdParty reference validated before insert and protected by a restrictive FK; no Dolibarr runtime dependency; authorization, audit and data migration pending |
-| `CT-READ` | `DONE` | `DONE` | `DONE` | `PENDING` | `N/A` | `DONE` | `PENDING` | `DONE` | Native GET by ID from the Flyway-managed `contact` table through jOOQ; no Dolibarr runtime dependency; authorization and data migration pending |
+| `CT-CREATE` | `DONE` | `DONE` | `DONE` | `DONE` | `DONE` | `DONE` | `PENDING` | `DONE` | Native PostgreSQL/jOOQ persistence; canonical model/use case; `201` + `Location` + ID; optional ThirdParty reference validated before insert and protected by a restrictive FK; `contacts.manage` for SESSION and PAT; session CSRF enforced; atomic `CONTACT_CREATED` audit with fail-closed `503`; no Dolibarr runtime dependency; data migration pending |
+| `CT-READ` | `DONE` | `DONE` | `DONE` | `DONE` | `N/A` | `DONE` | `PENDING` | `DONE` | Native GET by ID from the Flyway-managed `contact` table through jOOQ; `contacts.read` for SESSION and PAT; no read audit in the baseline; no Dolibarr runtime dependency; data migration pending |
 | `CT-LIST` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Legacy filters include `thirdparty_ids`, `category`, `sqlfilters`, pagination; canonical contract not defined |
 | `CT-UPDATE` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Legacy partial `PUT`; canonical update not defined |
 | `CT-DELETE` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Legacy physical delete; relationship deletion semantics pending |
@@ -453,6 +453,8 @@ Evidence: `dolibarr-reference: reference/characterization/THIRDPARTY-REF-001-thi
 `CONTACT-REF-001` characterizes the basic legacy Contact lifecycle.
 
 `CONTACT-002` implements Alixar-owned create/read persistence.
+`CONTACT-003` adds canonical business authorization, mandatory CSRF for the
+session creation path and atomic creation audit.
 
 Alixar currently has:
 
@@ -466,6 +468,10 @@ Alixar currently has:
   restrictive foreign key to `third_party`;
 - application pre-validation plus a database backstop for missing ThirdParty
   references (`422 CONTACT_INVALID_THIRD_PARTY_REFERENCE`);
+- canonical permissions `contacts.read` and `contacts.manage`, seeded by V13 and
+  assigned to `system-admin`;
+- mandatory CSRF for session-authenticated creation, with Bearer exemption;
+- an atomic `CONTACT_CREATED` audit event under `BASIC` and `SELECTIVE`;
 - no Dolibarr runtime adapter or Dolibarr runtime configuration for Contact.
 
 Solucar currently has a basic Contact UI that searches by ID and creates a
@@ -475,8 +481,7 @@ However:
 
 ```text
 List, update and delete are not implemented.
-Contact is public and has no canonical business permission.
-Contact has no business audit instrumentation.
+Creation audit is limited to CONTACT_CREATED; reads are not audited.
 Historical Contact data and relationships are not migrated.
 ```
 
@@ -569,12 +574,13 @@ No business permission is invented in this document.
 
 - `thirdparties.read` and `thirdparties.manage` are implemented, seeded and
   assigned to `system-admin`; `TP-CREATE`, `TP-READ`, `TP-LIST` and `TP-UPDATE`
-  enforce them. Contact still has no canonical business permission; its
-  create/read endpoints remain public by current contract.
-- Contact is currently public and its POST is temporarily excluded from CSRF
-  protection. That is **tracked debt**, not a target state. ThirdParty follows
-  the normal CSRF rule: session mutations require a CSRF token, Bearer requests
-  do not, and no exclusion is added for `/api/thirdparties/**`.
+  enforce them.
+- `contacts.read` and `contacts.manage` are implemented, seeded by V13 and
+  assigned to `system-admin`; `CT-READ` and `CT-CREATE` enforce them for both
+  SESSION and PAT authentication.
+- ThirdParty and Contact follow the normal CSRF rule: session mutations require
+  a CSRF token, Bearer requests do not, and no path exclusion is added for
+  `/api/thirdparties/**` or `/api/contacts/**`.
 - The audit platform exists, but business instrumentation is only `DONE` when a
   concrete capability actually appends its events.
 - ThirdParty mutation audit is implemented: `THIRD_PARTY_CREATED`,
@@ -582,7 +588,10 @@ No business permission is invented in this document.
   their mutations and record only the canonical identifier; no-op updates and
   rejected deletes record no event. ThirdParty reads are not part of the
   baseline and `SELECTIVE` read auditing for `THIRD_PARTY` is not implemented.
-  Contact business audit instrumentation is `PENDING`.
+- Contact creation audit is implemented: `CONTACT_CREATED` is appended
+  atomically with the insert under `BASIC` and `SELECTIVE`, records only the
+  canonical identifier and fails closed with `503 AUDIT_UNAVAILABLE`. Contact
+  reads are not audited in the baseline.
 - Do not mark a capability audited merely because the audit infrastructure
   exists.
 
@@ -656,7 +665,6 @@ These decisions are recorded in [ThirdParty](thirdparty.md):
 | Decision | Why it matters |
 |----------|----------------|
 | Contact list/update/delete lifecycle | Only create and read are implemented canonically and natively; list, update and delete remain open |
-| Contact authorization and audit | Contact is still public and has no canonical business permission or audit instrumentation |
 | ThirdParty advanced fiscal/tax rules | VIES, ES format/check digit, uniqueness and subjection rules are not characterized |
 | ThirdParty commercial alias | `name_alias` is observed but deferred |
 | ThirdParty structured addresses and geography | Address semantics, states and country catalogue are pending |
