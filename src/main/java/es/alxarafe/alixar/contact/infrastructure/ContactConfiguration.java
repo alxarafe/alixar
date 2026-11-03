@@ -4,6 +4,7 @@ import es.alxarafe.alixar.audit.application.AuditTrail;
 import es.alxarafe.alixar.contact.application.ContactRepository;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
 import es.alxarafe.alixar.contact.application.ThirdPartyReferenceChecker;
+import es.alxarafe.alixar.contact.application.UpdateContactUseCase;
 import es.alxarafe.alixar.contact.infrastructure.persistence.JooqContactRepository;
 import es.alxarafe.alixar.contact.infrastructure.persistence.JooqThirdPartyReferenceChecker;
 import org.jooq.DSLContext;
@@ -27,10 +28,23 @@ public class ContactConfiguration {
     }
 
     @Bean
+    UpdateContactUseCase updateContactUseCase(
+        ContactRepository contactRepository,
+        ThirdPartyReferenceChecker thirdPartyReferenceChecker
+    ) {
+        return new UpdateContactUseCase(contactRepository, thirdPartyReferenceChecker);
+    }
+
+    @Bean
     TransactionalContactService transactionalContactService(
         CreateContactUseCase createContactUseCase,
+        UpdateContactUseCase updateContactUseCase,
         AuditTrail auditTrail
     ) {
-        return new TransactionalContactService(createContactUseCase, auditTrail);
+        return new TransactionalContactService(
+            createContactUseCase,
+            updateContactUseCase,
+            auditTrail
+        );
     }
 }

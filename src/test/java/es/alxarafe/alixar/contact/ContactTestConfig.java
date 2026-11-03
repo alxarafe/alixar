@@ -4,6 +4,7 @@ import es.alxarafe.alixar.contact.application.ContactRepository;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
 import es.alxarafe.alixar.contact.application.GetContactUseCase;
 import es.alxarafe.alixar.contact.application.ThirdPartyReferenceChecker;
+import es.alxarafe.alixar.contact.application.UpdateContactUseCase;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +35,12 @@ public class ContactTestConfig {
     @Primary
     CreateContactUseCase createContactUseCase() {
         return Mockito.mock(CreateContactUseCase.class);
+    }
+
+    @Bean
+    @Primary
+    UpdateContactUseCase mockUpdateContactUseCase() {
+        return Mockito.mock(UpdateContactUseCase.class);
     }
 
 }

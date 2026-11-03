@@ -21,7 +21,11 @@ import es.alxarafe.alixar.contact.application.ContactRepository;
 import es.alxarafe.alixar.contact.application.CreateContactCommand;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
 import es.alxarafe.alixar.contact.application.GetContactUseCase;
+import es.alxarafe.alixar.contact.application.InvalidContactDataException;
 import es.alxarafe.alixar.contact.application.InvalidThirdPartyReferenceException;
+import es.alxarafe.alixar.contact.application.UpdateContactCommand;
+import es.alxarafe.alixar.contact.application.UpdateContactResult;
+import es.alxarafe.alixar.contact.application.UpdateContactUseCase;
 import es.alxarafe.alixar.contact.domain.Contact;
 import jakarta.servlet.http.Cookie;
 import java.time.Instant;
@@ -39,10 +43,13 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -69,6 +76,9 @@ class ContactControllerTest {
     private CreateContactUseCase createContactUseCase;
 
     @Autowired
+    private UpdateContactUseCase updateContactUseCase;
+
+    @Autowired
     private ContactRepository contactRepository;
 
     @Autowired
@@ -90,7 +100,7 @@ class ContactControllerTest {
 
     @BeforeEach
     void setup() {
-        reset(createContactUseCase, contactRepository);
+        reset(createContactUseCase, updateContactUseCase, contactRepository);
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         Instant now = Instant.parse("2026-11-02T10:00:00Z");
         ((TestUserRepository) userRepository).replaceWith(new User(
@@ -424,6 +434,231 @@ class ContactControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"lastName\":\"Doe\"}"))
             .andExpect(status().isCreated());
+    }
+
+    @Test
+    void updateContact_returnsCompleteCanonicalRepresentation() throws Exception {
+        Contact updated = new Contact(3L, "Smith", "John", "john@example.test", 10L);
+        when(updateContactUseCase.execute(eq(3L), any(UpdateContactCommand.class)))
+            .thenReturn(new UpdateContactResult(updated, true));
+
+        mockMvc.perform(authenticatedPatch("3", "{\"lastName\":\"Smith\"}"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/json"))
+            .andExpect(jsonPath("$.id").value(3))
+            .andExpect(jsonPath("$.lastName").value("Smith"))
+            .andExpect(jsonPath("$.firstName").value("John"))
+            .andExpect(jsonPath("$.email").value("john@example.test"))
+            .andExpect(jsonPath("$.thirdPartyId").value(10));
+    }
+
+    @Test
+    void updateContact_supportsOptionalFieldReplacementAndClearing() throws Exception {
+        Contact updated = new Contact(3L, "Doe", null, "jane@example.test", 10L);
+        when(updateContactUseCase.execute(eq(3L), any(UpdateContactCommand.class)))
+            .thenReturn(new UpdateContactResult(updated, true));
+
+        mockMvc.perform(authenticatedPatch(
+                "{\"firstName\":null,\"email\":\"jane@example.test\"}"
+            ))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.firstName").doesNotExist())
+            .andExpect(jsonPath("$.email").value("jane@example.test"));
+    }
+
+    @Test
+    void updateContact_supportsThirdPartyReassignmentAndUnlink() throws Exception {
+        Contact reassigned = new Contact(3L, "Doe", "John", "john@example.test", 20L);
+        when(updateContactUseCase.execute(eq(3L), any(UpdateContactCommand.class)))
+            .thenReturn(new UpdateContactResult(reassigned, true), new UpdateContactResult(
+                new Contact(3L, "Doe", "John", "john@example.test", null),
+                true
+            ));
+
+        mockMvc.perform(authenticatedPatch("{\"thirdPartyId\":20}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.thirdPartyId").value(20));
+
+        mockMvc.perform(authenticatedPatch("{\"thirdPartyId\":null}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.thirdPartyId").doesNotExist());
+    }
+
+    @Test
+    void updateContact_rejectsUnknownMembersBodyIdAndInvalidTypes() throws Exception {
+        assertUpdateValidationError("{\"legacyId\":7}", "legacyId");
+        assertUpdateValidationError("{\"id\":7}", "id");
+        assertUpdateValidationError("{\"lastName\":123}", "lastName");
+        assertUpdateValidationError("{\"firstName\":123}", "firstName");
+        assertUpdateValidationError("{\"email\":123}", "email");
+        assertUpdateValidationError("{\"thirdPartyId\":\"20\"}", "thirdPartyId");
+        assertUpdateValidationError("{\"thirdPartyId\":1.5}", "thirdPartyId");
+        assertUpdateValidationError("[]", "body");
+        assertUpdateValidationError("{not-json", "body");
+    }
+
+    @Test
+    void updateContact_nullLastNameReturnsValidationRequired() throws Exception {
+        mockMvc.perform(authenticatedPatch("{\"lastName\":null}"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("VALIDATION_REQUIRED"))
+            .andExpect(jsonPath("$.field").value("lastName"));
+    }
+
+    @Test
+    void updateContact_blankLastNamePropagatesValidationRequired() throws Exception {
+        when(updateContactUseCase.execute(eq(3L), any(UpdateContactCommand.class)))
+            .thenThrow(new InvalidContactDataException(
+                es.alxarafe.alixar.core.application.ErrorCode.VALIDATION_REQUIRED,
+                "lastName"
+            ));
+
+        mockMvc.perform(authenticatedPatch("{\"lastName\":\"   \"}"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("VALIDATION_REQUIRED"))
+            .andExpect(jsonPath("$.field").value("lastName"));
+    }
+
+    @Test
+    void updateContact_nonPositiveIdentifierReturnsValidationInvalid() throws Exception {
+        when(updateContactUseCase.execute(eq(0L), any(UpdateContactCommand.class)))
+            .thenThrow(new InvalidContactDataException(
+                es.alxarafe.alixar.core.application.ErrorCode.VALIDATION_INVALID,
+                "id"
+            ));
+        when(updateContactUseCase.execute(eq(-1L), any(UpdateContactCommand.class)))
+            .thenThrow(new InvalidContactDataException(
+                es.alxarafe.alixar.core.application.ErrorCode.VALIDATION_INVALID,
+                "id"
+            ));
+
+        for (String id : List.of("0", "-1", "abc")) {
+            mockMvc.perform(authenticatedPatch(id, "{\"lastName\":\"Doe\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VALIDATION_INVALID"))
+                .andExpect(jsonPath("$.field").value("id"));
+        }
+    }
+
+    @Test
+    void updateContact_missingPositiveIdentifierReturnsNotFound() throws Exception {
+        when(updateContactUseCase.execute(eq(999L), any(UpdateContactCommand.class)))
+            .thenThrow(new ContactNotFoundException(999L));
+
+        mockMvc.perform(authenticatedPatch("999", "{\"lastName\":\"Doe\"}"))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value("CONTACT_NOT_FOUND"));
+    }
+
+    @Test
+    void updateContact_requiresAuthenticationAndManagePermission() throws Exception {
+        when(updateContactUseCase.execute(eq(3L), any(UpdateContactCommand.class)))
+            .thenReturn(new UpdateContactResult(
+                new Contact(3L, "Doe", null, null, null),
+                true
+            ));
+
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        mockMvc.perform(patch(ContactEndpoints.BASE_PATH + "/3")
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(ContactEndpoints.MERGE_PATCH_MEDIA_TYPE)
+                .content("{\"lastName\":\"Doe\"}"))
+            .andExpect(status().isUnauthorized());
+
+        grantOnly(PermissionCodes.CONTACTS_READ);
+        mockMvc.perform(authenticatedPatch("3", "{\"lastName\":\"Doe\"}"))
+            .andExpect(status().isForbidden());
+
+        grantOnly(PermissionCodes.CONTACTS_MANAGE);
+        mockMvc.perform(authenticatedPatch("3", "{\"lastName\":\"Doe\"}"))
+            .andExpect(status().isOk());
+
+        mockMvc.perform(patch(ContactEndpoints.BASE_PATH + "/3")
+                .header("Authorization", "Bearer " + personalAccessToken())
+                .contentType(ContactEndpoints.MERGE_PATCH_MEDIA_TYPE)
+                .content("{\"lastName\":\"Doe\"}"))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    void updateContact_sessionRequiresCsrfAndBearerDoesNot() throws Exception {
+        when(updateContactUseCase.execute(eq(3L), any(UpdateContactCommand.class)))
+            .thenReturn(new UpdateContactResult(
+                new Contact(3L, "Doe", null, null, null),
+                true
+            ));
+        grantOnly(PermissionCodes.CONTACTS_MANAGE);
+
+        mockMvc.perform(patch(ContactEndpoints.BASE_PATH + "/3")
+                .session(authenticatedSession())
+                .contentType(ContactEndpoints.MERGE_PATCH_MEDIA_TYPE)
+                .content("{\"lastName\":\"Doe\"}"))
+            .andExpect(status().isForbidden());
+
+        mockMvc.perform(authenticatedPatch("3", "{\"lastName\":\"Doe\"}"))
+            .andExpect(status().isOk());
+
+        mockMvc.perform(patch(ContactEndpoints.BASE_PATH + "/3")
+                .header("Authorization", "Bearer " + personalAccessToken())
+                .contentType(ContactEndpoints.MERGE_PATCH_MEDIA_TYPE)
+                .content("{\"lastName\":\"Doe\"}"))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    void updateContact_applicationJsonMediaTypeIsUnsupported() throws Exception {
+        grantOnly(PermissionCodes.CONTACTS_MANAGE);
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        mockMvc.perform(patch(ContactEndpoints.BASE_PATH + "/3")
+                .session(authenticatedSession())
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"lastName\":\"Doe\"}"))
+            .andExpect(status().isUnsupportedMediaType());
+    }
+
+    @Test
+    void updateContact_noOpReturnsFullRepresentation() throws Exception {
+        Contact existing = new Contact(3L, "Doe", "John", "john@example.test", 10L);
+        when(updateContactUseCase.execute(eq(3L), any(UpdateContactCommand.class)))
+            .thenReturn(new UpdateContactResult(existing, false));
+
+        mockMvc.perform(authenticatedPatch("{}"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.id").value(3))
+            .andExpect(jsonPath("$.lastName").value("Doe"))
+            .andExpect(jsonPath("$.firstName").value("John"))
+            .andExpect(jsonPath("$.email").value("john@example.test"))
+            .andExpect(jsonPath("$.thirdPartyId").value(10));
+    }
+
+    private void assertUpdateValidationError(String body, String field) throws Exception {
+        mockMvc.perform(authenticatedPatch(body))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("VALIDATION_INVALID"))
+            .andExpect(jsonPath("$.field").value(field));
+    }
+
+    private org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder authenticatedPatch(
+        String body
+    ) throws Exception {
+        return authenticatedPatch("3", body);
+    }
+
+    private org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder authenticatedPatch(
+        String id,
+        String body
+    ) throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        return patch(ContactEndpoints.BASE_PATH + "/" + id)
+            .session(authenticatedSession())
+            .cookie(csrfCookie)
+            .header(CSRF_HEADER, csrfCookie.getValue())
+            .contentType(ContactEndpoints.MERGE_PATCH_MEDIA_TYPE)
+            .content(body);
     }
 
     private org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder authenticatedPost(

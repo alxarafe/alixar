@@ -19,6 +19,10 @@ import es.alxarafe.alixar.contact.ContactTestConfig;
 import es.alxarafe.alixar.contact.application.ContactRepository;
 import es.alxarafe.alixar.contact.application.CreateContactCommand;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
+import es.alxarafe.alixar.contact.application.UpdateContactCommand;
+import es.alxarafe.alixar.contact.application.UpdateContactResult;
+import es.alxarafe.alixar.contact.application.UpdateContactUseCase;
+import es.alxarafe.alixar.contact.domain.Contact;
 import jakarta.servlet.http.Cookie;
 import java.time.Instant;
 import java.util.UUID;
@@ -39,11 +43,13 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -69,6 +75,9 @@ class ContactAuditFailureTest {
     private CreateContactUseCase createContactUseCase;
 
     @Autowired
+    private UpdateContactUseCase updateContactUseCase;
+
+    @Autowired
     private ContactRepository contactRepository;
 
     @Autowired
@@ -90,7 +99,7 @@ class ContactAuditFailureTest {
 
     @BeforeEach
     void setup() {
-        reset(createContactUseCase, contactRepository);
+        reset(createContactUseCase, updateContactUseCase, contactRepository);
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         Instant now = Instant.parse("2026-11-02T10:00:00Z");
         ((TestUserRepository) userRepository).replaceWith(new User(
@@ -122,6 +131,34 @@ class ContactAuditFailureTest {
                     .header(CSRF_HEADER, csrfCookie.getValue())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{\"lastName\":\"Doe\",\"email\":\"john@example.test\"}"))
+                .andExpect(status().isServiceUnavailable())
+                .andExpect(jsonPath("$.code").value(AuditErrorCode.AUDIT_UNAVAILABLE.name()))
+                .andExpect(jsonPath("$.lastName").doesNotExist())
+                .andExpect(jsonPath("$.email").doesNotExist());
+
+            assertThat(auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID)).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void update_auditFailure_returnsAuditUnavailableWithoutBusinessData() throws Exception {
+        when(updateContactUseCase.execute(eq(42L), any(UpdateContactCommand.class)))
+            .thenReturn(new UpdateContactResult(
+                new Contact(42L, "Doe", "John", "john@example.test", null),
+                true
+            ));
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            mockMvc.perform(patch(ContactEndpoints.BASE_PATH + "/42")
+                    .session(session)
+                    .cookie(csrfCookie)
+                    .header(CSRF_HEADER, csrfCookie.getValue())
+                    .contentType(ContactEndpoints.MERGE_PATCH_MEDIA_TYPE)
+                    .content("{\"lastName\":\"Doe\"}"))
                 .andExpect(status().isServiceUnavailable())
                 .andExpect(jsonPath("$.code").value(AuditErrorCode.AUDIT_UNAVAILABLE.name()))
                 .andExpect(jsonPath("$.lastName").doesNotExist())

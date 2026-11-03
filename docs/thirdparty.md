@@ -760,9 +760,8 @@ Decisions:
 - when present, `thirdPartyId` must reference an existing canonical ThirdParty;
 - the relationship is optional many-to-one: many Contacts may reference one
   ThirdParty, and one Contact references at most one ThirdParty;
-- changing the association is allowed through the future Contact update
-  lifecycle: setting a valid identifier links the Contact, and setting `null`
-  makes it standalone;
+- changing the association is allowed through Contact partial update: setting a
+  valid identifier links the Contact, and setting `null` makes it standalone;
 - supplying a non-existent ThirdParty on Contact create/update keeps the existing
   canonical error `CONTACT_INVALID_THIRD_PARTY_REFERENCE` (HTTP `422`);
 - deleting a ThirdParty with linked Contacts is rejected with

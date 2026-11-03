@@ -194,6 +194,8 @@ public class SecurityConfiguration {
                 ).hasAuthority(PermissionCodes.CONTACTS_READ)
                 .requestMatchers(HttpMethod.POST, ContactEndpoints.BASE_PATH)
                     .hasAuthority(PermissionCodes.CONTACTS_MANAGE)
+                .requestMatchers(HttpMethod.PATCH, ContactEndpoints.ITEM_PATH_PATTERN)
+                    .hasAuthority(PermissionCodes.CONTACTS_MANAGE)
                 .requestMatchers(HttpMethod.GET, AuditEndpoints.VERIFICATION_PATH)
                     .hasAuthority(PermissionCodes.AUDIT_READ)
                 .requestMatchers(HttpMethod.GET, AuditEndpoints.BASE_PATH)

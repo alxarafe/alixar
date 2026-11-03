@@ -31,12 +31,14 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 
 ## Implemented
 
-- Canonical Contact read (`GET /api/contacts/{id}`), list (`GET /api/contacts`)
-  and creation (`POST /api/contacts`) with native Alixar PostgreSQL/jOOQ
-  persistence, `contacts.read` / `contacts.manage` authorization, mandatory
-  session CSRF and atomic `CONTACT_CREATED` audit
+- Canonical Contact read (`GET /api/contacts/{id}`), list (`GET /api/contacts`),
+  creation (`POST /api/contacts`) and partial update (`PATCH /api/contacts/{id}`)
+  with native Alixar PostgreSQL/jOOQ persistence, `contacts.read` /
+  `contacts.manage` authorization, mandatory session CSRF and atomic
+  `CONTACT_CREATED` / `CONTACT_UPDATED` audit
 - Optional Contact → ThirdParty relationship with a restrictive native foreign
-  key and canonical `422` validation for missing references
+  key, canonical `422` validation for missing references, and reassignment or
+  unlinking through Contact partial update
 - Real Dolibarr reference verification against `dolibarr-reference` 24.0.1,
   including confirmation that the Contact runtime does not depend on Dolibarr
 - Canonical ThirdParty creation (`POST /api/thirdparties`), read
@@ -106,8 +108,8 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   event detail, retention, purge, archive and signed checkpoints
 
 - ThirdParty Solucar UI and historical data migration
-- Contact update, delete and historical data migration; native create/read/list
-  persistence, canonical authorization, CSRF hardening, creation audit and the
+- Contact delete and historical data migration; native create/read/list/update
+  persistence, canonical authorization, CSRF hardening, mutation audit and the
   restrictive Contact → ThirdParty relationship are implemented
 - Email change with new-address verification
 - Role groups
@@ -233,8 +235,8 @@ self-service username and password changes, completed password recovery,
 Personal Access Token creation and revocation, role creation, rename,
 permission replacement and deletion, ThirdParty creation, real update and
 successful physical delete (`THIRD_PARTY_CREATED`, `THIRD_PARTY_UPDATED`,
-`THIRD_PARTY_DELETED`) and Contact creation (`CONTACT_CREATED`), recording only
-the canonical identifier. The application
+`THIRD_PARTY_DELETED`) and Contact creation and partial update (`CONTACT_CREATED`,
+`CONTACT_UPDATED`), recording only the canonical identifier. The application
 layer depends on an
 `AuditTrail` port and an `AuditPolicyProvider` port, not on environment variables,
 Spring Security or jOOQ. Authenticated operations resolve their actor

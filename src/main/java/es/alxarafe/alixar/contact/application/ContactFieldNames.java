@@ -7,6 +7,7 @@ public final class ContactFieldNames {
     public static final String FIRST_NAME = "firstName";
     public static final String EMAIL = "email";
     public static final String THIRD_PARTY_ID = "thirdPartyId";
+    public static final String BODY = "body";
     public static final String PAGE = "page";
     public static final String SIZE = "size";
 

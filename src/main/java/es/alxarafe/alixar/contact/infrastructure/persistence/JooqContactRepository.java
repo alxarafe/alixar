@@ -85,6 +85,24 @@ public class JooqContactRepository implements ContactRepository {
         }
     }
 
+    @Override
+    public void update(Contact contact) {
+        try {
+            dsl.update(CONTACT_TABLE)
+                .set(LAST_NAME, contact.lastName())
+                .set(FIRST_NAME, contact.firstName())
+                .set(EMAIL, contact.email())
+                .set(THIRD_PARTY_ID, contact.thirdPartyId())
+                .where(ID.eq(contact.id()))
+                .execute();
+        } catch (DataIntegrityViolationException exception) {
+            if (contact.thirdPartyId() != null) {
+                throw new InvalidThirdPartyReferenceException();
+            }
+            throw exception;
+        }
+    }
+
     private Condition filterCondition(ContactListQuery query) {
         Condition condition = noCondition();
         if (query.thirdPartyId() != null) {

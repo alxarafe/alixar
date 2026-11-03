@@ -8,6 +8,8 @@ public interface ContactRepository {
 
     long create(CreateContactCommand command);
 
+    void update(Contact contact);
+
     ContactPage findPage(ContactListQuery query);
 
 }

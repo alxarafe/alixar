@@ -254,7 +254,7 @@ characterized**. It is not an implementation claim.
 | Domain | Evidence source | Legacy evidence | Seed status |
 |--------|-----------------|-----------------|-------------|
 | Third Parties | API inventory `thirdparties`; `THIRDPARTY-REF-001` | Basic lifecycle, classification, supplier flag, status and Contact link characterized; fiscal identity partially observed; broad sub-resources only discovered | Seeded; native create/read/list/update/delete implemented |
-| Contacts | API inventory `contacts`; `CONTACT-REF-001` | `CHARACTERIZED` for basic lifecycle; other sub-resources discovered | Seeded; native canonical create/read/list implemented with canonical authorization, CSRF and creation audit |
+| Contacts | API inventory `contacts`; `CONTACT-REF-001` | `CHARACTERIZED` for basic lifecycle; other sub-resources discovered | Seeded; native canonical create/read/list/update implemented with canonical authorization, CSRF and mutation audit |
 | Users and groups (Dolibarr) | API inventory `users` | `PENDING` | Discovered only; **not** equivalent to Alixar authentication users/roles |
 | Documents | API inventory `documents` | `PENDING` | Discovered only |
 | Email templates | API inventory `emailtemplates` | `PENDING` | Discovered only |
@@ -317,7 +317,7 @@ inventory of all Dolibarr.
 | `CT-CREATE` | Contacts — create | `CONTACT-REF-001` | `CHARACTERIZED` | `ADAPT` | `IN_PROGRESS` | `TP-CONTACT-LINK`; native Contact persistence (`CONTACT-002`) |
 | `CT-READ` | Contacts — read by ID | `CONTACT-REF-001` | `CHARACTERIZED` | `ADAPT` | `IN_PROGRESS` | `TP-CONTACT-LINK`; native Contact persistence (`CONTACT-002`) |
 | `CT-LIST` | Contacts — list/search/filter | `CONTACT-REF-001` | `CHARACTERIZED` | `ADAPT` | `IN_PROGRESS` | Contact persistence |
-| `CT-UPDATE` | Contacts — update | `CONTACT-REF-001` | `CHARACTERIZED` | `PENDING` | `CHARACTERIZED` | Contact persistence |
+| `CT-UPDATE` | Contacts — update | `CONTACT-REF-001` | `CHARACTERIZED` | `ADAPT` | `DONE` | Contact persistence; `TP-CONTACT-LINK` |
 | `CT-DELETE` | Contacts — delete | `CONTACT-REF-001` | `CHARACTERIZED` | `PENDING` | `CHARACTERIZED` | Contact persistence; `TP-CONTACT-LINK` deletion decision |
 | `CT-EMAIL-LOOKUP` | Contacts — lookup by email | API inventory | `PENDING` | `PENDING` | `PENDING` | Privacy/authorization decisions |
 | `CT-CREATE-USER` | Contacts — create user from contact | API inventory | `PENDING` | `PENDING` | `PENDING` | Dolibarr Users/Groups; identity mapping |
@@ -363,7 +363,7 @@ inventory of all Dolibarr.
 | `CT-CREATE` | `DONE` | `DONE` | `DONE` | `DONE` | `DONE` | `DONE` | `PENDING` | `DONE` | Native PostgreSQL/jOOQ persistence; canonical model/use case; `201` + `Location` + ID; optional ThirdParty reference validated before insert and protected by a restrictive FK; `contacts.manage` for SESSION and PAT; session CSRF enforced; atomic `CONTACT_CREATED` audit with fail-closed `503`; no Dolibarr runtime dependency; data migration pending |
 | `CT-READ` | `DONE` | `DONE` | `DONE` | `DONE` | `N/A` | `DONE` | `PENDING` | `DONE` | Native GET by ID from the Flyway-managed `contact` table through jOOQ; `contacts.read` for SESSION and PAT; no read audit in the baseline; no Dolibarr runtime dependency; data migration pending |
 | `CT-LIST` | `DONE` | `DONE` | `DONE` | `DONE` | `N/A` | `PENDING` | `PENDING` | `DONE` | `GET /api/contacts` with 0-based `page`/`size`, `id ASC`, optional exact `thirdPartyId` filter and filtered `total`; reads are not audited; Solucar and data migration pending |
-| `CT-UPDATE` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Legacy partial `PUT`; canonical update not defined |
+| `CT-UPDATE` | `DONE` | `DONE` | `DONE` | `DONE` | `DONE` | `PENDING` | `PENDING` | `DONE` | `PATCH /api/contacts/{id}` with `application/merge-patch+json`, unknown members rejected, nullable clearing, ThirdParty reassignment/unlink with `422` validation and restrictive FK, no-op records no event, `CONTACT_UPDATED` audit; Solucar and data migration pending |
 | `CT-DELETE` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Legacy physical delete; relationship deletion semantics pending |
 | `CT-EMAIL-LOOKUP` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Discovered endpoint; privacy/authorization not decided |
 | `CT-CREATE-USER` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | `PENDING` | Legacy endpoint creates a Dolibarr user; identity mapping not decided |
@@ -456,16 +456,20 @@ Evidence: `dolibarr-reference: reference/characterization/THIRDPARTY-REF-001-thi
 `CONTACT-003` adds canonical business authorization, mandatory CSRF for the
 session creation path and atomic creation audit. `CONTACT-004A` adds the
 canonical Contact list with pagination, deterministic ordering and an optional
-ThirdParty filter.
+ThirdParty filter. `CONTACT-004B` adds the canonical partial update.
 
 Alixar currently has:
 
 - a canonical Contact domain model;
-- `CreateContactUseCase`, `GetContactUseCase` and `ListContactsUseCase`;
+- `CreateContactUseCase`, `GetContactUseCase`, `ListContactsUseCase` and
+  `UpdateContactUseCase`;
 - `GET /api/contacts/{id}` backed by native PostgreSQL/jOOQ persistence;
 - `GET /api/contacts` with 0-based pagination, `id ASC` ordering, an optional
   exact `thirdPartyId` filter and a filtered `total`, without read audit;
 - `POST /api/contacts` (201 + ID) backed by native PostgreSQL/jOOQ persistence;
+- `PATCH /api/contacts/{id}` with `application/merge-patch+json` for `lastName`,
+  `firstName`, `email` and `thirdPartyId`, returning the full canonical
+  representation and distinguishing real updates from no-ops;
 - the canonical naming boundary (`lastName`, `firstName`, `thirdPartyId`);
 - a Flyway-managed `contact` table with an identity identifier, required
   non-blank `last_name`, optional `first_name` and `email`, and a nullable
@@ -474,8 +478,10 @@ Alixar currently has:
   references (`422 CONTACT_INVALID_THIRD_PARTY_REFERENCE`);
 - canonical permissions `contacts.read` and `contacts.manage`, seeded by V13 and
   assigned to `system-admin`;
-- mandatory CSRF for session-authenticated creation, with Bearer exemption;
-- an atomic `CONTACT_CREATED` audit event under `BASIC` and `SELECTIVE`;
+- mandatory CSRF for session-authenticated creation and update, with Bearer
+  exemption;
+- atomic `CONTACT_CREATED` and `CONTACT_UPDATED` audit events under `BASIC` and
+  `SELECTIVE`, with no event for a no-op update;
 - no Dolibarr runtime adapter or Dolibarr runtime configuration for Contact.
 
 Solucar currently has a basic Contact UI that searches by ID and creates a
@@ -484,8 +490,9 @@ Contact.
 However:
 
 ```text
-Update and delete are not implemented.
-Creation audit is limited to CONTACT_CREATED; reads and listing are not audited.
+Delete is not implemented.
+Mutation audit is limited to CONTACT_CREATED and CONTACT_UPDATED; reads and
+listing are not audited.
 Historical Contact data and relationships are not migrated.
 ```
 
@@ -580,8 +587,8 @@ No business permission is invented in this document.
   assigned to `system-admin`; `TP-CREATE`, `TP-READ`, `TP-LIST` and `TP-UPDATE`
   enforce them.
 - `contacts.read` and `contacts.manage` are implemented, seeded by V13 and
-  assigned to `system-admin`; `CT-READ`, `CT-LIST` and `CT-CREATE` enforce them
-  for both SESSION and PAT authentication.
+  assigned to `system-admin`; `CT-READ`, `CT-LIST`, `CT-CREATE` and `CT-UPDATE`
+  enforce them for both SESSION and PAT authentication.
 - ThirdParty and Contact follow the normal CSRF rule: session mutations require
   a CSRF token, Bearer requests do not, and no path exclusion is added for
   `/api/thirdparties/**` or `/api/contacts/**`.
@@ -592,10 +599,11 @@ No business permission is invented in this document.
   their mutations and record only the canonical identifier; no-op updates and
   rejected deletes record no event. ThirdParty reads are not part of the
   baseline and `SELECTIVE` read auditing for `THIRD_PARTY` is not implemented.
-- Contact creation audit is implemented: `CONTACT_CREATED` is appended
-  atomically with the insert under `BASIC` and `SELECTIVE`, records only the
-  canonical identifier and fails closed with `503 AUDIT_UNAVAILABLE`. Contact
-  reads and listing are not audited in the baseline.
+- Contact mutation audit is implemented: `CONTACT_CREATED` and
+  `CONTACT_UPDATED` are appended atomically with the mutation under `BASIC` and
+  `SELECTIVE`, record only the canonical identifier and fail closed with `503
+  AUDIT_UNAVAILABLE`. A no-op update records no event. Contact reads and listing
+  are not audited in the baseline.
 - Do not mark a capability audited merely because the audit infrastructure
   exists.
 
@@ -611,7 +619,7 @@ Only implemented UI is recorded.
 |------------|---------------|
 | Login, logout, forbidden view | `DONE` |
 | Contact search by ID and create | `DONE` |
-| Contact list, edit, delete | `PENDING` |
+| Contact list, edit, delete UI | `PENDING` |
 | ThirdParty UI | `PENDING` |
 | User administration UI | `DONE` |
 | Role administration UI | `DONE` |
@@ -629,7 +637,7 @@ Only dependencies that genuinely condition order are recorded.
 
 | Capability | Depends on |
 |------------|------------|
-| Contact update/delete lifecycle | Canonical authorization/audit decisions and deletion/relationship semantics; native Contact persistence, list and the optional restrictive FK are implemented |
+| Contact delete lifecycle | Canonical deletion/relationship semantics; native Contact persistence, list, update and the optional restrictive FK are implemented |
 | ThirdParty canonical implementation | `THIRDPARTY-001` decisions (complete); create/read/list/update implemented natively; the full lifecycle still needs delete and the canonical linked-Contact conflict |
 | Data migration for ThirdParty/Contact | Explicit legacy-to-canonical identity mapping and duplicate-resolution decisions |
 | Categories/classifications | A canonical category domain |
@@ -657,6 +665,7 @@ These decisions are recorded in [ThirdParty](thirdparty.md):
 | Unknown JSON body-field handling | Rejected with `400 VALIDATION_INVALID` |
 | Unknown query-parameter handling | Not a canonical rejection requirement; standard Spring binding; closed-list validation where natural |
 | ThirdParty deletion with linked Contacts | `409 THIRD_PARTY_DELETE_CONFLICT`; unlink or reassign first |
+| Contact update transport and semantics | `PATCH /api/contacts/{id}` with `application/merge-patch+json`; omitted fields unchanged, `null` clears nullable fields, `lastName` remains required, no-op performs no update or audit |
 | Customer/prospect representation | Independent `customer` and `prospect` booleans |
 | Supplier semantics | Independent `supplier` boolean |
 | Active state | Single `active` boolean |
@@ -668,7 +677,7 @@ These decisions are recorded in [ThirdParty](thirdparty.md):
 
 | Decision | Why it matters |
 |----------|----------------|
-| Contact update/delete lifecycle | Create, read and list are implemented canonically and natively; update and delete remain open |
+| Contact delete lifecycle | Create, read, list and update are implemented canonically and natively; delete remains open |
 | ThirdParty advanced fiscal/tax rules | VIES, ES format/check digit, uniqueness and subjection rules are not characterized |
 | ThirdParty commercial alias | `name_alias` is observed but deferred |
 | ThirdParty structured addresses and geography | Address semantics, states and country catalogue are pending |
@@ -731,20 +740,19 @@ No legacy business capability = MIGRATED
 The ThirdParty aggregate refers to the basic lifecycle. Create, read, list,
 partial update and delete are implemented natively; `TP-FISCAL` evidence remains
 `PARTIAL`, and advanced fiscal, alias, structured address/geography, Solucar UI
-and data migration remain pending. Contact create, read and list are
+and data migration remain pending. Contact create, read, list and update are
 implemented natively with canonical authorization and an optional restrictive
-ThirdParty relationship; update, delete and historical data migration remain
-pending.
+ThirdParty relationship; delete and historical data migration remain pending.
 
 No arbitrary percentages are used. Progress is expressed only through the
 controlled states and the dimensions in section 8.
 
 With `THIRDPARTY-002D` the canonical ThirdParty lifecycle backend is complete;
 the next gates are the Solucar UI and historical data migration. Contact
-create, read and list are implemented natively with canonical authorization;
-the next Contact lifecycle decisions must cover update, delete and historical
-data migration, while the restrictive ThirdParty relationship is already
-implemented.
+create, read, list and update are implemented natively with canonical
+authorization; the next Contact lifecycle decision must cover delete and
+historical data migration, while the restrictive ThirdParty relationship is
+already implemented.
 
 ---
 
