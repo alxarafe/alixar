@@ -29,6 +29,10 @@ import es.alxarafe.alixar.contact.application.ContactPage;
 import es.alxarafe.alixar.contact.application.ContactRepository;
 import es.alxarafe.alixar.contact.application.CreateContactCommand;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
+import es.alxarafe.alixar.contact.application.UpdateContactCommand;
+import es.alxarafe.alixar.contact.application.UpdateContactResult;
+import es.alxarafe.alixar.contact.application.UpdateContactUseCase;
+import es.alxarafe.alixar.contact.domain.Contact;
 import jakarta.servlet.http.Cookie;
 import java.time.Instant;
 import java.util.List;
@@ -46,10 +50,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -69,6 +76,9 @@ class ContactAuditTest {
 
     @Autowired
     private CreateContactUseCase createContactUseCase;
+
+    @Autowired
+    private UpdateContactUseCase updateContactUseCase;
 
     @Autowired
     private ContactRepository contactRepository;
@@ -98,7 +108,7 @@ class ContactAuditTest {
 
     @BeforeEach
     void setup() {
-        reset(createContactUseCase, contactRepository);
+        reset(createContactUseCase, updateContactUseCase, contactRepository);
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         Instant now = Instant.parse("2026-11-02T10:00:00Z");
         ((TestUserRepository) userRepository).replaceWith(new User(
@@ -219,6 +229,162 @@ class ContactAuditTest {
         } finally {
             auditMode.reset();
         }
+    }
+
+    @Test
+    void offMode_update_doesNotAppendAuditEvent() throws Exception {
+        stubUpdated(1L, "Updated");
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        update(session, csrfCookie, 1L, "{\"lastName\":\"Updated\"}")
+            .andExpect(status().isOk());
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
+    void basicAndSelectiveModes_update_appendUpdatedEventWithoutBusinessPayload() throws Exception {
+        stubUpdated(1L, "Basic Updated");
+        stubUpdated(2L, "Selective Updated");
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            update(session, csrfCookie, 1L, "{\"lastName\":\"Basic Updated\"}")
+                .andExpect(status().isOk());
+            auditMode.setMode(AuditMode.SELECTIVE);
+            update(session, csrfCookie, 2L, "{\"lastName\":\"Selective Updated\"}")
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents()).hasSize(2).allSatisfy(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.CONTACT_UPDATED.name());
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.CONTACT.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo(USERNAME);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.toString()).doesNotContain("Updated", "Doe", "john@example.test");
+            });
+            assertThat(auditEvents())
+                .extracting(AuditEvent::resourceId)
+                .containsExactly("1", "2");
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void bearerUpdate_appendsPatAuthenticationType() throws Exception {
+        stubUpdated(3L, "Bearer Updated");
+        String rawToken = personalAccessToken();
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            mockMvc.perform(patch(ContactEndpoints.BASE_PATH + "/3")
+                    .header("Authorization", "Bearer " + rawToken)
+                    .contentType(ContactEndpoints.MERGE_PATCH_MEDIA_TYPE)
+                    .content("{\"lastName\":\"Bearer Updated\"}"))
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.CONTACT_UPDATED.name());
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.CONTACT.name());
+                assertThat(event.resourceId()).isEqualTo("3");
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.PAT);
+            });
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void update_noOp_doesNotAppendUpdatedEvent() throws Exception {
+        when(updateContactUseCase.execute(eq(3L), any(UpdateContactCommand.class)))
+            .thenReturn(new UpdateContactResult(
+                new Contact(3L, "Doe", "John", "john@example.test", null),
+                false
+            ));
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            update(session, csrfCookie, 3L, "{}").andExpect(status().isOk());
+            update(session, csrfCookie, 3L, "{\"lastName\":\"Doe\"}")
+                .andExpect(status().isOk());
+
+            assertThat(auditEvents())
+                .noneMatch(event -> event.action().equals(AuditAction.CONTACT_UPDATED.name()));
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void update_rejectedRequests_doNotAppendMutationAudit() throws Exception {
+        when(updateContactUseCase.execute(eq(3L), any(UpdateContactCommand.class)))
+            .thenThrow(new es.alxarafe.alixar.contact.application.InvalidContactDataException(
+                es.alxarafe.alixar.core.application.ErrorCode.VALIDATION_REQUIRED,
+                "lastName"
+            ));
+        when(updateContactUseCase.execute(eq(404L), any(UpdateContactCommand.class)))
+            .thenThrow(new es.alxarafe.alixar.contact.application.ContactNotFoundException(404L));
+        when(updateContactUseCase.execute(eq(5L), any(UpdateContactCommand.class)))
+            .thenThrow(new es.alxarafe.alixar.contact.application.InvalidThirdPartyReferenceException());
+
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            update(session, csrfCookie, 3L, "{\"lastName\":\"   \"}")
+                .andExpect(status().isBadRequest());
+            update(session, csrfCookie, 404L, "{\"lastName\":\"Doe\"}")
+                .andExpect(status().isNotFound());
+            update(session, csrfCookie, 5L, "{\"thirdPartyId\":999}")
+                .andExpect(status().isUnprocessableEntity());
+
+            mockMvc.perform(patch(ContactEndpoints.BASE_PATH + "/3")
+                    .session(session)
+                    .contentType(ContactEndpoints.MERGE_PATCH_MEDIA_TYPE)
+                    .content("{\"lastName\":\"Doe\"}"))
+                .andExpect(status().isForbidden());
+
+            authorizationRepository.replaceRolePermissions(
+                RoleCodes.SYSTEM_ADMIN,
+                List.of(PermissionCodes.CONTACTS_READ)
+            );
+            update(session, csrfCookie, 3L, "{\"lastName\":\"Doe\"}")
+                .andExpect(status().isForbidden());
+
+            assertThat(auditEvents())
+                .noneMatch(event -> event.action().equals(AuditAction.CONTACT_UPDATED.name()));
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    private void stubUpdated(long id, String lastName) {
+        when(updateContactUseCase.execute(eq(id), any(UpdateContactCommand.class)))
+            .thenReturn(new UpdateContactResult(
+                new Contact(id, lastName, "John", "john@example.test", null),
+                true
+            ));
+    }
+
+    private org.springframework.test.web.servlet.ResultActions update(
+        MockHttpSession session,
+        Cookie csrfCookie,
+        long id,
+        String body
+    ) throws Exception {
+        return mockMvc.perform(patch(ContactEndpoints.BASE_PATH + "/" + id)
+            .session(session)
+            .cookie(csrfCookie)
+            .header(CSRF_HEADER, csrfCookie.getValue())
+            .contentType(ContactEndpoints.MERGE_PATCH_MEDIA_TYPE)
+            .content(body));
     }
 
     private org.springframework.test.web.servlet.ResultActions create(

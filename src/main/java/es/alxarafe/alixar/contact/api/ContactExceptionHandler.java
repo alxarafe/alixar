@@ -1,5 +1,7 @@
 package es.alxarafe.alixar.contact.api;
 
+import static es.alxarafe.alixar.contact.application.ContactFieldNames.BODY;
+
 import es.alxarafe.alixar.audit.application.AuditErrorCode;
 import es.alxarafe.alixar.audit.application.AuditUnavailableException;
 import es.alxarafe.alixar.contact.application.ContactNotFoundException;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -93,6 +96,20 @@ public class ContactExceptionHandler {
         problem.setTitle(getMessage("validation.invalid.title", locale));
         problem.setProperty("code", ErrorCode.VALIDATION_INVALID.name());
         problem.setProperty("field", ex.getName());
+        return problem;
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    ProblemDetail handleUnreadableBody(Locale locale) {
+        String fieldLabel = fieldLabel(BODY, locale);
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST,
+            messageSource.getMessage("validation.invalid", new Object[]{fieldLabel}, locale)
+        );
+        problem.setType(VALIDATION_INVALID_TYPE);
+        problem.setTitle(getMessage("validation.invalid.title", locale));
+        problem.setProperty("code", ErrorCode.VALIDATION_INVALID.name());
+        problem.setProperty("field", BODY);
         return problem;
     }
 

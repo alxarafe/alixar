@@ -76,7 +76,10 @@ import es.alxarafe.alixar.contact.application.ContactRepository;
 import es.alxarafe.alixar.contact.application.CreateContactCommand;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
 import es.alxarafe.alixar.contact.application.InvalidThirdPartyReferenceException;
+import es.alxarafe.alixar.contact.application.UpdateContactCommand;
+import es.alxarafe.alixar.contact.application.UpdateContactUseCase;
 import es.alxarafe.alixar.contact.domain.Contact;
+import es.alxarafe.alixar.contact.infrastructure.TransactionalContactService;
 import es.alxarafe.alixar.thirdparty.application.CreateThirdPartyCommand;
 import es.alxarafe.alixar.thirdparty.application.FieldUpdate;
 import es.alxarafe.alixar.thirdparty.application.UpdateThirdPartyCommand;
@@ -130,6 +133,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -261,6 +265,12 @@ class PersistenceIT {
 
     @Autowired
     private CreateContactUseCase createContactUseCase;
+
+    @Autowired
+    private UpdateContactUseCase updateContactUseCase;
+
+    @Autowired
+    private TransactionalContactService transactionalContactService;
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -2019,6 +2029,232 @@ class PersistenceIT {
         } finally {
             deleteUser(auth.userId());
         }
+    }
+
+    @Test
+    void contact_updatePersistsEveryEditableFieldAndClearsNullables() {
+        Long firstThirdPartyId = null;
+        Long secondThirdPartyId = null;
+        Long contactId = null;
+        try {
+            firstThirdPartyId = createThirdPartyForContact("Update Contact Co One");
+            secondThirdPartyId = createThirdPartyForContact("Update Contact Co Two");
+            contactId = contactRepository.create(new CreateContactCommand(
+                "Before",
+                "John",
+                "john@example.test",
+                firstThirdPartyId
+            ));
+
+            var result = updateContactUseCase.execute(
+                contactId,
+                contactCommand("After", "Jane", null, secondThirdPartyId)
+            );
+
+            assertThat(result.changed()).isTrue();
+            assertThat(contactRepository.findById(contactId)).isEqualTo(new Contact(
+                contactId,
+                "After",
+                "Jane",
+                null,
+                secondThirdPartyId
+            ));
+        } finally {
+            deleteContact(contactId);
+            deleteThirdParty(secondThirdPartyId);
+            deleteThirdParty(firstThirdPartyId);
+        }
+    }
+
+    @Test
+    void contact_partialUpdatePreservesOmittedFieldsAndSupportsReassignAndUnlink() {
+        Long firstThirdPartyId = null;
+        Long secondThirdPartyId = null;
+        Long contactId = null;
+        try {
+            firstThirdPartyId = createThirdPartyForContact("Partial Update Contact Co One");
+            secondThirdPartyId = createThirdPartyForContact("Partial Update Contact Co Two");
+            contactId = contactRepository.create(new CreateContactCommand(
+                "Before",
+                "John",
+                "john@example.test",
+                firstThirdPartyId
+            ));
+
+            updateContactUseCase.execute(contactId, contactLastNameOnly("Renamed"));
+
+            Contact afterRename = contactRepository.findById(contactId);
+            assertThat(afterRename.lastName()).isEqualTo("Renamed");
+            assertThat(afterRename.firstName()).isEqualTo("John");
+            assertThat(afterRename.email()).isEqualTo("john@example.test");
+            assertThat(afterRename.thirdPartyId()).isEqualTo(firstThirdPartyId);
+
+            transactionalContactService.update(contactId, contactThirdPartyOnly(secondThirdPartyId));
+            assertThat(contactRepository.findById(contactId).thirdPartyId())
+                .isEqualTo(secondThirdPartyId);
+
+            transactionalContactService.update(contactId, contactThirdPartyOnly(null));
+            Contact unlinked = contactRepository.findById(contactId);
+            assertThat(unlinked.thirdPartyId()).isNull();
+            assertThat(unlinked.firstName()).isEqualTo("John");
+            assertThat(unlinked.email()).isEqualTo("john@example.test");
+        } finally {
+            deleteContact(contactId);
+            deleteThirdParty(secondThirdPartyId);
+            deleteThirdParty(firstThirdPartyId);
+        }
+    }
+
+    @Test
+    void contactApi_patchPersistsPartialUpdateAndRejectsInvalidThirdParty() throws Exception {
+        ContactApiAuth auth = contactApiAuth("contact-api-update");
+        Long thirdPartyId = null;
+        Long contactId = null;
+        try {
+            thirdPartyId = createThirdPartyForContact("API Update Co");
+            contactId = postContact(auth, """
+                {"lastName":"Before","firstName":"John","email":"john@example.test"}
+                """);
+
+            mockMvc().perform(patch("/api/contacts/{id}", contactId)
+                    .session(auth.session())
+                    .cookie(auth.csrfCookie())
+                    .header("X-XSRF-TOKEN", auth.csrfCookie().getValue())
+                    .contentType("application/merge-patch+json")
+                    .content("""
+                        {"lastName":"After","email":null,"thirdPartyId":%d}
+                        """.formatted(thirdPartyId)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").value(contactId))
+                .andExpect(jsonPath("$.lastName").value("After"))
+                .andExpect(jsonPath("$.firstName").value("John"))
+                .andExpect(jsonPath("$.email").doesNotExist())
+                .andExpect(jsonPath("$.thirdPartyId").value(thirdPartyId));
+
+            assertThat(contactRepository.findById(contactId)).isEqualTo(new Contact(
+                contactId,
+                "After",
+                "John",
+                null,
+                thirdPartyId
+            ));
+
+            mockMvc().perform(patch("/api/contacts/{id}", contactId)
+                    .session(auth.session())
+                    .cookie(auth.csrfCookie())
+                    .header("X-XSRF-TOKEN", auth.csrfCookie().getValue())
+                    .contentType("application/merge-patch+json")
+                    .content("{\"thirdPartyId\":999999999}"))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(jsonPath("$.code").value("CONTACT_INVALID_THIRD_PARTY_REFERENCE"));
+
+            assertThat(contactRepository.findById(contactId).thirdPartyId())
+                .isEqualTo(thirdPartyId);
+        } finally {
+            deleteContact(contactId);
+            deleteThirdParty(thirdPartyId);
+            deleteUser(auth.userId());
+        }
+    }
+
+    @Test
+    void basicAuditMode_successfulContactUpdateAndAuditCommitTogether() {
+        Long contactId = null;
+        try {
+            contactId = contactRepository.create(new CreateContactCommand(
+                "Before Audit",
+                null,
+                null,
+                null
+            ));
+            resetAuditChain();
+            setAuditMode(AuditMode.BASIC);
+
+            transactionalContactService.update(contactId, contactLastNameOnly("After Audit"));
+
+            assertThat(contactRepository.findById(contactId).lastName())
+                .isEqualTo("After Audit");
+            var events = dsl.fetch(
+                "select action, resource_type, resource_id, result from audit_event order by sequence"
+            );
+            assertThat(events).hasSize(1);
+            assertThat(events.get(0).get("action", String.class))
+                .isEqualTo(AuditAction.CONTACT_UPDATED.name());
+            assertThat(events.get(0).get("resource_type", String.class))
+                .isEqualTo(AuditResourceType.CONTACT.name());
+            assertThat(events.get(0).get("resource_id", String.class))
+                .isEqualTo(Long.toString(contactId));
+            assertThat(events.get(0).get("result", String.class))
+                .isEqualTo(AuditResult.SUCCESS.name());
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteContact(contactId);
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackContactUpdate() {
+        Long contactId = null;
+        try {
+            contactId = contactRepository.create(new CreateContactCommand(
+                "Before Rollback",
+                "John",
+                "john@example.test",
+                null
+            ));
+            resetAuditChain();
+            setAuditMode(AuditMode.BASIC);
+            deleteAuditChainHead();
+
+            long targetId = contactId;
+            assertThatThrownBy(() -> transactionalContactService.update(
+                targetId,
+                contactLastNameOnly("After Rollback")
+            )).isInstanceOf(AuditUnavailableException.class);
+
+            Contact stored = contactRepository.findById(contactId);
+            assertThat(stored.lastName()).isEqualTo("Before Rollback");
+            assertThat(stored.firstName()).isEqualTo("John");
+            assertThat(stored.email()).isEqualTo("john@example.test");
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteContact(contactId);
+        }
+    }
+
+    private UpdateContactCommand contactCommand(
+        String lastName,
+        String firstName,
+        String email,
+        Long thirdPartyId
+    ) {
+        return new UpdateContactCommand(
+            es.alxarafe.alixar.contact.application.FieldUpdate.of(lastName),
+            es.alxarafe.alixar.contact.application.FieldUpdate.of(firstName),
+            es.alxarafe.alixar.contact.application.FieldUpdate.of(email),
+            es.alxarafe.alixar.contact.application.FieldUpdate.of(thirdPartyId)
+        );
+    }
+
+    private UpdateContactCommand contactLastNameOnly(String lastName) {
+        return new UpdateContactCommand(
+            es.alxarafe.alixar.contact.application.FieldUpdate.of(lastName),
+            es.alxarafe.alixar.contact.application.FieldUpdate.absent(),
+            es.alxarafe.alixar.contact.application.FieldUpdate.absent(),
+            es.alxarafe.alixar.contact.application.FieldUpdate.absent()
+        );
+    }
+
+    private UpdateContactCommand contactThirdPartyOnly(Long thirdPartyId) {
+        return new UpdateContactCommand(
+            es.alxarafe.alixar.contact.application.FieldUpdate.absent(),
+            es.alxarafe.alixar.contact.application.FieldUpdate.absent(),
+            es.alxarafe.alixar.contact.application.FieldUpdate.absent(),
+            es.alxarafe.alixar.contact.application.FieldUpdate.of(thirdPartyId)
+        );
     }
 
     private ContactApiAuth contactApiAuth(String prefix) throws Exception {

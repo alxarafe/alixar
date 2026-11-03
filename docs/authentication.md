@@ -537,7 +537,7 @@ The initial catalogue contains:
 | `thirdparties.read` | Read ThirdParty data (THIRDPARTY-002A) |
 | `thirdparties.manage` | Create, update and delete ThirdParty data (THIRDPARTY-002A, THIRDPARTY-002D) |
 | `contacts.read` | Read Contact data (CONTACT-003) |
-| `contacts.manage` | Create Contact data (CONTACT-003) |
+| `contacts.manage` | Create and update Contact data (CONTACT-003, CONTACT-004B) |
 
 The built-in role `system-admin` contains all eight permissions. The role name
 and code are stable identifiers, but application code authorizes by permission,
@@ -593,6 +593,7 @@ The administrative namespace is split by capability:
 | `POST /api/thirdparties` | `thirdparties.manage` |
 | `GET /api/contacts/{id}` | `contacts.read` |
 | `POST /api/contacts` | `contacts.manage` |
+| `PATCH /api/contacts/{id}` | `contacts.manage` |
 | `GET /api/admin/roles` | `users.manage` or `roles.manage` |
 | Any other `/api/admin/roles/**` method | `roles.manage` |
 | `/api/admin/permissions` | `roles.manage` |
@@ -920,18 +921,19 @@ token. `/api/auth/me` works with both mechanisms. The `/api/admin/users/**`
 namespace requires `users.manage`; `GET /api/admin/roles` accepts
 `users.manage` or `roles.manage`; role detail, role creation and the permission
 catalogue require `roles.manage`. `GET /api/contacts/{id}` requires
-`contacts.read` and `POST /api/contacts` requires `contacts.manage`. Contact
-authorization is identical for session and Bearer authentication.
+`contacts.read`; `POST /api/contacts` and `PATCH /api/contacts/{id}` require
+`contacts.manage`. Contact authorization is identical for session and Bearer
+authentication.
 
 ### Contact CSRF policy
 
-`/api/contacts/**` is no longer excluded from CSRF. A session-authenticated
-`POST /api/contacts` without a valid CSRF cookie/header pair is rejected with
-`403` before authorization; with a valid pair and `contacts.manage` it proceeds.
-Bearer requests are exempt from CSRF because the credential is explicitly
-presented in the `Authorization` header. No Contact-specific authorization or
-CSRF rule exists for collection reads, `PUT`, `PATCH` or `DELETE`; those
-operations are not implemented.
+`/api/contacts/**` is no longer excluded from CSRF. Session-authenticated
+`POST /api/contacts` and `PATCH /api/contacts/{id}` requests without a valid
+CSRF cookie/header pair are rejected with `403` before authorization; with a
+valid pair and `contacts.manage` they proceed. Bearer requests are exempt from
+CSRF because the credential is explicitly presented in the `Authorization`
+header. No Contact-specific authorization or CSRF rule exists for collection
+reads, `PUT` or `DELETE`; those operations are not implemented.
 
 ## Future API authentication evolution
 
