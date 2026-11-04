@@ -20,6 +20,7 @@ import es.alxarafe.alixar.contact.application.ContactPage;
 import es.alxarafe.alixar.contact.application.ContactRepository;
 import es.alxarafe.alixar.contact.application.CreateContactCommand;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
+import es.alxarafe.alixar.contact.application.DeleteContactUseCase;
 import es.alxarafe.alixar.contact.application.GetContactUseCase;
 import es.alxarafe.alixar.contact.application.InvalidContactDataException;
 import es.alxarafe.alixar.contact.application.InvalidThirdPartyReferenceException;
@@ -27,6 +28,7 @@ import es.alxarafe.alixar.contact.application.UpdateContactCommand;
 import es.alxarafe.alixar.contact.application.UpdateContactResult;
 import es.alxarafe.alixar.contact.application.UpdateContactUseCase;
 import es.alxarafe.alixar.contact.domain.Contact;
+import es.alxarafe.alixar.core.application.ErrorCode;
 import jakarta.servlet.http.Cookie;
 import java.time.Instant;
 import java.util.List;
@@ -45,9 +47,11 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -79,6 +83,9 @@ class ContactControllerTest {
     private UpdateContactUseCase updateContactUseCase;
 
     @Autowired
+    private DeleteContactUseCase deleteContactUseCase;
+
+    @Autowired
     private ContactRepository contactRepository;
 
     @Autowired
@@ -100,7 +107,7 @@ class ContactControllerTest {
 
     @BeforeEach
     void setup() {
-        reset(createContactUseCase, updateContactUseCase, contactRepository);
+        reset(createContactUseCase, updateContactUseCase, deleteContactUseCase, contactRepository);
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         Instant now = Instant.parse("2026-11-02T10:00:00Z");
         ((TestUserRepository) userRepository).replaceWith(new User(
@@ -437,6 +444,97 @@ class ContactControllerTest {
     }
 
     @Test
+    void deleteContact_returnsNoContentAndEmptyBody() throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        mockMvc.perform(delete(ContactEndpoints.BASE_PATH + "/3")
+                .session(authenticatedSession())
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue()))
+            .andExpect(status().isNoContent())
+            .andExpect(content().string(""));
+    }
+
+    @Test
+    void deleteContact_invalidIdentifierReturnsValidationInvalid() throws Exception {
+        doThrow(new InvalidContactDataException(
+            ErrorCode.VALIDATION_INVALID,
+            "id"
+        )).when(deleteContactUseCase).execute(0L);
+        doThrow(new InvalidContactDataException(
+            ErrorCode.VALIDATION_INVALID,
+            "id"
+        )).when(deleteContactUseCase).execute(-1L);
+
+        for (String id : List.of("0", "-1", "abc")) {
+            Cookie csrfCookie = csrfCookieFromSafeRequest();
+            mockMvc.perform(delete(ContactEndpoints.BASE_PATH + "/" + id)
+                    .session(authenticatedSession())
+                    .cookie(csrfCookie)
+                    .header(CSRF_HEADER, csrfCookie.getValue()))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VALIDATION_INVALID"))
+                .andExpect(jsonPath("$.field").value("id"));
+        }
+    }
+
+    @Test
+    void deleteContact_missingPositiveIdentifierReturnsNotFound() throws Exception {
+        doThrow(new ContactNotFoundException(999L)).when(deleteContactUseCase).execute(999L);
+
+        mockMvc.perform(authenticatedDelete("999"))
+            .andExpect(status().isNotFound())
+            .andExpect(jsonPath("$.code").value("CONTACT_NOT_FOUND"));
+    }
+
+    @Test
+    void deleteContact_requiresAuthenticationAndManagePermission() throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        mockMvc.perform(delete(ContactEndpoints.BASE_PATH + "/3")
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue()))
+            .andExpect(status().isUnauthorized());
+
+        grantOnly(PermissionCodes.CONTACTS_READ);
+        mockMvc.perform(delete(ContactEndpoints.BASE_PATH + "/3")
+                .session(authenticatedSession())
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue()))
+            .andExpect(status().isForbidden());
+
+        grantOnly(PermissionCodes.CONTACTS_MANAGE);
+        mockMvc.perform(delete(ContactEndpoints.BASE_PATH + "/3")
+                .session(authenticatedSession())
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue()))
+            .andExpect(status().isNoContent());
+
+        mockMvc.perform(delete(ContactEndpoints.BASE_PATH + "/3")
+                .header("Authorization", "Bearer " + personalAccessToken()))
+            .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteContact_sessionRequiresCsrfAndBearerDoesNot() throws Exception {
+        grantOnly(PermissionCodes.CONTACTS_MANAGE);
+        MockHttpSession session = authenticatedSession();
+
+        mockMvc.perform(delete(ContactEndpoints.BASE_PATH + "/3").session(session))
+            .andExpect(status().isForbidden());
+
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        mockMvc.perform(delete(ContactEndpoints.BASE_PATH + "/3")
+                .session(session)
+                .cookie(csrfCookie)
+                .header(CSRF_HEADER, csrfCookie.getValue()))
+            .andExpect(status().isNoContent());
+
+        mockMvc.perform(delete(ContactEndpoints.BASE_PATH + "/3")
+                .header("Authorization", "Bearer " + personalAccessToken()))
+            .andExpect(status().isNoContent());
+    }
+
+    @Test
     void updateContact_returnsCompleteCanonicalRepresentation() throws Exception {
         Contact updated = new Contact(3L, "Smith", "John", "john@example.test", 10L);
         when(updateContactUseCase.execute(eq(3L), any(UpdateContactCommand.class)))
@@ -523,12 +621,12 @@ class ContactControllerTest {
     void updateContact_nonPositiveIdentifierReturnsValidationInvalid() throws Exception {
         when(updateContactUseCase.execute(eq(0L), any(UpdateContactCommand.class)))
             .thenThrow(new InvalidContactDataException(
-                es.alxarafe.alixar.core.application.ErrorCode.VALIDATION_INVALID,
+                ErrorCode.VALIDATION_INVALID,
                 "id"
             ));
         when(updateContactUseCase.execute(eq(-1L), any(UpdateContactCommand.class)))
             .thenThrow(new InvalidContactDataException(
-                es.alxarafe.alixar.core.application.ErrorCode.VALIDATION_INVALID,
+                ErrorCode.VALIDATION_INVALID,
                 "id"
             ));
 
@@ -659,6 +757,16 @@ class ContactControllerTest {
             .header(CSRF_HEADER, csrfCookie.getValue())
             .contentType(ContactEndpoints.MERGE_PATCH_MEDIA_TYPE)
             .content(body);
+    }
+
+    private org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder authenticatedDelete(
+        String id
+    ) throws Exception {
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        return delete(ContactEndpoints.BASE_PATH + "/" + id)
+            .session(authenticatedSession())
+            .cookie(csrfCookie)
+            .header(CSRF_HEADER, csrfCookie.getValue());
     }
 
     private org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder authenticatedPost(

@@ -29,6 +29,7 @@ import es.alxarafe.alixar.contact.application.ContactPage;
 import es.alxarafe.alixar.contact.application.ContactRepository;
 import es.alxarafe.alixar.contact.application.CreateContactCommand;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
+import es.alxarafe.alixar.contact.application.DeleteContactUseCase;
 import es.alxarafe.alixar.contact.application.UpdateContactCommand;
 import es.alxarafe.alixar.contact.application.UpdateContactResult;
 import es.alxarafe.alixar.contact.application.UpdateContactUseCase;
@@ -52,9 +53,11 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -79,6 +82,9 @@ class ContactAuditTest {
 
     @Autowired
     private UpdateContactUseCase updateContactUseCase;
+
+    @Autowired
+    private DeleteContactUseCase deleteContactUseCase;
 
     @Autowired
     private ContactRepository contactRepository;
@@ -108,7 +114,7 @@ class ContactAuditTest {
 
     @BeforeEach
     void setup() {
-        reset(createContactUseCase, updateContactUseCase, contactRepository);
+        reset(createContactUseCase, updateContactUseCase, deleteContactUseCase, contactRepository);
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         Instant now = Instant.parse("2026-11-02T10:00:00Z");
         ((TestUserRepository) userRepository).replaceWith(new User(
@@ -365,6 +371,97 @@ class ContactAuditTest {
         }
     }
 
+    @Test
+    void offMode_delete_doesNotAppendAuditEvent() throws Exception {
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        deleteContact(session, csrfCookie, 1L).andExpect(status().isNoContent());
+
+        assertThat(auditEvents()).isEmpty();
+    }
+
+    @Test
+    void basicAndSelectiveModes_delete_appendDeletedEventWithoutBusinessPayload() throws Exception {
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            deleteContact(session, csrfCookie, 1L).andExpect(status().isNoContent());
+            auditMode.setMode(AuditMode.SELECTIVE);
+            deleteContact(session, csrfCookie, 2L).andExpect(status().isNoContent());
+
+            assertThat(auditEvents()).hasSize(2).allSatisfy(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.CONTACT_DELETED.name());
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.CONTACT.name());
+                assertThat(event.result()).isEqualTo(AuditResult.SUCCESS);
+                assertThat(event.actorUserId()).isEqualTo(ALICE_ID);
+                assertThat(event.actorUsername()).isEqualTo(USERNAME);
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.SESSION);
+                assertThat(event.toString()).doesNotContain("Doe", "John", "john@example.test");
+            });
+            assertThat(auditEvents())
+                .extracting(AuditEvent::resourceId)
+                .containsExactly("1", "2");
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void bearerDelete_appendsPatAuthenticationType() throws Exception {
+        String rawToken = personalAccessToken();
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            mockMvc.perform(delete(ContactEndpoints.BASE_PATH + "/3")
+                    .header("Authorization", "Bearer " + rawToken))
+                .andExpect(status().isNoContent());
+
+            assertThat(auditEvents()).singleElement().satisfies(event -> {
+                assertThat(event.action()).isEqualTo(AuditAction.CONTACT_DELETED.name());
+                assertThat(event.resourceType()).isEqualTo(AuditResourceType.CONTACT.name());
+                assertThat(event.resourceId()).isEqualTo("3");
+                assertThat(event.authenticationType()).isEqualTo(AuditAuthenticationType.PAT);
+            });
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void delete_rejectedRequests_doNotAppendMutationAudit() throws Exception {
+        doThrow(new es.alxarafe.alixar.contact.application.InvalidContactDataException(
+            es.alxarafe.alixar.core.application.ErrorCode.VALIDATION_INVALID,
+            "id"
+        )).when(deleteContactUseCase).execute(0L);
+        doThrow(new es.alxarafe.alixar.contact.application.ContactNotFoundException(404L))
+            .when(deleteContactUseCase).execute(404L);
+
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            deleteContact(session, csrfCookie, 0L).andExpect(status().isBadRequest());
+            deleteContact(session, csrfCookie, 404L).andExpect(status().isNotFound());
+
+            mockMvc.perform(delete(ContactEndpoints.BASE_PATH + "/3").session(session))
+                .andExpect(status().isForbidden());
+
+            authorizationRepository.replaceRolePermissions(
+                RoleCodes.SYSTEM_ADMIN,
+                List.of(PermissionCodes.CONTACTS_READ)
+            );
+            deleteContact(session, csrfCookie, 3L).andExpect(status().isForbidden());
+
+            assertThat(auditEvents())
+                .noneMatch(event -> event.action().equals(AuditAction.CONTACT_DELETED.name()));
+        } finally {
+            auditMode.reset();
+        }
+    }
+
     private void stubUpdated(long id, String lastName) {
         when(updateContactUseCase.execute(eq(id), any(UpdateContactCommand.class)))
             .thenReturn(new UpdateContactResult(
@@ -385,6 +482,17 @@ class ContactAuditTest {
             .header(CSRF_HEADER, csrfCookie.getValue())
             .contentType(ContactEndpoints.MERGE_PATCH_MEDIA_TYPE)
             .content(body));
+    }
+
+    private org.springframework.test.web.servlet.ResultActions deleteContact(
+        MockHttpSession session,
+        Cookie csrfCookie,
+        long id
+    ) throws Exception {
+        return mockMvc.perform(delete(ContactEndpoints.BASE_PATH + "/" + id)
+            .session(session)
+            .cookie(csrfCookie)
+            .header(CSRF_HEADER, csrfCookie.getValue()));
     }
 
     private org.springframework.test.web.servlet.ResultActions create(

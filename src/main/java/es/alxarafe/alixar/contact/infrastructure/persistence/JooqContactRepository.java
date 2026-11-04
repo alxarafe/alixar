@@ -103,6 +103,13 @@ public class JooqContactRepository implements ContactRepository {
         }
     }
 
+    @Override
+    public int deleteById(long id) {
+        return dsl.deleteFrom(CONTACT_TABLE)
+            .where(ID.eq(id))
+            .execute();
+    }
+
     private Condition filterCondition(ContactListQuery query) {
         Condition condition = noCondition();
         if (query.thirdPartyId() != null) {

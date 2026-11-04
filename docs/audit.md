@@ -26,8 +26,10 @@ events for the administrative `USER` and `ROLE` read endpoints. THIRDPARTY-002A
 adds `THIRD_PARTY_CREATED` as the first business-capability mutation event, and
 THIRDPARTY-002C adds `THIRD_PARTY_UPDATED` for real partial updates, and
 THIRDPARTY-002D adds `THIRD_PARTY_DELETED` for successful physical deletes.
-CONTACT-003 adds `CONTACT_CREATED` for successful Contact creation, and
-CONTACT-004B adds `CONTACT_UPDATED` for real Contact partial updates. Event
+CONTACT-003 adds `CONTACT_CREATED` for successful Contact creation,
+CONTACT-004B adds `CONTACT_UPDATED` for real Contact partial updates, and
+CONTACT-004C adds `CONTACT_DELETED` for successful physical Contact deletes.
+Event
 detail, retention, archive and checkpoints remain out of scope.
 
 ## Current scope (T1.1, T1.2, T1.3a, T1.3b, T1.4a, T1.4b, T1.5a, T1.5b, T1.6a, T1.6b, T1.7a and T1.7b)
@@ -352,6 +354,7 @@ The following operations are instrumented atomically under `BASIC` and
 | ThirdParty successful physical delete | `THIRD_PARTY_DELETED` | `THIRD_PARTY` / canonical third-party id | `SUCCESS` |
 | Contact creation | `CONTACT_CREATED` | `CONTACT` / canonical contact id | `SUCCESS` |
 | Contact partial update with real change | `CONTACT_UPDATED` | `CONTACT` / canonical contact id | `SUCCESS` |
+| Contact successful physical delete | `CONTACT_DELETED` | `CONTACT` / canonical contact id | `SUCCESS` |
 
 The ThirdParty create event was the first business-capability event. ThirdParty
 and Contact mutation events record only the canonical identifier, action,
@@ -360,11 +363,11 @@ address, name or contact data. A no-op partial update records no event, and
 rejected or failed deletes record no event. ThirdParty and Contact reads are
 not audited in the baseline.
 
-The Contact creation and update events are appended in the same transaction as
-the Contact mutation. If the append fails, the operation returns `503` with code
-`AUDIT_UNAVAILABLE` and the Contact change is rolled back. A real no-op update
-records no event. The events record the authenticated actor, the canonical
-Contact id and no Contact payload.
+The Contact creation, update and delete events are appended in the same
+transaction as the Contact mutation. If the append fails, the operation returns
+`503` with code `AUDIT_UNAVAILABLE` and the Contact change is rolled back. A real
+no-op update, a rejected delete and a failed delete record no event. The events
+record the authenticated actor, the canonical Contact id and no Contact payload.
 
 ### Mandatory policy-change events (T1.5b and T1.7a)
 

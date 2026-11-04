@@ -29,6 +29,12 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   clears nullable fields, and `lastName` cannot be cleared. Unknown members,
   body `id` and wrong JSON types return `400 VALIDATION_INVALID`; a real no-op
   performs no SQL update and records no audit event
+- **Native canonical delete**: `DELETE /api/contacts/{id}` performs a physical
+  delete and returns `204 No Content` with no body. Positive unknown identifiers
+  return `404 CONTACT_NOT_FOUND`; non-positive identifiers return
+  `400 VALIDATION_INVALID`. A Contact linked to a ThirdParty is deleted without
+  deleting, modifying or cascading to its ThirdParty. No soft delete, archive,
+  restore or bulk delete is introduced
 - **Optional native ThirdParty relationship**: `thirdPartyId` is nullable. When
   present it must reference an existing native ThirdParty; otherwise creation
   and update return `422 CONTACT_INVALID_THIRD_PARTY_REFERENCE`. Update can
@@ -43,22 +49,25 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   human-readable text via module-owned translation bundles (`i18n/core/`,
   `i18n/contact/`)
 - **Canonical business authorization**: `GET /api/contacts`,
-  `GET /api/contacts/{id}` require `contacts.read`; `POST /api/contacts` and
-  `PATCH /api/contacts/{id}` require `contacts.manage`. Anonymous
+  `GET /api/contacts/{id}` require `contacts.read`; `POST /api/contacts`,
+  `PATCH /api/contacts/{id}` and `DELETE /api/contacts/{id}` require
+  `contacts.manage`. Anonymous
   requests receive `401`, authenticated callers without the permission receive
   `403`, and both SESSION and PAT authentication follow the same rules
 - **CSRF hardening**: `/api/contacts/**` is no longer excluded from CSRF.
-  Session-authenticated creation and update require a valid CSRF cookie/header
-  pair; Bearer requests do not
-- **Business audit**: Successful creation and real updates append atomic
-  `CONTACT_CREATED` / `CONTACT_UPDATED` events under `BASIC` and `SELECTIVE` with
-  the canonical Contact id and authenticated actor, but no Contact payload. A
-  no-op update records no event. An append failure returns `503
+  Session-authenticated creation, update and delete require a valid CSRF
+  cookie/header pair; Bearer requests do not
+- **Business audit**: Successful creation, real updates and successful physical
+  deletes append atomic `CONTACT_CREATED` / `CONTACT_UPDATED` /
+  `CONTACT_DELETED` events under `BASIC` and `SELECTIVE` with the canonical
+  Contact id and authenticated actor, but no Contact payload. A no-op update and
+  rejected or failed deletes record no event. An append failure returns `503
   AUDIT_UNAVAILABLE` and rolls back the mutation
 - **Reference validation**: `./bin/check-reference` verifies the observed Dolibarr
   24.0.1 Contact behavior remains reproducible and that Alixar's Contact runtime
   no longer depends on Dolibarr
-- **Pending**: Contact delete and historical data migration
+- **Pending**: Contact historical data migration and the remaining Contact
+  sub-capabilities (for example email lookup and categories)
 
 ### ThirdParty
 
@@ -302,7 +311,7 @@ Dolibarr is a **temporary compatibility/reference backend** for capabilities sti
 - **Not** Alixar's canonical API
 - **Not** normal Alixar infrastructure
 
-The target Alixar architecture does not treat Dolibarr as normal infrastructure or as part of the canonical domain/API model. The `dolibarr-reference` repository exists solely to reproduce and verify observed legacy behaviour during progressive migration. Contact create/read/list/update now use Alixar-owned persistence and have no Dolibarr runtime configuration or adapter.
+The target Alixar architecture does not treat Dolibarr as normal infrastructure or as part of the canonical domain/API model. The `dolibarr-reference` repository exists solely to reproduce and verify observed legacy behaviour during progressive migration. Contact create/read/list/update/delete now use Alixar-owned persistence and have no Dolibarr runtime configuration or adapter.
 
 ## Validation
 
@@ -316,8 +325,9 @@ See [Development](development.md) for full validation workflow details.
 
 ## Not yet implemented
 
-- Contact delete and historical data migration; create, read, list and update
-  are already native, authorized and covered by mutation audit
+- Contact historical data migration and remaining Contact sub-capabilities;
+  the canonical basic lifecycle (create, read, list, update and delete) is
+  already native, authorized and covered by mutation audit
 - ThirdParty Solucar UI and historical data migration
 - Role groups, PAT scopes and additional business authorization beyond
   `users.manage`, `roles.manage`, `audit.read`, `audit.configure`,
