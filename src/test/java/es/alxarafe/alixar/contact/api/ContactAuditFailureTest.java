@@ -19,6 +19,7 @@ import es.alxarafe.alixar.contact.ContactTestConfig;
 import es.alxarafe.alixar.contact.application.ContactRepository;
 import es.alxarafe.alixar.contact.application.CreateContactCommand;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
+import es.alxarafe.alixar.contact.application.DeleteContactUseCase;
 import es.alxarafe.alixar.contact.application.UpdateContactCommand;
 import es.alxarafe.alixar.contact.application.UpdateContactResult;
 import es.alxarafe.alixar.contact.application.UpdateContactUseCase;
@@ -48,6 +49,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -78,6 +80,9 @@ class ContactAuditFailureTest {
     private UpdateContactUseCase updateContactUseCase;
 
     @Autowired
+    private DeleteContactUseCase deleteContactUseCase;
+
+    @Autowired
     private ContactRepository contactRepository;
 
     @Autowired
@@ -99,7 +104,7 @@ class ContactAuditFailureTest {
 
     @BeforeEach
     void setup() {
-        reset(createContactUseCase, updateContactUseCase, contactRepository);
+        reset(createContactUseCase, updateContactUseCase, deleteContactUseCase, contactRepository);
         mockMvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
         Instant now = Instant.parse("2026-11-02T10:00:00Z");
         ((TestUserRepository) userRepository).replaceWith(new User(
@@ -163,6 +168,28 @@ class ContactAuditFailureTest {
                 .andExpect(jsonPath("$.code").value(AuditErrorCode.AUDIT_UNAVAILABLE.name()))
                 .andExpect(jsonPath("$.lastName").doesNotExist())
                 .andExpect(jsonPath("$.email").doesNotExist());
+
+            assertThat(auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID)).isEmpty();
+        } finally {
+            auditMode.reset();
+        }
+    }
+
+    @Test
+    void delete_auditFailure_returnsAuditUnavailableWithoutBusinessData() throws Exception {
+        MockHttpSession session = authenticatedSession();
+        Cookie csrfCookie = csrfCookieFromSafeRequest();
+        auditMode.setMode(AuditMode.BASIC);
+        try {
+            mockMvc.perform(delete(ContactEndpoints.BASE_PATH + "/42")
+                    .session(session)
+                    .cookie(csrfCookie)
+                    .header(CSRF_HEADER, csrfCookie.getValue()))
+                .andExpect(status().isServiceUnavailable())
+                .andExpect(jsonPath("$.code").value(AuditErrorCode.AUDIT_UNAVAILABLE.name()))
+                .andExpect(jsonPath("$.lastName").doesNotExist())
+                .andExpect(jsonPath("$.email").doesNotExist())
+                .andExpect(jsonPath("$.thirdPartyId").doesNotExist());
 
             assertThat(auditEventRepository.events(AuditChain.DEFAULT_CHAIN_ID)).isEmpty();
         } finally {

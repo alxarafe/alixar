@@ -38,7 +38,8 @@ presence-aware merge-patch semantics, no-op detection and the update audit event
 `THIRDPARTY-002D` provides the canonical physical delete, the linked-Contact
 conflict and the delete audit event. Native Contact create/read persistence and
 the optional restrictive Contact → ThirdParty relationship are implemented by
-`CONTACT-002`.
+`CONTACT-002`. The canonical Contact basic lifecycle, including physical delete,
+is implemented by `CONTACT-004C`.
 
 ## 2. Scope
 
@@ -728,7 +729,11 @@ evidence:
 - it is backed by the restrictive database foreign key;
 - it does not require a cascading operation that is not yet justified.
 
-Deleting a Contact never deletes its ThirdParty.
+Deleting a Contact never deletes, modifies or creates a conflict with its
+ThirdParty. A linked Contact can always be deleted through
+`DELETE /api/contacts/{id}`; only the Contact row is removed and the ThirdParty
+is preserved. This asymmetry is intentional: the Contact is the dependent side
+of `contact.third_party_id → third_party.id`.
 
 ### 17.3 Other blocking children
 
@@ -773,7 +778,8 @@ The native `contact` table implements a real nullable foreign key
 cascades. Contact creation pre-validates the reference and returns
 `422 CONTACT_INVALID_THIRD_PARTY_REFERENCE` when the ThirdParty does not exist.
 The canonical `409 THIRD_PARTY_DELETE_CONFLICT` response is implemented by
-`THIRDPARTY-002D`.
+`THIRDPARTY-002D`. The canonical Contact physical delete is implemented by
+`CONTACT-004C`; it removes only the Contact and preserves the linked ThirdParty.
 
 The canonical Contact representation does not yet embed a ThirdParty object or
 denormalized ThirdParty name. `thirdPartyId` remains the canonical reference.

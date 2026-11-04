@@ -6,6 +6,7 @@ import es.alxarafe.alixar.audit.application.AuditTrail;
 import es.alxarafe.alixar.audit.application.AuditUnavailableException;
 import es.alxarafe.alixar.contact.application.CreateContactCommand;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
+import es.alxarafe.alixar.contact.application.DeleteContactUseCase;
 import es.alxarafe.alixar.contact.application.UpdateContactCommand;
 import es.alxarafe.alixar.contact.application.UpdateContactResult;
 import es.alxarafe.alixar.contact.application.UpdateContactUseCase;
@@ -16,15 +17,18 @@ public class TransactionalContactService {
 
     private final CreateContactUseCase createContactUseCase;
     private final UpdateContactUseCase updateContactUseCase;
+    private final DeleteContactUseCase deleteContactUseCase;
     private final AuditTrail auditTrail;
 
     public TransactionalContactService(
         CreateContactUseCase createContactUseCase,
         UpdateContactUseCase updateContactUseCase,
+        DeleteContactUseCase deleteContactUseCase,
         AuditTrail auditTrail
     ) {
         this.createContactUseCase = createContactUseCase;
         this.updateContactUseCase = updateContactUseCase;
+        this.deleteContactUseCase = deleteContactUseCase;
         this.auditTrail = auditTrail;
     }
 
@@ -42,6 +46,12 @@ public class TransactionalContactService {
             recordAudit(AuditAction.CONTACT_UPDATED, id);
         }
         return result.contact();
+    }
+
+    @Transactional
+    public void delete(long id) {
+        deleteContactUseCase.execute(id);
+        recordAudit(AuditAction.CONTACT_DELETED, id);
     }
 
     private void recordAudit(AuditAction action, long id) {

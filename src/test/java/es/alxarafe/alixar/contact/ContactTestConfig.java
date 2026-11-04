@@ -2,6 +2,7 @@ package es.alxarafe.alixar.contact;
 
 import es.alxarafe.alixar.contact.application.ContactRepository;
 import es.alxarafe.alixar.contact.application.CreateContactUseCase;
+import es.alxarafe.alixar.contact.application.DeleteContactUseCase;
 import es.alxarafe.alixar.contact.application.GetContactUseCase;
 import es.alxarafe.alixar.contact.application.ThirdPartyReferenceChecker;
 import es.alxarafe.alixar.contact.application.UpdateContactUseCase;
@@ -41,6 +42,12 @@ public class ContactTestConfig {
     @Primary
     UpdateContactUseCase mockUpdateContactUseCase() {
         return Mockito.mock(UpdateContactUseCase.class);
+    }
+
+    @Bean
+    @Primary
+    DeleteContactUseCase mockDeleteContactUseCase() {
+        return Mockito.mock(DeleteContactUseCase.class);
     }
 
 }

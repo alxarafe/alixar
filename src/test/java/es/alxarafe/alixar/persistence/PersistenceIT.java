@@ -2159,6 +2159,129 @@ class PersistenceIT {
     }
 
     @Test
+    void contactApi_deleteRemovesContactPhysicallyAndPreservesLinkedThirdParty() throws Exception {
+        ContactApiAuth auth = contactApiAuth("contact-api-delete");
+        Long thirdPartyId = null;
+        Long contactId = null;
+        try {
+            thirdPartyId = createThirdPartyForContact("Delete Contact Co");
+            contactId = postContact(auth, """
+                {"lastName":"Doe","firstName":"John","email":"john@example.test","thirdPartyId":%d}
+                """.formatted(thirdPartyId));
+
+            mockMvc().perform(delete("/api/contacts/{id}", contactId)
+                    .session(auth.session())
+                    .cookie(auth.csrfCookie())
+                    .header("X-XSRF-TOKEN", auth.csrfCookie().getValue()))
+                .andExpect(status().isNoContent())
+                .andExpect(content().string(""));
+
+            assertThat(dsl.fetch("select id from contact where id = ?", contactId)).isEmpty();
+            assertThat(dsl.fetch("select id from third_party where id = ?", thirdPartyId))
+                .hasSize(1);
+
+            mockMvc().perform(get("/api/contacts/{id}", contactId).session(auth.session()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("CONTACT_NOT_FOUND"));
+        } finally {
+            deleteContact(contactId);
+            deleteThirdParty(thirdPartyId);
+            deleteUser(auth.userId());
+        }
+    }
+
+    @Test
+    void contactApi_deleteRejectsInvalidAndMissingIdentifiers() throws Exception {
+        ContactApiAuth auth = contactApiAuth("contact-api-delete-invalid");
+        try {
+            for (String id : List.of("0", "-1")) {
+                mockMvc().perform(delete("/api/contacts/{id}", id)
+                        .session(auth.session())
+                        .cookie(auth.csrfCookie())
+                        .header("X-XSRF-TOKEN", auth.csrfCookie().getValue()))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.code").value("VALIDATION_INVALID"))
+                    .andExpect(jsonPath("$.field").value("id"));
+            }
+
+            mockMvc().perform(delete("/api/contacts/{id}", Long.MAX_VALUE)
+                    .session(auth.session())
+                    .cookie(auth.csrfCookie())
+                    .header("X-XSRF-TOKEN", auth.csrfCookie().getValue()))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("CONTACT_NOT_FOUND"));
+        } finally {
+            deleteUser(auth.userId());
+        }
+    }
+
+    @Test
+    void basicAuditMode_successfulContactDeleteAndAuditCommitTogether() {
+        Long contactId = null;
+        try {
+            contactId = contactRepository.create(new CreateContactCommand(
+                "Delete Audit",
+                null,
+                null,
+                null
+            ));
+            resetAuditChain();
+            setAuditMode(AuditMode.BASIC);
+
+            long targetId = contactId;
+            transactionalContactService.delete(targetId);
+
+            assertThatThrownBy(() -> contactRepository.findById(targetId))
+                .isInstanceOf(ContactNotFoundException.class);
+            var events = dsl.fetch(
+                "select action, resource_type, resource_id, result from audit_event order by sequence"
+            );
+            assertThat(events).hasSize(1);
+            assertThat(events.get(0).get("action", String.class))
+                .isEqualTo(AuditAction.CONTACT_DELETED.name());
+            assertThat(events.get(0).get("resource_type", String.class))
+                .isEqualTo(AuditResourceType.CONTACT.name());
+            assertThat(events.get(0).get("resource_id", String.class))
+                .isEqualTo(Long.toString(targetId));
+            assertThat(events.get(0).get("result", String.class))
+                .isEqualTo(AuditResult.SUCCESS.name());
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteContact(contactId);
+        }
+    }
+
+    @Test
+    void basicAuditMode_auditAppendFailureRollsBackContactDelete() {
+        Long contactId = null;
+        try {
+            contactId = contactRepository.create(new CreateContactCommand(
+                "Before Delete Rollback",
+                "John",
+                "john@example.test",
+                null
+            ));
+            resetAuditChain();
+            setAuditMode(AuditMode.BASIC);
+            deleteAuditChainHead();
+
+            long targetId = contactId;
+            assertThatThrownBy(() -> transactionalContactService.delete(targetId))
+                .isInstanceOf(AuditUnavailableException.class);
+
+            Contact stored = contactRepository.findById(contactId);
+            assertThat(stored.lastName()).isEqualTo("Before Delete Rollback");
+            assertThat(stored.firstName()).isEqualTo("John");
+            assertThat(stored.email()).isEqualTo("john@example.test");
+        } finally {
+            setAuditMode(AuditMode.OFF);
+            resetAuditChain();
+            deleteContact(contactId);
+        }
+    }
+
+    @Test
     void basicAuditMode_successfulContactUpdateAndAuditCommitTogether() {
         Long contactId = null;
         try {

@@ -47,6 +47,12 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   physical delete with linked-Contact conflict (`DELETE /api/thirdparties/{id}`)
   with native Alixar PostgreSQL/jOOQ persistence, `thirdparties.read` /
   `thirdparties.manage` authorization and atomic ThirdParty mutation audit
+- Canonical Contact basic lifecycle: create (`POST /api/contacts`), read
+  (`GET /api/contacts/{id}`), list (`GET /api/contacts`), partial update
+  (`PATCH /api/contacts/{id}`) and physical delete (`DELETE /api/contacts/{id}`)
+  with native Alixar PostgreSQL/jOOQ persistence, `contacts.read` /
+  `contacts.manage` authorization, session CSRF enforcement and atomic Contact
+  mutation audit
 - PostgreSQL 18.6 persistence infrastructure
 - Flyway migration infrastructure
 - jOOQ runtime infrastructure (PostgreSQL dialect)
@@ -108,9 +114,10 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   event detail, retention, purge, archive and signed checkpoints
 
 - ThirdParty Solucar UI and historical data migration
-- Contact delete and historical data migration; native create/read/list/update
-  persistence, canonical authorization, CSRF hardening, mutation audit and the
-  restrictive Contact → ThirdParty relationship are implemented
+- Contact Solucar UI and historical data migration; the native canonical basic
+  lifecycle (create, read, list, update and delete), authorization, CSRF
+  hardening, mutation audit and the restrictive Contact → ThirdParty
+  relationship are implemented
 - Email change with new-address verification
 - Role groups
 - PAT scopes and authorization for business capabilities beyond `users.manage`,
@@ -235,8 +242,9 @@ self-service username and password changes, completed password recovery,
 Personal Access Token creation and revocation, role creation, rename,
 permission replacement and deletion, ThirdParty creation, real update and
 successful physical delete (`THIRD_PARTY_CREATED`, `THIRD_PARTY_UPDATED`,
-`THIRD_PARTY_DELETED`) and Contact creation and partial update (`CONTACT_CREATED`,
-`CONTACT_UPDATED`), recording only the canonical identifier. The application
+`THIRD_PARTY_DELETED`) and Contact creation, partial update and physical delete
+(`CONTACT_CREATED`, `CONTACT_UPDATED`, `CONTACT_DELETED`), recording only the
+canonical identifier. The application
 layer depends on an
 `AuditTrail` port and an `AuditPolicyProvider` port, not on environment variables,
 Spring Security or jOOQ. Authenticated operations resolve their actor

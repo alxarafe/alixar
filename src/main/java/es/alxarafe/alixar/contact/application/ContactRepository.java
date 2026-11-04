@@ -10,6 +10,8 @@ public interface ContactRepository {
 
     void update(Contact contact);
 
+    int deleteById(long id);
+
     ContactPage findPage(ContactListQuery query);
 
 }
