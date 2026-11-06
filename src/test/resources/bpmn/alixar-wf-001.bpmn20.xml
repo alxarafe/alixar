@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:flowable="http://flowable.org/bpmn"
+             targetNamespace="http://alixar.es/workflow/spike">
+    <process id="alixarWf001Spike" name="ALIXAR-WF-001 compatibility spike" isExecutable="true">
+        <startEvent id="start"/>
+        <sequenceFlow id="flow-start-to-task" sourceRef="start" targetRef="user-task"/>
+        <userTask id="user-task" name="ALIXAR-WF-001 user task"/>
+        <sequenceFlow id="flow-task-to-end" sourceRef="user-task" targetRef="end"/>
+        <endEvent id="end"/>
+    </process>
+</definitions>

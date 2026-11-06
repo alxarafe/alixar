@@ -1,0 +1,45 @@
+services:
+  workflow-database:
+    image: postgres:18.6-alpine@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873
+    environment:
+      POSTGRES_DB: alixar_workflow_test
+      POSTGRES_USER: alixar_workflow
+      POSTGRES_PASSWORD: alixar_workflow_test
+    networks:
+      - workflow-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U alixar_workflow -d alixar_workflow_test"]
+      interval: 5s
+      timeout: 3s
+      start_period: 10s
+      retries: 5
+
+  workflow-test:
+    build:
+      context: .
+      target: build
+    command:
+      - "./mvnw"
+      - "--batch-mode"
+      - "--no-transfer-progress"
+      - "-Dtest=FlowableCompatibilityIT,FlowableIsolationIT"
+      - "test"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://workflow-database:5432/alixar_workflow_test
+      SPRING_DATASOURCE_USERNAME: alixar_workflow
+      SPRING_DATASOURCE_PASSWORD: alixar_workflow_test
+      SPRING_JOOQ_SQL_DIALECT: POSTGRES
+      ALIXAR_WORKFLOW_DB_URL: jdbc:postgresql://workflow-database:5432/alixar_workflow_test
+      ALIXAR_WORKFLOW_DB_USER: alixar_workflow
+      ALIXAR_WORKFLOW_DB_PASSWORD: alixar_workflow_test
+      ALIXAR_WORKFLOW_DB_SCHEMA: flowable_spike
+    networks:
+      - workflow-network
+    depends_on:
+      workflow-database:
+        condition: service_healthy
+
+networks:
+  workflow-network:
+    driver: bridge
+    internal: false

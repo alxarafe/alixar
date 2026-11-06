@@ -18,6 +18,7 @@ The host must provide only:
 ./bin/test           # Run tests in Docker
 ./bin/check          # Complete local validation (build, test, image, runtime, health)
 ./bin/check-reference # Dolibarr reference verification + native runtime independence (requires sibling dolibarr-reference)
+./bin/check-workflow # Test-only Flowable 8.0.0 compatibility spike (isolated PostgreSQL)
 ```
 
 ## Port Configuration
@@ -239,7 +240,7 @@ the invocation's project. Cleanup errors are reported and fail an otherwise
 successful check; an earlier failure retains its exit code. Images/build cache
 are retained. No fixed development or previous check project is cleaned.
 
-`./bin/test` runs the 504 deterministic tests without PostgreSQL, including
+`./bin/test` runs the 565 deterministic tests without PostgreSQL, including
 eight real HTTP status regressions against embedded Tomcat in
 `AuthHttpStatusTest`. These distinguish CSRF `403`, invalid credentials `401`,
 anonymous `/me` `401`, and permission denial `403`, while retaining deny-by-default
@@ -287,6 +288,20 @@ follow the same rules as the self-contained check.
 **Environment variables:**
 - `ALIXAR_JAVA_PORT` (default dynamically assigned) — optional host port for Alixar health/API
 - `DOLIBARR_REFERENCE_PORT` (default 48240) — host port for Dolibarr
+
+### `./bin/check-workflow` — Flowable Compatibility Spike
+
+`./bin/check-workflow` validates the test-only Flowable 8.0.0 compatibility
+spike. It uses `compose.workflow.yaml` with its own fresh Compose project, an
+isolated PostgreSQL 18.6 service, no host database port, and test-only
+credentials. It builds the test image, waits for PostgreSQL health, runs
+`FlowableCompatibilityIT` and `FlowableIsolationIT`, and removes its containers,
+network and volume on exit.
+
+The workflow check is **not** part of `./bin/check`; Flowable is not an approved
+production dependency and is absent from the runtime image. See
+[Workflow engine compatibility spike](workflow-spike.md) for the verified
+behaviour, dependency notes, risks and recommendation.
 
 ## Eclipse (optional editor)
 
@@ -348,6 +363,8 @@ Edits made in Eclipse change the working tree, so the next build includes them:
 - `./bin/up` rebuilds the image and restarts the development environment.
 - `./bin/test` rebuilds the image and runs the deterministic tests.
 - `./bin/check` remains the complete validation authority.
+- `./bin/check-workflow` runs the test-only Flowable compatibility spike in its
+  own isolated environment.
 
 There is no hot reload. Tests that require PostgreSQL (`PersistenceIT`) cannot
 run from Eclipse because the database publishes no host port; run them through

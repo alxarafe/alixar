@@ -138,8 +138,19 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   and a nullable restrictive foreign key to `third_party`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 518 deterministic tests and 106 PostgreSQL integration tests remain
+  the 565 deterministic tests and 115 PostgreSQL integration tests remain
   enabled
+
+### Technical spikes (not product capabilities)
+
+- **Flowable 8.0.0 compatibility spike (ALIXAR-WF-001)**: Test-scoped only.
+  It uses an isolated PostgreSQL 18.6 database and the `flowable_spike` schema
+  to verify BPMN deployment, process/task lifecycle, restart persistence,
+  Flyway/schema isolation, and the absence of Flowable beans or changed
+  security/audit/endpoints in the Alixar context. Run it with
+  `./bin/check-workflow`. Flowable is not an approved production dependency and
+  is absent from the runtime image. See
+  [Workflow engine compatibility spike](workflow-spike.md).
 
 ### Authentication
 
