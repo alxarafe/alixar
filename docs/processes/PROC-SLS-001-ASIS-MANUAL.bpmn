@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  id="Definitions_PROC_SLS_001_ASIS_MANUAL"
+  targetNamespace="https://alixar.es/bpmn"
+  exporter="Alixar"
+  exporterVersion="1.0">
+  <bpmn:process id="PROC-SLS-001-ASIS-MANUAL" name="PROC-SLS-001 AS-IS manual accepted proposal to order" isExecutable="false">
+    <bpmn:documentation>AS-IS manual path. Evidence: INFERIDO from Dolibarr 24.0.1 source. Runtime UI verification is pending. AFS: AFS-PROC-002.</bpmn:documentation>
+
+    <bpmn:startEvent id="StartEvent_ProposalAccepted" name="Accepted proposal">
+      <bpmn:outgoing>Flow_Manual_01</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:task id="Task_OpenProposal" name="Commercial user: open accepted proposal">
+      <bpmn:incoming>Flow_Manual_01</bpmn:incoming>
+      <bpmn:outgoing>Flow_Manual_02</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:exclusiveGateway id="Gateway_ConversionAvailable" name="Order module active and permission?">
+      <bpmn:incoming>Flow_Manual_02</bpmn:incoming>
+      <bpmn:outgoing>Flow_Manual_03</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Manual_04</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:endEvent id="EndEvent_Unavailable" name="Manual conversion unavailable">
+      <bpmn:incoming>Flow_Manual_04</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:task id="Task_AddOrder" name="Commercial user: press &quot;Add order&quot;">
+      <bpmn:incoming>Flow_Manual_03</bpmn:incoming>
+      <bpmn:outgoing>Flow_Manual_05</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:task id="Task_OpenOrderFromProposal" name="Dolibarr: open order from proposal">
+      <bpmn:incoming>Flow_Manual_05</bpmn:incoming>
+      <bpmn:outgoing>Flow_Manual_06</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:task id="Task_SelectLines" name="Commercial user: select proposal lines">
+      <bpmn:incoming>Flow_Manual_06</bpmn:incoming>
+      <bpmn:outgoing>Flow_Manual_07</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:exclusiveGateway id="Gateway_LinesSelected" name="Lines selected?">
+      <bpmn:incoming>Flow_Manual_07</bpmn:incoming>
+      <bpmn:outgoing>Flow_Manual_08</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Manual_09</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:endEvent id="EndEvent_Cancelled" name="Conversion cancelled">
+      <bpmn:incoming>Flow_Manual_09</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:task id="Task_CreateDraftOrder" name="Dolibarr: create draft order with selected lines">
+      <bpmn:incoming>Flow_Manual_08</bpmn:incoming>
+      <bpmn:outgoing>Flow_Manual_10</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:exclusiveGateway id="Gateway_ValidateNow" name="Validate immediately?">
+      <bpmn:incoming>Flow_Manual_10</bpmn:incoming>
+      <bpmn:outgoing>Flow_Manual_11</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Manual_12</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:task id="Task_ValidateOrder" name="Dolibarr: validate order">
+      <bpmn:incoming>Flow_Manual_11</bpmn:incoming>
+      <bpmn:outgoing>Flow_Manual_13</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:endEvent id="EndEvent_OrderValidated" name="Order validated">
+      <bpmn:incoming>Flow_Manual_13</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:endEvent id="EndEvent_OrderDraft" name="Order in draft">
+      <bpmn:incoming>Flow_Manual_12</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="Flow_Manual_01" sourceRef="StartEvent_ProposalAccepted" targetRef="Task_OpenProposal" />
+    <bpmn:sequenceFlow id="Flow_Manual_02" sourceRef="Task_OpenProposal" targetRef="Gateway_ConversionAvailable" />
+    <bpmn:sequenceFlow id="Flow_Manual_03" name="Yes" sourceRef="Gateway_ConversionAvailable" targetRef="Task_AddOrder">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Order module active and user has order creation permission</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Manual_04" name="No" sourceRef="Gateway_ConversionAvailable" targetRef="EndEvent_Unavailable">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Order module inactive or user lacks order creation permission</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Manual_05" sourceRef="Task_AddOrder" targetRef="Task_OpenOrderFromProposal" />
+    <bpmn:sequenceFlow id="Flow_Manual_06" sourceRef="Task_OpenOrderFromProposal" targetRef="Task_SelectLines" />
+    <bpmn:sequenceFlow id="Flow_Manual_07" sourceRef="Task_SelectLines" targetRef="Gateway_LinesSelected" />
+    <bpmn:sequenceFlow id="Flow_Manual_08" name="Yes" sourceRef="Gateway_LinesSelected" targetRef="Task_CreateDraftOrder">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">At least one proposal line is selected</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Manual_09" name="No" sourceRef="Gateway_LinesSelected" targetRef="EndEvent_Cancelled">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">No proposal line is selected</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Manual_10" sourceRef="Task_CreateDraftOrder" targetRef="Gateway_ValidateNow" />
+    <bpmn:sequenceFlow id="Flow_Manual_11" name="Yes" sourceRef="Gateway_ValidateNow" targetRef="Task_ValidateOrder">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">User chooses immediate validation</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Manual_12" name="No" sourceRef="Gateway_ValidateNow" targetRef="EndEvent_OrderDraft">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">User keeps the order in draft</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Manual_13" sourceRef="Task_ValidateOrder" targetRef="EndEvent_OrderValidated" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PROC_SLS_001_ASIS_MANUAL">
+    <bpmndi:BPMNPlane id="BPMNPlane_PROC_SLS_001_ASIS_MANUAL" bpmnElement="PROC-SLS-001-ASIS-MANUAL">
+      <bpmndi:BPMNShape id="Shape_StartEvent_ProposalAccepted" bpmnElement="StartEvent_ProposalAccepted">
+        <dc:Bounds x="152" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_OpenProposal" bpmnElement="Task_OpenProposal">
+        <dc:Bounds x="240" y="180" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_ConversionAvailable" bpmnElement="Gateway_ConversionAvailable" isMarkerVisible="true">
+        <dc:Bounds x="410" y="195" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_AddOrder" bpmnElement="Task_AddOrder">
+        <dc:Bounds x="510" y="180" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_OpenOrderFromProposal" bpmnElement="Task_OpenOrderFromProposal">
+        <dc:Bounds x="680" y="180" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_SelectLines" bpmnElement="Task_SelectLines">
+        <dc:Bounds x="870" y="180" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_LinesSelected" bpmnElement="Gateway_LinesSelected" isMarkerVisible="true">
+        <dc:Bounds x="1040" y="195" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_CreateDraftOrder" bpmnElement="Task_CreateDraftOrder">
+        <dc:Bounds x="1140" y="180" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_ValidateNow" bpmnElement="Gateway_ValidateNow" isMarkerVisible="true">
+        <dc:Bounds x="1330" y="195" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_ValidateOrder" bpmnElement="Task_ValidateOrder">
+        <dc:Bounds x="1430" y="180" width="120" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndEvent_Unavailable" bpmnElement="EndEvent_Unavailable">
+        <dc:Bounds x="510" y="320" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndEvent_Cancelled" bpmnElement="EndEvent_Cancelled">
+        <dc:Bounds x="1140" y="320" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndEvent_OrderValidated" bpmnElement="EndEvent_OrderValidated">
+        <dc:Bounds x="1600" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndEvent_OrderDraft" bpmnElement="EndEvent_OrderDraft">
+        <dc:Bounds x="1600" y="300" width="36" height="36" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Edge_Flow_Manual_01" bpmnElement="Flow_Manual_01">
+        <di:waypoint x="188" y="220" />
+        <di:waypoint x="240" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Manual_02" bpmnElement="Flow_Manual_02">
+        <di:waypoint x="360" y="220" />
+        <di:waypoint x="410" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Manual_03" bpmnElement="Flow_Manual_03">
+        <di:waypoint x="460" y="220" />
+        <di:waypoint x="510" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Manual_04" bpmnElement="Flow_Manual_04">
+        <di:waypoint x="435" y="245" />
+        <di:waypoint x="435" y="338" />
+        <di:waypoint x="510" y="338" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Manual_05" bpmnElement="Flow_Manual_05">
+        <di:waypoint x="630" y="220" />
+        <di:waypoint x="680" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Manual_06" bpmnElement="Flow_Manual_06">
+        <di:waypoint x="820" y="220" />
+        <di:waypoint x="870" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Manual_07" bpmnElement="Flow_Manual_07">
+        <di:waypoint x="990" y="220" />
+        <di:waypoint x="1040" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Manual_08" bpmnElement="Flow_Manual_08">
+        <di:waypoint x="1090" y="220" />
+        <di:waypoint x="1140" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Manual_09" bpmnElement="Flow_Manual_09">
+        <di:waypoint x="1065" y="245" />
+        <di:waypoint x="1065" y="338" />
+        <di:waypoint x="1140" y="338" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Manual_10" bpmnElement="Flow_Manual_10">
+        <di:waypoint x="1280" y="220" />
+        <di:waypoint x="1330" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Manual_11" bpmnElement="Flow_Manual_11">
+        <di:waypoint x="1380" y="220" />
+        <di:waypoint x="1430" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Manual_12" bpmnElement="Flow_Manual_12">
+        <di:waypoint x="1355" y="245" />
+        <di:waypoint x="1355" y="318" />
+        <di:waypoint x="1600" y="318" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Manual_13" bpmnElement="Flow_Manual_13">
+        <di:waypoint x="1550" y="220" />
+        <di:waypoint x="1600" y="220" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

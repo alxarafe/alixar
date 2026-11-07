@@ -61,13 +61,14 @@ pinned 24.0.1 reference before they can support a normative claim.
 | [AFS-TEMPLATE.md](AFS-TEMPLATE.md) | Canonical AFS document and element template |
 | [examples/AFS-TP-001-thirdparty-create.md](examples/AFS-TP-001-thirdparty-create.md) | Short operation example on ThirdParty |
 | [examples/AFS-PROC-001-thirdparty-contact.md](examples/AFS-PROC-001-thirdparty-contact.md) | Short cross-module process example |
+| [AFS-PROC-002-proposal-to-order.md](AFS-PROC-002-proposal-to-order.md) | Accepted proposal to customer order process |
 
 ## Current status
 
 `ALIXAR-REF-002` establishes the method, the template and two compact examples.
-It does not produce a complete pilot specification. The next documentation
-slice should create the ThirdParty pilot AFS from `THIRDPARTY-REF-001` and link
-it to the existing decisions without duplicating them.
+`ALIXAR-REF-003` adds a preliminary process inventory and `AFS-PROC-002` for
+proposal-to-order conversion, linked to AS-IS BPMN maps. It does not implement
+the process or approve migration decisions.
 
 ## Core rules
 
