@@ -127,6 +127,9 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - OpenAPI specification
 - ERP modules beyond ThirdParty (catalog, sales, billing, inventory, accounting)
+- Workflow engine selection: Flowable 8.0.0 is evaluated only by a test-only
+  compatibility spike; it is not an approved production dependency. See
+  [Workflow engine compatibility spike](workflow-spike.md)
 - Module system
 - Testcontainers for integration tests
 - Bruno for API conformance tests
