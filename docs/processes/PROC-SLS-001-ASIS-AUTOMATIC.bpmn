@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  id="Definitions_PROC_SLS_001_ASIS_AUTOMATIC"
+  targetNamespace="https://alixar.es/bpmn"
+  exporter="Alixar"
+  exporterVersion="1.0">
+  <bpmn:process id="PROC-SLS-001-ASIS-AUTOMATIC" name="PROC-SLS-001 AS-IS automatic accepted proposal to order" isExecutable="false">
+    <bpmn:documentation>AS-IS automatic path. Creation and basic restricted-user validation outcomes DEMOSTRADO in the isolated commercial-ES audit follow-up. No order-creation permission gate exists in this trigger. Validation may fail and leave a draft. Online signature and creation/transaction failures are outside this map; see the AFS evidence and pending cases. AFS: AFS-PROC-002.</bpmn:documentation>
+
+    <bpmn:startEvent id="StartEvent_CloseAccepted" name="Request to close proposal as accepted">
+      <bpmn:outgoing>Flow_Auto_01</bpmn:outgoing>
+    </bpmn:startEvent>
+
+    <bpmn:task id="Task_CloseProposal" name="Dolibarr: close proposal as accepted">
+      <bpmn:incoming>Flow_Auto_01</bpmn:incoming>
+      <bpmn:outgoing>Flow_Auto_02</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:task id="Task_EmitCloseEvent" name="Dolibarr: emit close-accepted event">
+      <bpmn:incoming>Flow_Auto_02</bpmn:incoming>
+      <bpmn:outgoing>Flow_Auto_03</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:exclusiveGateway id="Gateway_AutocreateEnabled" name="Workflow, order module and option enabled?">
+      <bpmn:incoming>Flow_Auto_03</bpmn:incoming>
+      <bpmn:outgoing>Flow_Auto_04</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Auto_05</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:endEvent id="EndEvent_NoAutomaticOrder" name="No automatic order">
+      <bpmn:incoming>Flow_Auto_05</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:exclusiveGateway id="Gateway_OrderExists" name="Linked order exists?">
+      <bpmn:incoming>Flow_Auto_04</bpmn:incoming>
+      <bpmn:outgoing>Flow_Auto_10</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Auto_11</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:endEvent id="EndEvent_OrderExists" name="Order already exists">
+      <bpmn:incoming>Flow_Auto_11</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:task id="Task_CreateOrderFromProposal" name="Dolibarr: create order from proposal">
+      <bpmn:incoming>Flow_Auto_10</bpmn:incoming>
+      <bpmn:outgoing>Flow_Auto_12</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:exclusiveGateway id="Gateway_ValidateAfterClose" name="Validate after close?">
+      <bpmn:incoming>Flow_Auto_12</bpmn:incoming>
+      <bpmn:outgoing>Flow_Auto_13</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Auto_14</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+
+    <bpmn:task id="Task_ValidateOrder" name="Dolibarr: validate order">
+      <bpmn:incoming>Flow_Auto_13</bpmn:incoming>
+      <bpmn:outgoing>Flow_Auto_15</bpmn:outgoing>
+    </bpmn:task>
+
+    <bpmn:endEvent id="EndEvent_OrderValidated" name="Order validated">
+      <bpmn:incoming>Flow_Auto_16</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:endEvent id="EndEvent_OrderDraft" name="Order in draft">
+      <bpmn:incoming>Flow_Auto_14</bpmn:incoming>
+      <bpmn:incoming>Flow_Auto_17</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="Flow_Auto_01" sourceRef="StartEvent_CloseAccepted" targetRef="Task_CloseProposal" />
+    <bpmn:sequenceFlow id="Flow_Auto_02" sourceRef="Task_CloseProposal" targetRef="Task_EmitCloseEvent" />
+    <bpmn:sequenceFlow id="Flow_Auto_03" sourceRef="Task_EmitCloseEvent" targetRef="Gateway_AutocreateEnabled" />
+    <bpmn:sequenceFlow id="Flow_Auto_04" name="Yes" sourceRef="Gateway_AutocreateEnabled" targetRef="Gateway_OrderExists">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Workflow and order modules active and WORKFLOW_PROPAL_AUTOCREATE_ORDER enabled</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Auto_05" name="No" sourceRef="Gateway_AutocreateEnabled" targetRef="EndEvent_NoAutomaticOrder">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Workflow or order module inactive or automatic option disabled</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Auto_10" name="No" sourceRef="Gateway_OrderExists" targetRef="Task_CreateOrderFromProposal">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">No linked order exists</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Auto_11" name="Yes" sourceRef="Gateway_OrderExists" targetRef="EndEvent_OrderExists">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">A linked order already exists</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Auto_12" sourceRef="Task_CreateOrderFromProposal" targetRef="Gateway_ValidateAfterClose" />
+    <bpmn:sequenceFlow id="Flow_Auto_13" name="Yes" sourceRef="Gateway_ValidateAfterClose" targetRef="Task_ValidateOrder">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">ORDER_VALID_AFTER_CLOSE_PROPAL enabled</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Auto_14" name="No" sourceRef="Gateway_ValidateAfterClose" targetRef="EndEvent_OrderDraft">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">ORDER_VALID_AFTER_CLOSE_PROPAL disabled</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Auto_15" sourceRef="Task_ValidateOrder" targetRef="Gateway_ValidationSucceeded" />
+    <bpmn:exclusiveGateway id="Gateway_ValidationSucceeded" name="Validation succeeded?">
+      <bpmn:incoming>Flow_Auto_15</bpmn:incoming>
+      <bpmn:outgoing>Flow_Auto_16</bpmn:outgoing>
+      <bpmn:outgoing>Flow_Auto_17</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_Auto_16" name="Yes" sourceRef="Gateway_ValidationSucceeded" targetRef="EndEvent_OrderValidated">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Order validation returns success</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Auto_17" name="No" sourceRef="Gateway_ValidationSucceeded" targetRef="EndEvent_OrderDraft">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Validation fails, including missing validation permission</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PROC_SLS_001_ASIS_AUTOMATIC">
+    <bpmndi:BPMNPlane id="BPMNPlane_PROC_SLS_001_ASIS_AUTOMATIC" bpmnElement="PROC-SLS-001-ASIS-AUTOMATIC">
+      <bpmndi:BPMNShape id="Shape_StartEvent_CloseAccepted" bpmnElement="StartEvent_CloseAccepted">
+        <dc:Bounds x="100" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_CloseProposal" bpmnElement="Task_CloseProposal">
+        <dc:Bounds x="200" y="180" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_EmitCloseEvent" bpmnElement="Task_EmitCloseEvent">
+        <dc:Bounds x="390" y="180" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_AutocreateEnabled" bpmnElement="Gateway_AutocreateEnabled" isMarkerVisible="true">
+        <dc:Bounds x="610" y="195" width="50" height="50" />
+        <bpmndi:BPMNLabel><dc:Bounds x="565" y="133" width="140" height="42" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndEvent_NoAutomaticOrder" bpmnElement="EndEvent_NoAutomaticOrder">
+        <dc:Bounds x="617" y="420" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_OrderExists" bpmnElement="Gateway_OrderExists" isMarkerVisible="true">
+        <dc:Bounds x="780" y="195" width="50" height="50" />
+        <bpmndi:BPMNLabel><dc:Bounds x="735" y="133" width="140" height="42" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndEvent_OrderExists" bpmnElement="EndEvent_OrderExists">
+        <dc:Bounds x="787" y="330" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_CreateOrderFromProposal" bpmnElement="Task_CreateOrderFromProposal">
+        <dc:Bounds x="900" y="180" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_ValidateAfterClose" bpmnElement="Gateway_ValidateAfterClose" isMarkerVisible="true">
+        <dc:Bounds x="1130" y="195" width="50" height="50" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1085" y="133" width="140" height="42" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Task_ValidateOrder" bpmnElement="Task_ValidateOrder">
+        <dc:Bounds x="1250" y="180" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndEvent_OrderValidated" bpmnElement="EndEvent_OrderValidated">
+        <dc:Bounds x="1580" y="202" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_EndEvent_OrderDraft" bpmnElement="EndEvent_OrderDraft">
+        <dc:Bounds x="1457" y="420" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_Gateway_ValidationSucceeded" bpmnElement="Gateway_ValidationSucceeded" isMarkerVisible="true">
+        <dc:Bounds x="1450" y="195" width="50" height="50" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1405" y="133" width="140" height="42" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_Flow_Auto_01" bpmnElement="Flow_Auto_01">
+        <di:waypoint x="136" y="220" />
+        <di:waypoint x="200" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Auto_02" bpmnElement="Flow_Auto_02">
+        <di:waypoint x="340" y="220" />
+        <di:waypoint x="390" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Auto_03" bpmnElement="Flow_Auto_03">
+        <di:waypoint x="540" y="220" />
+        <di:waypoint x="610" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Auto_04" bpmnElement="Flow_Auto_04">
+        <di:waypoint x="660" y="220" />
+        <di:waypoint x="780" y="220" />
+        <bpmndi:BPMNLabel><dc:Bounds x="668" y="228" width="70" height="20" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Auto_05" bpmnElement="Flow_Auto_05">
+        <di:waypoint x="635" y="245" />
+        <di:waypoint x="635" y="420" />
+        <bpmndi:BPMNLabel><dc:Bounds x="643" y="253" width="70" height="20" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Auto_10" bpmnElement="Flow_Auto_10">
+        <di:waypoint x="830" y="220" />
+        <di:waypoint x="900" y="220" />
+        <bpmndi:BPMNLabel><dc:Bounds x="838" y="228" width="70" height="20" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Auto_11" bpmnElement="Flow_Auto_11">
+        <di:waypoint x="805" y="245" />
+        <di:waypoint x="805" y="330" />
+        <bpmndi:BPMNLabel><dc:Bounds x="813" y="253" width="70" height="20" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Auto_12" bpmnElement="Flow_Auto_12">
+        <di:waypoint x="1060" y="220" />
+        <di:waypoint x="1130" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Auto_13" bpmnElement="Flow_Auto_13">
+        <di:waypoint x="1180" y="220" />
+        <di:waypoint x="1250" y="220" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1188" y="228" width="70" height="20" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Auto_14" bpmnElement="Flow_Auto_14">
+        <di:waypoint x="1155" y="245" />
+        <di:waypoint x="1155" y="438" />
+        <di:waypoint x="1457" y="438" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1163" y="253" width="70" height="20" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Auto_15" bpmnElement="Flow_Auto_15">
+        <di:waypoint x="1380" y="220" />
+        <di:waypoint x="1450" y="220" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Auto_16" bpmnElement="Flow_Auto_16">
+        <di:waypoint x="1500" y="220" />
+        <di:waypoint x="1580" y="220" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1508" y="228" width="70" height="20" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_Flow_Auto_17" bpmnElement="Flow_Auto_17">
+        <di:waypoint x="1475" y="245" />
+        <di:waypoint x="1475" y="420" />
+        <bpmndi:BPMNLabel><dc:Bounds x="1483" y="253" width="70" height="20" /></bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
