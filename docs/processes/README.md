@@ -89,14 +89,13 @@ A process map that contains `INFERIDO` paths is not a conformance authority.
 
 ## Validation
 
-Minimum check:
+Validation is performed in temporary Docker containers; no host XML, Node or
+Java installation is required. The independent correction review checked the
+XML against the BPMN 2.0 XSD set (including BPMN-DI) distributed with
+`bpmn-moddle@9.0.1`.
 
-```bash
-xmllint --noout docs/processes/*.bpmn
-```
-
-Semantic validation was performed during review with `bpmn-moddle@9.0.1` over a
-temporary Node container. It verifies:
+Structural validation was performed with `bpmn-moddle@9.0.1` in a temporary
+Node container. It verifies:
 
 - BPMN XML parsing without moddle warnings;
 - exactly one process per file;
@@ -106,14 +105,17 @@ temporary Node container. It verifies:
 - a BPMN-DI shape for every flow node and a BPMN-DI edge for every sequence flow.
 
 The repository does not add a production dependency for diagram validation.
-Visual rendering with `bpmn-js` remains a manual review aid.
+Visual opening and SVG/PNG export with `bpmn-js@18.9.1` in a temporary
+Chromium container were reviewed separately. Rendering does not prove
+functional fidelity. The viewer is temporary review tooling, not a project
+dependency.
 
 ## Current maps
 
 | Map | Process | AFS | Evidence |
 |---|---|---|---|
-| [PROC-SLS-001-ASIS-MANUAL.bpmn](PROC-SLS-001-ASIS-MANUAL.bpmn) | Manual accepted-proposal to order | `AFS-PROC-002` | `INFERIDO` |
-| [PROC-SLS-001-ASIS-AUTOMATIC.bpmn](PROC-SLS-001-ASIS-AUTOMATIC.bpmn) | Automatic accepted-proposal to order | `AFS-PROC-002` | `DEMOSTRADO` for main path; `INFERIDO` for online signature |
+| [PROC-SLS-001-ASIS-MANUAL.bpmn](PROC-SLS-001-ASIS-MANUAL.bpmn) | Manual accepted-proposal to order | `AFS-PROC-002` | `DEMOSTRADO` for controlled HTTP UI fixtures; full browser interaction unverified |
+| [PROC-SLS-001-ASIS-AUTOMATIC.bpmn](PROC-SLS-001-ASIS-AUTOMATIC.bpmn) | Automatic accepted-proposal to order | `AFS-PROC-002` | `DEMOSTRADO` for controlled creation fixtures; validation failure is explicit; online signature is outside the map |
 
 ## Related documents
 
@@ -122,3 +124,17 @@ Visual rendering with `bpmn-js` remains a manual review aid.
 - [Functional specifications](../functional/README.md)
 - Dolibarr proposal-order characterization:
   `dolibarr-reference: reference/characterization/PROPAL-ORDER-REF-001-proposal-to-order.md`
+
+## Pilot interpretation
+
+The manual map distinguishes empty selection from an explicit cancel action.
+Creation produces a draft; later validation is requested and confirmed by the
+user, with validation permission and an eligible order. The automatic map has
+no order-creation permission gateway. It checks the order module as well as the
+workflow module and option. Configured immediate validation is attempted, not
+guaranteed; denial can leave the created order in draft.
+
+The maps do not establish global proposal/order cardinality, concurrency safety,
+all-line-type total fidelity, full online signature behavior, or transaction
+rollback on creation failure. The AFS and the reference follow-up record the
+evidence scope and remaining gaps.

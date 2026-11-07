@@ -19,7 +19,7 @@ Evidence labels:
 |---|---|---|---|---|---|
 | `BM-01` | Customer and contact management | Business macroprocess | Third parties, contacts, commercial classification and relationship lifecycle | `INFERIDO` from `THIRDPARTY-REF-001`, `CONTACT-REF-001` | Partially characterized |
 | `BM-02` | Commercial proposal management | Business macroprocess | Proposal creation, lines, validation, acceptance, refusal and closing | `INFERIDO` from `PROPAL-ORDER-REF-001` | Partially characterized |
-| `BM-03` | Proposal-to-order conversion | Business macroprocess | Manual and automatic conversion of an accepted proposal into a customer order | `DEMOSTRADO` for automatic path; `INFERIDO` for manual UI | Pilot `PROC-SLS-001` |
+| `BM-03` | Proposal-to-order conversion | Business macroprocess | Manual and automatic conversion of an accepted proposal into a customer order | `DEMOSTRADO` for controlled automatic and manual HTTP UI fixtures | Pilot `PROC-SLS-001` |
 | `BM-04` | Customer order management | Business macroprocess | Order creation, lines, validation, status and cancellation | `INFERIDO` from `PROPAL-ORDER-REF-001` | Pending |
 | `BM-05` | Order fulfillment and shipping | Business macroprocess | Shipment preparation, delivery and stock movement | `PENDIENTE` | Not characterized |
 | `BM-06` | Customer invoicing and collection | Business macroprocess | Invoice generation, payments, credit notes and collection | `PENDIENTE` | Not characterized |
@@ -43,7 +43,7 @@ technical endpoints.
 | `OP-SLS-002` | Add a line to a commercial proposal | `BM-02` | `DEMOSTRADO` in `PROPAL-ORDER-REF-001` | Observed, including description, quantity, price, VAT and totals |
 | `OP-SLS-003` | Validate a commercial proposal | `BM-02` | `DEMOSTRADO` in `PROPAL-ORDER-REF-001` | Observed |
 | `OP-SLS-004` | Close a proposal as accepted | `BM-02`, `BM-03` | `DEMOSTRADO` in `PROPAL-ORDER-REF-001` | Observed |
-| `OP-SLS-005` | Create an order from a proposal manually | `BM-03` | `INFERIDO` from proposal and order cards | Pending runtime verification |
+| `OP-SLS-005` | Create an order from a proposal manually | `BM-03` | `DEMOSTRADO` in the audit follow-up | Partial selection, empty selection and cancellation observed |
 | `OP-SLS-006` | Create an order from a proposal automatically | `BM-03` | `DEMOSTRADO` in `PROPAL-ORDER-REF-001` | Observed |
 | `OP-SLS-007` | Validate a customer order | `BM-04` | `DEMOSTRADO` through the immediate-validation option | Observed |
 | `OP-SLS-008` | Link a proposal to its customer order | `BM-03` | `DEMOSTRADO` in `PROPAL-ORDER-REF-001` | Observed |
@@ -60,7 +60,7 @@ processes and must not be presented as migration scope by themselves.
 | `TC-DOC-001` | Document reference numbering | Generate proposal and order references | `DEMOSTRADO` for drafts and validated orders | Partial |
 | `TC-WF-001` | Business event and trigger dispatch | Notify modules after business events | `DEMOSTRADO` for `PROPAL_CLOSE_SIGNED` | Partial |
 | `TC-WF-002` | Configurable workflow options | Enable or disable automatic conversion | `DEMOSTRADO` for `WORKFLOW_PROPAL_AUTOCREATE_ORDER` | Partial |
-| `TC-PERM-001` | Permission enforcement | Restrict manual and automatic actions | `INFERIDO` from source; admin only at runtime | Partial |
+| `TC-PERM-001` | Permission enforcement | Control UI creation and later validation; automatic workflow creation has no order-creation gate | `DEMOSTRADO` for basic non-admin cases; advanced roles `PENDIENTE` | Partial |
 | `TC-AUDIT-001` | Audit and modification metadata | Record creation and modification actors and timestamps | `INFERIDO` from persistence | Pending |
 | `TC-I18N-001` | Localization | Render labels and business messages | `INFERIDO` from `es_ES` profile | Pending |
 | `TC-PERSIST-001` | Relational persistence and links | Store objects, lines and relationships | `DEMOSTRADO` in the commercial profile | Partial |
