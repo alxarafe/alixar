@@ -20,17 +20,19 @@ Evidence labels:
 | `BM-01` | Customer and contact management | Business macroprocess | Third parties, contacts, commercial classification and relationship lifecycle | `INFERIDO` from `THIRDPARTY-REF-001`, `CONTACT-REF-001` | Partially characterized |
 | `BM-02` | Commercial proposal management | Business macroprocess | Proposal creation, lines, validation, acceptance, refusal and closing | `INFERIDO` from `PROPAL-ORDER-REF-001` | Partially characterized |
 | `BM-03` | Proposal-to-order conversion | Business macroprocess | Manual and automatic conversion of an accepted proposal into a customer order | `DEMOSTRADO` for controlled automatic and manual HTTP UI fixtures | Pilot `PROC-SLS-001` |
-| `BM-04` | Customer order management | Business macroprocess | Order creation, lines, validation, status and cancellation | `INFERIDO` from `PROPAL-ORDER-REF-001` | Pending |
-| `BM-05` | Order fulfillment and shipping | Business macroprocess | Shipment preparation, delivery and stock movement | `PENDIENTE` | Not characterized |
+| `BM-04` | Customer order management | Business macroprocess | Order creation, lines, validation, status and cancellation | `DEMOSTRADO` for selected validation/shipping/closure states in `ORDER-SHIPMENT-REF-001`; other operations partial | Partially characterized |
+| `BM-05` | Order fulfillment and shipping | Business macroprocess | Shipment preparation, delivery and stock movement | `DEMOSTRADO` for the sequential stockable-product pilot; physical receipt `PENDIENTE` | Pilot `PROC-SHP-001` |
 | `BM-06` | Customer invoicing and collection | Business macroprocess | Invoice generation, payments, credit notes and collection | `PENDIENTE` | Not characterized |
 | `BM-07` | Pricing, taxes and discounts | Business macroprocess | Prices, VAT, discounts, payment terms and commercial conditions | `PENDIENTE` | Not characterized |
-| `BM-08` | Product and stock management | Business macroprocess | Products, services, warehouses and stock movements | `PENDIENTE` | Not characterized |
+| `BM-08` | Product and stock management | Business macroprocess | Products, services, warehouses and stock movements | `DEMOSTRADO` for selected shipment stock effects in `ORDER-SHIPMENT-REF-001`; broader management `PENDIENTE` | Partially characterized |
 | `BM-09` | Purchasing and supplier management | Business macroprocess | Supplier proposals, orders, invoices and procurement | `PENDIENTE` | Not characterized |
 | `BM-10` | Reporting and commercial analytics | Business macroprocess | Operational reporting, dashboards and commercial indicators | `PENDIENTE` | Not characterized |
 
-`BM-03` is the only macroprocess with a dedicated pilot map in this slice. The
-other identifiers are reserved for decomposition and must not be read as an
-approved roadmap.
+`PROC-SLS-001` covers the `BM-03` proposal-to-order boundary. `PROC-SHP-001`
+continues from a customer order across `BM-04`, `BM-05` and the relevant `BM-08`
+stock capability. An order may also be created independently of a proposal.
+Downstream `BM-06` invoicing remains outside both runtime pilots. These
+relationships are not an approved implementation roadmap.
 
 ## 2. Business operations
 
@@ -49,6 +51,16 @@ technical endpoints.
 | `OP-SLS-008` | Link a proposal to its customer order | `BM-03` | `DEMOSTRADO` in `PROPAL-ORDER-REF-001` | Observed |
 | `OP-SLS-009` | Refuse or close a proposal without an order | `BM-02` | `INFERIDO` from proposal statuses | Pending |
 | `OP-SLS-010` | Cancel or delete a customer order | `BM-04` | `PENDIENTE` | Not characterized |
+
+Shipping operations belong to the end-to-end fulfillment process, rather than
+forming a separate business process for each endpoint or record mutation.
+
+| ID | Operation | Parent | Evidence | State |
+|---|---|---|---|---|
+| `OP-SHP-001` | Prepare a complete, partial or subsequent shipment from order lines | `BM-05` | `DEMOSTRADO` in `ORDER-SHIPMENT-REF-001` | Administrator class fixtures; UI guards source-derived; positive API mutations pending |
+| `OP-SHP-002` | Validate a shipment with its configured stock effect | `BM-05`, `BM-08` | `DEMOSTRADO` | Three timing configurations |
+| `OP-SHP-003` | Close a shipment and evaluate order fulfillment | `BM-05`, `BM-04`, `BM-08` | `DEMOSTRADO` for administrator class calls | Partial/complete quantities; four sequential repeated closures preserve stock/movements and state |
+| `OP-SHP-004` | Cancel a partial shipment with conditional stock compensation | `BM-05`, `BM-08` | `DEMOSTRADO` by class composition | UI/browser and delivery-linked cases pending |
 
 ## 3. Technical capabilities
 
@@ -76,13 +88,22 @@ processes and must not be presented as migration scope by themselves.
 | Evidence is not scope approval | An observed legacy behavior may later be kept, adapted, replaced or discarded |
 | Prefer real use cases | Do not create speculative ports, adapters or modules for inventory entries |
 
-## 5. Current slice
+## 5. Current pilot coverage
 
-The approved slice covers:
+- `ALIXAR-REF-003`: preliminary inventory, `AFS-PROC-002` and two AS-IS
+  `PROC-SLS-001` variants.
+- `ALIXAR-REF-004`: `AFS-PROC-003` and one AS-IS `PROC-SHP-001` map, covering
+  complete/partial/subsequent shipments and conditional stock effects.
 
-- the preliminary inventory in this document;
-- `AFS-PROC-002` for `BM-03`;
-- two AS-IS maps for `PROC-SLS-001`.
+Shipping evidence and scenario-to-BPMN links are maintained in
+[AFS-PROC-003](../functional/AFS-PROC-003-order-to-shipment.md#10-scenarios-and-traceability).
+The current 28-observation capture covers three timing modes for successive
+partial shipments, one single complete shipment with validation-timed stock,
+three cancellation compositions and four sequential repeated closures.
+The 21-observation capture is preserved as historical evidence. Repeated-close
+idempotence is scoped to the four tested administrator class calls; positive API
+mutations, full UI, advanced permissions and concurrency remain `PENDIENTE`.
 
-It does not cover implementation, canonical API design, migration decisions,
-Solucar, invoicing, shipping, stock or procurement.
+Neither pilot approves canonical API design, implementation, Solucar behavior
+or migration/security policy. Invoicing, procurement and full logistics remain
+outside the current slice.

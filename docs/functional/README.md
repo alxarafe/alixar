@@ -62,6 +62,7 @@ pinned 24.0.1 reference before they can support a normative claim.
 | [examples/AFS-TP-001-thirdparty-create.md](examples/AFS-TP-001-thirdparty-create.md) | Short operation example on ThirdParty |
 | [examples/AFS-PROC-001-thirdparty-contact.md](examples/AFS-PROC-001-thirdparty-contact.md) | Short cross-module process example |
 | [AFS-PROC-002-proposal-to-order.md](AFS-PROC-002-proposal-to-order.md) | Accepted proposal to customer order process |
+| [AFS-PROC-003-order-to-shipment.md](AFS-PROC-003-order-to-shipment.md) | Customer order to complete/successive shipments, conditional stock effects and four scoped repeated closures |
 
 ## Current status
 
