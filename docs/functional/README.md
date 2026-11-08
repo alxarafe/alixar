@@ -63,6 +63,7 @@ pinned 24.0.1 reference before they can support a normative claim.
 | [examples/AFS-PROC-001-thirdparty-contact.md](examples/AFS-PROC-001-thirdparty-contact.md) | Short cross-module process example |
 | [AFS-PROC-002-proposal-to-order.md](AFS-PROC-002-proposal-to-order.md) | Accepted proposal to customer order process |
 | [AFS-PROC-003-order-to-shipment.md](AFS-PROC-003-order-to-shipment.md) | Customer order to complete/successive shipments, conditional stock effects and four scoped repeated closures |
+| [AFS-PROC-004-customer-invoicing.md](AFS-PROC-004-customer-invoicing.md) | Draft AS-IS customer invoicing: order/shipment conversion, explicit lines, repeated quantities, permissions and independent stock effects |
 
 ## Current status
 
