@@ -119,6 +119,9 @@ dependency.
 | [PROC-SLS-001-ASIS-MANUAL.bpmn](PROC-SLS-001-ASIS-MANUAL.bpmn) | Manual accepted-proposal to order | `AFS-PROC-002` | `DEMOSTRADO` for controlled HTTP UI fixtures; full browser interaction unverified |
 | [PROC-SLS-001-ASIS-AUTOMATIC.bpmn](PROC-SLS-001-ASIS-AUTOMATIC.bpmn) | Automatic accepted-proposal to order | `AFS-PROC-002` | `DEMOSTRADO` for controlled creation fixtures; validation failure is explicit; online signature is outside the map |
 | [PROC-SHP-001-ASIS-ORDER-SHIPMENT.bpmn](PROC-SHP-001-ASIS-ORDER-SHIPMENT.bpmn) | Complete, partial and successive customer-order shipments | [AFS-PROC-003](../functional/AFS-PROC-003-order-to-shipment.md) | [Evidence and scenario traceability](../functional/AFS-PROC-003-order-to-shipment.md#10-scenarios-and-traceability): 28 observations, four repeated closes; administrator class fixtures; UI guards `INFERIDO`; unexecuted paths `PENDIENTE` |
+| [PROC-INV-001-ASIS-ORDER.bpmn](PROC-INV-001-ASIS-ORDER.bpmn) | Order conversion: full, percentage or selected lines; form/API/class boundaries | [AFS-PROC-004](../functional/AFS-PROC-004-customer-invoicing.md) | INV-ROUTE-001/002/003; quantity, permission and stock observations scoped by TEST-001–004/007/008/010 |
+| [PROC-INV-001-ASIS-SHIPMENT.bpmn](PROC-INV-001-ASIS-SHIPMENT.bpmn) | Shipment conversion, source relationships and independent stock timings | [AFS-PROC-004](../functional/AFS-PROC-004-customer-invoicing.md) | INV-ROUTE-004, TEST-005/009; repeated quantities and one demonstrated double stock decrease |
+| [PROC-INV-001-ASIS-EXPLICIT.bpmn](PROC-INV-001-ASIS-EXPLICIT.bpmn) | Caller-supplied invoice lines and explicit source links | [AFS-PROC-004](../functional/AFS-PROC-004-customer-invoicing.md) | INV-ROUTE-005, TEST-006/010; not automatic document conversion; permission boundaries explicitly scoped |
 
 ## Visualización de procesos
 
@@ -151,6 +154,8 @@ runtime process engine is required.
 ## Related documents
 
 - [AFS-PROC-002](../functional/AFS-PROC-002-proposal-to-order.md)
+- [AFS-PROC-004 customer invoicing](../functional/AFS-PROC-004-customer-invoicing.md)
+- [Invoice modeling validation](ALIXAR-REF-005-validation.md)
 - [Preliminary inventory](INVENTORY.md)
 - [Functional specifications](../functional/README.md)
 - Dolibarr proposal-order characterization:
@@ -188,3 +193,18 @@ Runtime authority:
 The shipping pilot does not change the earlier maps or approve Alixar stock,
 permission or cancellation policy. XML/DI validation and visual opening are
 independent of functional conformance.
+
+## Customer invoicing pilot
+
+`PROC-INV-001` uses three business-input variants, not one process per endpoint:
+order conversion, shipment conversion and creation with explicit lines. The
+[AFS traceability matrix](../functional/AFS-PROC-004-customer-invoicing.md#11-bpmn--afs--evidence-traceability)
+maps all five technical entry routes to those variants and the existing 27
+observations. The AFS and maps remain drafts pending human review.
+
+Repeated creation can copy original quantities again; there is no demonstrated
+universal duplicate-prevention guarantee. Invoice validation and shipment
+validation can independently decrease stock under the combined configuration.
+Neither result approves Alixar behavior. Inferred guards/events and pending
+variants remain explicit; automatic/grouped routes and paid/collection processes
+are not added to the demonstrated maps. No runtime process engine is introduced.

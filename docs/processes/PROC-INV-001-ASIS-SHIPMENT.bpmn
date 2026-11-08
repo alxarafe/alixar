@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_PROC-INV-001-ASIS-SHIPMENT" targetNamespace="https://alixar.es/bpmn">
+  <bpmn:process id="PROC-INV-001-ASIS-SHIPMENT" name="Shipment to customer invoice — AS-IS" isExecutable="false">
+    <bpmn:documentation>Dolibarr 24.0.1, pinned source b7958385f00a92219f76a4dfea67dae93df97a25; invoicing-ES, Workflow disabled, standard stockable-product fixtures. AFS-PROC-004 sections 10/11 trace all elements to INVOICE-ROUTES-REF-001 (27 observations, 35 HTTP records). DEMOSTRADO applies only to recorded boundaries; graphical choice arrangement is INFERIDO. Source-only guards/events are INFERIDO; advanced roles, concurrency, rollback and unexecuted variants are PENDIENTE. Descriptive AS-IS, not executable or an Alixar adoption decision. Conditional stock effects are annotations on validation; captured context is not a business activity. SHIPMENT: INV-ROUTE-004; TEST-005/009. Only successful administrator form/API sequence mapped; unexecuted rejection/compensation paths excluded. Prior shipment quantities/balances are context at the start. Invoice stock effects are annotations on invoice validation, not observation tasks.</bpmn:documentation>
+    <bpmn:startEvent id="S_Start" name="Validated shipment available">
+      <bpmn:documentation>ENT-002, STEP-002. TEST-005/009; upstream validated partial shipment 2 / 1. Captured prior stock is context in S_ContextNote, not an inspection prerequisite.</bpmn:documentation>
+      <bpmn:outgoing>S_F1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="S_Copy" name="Operator / Dolibarr: copy shipment quantities">
+      <bpmn:documentation>STEP-002, UC-002. INV-ROUTE-004 controlled HTTP form copies shipped 2 / 1, not original order 5 / 3.</bpmn:documentation>
+      <bpmn:incoming>S_F1</bpmn:incoming>
+      <bpmn:outgoing>S_F3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="S_Create" name="Dolibarr: create draft linked to shipment and order">
+      <bpmn:documentation>STEP-004, ST-001, REL-002. TEST-005/009: both source links persisted, order-shipment link retained.</bpmn:documentation>
+      <bpmn:incoming>S_F3</bpmn:incoming>
+      <bpmn:outgoing>S_F4</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="S_Validate" name="Actor / Dolibarr: validate invoice">
+      <bpmn:documentation>STEP-005, UC-004, ST-002. TEST-005/009 administrator form creation followed by API validation; no demonstrated shipment-path rejection branch.</bpmn:documentation>
+      <bpmn:incoming>S_F4</bpmn:incoming>
+      <bpmn:outgoing>S_F5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="S_End" name="Validated invoice; shipment and order links retained">
+      <bpmn:documentation>REL-002, ST-002; TEST-005. Invoice remains unpaid; receipt/payment not demonstrated.</bpmn:documentation>
+      <bpmn:incoming>S_F5</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="S_F1" sourceRef="S_Start" targetRef="S_Copy"></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="S_F3" sourceRef="S_Copy" targetRef="S_Create"></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="S_F4" sourceRef="S_Create" targetRef="S_Validate"></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="S_F5" sourceRef="S_Validate" targetRef="S_End"></bpmn:sequenceFlow>
+    <bpmn:textAnnotation id="S_RouteNote"><bpmn:text>DEMOSTRADO: INV-ROUTE-004.
+Real shipment invoice forms; API validation.
+Copies shipped 2 / 1; retains shipment and order links.
+PENDIENTE: full browser, other entry/denial variants.
+No shipment-specific API conversion demonstrated.</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="S_AssocS_RouteNote" sourceRef="S_Copy" targetRef="S_RouteNote" associationDirection="None" />
+    <bpmn:textAnnotation id="S_RepeatNote"><bpmn:text>DEMOSTRADO: repeated creation copies 2 / 1 again.
+Validated total 4 / 2 against shipped 2 / 1.
+No universal duplicate-prevention or remainder lock.
+Another execution, not a mandatory business loop.</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="S_AssocS_RepeatNote" sourceRef="S_Create" targetRef="S_RepeatNote" associationDirection="None" />
+    <bpmn:textAnnotation id="S_StockNote"><bpmn:text>DEMOSTRADO functional effect of invoice validation:
+Invoice timing off: stock stays 8 / 9, also on repetition.
+Combined timings and positive invoice warehouse:
+stock 8 / 9 -> 6 / 8, shipment AND invoice origins.
+Observed double decrease, not an Alixar policy.</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="S_AssocS_StockNote" sourceRef="S_Validate" targetRef="S_StockNote" associationDirection="None" />
+    <bpmn:textAnnotation id="S_ContextNote"><bpmn:text>HARNESS CONTEXT, not an activity: shipped 2 / 1.
+Opening stock 10 / 10; DEMOSTRADO upstream effect:
+shipment validation leaves stock 8 / 9 before invoicing.
+TEST-005/009; upstream process is AFS-PROC-003.
+No obligatory stock/quantity inspection is established.</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="S_AssocS_ContextNote" sourceRef="S_Start" targetRef="S_ContextNote" associationDirection="None" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_PROC-INV-001-ASIS-SHIPMENT">
+    <bpmndi:BPMNPlane id="Plane_PROC-INV-001-ASIS-SHIPMENT" bpmnElement="PROC-INV-001-ASIS-SHIPMENT">
+      <bpmndi:BPMNShape id="Shape_S_Start" bpmnElement="S_Start"><dc:Bounds x="290" y="262" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_S_Copy" bpmnElement="S_Copy"><dc:Bounds x="395" y="240" width="185" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_S_Create" bpmnElement="S_Create"><dc:Bounds x="645" y="240" width="185" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_S_Validate" bpmnElement="S_Validate"><dc:Bounds x="895" y="240" width="185" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_S_End" bpmnElement="S_End"><dc:Bounds x="1145" y="262" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_S_RouteNote" bpmnElement="S_RouteNote"><dc:Bounds x="145" y="35" width="430" height="120" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_S_RepeatNote" bpmnElement="S_RepeatNote"><dc:Bounds x="645" y="430" width="410" height="120" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_S_StockNote" bpmnElement="S_StockNote"><dc:Bounds x="1145" y="35" width="420" height="145" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_S_ContextNote" bpmnElement="S_ContextNote"><dc:Bounds x="145" y="430" width="435" height="120" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_S_F1" bpmnElement="S_F1"><di:waypoint x="326" y="280" /><di:waypoint x="395" y="280" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_S_F3" bpmnElement="S_F3"><di:waypoint x="580" y="280" /><di:waypoint x="645" y="280" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_S_F4" bpmnElement="S_F4"><di:waypoint x="830" y="280" /><di:waypoint x="895" y="280" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_S_F5" bpmnElement="S_F5"><di:waypoint x="1080" y="280" /><di:waypoint x="1145" y="280" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_S_AssocS_RouteNote" bpmnElement="S_AssocS_RouteNote"><di:waypoint x="487.5" y="240" /><di:waypoint x="487.5" y="180" /><di:waypoint x="360" y="180" /><di:waypoint x="360" y="155" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_S_AssocS_RepeatNote" bpmnElement="S_AssocS_RepeatNote"><di:waypoint x="737.5" y="320" /><di:waypoint x="737.5" y="405" /><di:waypoint x="850" y="405" /><di:waypoint x="850" y="430" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_S_AssocS_StockNote" bpmnElement="S_AssocS_StockNote"><di:waypoint x="987.5" y="240" /><di:waypoint x="987.5" y="205" /><di:waypoint x="1355" y="205" /><di:waypoint x="1355" y="180" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_S_AssocS_ContextNote" bpmnElement="S_AssocS_ContextNote"><di:waypoint x="290" y="280" /><di:waypoint x="270" y="280" /><di:waypoint x="270" y="405" /><di:waypoint x="362.5" y="405" /><di:waypoint x="362.5" y="430" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

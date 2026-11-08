@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_PROC-INV-001-ASIS-EXPLICIT" targetNamespace="https://alixar.es/bpmn">
+  <bpmn:process id="PROC-INV-001-ASIS-EXPLICIT" name="Explicit lines to customer invoice — AS-IS" isExecutable="false">
+    <bpmn:documentation>Dolibarr 24.0.1, pinned source b7958385f00a92219f76a4dfea67dae93df97a25; invoicing-ES, Workflow disabled, standard stockable-product fixtures. AFS-PROC-004 sections 10/11 trace all elements to INVOICE-ROUTES-REF-001 (27 observations, 35 HTTP records). DEMOSTRADO applies only to recorded boundaries; graphical choice arrangement is INFERIDO. Source-only guards/events are INFERIDO; advanced roles, concurrency, rollback and unexecuted variants are PENDIENTE. Descriptive AS-IS, not executable or an Alixar adoption decision. Stock evaluation describes effects of validation, not an additional mutation. EXPLICIT: INV-ROUTE-005, TEST-006. INV-PERM-001 (TEST-010) supports generic API creation denial and shared validation boundary denial on an order-origin draft, not an end-to-end generic-origin denial fixture.</bpmn:documentation>
+    <bpmn:startEvent id="E_Start" name="Caller requests standard invoice">
+      <bpmn:documentation>UC-003; TEST-006. No automatic source-conversion precondition.</bpmn:documentation>
+      <bpmn:outgoing>E_F1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="E_Supply" name="Caller: supply customer, explicit lines and order link">
+      <bpmn:documentation>STEP-003, REL-003, TEST-006. Caller supplies quantity 1 for first product, explicit link to order 5 / 3.</bpmn:documentation>
+      <bpmn:incoming>E_F1</bpmn:incoming>
+      <bpmn:outgoing>E_F2</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="E_Create" name="Dolibarr: attempt draft with supplied content">
+      <bpmn:documentation>STEP-004, UC-003, ST-001. INV-ROUTE-005, TEST-006: no automatic copy of other order line.</bpmn:documentation>
+      <bpmn:incoming>E_F2</bpmn:incoming>
+      <bpmn:outgoing>E_F3</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="E_Created" name="Draft created?">
+      <bpmn:documentation>TEST-006/010; generic API creation success versus reader permission denial. No universal failure-atomicity assertion.</bpmn:documentation>
+      <bpmn:incoming>E_F3</bpmn:incoming>
+      <bpmn:outgoing>E_F4</bpmn:outgoing>
+      <bpmn:outgoing>E_F5</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="E_Refused" name="API creation denied">
+      <bpmn:documentation>PERM-001, TEST-010; HTTP 403 for restricted reader generic creation.</bpmn:documentation>
+      <bpmn:incoming>E_F5</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:task id="E_Validate" name="Caller / Dolibarr: validate draft">
+      <bpmn:documentation>STEP-005, UC-004, ST-002, TEST-006/010. API success / API validation denial on an existing draft; denial fixture draft originated through order conversion.</bpmn:documentation>
+      <bpmn:incoming>E_F4</bpmn:incoming>
+      <bpmn:outgoing>E_F6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="E_Validated" name="Validation succeeded?">
+      <bpmn:documentation>TEST-006/010. Validation permission boundary is shared, not a separately executed generic-origin denial fixture.</bpmn:documentation>
+      <bpmn:incoming>E_F6</bpmn:incoming>
+      <bpmn:outgoing>E_F7</bpmn:outgoing>
+      <bpmn:outgoing>E_F8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="E_Draft" name="INFERIDO here: draft remains on denial">
+      <bpmn:documentation>INFERIDO for generic-origin draft: PERM-001/002, TEST-010 preserves an existing order-origin draft. Generic-origin denial variant PENDIENTE.</bpmn:documentation>
+      <bpmn:incoming>E_F8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="E_End" name="Validated invoice with supplied line">
+      <bpmn:documentation>TEST-006, ST-002; unpaid, quantity 1, explicit order link. Generic-path stock variants not exercised.</bpmn:documentation>
+      <bpmn:incoming>E_F7</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="E_F1" sourceRef="E_Start" targetRef="E_Supply"></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="E_F2" sourceRef="E_Supply" targetRef="E_Create"></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="E_F3" sourceRef="E_Create" targetRef="E_Created"></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="E_F4" sourceRef="E_Created" targetRef="E_Validate" name="Yes"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Successful generic API creation returns a draft with caller-supplied content</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="E_F5" sourceRef="E_Created" targetRef="E_Refused" name="No / permission"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Restricted reader generic API creation denied (403); other failure outcomes PENDIENTE</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="E_F6" sourceRef="E_Validate" targetRef="E_Validated"></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="E_F7" sourceRef="E_Validated" targetRef="E_End" name="Yes"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">API invoice validation succeeds (tested generic-origin invoice)</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="E_F8" sourceRef="E_Validated" targetRef="E_Draft" name="INFERIDO here / denial"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">INFERIDO for generic-origin draft: shared API validation denied on existing order-origin draft in INV-PERM-001. Generic-origin denial variant PENDIENTE; not a demonstrated generic-origin conformance path.</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:textAnnotation id="E_RouteNote"><bpmn:text>DEMOSTRADO: INV-ROUTE-005.
+Caller supplies explicit lines and source link.
+Quantity 1; other order line not copied.
+Not automatic order conversion.
+Source identifier alone without explicit link not tested.</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="E_AssocE_RouteNote" sourceRef="E_Supply" targetRef="E_RouteNote" associationDirection="None" />
+    <bpmn:textAnnotation id="E_LimitNote"><bpmn:text>DEMOSTRADO: generic creation denied (403).
+Validation denial tested on an order-origin draft.
+INFERIDO here: same denial for generic-origin draft.
+PENDIENTE: that variant, advanced roles, stock variants.
+No universal duplicate-prevention guarantee.</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="E_AssocE_LimitNote" sourceRef="E_Validate" targetRef="E_LimitNote" associationDirection="None" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_PROC-INV-001-ASIS-EXPLICIT">
+    <bpmndi:BPMNPlane id="Plane_PROC-INV-001-ASIS-EXPLICIT" bpmnElement="PROC-INV-001-ASIS-EXPLICIT">
+      <bpmndi:BPMNShape id="Shape_E_Start" bpmnElement="E_Start"><dc:Bounds x="40" y="262" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_E_Supply" bpmnElement="E_Supply"><dc:Bounds x="145" y="240" width="185" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_E_Create" bpmnElement="E_Create"><dc:Bounds x="395" y="240" width="185" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_E_Created" bpmnElement="E_Created" isMarkerVisible="true"><dc:Bounds x="640" y="255" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_E_Refused" bpmnElement="E_Refused"><dc:Bounds x="647" y="447" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_E_Validate" bpmnElement="E_Validate"><dc:Bounds x="755" y="240" width="185" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_E_Validated" bpmnElement="E_Validated" isMarkerVisible="true"><dc:Bounds x="1000" y="255" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_E_Draft" bpmnElement="E_Draft"><dc:Bounds x="1007" y="447" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_E_End" bpmnElement="E_End"><dc:Bounds x="1135" y="262" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_E_RouteNote" bpmnElement="E_RouteNote"><dc:Bounds x="145" y="35" width="435" height="120" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_E_LimitNote" bpmnElement="E_LimitNote"><dc:Bounds x="755" y="35" width="435" height="140" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_E_F1" bpmnElement="E_F1"><di:waypoint x="76" y="280" /><di:waypoint x="145" y="280" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_E_F2" bpmnElement="E_F2"><di:waypoint x="330" y="280" /><di:waypoint x="395" y="280" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_E_F3" bpmnElement="E_F3"><di:waypoint x="580" y="280" /><di:waypoint x="640" y="280" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_E_F4" bpmnElement="E_F4"><di:waypoint x="690" y="280" /><di:waypoint x="755" y="280" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_E_F5" bpmnElement="E_F5"><di:waypoint x="665" y="305" /><di:waypoint x="665" y="447" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_E_F6" bpmnElement="E_F6"><di:waypoint x="940" y="280" /><di:waypoint x="1000" y="280" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_E_F7" bpmnElement="E_F7"><di:waypoint x="1050" y="280" /><di:waypoint x="1135" y="280" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_E_F8" bpmnElement="E_F8"><di:waypoint x="1025" y="305" /><di:waypoint x="1025" y="447" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_E_AssocE_RouteNote" bpmnElement="E_AssocE_RouteNote"><di:waypoint x="237.5" y="240" /><di:waypoint x="237.5" y="180" /><di:waypoint x="362.5" y="180" /><di:waypoint x="362.5" y="155" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_E_AssocE_LimitNote" bpmnElement="E_AssocE_LimitNote"><di:waypoint x="847.5" y="240" /><di:waypoint x="847.5" y="200" /><di:waypoint x="972.5" y="200" /><di:waypoint x="972.5" y="175" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

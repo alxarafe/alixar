@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_PROC-INV-001-ASIS-ORDER" targetNamespace="https://alixar.es/bpmn">
+  <bpmn:process id="PROC-INV-001-ASIS-ORDER" name="Order to customer invoice — AS-IS" isExecutable="false">
+    <bpmn:documentation>Dolibarr 24.0.1, pinned source b7958385f00a92219f76a4dfea67dae93df97a25; invoicing-ES, Workflow disabled, standard stockable-product fixtures. AFS-PROC-004 sections 10/11 trace all elements to INVOICE-ROUTES-REF-001 (27 observations, 35 HTTP records). DEMOSTRADO applies only to recorded boundaries; graphical choice arrangement is INFERIDO. Source-only guards/events are INFERIDO; advanced roles, concurrency, rollback and unexecuted variants are PENDIENTE. Descriptive AS-IS, not executable or an Alixar adoption decision. Conditional stock effects are annotations on validation; captured context is not a business activity. ORDER: INV-ROUTE-001/002/003 and INV-ROUTE-001-P; TEST-001–004/007/008/010. Repetition is another route execution, not a new business loop. Refusal branches are bounded by the stated API/class permission outcomes. Stock effects are annotations on invoice validation; prior order-validation balances are context at the start, never observation tasks.</bpmn:documentation>
+    <bpmn:startEvent id="O_Start" name="Validated customer order">
+      <bpmn:documentation>AFS-PROC-004-ENT-001; TEST-001–004. DEMOSTRADO: tested validated orders. No universal source eligibility rule.</bpmn:documentation>
+      <bpmn:outgoing>O_F1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:exclusiveGateway id="O_Mode" name="Invoice content?">
+      <bpmn:documentation>STEP-001; RULE-001. Content DEMOSTRADO, graphical selection INFERIDO. API/class full copy only; form route also percentage/selection.</bpmn:documentation>
+      <bpmn:incoming>O_F1</bpmn:incoming>
+      <bpmn:outgoing>O_F2</bpmn:outgoing>
+      <bpmn:outgoing>O_F3</bpmn:outgoing>
+      <bpmn:outgoing>O_F4</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="O_Full" name="Actor / system: use full order quantities">
+      <bpmn:documentation>STEP-001, UC-001; TEST-001/003/004; INV-ROUTE-001/002/003. DEMOSTRADO original 5 / 3.</bpmn:documentation>
+      <bpmn:incoming>O_F2</bpmn:incoming>
+      <bpmn:outgoing>O_F5</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="O_Percent" name="Operator: apply order percentage (form)">
+      <bpmn:documentation>RULE-001; TEST-002, INV-ROUTE-001-P. DEMOSTRADO 50% -> 2.5 / 1.5. No API/class percentage claim.</bpmn:documentation>
+      <bpmn:incoming>O_F3</bpmn:incoming>
+      <bpmn:outgoing>O_F6</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:task id="O_Select" name="Operator: select original order lines (form)">
+      <bpmn:documentation>RULE-001; TEST-002. DEMOSTRADO first original line 5 after percentage invoice, not net remainder.</bpmn:documentation>
+      <bpmn:incoming>O_F4</bpmn:incoming>
+      <bpmn:outgoing>O_F7</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="O_Join" name="">
+      <bpmn:documentation>Merge alternative content selection; presentation only, not a new business rule.</bpmn:documentation>
+      <bpmn:incoming>O_F5</bpmn:incoming>
+      <bpmn:incoming>O_F6</bpmn:incoming>
+      <bpmn:incoming>O_F7</bpmn:incoming>
+      <bpmn:outgoing>O_F8</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="O_Create" name="Dolibarr: attempt linked draft creation">
+      <bpmn:documentation>STEP-004, UC-001, ST-001, REL-001. TEST-001–004. Creation via real form, order-conversion API or administrator class.</bpmn:documentation>
+      <bpmn:incoming>O_F8</bpmn:incoming>
+      <bpmn:outgoing>O_F9</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="O_Created" name="Draft created?">
+      <bpmn:documentation>TEST-003/010. DEMOSTRADO successes; rejection only for exercised API permission/billed cases. No class creation denial matrix.</bpmn:documentation>
+      <bpmn:incoming>O_F9</bpmn:incoming>
+      <bpmn:outgoing>O_F10</bpmn:outgoing>
+      <bpmn:outgoing>O_F11</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="O_Refused" name="API request refused">
+      <bpmn:documentation>PERM-001, ST-004, TEST-003/010: 403 without creation permission or 405 for explicitly billed order. Failure atomicity PENDIENTE.</bpmn:documentation>
+      <bpmn:incoming>O_F11</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:task id="O_Validate" name="Actor / Dolibarr: validate draft invoice">
+      <bpmn:documentation>STEP-005, UC-004, ST-002, PERM-002/003. TEST-001–004/010. API validation for UI/API creations; class validation for direct conversion.</bpmn:documentation>
+      <bpmn:incoming>O_F10</bpmn:incoming>
+      <bpmn:outgoing>O_F12</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="O_Validated" name="Validation succeeded?">
+      <bpmn:documentation>TEST-010: class/API denied reader versus successful authorized calls. No generic transaction-failure outcome asserted.</bpmn:documentation>
+      <bpmn:incoming>O_F12</bpmn:incoming>
+      <bpmn:outgoing>O_F13</bpmn:outgoing>
+      <bpmn:outgoing>O_F14</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="O_Draft" name="Draft remains after permission denial">
+      <bpmn:documentation>PERM-001/002; TEST-010 reader_denied. DEMOSTRADO denial, not universal rollback guarantee.</bpmn:documentation>
+      <bpmn:incoming>O_F14</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="O_End" name="Validated invoice; payment not established">
+      <bpmn:documentation>ST-002/004; TEST-001/003. Validated/unpaid, order not automatically billed in tested disabled Workflow composition.</bpmn:documentation>
+      <bpmn:incoming>O_F13</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="O_F1" sourceRef="O_Start" targetRef="O_Mode"></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="O_F2" sourceRef="O_Mode" targetRef="O_Full" name="Full copy"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Full order content selected: tested form, API order conversion or administrator internal conversion</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="O_F3" sourceRef="O_Mode" targetRef="O_Percent" name="Percentage / form"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Tested form route selects 50 percent of original quantities</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="O_F4" sourceRef="O_Mode" targetRef="O_Select" name="Selected lines / form"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Tested form route selects only the original first line</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="O_F5" sourceRef="O_Full" targetRef="O_Join"></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="O_F6" sourceRef="O_Percent" targetRef="O_Join"></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="O_F7" sourceRef="O_Select" targetRef="O_Join"></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="O_F8" sourceRef="O_Join" targetRef="O_Create"></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="O_F9" sourceRef="O_Create" targetRef="O_Created"></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="O_F10" sourceRef="O_Created" targetRef="O_Validate" name="Yes"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Successful tested creation returned a draft invoice</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="O_F11" sourceRef="O_Created" targetRef="O_Refused" name="No / tested API"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">API order conversion refused: missing basic creation permission (403), or explicitly billed source order (405). Other failures and class creation authorization are PENDIENTE.</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="O_F12" sourceRef="O_Validate" targetRef="O_Validated"></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="O_F13" sourceRef="O_Validated" targetRef="O_End" name="Yes"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Authorized validation succeeds at the tested API/class boundary</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="O_F14" sourceRef="O_Validated" targetRef="O_Draft" name="No / permission"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Restricted reader validation is denied; observed draft remains. No injected failure or concurrent outcome claimed.</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:textAnnotation id="O_RouteNote"><bpmn:text>DEMOSTRADO: INV-ROUTE-001/002/003.
+Forms create; API validates. Class route validates by class.
+INFERIDO: unexecuted UI switches / source guards.
+PENDIENTE: full browser, class creation permission matrix.</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="O_AssocO_RouteNote" sourceRef="O_Mode" targetRef="O_RouteNote" associationDirection="None" />
+    <bpmn:textAnnotation id="O_RepeatNote"><bpmn:text>DEMOSTRADO: repeated full creation totals 10 / 6.
+Percentage then first original line totals 7.5 / 1.5.
+No universal duplicate-prevention or remainder gate.
+Explicit billed API refusal is a separate observation.</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="O_AssocO_RepeatNote" sourceRef="O_Create" targetRef="O_RepeatNote" associationDirection="None" />
+    <bpmn:textAnnotation id="O_StockNote"><bpmn:text>DEMOSTRADO functional effect of invoice validation:
+Invoice-only timing: draft 10 / 10 -> validated 5 / 7.
+Invoice movement requires positive warehouse here.
+Zero warehouse: validated without invoice movement.
+PENDIENTE: disabled Stock module / other variants.</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="O_AssocO_StockNote" sourceRef="O_Validate" targetRef="O_StockNote" associationDirection="None" />
+    <bpmn:textAnnotation id="O_ContextNote"><bpmn:text>HARNESS CONTEXT, not an activity: opening stock 10 / 10.
+DEMOSTRADO upstream effect: order-only timing leaves
+stock 5 / 7 after order validation, before invoice draft.
+TEST-007 / INV-STOCK-order; no later invoice decrease.</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="O_AssocO_ContextNote" sourceRef="O_Start" targetRef="O_ContextNote" associationDirection="None" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_PROC-INV-001-ASIS-ORDER">
+    <bpmndi:BPMNPlane id="Plane_PROC-INV-001-ASIS-ORDER" bpmnElement="PROC-INV-001-ASIS-ORDER">
+      <bpmndi:BPMNShape id="Shape_O_Start" bpmnElement="O_Start"><dc:Bounds x="40" y="342" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_Mode" bpmnElement="O_Mode" isMarkerVisible="true"><dc:Bounds x="145" y="335" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_Full" bpmnElement="O_Full"><dc:Bounds x="260" y="205" width="175" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_Percent" bpmnElement="O_Percent"><dc:Bounds x="260" y="320" width="175" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_Select" bpmnElement="O_Select"><dc:Bounds x="260" y="435" width="175" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_Join" bpmnElement="O_Join" isMarkerVisible="true"><dc:Bounds x="495" y="335" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_Create" bpmnElement="O_Create"><dc:Bounds x="605" y="320" width="175" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_Created" bpmnElement="O_Created" isMarkerVisible="true"><dc:Bounds x="840" y="335" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_Refused" bpmnElement="O_Refused"><dc:Bounds x="847" y="527" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_Validate" bpmnElement="O_Validate"><dc:Bounds x="955" y="320" width="175" height="80" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_Validated" bpmnElement="O_Validated" isMarkerVisible="true"><dc:Bounds x="1190" y="335" width="50" height="50" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_Draft" bpmnElement="O_Draft"><dc:Bounds x="1197" y="527" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_End" bpmnElement="O_End"><dc:Bounds x="1305" y="342" width="36" height="36" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_RouteNote" bpmnElement="O_RouteNote"><dc:Bounds x="120" y="35" width="470" height="120" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_RepeatNote" bpmnElement="O_RepeatNote"><dc:Bounds x="605" y="35" width="470" height="120" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_StockNote" bpmnElement="O_StockNote"><dc:Bounds x="1305" y="35" width="420" height="140" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Shape_O_ContextNote" bpmnElement="O_ContextNote"><dc:Bounds x="40" y="650" width="450" height="110" /></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Edge_O_F1" bpmnElement="O_F1"><di:waypoint x="76" y="360" /><di:waypoint x="145" y="360" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_F2" bpmnElement="O_F2"><di:waypoint x="170" y="335" /><di:waypoint x="170" y="245" /><di:waypoint x="260" y="245" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_F3" bpmnElement="O_F3"><di:waypoint x="195" y="360" /><di:waypoint x="260" y="360" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_F4" bpmnElement="O_F4"><di:waypoint x="170" y="385" /><di:waypoint x="170" y="475" /><di:waypoint x="260" y="475" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_F5" bpmnElement="O_F5"><di:waypoint x="435" y="245" /><di:waypoint x="520" y="245" /><di:waypoint x="520" y="335" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_F6" bpmnElement="O_F6"><di:waypoint x="435" y="360" /><di:waypoint x="495" y="360" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_F7" bpmnElement="O_F7"><di:waypoint x="435" y="475" /><di:waypoint x="520" y="475" /><di:waypoint x="520" y="385" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_F8" bpmnElement="O_F8"><di:waypoint x="545" y="360" /><di:waypoint x="605" y="360" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_F9" bpmnElement="O_F9"><di:waypoint x="780" y="360" /><di:waypoint x="840" y="360" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_F10" bpmnElement="O_F10"><di:waypoint x="890" y="360" /><di:waypoint x="955" y="360" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_F11" bpmnElement="O_F11"><di:waypoint x="865" y="385" /><di:waypoint x="865" y="527" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_F12" bpmnElement="O_F12"><di:waypoint x="1130" y="360" /><di:waypoint x="1190" y="360" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_F13" bpmnElement="O_F13"><di:waypoint x="1240" y="360" /><di:waypoint x="1305" y="360" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_F14" bpmnElement="O_F14"><di:waypoint x="1215" y="385" /><di:waypoint x="1215" y="527" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_AssocO_RouteNote" bpmnElement="O_AssocO_RouteNote"><di:waypoint x="170" y="335" /><di:waypoint x="170" y="180" /><di:waypoint x="355" y="180" /><di:waypoint x="355" y="155" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_AssocO_RepeatNote" bpmnElement="O_AssocO_RepeatNote"><di:waypoint x="692.5" y="320" /><di:waypoint x="692.5" y="180" /><di:waypoint x="840" y="180" /><di:waypoint x="840" y="155" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_AssocO_StockNote" bpmnElement="O_AssocO_StockNote"><di:waypoint x="1042.5" y="320" /><di:waypoint x="1042.5" y="200" /><di:waypoint x="1515" y="200" /><di:waypoint x="1515" y="175" /></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Edge_O_AssocO_ContextNote" bpmnElement="O_AssocO_ContextNote"><di:waypoint x="40" y="360" /><di:waypoint x="20" y="360" /><di:waypoint x="20" y="625" /><di:waypoint x="265" y="625" /><di:waypoint x="265" y="650" /></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

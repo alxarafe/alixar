@@ -22,17 +22,18 @@ Evidence labels:
 | `BM-03` | Proposal-to-order conversion | Business macroprocess | Manual and automatic conversion of an accepted proposal into a customer order | `DEMOSTRADO` for controlled automatic and manual HTTP UI fixtures | Pilot `PROC-SLS-001` |
 | `BM-04` | Customer order management | Business macroprocess | Order creation, lines, validation, status and cancellation | `DEMOSTRADO` for selected validation/shipping/closure states in `ORDER-SHIPMENT-REF-001`; other operations partial | Partially characterized |
 | `BM-05` | Order fulfillment and shipping | Business macroprocess | Shipment preparation, delivery and stock movement | `DEMOSTRADO` for the sequential stockable-product pilot; physical receipt `PENDIENTE` | Pilot `PROC-SHP-001` |
-| `BM-06` | Customer invoicing and collection | Business macroprocess | Invoice generation, payments, credit notes and collection | `PENDIENTE` | Not characterized |
+| `BM-06` | Customer invoicing and collection | Business macroprocess | Invoice generation, payments, credit notes and collection | `DEMOSTRADO` for standard invoice creation/validation in INVOICE-ROUTES-REF-001; collection/payments/credit notes `PENDIENTE` | Partial pilot `PROC-INV-001`, draft `AFS-PROC-004` |
 | `BM-07` | Pricing, taxes and discounts | Business macroprocess | Prices, VAT, discounts, payment terms and commercial conditions | `PENDIENTE` | Not characterized |
-| `BM-08` | Product and stock management | Business macroprocess | Products, services, warehouses and stock movements | `DEMOSTRADO` for selected shipment stock effects in `ORDER-SHIPMENT-REF-001`; broader management `PENDIENTE` | Partially characterized |
+| `BM-08` | Product and stock management | Business macroprocess | Products, services, warehouses and stock movements | `DEMOSTRADO` for selected shipment and invoice stock effects in `ORDER-SHIPMENT-REF-001` / `INVOICE-ROUTES-REF-001`, including one combined decrement case; broader management `PENDIENTE` | Partially characterized |
 | `BM-09` | Purchasing and supplier management | Business macroprocess | Supplier proposals, orders, invoices and procurement | `PENDIENTE` | Not characterized |
 | `BM-10` | Reporting and commercial analytics | Business macroprocess | Operational reporting, dashboards and commercial indicators | `PENDIENTE` | Not characterized |
 
 `PROC-SLS-001` covers the `BM-03` proposal-to-order boundary. `PROC-SHP-001`
 continues from a customer order across `BM-04`, `BM-05` and the relevant `BM-08`
 stock capability. An order may also be created independently of a proposal.
-Downstream `BM-06` invoicing remains outside both runtime pilots. These
-relationships are not an approved implementation roadmap.
+Downstream `BM-06` invoicing remains outside those two runtime pilots;
+`PROC-INV-001` models the separately characterized invoice boundary with `BM-08`
+effects. These relationships are not an approved implementation roadmap.
 
 ## 2. Business operations
 
@@ -61,6 +62,16 @@ forming a separate business process for each endpoint or record mutation.
 | `OP-SHP-002` | Validate a shipment with its configured stock effect | `BM-05`, `BM-08` | `DEMOSTRADO` | Three timing configurations |
 | `OP-SHP-003` | Close a shipment and evaluate order fulfillment | `BM-05`, `BM-04`, `BM-08` | `DEMOSTRADO` for administrator class calls | Partial/complete quantities; four sequential repeated closures preserve stock/movements and state |
 | `OP-SHP-004` | Cancel a partial shipment with conditional stock compensation | `BM-05`, `BM-08` | `DEMOSTRADO` by class composition | UI/browser and delivery-linked cases pending |
+
+Invoicing operations share business flows across form, API and internal entry
+boundaries; the five technical routes are not five business macroprocesses.
+
+| ID | Operation | Parent | Evidence | State |
+|---|---|---|---|---|
+| `OP-INV-001` | Create an invoice from an order, fully, by percentage or selected original lines | `BM-06`, `BM-04` | `DEMOSTRADO`: INV-ROUTE-001/002/003; percentage/selection only on form route | Draft AFS-PROC-004, ORDER map |
+| `OP-INV-002` | Create an invoice from shipped quantities with source-document links | `BM-06`, `BM-05` | `DEMOSTRADO`: INV-ROUTE-004 | Draft AFS-PROC-004, SHIPMENT map |
+| `OP-INV-003` | Create an invoice with caller-supplied lines and explicit links | `BM-06` | `DEMOSTRADO`: INV-ROUTE-005; not automatic conversion | Draft AFS-PROC-004, EXPLICIT map |
+| `OP-INV-004` | Validate an invoice with its independently configured stock effect | `BM-06`, `BM-08` | `DEMOSTRADO`: basic permission outcomes and scoped stock cases, including combined shipment/invoice decrements | Partial; advanced roles and other variants pending |
 
 ## 3. Technical capabilities
 
@@ -94,6 +105,12 @@ processes and must not be presented as migration scope by themselves.
   `PROC-SLS-001` variants.
 - `ALIXAR-REF-004`: `AFS-PROC-003` and one AS-IS `PROC-SHP-001` map, covering
   complete/partial/subsequent shipments and conditional stock effects.
+- `ALIXAR-REF-005`: draft [AFS-PROC-004](../functional/AFS-PROC-004-customer-invoicing.md)
+  and three AS-IS `PROC-INV-001` maps, reusing 27 observations and 35 HTTP
+  results from INVOICE-ROUTES-REF-001. Order/shipment conversion and explicit
+  lines are distinct business inputs; UI/API/class entry variants share maps.
+  [Traceability](../functional/AFS-PROC-004-customer-invoicing.md#11-bpmn--afs--evidence-traceability)
+  and [technical validation](ALIXAR-REF-005-validation.md) accompany the draft.
 
 Shipping evidence and scenario-to-BPMN links are maintained in
 [AFS-PROC-003](../functional/AFS-PROC-003-order-to-shipment.md#10-scenarios-and-traceability).
@@ -104,6 +121,8 @@ The 21-observation capture is preserved as historical evidence. Repeated-close
 idempotence is scoped to the four tested administrator class calls; positive API
 mutations, full UI, advanced permissions and concurrency remain `PENDIENTE`.
 
-Neither pilot approves canonical API design, implementation, Solucar behavior
-or migration/security policy. Invoicing, procurement and full logistics remain
-outside the current slice.
+None of these pilots approves canonical API design, implementation, Solucar
+behavior or migration/security policy. Invoice repetition does not establish
+universal duplicate prevention; independently configured shipment and invoice
+stock effects may both decrement stock. Collection, payments, credit notes,
+procurement and full logistics remain outside the current slices.
