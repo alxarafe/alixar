@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_PROC-SHP-001-ASIS-ORDER-SHIPMENT" targetNamespace="https://alixar.es/bpmn">
+  <bpmn:process id="PROC-SHP-001-ASIS-ORDER-SHIPMENT" name="Customer order to successive shipments — Dolibarr AS-IS pilot" isExecutable="false">
+    <bpmn:documentation>Dolibarr 24.0.1, exact commit b7958385f00a92219f76a4dfea67dae93df97a25. AFS-PROC-003; ORDER-SHIPMENT-REF-001, 28 observations captured 2026-11-08. Sequential partial/subsequent shipments cover validation, close and disabled stock timings. One complete shipment covers validation timing only (TEST-010), reaching F15 without F17. Four already-closed class-call replays preserve states, quantities, balances, movement rows and relationships (TEST-011); no new business-loop path is implied. Positive mutations use administrator classes; API evidence covers reading and mutation denials only. Source-derived UI/choice arrangements remain INFERIDO. Positive API mutations, full UI, advanced permissions and concurrency remain PENDIENTE. No Alixar policy adoption. Creation errors, injected rollback, delivery receipts and automatic workflow variants are not modeled as demonstrated outcomes.</bpmn:documentation>
+    <bpmn:startEvent id="Start_Order" name="Customer order ready for shipping">
+      <bpmn:outgoing>F01</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:task id="Task_Check" name="INFERIDO — Operator: check UI entry conditions">
+      <bpmn:incoming>F01</bpmn:incoming>
+      <bpmn:outgoing>F02</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_Allowed" name="Entry conditions met?">
+      <bpmn:incoming>F02</bpmn:incoming>
+      <bpmn:outgoing>F03</bpmn:outgoing>
+      <bpmn:outgoing>F04</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Unavailable" name="Creation unavailable">
+      <bpmn:incoming>F04</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="Task_Prepare" name="Operator: select order lines, quantities and warehouse">
+      <bpmn:incoming>F03</bpmn:incoming>
+      <bpmn:incoming>F17</bpmn:incoming>
+      <bpmn:outgoing>F05</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:task id="Task_Create" name="Dolibarr: create linked draft shipment">
+      <bpmn:incoming>F05</bpmn:incoming>
+      <bpmn:outgoing>F06</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:userTask id="Task_RequestValidation" name="Operator: request shipment validation">
+      <bpmn:incoming>F06</bpmn:incoming>
+      <bpmn:outgoing>F07</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:task id="Task_Validate" name="Dolibarr: validate shipment and configured stock effect">
+      <bpmn:incoming>F07</bpmn:incoming>
+      <bpmn:outgoing>F08</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_Validated" name="Validation succeeded?">
+      <bpmn:incoming>F08</bpmn:incoming>
+      <bpmn:outgoing>F09</bpmn:outgoing>
+      <bpmn:outgoing>F10</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Draft" name="Draft remains; correction or permission needed">
+      <bpmn:incoming>F10</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="Gateway_Disposition" name="Operator next action?">
+      <bpmn:incoming>F09</bpmn:incoming>
+      <bpmn:outgoing>F11</bpmn:outgoing>
+      <bpmn:outgoing>F12</bpmn:outgoing>
+      <bpmn:outgoing>F13</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:task id="Task_Close" name="Operator / Dolibarr: close shipment; configured stock and order effect">
+      <bpmn:incoming>F11</bpmn:incoming>
+      <bpmn:outgoing>F14</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:exclusiveGateway id="Gateway_OrderClosed" name="Order actually closed?">
+      <bpmn:incoming>F14</bpmn:incoming>
+      <bpmn:outgoing>F15</bpmn:outgoing>
+      <bpmn:outgoing>F16</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Complete" name="Order closed">
+      <bpmn:incoming>F15</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="Gateway_FollowUp" name="Operator follow-up?">
+      <bpmn:incoming>F16</bpmn:incoming>
+      <bpmn:outgoing>F17</bpmn:outgoing>
+      <bpmn:outgoing>F18</bpmn:outgoing>
+      <bpmn:outgoing>F19</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:endEvent id="End_Partial" name="Order open; further shipment may follow">
+      <bpmn:incoming>F18</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:task id="Task_Cancel" name="Operator / Dolibarr: cancel; conditional restock; remove lines; set canceled status">
+      <bpmn:incoming>F12</bpmn:incoming>
+      <bpmn:incoming>F19</bpmn:incoming>
+      <bpmn:outgoing>F20</bpmn:outgoing>
+    </bpmn:task>
+    <bpmn:endEvent id="End_Canceled" name="Shipment canceled; recompute order quantities">
+      <bpmn:incoming>F20</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:endEvent id="End_Validated" name="Shipment stays validated; order open">
+      <bpmn:incoming>F13</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="F01" sourceRef="Start_Order" targetRef="Task_Check" />
+    <bpmn:sequenceFlow id="F02" sourceRef="Task_Check" targetRef="Gateway_Allowed" />
+    <bpmn:sequenceFlow id="F03" sourceRef="Gateway_Allowed" targetRef="Task_Prepare" name="Yes"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Shipping module and shipment submodule active; order validated or shipping in progress with product lines; UI creation permission available</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F04" sourceRef="Gateway_Allowed" targetRef="End_Unavailable" name="No"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">At least one entry condition is absent</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F05" sourceRef="Task_Prepare" targetRef="Task_Create" />
+    <bpmn:sequenceFlow id="F06" sourceRef="Task_Create" targetRef="Task_RequestValidation" />
+    <bpmn:sequenceFlow id="F07" sourceRef="Task_RequestValidation" targetRef="Task_Validate" />
+    <bpmn:sequenceFlow id="F08" sourceRef="Task_Validate" targetRef="Gateway_Validated" />
+    <bpmn:sequenceFlow id="F09" sourceRef="Gateway_Validated" targetRef="Gateway_Disposition" name="Yes"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Validation succeeds</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F10" sourceRef="Gateway_Validated" targetRef="End_Draft" name="No"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Validation is denied; injected transaction failures are outside this pilot</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F11" sourceRef="Gateway_Disposition" targetRef="Task_Close" name="Close"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Authorized operator requests close of validated shipment</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F12" sourceRef="Gateway_Disposition" targetRef="Task_Cancel" name="Cancel"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Authorized operator cancels validated shipment; no delivery receipt is linked</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F13" sourceRef="Gateway_Disposition" targetRef="End_Validated" name="Pause (INFERIDO)"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">INFERIDO process interpretation: operator leaves shipment validated for later action</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F14" sourceRef="Task_Close" targetRef="Gateway_OrderClosed" />
+    <bpmn:sequenceFlow id="F15" sourceRef="Gateway_OrderClosed" targetRef="End_Complete" name="Yes"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Order close has succeeded; closed shipment product quantities match ordered quantities and actor can close order</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F16" sourceRef="Gateway_OrderClosed" targetRef="Gateway_FollowUp" name="No — partial"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">DEMOSTRADO for administrator: partial closed quantities leave order open. Missing order-close permission is PENDIENTE and excluded from this path.</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F17" sourceRef="Gateway_FollowUp" targetRef="Task_Prepare" name="Pending qty &gt; 0"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Operator starts a further shipment with positive ordered-minus-validated quantity, as in the sequential partial fixture. This diagram scope is not a universal API/UI guard.</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F18" sourceRef="Gateway_FollowUp" targetRef="End_Partial" name="Later (INFERIDO)"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">INFERIDO process interpretation: operator leaves order open for later fulfillment</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F19" sourceRef="Gateway_FollowUp" targetRef="Task_Cancel" name="Cancel closed partial"><bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">Operator cancels this closed partial shipment; compensation flag is explicit and no delivery receipt is linked</bpmn:conditionExpression></bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="F20" sourceRef="Task_Cancel" targetRef="End_Canceled" />
+    <bpmn:textAnnotation id="Note_Prepare"><bpmn:text>INFERIDO: UI entry and quantity defaults (may count drafts); browser verification PENDIENTE. DEMOSTRADO: partial/full administrator class drafts leave stock unchanged. TEST-001–003, 006, 008, 010.</bpmn:text></bpmn:textAnnotation>
+    <bpmn:textAnnotation id="Note_Validate"><bpmn:text>DEMOSTRADO: administrator class validation; order 2, shipment 1. Stock decreases only with validation timing enabled (stock active). Permission denial: class and API, TEST-007; positive API mutations PENDIENTE.</bpmn:text></bpmn:textAnnotation>
+    <bpmn:textAnnotation id="Note_Close"><bpmn:text>DEMOSTRADO: admin class close; close-timed stock only, neither timing: no movement. Flags exclusive. Full shipment: validation timing only (TEST-010). Four repeat closes preserve states, stock and movement rows (TEST-011). Missing order-close permission PENDIENTE (TEST-009, not F16).</bpmn:text></bpmn:textAnnotation>
+    <bpmn:textAnnotation id="Note_Cancel"><bpmn:text>DEMOSTRADO: partial class cancellation then status -1. Validation timing restores stock; close timing needs explicit restore. No delivery receipt. UI execution and closed-order cancellation PENDIENTE. TEST-004–005.</bpmn:text></bpmn:textAnnotation>
+    <bpmn:association id="Assoc_Prepare" sourceRef="Note_Prepare" targetRef="Task_Prepare" />
+    <bpmn:association id="Assoc_Validate" sourceRef="Note_Validate" targetRef="Task_Validate" />
+    <bpmn:association id="Assoc_Close" sourceRef="Note_Close" targetRef="Task_Close" />
+    <bpmn:association id="Assoc_Cancel" sourceRef="Note_Cancel" targetRef="Task_Cancel" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="Diagram_PROC-SHP-001-ASIS-ORDER-SHIPMENT"><bpmndi:BPMNPlane id="Plane_PROC-SHP-001-ASIS-ORDER-SHIPMENT" bpmnElement="PROC-SHP-001-ASIS-ORDER-SHIPMENT">
+    <bpmndi:BPMNShape id="Shape_Start_Order" bpmnElement="Start_Order"><dc:Bounds x="80" y="222" width="36" height="36" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Task_Check" bpmnElement="Task_Check"><dc:Bounds x="170" y="200" width="150" height="80" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Gateway_Allowed" bpmnElement="Gateway_Allowed" isMarkerVisible="true"><dc:Bounds x="390" y="215" width="50" height="50" />
+      <bpmndi:BPMNLabel><dc:Bounds x="345" y="160" width="140" height="35" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_End_Unavailable" bpmnElement="End_Unavailable"><dc:Bounds x="397" y="420" width="36" height="36" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Task_Prepare" bpmnElement="Task_Prepare"><dc:Bounds x="510" y="200" width="170" height="80" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Task_Create" bpmnElement="Task_Create"><dc:Bounds x="730" y="200" width="150" height="80" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Task_RequestValidation" bpmnElement="Task_RequestValidation"><dc:Bounds x="930" y="200" width="150" height="80" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Task_Validate" bpmnElement="Task_Validate"><dc:Bounds x="1130" y="200" width="160" height="80" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Gateway_Validated" bpmnElement="Gateway_Validated" isMarkerVisible="true"><dc:Bounds x="1360" y="215" width="50" height="50" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1315" y="160" width="140" height="35" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_End_Draft" bpmnElement="End_Draft"><dc:Bounds x="1367" y="420" width="36" height="36" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Gateway_Disposition" bpmnElement="Gateway_Disposition" isMarkerVisible="true"><dc:Bounds x="1510" y="215" width="50" height="50" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1465" y="160" width="140" height="35" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Task_Close" bpmnElement="Task_Close"><dc:Bounds x="1630" y="200" width="180" height="80" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Gateway_OrderClosed" bpmnElement="Gateway_OrderClosed" isMarkerVisible="true"><dc:Bounds x="1880" y="215" width="50" height="50" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1835" y="160" width="140" height="35" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_End_Complete" bpmnElement="End_Complete"><dc:Bounds x="2000" y="222" width="36" height="36" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Gateway_FollowUp" bpmnElement="Gateway_FollowUp" isMarkerVisible="true"><dc:Bounds x="1880" y="465" width="50" height="50" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1940" y="420" width="140" height="35" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_End_Partial" bpmnElement="End_Partial"><dc:Bounds x="2000" y="472" width="36" height="36" />
+      <bpmndi:BPMNLabel><dc:Bounds x="2070" y="470" width="140" height="65" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Task_Cancel" bpmnElement="Task_Cancel"><dc:Bounds x="1640" y="700" width="180" height="100" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_End_Canceled" bpmnElement="End_Canceled"><dc:Bounds x="1900" y="732" width="36" height="36" />
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_End_Validated" bpmnElement="End_Validated"><dc:Bounds x="1517" y="72" width="36" height="36" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1455" y="10" width="160" height="45" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNShape>
+    <bpmndi:BPMNEdge id="Edge_F01" bpmnElement="F01">
+      <di:waypoint x="116" y="240" />
+      <di:waypoint x="170" y="240" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F02" bpmnElement="F02">
+      <di:waypoint x="320" y="240" />
+      <di:waypoint x="390" y="240" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F03" bpmnElement="F03">
+      <di:waypoint x="440" y="240" />
+      <di:waypoint x="510" y="240" />
+      <bpmndi:BPMNLabel><dc:Bounds x="455" y="215" width="40" height="20" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F04" bpmnElement="F04">
+      <di:waypoint x="415" y="265" />
+      <di:waypoint x="415" y="420" />
+      <bpmndi:BPMNLabel><dc:Bounds x="425" y="340" width="110" height="35" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F05" bpmnElement="F05">
+      <di:waypoint x="680" y="240" />
+      <di:waypoint x="730" y="240" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F06" bpmnElement="F06">
+      <di:waypoint x="880" y="240" />
+      <di:waypoint x="930" y="240" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F07" bpmnElement="F07">
+      <di:waypoint x="1080" y="240" />
+      <di:waypoint x="1130" y="240" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F08" bpmnElement="F08">
+      <di:waypoint x="1290" y="240" />
+      <di:waypoint x="1360" y="240" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F09" bpmnElement="F09">
+      <di:waypoint x="1410" y="240" />
+      <di:waypoint x="1510" y="240" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1430" y="215" width="40" height="20" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F10" bpmnElement="F10">
+      <di:waypoint x="1385" y="265" />
+      <di:waypoint x="1385" y="420" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1395" y="340" width="110" height="35" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F11" bpmnElement="F11">
+      <di:waypoint x="1560" y="240" />
+      <di:waypoint x="1630" y="240" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1570" y="215" width="50" height="20" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F12" bpmnElement="F12">
+      <di:waypoint x="1535" y="265" />
+      <di:waypoint x="1535" y="750" />
+      <di:waypoint x="1640" y="750" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1545" y="340" width="110" height="35" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F13" bpmnElement="F13">
+      <di:waypoint x="1535" y="215" />
+      <di:waypoint x="1535" y="108" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1545" y="120" width="110" height="35" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F14" bpmnElement="F14">
+      <di:waypoint x="1810" y="240" />
+      <di:waypoint x="1880" y="240" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F15" bpmnElement="F15">
+      <di:waypoint x="1930" y="240" />
+      <di:waypoint x="2000" y="240" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1940" y="215" width="40" height="20" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F16" bpmnElement="F16">
+      <di:waypoint x="1905" y="265" />
+      <di:waypoint x="1905" y="465" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1915" y="340" width="110" height="35" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F17" bpmnElement="F17">
+      <di:waypoint x="1880" y="490" />
+      <di:waypoint x="1810" y="490" />
+      <di:waypoint x="1810" y="600" />
+      <di:waypoint x="595" y="600" />
+      <di:waypoint x="595" y="280" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1120" y="575" width="110" height="35" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F18" bpmnElement="F18">
+      <di:waypoint x="1930" y="490" />
+      <di:waypoint x="2000" y="490" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1925" y="540" width="160" height="35" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F19" bpmnElement="F19">
+      <di:waypoint x="1905" y="515" />
+      <di:waypoint x="1905" y="650" />
+      <di:waypoint x="1730" y="650" />
+      <di:waypoint x="1730" y="700" />
+      <bpmndi:BPMNLabel><dc:Bounds x="1840" y="605" width="110" height="35" /></bpmndi:BPMNLabel>
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_F20" bpmnElement="F20">
+      <di:waypoint x="1820" y="750" />
+      <di:waypoint x="1900" y="750" />
+    </bpmndi:BPMNEdge>
+    <bpmndi:BPMNShape id="Shape_Note_Prepare" bpmnElement="Note_Prepare"><dc:Bounds x="170" y="10" width="550" height="115" /></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Note_Validate" bpmnElement="Note_Validate"><dc:Bounds x="930" y="5" width="480" height="125" /></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Note_Close" bpmnElement="Note_Close"><dc:Bounds x="1630" y="5" width="550" height="125" /></bpmndi:BPMNShape>
+    <bpmndi:BPMNShape id="Shape_Note_Cancel" bpmnElement="Note_Cancel"><dc:Bounds x="900" y="705" width="530" height="135" /></bpmndi:BPMNShape>
+    <bpmndi:BPMNEdge id="Edge_Assoc_Prepare" bpmnElement="Assoc_Prepare"><di:waypoint x="595" y="125" /><di:waypoint x="595" y="200" /></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_Assoc_Validate" bpmnElement="Assoc_Validate"><di:waypoint x="1210" y="130" /><di:waypoint x="1210" y="200" /></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_Assoc_Close" bpmnElement="Assoc_Close"><di:waypoint x="1720" y="130" /><di:waypoint x="1720" y="200" /></bpmndi:BPMNEdge>
+    <bpmndi:BPMNEdge id="Edge_Assoc_Cancel" bpmnElement="Assoc_Cancel"><di:waypoint x="1430" y="790" /><di:waypoint x="1640" y="790" /></bpmndi:BPMNEdge>
+  </bpmndi:BPMNPlane></bpmndi:BPMNDiagram>
+</bpmn:definitions>

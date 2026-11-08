@@ -44,6 +44,8 @@ It distinguishes:
 The inventory is not an approved roadmap. Most entries are `PENDIENTE` or
 `INFERIDO` until a real use case and evidence exist.
 
+For opening and editing instructions, see [Process visualization](#visualización-de-procesos).
+
 ## File naming
 
 ```text
@@ -116,6 +118,35 @@ dependency.
 |---|---|---|---|
 | [PROC-SLS-001-ASIS-MANUAL.bpmn](PROC-SLS-001-ASIS-MANUAL.bpmn) | Manual accepted-proposal to order | `AFS-PROC-002` | `DEMOSTRADO` for controlled HTTP UI fixtures; full browser interaction unverified |
 | [PROC-SLS-001-ASIS-AUTOMATIC.bpmn](PROC-SLS-001-ASIS-AUTOMATIC.bpmn) | Automatic accepted-proposal to order | `AFS-PROC-002` | `DEMOSTRADO` for controlled creation fixtures; validation failure is explicit; online signature is outside the map |
+| [PROC-SHP-001-ASIS-ORDER-SHIPMENT.bpmn](PROC-SHP-001-ASIS-ORDER-SHIPMENT.bpmn) | Complete, partial and successive customer-order shipments | [AFS-PROC-003](../functional/AFS-PROC-003-order-to-shipment.md) | [Evidence and scenario traceability](../functional/AFS-PROC-003-order-to-shipment.md#10-scenarios-and-traceability): 28 observations, four repeated closes; administrator class fixtures; UI guards `INFERIDO`; unexecuted paths `PENDIENTE` |
+
+## Visualización de procesos
+
+Available `.bpmn` files are listed in **Current maps** above and stored in this
+directory. Each row links the map to its AFS; the AFS links to the characterization
+in `dolibarr-reference` and identifies the evidence behind individual steps.
+Keep both repositories side by side when following those local evidence links.
+
+To use [bpmn.io](https://demo.bpmn.io/), open the demo and drag a `.bpmn` file
+onto the canvas, or use its open-file control. Fit the diagram to the viewport,
+zoom with the canvas controls or mouse wheel, and pan to inspect details. Select
+elements to edit labels, move shapes or adjust connections; download the edited
+BPMN XML to save a local copy. The [official toolkit walkthrough](https://bpmn.io/toolkit/bpmn-js/walkthrough/)
+describes import, rendering and modeling.
+
+Alternatively, open the file using **File → Open File** in
+[Camunda Modeler](https://docs.camunda.io/docs/components/modeler/desktop-modeler/).
+Use canvas zoom/fit controls and pan to inspect the process; select elements to
+edit and save the `.bpmn` file locally. Deployment lint messages are not this
+repository's validation authority: these descriptive maps have
+`isExecutable="false"` and use standard BPMN only. Preserve stable IDs and avoid
+adding engine-specific extensions when saving with an editor.
+
+After editing, compare the XML diff, check the corresponding AFS and rerun
+structural and visual validation. A visual editor does not validate legacy
+behavior. The AFS scenario table maps BPMN element IDs to evidence and explicitly
+separates `DEMOSTRADO`, `INFERIDO` and `PENDIENTE` paths. No custom viewer or
+runtime process engine is required.
 
 ## Related documents
 
@@ -138,3 +169,22 @@ The maps do not establish global proposal/order cardinality, concurrency safety,
 all-line-type total fidelity, full online signature behavior, or transaction
 rollback on creation failure. The AFS and the reference follow-up record the
 evidence scope and remaining gaps.
+
+## Customer order to shipment pilot
+
+[`PROC-SHP-001-ASIS-ORDER-SHIPMENT.bpmn`](PROC-SHP-001-ASIS-ORDER-SHIPMENT.bpmn)
+continues from the order boundary of `PROC-SLS-001`, and also permits an order
+created independently. One map covers complete/partial/subsequent shipments,
+conditional stock effects and the tested cancellation variants. Single complete
+shipment coverage uses validation-timed stock only; the three timing modes apply
+to the successive partial scenarios. Four sequential repeated closures preserve
+states, quantities, stock/movements and relations, as documented in TEST-011;
+they do not add a business-loop path or prove concurrent idempotence. See
+[`AFS-PROC-003`](../functional/AFS-PROC-003-order-to-shipment.md) for scoped
+`DEMOSTRADO`, source-derived `INFERIDO` and `PENDIENTE` distinctions.
+
+Runtime authority:
+`dolibarr-reference: reference/characterization/ORDER-SHIPMENT-REF-001-order-to-shipment.md`.
+The shipping pilot does not change the earlier maps or approve Alixar stock,
+permission or cancellation policy. XML/DI validation and visual opening are
+independent of functional conformance.
