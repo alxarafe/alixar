@@ -34,6 +34,11 @@ The evidence layers remain separate:
 
 ## Inventory
 
+Start with the [global business process map](MAP.md) for the BM-01–BM-10
+hierarchy, commercial relationships, coverage gaps and links to all six BPMN
+maps, their AFS and evidence. Hierarchy means navigation, not execution order;
+commercial arrows do not impose mandatory handoffs.
+
 The preliminary business-map inventory is in [INVENTORY.md](INVENTORY.md).
 It distinguishes:
 
@@ -200,7 +205,9 @@ independent of functional conformance.
 order conversion, shipment conversion and creation with explicit lines. The
 [AFS traceability matrix](../functional/AFS-PROC-004-customer-invoicing.md#11-bpmn--afs--evidence-traceability)
 maps all five technical entry routes to those variants and the existing 27
-observations. The AFS and maps remain drafts pending human review.
+observations. The AFS and maps are integrated documentation; AFS-PROC-004 still
+records draft status and pending human review. Integration does not change
+normative status.
 
 Repeated creation can copy original quantities again; there is no demonstrated
 universal duplicate-prevention guarantee. Invoice validation and shipment

@@ -7,6 +7,7 @@
 - [Functional specifications](functional/README.md) — Implementation-independent Alixar AFS method, template and examples
 - [Accepted proposal to customer order](functional/AFS-PROC-002-proposal-to-order.md) — Process AFS for proposal-to-order conversion
 - [Process maps](processes/README.md) — Preliminary business inventory and AS-IS BPMN process maps
+- [Global business process map](processes/MAP.md) — BM-01–BM-10 hierarchy, commercial alternatives and navigation to BPMN, AFS and evidence
 - [Process visualization](processes/README.md#visualización-de-procesos) — Open, zoom and edit BPMN files with bpmn.io or Camunda Modeler
 - [ThirdParty](thirdparty.md) — Canonical ThirdParty contract and migration decisions
 - [Architecture](architecture.md) — Architectural decisions and principles
