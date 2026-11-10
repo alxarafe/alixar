@@ -100,7 +100,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   physical delete and returns `204 No Content` with no body. Positive unknown
   identifiers return `404 THIRD_PARTY_NOT_FOUND`; zero, negative and
   non-numeric identifiers return `400 VALIDATION_INVALID`. A ThirdParty with
-  linked Contacts is not deleted and returns
+  linked Contacts or proposals is not deleted and returns
   `409 THIRD_PARTY_DELETE_CONFLICT`; the restrictive database foreign key is
   the concurrency backstop
 - **Authorization**: `thirdparties.read` protects reads and listing;
@@ -119,6 +119,16 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   not audited
 - **Pending**: Solucar UI and historical data migration
 
+### Proposals (COM-01)
+
+Native proposal draft creation and read use Alixar PostgreSQL/jOOQ persistence,
+exact decimal snapshots, EUR and a centralized immutable versioned monetary policy.
+Creation allows zero or more lines and requires an active customer or prospect.
+`proposals.manage` and `proposals.read` are initially assigned only to `system-admin`;
+creation audit is atomic under BASIC/SELECTIVE. Referenced ThirdParty deletion is
+restricted. Editing, business validation/acceptance, orders and automation remain
+pending. See [Proposal contract and limitations](proposals.md).
+
 ### Persistence Infrastructure
 
 - **PostgreSQL 18.6**: Docker Compose service with a pinned image digest, internal
@@ -127,7 +137,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   user, password recovery, Personal Access Token, role-based authorization,
   role-administration authorization, audit integrity-core, recovery-token
   audit-authentication, audit-read authorization, persisted
-  audit-configuration, native ThirdParty and native Contact migrations
+  audit-configuration, native ThirdParty, native Contact and proposal migrations
 - **jOOQ runtime**: PostgreSQL dialect and Spring-provided `DSLContext` verified
   with a real `SELECT 1` against PostgreSQL through `PersistenceIT` in `bin/check`
 - **Native ThirdParty table**: `third_party` is owned by Alixar, with an
@@ -138,8 +148,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   and a nullable restrictive foreign key to `third_party`
 - **Validation isolation**: Each self-contained/reference check owns a fresh Compose
   project and cleans only its own containers, network, and database volume;
-  the 565 deterministic tests and 115 PostgreSQL integration tests remain
-  enabled
+  deterministic tests and real PostgreSQL integration tests remain enabled
 
 ### Technical spikes (not product capabilities)
 
@@ -185,7 +194,8 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   session and Bearer authentication, without changing `credentials_version`,
   invalidating sessions or revoking PATs. Built-in `system-admin` role contains
   `users.manage`, `roles.manage`, `audit.read`, `audit.configure`,
-  `thirdparties.read` and `thirdparties.manage`; there are
+  `thirdparties.read`, `thirdparties.manage`, `contacts.read`, `contacts.manage`,
+  `proposals.read` and `proposals.manage`; there are
   no per-user overrides, explicit `DENY`, role hierarchy or role groups.
   `GET /api/auth/me` exposes the user's current role codes and effective
   permission codes for the current request; these are informational for the
@@ -343,7 +353,7 @@ See [Development](development.md) for full validation workflow details.
 - Role groups, PAT scopes and additional business authorization beyond
   `users.manage`, `roles.manage`, `audit.read`, `audit.configure`,
   `thirdparties.read`, `thirdparties.manage`, `contacts.read` and
-  `contacts.manage`
+  `contacts.manage`, `proposals.read` and `proposals.manage`
 - the `FULL` audit mode, read event capture beyond the administrative user and
   role reads, bootstrap and password-reset request events, CSRF-specific audit
   events, audit event detail, retention, purging, archive and signed

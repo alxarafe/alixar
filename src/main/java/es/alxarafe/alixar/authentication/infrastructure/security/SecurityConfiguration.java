@@ -10,6 +10,7 @@ import es.alxarafe.alixar.authentication.application.GetEffectivePermissionsUseC
 import es.alxarafe.alixar.authentication.application.PermissionCodes;
 import es.alxarafe.alixar.authentication.application.UserRepository;
 import es.alxarafe.alixar.contact.api.ContactEndpoints;
+import es.alxarafe.alixar.sales.api.ProposalEndpoints;
 import es.alxarafe.alixar.thirdparty.api.ThirdPartyEndpoints;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -198,6 +199,10 @@ public class SecurityConfiguration {
                     .hasAuthority(PermissionCodes.CONTACTS_MANAGE)
                 .requestMatchers(HttpMethod.DELETE, ContactEndpoints.ITEM_PATH_PATTERN)
                     .hasAuthority(PermissionCodes.CONTACTS_MANAGE)
+                .requestMatchers(HttpMethod.POST, ProposalEndpoints.BASE_PATH)
+                    .hasAuthority(PermissionCodes.PROPOSALS_MANAGE)
+                .requestMatchers(HttpMethod.GET, ProposalEndpoints.ITEM_PATH_PATTERN)
+                    .hasAuthority(PermissionCodes.PROPOSALS_READ)
                 .requestMatchers(HttpMethod.GET, AuditEndpoints.VERIFICATION_PATH)
                     .hasAuthority(PermissionCodes.AUDIT_READ)
                 .requestMatchers(HttpMethod.GET, AuditEndpoints.BASE_PATH)

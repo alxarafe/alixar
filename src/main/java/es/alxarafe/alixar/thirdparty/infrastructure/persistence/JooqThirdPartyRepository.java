@@ -52,6 +52,9 @@ public class JooqThirdPartyRepository implements ThirdPartyRepository {
     private static final String CONTACT_THIRD_PARTY_FK_CONSTRAINT =
         "contact_third_party_id_fkey";
 
+    private static final String PROPOSAL_THIRD_PARTY_FK_CONSTRAINT =
+        "sales_proposal_third_party_id_fkey";
+
     private final DSLContext dsl;
 
     public JooqThirdPartyRepository(DSLContext dsl) {
@@ -144,7 +147,7 @@ public class JooqThirdPartyRepository implements ThirdPartyRepository {
                 .where(ID.eq(id))
                 .execute();
         } catch (DataIntegrityViolationException exception) {
-            if (isContactThirdPartyReferenceViolation(exception)) {
+            if (isKnownThirdPartyReferenceViolation(exception)) {
                 throw new ThirdPartyDeleteConflictException();
             }
             throw exception;
@@ -190,12 +193,12 @@ public class JooqThirdPartyRepository implements ThirdPartyRepository {
             .fetchOne(ID);
     }
 
-    static boolean isContactThirdPartyReferenceViolation(Throwable throwable) {
+    static boolean isKnownThirdPartyReferenceViolation(Throwable throwable) {
         Throwable cause = throwable;
         while (cause != null) {
             if (cause instanceof PSQLException psqlException
                 && REFERENTIAL_INTEGRITY_SQL_STATES.contains(psqlException.getSQLState())
-                && isContactThirdPartyConstraint(psqlException.getServerErrorMessage())) {
+                && isKnownThirdPartyConstraint(psqlException.getServerErrorMessage())) {
                 return true;
             }
             cause = cause.getCause();
@@ -203,9 +206,10 @@ public class JooqThirdPartyRepository implements ThirdPartyRepository {
         return false;
     }
 
-    private static boolean isContactThirdPartyConstraint(ServerErrorMessage error) {
+    private static boolean isKnownThirdPartyConstraint(ServerErrorMessage error) {
         return error != null
-            && CONTACT_THIRD_PARTY_FK_CONSTRAINT.equals(error.getConstraint());
+            && (CONTACT_THIRD_PARTY_FK_CONSTRAINT.equals(error.getConstraint())
+                || PROPOSAL_THIRD_PARTY_FK_CONSTRAINT.equals(error.getConstraint()));
     }
 
     private Condition filterCondition(ThirdPartyListQuery query) {

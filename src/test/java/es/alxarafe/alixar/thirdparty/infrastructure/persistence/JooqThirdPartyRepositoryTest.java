@@ -13,29 +13,37 @@ class JooqThirdPartyRepositoryTest {
 
     @Test
     void restrictViolationOnContactForeignKeyIsTranslated() {
-        assertThat(isContactThirdPartyReferenceViolation("23001", CONTACT_FK)).isTrue();
+        assertThat(isKnownThirdPartyReferenceViolation("23001", CONTACT_FK)).isTrue();
     }
 
     @Test
     void foreignKeyViolationOnContactForeignKeyIsTranslated() {
-        assertThat(isContactThirdPartyReferenceViolation("23503", CONTACT_FK)).isTrue();
+        assertThat(isKnownThirdPartyReferenceViolation("23503", CONTACT_FK)).isTrue();
+    }
+
+    @Test
+    void proposalReferenceViolationsUseTheExistingDeleteConflict() {
+        String proposalFk = "sales_proposal_third_party_id_fkey";
+        assertThat(isKnownThirdPartyReferenceViolation("23001", proposalFk)).isTrue();
+        assertThat(isKnownThirdPartyReferenceViolation("23503", proposalFk)).isTrue();
+        assertThat(isKnownThirdPartyReferenceViolation("23514", proposalFk)).isFalse();
     }
 
     @Test
     void referentialViolationOnAnotherConstraintIsNotTranslated() {
-        assertThat(isContactThirdPartyReferenceViolation("23001", "another_table_contact_fkey"))
+        assertThat(isKnownThirdPartyReferenceViolation("23001", "another_table_contact_fkey"))
             .isFalse();
-        assertThat(isContactThirdPartyReferenceViolation("23503", "another_table_contact_fkey"))
+        assertThat(isKnownThirdPartyReferenceViolation("23503", "another_table_contact_fkey"))
             .isFalse();
     }
 
     @Test
     void referentialViolationWithoutConstraintIsNotTranslated() {
-        assertThat(isContactThirdPartyReferenceViolation("23001", null)).isFalse();
-        assertThat(isContactThirdPartyReferenceViolation("23503", null)).isFalse();
+        assertThat(isKnownThirdPartyReferenceViolation("23001", null)).isFalse();
+        assertThat(isKnownThirdPartyReferenceViolation("23503", null)).isFalse();
     }
 
-    private static boolean isContactThirdPartyReferenceViolation(
+    private static boolean isKnownThirdPartyReferenceViolation(
         String sqlState,
         String constraint
     ) {
@@ -47,6 +55,6 @@ class JooqThirdPartyRepositoryTest {
             new PSQLException(new ServerErrorMessage(serverMessage));
         DataIntegrityViolationException exception =
             new DataIntegrityViolationException("violation", postgresException);
-        return JooqThirdPartyRepository.isContactThirdPartyReferenceViolation(exception);
+        return JooqThirdPartyRepository.isKnownThirdPartyReferenceViolation(exception);
     }
 }

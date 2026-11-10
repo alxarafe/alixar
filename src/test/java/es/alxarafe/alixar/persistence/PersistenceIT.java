@@ -282,8 +282,8 @@ class PersistenceIT {
                 .startsWith(POSTGRESQL_VERSION);
         }
         assertThat(flyway.getConfiguration().getDataSource()).isSameAs(dataSource);
-        assertThat(flyway.info().all()).hasSize(13);
-        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("13");
+        assertThat(flyway.info().all()).hasSize(14);
+        assertThat(flyway.info().current().getVersion().getVersion()).isEqualTo("14");
         assertThat(dsl.selectOne().fetchSingle().value1()).isEqualTo(1);
         assertThat(dsl.fetch("select tablename from pg_catalog.pg_tables where schemaname = current_schema()")
             .getValues(0, String.class)).containsExactlyInAnyOrder(
@@ -300,10 +300,12 @@ class PersistenceIT {
                 AUDIT_CONFIGURATION_TABLE,
                 AUDIT_READ_POLICY_TABLE,
                 THIRD_PARTY_TABLE,
-                CONTACT_TABLE
+                CONTACT_TABLE,
+                "sales_proposal",
+                "sales_proposal_line"
             );
         assertThat(dsl.fetchCount(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(HISTORY_TABLE))))
-            .isEqualTo(13);
+            .isEqualTo(14);
     }
 
     @Test
@@ -2553,7 +2555,9 @@ class PersistenceIT {
                 PermissionCodes.THIRD_PARTIES_READ,
                 PermissionCodes.THIRD_PARTIES_MANAGE,
                 PermissionCodes.CONTACTS_READ,
-                PermissionCodes.CONTACTS_MANAGE
+                PermissionCodes.CONTACTS_MANAGE,
+                PermissionCodes.PROPOSALS_MANAGE,
+                PermissionCodes.PROPOSALS_READ
             );
         assertThat(dsl.fetch("select code from authentication_role").getValues(0, String.class))
             .contains(RoleCodes.SYSTEM_ADMIN);
@@ -2566,7 +2570,9 @@ class PersistenceIT {
                 PermissionCodes.THIRD_PARTIES_READ,
                 PermissionCodes.THIRD_PARTIES_MANAGE,
                 PermissionCodes.CONTACTS_READ,
-                PermissionCodes.CONTACTS_MANAGE
+                PermissionCodes.CONTACTS_MANAGE,
+                PermissionCodes.PROPOSALS_MANAGE,
+                PermissionCodes.PROPOSALS_READ
             );
         assertThat(dsl.fetch(
             "select built_in from authentication_role where code = ?",
@@ -2582,6 +2588,8 @@ class PersistenceIT {
                 new PermissionDefinition(PermissionCodes.AUDIT_READ, "Read audit events"),
                 new PermissionDefinition(PermissionCodes.CONTACTS_MANAGE, "Manage contacts"),
                 new PermissionDefinition(PermissionCodes.CONTACTS_READ, "Read contacts"),
+                new PermissionDefinition(PermissionCodes.PROPOSALS_MANAGE, "Create proposals"),
+                new PermissionDefinition(PermissionCodes.PROPOSALS_READ, "Read proposals"),
                 new PermissionDefinition(
                     PermissionCodes.ROLES_MANAGE,
                     "Manage roles and their permission assignments"
@@ -2736,6 +2744,8 @@ class PersistenceIT {
                 PermissionCodes.AUDIT_READ,
                 PermissionCodes.CONTACTS_MANAGE,
                 PermissionCodes.CONTACTS_READ,
+                PermissionCodes.PROPOSALS_MANAGE,
+                PermissionCodes.PROPOSALS_READ,
                 PermissionCodes.ROLES_MANAGE,
                 PermissionCodes.THIRD_PARTIES_MANAGE,
                 PermissionCodes.THIRD_PARTIES_READ,
@@ -2827,6 +2837,8 @@ class PersistenceIT {
                     PermissionCodes.THIRD_PARTIES_MANAGE,
                     PermissionCodes.CONTACTS_READ,
                     PermissionCodes.CONTACTS_MANAGE,
+                    PermissionCodes.PROPOSALS_MANAGE,
+                    PermissionCodes.PROPOSALS_READ,
                     permissionCode
                 );
         } finally {
@@ -2855,7 +2867,9 @@ class PersistenceIT {
                     PermissionCodes.THIRD_PARTIES_READ,
                     PermissionCodes.THIRD_PARTIES_MANAGE,
                     PermissionCodes.CONTACTS_READ,
-                    PermissionCodes.CONTACTS_MANAGE
+                    PermissionCodes.CONTACTS_MANAGE,
+                    PermissionCodes.PROPOSALS_MANAGE,
+                    PermissionCodes.PROPOSALS_READ
                 );
             assertThat(dsl.selectCount()
                 .from(org.jooq.impl.DSL.table(org.jooq.impl.DSL.name(USER_ROLE_TABLE)))

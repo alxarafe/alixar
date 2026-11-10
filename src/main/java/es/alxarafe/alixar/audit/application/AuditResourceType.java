@@ -12,5 +12,6 @@ public enum AuditResourceType {
     AUTHENTICATION,
     HTTP_REQUEST,
     THIRD_PARTY,
-    CONTACT
+    CONTACT,
+    PROPOSAL
 }

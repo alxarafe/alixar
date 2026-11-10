@@ -4,3 +4,4 @@ es.alxarafe.alixar.authentication.infrastructure.NoOpPasswordResetNotifierConfig
 es.alxarafe.alixar.audit.infrastructure.AuditConfiguration
 es.alxarafe.alixar.contact.infrastructure.ContactConfiguration
 es.alxarafe.alixar.thirdparty.infrastructure.ThirdPartyConfiguration
+es.alxarafe.alixar.sales.infrastructure.ProposalConfiguration

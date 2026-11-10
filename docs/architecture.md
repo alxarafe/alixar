@@ -31,6 +31,10 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 
 ## Implemented
 
+- Native proposal draft creation/read with isolated monetary rules, persisted
+  historical line snapshots and policy identification, ThirdParty eligibility
+  locking, operation permissions and atomic audit. See [Proposals](proposals.md).
+
 - Canonical Contact read (`GET /api/contacts/{id}`), list (`GET /api/contacts`),
   creation (`POST /api/contacts`) and partial update (`PATCH /api/contacts/{id}`)
   with native Alixar PostgreSQL/jOOQ persistence, `contacts.read` /
@@ -69,7 +73,7 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
   request, deny-by-default policy, and identical authorization for session and
   Bearer authentication. Built-in `system-admin` role with `users.manage`,
   `roles.manage`, `audit.read`, `audit.configure`, `thirdparties.read`,
-  `thirdparties.manage`, `contacts.read` and `contacts.manage`; read-only
+  `thirdparties.manage`, `contacts.read`, `contacts.manage`, `proposals.read` and `proposals.manage`; read-only
   permission
   catalogue; role detail,
   creation, rename, permission replacement and deletion of unassigned custom
@@ -122,11 +126,12 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - Role groups
 - PAT scopes and authorization for business capabilities beyond `users.manage`,
   `roles.manage`, `audit.read`, `audit.configure`, `thirdparties.read`,
-  `thirdparties.manage`, `contacts.read` and `contacts.manage`
+  `thirdparties.manage`, `contacts.read`, `contacts.manage`, `proposals.read` and `proposals.manage`
 - OAuth 2.x Authorization Server / Authorization Code + PKCE, OpenID Connect
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - OpenAPI specification
-- ERP modules beyond ThirdParty (catalog, sales, billing, inventory, accounting)
+- ERP capabilities beyond the implemented ThirdParty/Contact and proposal
+  creation/read slices (catalog, remaining sales, billing, inventory, accounting)
 - Workflow engine selection: Flowable 8.0.0 is evaluated only by a test-only
   compatibility spike; it is not an approved production dependency. See
   [Workflow engine compatibility spike](workflow-spike.md)

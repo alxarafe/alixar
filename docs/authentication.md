@@ -595,6 +595,8 @@ The administrative namespace is split by capability:
 | `POST /api/contacts` | `contacts.manage` |
 | `PATCH /api/contacts/{id}` | `contacts.manage` |
 | `DELETE /api/contacts/{id}` | `contacts.manage` |
+| `POST /api/proposals` | `proposals.manage` |
+| `GET /api/proposals/{id}` | `proposals.read` |
 | `GET /api/admin/roles` | `users.manage` or `roles.manage` |
 | Any other `/api/admin/roles/**` method | `roles.manage` |
 | `/api/admin/permissions` | `roles.manage` |
@@ -604,6 +606,11 @@ The administrative namespace is split by capability:
 | `PUT /api/admin/audit-configuration` | `audit.configure` |
 | `GET /api/admin/audit-configuration/read-policy` | `audit.read` or `audit.configure` |
 | `PUT /api/admin/audit-configuration/read-policy` | `audit.configure` |
+
+Proposal permissions are initially assigned only to `system-admin`. Internal
+ThirdParty eligibility checking requires no `thirdparties.read`. Manage does not
+imply read. Proposal POST follows existing session CSRF/Bearer parity; see
+[Proposals](proposals.md).
 
 The GET rule for the role catalogue is method-specific and is evaluated before
 the general role namespace rule. Results:

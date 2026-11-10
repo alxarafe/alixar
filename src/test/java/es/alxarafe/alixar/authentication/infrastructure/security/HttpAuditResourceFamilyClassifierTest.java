@@ -39,6 +39,12 @@ class HttpAuditResourceFamilyClassifierTest {
     }
 
     @Test
+    void classifiesProposalWithoutDisclosingIdentifier() {
+        var request = request("GET", "/api/proposals/123");
+        assertThat(classifier.classify(request)).contains("GET /api/proposals");
+    }
+
+    @Test
     void ignoresQueryString() {
         var request = request("GET", "/api/admin/audit-events");
         request.setQueryString("actorUserId=8f796219-e501-44e8-a4ab-4c014821ba58");
