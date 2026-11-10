@@ -1,8 +1,9 @@
 # ALIXAR-COM-001 — Proposal to order technical design
 
-Status: **Partially approved — COM-01 functional and technical contract closed**.
-Updated: 2026-11-10. Sections 3.4/12.3 record explicit human approval. Other
-operations remain Proposed/Pending. This documentary task does not authorize implementation.
+Status: **COM-01 and COM-02 functional/technical contracts closed and Approved**.
+Updated: 2026-11-10. COM-01 approvals are in sections 3.4/12.3; COM-02 authority is
+section 13. All other operations remain Proposed/Pending. This documentary task
+does not authorize implementation.
 
 ## 1. Scope, acceptance and evidence vocabulary
 
@@ -21,13 +22,14 @@ are excluded.
 - **Proposed**: an Alixar design recommendation, not approved behavior.
 - **Pending**: a decision or evidence gap requiring resolution.
 - **Approved**: existing architecture decisions, the explicit COM-01 functional
-  and technical decisions in sections 3.4/12.3, and the user's authorization of
-  this documentary task.
+  and technical decisions in sections 3.4/12.3, the scoped COM-02 rules in
+  section 13, and the user's authorization of this documentary task.
 - **Antecedent / Discarded**: historical context / rejected historical inference.
 
 Future behavior is **Proposed** except for the scoped COM-01 approvals in section
-3.4 and the explicit technical closure in section 12.3. Existing legacy behavior
-is never adopted merely because demonstrated.
+3.4/12.3 and the scoped COM-02 approvals in section 13. Earlier COM-02 Proposed
+summaries are superseded only within that scope. Existing legacy behavior is never
+adopted merely because demonstrated.
 
 ## 2. Sources and current architecture
 
@@ -337,10 +339,12 @@ creates no per-ThirdParty configuration, selector infrastructure or configuratio
 API. Its concrete future selection rules remain Pending. Monetary policy is
 separate from the Proposed sales-conversion automation policy (D7).
 
-## 7. Canonical HTTP contract — COM-01 approved, later operations Proposed
+## 7. Canonical HTTP contract — scoped COM-01/02 approvals; other operations Proposed
 
-Only COM-01 POST/GET and their existing representations/errors below are Approved;
-all other operations and their errors remain Proposed/Pending.
+COM-01 POST/GET and their existing representations/errors below are Approved.
+For COM-02, section 13 records the approved PUT permission/minimal success response
+and closed functional/technical contract, including Approved PR-1–PR-3. All other
+operations remain Proposed/Pending.
 
 JSON application/json; errors application/problem+json with existing ProblemDetail
 shape and module-owned sales.* MessageSource/Jakarta Validation text. Stable codes,
@@ -352,7 +356,7 @@ existing security. Unknown/protected fields and malformed values reject.
 |---|---|---|
 | POST `/api/proposals` | `{thirdPartyId,currency,lines:[{description,quantity,unitNetPrice,vatRate}]}` | 201 `{id}`, Location `/api/proposals/{id}`; proposals.manage |
 | GET `/api/proposals/{id}` | positive bigint ID | 200 proposal; proposals.read |
-| PUT `/api/proposals/{id}/draft` | expectedVersion plus complete creation fields | 200 proposal; proposals.manage |
+| PUT `/api/proposals/{id}/draft` | expectedVersion plus complete editable fields; section 13 is authoritative for COM-02 | Approved: 200 `{id,version}` only; proposals.manage; errors and precedence in section 13 |
 | POST `/api/proposals/{id}/validation` | `{expectedVersion}` | 200 proposal; proposals.validate |
 | POST `/api/proposals/{id}/acceptance` | `{expectedVersion}` | 200 acceptance representation; proposals.accept |
 | POST `/api/proposals/{id}/refusal` | `{expectedVersion}` | 200 proposal; proposals.accept |
@@ -626,3 +630,370 @@ The next separately authorized task must deliver the complete create/read capabi
 No proposal editing, validation, acceptance, conversion, order tables, automation,
 reference investigation, Solucar changes or deployment belongs to COM-01. Keep all
 nine tasks; approve subsequent work separately after COM-01 is validated and closed.
+
+## 13. COM-02 — complete replacement of a DRAFT proposal
+
+**Status: functional and technical contract closed — Approved, including PR-1,
+PR-2 and PR-3. COM-02 remains unimplemented and implementation is not authorized.**
+Approval source: the human final contract-closure and publication instruction,
+following consolidation based on local commit
+`08812a4833bb19b30d77780f564751afbe6efe9a`. The earlier Proposed/Pending status of
+the three precedences is Antecedent. Approved task scope: one local atomic
+consolidation commit, publication of this documentary branch, a PR against main
+and inspection of the corresponding CI. This does not authorize implementation,
+PR merge, tags, releases or deployment. COM-03, orders, tariffs, discounts,
+commercial automation,
+automatic ThirdParty repricing and per-ThirdParty monetary configuration are out
+of scope. Sections 3.4, 6.1 and 12 retain their COM-01 approval scope.
+
+For COM-02, this section supersedes earlier Proposed recommendations in sections
+4–10, including the old full-proposal PUT response. In particular, this PUT's
+400 VALIDATION_INVALID contract takes precedence over the multi-operation error
+summary in section 7. No COM-01 request, response, permission or error is changed.
+
+### 13.1 Evidence, outcome and boundaries
+
+Inspected integrated main: `e2b03a6` (PR #37), containing COM-01 commit
+`019026de3508f5c5aa6771485d6472d5d17583e2`. This review used the actual main files,
+not a proposed COM-01 implementation. No runtime verification was rerun here.
+
+| Source | Demonstrated mechanism / consequence for COM-02 |
+|---|---|
+| [Proposal](../../src/main/java/es/alxarafe/alixar/sales/domain/Proposal.java), [ProposalLine](../../src/main/java/es/alxarafe/alixar/sales/domain/ProposalLine.java) | Immutable records retain amounts, policy ID, ordered lines, version and timestamps; no replacement operation exists |
+| [MonetaryPolicy](../../src/main/java/es/alxarafe/alixar/sales/domain/MonetaryPolicy.java), [ProposalLimits](../../src/main/java/es/alxarafe/alixar/sales/domain/ProposalLimits.java), [create use case](../../src/main/java/es/alxarafe/alixar/sales/application/CreateProposalUseCase.java) | Existing exact EUR v1 calculations, centralized limits and normalization are reusable; creation cannot be invoked to replace an existing root |
+| [V14](../../src/main/resources/db/migration/V14__create_proposal_and_authorization.sql), [jOOQ repository](../../src/main/java/es/alxarafe/alixar/sales/infrastructure/persistence/JooqProposalRepository.java) | Restrictive FKs, generated IDs, unique positions, DRAFT-only storage and a two-statement aggregate read; no revision archive or update/root-lock method |
+| [Eligibility adapter](../../src/main/java/es/alxarafe/alixar/sales/infrastructure/persistence/JooqEligibleThirdParty.java), [transactional facade](../../src/main/java/es/alxarafe/alixar/sales/infrastructure/TransactionalProposalService.java) | Existing lockAndCheck combines FOR SHARE with reading commercial flags; GET has default isolation. The combined checker must not be used on the no-op branch |
+| [Security](../../src/main/java/es/alxarafe/alixar/authentication/infrastructure/security/SecurityConfiguration.java), [controller](../../src/main/java/es/alxarafe/alixar/sales/api/ProposalController.java), [errors](../../src/main/java/es/alxarafe/alixar/sales/api/ProposalExceptionHandler.java) | Separate manage/read permissions, exact decimal JSON parsing and localized errors; PUT does not exist. COM-01 has distinct required-field/currency codes that this PUT must not silently inherit |
+| [AuditTrail implementation](../../src/main/java/es/alxarafe/alixar/audit/infrastructure/ConfiguredAuditTrail.java), [PostgreSQL tests](../../src/test/java/es/alxarafe/alixar/persistence/ProposalPersistenceIT.java), [HTTP tests](../../src/test/java/es/alxarafe/alixar/sales/ProposalControllerTest.java) | OFF/BASIC/SELECTIVE, authenticated actors, transactional audit and controlled concurrency tests exist; COM-02 replacement/read-coherence evidence must still be implemented |
+
+Outcome: replace all editable contents of one existing DRAFT with version control,
+coherent monetary snapshots and atomic effective-change audit. No PATCH, line-level
+mutation API, quantity allocation, new lifecycle state, order, workflow engine or
+commercial configuration is introduced. This is a contract, not delivered behavior.
+
+### 13.2 Consolidated decisions — the ten initial proposals
+
+| ID | Approved rule | Superseded recommendation / implementation boundary |
+|---|---|---|
+| COM-02-P1 | thirdPartyId may change in DRAFT. Submit all editable fields and all lines/prices explicitly; empty drafts remain valid. The effective target must exist and be an active customer or prospect. | No automatic tariffs, discounts, conditions or prices derived from ThirdParty; no additional editable root fields. |
+| COM-02-P2 | Any effective change replaces all lines with new generated IDs in input order, including a ThirdParty-only change. No-op retains all IDs. | Retaining/matching old line IDs during an effective edit is Discarded; client-supplied line IDs are invalid. |
+| COM-02-P3 | Compare normalized thirdPartyId, currency and ordered line tuples; use BigDecimal.compareTo(), not scale-sensitive equals. Check expectedVersion even for identical content. No-op changes no header, line, amount, version or date and emits no modification audit. | Generated IDs, totals and dates are not editable/comparison inputs. Equal rounded totals do not make different editable inputs a no-op. |
+| COM-02-P4 | No-op does not recheck ThirdParty commercial eligibility. Effective changes do, even when thirdPartyId is unchanged. | Unconditional commercial flag reads before no-op detection are Discarded. A pure identifier lock is separate from eligibility and is specified in 13.5. |
+| COM-02-P5 | Resolve the immutable policy identified on the document; preserve its identifier and exact rules. Unknown policy permits consultation and valid no-op, but rejects effective edits requiring recalculation. | No fallback to today's default, silent policy migration or per-ThirdParty configuration. |
+| COM-02-P6 | Do not store complete prior draft revisions. Technical version is for concurrency, not reconstruction; audit is not an old-document copy. | Retention of formally communicated or issued versions remains a later, out-of-scope decision. |
+| COM-02-P7 | Increment version once per effective edit; keep createdAt; updatedAt must not regress. Prevent version overflow. No-op retains all dates/version. | Concrete timestamp arithmetic and stable exhaustion treatment are specified in 13.4; timestamps do not replace expectedVersion. |
+| COM-02-P8 | PUT requires proposals.manage and returns 200 with only id/version on both success branches. Full consultation requires GET with proposals.read. | The full-proposal PUT response is Discarded. Reuse existing CSRF/Bearer mechanisms and no additional ThirdParty read permission for the internal check. |
+| COM-02-P9 | PROPOSAL_UPDATED only for effective edits, via existing AuditTrail with PROPOSAL/SUCCESS, in the mutation transaction. OFF emits none; BASIC/SELECTIVE require audit and rollback on failure. | No no-op success event, unconditional mandatory append, commercial payload or synthetic actor. |
+| COM-02-P10 | Serialize edits of one root; verify state/version transactionally; provide coherent aggregate reads and a consistent ThirdParty/proposal/AuditTrail lock order. Approved errors are in 13.6. | The physical protocol and PR-1–PR-3 below define the approved consistency/error requirements; no implementation or later operation is authorized. |
+
+### 13.3 Input, normalized equality and minimal success result
+
+`PUT /api/proposals/{id}/draft` consumes and produces application/json. Complete
+request example:
+
+```json
+{
+  "expectedVersion": 1,
+  "thirdPartyId": 42,
+  "currency": "EUR",
+  "lines": [
+    {"description": "Consulting", "quantity": 2, "unitNetPrice": 10.005, "vatRate": 21}
+  ]
+}
+```
+
+All root members are required/non-null. Path ID, thirdPartyId and expectedVersion
+must be positive signed BIGINT-range integers, without string/fractional/overflow
+coercion. Reuse COM-01's normalized line inputs, limits, scales, EUR and calculation
+rules in sections 6.1/12.1 rather than duplicating them here. Required VAT and all
+line members must be supplied. `lines: []` removes all lines; omission/null never
+means "keep lines". Unknown/protected members, root ID, current version, state,
+policy ID, totals, timestamps, links and line IDs/positions reject.
+
+For this PUT, missing/null members, malformed JSON/types/IDs, non-EUR currency,
+invalid bounds/scale/limits and computed overflow all use 400 VALIDATION_INVALID.
+Under Approved PR-1, structural input validation precedes business access;
+policy-dependent calculated overflow is checked only on effective modification,
+after resolving that policy. COM-01 POST keeps its approved VALIDATION_REQUIRED
+and SALES_UNSUPPORTED_CURRENCY mappings. Reuse core MessageSource validation
+messages and sales-owned localized field labels without requiring equal error codes
+across different operations.
+
+Normalize descriptions as in COM-01. Compare thirdPartyId, currency and line count,
+then each normalized description/quantity/unitNetPrice/vatRate tuple in order.
+Decimal scales within the allowed input limit are numerically equal using
+BigDecimal.compareTo(): 2 and 2.000000 match; excessive scale still rejects before
+comparison. Reordering distinct tuples is effective; swapping identical tuples is
+unobservable. Equal rounded totals do not suppress an editable-value change.
+
+After authorization and locating/locking the root, Approved PR-2 checks
+expectedVersion, then DRAFT, then normalized equality. Identical input is a valid
+no-op even if the stored ThirdParty later became inactive or lost its customer/
+prospect flags. Do not read those flags, resolve an unavailable policy, recalculate
+or write anything on that branch. A stale version still conflicts. Both real success and no-op return 200 OK with exactly:
+
+```json
+{
+  "id": 125,
+  "version": 2
+}
+```
+
+Use the resulting version for an effective edit and the unchanged version for a
+no-op. Neither result includes lines, ThirdParty, amounts, policy, dates, links,
+change flags or any other document member. No Location or ETag is introduced.
+Consultation remains the existing GET with proposals.read; manage does not grant
+that permission. Errors do not disclose the document or current stored version.
+
+### 13.4 Stored policy, intentional replacement, version and dates
+
+Every effective replacement, including ThirdParty-only changes, calculates its
+candidate snapshots under the immutable policy ID on the locked proposal. For
+COM-01 this is MonetaryPolicy.EUR_V1. A small explicit supported-ID resolution is
+sufficient; there is no justification for a generic configurable policy framework.
+Never interpret an unknown ID as EUR v1. If recalculation is required and the policy
+is unavailable, return 409 SALES_MONETARY_POLICY_UNAVAILABLE without mutation.
+Unknown-policy GET and valid no-op use stored snapshots and remain possible.
+
+Validate all replacement amounts and their totals before deleting any existing
+line. Reuse the central policy/limits and exact decimal handling; retain the policy
+ID on commit. Untouched documents, reads and no-ops preserve historical amounts.
+An intentional effective draft edit replaces its current snapshots; it does not
+archive the superseded ones. These statements are compatible with the approved
+absence of prior-content storage: no reconstruction or history-copy guarantee is
+implied by technical version or the PROPOSAL_UPDATED event. No automatically
+derived ThirdParty prices or configurable monetary conditions are introduced.
+
+Retain root ID, DRAFT and createdAt. Increment the locked version once, with an
+explicit capacity check before increment arithmetic or mutation SQL. **Approved
+PR-3:** after detecting an effective change, reject an exhausted version with 409 SALES_VERSION_EXHAUSTED, distinct from the approved
+SALES_VERSION_CONFLICT for stale expectedVersion. Do not return currentVersion.
+A valid no-op at Long.MAX_VALUE still succeeds; a real change at that version
+cannot write, wrap, reset or generate audit. Retrying with the same/latest version
+does not solve exhaustion. The differentiated code and its precedence are
+expressly Approved by the final human instruction.
+
+For an effective change, take one server-clock instant at persistence timestamp
+precision and set updatedAt to max(previous updatedAt, that instant). The concrete
+precision is PostgreSQL TIMESTAMPTZ microseconds: truncate the sampled instant to
+ChronoUnit.MICROS before comparison/persistence. Keep createdAt exactly. Equal
+updatedAt values are allowed at that precision or during clock regression; version
+is the concurrency authority. No-op does not update or reassign any timestamp.
+
+### 13.5 Concrete transaction, lock order and coherent reads
+
+Technical realization of the approved consistency rules: one READ COMMITTED
+mutation transaction in the existing infrastructure facade. Domain/application
+remain independent of Spring, jOOQ, HTTP and JSON. No schema change to V14, revision
+table, new permission/grant or future state is required by this design. Do not
+rewrite V14 or relax its DRAFT CHECK. Add only the concrete repository operations
+needed by replacement and PROPOSAL_UPDATED registration in a later authorized
+implementation; this task changes no code or migration.
+
+Lock order for this operation is **target ThirdParty identifier FOR SHARE → proposal
+header FOR UPDATE → its lines → audit chain**. Locks last until commit/rollback.
+Only the target ID is locked; do not lock the old ThirdParty after the root, upgrade
+the shared lock, acquire another proposal or call external systems. This follows
+the applicable ranks in section 5 without implementing future operations.
+
+1. Under Approved PR-1, authentication, existing CSRF and proposals.manage
+   authorization precede any business access. Then
+   validate request/path structure, required/protected fields, types, normalization,
+   individual bounds, limits, scales and currency; invalid input is 400. Do not
+   calculate policy-dependent amounts or their overflow during this initial phase;
+   those checks occur only in the effective branch after policy resolution.
+2. Acquire a technical target-reference lock using SELECT id FROM third_party WHERE
+   id = :submittedThirdPartyId FOR SHARE. Select **only id**, with no commercial
+   predicates and no active/customer/prospect/supplier projection. Save whether a
+   row was found; absence does not yet produce an error. This is not eligibility
+   validation and may occur for a no-op. No flags are read on that branch.
+3. Locate and lock the proposal header FOR UPDATE. Under Approved PR-2, after
+   existence check expectedVersion first, then DRAFT, then load/compare the ordered normalized contents under that lock. If
+   version and state are both wrong, return SALES_VERSION_CONFLICT. A competitor
+   must wait and check the committed root version, not a stale pre-lock value.
+4. Compare normalized editable input with that locked aggregate. If identical,
+   return id/unchanged version without mutations, policy resolution, audit or a
+   commercial eligibility query. The existing lockAndCheck method must not be
+   called here. Inactive/reclassified target flags never reject a matching no-op.
+5. Only after detecting an effective change, Approved PR-3 checks increment
+   capacity first: return 409 SALES_VERSION_EXHAUSTED if exhausted. Then check target eligibility and stored-policy availability.
+   A valid no-op never reaches this exhaustion check. If step 2 found no row, reject
+   with 422 only on this branch; do not query a newly inserted target after taking
+   the root lock. Otherwise read active/customer/prospect on the **already locked**
+   target and require active && (customer || prospect). Reusing lockAndCheck here
+   may reissue FOR SHARE on that same held row; it must not acquire a previously
+   unheld earlier-rank lock. The flags cannot change between steps 2 and 5.
+6. On that effective branch, after resolving the stored policy, calculate and
+   validate all new snapshots/totals, including calculated overflow (400 on failure).
+   Do not run these policy-dependent checks on no-op or before policy resolution.
+   Delete old lines only for this root; insert the complete replacement with fresh
+   generated IDs and positions starting at 1; update only thirdPartyId, version and
+   updatedAt on its header. Keep root identity/state/createdAt/policy unchanged.
+   A guarded id/version/DRAFT update is a backstop; unexpected zero affected rows
+   abort the whole transaction rather than committing inserted lines.
+7. Append PROPOSAL_UPDATED / PROPOSAL / SUCCESS last via AuditTrail.recordSuccess.
+   OFF emits none, BASIC/SELECTIVE require success. Return only id/new version after
+   successful commit. Line, header, FK or required audit failure restores the entire
+   original header, IDs, lines, amounts, version, dates and policy. An exception
+   after an append also rolls its event back; sequence gaps do not imply partial
+   document persistence.
+
+This separates the combined COM-01 lock/check into an identity-only lock and an
+effective-branch eligibility read, adding only concrete capability boundaries
+where needed. COM-01 creation still uses its existing combined checker and keeps
+its behavior. The unconditional pre-no-op commercial check and the preliminary
+read/two-phase alternative from earlier COM-02 recommendations are Discarded.
+
+For two effective commands with the same expectedVersion, root locking yields one
+commit and one 409. Different target ThirdParties do not allow two winners. Two
+matching no-ops may both succeed because neither increments version. A no-op racing
+an effective edit either precedes the committed edit or sees its advanced version
+and conflicts. There is no silent retry, replay cache or Idempotency-Key store;
+a lost-response repeat with stale expectedVersion conflicts. A caller needing the
+full current document uses separately authorized GET.
+
+For effective edits, target mutation/deletion committed before the identifier lock
+is observed by the eligibility branch; mutation after that lock waits for release.
+A no-op may wait for an identifier lock but never reads commercial flags afterward.
+Changing away from an inactive old party to an eligible new target is permitted.
+Restrictive FKs preserve the old relationship until the header change commits and
+protect the new relationship thereafter; other references may still prevent old
+ThirdParty deletion. No automatic classification change, unlink or cascade occurs.
+
+**Coherent aggregate GET:** the integrated jOOQ reader uses separate header and
+line statements. To meet the approved coherent-read requirement once PUT exists,
+use one REPEATABLE READ read-only transaction for those queries through the actual
+infrastructure facade. PUT compares/returns its guarded root version in the write
+transaction and must not obtain its result from a later GET. Public COM-01 GET
+fields, permission and later-eligibility behavior are unchanged; the isolation
+adjustment is internal support for COM-02 and is not implemented in this task.
+
+Technical basis: [PostgreSQL locks](https://www.postgresql.org/docs/18/explicit-locking.html)
+cover shared/exclusive row-lock conflicts; [transaction isolation](https://www.postgresql.org/docs/18/transaction-iso.html)
+distinguishes per-statement and transaction snapshots. [Spring transaction annotations](https://docs.spring.io/spring-framework/reference/data-access/transaction/declarative/annotations.html)
+provide infrastructure isolation controls. These support the design above; they
+are not evidence of newly executed Alixar concurrency tests or a new dependency.
+
+### 13.6 Approved errors and final precedence rules
+
+Reuse existing application/problem+json with stable code and optional field,
+localized core validation messages and sales-owned English/Spanish bundles. No
+error includes currentVersion, line IDs, prices, SQL/constraint names or the
+proposal contents. Authorize before business lookup or disclosure. proposals.read
+alone cannot PUT; proposals.manage alone cannot GET the full document. Internal
+eligibility checking requires no additional thirdparties.read permission.
+
+| HTTP | Code / scope / status | Effect |
+|---|---|---|
+| 400 | VALIDATION_INVALID: any invalid PUT input, including missing/null/protected members, non-EUR, IDs/expectedVersion, bounds/scales/limits or computed overflow | No document change or modification event; COM-01 codes are unaffected |
+| 404 | PROPOSAL_NOT_FOUND | No change |
+| 409 | SALES_VERSION_CONFLICT: stale expectedVersion; Approved PR-2 gives it priority over a simultaneous non-DRAFT state | No change |
+| 409 | SALES_VERSION_EXHAUSTED: Approved PR-3, for an effective edit that cannot increment version | No change; valid max-version no-op succeeds; a blind retry does not resolve exhaustion |
+| 409 | PROPOSAL_INVALID_STATE: non-DRAFT | No change; no new lifecycle state is introduced |
+| 409 | SALES_MONETARY_POLICY_UNAVAILABLE: effective edit requires unavailable calculation policy | Preserve stored snapshots and policy; no fallback |
+| 422 | SALES_INVALID_THIRD_PARTY: submitted target is not eligible for an effective edit | No change; never used to reject an identical no-op for commercial flags |
+| 503 | AUDIT_UNAVAILABLE: required audit append fails | Whole mutation and success event roll back |
+
+Existing authentication/CSRF/authorization results are preserved; they are not new
+business error codes. The prior VALIDATION_REQUIRED and 422 unsupported-currency
+recommendations are Discarded **for this PUT only**. SALES_TEMPORARILY_UNAVAILABLE
+was not included in the approved catalog and is not adopted for COM-02. Unexpected
+non-audit infrastructure failures roll back and retain existing generic server-error
+handling; they must not be mislabeled AUDIT_UNAVAILABLE or silently retried. A new
+transient-error contract would need separate approval.
+
+The final human instruction expressly approves PR-1–PR-3, their priorities and
+SALES_VERSION_EXHAUSTED. The protocol, error table and acceptance criteria use
+these rules without a remaining precedence approval gate:
+
+| Decision | Approved deterministic order | Approved consequence |
+|---|---|---|
+| PR-1 | Authentication → existing CSRF/authorization → structural request/path validation (required/protected fields, types, bounds, limits, scales) → business access | No business access before authorization or initial input validation. Policy-dependent amount calculations/overflow are deferred to effective modification after policy resolution. PR-1 is Approved. |
+| PR-2 | Locate/lock root; missing root → expectedVersion → DRAFT → normalized comparison/no-op | Return SALES_VERSION_CONFLICT when incorrect expectedVersion and non-DRAFT coexist. Stale identical input conflicts before no-op classification. PR-2 is Approved. |
+| PR-3 | Valid no-op returns, including at Long.MAX_VALUE; effective branch: increment capacity → target eligibility → stored-policy resolution → calculated amount validity/overflow → writes/audit | Return 409 SALES_VERSION_EXHAUSTED for exhaustion, separately from stale-version conflict. PR-3 and that differentiated code are Approved. |
+
+The identifier-only lock can wait before resource checks; it makes no commercial
+or missing-target decision and does not override PR-2. If a concurrent transaction
+inserts a previously absent target, an effective command still uses its recorded
+absence and returns 422 without an out-of-order lock; a later explicit retry may
+succeed. No-op never enters that branch. Map only known, relevant FK violations
+at the boundary after rollback; never reuse an aborted transaction or classify
+arbitrary integrity errors as eligibility. Database wait failures are technical
+failures, not successful or business-audited writes. New timeout values, if needed
+later, require named/configured sources of truth rather than scattered literals.
+
+Effective successful edits record exactly one PROPOSAL_UPDATED on PROPOSAL with
+SUCCESS and the authenticated SESSION/PAT actor under BASIC/SELECTIVE. OFF stays
+OFF. No-op does not invoke an unconditional mandatory method or append an update
+event. Update, line replacement and required audit have one commit/rollback
+boundary; no before/after commercial payload or new actor is introduced.
+
+### 13.7 Twelve acceptance scenarios — future implementation evidence
+
+The following scenarios verify the approved rules and concrete realization above,
+including combined-error expectations under Approved PR-1–PR-3. They are future
+implementation requirements, not evidence of delivered COM-02 functionality.
+No local application tests, Docker commands, migrations or runtime checks are
+executed for this documentary task. Remote GitHub CI validates the existing
+repository after publication; it does not prove an unimplemented COM-02 endpoint.
+
+| ID | Scenario / expected outcome | Required future evidence |
+|---|---|---|
+| COM-02-T1 | Replace, clear and refill a DRAFT; change eligible ThirdParty with explicit full lines/prices; retain root/DRAFT/createdAt/policy; advance version once and calculate correct totals | Domain/component and real PostgreSQL roundtrip; no automatic ThirdParty prices or prior-content archive |
+| COM-02-T2 | Every effective edit, including ThirdParty-only change/reordering, replaces all line IDs; positions follow input and old IDs disappear; no-op retains every ID | Real PostgreSQL identity/position constraints; no gap-free-sequence assumption |
+| COM-02-T3 | Compare ordered normalized tuples and BigDecimal.compareTo(); equivalent allowed scales and exterior whitespace are no-op; equal totals with changed tuples are effective; stale identical input conflicts | Domain comparison, plus SQL observation of no document mutation/update event/commercial flag read on no-op; an ID-only lock is allowed |
+| COM-02-T4 | After security, Approved PR-1 requires structural/type/bounds/limit/scale/protected-field validation before business access; invalid/missing/null/non-EUR values, IDs/versions, excessive scale, 1,001 lines or 2,001 code points return 400 VALIDATION_INVALID. Policy-dependent calculated overflow returns 400 only on effective modification after policy resolution; exact maxima and supplementary Unicode pass | Focused PUT tests distinct from unchanged COM-01 tests; observe validation phases and no pre-policy/no-op arithmetic; verify Approved PR-1 precedence |
+| COM-02-T5 | Two same-version effective writes have one winner and one conflict, including different target parties; no-op/real and no-op/no-op races respect version guards and produce coherent results | Separate PostgreSQL connections, latches and observed blocking; check guards after lock waits; no sequential-double proof |
+| COM-02-T6 | Effective edits reject unchanged but ineligible target and allow reassignment from inactive old party to eligible target; target mutations/deletion in both lock orders preserve FK behavior; matching no-op with later-ineligible party succeeds without flags | Real PostgreSQL identifier-only lock/eligibility separation, target absence/concurrent insertion case, no flags mutated and no inverted locks |
+| COM-02-T7 | Inject failure after old-line delete, during new inserts, header update, required audit and after successful append | Old header/IDs/lines/version/dates/amounts/policy restored; no surviving success audit or partial ThirdParty reassignment |
+| COM-02-T8 | BASIC/SELECTIVE effective edit emits exactly one PROPOSAL_UPDATED/PROPOSAL/SUCCESS with actor; OFF/no-op/rejected writes emit no modification event; required append failure returns 503 AUDIT_UNAVAILABLE | Real PostgreSQL atomic audit/rollback and component attribution/security tests |
+| COM-02-T9 | PUT requires manage and returns exactly id/version on both success branches; full GET still requires read; session CSRF/Bearer parity; security precedes business access and errors disclose no document. Approved PR-2 requires version-before-DRAFT-before-no-op, returning SALES_VERSION_CONFLICT when both version and state are wrong | HTTP/security/i18n, approved error-table and exact member-count assertions; verify Approved PR-1/PR-2 ordering fixtures |
+| COM-02-T10 | Stored policy/rules and historical amounts survive reads/no-op/default changes; unavailable policy allows GET and valid no-op but rejects effective recalculation with 409; deliberate edits replace current snapshots without prior-content copies | Exact snapshot/ID roundtrip, unavailable-policy fixture, version cannot reconstruct old document; no ThirdParty configuration or repricing |
+| COM-02-T11 | Commit an effective replacement between actual GET header and line queries; response is wholly old or wholly new, including version and totals | Real PostgreSQL snapshot test through the actual facade, with unchanged public COM-01 representation/permission |
+| COM-02-T12 | Preserve createdAt and nonregressing updatedAt; increment version once. Valid Long.MAX_VALUE no-op succeeds; Approved PR-3 requires 409 SALES_VERSION_EXHAUSTED only after effective-change detection, before eligibility/policy/calculated amounts, without overflow or writes | Deterministic clock/version, persisted timestamp precision and max-version fixtures; verify distinct stale/exhausted codes and Approved PR-3 order |
+
+Unit-test non-DRAFT guards on a constructed aggregate; V14 cannot store non-DRAFT,
+so do not relax its CHECK to manufacture a COM-03 integration fixture. Future
+approved lifecycle work must verify this guard against its own real states later.
+
+Reuse concrete sales domain/application operations, existing persistence adapters
+and infrastructure transaction placement. No new library, generic policy framework,
+workflow abstraction or event bus is justified. Required focused tests precede
+./bin/test and ./bin/check; expensive complete checks normally run by developer/CI
+and their actual successful results remain mandatory before implementation closure.
+No Dolibarr dependency, new legacy conformance claim or check-reference requirement.
+
+### 13.8 Contract closure, authorization and documentation impact
+
+P1–P10 and PR-1–PR-3 are Approved; the COM-02 functional and technical contract is
+closed. No functional/technical decision in this section remains Proposed/Pending.
+Do not request reapproval of its equality/renewal, policy, date, minimal-result,
+no-op, audit, precedence or exhaustion-code rules. This closes the design only:
+COM-02 implementation still requires separate express authorization. COM-03 and
+all later commercial operations retain their prior unapproved status.
+
+No functional contradiction remains between policy snapshots and lack of an old
+revision archive: unchanged historical values are preserved, while an intentional
+draft edit replaces only its current contents. Issued/communicated-version
+retention remains a future decision. The physical protocol separates locking an
+ID from checking eligibility and makes no-op compatible with a consistent order.
+It is a technical specification to be tested, not a claim that COM-01 already
+implements it or that those concurrency tests passed.
+
+This consolidation changes only this design: section 13, its COM-02 summary in
+section 7 and the corresponding document status/approval-scope labels.
+COM-01 Java, migrations, endpoints, tests, public contracts and approval criteria
+remain intact. README, runtime-capability docs and sibling repositories need no
+change while COM-02 is unimplemented. A later implementation must update its
+runtime/security/audit/status documentation without describing drafts' technical
+versions as recoverable content revisions.
+
+Publication authorization for this task permits the final local atomic
+consolidation commit, pushing only docs/alixar-com-02-draft-design, opening its PR
+against main and inspecting the corresponding CI. The earlier requirement to leave
+this revision uncommitted/unpublished is Antecedent, superseded by this express
+authorization. It does not permit Java code, migrations, endpoints, tests, local
+Docker, PR merge, tags, releases, deployment or starting COM-02/COM-03 implementation.
+Documentary verification is scope/consistency review, local links, preservation of
+COM-01 and git diff --check. Any remote CI outcome must be reported separately
+from these local documentary checks; no local runtime result is claimed.
