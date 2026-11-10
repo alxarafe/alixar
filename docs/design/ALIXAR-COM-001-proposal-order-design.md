@@ -77,11 +77,19 @@ consumes the canonical API and owns no commercial rule.
 
 ## 3. Decision register and authorization boundary
 
-**Approved for this task:** prepare the documentary branch from updated main,
-update this design and validate documentation. **Not authorized:** application code,
-migrations, tests, Docker, commits, push, PR, remote merge, tags or deployment.
-The earlier design publication authorization is Antecedent and does not authorize
-publication of this revision. COM-01 functional and technical approval is recorded
+**Antecedent — initial documentary preparation authorization:** prepare the branch
+from updated main, update this design and validate documentation; commit and
+publication were not authorized at that stage.
+
+**Approved — subsequent commit and publication authorization:** after review and
+final documentary corrections, create the documentary commit, push the branch,
+open a PR against main and inspect CI. These operations were executed in commit
+`99b33b5` and [PR #36](https://github.com/alxarafe/alixar/pull/36).
+
+**Not authorized:** COM-01 implementation, application code, migrations, local
+Docker or functional tests, PR merge, tags or deployment.
+
+COM-01 functional and technical approval is recorded
 in sections 3.4/12.3; D1/D5/D6/D8 are partially approved only to that extent.
 D2/D3/D4/D7 and all other-operation decisions remain Pending. Existing architecture
 approvals in S6 are separate from this approval.
@@ -467,8 +475,12 @@ historical amounts/policy identification, centralized limits, representation,
 grants and audit are consistent across sections 3.4, 6.1, 7, 8 and 12. Later-operation
 decisions and all nine separately authorized tasks remain explicit. Evidence is
 source inspection, local link checks, whitespace and diff/scope review; no Docker,
-functional test or runtime/concurrency verification is claimed. This revision
-remains uncommitted for human review; publication and PR require new authorization.
+local functional test or runtime/concurrency verification is claimed. Initial
+preparation left the document uncommitted pending review. Subsequent explicit
+authorization permitted the documentary commit and publication, completed in
+`99b33b5` and PR #36; both corresponding Java CI runs passed remotely. This
+status correction is separately authorized for a corrective commit and PR update.
+COM-01 implementation, PR merge, tags and deployment remain unauthorized.
 
 ## 12. COM-01 precise specification and final authorization gates
 
