@@ -35,7 +35,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Primary;
 
 @TestConfiguration
-@Import({AuditTestConfig.class, ContactTestConfig.class, ThirdPartyTestConfig.class})
+@Import({AuditTestConfig.class, ContactTestConfig.class, ThirdPartyTestConfig.class,
+    es.alxarafe.alixar.sales.ProposalTestConfig.class})
 public class AuthenticationTestConfig {
 
     @Bean

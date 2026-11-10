@@ -11,6 +11,9 @@ public final class PermissionCodes {
     public static final String CONTACTS_READ = "contacts.read";
     public static final String CONTACTS_MANAGE = "contacts.manage";
 
+    public static final String PROPOSALS_MANAGE = "proposals.manage";
+    public static final String PROPOSALS_READ = "proposals.read";
+
     private PermissionCodes() {
     }
 }

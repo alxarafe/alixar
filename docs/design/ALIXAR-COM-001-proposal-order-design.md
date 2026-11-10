@@ -484,7 +484,11 @@ COM-01 implementation, PR merge, tags and deployment remain unauthorized.
 
 ## 12. COM-01 precise specification and final authorization gates
 
-**Status: functional and technical contract Approved in sections 3.4/12.3; implementation not started.**
+**Status: functional and technical contract Approved in sections 3.4/12.3.**
+Separate COM-01 implementation authorization was granted on 2026-11-10; see
+[implementation contract and verification](../proposals.md). Earlier documentary
+authorization statements above describe that historical task, not the subsequent
+implementation authorization. All later operations still require separate approval.
 One outcome: an authorized caller can persist an independent proposal draft and read it back.
 No update, validation, acceptance, conversion, order, automation policy or
 per-ThirdParty monetary configuration implementation.

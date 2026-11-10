@@ -20,7 +20,8 @@ public class I18nConfig {
             "classpath:i18n/contact/messages",
             "classpath:i18n/authentication/messages",
             "classpath:i18n/audit/messages",
-            "classpath:i18n/thirdparty/messages"
+            "classpath:i18n/thirdparty/messages",
+            "classpath:i18n/sales/messages"
         );
         messageSource.setDefaultEncoding("UTF-8");
         messageSource.setUseCodeAsDefaultMessage(true);

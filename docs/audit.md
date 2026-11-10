@@ -97,6 +97,15 @@ Not implemented yet:
 - signed checkpoints or external anchoring;
 - payloads with explicit `before` / `after` changes.
 
+## Proposal creation (COM-01)
+
+`PROPOSAL_CREATED` on `PROPOSAL` is a BASIC mutation event, also required under
+SELECTIVE, using the existing authenticated actor and canonical proposal ID with
+no commercial payload. Creation, lines and the success event commit atomically;
+required append failure rolls creation back. OFF remains OFF. Proposal reads add
+no baseline success audit, and denied authorization reuses ACCESS_DENIED with the
+static proposal route family. See [Proposals](proposals.md).
+
 ## Audit modes
 
 T1.7a defines three modes:

@@ -737,9 +737,13 @@ of `contact.third_party_id → third_party.id`.
 
 ### 17.3 Other blocking children
 
-Future modules (orders, invoices, proposals, projects, etc.) may add their own
-restrictive deletion rules and conflict errors. They are outside this contract
-and are not simulated now.
+COM-01 proposals now reference ThirdParty through a restrictive foreign key.
+Deleting a referenced ThirdParty returns `409 THIRD_PARTY_DELETE_CONFLICT`, using
+an explicit constraint mapping even when a concurrent creation wins the race.
+No proposal deletion, unlinking or cascade is available. See [Proposals](proposals.md).
+
+Future modules (orders, invoices, projects, etc.) may add their own restrictive
+deletion rules and conflict errors. They are outside this contract.
 
 ### 17.4 Implementation status
 
@@ -823,7 +827,7 @@ come from module-owned i18n bundles when implemented.
 | `401` | Existing authentication result | Missing or invalid authentication | Existing security contract |
 | `403` | Existing authorization result | Authenticated without the required permission | Existing security contract |
 | `404` | `THIRD_PARTY_NOT_FOUND` | Positive identifier not found | Also used by update and delete |
-| `409` | `THIRD_PARTY_DELETE_CONFLICT` | Delete blocked by linked Contacts | No cascade |
+| `409` | `THIRD_PARTY_DELETE_CONFLICT` | Delete blocked by linked Contacts or proposals | No cascade |
 | `415` | Framework result | Unsupported media type | No legacy SQL detail |
 | `503` | `AUDIT_UNAVAILABLE` | Required audit event cannot be appended | Existing fail-closed convention |
 
