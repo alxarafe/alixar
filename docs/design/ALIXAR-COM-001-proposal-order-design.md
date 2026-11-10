@@ -1,8 +1,8 @@
 # ALIXAR-COM-001 — Proposal to order technical design
 
-Status: **Partially approved — COM-01 functional criteria only**. Date:
-2026-11-09. Section 3.4 records the explicit human approval. Other operations remain
-Proposed/Pending. This documentary task does not authorize implementation.
+Status: **Partially approved — COM-01 functional and technical contract closed**.
+Updated: 2026-11-10. Sections 3.4/12.3 record explicit human approval. Other
+operations remain Proposed/Pending. This documentary task does not authorize implementation.
 
 ## 1. Scope, acceptance and evidence vocabulary
 
@@ -21,12 +21,13 @@ are excluded.
 - **Proposed**: an Alixar design recommendation, not approved behavior.
 - **Pending**: a decision or evidence gap requiring resolution.
 - **Approved**: existing architecture decisions, the explicit COM-01 functional
-  decisions in section 3.4, and the user's authorization of this documentary task.
+  and technical decisions in sections 3.4/12.3, and the user's authorization of
+  this documentary task.
 - **Antecedent / Discarded**: historical context / rejected historical inference.
 
 Future behavior is **Proposed** except for the scoped COM-01 approvals in section
-3.4. Technical recommendations are not automatically approved with functional
-criteria. Existing legacy behavior is never adopted merely because demonstrated.
+3.4 and the explicit technical closure in section 12.3. Existing legacy behavior
+is never adopted merely because demonstrated.
 
 ## 2. Sources and current architecture
 
@@ -76,13 +77,14 @@ consumes the canonical API and owns no commercial rule.
 
 ## 3. Decision register and authorization boundary
 
-**Approved for this task:** update this design, validate documentation, create a
-documentary commit, publish the feature branch and open a PR against main; inspect
-applicable CI. **Not authorized:** production code, migrations, local Docker or
-functional tests, merge, tags or deployment. COM-01 functional approval is recorded
-in section 3.4; D1/D5/D6/D8 are partially approved only to that extent. D2/D3/D4/D7
-and all other-operation decisions remain Pending. Existing architecture approvals
-in S6 are separate from this approval.
+**Approved for this task:** prepare the documentary branch from updated main,
+update this design and validate documentation. **Not authorized:** application code,
+migrations, tests, Docker, commits, push, PR, remote merge, tags or deployment.
+The earlier design publication authorization is Antecedent and does not authorize
+publication of this revision. COM-01 functional and technical approval is recorded
+in sections 3.4/12.3; D1/D5/D6/D8 are partially approved only to that extent.
+D2/D3/D4/D7 and all other-operation decisions remain Pending. Existing architecture
+approvals in S6 are separate from this approval.
 
 | Decision | Proposed recommendation | Actual authorization / remaining gate |
 |---|---|---|
@@ -91,9 +93,9 @@ in S6 are separate from this approval.
 | D3 — acceptance | Commercial acceptance commits independently of automatic creation/validation. Creation failure retains acceptance; validation failure retains acceptance and draft order. | Pending; approve durable intent/outcome, recovery and API semantics below before COM-08. Atomic all-or-nothing acceptance is an unselected alternative. |
 | D4 — cardinality | Proposal → zero to many orders; each order has zero or one source. Initial conversion selects complete lines at full quantity; a source line may appear in at most one order globally. | Pending; approve whole-line consumption, version/retry semantics and remaining-line automation. Single-order and split-quantity alternatives are unselected, not current defaults. |
 | D5 — lifecycle | Proposal DRAFT → VALIDATED → ACCEPTED or REFUSED; order DRAFT → VALIDATED. Freeze commercial contents at validation. | Approved only for COM-01 creation in DRAFT. Every transition and other operation remains Pending. |
-| D6 — money | Free-description service lines, deterministic BigDecimal arithmetic, EUR only; exact precision, rounding and limits in section 6. | COM-01 EUR, deterministic BigDecimal, required description, positive quantity and nonnegative price Approved. Exact numeric policy/limits remain technical proposals in section 6.1; numbering and other operations remain Pending. |
+| D6 — money | Free-description service lines, deterministic BigDecimal arithmetic, EUR only; exact precision, rounding and limits in section 6. | COM-01 EUR, deterministic BigDecimal, required description, positive quantity and nonnegative price Approved. Exact numeric policy, centralized immutable monetary policy and limits in section 6.1 are Approved for COM-01; numbering and other operations remain Pending. |
 | D7 — automation | Server-owned versioned policy; creation and immediate validation initially false. Immediate validation implies automatic creation. | Pending; enabling requires a separately authorized configuration operation and implemented capability. No caller-supplied automation flags. |
-| D8 — ThirdParty/audit | Reuse native ThirdParty, RBAC and AuditTrail; never reclassify/activate automatically. Retain OFF/BASIC/SELECTIVE semantics. | COM-01 active existing customer or prospect and existing security/audit reuse Approved; exact grants/events and later-operation eligibility remain Pending. |
+| D8 — ThirdParty/audit | Reuse native ThirdParty, RBAC and AuditTrail; never reclassify/activate automatically. Retain OFF/BASIC/SELECTIVE semantics. | COM-01 active existing customer or prospect and existing security/audit reuse Approved; COM-01 grants and create audit in sections 8/12.3 Approved; later-operation grants, events and eligibility remain Pending. |
 
 ### 3.1 Acceptance and automation are separate commitments
 
@@ -164,24 +166,25 @@ lock and recheck at the approved boundary, including concurrent deactivation tes
 ### 3.4 Explicitly approved decisions — COM-01 only
 
 Approval source: the human instruction to register partial COM-01 approval in this
-document, dated 2026-11-09. This approval is exclusively functional, not permission
-to implement on this documentary branch or approval of the rest of D1–D8.
+document, dated 2026-11-09, followed by explicit technical closure on 2026-11-10
+(sections 6.1/12.3). Neither approval permits implementation on this documentary
+branch or approves the rest of D1–D8.
 
 | ID | Approved COM-01 decision | Scope boundary |
 |---|---|---|
 | COM-01-A1 | Independently created proposal drafts may have zero lines. | No approval for empty conversion, validation or standalone orders. |
 | COM-01-A2 | ThirdParty must exist, be active, and be customer or prospect: `active && (customer || prospect)`. | Check at creation; no automatic classification changes. Recommended read semantics: later flag changes do not rewrite the proposal or prevent authorized GET. Other-operation eligibility remains Pending. |
-| COM-01-A3 | Currency EUR; deterministic BigDecimal calculation with explicit precision and rounding. | Section 6.1 makes the exact technical recommendation explicit; its exact scales, rounding mode and limits are not independently recorded as human-approved choices. |
-| COM-01-A4 | Each supplied line requires a description, positive quantity and nonnegative unit price. | Zero-line drafts remain valid. VAT/limits and normalization details are technical recommendations. |
-| COM-01-A5 | POST `/api/proposals` and GET `/api/proposals/{id}`. | No list, modification, state transition, acceptance, conversion or order API approved. |
-| COM-01-A6 | Permissions `proposals.manage` for creation and `proposals.read` for consultation. | Reuse RBAC, authentication and CSRF. Role grants and any extra ThirdParty permission remain technical decisions. |
-| COM-01-A7 | Reuse existing audit infrastructure and policies. | Exact new action/resource registration and baseline read behavior are specified as recommendations, not a new audit subsystem. |
+| COM-01-A3 | Currency EUR; deterministic BigDecimal calculation with explicit precision and rounding. | Section 6.1 records the approved exact scales, HALF_UP line rounding, sum of rounded amounts and centralized immutable monetary policy; no per-ThirdParty configuration. |
+| COM-01-A4 | Each supplied line requires a description, positive quantity and nonnegative unit price. | Zero-line drafts remain valid. Required VAT, limits, normalization and centralized limit constants in section 6.1 are Approved for COM-01. |
+| COM-01-A5 | POST `/api/proposals` and GET `/api/proposals/{id}`. | Existing POST/GET representations and ProblemDetail contract in sections 7/12.1 are Approved for COM-01. No list, modification, state transition, acceptance, conversion or order API approved. |
+| COM-01-A6 | Permissions `proposals.manage` for creation and `proposals.read` for consultation. | Reuse RBAC, authentication and CSRF. Initial assignment to system-admin only is Approved; internal eligibility lookup requires no thirdparties.read permission. |
+| COM-01-A7 | Reuse existing audit infrastructure and policies. | PROPOSAL_CREATED / PROPOSAL via AuditTrail, OFF/BASIC/SELECTIVE and atomicity are Approved; no baseline GET success audit or new audit subsystem. |
 | COM-01-A8 | Creation only in DRAFT. | No other state can be supplied by callers; no transition approved. |
 
 The prior existence-only draft recommendation is superseded for COM-01 by A2.
-Technical refinements still requiring confirmation are listed in section 12.3;
-they must not be confused with unapproved functional criteria or a request to
-reapprove A1–A8. Approval does not extend to conversion cardinality or automation.
+Section 12.3 records technical closure; only separate implementation authorization
+remains for COM-01. Do not request approval again for the closed contract. Approval
+does not extend to conversion cardinality or automation.
 
 ## 4. Aggregates, lifecycle and invariants
 
@@ -194,7 +197,7 @@ and time. It is not a generic link aggregate or live pricing reference.
 
 | Operation | Preconditions / effect |
 |---|---|
-| Independent proposal creation | Existing active customer or prospect (COM-01 approved); well-formed zero or more lines; DRAFT; proposed initial version 1 |
+| Independent proposal creation | Existing active customer or prospect (COM-01 approved); well-formed zero or more lines; DRAFT; approved initial version 1 |
 | Draft replacement | DRAFT, matching version; replace whole contents and allocate new line IDs |
 | Proposal validation | DRAFT, matching version, nonempty consistent lines; VALIDATED and freeze commercial contents |
 | Acceptance / refusal | VALIDATED, matching version and permission; ACCEPTED / REFUSED; no direct order-state transition |
@@ -243,7 +246,10 @@ These are proposed protocols, not executed concurrency evidence. Technical basis
 ## 6. Proposed schema, constraints and indexes — no migrations
 
 Existing Flyway-owned public schema and jOOQ adapters are reused. No migration
-number is reserved; each slice introduces only its needed persistence.
+number is reserved; each slice introduces only its needed persistence. COM-01
+proposal persistence must also retain the applied immutable monetary policy
+identification alongside historical line amounts (section 6.1); its concrete
+storage representation is not prescribed by this documentary closure.
 
 | Table | Proposed columns / constraints |
 |---|---|
@@ -290,7 +296,7 @@ No duplicate source-line index, status-only or speculative search index is propo
 ### 6.1 Deterministic money and limits (D6)
 
 Use [Java 25 BigDecimal](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/math/BigDecimal.html)
-from exact decimal input, never binary floating point. Proposed quantity
+from exact decimal input, never binary floating point. Approved for COM-01: quantity
 numeric(19,6) > 0; unit price numeric(19,6) >= 0; VAT numeric(7,4) in [0,100];
 amounts numeric(19,2) >= 0, gross = net + tax. Net = quantity × price rounded
 to 2 decimals HALF_UP; tax = rounded net × VAT / 100 rounded to 2 decimals HALF_UP;
@@ -299,14 +305,34 @@ editable header columns. Check line and aggregate totals fit numeric(19,2).
 Reject excess input scale, overflow and out-of-range values before persistence,
 without implicit database rounding. Currency is required and exactly EUR.
 
-Proposed maximum: 1,000 lines, description trimmed/nonblank and at most 2,000
-Unicode code points after trimming; no silent truncation. Empty draft totals are
+Approved COM-01 maximum: 1,000 lines; description required, trimmed/nonblank and at
+most 2,000 Unicode code points after trimming; no silent truncation. Empty draft totals are
 0.00. Free descriptions only; no catalogue, discounts, negative lines or local
 taxes. Proposed order reference: SO- plus dedicated sequence value at validation,
 unique, never reused, gaps allowed. Proposal ID is its initial identity; no public
-proposal numbering scheme. These are pending commercial choices, not legacy facts.
+proposal numbering scheme. Order numbering and monetary rules for other operations
+remain Proposed/Pending; COM-01 approval does not extend to them.
 
-## 7. Proposed canonical HTTP contract
+Approved COM-01 source of truth: centralize the line-count and description-length
+limits as narrowly scoped named constants, reused by input validation and
+validations of the COM-01 contract. Centralize precision, scale, currency and rounding in one immutable
+monetary policy; do not scatter these values or make the policy mutable runtime
+configuration. Persist calculated historical amounts and the identification of the
+policy applied to each proposal so later policy changes cannot recalculate history.
+The applied policy identifier must be stable, versioned and unambiguous about its
+calculation rules. A generic identifier whose meaning can change is not valid;
+changed calculation rules require a distinct versioned identifier while historical
+identifiers retain their original meaning. This introduces no new configuration
+tables and does not extend the API.
+The design must allow future policy selection according to ThirdParty, but COM-01
+creates no per-ThirdParty configuration, selector infrastructure or configuration
+API. Its concrete future selection rules remain Pending. Monetary policy is
+separate from the Proposed sales-conversion automation policy (D7).
+
+## 7. Canonical HTTP contract — COM-01 approved, later operations Proposed
+
+Only COM-01 POST/GET and their existing representations/errors below are Approved;
+all other operations and their errors remain Proposed/Pending.
 
 JSON application/json; errors application/problem+json with existing ProblemDetail
 shape and module-owned sales.* MessageSource/Jakarta Validation text. Stable codes,
@@ -363,14 +389,16 @@ constraint names. Collections/search and generic state mutation APIs remain defe
 Approved COM-01 permissions: proposals.read/manage. Proposed later permissions:
 proposals.validate/accept, orders.read/create/validate and sales.configure.
 They are permission codes, never role-name branches.
-Catalogue seeds and built-in role assignments require explicit approval per slice.
-Recommended COM-01: seed proposals.read/manage for system-admin, no other role
-changes; ThirdParty reference lookup does not imply thirdparties.manage or disclose
-ThirdParty details. Decide explicitly whether thirdparties.read is additionally
-required; proposed COM-01 requires only the operation permission.
+Approved COM-01 seeds: proposals.read/manage assigned initially to system-admin
+only, with no other role changes. Internal ThirdParty eligibility lookup requires
+only proposals.manage, without thirdparties.read or thirdparties.manage, and
+discloses no ThirdParty details. Later catalogue seeds and role assignments remain
+Pending and require explicit approval per slice.
 
 Reuse AuditTrail, SESSION/API_TOKEN actor attribution and UUID authentication IDs.
-Proposed events: PROPOSAL_CREATED/UPDATED/VALIDATED/ACCEPTED/REFUSED, ORDER_CREATED,
+Approved COM-01 event/resource: PROPOSAL_CREATED / PROPOSAL, result SUCCESS, via
+AuditTrail.recordSuccess in the creation transaction, preserving OFF.
+Proposed later events: PROPOSAL_UPDATED/VALIDATED/ACCEPTED/REFUSED, ORDER_CREATED,
 PROPOSAL_ORDER_LINKED, ORDER_VALIDATED, SALES_CONVERSION_POLICY_UPDATED, with
 PROPOSAL/ORDER/SALES_CONVERSION_POLICY resources. Linking uses order resource ID.
 Required events share their mutation transaction and fail closed under BASIC and
@@ -410,7 +438,7 @@ retained; D3 recovery expands COM-08 sizing and must be reviewed before approval
 
 | Task | Dependencies / decision gate | Verifiable outcome |
 |---|---|---|
-| COM-01 creation and read | Functional subset approved in 3.4; technical confirmations and separate implementation authorization in 12.3 | Native create/GET with money, FK, security and atomic create audit |
+| COM-01 creation and read | Functional and technical contract approved in 3.4/12.3; separate implementation authorization required | Native create/GET with money, FK, security and atomic create audit |
 | COM-02 draft replacement | COM-01 | Full replacement with version check, limits and real-change audit |
 | COM-03 proposal validation | COM-02; D1/D5/D6 | Nonempty validated proposal, frozen commercial fields and rollback on audit failure |
 | COM-04 acceptance/refusal without automation | COM-03; D2/D3/D5 and acceptance eligibility D8 | Terminal business transition, no order or ThirdParty side effect |
@@ -428,31 +456,31 @@ obtain approval for a revised breakdown rather than silently adding a tenth task
 
 ## 11. Review evidence and documentation impact
 
-This documentary commit publishes the previously untracked design and records only
-COM-01 functional approval. No implemented capability changes. README, AS-IS AFS/BPMN
-and sibling repositories need no update: no frontend or reference implementation
-task has started. COM-01 implementation must update relevant API and capability
-documentation, including the restrictive ThirdParty deletion behavior.
+This revision records only the approved COM-01 technical closure and aligns its
+specification and future acceptance criteria. No implemented capability changes.
+README, AS-IS AFS/BPMN and sibling repositories need no update: this closure does
+not change their current runtime claims. COM-01 implementation must update relevant
+API and capability documentation, including restrictive ThirdParty deletion.
 
-Documentation acceptance: section 3.4 separates approved COM-01 criteria from
-technical recommendations and all later-operation decisions; the proposed schema
-allows multiple orders with global no-reuse protection; nine tasks remain explicit.
-Evidence is source inspection, links, whitespace and scope review. No local Docker,
-functional test or runtime/concurrency claim is part of this task. Publication and
-PR are expressly authorized; merge, tags and deployment are not. The existing Java
-CI runs automatically on push/PR and invokes ./bin/check remotely; inspect its
-actual outcome without claiming local execution or changing the workflow.
+Documentary acceptance: the approved scales, rounding, immutable monetary policy,
+historical amounts/policy identification, centralized limits, representation,
+grants and audit are consistent across sections 3.4, 6.1, 7, 8 and 12. Later-operation
+decisions and all nine separately authorized tasks remain explicit. Evidence is
+source inspection, local link checks, whitespace and diff/scope review; no Docker,
+functional test or runtime/concurrency verification is claimed. This revision
+remains uncommitted for human review; publication and PR require new authorization.
 
 ## 12. COM-01 precise specification and final authorization gates
 
-**Status: functional criteria approved in section 3.4; implementation not started.**
+**Status: functional and technical contract Approved in sections 3.4/12.3; implementation not started.**
 One outcome: an authorized caller can persist an independent proposal draft and read it back.
-No update, validation, acceptance, conversion, order or policy implementation.
+No update, validation, acceptance, conversion, order, automation policy or
+per-ThirdParty monetary configuration implementation.
 
-### 12.1 Create/read behavior and technical recommendations
+### 12.1 Create/read behavior and closed technical contract
 
 Section 3.4 is the approval authority. The implementation details below refine it;
-section 12.3 explicitly identifies remaining technical confirmations.
+section 12.3 records the approved technical contract and separate implementation gate.
 
 POST and GET use section 7's exact fields. Require thirdPartyId, currency and lines;
 lines must be an array, may be empty, and must not be omitted/null. Each line
@@ -468,8 +496,8 @@ orderIds and null convertedOrderId; no ThirdParty details. Creation and read hav
 independent permissions; manage does not grant read. A successful create does not
 need read permission and exposes only generated ID. No list/search endpoint.
 
-Approved ThirdParty rule: existing AND active AND (customer OR prospect). Recommend
-lookup under proposals.manage without extra ThirdParty permission. Read the
+Approved ThirdParty rule: existing AND active AND (customer OR prospect). Approved
+internal lookup under proposals.manage without extra ThirdParty permission. Read the
 ThirdParty with FOR SHARE in the creation transaction, verify flags and hold the
 lock until commit before appending audit. A row CHECK/FK cannot enforce eligibility
 flags in another table. Concurrent deactivation/reclassification waits or is observed
@@ -482,7 +510,7 @@ proposal references without exposing SQL; this integration belongs to COM-01.
 
 Create only sales_proposal/sales_proposal_line persistence needed by this slice;
 do not seed future sales states/permissions/actions as implemented capabilities.
-Use existing RBAC and AuditTrail. Proposed seeds: proposals.manage/read assigned
+Use existing RBAC and AuditTrail. Approved COM-01 seeds: proposals.manage/read assigned
 to system-admin only; PROPOSAL_CREATED / PROPOSAL / SUCCESS in the create transaction.
 OFF emits none; BASIC/SELECTIVE required append failure rolls back and returns
 503 AUDIT_UNAVAILABLE. GET has no baseline success audit. User-facing messages
@@ -490,21 +518,29 @@ belong to sales.* bundles; existing generic validation keys are reused where apt
 
 ### 12.2 Implementation acceptance criteria
 
-These combine approved functional outcomes with the technical recommendations
-requiring confirmation in section 12.3; they authorize no execution in this task.
+These verify the approved COM-01 functional and technical contract in sections
+3.4/6.1/12.3; they authorize no implementation or test execution in this task.
 
 1. Empty lines creates DRAFT/version 1; GET returns no lines and all totals 0.00.
 2. Nonempty create/read preserves order, stable generated line IDs and normalized
    descriptions; quantity 2 × price 10.005 at VAT 21 gives net 20.01, tax 4.20,
    gross 24.21. Totals sum individually rounded lines, deterministically with
-   BigDecimal; two lines of quantity 1, price 0.005 and VAT 0 total net 0.02.
+   BigDecimal and the centralized immutable policy; two lines of quantity 1,
+   price 0.005 and VAT 0 total net 0.02. Quantity/price (19,6), VAT (7,4) and
+   amounts/totals (19,2) roundtrip exactly. Historical amounts and the applied
+   policy identification remain unchanged by future policy selection changes.
 3. Missing/null required fields → 400 VALIDATION_REQUIRED; unknown/protected fields,
    malformed IDs/types, excessive scale, bounds, description/line limits or overflow
    → 400 VALIDATION_INVALID. Non-EUR → 422 SALES_UNSUPPORTED_CURRENCY. Invalid
-   ThirdParty → 422 SALES_INVALID_THIRD_PARTY. No partial header/lines/audit remains.
+   ThirdParty → 422 SALES_INVALID_THIRD_PARTY. At most 1,000 lines are allowed;
+   descriptions are required, nonblank and at most 2,000 Unicode code points after
+   trimming, with no exterior whitespace persisted. Both limits use centralized
+   named constants. No partial header/lines/audit remains.
 4. Valid positive missing proposal ID → 404 PROPOSAL_NOT_FOUND after authorization;
    invalid ID → 400. POST/GET unauthorized access follows existing 401/403 rules.
    Session writes require CSRF; Bearer permissions match session behavior.
+   proposals.manage/read are initially assigned to system-admin only; internal
+   eligibility lookup succeeds without thirdparties.read. Manage does not grant read.
 5. Restrictive FK rejects unknown ThirdParty and blocks deleting a referenced one;
    concurrent delete/create and reclassification/create have consistent outcomes.
    Active customer-only, prospect-only and customer+prospect records qualify;
@@ -513,7 +549,8 @@ requiring confirmation in section 12.3; they authorize no execution in this task
    flag change does not block authorized GET or rewrite the proposal.
 6. Required audit failure rolls back header and lines; OFF creates without event;
    successful BASIC/SELECTIVE creates exactly one event with canonical proposal ID,
-   authenticated actor and no commercial payload. GET creates no baseline event.
+   authenticated actor, action PROPOSAL_CREATED, resource PROPOSAL, result SUCCESS
+   via AuditTrail and no commercial payload. GET creates no baseline event.
 7. Real PostgreSQL roundtrip proves decimals, constraints and FK behavior; focused
    domain/component tests cover rounding, validation, HTTP/security and localization.
    Applicable ./bin/test and mandatory ./bin/check results must be obtained before
@@ -522,39 +559,46 @@ requiring confirmation in section 12.3; they authorize no execution in this task
    including ThirdParty delete-conflict documentation if its public behavior changes.
    No order/attempt/policy tables or future automation are introduced.
 
-### 12.3 Remaining technical confirmations and implementation gate
+### 12.3 Approved technical closure and implementation gate
 
-COM-01 functional criteria A1–A8 are approved; do not request their approval again.
-The human instruction does not name exact numeric scales, rounding mode, payload
-limits, role grants or action identifiers. The following remain explicitly Proposed
-and must be confirmed with the separately authorized implementation task.
+Approval source: explicit human COM-01 technical closure instruction and subsequent
+branch/documentary preparation authorization, dated 2026-11-10. Functional A1–A8
+and the following technical decisions are Approved; do not request approval again
+for these decisions. This authorization is exclusively documentary.
 
-| Technical gate | Recommendation requiring confirmation |
+| Technical contract | Approved COM-01 decision |
 |---|---|
 | Numeric policy | Section 6.1: quantity/price (19,6), VAT (7,4), amounts/totals (19,2), line-net then tax HALF_UP to two decimals, exact sum of rounded lines, reject excess scale/overflow |
-| Payload/representation | Required VAT; 1,000 lines; description trim/nonblank/2,000 code points; exact decimal JSON; generated bigint IDs, version 1, response/error details in sections 7/12.1 |
-| Security integration | Seed proposals.read/manage for system-admin only; no extra thirdparties.read permission for reference eligibility lookup |
-| Audit integration | PROPOSAL_CREATED/PROPOSAL/SUCCESS; existing OFF/BASIC/SELECTIVE fail-closed mutation policy; no baseline sales read audit |
-| Implementation task | Approve this one vertical implementation, including necessary schema, locking, tests and documentation; no production code on this documentary branch |
+| Monetary policy | Centralized and immutable; retain historical amounts and identification of the applied policy; allow future selection according to ThirdParty, without implementing per-ThirdParty configuration |
+| Payload/representation | Required VAT; 1,000 lines; required trimmed/nonblank description up to 2,000 Unicode code points; centralized named limit constants; exact decimal JSON; EUR; generated positive BIGINT IDs; initial version 1 |
+| HTTP contract | Existing POST/GET fields, responses, Location and ProblemDetail in sections 7/12.1; no additional endpoint or response field approved |
+| Security integration | Seed proposals.read/manage for system-admin only; no extra thirdparties.read permission for internal reference eligibility lookup |
+| Audit integration | PROPOSAL_CREATED/PROPOSAL/SUCCESS via AuditTrail; existing OFF/BASIC/SELECTIVE policy and atomic mutation; no baseline sales read audit |
+
+**Pending: separate COM-01 implementation authorization**, including necessary
+schema, locking, tests and documentation. No application code, migrations or tests
+are authorized by this closure. Policy identification must be retained internally;
+this does not add a public field to the existing POST/GET contract.
 
 There is no remaining ThirdParty eligibility discrepancy: existence-only is
-superseded by active customer-or-prospect for COM-01. Exact technical choices above
-are not silently promoted to human authorization. D2/D3/D4/D7 and all later-operation
-parts of D1/D5/D6/D8 remain Pending and do not block an isolated COM-01 task once its
-technical contract and implementation authorization are obtained.
+superseded by active customer-or-prospect for COM-01. D2/D3/D4/D7 and all
+later-operation parts of D1/D5/D6/D8 remain Pending. Future ThirdParty policy
+selection behavior is Pending; COM-01 neither implements it nor configures it.
 
 ### 12.4 First vertical implementation boundary — COM-01
 
 The next separately authorized task must deliver the complete create/read capability:
 
 - Flyway: only proposal header/line persistence, restrictive ThirdParty relation,
-  numeric/state constraints and the two approved permission codes with confirmed grants.
-- Domain: draft creation, line rules, EUR and deterministic BigDecimal calculations;
+  numeric/state constraints and the two approved permission codes with approved initial grants.
+- Domain: draft creation, centralized limit constants, EUR and deterministic
+  BigDecimal calculations under the centralized immutable monetary policy;
   no Spring/HTTP/JSON/jOOQ dependencies and no future transitions.
 - Application: create/read use cases and only the concrete persistence boundaries
   required by these use cases; no speculative generic sales framework.
 - jOOQ/infrastructure: exact decimal roundtrip, generated IDs, ordered lines,
-  transactional eligibility locking, atomic creation/audit and FK conflict mapping.
+  historical monetary snapshots and applied policy identification, transactional
+  eligibility locking, atomic creation/audit and FK conflict mapping.
 - API/security: the two approved endpoints and permissions, existing authentication,
   session CSRF/Bearer parity, ProblemDetail and module-owned i18n.
 - Audit: reuse existing AuditTrail and policy; implement only the confirmed create
