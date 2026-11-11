@@ -119,7 +119,7 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   not audited
 - **Pending**: Solucar UI and historical data migration
 
-### Proposals (COM-01)
+### Proposals (COM-01 and internal COM-02 preparation)
 
 Native proposal draft creation and read use Alixar PostgreSQL/jOOQ persistence,
 exact decimal snapshots, EUR and a centralized immutable versioned monetary policy.
@@ -127,7 +127,10 @@ Creation allows zero or more lines and requires an active customer or prospect.
 `proposals.manage` and `proposals.read` are initially assigned only to `system-admin`;
 creation audit is atomic under BASIC/SELECTIVE. Referenced ThirdParty deletion is
 restricted. Editing, business validation/acceptance, orders and automation remain
-pending. See [Proposal contract and limitations](proposals.md).
+pending. Internal COM-02.2 logic can classify normalized no-ops and prepare complete
+draft replacement contents with version/state guards and stored-policy calculations.
+It has no HTTP or persistence wiring; transactional eligibility, writes, timestamps
+and modification audit remain pending. See [Proposal contract and limitations](proposals.md).
 
 ### Persistence Infrastructure
 

@@ -1,10 +1,36 @@
 # Proposal creation and read (COM-01)
 
 Alixar owns independent proposal drafts and their persisted monetary snapshots.
-Only creation and single-object consultation are implemented. The approved contract
+The HTTP API exposes creation and single-object consultation. The approved contract
 is recorded in [COM-001 design](design/ALIXAR-COM-001-proposal-order-design.md).
 No editing, validation, business acceptance/refusal, orders, conversion or automation
 is available.
+
+## Internal draft replacement preparation (COM-02.2)
+
+`ReplaceProposalDraftCommand` validates and freezes normalized editable inputs,
+reusing COM-01 line inputs, description normalization and decimal bounds. This
+phase does not calculate amounts. `PrepareProposalDraftReplacement.assess` accepts
+an existing snapshot and checks expected version, then DRAFT, then ordered editable
+equality. Decimal equality uses `BigDecimal.compareTo`; stored line identities,
+amounts and dates do not participate. A no-op returns the exact unchanged snapshot,
+without eligibility checks, policy resolution or recalculation.
+
+An effective change checks version capacity and yields `Change`. The future
+transactional caller must check target eligibility before invoking
+`Change.prepare()`. Preparation explicitly resolves only the stored policy ID,
+rejects an unavailable policy without fallback, and calculates every replacement
+line and the aggregate totals using COM-01 rules. The resulting immutable content
+retains root ID, DRAFT, creation time and policy ID, and advances the version once.
+Lines have no IDs or assigned positions; their list order determines later
+persistence positions. `previousUpdatedAt` is retained solely as input to later
+timestamp selection. Preparation does not choose a new timestamp.
+
+This pure application logic is not wired to HTTP or persistence. Transactional
+eligibility, replacement SQL, locks, timestamp selection and modification audit
+remain pending. Its deterministic unit tests establish preparation rules only,
+not real persistence, concurrency or audit behavior. The historical design document
+records the approved complete contract; it does not describe current delivery status.
 
 ## HTTP contract
 
