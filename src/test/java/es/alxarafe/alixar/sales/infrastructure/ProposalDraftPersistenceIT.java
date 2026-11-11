@@ -24,7 +24,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import static es.alxarafe.alixar.sales.application.SalesErrorCode.*;
 import static org.assertj.core.api.Assertions.*;
 
-/** Real PostgreSQL persistence only; no replacement endpoint or modification audit is wired. */
+/** Exercises the internal PostgreSQL persistence step; the audited facade is tested separately. */
 @SpringBootTest(properties = "spring.autoconfigure.exclude=")
 class ProposalDraftPersistenceIT {
     private static final int TIMEOUT_SECONDS = 10;

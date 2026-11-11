@@ -4,7 +4,7 @@ Alixar owns independent proposal drafts and their persisted monetary snapshots.
 The HTTP API exposes creation and single-object consultation. The approved contract
 is recorded in [COM-001 design](design/ALIXAR-COM-001-proposal-order-design.md).
 No editing, validation, business acceptance/refusal, orders, conversion or automation
-is available.
+is available through HTTP.
 
 ## Internal draft replacement preparation (COM-02.2)
 
@@ -34,12 +34,11 @@ approved complete contract; it does not describe current delivery status.
 
 The package-private `InternalProposalDraftReplacement` composes the existing
 application preparation and persistence ports. It is not registered as a Spring
-bean and is not exposed through `TransactionalProposalService` or HTTP. It requires
+bean and has no public entry point of its own. It requires
 an enclosing, explicitly configured writable `READ COMMITTED` transaction; its
 mandatory transaction participation cannot commit separately. A failure marks the
 enclosing transaction for rollback even if its caller catches that failure.
-This keeps the step available for later audit orchestration without exposing an
-unaudited public replacement operation.
+The audited facade described below is its production caller.
 
 After structural validation, the step locks only the submitted ThirdParty ID
 `FOR SHARE`, remembers whether it exists, then locks the proposal header
@@ -61,9 +60,40 @@ is the maximum of the stored value and one clock sample truncated to microsecond
 roundtrips, exact no-op preservation, observed blocking between distinct backend
 connections, same-version conflicts, target mutation/deletion ordering and full
 rollback after injected write failures. It also commits the actual internal step
-between GET's two queries to check the COM-02.1 snapshot guarantee. These tests do
-not establish replacement HTTP or modification-audit behavior: both integrations
-remain pending, and no `PROPOSAL_UPDATED` event is implemented here.
+between GET's two queries to check the COM-02.1 snapshot guarantee. Its tests cover
+the internal persistence step; audited orchestration is tested separately.
+
+## Transactional modification audit (COM-02.4)
+
+`TransactionalProposalService.replaceDraft` runs the internal replacement step and
+its success audit in one writable `READ COMMITTED` transaction. It returns the
+resulting version for the supplied proposal ID; no HTTP request/response DTO or
+replacement endpoint is introduced. The facade calls
+`AuditTrail.recordSuccess(PROPOSAL_UPDATED, PROPOSAL, id)` exactly once after an
+effective change. No-op returns the unchanged version without invoking audit.
+Rejected operations never reach that append.
+
+The existing configured trail emits no event under `OFF`. Under `BASIC` and
+`SELECTIVE`, the event is required and uses the authenticated SESSION/PAT actor.
+`SELECTIVE` read rules do not filter these baseline mutation events. No additional
+audit configuration, commercial payload or alternative actor is introduced.
+The lock order remains target ThirdParty, proposal root, lines, then audit chain.
+The ordinary audit append joins the business transaction; no isolated append is used.
+
+Required audit failure becomes `AuditUnavailableException` and restores all
+original header values, line IDs, amounts, ThirdParty, version and dates. The error
+conversion is confined to the audit call, so validation, business and persistence
+errors retain their meaning. An exception after append but before commit also
+rolls back the event and chain head. COM-01 creation and `PROPOSAL_CREATED` are unchanged.
+
+`ProposalDraftAuditIT` uses the real facade, configured trail, authenticated-context
+actor resolver and PostgreSQL repositories. It verifies modes, event cardinality,
+SESSION/PAT attribution, rejection/no-op behavior and rollback. SQL observation
+checks the same PostgreSQL backend and transaction ID for mutation and append,
+with chain locks taken after header writes. Session/PAT fixtures supply an already
+authenticated context; these tests do not establish a replacement HTTP endpoint
+or its authentication/authorization flow. The non-DRAFT guard uses a constructed
+snapshot because V14 intentionally stores only DRAFT. HTTP integration remains pending.
 
 ## HTTP contract
 

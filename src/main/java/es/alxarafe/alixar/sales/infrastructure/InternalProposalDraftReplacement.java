@@ -11,7 +11,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
-/** Internal persistence step only. Not a bean or public service until transactional audit is integrated. */
+/** Internal persistence step; the public facade adds audit in the same enclosing transaction. */
 final class InternalProposalDraftReplacement {
     private final ProposalRepository repository;
     private final EligibleThirdParty thirdParty;
@@ -54,6 +54,6 @@ final class InternalProposalDraftReplacement {
         });
     }
 
-    /** Internal change marker lets future orchestration append audit inside the same transaction. */
+    /** Internal change marker lets the facade append audit only for effective changes. */
     record Result(long id, long version, boolean changed) { }
 }

@@ -96,11 +96,14 @@ startup using its default `classpath:db/migration`
 location. `PersistenceIT` verifies the migrations, their constraints, RBAC
 resolution and authentication transaction behaviour against PostgreSQL.
 
-`compose.check.yaml` also selects `ProposalPersistenceIT` and
-`ProposalDraftPersistenceIT`. The latter exercises internal COM-02 replacement
+`compose.check.yaml` also selects `ProposalPersistenceIT`,
+`ProposalDraftPersistenceIT` and `ProposalDraftAuditIT`. The persistence tests
+exercise internal COM-02 replacement
 against the same isolated PostgreSQL environment, including controlled concurrent
-connections and write-failure rollback. It does not expose or test a replacement
-HTTP endpoint or modification audit. `./bin/test` covers the deterministic COM-02
+connections and write-failure rollback. The audit tests verify the configured
+success trail, authenticated-context actors, shared PostgreSQL transaction identity
+and complete rollback on required audit failure or a later exception. No replacement
+HTTP endpoint is exposed or tested. `./bin/test` covers the deterministic COM-02
 preparation tests; `./bin/check` remains the complete local validation authority.
 
 ## Authentication Configuration

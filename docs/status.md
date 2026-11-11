@@ -126,14 +126,18 @@ exact decimal snapshots, EUR and a centralized immutable versioned monetary poli
 Creation allows zero or more lines and requires an active customer or prospect.
 `proposals.manage` and `proposals.read` are initially assigned only to `system-admin`;
 creation audit is atomic under BASIC/SELECTIVE. Referenced ThirdParty deletion is
-restricted. Editing, business validation/acceptance, orders and automation remain
+restricted. HTTP editing, business validation/acceptance, orders and automation remain
 pending. Internal COM-02.2 logic can classify normalized no-ops and prepare complete
 draft replacement contents with version/state guards and stored-policy calculations.
 COM-02.3 adds an internal transaction-participating persistence step with ordered
 target/root locks, effective-branch eligibility, full line replacement, guarded
 header writes and nonregressing microsecond timestamps. Real PostgreSQL tests
-cover concurrent writers, no-op preservation and rollback. This step is not a
-public service or endpoint; HTTP integration and modification audit remain pending.
+cover concurrent writers, no-op preservation and rollback. COM-02.4 integrates the
+step through the transactional proposal facade with exactly one required
+`PROPOSAL_UPDATED` per effective change under BASIC/SELECTIVE, no event under OFF,
+and atomic rollback on audit failure. No-op and rejected operations emit no update
+event. PostgreSQL tests verify SESSION/PAT context attribution and shared transaction
+identity. The internal step has no public unaudited entry point; HTTP editing remains pending.
 See [Proposal contract and limitations](proposals.md).
 
 ### Persistence Infrastructure
