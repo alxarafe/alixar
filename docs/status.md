@@ -129,8 +129,12 @@ creation audit is atomic under BASIC/SELECTIVE. Referenced ThirdParty deletion i
 restricted. Editing, business validation/acceptance, orders and automation remain
 pending. Internal COM-02.2 logic can classify normalized no-ops and prepare complete
 draft replacement contents with version/state guards and stored-policy calculations.
-It has no HTTP or persistence wiring; transactional eligibility, writes, timestamps
-and modification audit remain pending. See [Proposal contract and limitations](proposals.md).
+COM-02.3 adds an internal transaction-participating persistence step with ordered
+target/root locks, effective-branch eligibility, full line replacement, guarded
+header writes and nonregressing microsecond timestamps. Real PostgreSQL tests
+cover concurrent writers, no-op preservation and rollback. This step is not a
+public service or endpoint; HTTP integration and modification audit remain pending.
+See [Proposal contract and limitations](proposals.md).
 
 ### Persistence Infrastructure
 

@@ -96,6 +96,13 @@ startup using its default `classpath:db/migration`
 location. `PersistenceIT` verifies the migrations, their constraints, RBAC
 resolution and authentication transaction behaviour against PostgreSQL.
 
+`compose.check.yaml` also selects `ProposalPersistenceIT` and
+`ProposalDraftPersistenceIT`. The latter exercises internal COM-02 replacement
+against the same isolated PostgreSQL environment, including controlled concurrent
+connections and write-failure rollback. It does not expose or test a replacement
+HTTP endpoint or modification audit. `./bin/test` covers the deterministic COM-02
+preparation tests; `./bin/check` remains the complete local validation authority.
+
 ## Authentication Configuration
 
 The optional initial development user is configured with

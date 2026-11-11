@@ -16,7 +16,7 @@ equality. Decimal equality uses `BigDecimal.compareTo`; stored line identities,
 amounts and dates do not participate. A no-op returns the exact unchanged snapshot,
 without eligibility checks, policy resolution or recalculation.
 
-An effective change checks version capacity and yields `Change`. The future
+An effective change checks version capacity and yields `Change`. The
 transactional caller must check target eligibility before invoking
 `Change.prepare()`. Preparation explicitly resolves only the stored policy ID,
 rejects an unavailable policy without fallback, and calculates every replacement
@@ -26,11 +26,44 @@ Lines have no IDs or assigned positions; their list order determines later
 persistence positions. `previousUpdatedAt` is retained solely as input to later
 timestamp selection. Preparation does not choose a new timestamp.
 
-This pure application logic is not wired to HTTP or persistence. Transactional
-eligibility, replacement SQL, locks, timestamp selection and modification audit
-remain pending. Its deterministic unit tests establish preparation rules only,
-not real persistence, concurrency or audit behavior. The historical design document
-records the approved complete contract; it does not describe current delivery status.
+The pure preparation logic does not perform I/O. Its deterministic unit tests
+establish preparation rules only. The historical design document records the
+approved complete contract; it does not describe current delivery status.
+
+## Internal transactional replacement persistence (COM-02.3)
+
+The package-private `InternalProposalDraftReplacement` composes the existing
+application preparation and persistence ports. It is not registered as a Spring
+bean and is not exposed through `TransactionalProposalService` or HTTP. It requires
+an enclosing, explicitly configured writable `READ COMMITTED` transaction; its
+mandatory transaction participation cannot commit separately. A failure marks the
+enclosing transaction for rollback even if its caller catches that failure.
+This keeps the step available for later audit orchestration without exposing an
+unaudited public replacement operation.
+
+After structural validation, the step locks only the submitted ThirdParty ID
+`FOR SHARE`, remembers whether it exists, then locks the proposal header
+`FOR UPDATE`. Missing root, expected version and DRAFT are checked before loading
+lines. COM-02.2 determines no-op or effective change. No-op executes only these
+reads/locks; it does not query commercial flags, resolve a policy or issue DML.
+
+An effective change checks version capacity before checking the already locked
+target's eligibility and preparing amounts under the stored policy. An initially
+absent target rejects even if inserted while the operation waits for the root;
+no later lock is acquired out of order. All amounts are validated before deleting
+old lines. PostgreSQL generates every replacement line ID, including on a
+ThirdParty-only change, and positions start at 1 in input order. The guarded header
+update matches ID, expected version and DRAFT; it changes only ThirdParty, version
+and update time. An unexpected zero-row update aborts the transaction. Update time
+is the maximum of the stored value and one clock sample truncated to microseconds.
+
+`ProposalDraftPersistenceIT`, selected by `./bin/check`, verifies real PostgreSQL
+roundtrips, exact no-op preservation, observed blocking between distinct backend
+connections, same-version conflicts, target mutation/deletion ordering and full
+rollback after injected write failures. It also commits the actual internal step
+between GET's two queries to check the COM-02.1 snapshot guarantee. These tests do
+not establish replacement HTTP or modification-audit behavior: both integrations
+remain pending, and no `PROPOSAL_UPDATED` event is implemented here.
 
 ## HTTP contract
 

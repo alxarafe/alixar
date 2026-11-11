@@ -10,11 +10,16 @@ import static es.alxarafe.alixar.sales.application.SalesErrorCode.*;
 /** Pure preparation against a supplied snapshot; no lookup, lock, write, clock or audit. */
 public final class PrepareProposalDraftReplacement {
     public Decision assess(Proposal current, ReplaceProposalDraftCommand command) {
-        if (command.expectedVersion() != current.version()) { throw rejected(SALES_VERSION_CONFLICT); }
-        if (!ProposalLimits.DRAFT.equals(current.state())) { throw rejected(PROPOSAL_INVALID_STATE); }
+        checkVersionAndState(current.version(), current.state(), command.expectedVersion());
         if (sameContents(current, command)) { return new NoOp(current); }
         if (current.version() == Long.MAX_VALUE) { throw rejected(SALES_VERSION_EXHAUSTED); }
         return new Change(current, command);
+    }
+
+    /** Allows a locked header to be checked before loading its lines. */
+    public static void checkVersionAndState(long version, String state, long expectedVersion) {
+        if (expectedVersion != version) { throw rejected(SALES_VERSION_CONFLICT); }
+        if (!ProposalLimits.DRAFT.equals(state)) { throw rejected(PROPOSAL_INVALID_STATE); }
     }
 
     private boolean sameContents(Proposal current, ReplaceProposalDraftCommand command) {

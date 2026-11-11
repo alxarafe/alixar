@@ -20,4 +20,15 @@ public class JooqEligibleThirdParty implements EligibleThirdParty {
                 && (Boolean.TRUE.equals(row.get(CUSTOMER)) || Boolean.TRUE.equals(row.get(PROSPECT))))
             .orElse(false);
     }
+    @Override
+    public boolean lockIdentifier(long id) {
+        return dsl.select(ID).from(THIRD_PARTY).where(ID.eq(id)).forShare().fetchOptional().isPresent();
+    }
+    @Override
+    public boolean isEligible(long id) {
+        return dsl.select(ACTIVE, CUSTOMER, PROSPECT).from(THIRD_PARTY).where(ID.eq(id))
+            .fetchOptional(row -> Boolean.TRUE.equals(row.get(ACTIVE))
+                && (Boolean.TRUE.equals(row.get(CUSTOMER)) || Boolean.TRUE.equals(row.get(PROSPECT))))
+            .orElse(false);
+    }
 }
