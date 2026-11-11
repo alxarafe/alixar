@@ -96,6 +96,20 @@ startup using its default `classpath:db/migration`
 location. `PersistenceIT` verifies the migrations, their constraints, RBAC
 resolution and authentication transaction behaviour against PostgreSQL.
 
+`compose.check.yaml` also selects `ProposalPersistenceIT`,
+`ProposalDraftPersistenceIT`, `ProposalDraftAuditIT` and `ProposalDraftHttpIT`.
+The persistence tests
+exercise internal COM-02 replacement
+against the same isolated PostgreSQL environment, including controlled concurrent
+connections and write-failure rollback. The audit tests verify the configured
+success trail, authenticated-context actors, shared PostgreSQL transaction identity
+and complete rollback on required audit failure or a later exception. The HTTP
+suite uses MockMvc with real PostgreSQL and the security chain to exercise the PUT
+endpoint through its audited facade. It does not start a deployed HTTP server.
+`./bin/test` covers deterministic preparation and HTTP component tests;
+`./bin/check` remains the complete local validation authority. See the
+[COM-02 acceptance evidence](proposals.md#com-02-acceptance-evidence) for test-layer scope.
+
 ## Authentication Configuration
 
 The optional initial development user is configured with

@@ -2,8 +2,10 @@ package es.alxarafe.alixar.sales.infrastructure.persistence;
 
 import es.alxarafe.alixar.sales.application.ProposalNotFoundException;
 import es.alxarafe.alixar.sales.application.ProposalRepository;
+import es.alxarafe.alixar.sales.application.PrepareProposalDraftReplacement;
 import es.alxarafe.alixar.sales.domain.*;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -53,6 +55,16 @@ public class JooqProposalRepository implements ProposalRepository {
     public Proposal findById(long id) {
         Record header = dsl.select(ID, THIRD_PARTY_ID, CURRENCY, STATE, VERSION, POLICY, CREATED, UPDATED)
             .from(PROPOSAL).where(ID.eq(id)).fetchOptional().orElseThrow(ProposalNotFoundException::new);
+        return readLines(id, header);
+    }
+    @Override
+    public Proposal lockAndFindById(long id, long expectedVersion) {
+        Record header = dsl.select(ID, THIRD_PARTY_ID, CURRENCY, STATE, VERSION, POLICY, CREATED, UPDATED)
+            .from(PROPOSAL).where(ID.eq(id)).forUpdate().fetchOptional().orElseThrow(ProposalNotFoundException::new);
+        PrepareProposalDraftReplacement.checkVersionAndState(header.get(VERSION), header.get(STATE), expectedVersion);
+        return readLines(id, header);
+    }
+    private Proposal readLines(long id, Record header) {
         List<ProposalLine> lines = dsl.select(ID, POSITION, DESCRIPTION, QUANTITY, PRICE, VAT, NET, TAX, GROSS)
             .from(LINE).where(PROPOSAL_ID.eq(id)).orderBy(POSITION.asc())
             .fetch(row -> new ProposalLine(row.get(ID), row.get(POSITION), row.get(DESCRIPTION), row.get(QUANTITY),
@@ -61,5 +73,20 @@ public class JooqProposalRepository implements ProposalRepository {
         return new Proposal(id, header.get(THIRD_PARTY_ID), header.get(CURRENCY), header.get(STATE),
             header.get(VERSION), header.get(POLICY), lines, totals,
             header.get(CREATED).toInstant(), header.get(UPDATED).toInstant());
+    }
+    @Override
+    public void replace(PrepareProposalDraftReplacement.Prepared replacement, long expectedVersion, Instant updatedAt) {
+        dsl.deleteFrom(LINE).where(PROPOSAL_ID.eq(replacement.id())).execute();
+        int position = 1;
+        for (var line : replacement.lines()) {
+            dsl.insertInto(LINE).columns(PROPOSAL_ID, POSITION, DESCRIPTION, QUANTITY, PRICE, VAT, NET, TAX, GROSS)
+                .values(replacement.id(), position++, line.description(), line.quantity(), line.unitNetPrice(), line.vatRate(),
+                    line.amounts().netAmount(), line.amounts().taxAmount(), line.amounts().grossAmount()).execute();
+        }
+        int affected = dsl.update(PROPOSAL).set(THIRD_PARTY_ID, replacement.thirdPartyId())
+            .set(VERSION, replacement.version()).set(UPDATED, updatedAt.atOffset(ZoneOffset.UTC))
+            .where(ID.eq(replacement.id()).and(VERSION.eq(expectedVersion)).and(STATE.eq(ProposalLimits.DRAFT)))
+            .execute();
+        if (affected != 1) { throw new IllegalStateException("Guarded proposal replacement must update exactly one row"); }
     }
 }

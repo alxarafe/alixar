@@ -23,23 +23,27 @@ public final class MonetaryPolicy {
         if (!CURRENCY.equals(currency)) { throw new UnsupportedCurrencyException(); }
     }
     public Amounts calculate(BigDecimal quantity, BigDecimal price, BigDecimal vat) {
-        checkDecimal(quantity, INPUT_PRECISION, INPUT_SCALE, ProposalFields.QUANTITY);
-        checkDecimal(price, INPUT_PRECISION, INPUT_SCALE, ProposalFields.UNIT_NET_PRICE);
-        checkDecimal(vat, VAT_PRECISION, VAT_SCALE, ProposalFields.VAT_RATE);
-        if (quantity.signum() <= 0) { throw new InvalidProposalException(ProposalFields.QUANTITY, false); }
-        if (vat.compareTo(PERCENT_BASE) > 0) { throw new InvalidProposalException(ProposalFields.VAT_RATE, false); }
+        checkInputs(quantity, price, vat);
         BigDecimal net = quantity.multiply(price).setScale(AMOUNT_SCALE, ROUNDING);
         BigDecimal tax = net.multiply(vat).divide(PERCENT_BASE).setScale(AMOUNT_SCALE, ROUNDING);
         Amounts result = new Amounts(net, tax, net.add(tax));
         checkAmounts(result);
         return result;
     }
+    /** Structural bounds shared by creation and replacement; performs no calculation. */
+    public static void checkInputs(BigDecimal quantity, BigDecimal price, BigDecimal vat) {
+        checkDecimal(quantity, INPUT_PRECISION, INPUT_SCALE, ProposalFields.QUANTITY);
+        checkDecimal(price, INPUT_PRECISION, INPUT_SCALE, ProposalFields.UNIT_NET_PRICE);
+        checkDecimal(vat, VAT_PRECISION, VAT_SCALE, ProposalFields.VAT_RATE);
+        if (quantity.signum() <= 0) { throw new InvalidProposalException(ProposalFields.QUANTITY, false); }
+        if (vat.compareTo(PERCENT_BASE) > 0) { throw new InvalidProposalException(ProposalFields.VAT_RATE, false); }
+    }
     public void checkAmounts(Amounts amounts) {
         checkDecimal(amounts.netAmount(), AMOUNT_PRECISION, AMOUNT_SCALE, ProposalFields.TOTALS);
         checkDecimal(amounts.taxAmount(), AMOUNT_PRECISION, AMOUNT_SCALE, ProposalFields.TOTALS);
         checkDecimal(amounts.grossAmount(), AMOUNT_PRECISION, AMOUNT_SCALE, ProposalFields.TOTALS);
     }
-    private void checkDecimal(BigDecimal value, int precision, int scale, String field) {
+    private static void checkDecimal(BigDecimal value, int precision, int scale, String field) {
         if (value == null) { throw new InvalidProposalException(field, true); }
         // Count integer digits without expanding exponents or rounding input.
         if (value.signum() < 0 || value.scale() > scale

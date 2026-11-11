@@ -15,9 +15,14 @@ import static org.mockito.ArgumentMatchers.any;
 
 class ProposalCalculationTest {
     private final ProposalRepository repository = mock(ProposalRepository.class);
-    private final EligibleThirdParty eligible = id -> true;
+    private final EligibleThirdParty eligible = eligibility(true);
     private final Clock clock = Clock.fixed(Instant.parse("2026-11-10T12:00:00Z"), ZoneOffset.UTC);
     private final CreateProposalUseCase create = new CreateProposalUseCase(repository, eligible, clock);
+    private static EligibleThirdParty eligibility(boolean value) {
+        EligibleThirdParty eligible = mock(EligibleThirdParty.class);
+        when(eligible.lockAndCheck(anyLong())).thenReturn(value);
+        return eligible;
+    }
     private CreateProposalCommand.Line line(String description, String quantity, String price, String vat) {
         return new CreateProposalCommand.Line(description, new BigDecimal(quantity), new BigDecimal(price), new BigDecimal(vat));
     }
@@ -87,7 +92,7 @@ class ProposalCalculationTest {
             .isInstanceOf(UnsupportedCurrencyException.class);
         assertThatThrownBy(() -> create.execute(new CreateProposalCommand(1L, MonetaryPolicy.CURRENCY, null)))
             .isInstanceOf(InvalidProposalException.class);
-        assertThatThrownBy(() -> new CreateProposalUseCase(repository, id -> false, clock)
+        assertThatThrownBy(() -> new CreateProposalUseCase(repository, eligibility(false), clock)
             .execute(new CreateProposalCommand(1L, MonetaryPolicy.CURRENCY, List.of())))
             .isInstanceOf(InvalidSalesThirdPartyException.class);
         verifyNoInteractions(repository);

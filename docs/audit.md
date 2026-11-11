@@ -61,6 +61,8 @@ Implemented:
   deletion;
 - atomic `SUCCESS` events for native Contact creation and real partial
   updates under `BASIC` and `SELECTIVE`;
+- atomic `PROPOSAL_CREATED` and `PROPOSAL_UPDATED` success events for proposal
+  creation and effective complete draft replacement under `BASIC` and `SELECTIVE`;
 - `RECOVERY_TOKEN` as an audit authentication type;
 - `audit.read` permission and a read-only, chain-scoped event query API with
   keyset pagination and combinable filters;
@@ -105,6 +107,29 @@ no commercial payload. Creation, lines and the success event commit atomically;
 required append failure rolls creation back. OFF remains OFF. Proposal reads add
 no baseline success audit, and denied authorization reuses ACCESS_DENIED with the
 static proposal route family. See [Proposals](proposals.md).
+
+## Proposal draft modification (COM-02.4)
+
+`PROPOSAL_UPDATED` on `PROPOSAL` is a baseline mutation event recorded via
+`AuditTrail.recordSuccess` only after an effective complete draft replacement.
+`OFF` permits the change without an event. `BASIC` and `SELECTIVE` require exactly
+one event with `SUCCESS`, the canonical proposal ID and the existing authenticated
+SESSION/PAT actor; additive SELECTIVE read rules do not filter mutation events.
+No-op and rejected operations do not invoke the modification append.
+
+The proposal facade and ordinary audit append share one PostgreSQL transaction.
+Locks follow target ThirdParty, proposal root, lines, then audit chain. Required
+append failure raises `AuditUnavailableException` and restores the original
+proposal. Later rollback also removes the inserted event and restores the chain
+head. Non-audit failures are not relabeled as audit failures. The modification
+service is exposed by `PUT /api/proposals/{id}/draft`, with no commercial before/after payloads.
+`ProposalDraftAuditIT` verifies atomicity against PostgreSQL, including identical
+backend/transaction IDs during mutation and append, real insert failure and
+post-append rollback. Actor fixtures use the actual authenticated-context resolver;
+they do not exercise a replacement endpoint's HTTP security flow.
+`ProposalDraftHttpIT` separately verifies the actual HTTP security chain through
+MockMvc with real PostgreSQL, session login and PAT validation, actor attribution,
+and a 503 response with complete rollback after an audit INSERT failure.
 
 ## Audit modes
 
@@ -364,6 +389,8 @@ The following operations are instrumented atomically under `BASIC` and
 | Contact creation | `CONTACT_CREATED` | `CONTACT` / canonical contact id | `SUCCESS` |
 | Contact partial update with real change | `CONTACT_UPDATED` | `CONTACT` / canonical contact id | `SUCCESS` |
 | Contact successful physical delete | `CONTACT_DELETED` | `CONTACT` / canonical contact id | `SUCCESS` |
+| Proposal creation | `PROPOSAL_CREATED` | `PROPOSAL` / canonical proposal id | `SUCCESS` |
+| Effective complete proposal draft replacement | `PROPOSAL_UPDATED` | `PROPOSAL` / canonical proposal id | `SUCCESS` |
 
 The ThirdParty create event was the first business-capability event. ThirdParty
 and Contact mutation events record only the canonical identifier, action,

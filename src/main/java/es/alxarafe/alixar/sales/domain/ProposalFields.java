@@ -3,6 +3,7 @@ package es.alxarafe.alixar.sales.domain;
 public final class ProposalFields {
     public static final String BODY = "body";
     public static final String ID = "id";
+    public static final String EXPECTED_VERSION = "expectedVersion";
     public static final String THIRD_PARTY_ID = "thirdPartyId";
     public static final String CURRENCY = "currency";
     public static final String LINES = "lines";

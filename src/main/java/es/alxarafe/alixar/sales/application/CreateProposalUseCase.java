@@ -28,13 +28,7 @@ public class CreateProposalUseCase {
         Amounts totals = Amounts.zero();
         for (CreateProposalCommand.Line line : command.lines()) {
             if (line == null) { throw new InvalidProposalException(LINES, false); }
-            if (line.description() == null || line.description().isBlank()) {
-                throw new InvalidProposalException(DESCRIPTION, true);
-            }
-            String description = line.description().strip();
-            if (description.codePointCount(0, description.length()) > ProposalLimits.MAX_DESCRIPTION_CODE_POINTS) {
-                throw new InvalidProposalException(DESCRIPTION, false);
-            }
+            String description = ProposalLimits.normalizeDescription(line.description());
             Amounts amounts = policy.calculate(line.quantity(), line.unitNetPrice(), line.vatRate());
             totals = totals.plus(amounts);
             policy.checkAmounts(totals);

@@ -4,7 +4,7 @@ services:
     build:
       context: .
       target: build
-    command: ["./mvnw", "--batch-mode", "--no-transfer-progress", "-Dtest=PersistenceIT,ProposalPersistenceIT", "test"]
+    command: ["./mvnw", "--batch-mode", "--no-transfer-progress", "-Dtest=PersistenceIT,ProposalPersistenceIT,ProposalDraftPersistenceIT,ProposalDraftAuditIT,ProposalDraftHttpIT", "test"]
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/${ALIXAR_DB_NAME:-alixar}
       SPRING_DATASOURCE_USERNAME: ${ALIXAR_DB_USER:-alixar}

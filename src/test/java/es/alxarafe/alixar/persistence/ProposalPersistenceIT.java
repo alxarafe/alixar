@@ -71,6 +71,69 @@ class ProposalPersistenceIT {
         dsl.execute("update audit_chain_head set last_sequence=0,last_hash=? where chain_id=?", AuditChain.GENESIS_HASH, AuditChain.DEFAULT_CHAIN_ID);
     }
     private int count(String table) { return dsl.fetchOne("select count(*) from " + table).get(0, int.class); }
+    @Test void getKeepsOneSnapshotWhenReplacementCommitsBetweenHeaderAndLines() throws Exception {
+        long id = proposals.create(command(party(true, true, false, false)));
+        Proposal original = proposals.get(id);
+        assertThat(org.springframework.aop.support.AopUtils.isAopProxy(proposals)).isTrue();
+        var providers = dsl.configuration().executeListenerProviders();
+        CountDownLatch headerRead = new CountDownLatch(1), replacementCommitted = new CountDownLatch(1);
+        var readerThread = new java.util.concurrent.atomic.AtomicReference<Thread>();
+        AtomicInteger readerPid = new AtomicInteger(), writerPid = new AtomicInteger();
+        var listener = new org.jooq.impl.DefaultExecuteListener() {
+            @Override public void fetchEnd(org.jooq.ExecuteContext context) {
+                if (Thread.currentThread() != readerThread.get()
+                    || !context.sql().contains("from \"" + PROPOSAL + "\"")) { return; }
+                // Inspect the very JDBC connection used by the actual header query.
+                try (var statement = context.connection().createStatement();
+                     var result = statement.executeQuery(
+                         "select pg_backend_pid(), current_setting('transaction_isolation'), current_setting('transaction_read_only')")) {
+                    assertThat(result.next()).isTrue();
+                    readerPid.set(result.getInt(1));
+                    assertThat(result.getString(2)).isEqualTo("repeatable read");
+                    assertThat(result.getString(3)).isEqualTo("on");
+                } catch (java.sql.SQLException ex) { throw new AssertionError(ex); }
+                assertThat(org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive()).isTrue();
+                headerRead.countDown();
+                await(replacementCommitted);
+            }
+        };
+        var instrumented = Arrays.copyOf(providers, providers.length + 1);
+        instrumented[providers.length] = new org.jooq.impl.DefaultExecuteListenerProvider(listener);
+        dsl.configuration().set(instrumented);
+        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+            Future<Proposal> reading = executor.submit(() -> {
+                readerThread.set(Thread.currentThread());
+                try { return proposals.get(id); }
+                finally { readerThread.set(null); }
+            });
+            try {
+                await(headerRead);
+                // Fixture SQL simulates an atomic replacement; no PUT implementation is needed.
+                long replacementLine = new TransactionTemplate(transactions).execute(status -> {
+                    writerPid.set(dsl.fetchOne("select pg_backend_pid()").get(0, int.class));
+                    dsl.execute("update sales_proposal set version=version+1, updated_at=updated_at + interval '1 second' where id=?", id);
+                    dsl.execute("delete from sales_proposal_line where proposal_id=?", id);
+                    return dsl.fetchOne("insert into sales_proposal_line(proposal_id,position,description,quantity,unit_net_price,vat_rate,net_amount,tax_amount,gross_amount) values (?,1,'replacement',3,20,21,60,12.60,72.60) returning id", id)
+                        .get(0, Long.class);
+                });
+                assertThat(writerPid.get()).isNotEqualTo(readerPid.get());
+                replacementCommitted.countDown();
+                assertThat(reading.get(TIMEOUT_SECONDS, TimeUnit.SECONDS)).isEqualTo(original);
+                Proposal current = proposals.get(id);
+                assertThat(current.id()).isEqualTo(original.id());
+                assertThat(current.thirdPartyId()).isEqualTo(original.thirdPartyId());
+                assertThat(current.version()).isEqualTo(original.version() + 1);
+                assertThat(current.createdAt()).isEqualTo(original.createdAt());
+                assertThat(current.updatedAt()).isEqualTo(original.updatedAt().plusSeconds(1));
+                assertThat(current.lines()).hasSize(1);
+                assertThat(current.lines().getFirst().id()).isEqualTo(replacementLine);
+                assertThat(original.lines()).extracting(ProposalLine::id).doesNotContain(replacementLine);
+                assertThat(current.totals().netAmount()).isEqualByComparingTo("60");
+                assertThat(current.totals().taxAmount()).isEqualByComparingTo("12.60");
+                assertThat(current.totals().grossAmount()).isEqualByComparingTo("72.60");
+            } finally { replacementCommitted.countDown(); }
+        } finally { dsl.configuration().set(providers); }
+    }
     @Test void snapshotsAndPolicyRoundtripWithoutRecalculation() {
         long thirdParty = party(true, true, false, true);
         long id = proposals.create(command(thirdParty));

@@ -8,6 +8,8 @@ import org.jooq.DSLContext;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.transaction.PlatformTransactionManager;
 
 @AutoConfiguration
 public class ProposalConfiguration {
@@ -24,7 +26,11 @@ public class ProposalConfiguration {
     @Bean
     GetProposalUseCase getProposalUseCase(ProposalRepository repository) { return new GetProposalUseCase(repository); }
     @Bean
-    TransactionalProposalService transactionalProposalService(CreateProposalUseCase create, GetProposalUseCase get, AuditTrail audit) {
-        return new TransactionalProposalService(create, get, audit);
+    TransactionalProposalService transactionalProposalService(CreateProposalUseCase create, GetProposalUseCase get,
+        AuditTrail audit, ProposalRepository repository, EligibleThirdParty thirdParty,
+        ObjectProvider<PlatformTransactionManager> transactions) {
+        // Resolve the mandatory transaction dependency only for replacement, preserving COM-01 test contexts.
+        return new TransactionalProposalService(create, get, audit,
+            () -> new InternalProposalDraftReplacement(repository, thirdParty, Clock.systemUTC(), transactions.getObject()));
     }
 }
