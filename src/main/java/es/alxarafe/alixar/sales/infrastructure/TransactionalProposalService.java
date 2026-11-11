@@ -3,6 +3,7 @@ package es.alxarafe.alixar.sales.infrastructure;
 import es.alxarafe.alixar.sales.application.*;
 import es.alxarafe.alixar.sales.domain.Proposal;
 import es.alxarafe.alixar.audit.application.*;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 public class TransactionalProposalService {
@@ -22,6 +23,6 @@ public class TransactionalProposalService {
         catch (RuntimeException ex) { throw new AuditUnavailableException(); }
         return id;
     }
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, isolation = Isolation.REPEATABLE_READ)
     public Proposal get(long id) { return get.execute(id); }
 }

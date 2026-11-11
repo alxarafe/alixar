@@ -54,6 +54,10 @@ Lines follow input order, with positions starting at 1 and stable generated IDs.
 Empty drafts return empty lines and totals of 0.00. No ThirdParty details or
 internal policy identification are exposed. There is no list/search endpoint.
 
+The transactional service reads header and lines in one read-only PostgreSQL
+`REPEATABLE READ` transaction. A concurrent committed replacement cannot mix
+header/version from one snapshot with line identifiers or totals from another.
+
 ## Validation and money
 
 - At most 1,000 lines; descriptions are required, stripped of exterior whitespace,
