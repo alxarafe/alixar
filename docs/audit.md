@@ -122,11 +122,14 @@ Locks follow target ThirdParty, proposal root, lines, then audit chain. Required
 append failure raises `AuditUnavailableException` and restores the original
 proposal. Later rollback also removes the inserted event and restores the chain
 head. Non-audit failures are not relabeled as audit failures. The modification
-service has no HTTP endpoint yet; there are no commercial before/after payloads.
+service is exposed by `PUT /api/proposals/{id}/draft`, with no commercial before/after payloads.
 `ProposalDraftAuditIT` verifies atomicity against PostgreSQL, including identical
 backend/transaction IDs during mutation and append, real insert failure and
 post-append rollback. Actor fixtures use the actual authenticated-context resolver;
 they do not exercise a replacement endpoint's HTTP security flow.
+`ProposalDraftHttpIT` separately verifies the actual HTTP security chain through
+MockMvc with real PostgreSQL, session login and PAT validation, actor attribution,
+and a 503 response with complete rollback after an audit INSERT failure.
 
 ## Audit modes
 

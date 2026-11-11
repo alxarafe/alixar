@@ -31,7 +31,8 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 
 ## Implemented
 
-- Native proposal draft creation/read with isolated monetary rules, persisted
+- Native proposal draft creation/read and version-guarded complete replacement
+  with isolated monetary rules, persisted
   historical line snapshots and policy identification, ThirdParty eligibility
   locking, operation permissions and atomic audit. See [Proposals](proposals.md).
 
@@ -131,7 +132,7 @@ Alixar is the Java/Spring Boot backend for the Alixar ERP. It owns business rule
 - JWT, refresh tokens, client credentials, machine-to-machine authentication
 - OpenAPI specification
 - ERP capabilities beyond the implemented ThirdParty/Contact and proposal
-  creation/read slices (catalog, remaining sales, billing, inventory, accounting)
+  creation/read/draft-replacement capabilities (catalog, remaining sales, billing, inventory, accounting)
 - Workflow engine selection: Flowable 8.0.0 is evaluated only by a test-only
   compatibility spike; it is not an approved production dependency. See
   [Workflow engine compatibility spike](workflow-spike.md)

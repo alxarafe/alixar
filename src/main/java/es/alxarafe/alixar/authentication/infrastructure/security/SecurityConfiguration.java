@@ -201,6 +201,8 @@ public class SecurityConfiguration {
                     .hasAuthority(PermissionCodes.CONTACTS_MANAGE)
                 .requestMatchers(HttpMethod.POST, ProposalEndpoints.BASE_PATH)
                     .hasAuthority(PermissionCodes.PROPOSALS_MANAGE)
+                .requestMatchers(HttpMethod.PUT, ProposalEndpoints.DRAFT_PATH_PATTERN)
+                    .hasAuthority(PermissionCodes.PROPOSALS_MANAGE)
                 .requestMatchers(HttpMethod.GET, ProposalEndpoints.ITEM_PATH_PATTERN)
                     .hasAuthority(PermissionCodes.PROPOSALS_READ)
                 .requestMatchers(HttpMethod.GET, AuditEndpoints.VERIFICATION_PATH)

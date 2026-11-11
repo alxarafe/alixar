@@ -1,6 +1,7 @@
 package es.alxarafe.alixar.sales.api;
 
 import es.alxarafe.alixar.sales.application.CreateProposalCommand;
+import es.alxarafe.alixar.sales.application.ReplaceProposalDraftCommand;
 import es.alxarafe.alixar.sales.domain.*;
 import es.alxarafe.alixar.sales.infrastructure.TransactionalProposalService;
 import java.math.BigDecimal;
@@ -9,6 +10,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,8 @@ import static es.alxarafe.alixar.sales.domain.ProposalFields.*;
 class ProposalController {
     private static final Set<String> HEADER_FIELDS = Set.of(THIRD_PARTY_ID, CURRENCY, LINES);
     private static final Set<String> LINE_FIELDS = Set.of(DESCRIPTION, QUANTITY, UNIT_NET_PRICE, VAT_RATE);
+    private static final Set<String> DRAFT_FIELDS = Set.of(EXPECTED_VERSION, THIRD_PARTY_ID, CURRENCY, LINES);
+    private static final Pattern PATH_INTEGER = Pattern.compile("[0-9]+");
     private final TransactionalProposalService service;
     private final JsonMapper mapper;
     ProposalController(TransactionalProposalService service, JsonMapper mapper) {
@@ -59,6 +63,40 @@ class ProposalController {
                 line.amounts().netAmount(), line.amounts().taxAmount(), line.amounts().grossAmount(), null)).toList(),
             proposal.totals(), List.of(), proposal.createdAt(), proposal.updatedAt()));
     }
+    @PutMapping(value = ProposalEndpoints.DRAFT_RELATIVE_PATH,
+        consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Replaced> replaceDraft(@PathVariable(ID) String pathId, @RequestBody String body) {
+        long id;
+        try {
+            if (!PATH_INTEGER.matcher(pathId).matches()) { throw invalid(ID); }
+            id = Long.parseLong(pathId);
+            if (id <= 0) { throw invalid(ID); }
+        } catch (NumberFormatException ex) { throw invalid(ID); }
+        JsonNode root;
+        try { root = mapper.reader().with(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS,
+            DeserializationFeature.FAIL_ON_TRAILING_TOKENS, DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY)
+            .without(JsonNodeFeature.STRIP_TRAILING_BIGDECIMAL_ZEROES).readTree(body); }
+        catch (tools.jackson.core.JacksonException ex) { throw invalid(BODY); }
+        object(root, DRAFT_FIELDS, BODY);
+        long expectedVersion = positiveInteger(root, EXPECTED_VERSION);
+        long thirdPartyId = positiveInteger(root, THIRD_PARTY_ID);
+        String currency = text(root, CURRENCY);
+        JsonNode lines = required(root, LINES);
+        if (!lines.isArray() || lines.size() > ProposalLimits.MAX_LINES) { throw invalid(LINES); }
+        List<CreateProposalCommand.Line> inputs = new ArrayList<>();
+        for (JsonNode line : lines) {
+            object(line, LINE_FIELDS, LINES);
+            inputs.add(new CreateProposalCommand.Line(text(line, DESCRIPTION), decimal(line, QUANTITY),
+                decimal(line, UNIT_NET_PRICE), decimal(line, VAT_RATE)));
+        }
+        var command = new ReplaceProposalDraftCommand(expectedVersion, thirdPartyId, currency, inputs);
+        return ResponseEntity.ok(new Replaced(id, service.replaceDraft(id, command)));
+    }
+    private long positiveInteger(JsonNode node, String field) {
+        JsonNode value = required(node, field);
+        if (!value.isIntegralNumber() || !value.canConvertToLong() || value.longValue() <= 0) { throw invalid(field); }
+        return value.longValue();
+    }
     private void object(JsonNode node, Set<String> fields, String field) {
         if (node == null || !node.isObject()) { throw invalid(field); }
         node.propertyNames().forEach(key -> { if (!fields.contains(key)) { throw invalid(key); } });
@@ -80,6 +118,7 @@ class ProposalController {
     }
     private InvalidProposalException invalid(String field) { return new InvalidProposalException(field, false); }
     record Created(long id) { }
+    record Replaced(long id, long version) { }
     record ProposalResponse(long id, long thirdPartyId, String currency, String state, long version,
         List<LineResponse> lines, Amounts totals, List<Long> orderIds, Instant createdAt, Instant updatedAt) { }
     record LineResponse(long id, int position, String description, BigDecimal quantity, BigDecimal unitNetPrice,

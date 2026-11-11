@@ -1,10 +1,10 @@
-# Proposal creation and read (COM-01)
+# Proposals (COM-01 and COM-02)
 
 Alixar owns independent proposal drafts and their persisted monetary snapshots.
-The HTTP API exposes creation and single-object consultation. The approved contract
-is recorded in [COM-001 design](design/ALIXAR-COM-001-proposal-order-design.md).
-No editing, validation, business acceptance/refusal, orders, conversion or automation
-is available through HTTP.
+The HTTP API exposes creation, single-object consultation and complete draft
+replacement. The approved contract is recorded in
+[COM-001 design](design/ALIXAR-COM-001-proposal-order-design.md).
+No business validation, acceptance/refusal, orders, conversion or automation is available.
 
 ## Internal draft replacement preparation (COM-02.2)
 
@@ -67,8 +67,8 @@ the internal persistence step; audited orchestration is tested separately.
 
 `TransactionalProposalService.replaceDraft` runs the internal replacement step and
 its success audit in one writable `READ COMMITTED` transaction. It returns the
-resulting version for the supplied proposal ID; no HTTP request/response DTO or
-replacement endpoint is introduced. The facade calls
+resulting version for the supplied proposal ID. The HTTP adapter calls only this
+audited facade. The facade calls
 `AuditTrail.recordSuccess(PROPOSAL_UPDATED, PROPOSAL, id)` exactly once after an
 effective change. No-op returns the unchanged version without invoking audit.
 Rejected operations never reach that append.
@@ -93,7 +93,8 @@ checks the same PostgreSQL backend and transaction ID for mutation and append,
 with chain locks taken after header writes. Session/PAT fixtures supply an already
 authenticated context; these tests do not establish a replacement HTTP endpoint
 or its authentication/authorization flow. The non-DRAFT guard uses a constructed
-snapshot because V14 intentionally stores only DRAFT. HTTP integration remains pending.
+snapshot because V14 intentionally stores only DRAFT. HTTP integration is covered
+separately by the tests below.
 
 ## HTTP contract
 
@@ -147,6 +148,46 @@ The transactional service reads header and lines in one read-only PostgreSQL
 `REPEATABLE READ` transaction. A concurrent committed replacement cannot mix
 header/version from one snapshot with line identifiers or totals from another.
 
+### Complete draft replacement
+
+`PUT /api/proposals/{id}/draft` consumes and produces `application/json`:
+
+```json
+{
+  "expectedVersion": 1,
+  "thirdPartyId": 42,
+  "currency": "EUR",
+  "lines": [
+    {"description": "Consulting", "quantity": 2, "unitNetPrice": 10.005, "vatRate": 21}
+  ]
+}
+```
+
+Every member is required and non-null. IDs and expected version must be positive
+signed BIGINT-range integers, without string or fractional coercion. Descriptions,
+decimal inputs and line limits follow the rules below. The parser rejects duplicate
+keys, trailing JSON and unknown/protected members, including line IDs/positions,
+state, policy, totals, dates and links. `lines: []` clears all lines; omitted/null
+lines never mean "retain the old lines". Non-EUR input returns 400 for this PUT;
+COM-01 POST retains its existing unsupported-currency error.
+
+Successful effective changes and no-ops return exactly `200 OK` with:
+
+```json
+{"id": 125, "version": 2}
+```
+
+There is no Location or ETag header and no document payload. The resulting version
+comes from the write transaction, without a later GET. Manage permission permits
+PUT without read permission; full consultation still requires `proposals.read`.
+
+Precedence is authorization/CSRF, structural validation, root existence, expected
+version, DRAFT and normalized equality. A stale identical request conflicts.
+Valid no-op retains every value and emits no modification audit, even with later
+ThirdParty ineligibility, unavailable policy or maximum version. Effective changes
+check version capacity, then target eligibility, stored policy and calculated
+amounts before writing. Input validation never performs policy-dependent arithmetic.
+
 ## Validation and money
 
 - At most 1,000 lines; descriptions are required, stripped of exterior whitespace,
@@ -185,11 +226,11 @@ A restrictive foreign key protects the ThirdParty relationship. Deletion of a
 referenced ThirdParty returns the existing `409 THIRD_PARTY_DELETE_CONFLICT`, with
 no cascade, proposal removal or success audit. COM-01 has no unlink/delete API.
 
-POST requires `proposals.manage`; GET requires `proposals.read`. Both permissions
+POST and PUT require `proposals.manage`; GET requires `proposals.read`. Both permissions
 are initially assigned only to `system-admin`; manage does not imply read. Internal
 eligibility lookup needs no `thirdparties.read` permission. Existing session and
-Bearer authentication apply; session creation requires CSRF, Bearer creation does
-not. Authorization runs before lookup/disclosure.
+Bearer authentication apply; session writes require CSRF, Bearer writes do not.
+Authorization runs before validation and lookup/disclosure.
 
 Creation and `AuditTrail.recordSuccess(PROPOSAL_CREATED, PROPOSAL, id)` share one
 transaction. `OFF` emits no event; `BASIC` and `SELECTIVE` require the success event,
@@ -211,9 +252,59 @@ Errors reuse `application/problem+json`, stable codes and English/Spanish
 | 422 | `SALES_INVALID_THIRD_PARTY` / `SALES_UNSUPPORTED_CURRENCY` |
 | 503 | `AUDIT_UNAVAILABLE`: required audit append failed |
 
+The table above retains the COM-01 POST/GET contract. PUT uses this complete catalog:
+
+| HTTP | Code / condition |
+|---|---|
+| 400 | `VALIDATION_INVALID`: all invalid input, including missing/null members, non-EUR, limits/scales and computed overflow |
+| 401 / 403 | Existing authentication, authorization and CSRF rules |
+| 404 | `PROPOSAL_NOT_FOUND`: missing root after initial validation |
+| 409 | `SALES_VERSION_CONFLICT`: stale expected version, before DRAFT/no-op |
+| 409 | `PROPOSAL_INVALID_STATE`: non-DRAFT |
+| 409 | `SALES_VERSION_EXHAUSTED`: effective change cannot increment version |
+| 409 | `SALES_MONETARY_POLICY_UNAVAILABLE`: effective change requires unavailable stored policy |
+| 422 | `SALES_INVALID_THIRD_PARTY`: effective change has an ineligible target |
+| 503 | `AUDIT_UNAVAILABLE`: required audit failed; complete rollback |
+
+Problem details use stable codes and sales-owned English/Spanish text. They do not
+disclose the current version, document contents or SQL details. Unexpected non-audit
+infrastructure errors retain generic server-error handling and are not mislabeled
+as audit failures.
+
 `ProposalCalculationTest` and `ProposalControllerTest` cover deterministic money,
 validation, HTTP, security and localization. `ProposalPersistenceIT`, selected by
 `./bin/check` alongside `PersistenceIT`, uses real PostgreSQL for snapshots, schema,
 FKs, transaction rollback and synchronized competing transactions. Focused results
 do not replace the mandatory `./bin/test` and `./bin/check` before task closure.
 COM-01 introduces no Dolibarr integration or new claim of legacy conformance.
+
+### COM-02 acceptance evidence
+
+The approved scenarios are covered across complementary test layers:
+
+- [ProposalDraftReplacementTest](../src/test/java/es/alxarafe/alixar/sales/ProposalDraftReplacementTest.java): deterministic preparation rules.
+- [ProposalDraftControllerTest](../src/test/java/es/alxarafe/alixar/sales/ProposalDraftControllerTest.java): real HTTP/security/parsing boundary with a mocked service; no persistence claim.
+- [ProposalDraftPersistenceIT](../src/test/java/es/alxarafe/alixar/sales/infrastructure/ProposalDraftPersistenceIT.java): real PostgreSQL persistence, controlled concurrent connections and rollback of the internal step.
+- [ProposalDraftAuditIT](../src/test/java/es/alxarafe/alixar/sales/infrastructure/ProposalDraftAuditIT.java): real shared mutation/audit transactions and authenticated-context actor resolution.
+- [ProposalDraftHttpIT](../src/test/java/es/alxarafe/alixar/sales/infrastructure/ProposalDraftHttpIT.java): MockMvc with real PostgreSQL, login/PAT validation, permissions, controller, audited facade and repositories.
+
+| Scenario | Evidence |
+|---|---|
+| T1 — replace, clear, refill and change ThirdParty | Replacement unit tests, persistence roundtrips and session HTTP replacement flow |
+| T2 — renew every line identity; retain root and no-op identities | Persistence ThirdParty-only change and HTTP replacement/no-op assertions |
+| T3 — ordered normalized numeric equality; stale no-op conflict | Unit comparison, no-DML persistence observations and HTTP normalization/conflict flow |
+| T4 — strict input, inclusive limits and deferred arithmetic | Controller tests, unit boundary tests and HTTP combined-error precedence |
+| T5 — same-version writers and no-op races | Persistence tests with distinct backend connections, latches and observed `pg_blocking_pids` |
+| T6 — target eligibility, mutation/deletion ordering and initial absence | Persistence locking tests and HTTP inactive-party/no-op behavior |
+| T7 — rollback at write and audit failure points | Persistence injection tests, audit insertion/post-append rollback and HTTP 503 aggregate restoration |
+| T8 — OFF/BASIC/SELECTIVE, one event, actor and audit failure | Real audit transactions and HTTP session/PAT actor/mode assertions |
+| T9 — permissions, CSRF/Bearer, exact response, EN/ES errors and precedence | Controller tests and PostgreSQL HTTP tests; existing POST/GET regression tests |
+| T10 — historical snapshots/policy, no-op and unknown-policy rejection | Unit policy tests, persistence historical snapshots and HTTP combined-error/no-op tests |
+| T11 — coherent GET during committed replacement | COM-02.1 `ProposalPersistenceIT` plus the actual replacement interleaved with GET in `ProposalDraftPersistenceIT` |
+| T12 — version capacity and nonregressing microsecond timestamps | Unit max-version tests, persistence clock/version tests and HTTP max-version no-op/exhaustion |
+
+The non-DRAFT guard uses constructed snapshots; V14 is not relaxed to store future
+states. Concurrent PostgreSQL evidence concerns the shared internal persistence
+step, not competing network HTTP clients. MockMvc does not establish a deployed
+server or Solucar-to-Alixar verification. `./bin/check` explicitly selects all
+PostgreSQL suites; focused results still require the complete checks before closure.

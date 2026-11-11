@@ -119,15 +119,15 @@ Alixar is the backend and business authority of the Solucar / Alixar ERP. It is 
   not audited
 - **Pending**: Solucar UI and historical data migration
 
-### Proposals (COM-01 and internal COM-02 preparation)
+### Proposals (COM-01 and COM-02)
 
-Native proposal draft creation and read use Alixar PostgreSQL/jOOQ persistence,
+Native proposal draft creation, read and complete replacement use Alixar PostgreSQL/jOOQ persistence,
 exact decimal snapshots, EUR and a centralized immutable versioned monetary policy.
 Creation allows zero or more lines and requires an active customer or prospect.
 `proposals.manage` and `proposals.read` are initially assigned only to `system-admin`;
 creation audit is atomic under BASIC/SELECTIVE. Referenced ThirdParty deletion is
-restricted. HTTP editing, business validation/acceptance, orders and automation remain
-pending. Internal COM-02.2 logic can classify normalized no-ops and prepare complete
+restricted. Business validation/acceptance, orders and automation remain pending.
+Internal COM-02.2 logic can classify normalized no-ops and prepare complete
 draft replacement contents with version/state guards and stored-policy calculations.
 COM-02.3 adds an internal transaction-participating persistence step with ordered
 target/root locks, effective-branch eligibility, full line replacement, guarded
@@ -137,7 +137,11 @@ step through the transactional proposal facade with exactly one required
 `PROPOSAL_UPDATED` per effective change under BASIC/SELECTIVE, no event under OFF,
 and atomic rollback on audit failure. No-op and rejected operations emit no update
 event. PostgreSQL tests verify SESSION/PAT context attribution and shared transaction
-identity. The internal step has no public unaudited entry point; HTTP editing remains pending.
+identity. `PUT /api/proposals/{id}/draft` exposes only the audited facade, requires
+`proposals.manage` with existing CSRF/Bearer controls, and returns only ID/version
+for both no-op and effective change. Strict JSON, approved precedence and localized
+errors are covered by component and PostgreSQL-backed MockMvc tests. GET and POST
+retain their COM-01 contracts. There is no unaudited replacement endpoint.
 See [Proposal contract and limitations](proposals.md).
 
 ### Persistence Infrastructure
